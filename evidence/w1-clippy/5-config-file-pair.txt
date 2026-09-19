@@ -1,0 +1,16 @@
+experiment:   5-config-file-pair
+purpose:      a crate directory holding both clippy.toml (allow-unwrap-in-tests = true) and .clippy.toml (allow-expect-in-tests = true)
+fixture:      target/w1-clippy/pair
+preparation:  cargo clean in the fixture; CLIPPY_CONF_DIR unset
+command:      cargo clippy
+clippy:       clippy 0.1.98 (48a229ceae 2026-09-01)
+revision:     28ae543c297067ad5171654f490307b13995376a (working tree dirty: yes)
+recorded_at:  2026-09-19T21:26:14Z
+exit_status:  0
+--- stderr ---
+    Checking pair v0.0.0 (/home/kmosoti/projects/recursive_hexogonal_architecture/target/w1-clippy/pair)
+warning: using config file `/home/kmosoti/projects/recursive_hexogonal_architecture/target/w1-clippy/pair/.clippy.toml`, `/home/kmosoti/projects/recursive_hexogonal_architecture/target/w1-clippy/pair/clippy.toml` will be ignored
+
+warning: `pair` (lib) generated 1 warning
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.06s
+--- stdout ---

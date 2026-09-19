@@ -1,0 +1,24 @@
+experiment:   3-discovery-core-test-unwrap
+purpose:      allow-unwrap-in-tests only in the fixture root clippy.toml; core-a's local file holds only the deny list; core-a's test calls unwrap()
+fixture:      xtask/tests/corpus/clippy/discovery
+preparation:  cargo clean in the fixture; CLIPPY_CONF_DIR unset
+command:      cargo clippy -p core-a --all-targets
+clippy:       clippy 0.1.98 (48a229ceae 2026-09-01)
+revision:     28ae543c297067ad5171654f490307b13995376a (working tree dirty: yes)
+recorded_at:  2026-09-19T21:26:14Z
+exit_status:  0
+--- stderr ---
+    Checking core-a v0.0.0 (/home/kmosoti/projects/recursive_hexogonal_architecture/xtask/tests/corpus/clippy/discovery/crates/core-a)
+warning: used `unwrap()` on a `Result` value
+  --> crates/core-a/src/lib.rs:14:22
+   |
+14 |         let n: u32 = "41".parse().unwrap();
+   |                      ^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: if this value is an `Err`, it will panic
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+   = note: requested on the command line with `-W clippy::unwrap-used`
+
+warning: `core-a` (lib test) generated 1 warning
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.06s
+--- stdout ---

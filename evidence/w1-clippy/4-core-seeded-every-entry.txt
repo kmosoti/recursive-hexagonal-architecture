@@ -1,0 +1,186 @@
+experiment:   4-core-seeded-every-entry
+purpose:      one use of every deny-list entry in a crate with the template
+fixture:      xtask/tests/corpus/clippy/core-seeded
+preparation:  cargo clean in the fixture; CLIPPY_CONF_DIR unset
+command:      cargo clippy -p core-every
+clippy:       clippy 0.1.98 (48a229ceae 2026-09-01)
+revision:     28ae543c297067ad5171654f490307b13995376a (working tree dirty: yes)
+recorded_at:  2026-09-19T21:26:14Z
+exit_status:  101
+--- stderr ---
+    Checking core-every v0.0.0 (/home/kmosoti/projects/recursive_hexogonal_architecture/xtask/tests/corpus/clippy/core-seeded/crates/core-every)
+error: use of a disallowed method `std::time::SystemTime::now`
+ --> crates/core-every/src/lib.rs:9:6
+  |
+9 |     (std::time::SystemTime::now(), std::time::Instant::now())
+  |      ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: time crosses a Clock port
+  = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#disallowed_methods
+  = note: `-D clippy::disallowed-methods` implied by `-D clippy::all`
+  = help: to override `-D clippy::all` add `#[allow(clippy::disallowed_methods)]`
+
+error: use of a disallowed method `std::time::Instant::now`
+ --> crates/core-every/src/lib.rs:9:36
+  |
+9 |     (std::time::SystemTime::now(), std::time::Instant::now())
+  |                                    ^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: time crosses a Clock port
+  = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#disallowed_methods
+
+error: use of a disallowed method `std::env::var`
+  --> crates/core-every/src/lib.rs:15:6
+   |
+15 |     (std::env::var("HOME").ok(), std::env::vars().count())
+   |      ^^^^^^^^^^^^^
+   |
+   = note: environment crosses a Config port
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#disallowed_methods
+
+error: use of a disallowed method `std::env::vars`
+  --> crates/core-every/src/lib.rs:15:34
+   |
+15 |     (std::env::var("HOME").ok(), std::env::vars().count())
+   |                                  ^^^^^^^^^^^^^^
+   |
+   = note: environment crosses a Config port
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#disallowed_methods
+
+error: use of a disallowed method `std::process::Command::new`
+  --> crates/core-every/src/lib.rs:21:5
+   |
+21 |     std::process::Command::new("true")
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: process execution crosses a port
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#disallowed_methods
+
+error: use of a disallowed method `std::thread::spawn`
+  --> crates/core-every/src/lib.rs:26:13
+   |
+26 |     let _ = std::thread::spawn(|| ()).join();
+   |             ^^^^^^^^^^^^^^^^^^
+   |
+   = note: concurrency is orchestrated at the edge
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#disallowed_methods
+
+error: use of a disallowed method `std::fs::read`
+  --> crates/core-every/src/lib.rs:34:17
+   |
+34 |     let bytes = std::fs::read("a")?;
+   |                 ^^^^^^^^^^^^^
+   |
+   = note: storage crosses a port
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#disallowed_methods
+
+error: use of a disallowed method `std::fs::read_to_string`
+  --> crates/core-every/src/lib.rs:35:16
+   |
+35 |     let text = std::fs::read_to_string("b")?;
+   |                ^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: storage crosses a port
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#disallowed_methods
+
+error: use of a disallowed method `std::fs::write`
+  --> crates/core-every/src/lib.rs:36:5
+   |
+36 |     std::fs::write("c", [bytes.as_slice(), text.as_bytes()].concat())?;
+   |     ^^^^^^^^^^^^^^
+   |
+   = note: storage crosses a port
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#disallowed_methods
+
+error: use of a disallowed type `std::fs::File`
+  --> crates/core-every/src/lib.rs:37:20
+   |
+37 |     let mut file = std::fs::File::open("d")?;
+   |                    ^^^^^^^^^^^^^
+   |
+   = note: storage crosses a port
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#disallowed_types
+   = note: `-D clippy::disallowed-types` implied by `-D clippy::all`
+   = help: to override `-D clippy::all` add `#[allow(clippy::disallowed_types)]`
+
+error: use of a disallowed type `std::net::TcpStream`
+  --> crates/core-every/src/lib.rs:47:37
+   |
+47 | pub fn network() -> std::io::Result<std::net::TcpStream> {
+   |                                     ^^^^^^^^^^^^^^^^^^^
+   |
+   = note: network crosses a port
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#disallowed_types
+
+error: use of a disallowed type `std::net::TcpStream`
+  --> crates/core-every/src/lib.rs:48:5
+   |
+48 |     std::net::TcpStream::connect("127.0.0.1:1")
+   |     ^^^^^^^^^^^^^^^^^^^
+   |
+   = note: network crosses a port
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#disallowed_types
+
+error: use of a disallowed method `std::io::stdin`
+  --> crates/core-every/src/lib.rs:54:5
+   |
+54 |     std::io::stdin()
+   |     ^^^^^^^^^^^^^^
+   |
+   = note: input crosses a port
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#disallowed_methods
+
+error: use of a disallowed macro `std::println`
+  --> crates/core-every/src/lib.rs:59:5
+   |
+59 |     println!("out");
+   |     ^^^^^^^^^^^^^^^
+   |
+   = note: output crosses a port; return data instead
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#disallowed_macros
+   = note: `-D clippy::disallowed-macros` implied by `-D clippy::all`
+   = help: to override `-D clippy::all` add `#[allow(clippy::disallowed_macros)]`
+
+error: use of a disallowed macro `std::eprintln`
+  --> crates/core-every/src/lib.rs:60:5
+   |
+60 |     eprintln!("err");
+   |     ^^^^^^^^^^^^^^^^
+   |
+   = note: output crosses a port; return data instead
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#disallowed_macros
+
+error: use of a disallowed macro `std::dbg`
+  --> crates/core-every/src/lib.rs:61:13
+   |
+61 |     let _ = dbg!(1);
+   |             ^^^^^^^
+   |
+   = note: output crosses a port; return data instead
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#disallowed_macros
+
+error: the `dbg!` macro is intended as a debugging tool
+  --> crates/core-every/src/lib.rs:61:13
+   |
+61 |     let _ = dbg!(1);
+   |             ^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#dbg_macro
+   = note: requested on the command line with `-D clippy::dbg-macro`
+help: remove the invocation before committing it to a version control system
+   |
+61 -     let _ = dbg!(1);
+61 +     let _ = 1;
+   |
+
+error: use of a disallowed macro `std::eprintln`
+  --> crates/core-every/src/lib.rs:61:13
+   |
+61 |     let _ = dbg!(1);
+   |             ^^^^^^^
+   |
+   = note: output crosses a port; return data instead
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#disallowed_macros
+
+error: could not compile `core-every` (lib) due to 18 previous errors
+--- stdout ---

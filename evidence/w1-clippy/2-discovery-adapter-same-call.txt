@@ -1,0 +1,13 @@
+experiment:   2-discovery-adapter-same-call
+purpose:      an adapter with no local clippy.toml makes the same call
+fixture:      xtask/tests/corpus/clippy/discovery
+preparation:  cargo clean in the fixture; CLIPPY_CONF_DIR unset
+command:      cargo clippy -p adapter-x
+clippy:       clippy 0.1.98 (48a229ceae 2026-09-01)
+revision:     28ae543c297067ad5171654f490307b13995376a (working tree dirty: yes)
+recorded_at:  2026-09-19T21:26:13Z
+exit_status:  0
+--- stderr ---
+    Checking adapter-x v0.0.0 (/home/kmosoti/projects/recursive_hexogonal_architecture/xtask/tests/corpus/clippy/discovery/crates/adapter-x)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.05s
+--- stdout ---
