@@ -609,3 +609,28 @@ fn forbid_in_the_lint_table_closes_the_attribute_escape() {
         .exits_zero()
         .reports(&format!("warning: {SEEDED_FINDING}"));
 }
+
+/// Experiment 6n: `.cargo/config.toml` is read from the directory of the
+/// build upward, and it is not a protected surface in this repository.
+#[test]
+fn a_cargo_config_can_lower_every_lint() {
+    let mut fixture = Fixture::generate(
+        "cargo-config",
+        &DENY_LINTS,
+        &[core("core-seeded", "seeded_clock.rs", Config::Template)],
+    );
+    fixture.write(
+        ".cargo/config.toml",
+        b"[build]\nrustflags = [\"--cap-lints=warn\"]\n",
+    );
+
+    fixture
+        .clippy(
+            "6n",
+            "the seeded call with --cap-lints=warn in the fixture's .cargo/config.toml",
+            &["-p", "core-seeded"],
+            &[],
+        )
+        .exits_zero()
+        .reports(&format!("warning: {SEEDED_FINDING}"));
+}
