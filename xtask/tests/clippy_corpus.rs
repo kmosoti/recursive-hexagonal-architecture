@@ -448,3 +448,164 @@ fn a_dotfile_beside_the_template_silently_replaces_it() {
         .reports("using config file")
         .reports("clippy.toml` will be ignored");
 }
+
+/// The three lints the template configures, set to `forbid` in the lint table
+/// of the second fixture below.
+const DENY_LINTS: [(&str, &str); 3] = [
+    ("disallowed_methods", "forbid"),
+    ("disallowed_types", "forbid"),
+    ("disallowed_macros", "forbid"),
+];
+
+const INCOMPATIBLE: &str = "incompatible with previous forbid";
+const SEEDED_FINDING: &str = "use of a disallowed method `std::time::SystemTime::now`";
+
+/// Experiment 6: a lint attribute in the crate switches the deny list off,
+/// and the deny level does not stop it. `--cap-lints` is the boundary of what
+/// any lint level can promise.
+#[test]
+fn a_lint_attribute_switches_the_deny_list_off() {
+    let fixture = Fixture::generate(
+        "escape",
+        &[],
+        &[
+            core("core-allow-item", "allow_attribute.rs", Config::Template),
+            core("core-expect-item", "expect_attribute.rs", Config::Template),
+            core("core-allow-crate", "allow_crate.rs", Config::Template),
+            core("core-forbid-crate", "forbid_crate.rs", Config::Template),
+            core("core-seeded", "seeded_clock.rs", Config::Template),
+        ],
+    );
+
+    fixture
+        .clippy(
+            "6a",
+            "the seeded call under an item-level #[allow]",
+            &["-p", "core-allow-item"],
+            &[],
+        )
+        .exits_zero()
+        .silent("disallowed");
+
+    fixture
+        .clippy(
+            "6b",
+            "the seeded call under an item-level #[expect]",
+            &["-p", "core-expect-item"],
+            &[],
+        )
+        .exits_zero()
+        .silent("disallowed");
+
+    fixture
+        .clippy(
+            "6c",
+            "the seeded call under a crate-level #![allow]",
+            &["-p", "core-allow-crate"],
+            &[],
+        )
+        .exits_zero()
+        .silent("disallowed");
+
+    fixture
+        .clippy(
+            "6d",
+            "a crate-level #![forbid] above an item-level #[allow]",
+            &["-p", "core-forbid-crate"],
+            &[],
+        )
+        .exits_nonzero()
+        .reports(INCOMPATIBLE);
+
+    fixture
+        .clippy(
+            "6e",
+            "the seeded call with the lint allowed through RUSTFLAGS",
+            &["-p", "core-seeded"],
+            &[("RUSTFLAGS", "-Aclippy::disallowed_methods")],
+        )
+        .exits_zero()
+        .silent("disallowed");
+}
+
+/// Experiment 6, continued: the same crates under a lint table that forbids
+/// the three lints the template configures.
+#[test]
+fn forbid_in_the_lint_table_closes_the_attribute_escape() {
+    let fixture = Fixture::generate(
+        "escape-forbid",
+        &DENY_LINTS,
+        &[
+            core("core-allow-item", "allow_attribute.rs", Config::Template),
+            core("core-expect-item", "expect_attribute.rs", Config::Template),
+            core("core-allow-crate", "allow_crate.rs", Config::Template),
+            core("core-seeded", "seeded_clock.rs", Config::Template),
+            core("core-clean", "test_unwrap.rs", Config::Template),
+            adapter("adapter-x", "adapter_clock.rs"),
+        ],
+    );
+
+    for (id, krate) in [
+        ("6f", "core-allow-item"),
+        ("6g", "core-expect-item"),
+        ("6h", "core-allow-crate"),
+    ] {
+        fixture
+            .clippy(
+                id,
+                "the attribute escape under a forbidding lint table",
+                &["-p", krate],
+                &[],
+            )
+            .exits_nonzero()
+            .reports(INCOMPATIBLE);
+    }
+
+    fixture
+        .clippy(
+            "6i",
+            "the seeded call with no attribute, under forbid",
+            &["-p", "core-seeded"],
+            &[],
+        )
+        .exits_nonzero()
+        .reports(SEEDED_FINDING);
+
+    fixture
+        .clippy(
+            "6j",
+            "a core crate with nothing on the deny list, under forbid",
+            &["-p", "core-clean", "--all-targets"],
+            &[],
+        )
+        .exits_zero();
+
+    fixture
+        .clippy(
+            "6k",
+            "an adapter making the seeded call, under forbid",
+            &["-p", "adapter-x", "--all-targets"],
+            &[],
+        )
+        .exits_zero();
+
+    fixture
+        .clippy(
+            "6l",
+            "forbid against an allow in RUSTFLAGS",
+            &["-p", "core-seeded"],
+            &[("RUSTFLAGS", "-Aclippy::disallowed_methods")],
+        )
+        .exits_nonzero()
+        .reports(SEEDED_FINDING);
+
+    fixture
+        .clippy(
+            "6m",
+            "forbid against --cap-lints in RUSTFLAGS",
+            &["-p", "core-seeded"],
+            &[("RUSTFLAGS", "--cap-lints=warn")],
+        )
+        .exits_zero()
+        .reports(&format!("warning: {SEEDED_FINDING}"));
+}
