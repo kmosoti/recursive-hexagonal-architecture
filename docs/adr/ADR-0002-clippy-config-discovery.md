@@ -63,16 +63,16 @@ Rules 1 and 2 are what the plan pre-registered as its expectation, and both hold
 - Every crate with role `core` has a `clippy.toml` byte-equal to [`xtask/templates/core-clippy.toml`](../../xtask/templates/core-clippy.toml). Adapters, apps, and tools have none and use the root file. The template holds the §6.8 entries, the plan's W1 additions, the entries added in CHG-001.2, and, because of rule 2, every setting of the root `clippy.toml`.
 - Rule `effect.core_clippy_template` reports, per core crate, a missing `clippy.toml`, one that differs from the template, and a `.clippy.toml` beside it (rule 3). Its witness is the path and the sha256 digests. It is implemented in [`xtask/src/clippy_template.rs`](../../xtask/src/clippy_template.rs) and runs in L0 once `cargo xtask architecture` exists (CHG-003).
 - Fixtures are generated, not committed (CHG-001.1). A committed fixture is a copy of the root lint table, the root `clippy.toml`, or the template, and copies need drift tests to stay true. The one copy left is the template's repeat of the root settings, which rule 2 forces; `template_repeats_every_root_setting` guards it.
-- The deny list is extended in CHG-001.2 from 15 entries to 89, and experiment 4 keeps every entry honest: a path that stops resolving stops firing, and the test fails. The entries come from the ten paths this record named in CHG-001 plus a sweep of the Rust 1.98.1 standard-library source, kept to the effects §6.8 names.
+- The deny list is extended in CHG-001.2 from 15 entries to 111, and experiment 4 keeps every entry honest: a path that stops resolving stops firing, and the test fails. The entries come from the ten paths this record named in CHG-001, a sweep of the Rust 1.98.1 standard-library source, and two adversarial reviews of that sweep, all kept to the effects §6.8 names.
 
 | Category | Entries | Examples |
 | --- | --- | --- |
 | Clocks | 4 | `SystemTime::now`, `Instant::elapsed` |
 | Environment, arguments, working directory | 16 | `env::var_os`, `env::args`, `env::current_dir`, `path::absolute`, `IsTerminal::is_terminal` |
-| Storage | 34 | 19 `std::fs` functions, the 10 `Path` methods that touch the filesystem, and the types `File`, `OpenOptions`, `DirBuilder`, `ReadDir`, `DirEntry` |
+| Storage | 36 | 19 `std::fs` functions, `OpenOptions::open`, `DirBuilder::create`, the 10 `Path` methods that touch the filesystem, and the types `File`, `OpenOptions`, `DirBuilder`, `ReadDir`, `DirEntry` |
 | Network | 4 | the types `TcpStream`, `TcpListener`, `UdpSocket`, and `ToSocketAddrs::to_socket_addrs` |
-| Process, process-global state, telemetry | 9 | the types `Command` and `Child`, `process::exit`, `abort`, `id`, `panic::set_hook`, `take_hook`, `Backtrace::capture`, `force_capture` |
-| Concurrency and scheduling | 9 | `thread::spawn`, the `Builder` type, `scope`, `sleep`, `park`, `current` |
+| Process, process-global state, telemetry | 18 | the types `Command`, `Child` and `alloc::System`, the effectful methods of the first two, `process::exit`, `abort`, `id`, `panic::set_hook`, `take_hook`, `Backtrace::capture`, `force_capture`, `alloc::handle_alloc_error` |
+| Concurrency and scheduling | 20 | `thread::spawn`, `scope`, `sleep`, `park`, `current`, the `Builder` type, and the blocking parts of `std::sync`: `mpsc::channel`, `sync_channel`, the `Receiver` type with `recv` and `recv_timeout`, `Condvar` with `wait` and `wait_timeout`, `Barrier`, `Once::wait` |
 | Randomness | 1 | `hash::RandomState` |
 | Input and output | 12 | `io::stdin`, `stdout`, `stderr`, `pipe`, the `Stdin`, `Stdout` and `Stderr` types, and the five print macros |
 
