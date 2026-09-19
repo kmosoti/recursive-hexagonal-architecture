@@ -1,0 +1,40 @@
+# cargo-deny policy (spec §6.16.4): advisories, licences, bans, sources.
+# Protected surface after CHG-000 (.rha/policy.toml).
+
+[graph]
+all-features = true
+
+[advisories]
+# Vulnerable, unmaintained, and unsound crates are errors by default; yanked
+# versions are errors too.
+yanked = "deny"
+ignore = []
+
+[licenses]
+# The licences present in the dependency graph at CHG-000. Adding one is a
+# reviewed change to this file.
+allow = ["Apache-2.0", "MIT", "Unicode-3.0"]
+confidence-threshold = 0.8
+exceptions = []
+
+[licenses.private]
+# Workspace crates are unpublished (publish = false) and carry no licence yet.
+ignore = true
+
+[bans]
+# Duplicates are legitimate during ecosystem migrations: warn, do not fail.
+multiple-versions = "warn"
+wildcards = "deny"
+# Path dependencies between unpublished workspace crates are not wildcards.
+allow-wildcard-paths = true
+highlight = "all"
+allow = []
+deny = []
+skip = []
+skip-tree = []
+
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"
+allow-registry = ["https://github.com/rust-lang/crates.io-index"]
+allow-git = []

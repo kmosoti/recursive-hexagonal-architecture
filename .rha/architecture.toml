@@ -1,0 +1,6 @@
+# Declared semantic ids (spec §3.9): components, ports, contracts. Product
+# components arrive in CHG-005, after their boundary decision records (DP-1.3).
+schema_version = 1
+components = []
+ports = []
+contracts = []

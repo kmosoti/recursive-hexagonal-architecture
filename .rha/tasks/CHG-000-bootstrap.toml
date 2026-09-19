@@ -1,0 +1,135 @@
+# Task record (spec §11.7.11 shape, stored as TOML per DP-0.4).
+schema_version = 1
+id = "CHG-000"
+slug = "bootstrap"
+title = "Bootstrap: repository, fast lane, evidence records, contribution artifacts"
+mode = "agent"
+executor_composition = "agent"
+authority_profile = "ECC-Solo"
+# The Executor's proposal. Acceptance is Kennedy's, recorded in .rha/acceptances/.
+status = "proposed"
+plan_ref = "docs/plan/IMPLEMENTATION-PLAN.md §8 W0 (layout §4.1)"
+branch = "chg/000-bootstrap"
+base_revision = "81641865a4fe2a9ae6c0b660e03a8000456d6ff3"
+intent = "A repository that runs the §12.1 fast lane through one entry point (`cargo xtask ci`) and records honest evidence, with the spec's contribution artifacts installed and CI running on GitHub."
+non_goals = [
+  "Product crates (CHG-005)",
+  "Crate-graph checker rules (CHG-003); `cargo xtask architecture` is a stub that reports not_run",
+  "The H4 corpus (CHG-002, CHG-004)",
+  "The L1 evaluator `cargo xtask l1`",
+  "Record schemas and `cargo xtask rha lint` (CHG-019)",
+]
+
+[[actors]]
+id = "human:kennedy"
+type = "human"
+
+[[actors]]
+id = "agent:claude-opus-5"
+type = "agent"
+accountable_to = "human:kennedy"
+
+[[actors]]
+id = "automation:github-actions"
+type = "automation"
+accountable_to = "human:kennedy"
+
+[roles]
+planner = "human:kennedy"
+executor = ["agent:claude-opus-5"]
+integrator = "human:kennedy"
+verifier = ["automation:xtask-ci (local, advisory)", "automation:github-actions (class ci, advisory)"]
+acceptor = "human:kennedy"
+
+[[work]]
+id = "W0"
+executor = "agent:claude-opus-5"
+depends_on = ["DP-0.1", "DP-0.2", "DP-0.3", "DP-0.4", "DP-0.5", "DP-0.6"]
+output = "Everything in IMPLEMENTATION-PLAN.md §4.1, except the deviations listed in docs/changes/CHG-000-bootstrap.md."
+
+[[decisions]]
+id = "DP-0.1"
+question = "Git identity for the repository"
+answer = "Kennedy Mosoti <47609243+kmosoti@users.noreply.github.com>, repo-local"
+decided_by = "human:kennedy"
+date = "2026-09-19"
+note = "The plan default kennedy.rmosoti@gmail.com was accepted first; GitHub rejected the push (GH007: push would publish a private email address). Kennedy then chose the noreply address, and the unpushed base commit was amended."
+
+[[decisions]]
+id = "DP-0.2"
+question = "GitHub repository name and visibility; product name"
+answer = "kmosoti/recursive-hexagonal-architecture, public; product rhawiki"
+decided_by = "human:kennedy"
+date = "2026-09-19"
+
+[[decisions]]
+id = "DP-0.3"
+question = "Move the spec to docs/spec/"
+answer = "Move (git mv; content unchanged)"
+decided_by = "human:kennedy"
+date = "2026-09-19"
+
+[[decisions]]
+id = "DP-0.4"
+question = ".rha/ record format"
+answer = "TOML"
+decided_by = "human:kennedy"
+date = "2026-09-19"
+
+[[decisions]]
+id = "DP-0.5"
+question = "Policy parameters"
+answer = "cooling_off_hours 24; repair_loop.max_attempts 3; proptest L0 256, L1 4096; all L0 checks non-waivable; protected surfaces as listed in .rha/policy.toml [surface]"
+decided_by = "human:kennedy"
+date = "2026-09-19"
+
+[[decisions]]
+id = "DP-0.6"
+question = "Branch protection on main"
+answer = "PR required with 0 approvals; required status check `ci`, strict (up to date); enforce_admins; no force-push; no deletion"
+decided_by = "human:kennedy"
+date = "2026-09-19"
+
+[claim]
+affected_components = []
+contract_changes = "none: no product components exist"
+architecture_delta = "New repository. Workspace with one member (xtask, role tool). No core, adapter, or app crates."
+performance_impact = "none claimed"
+unresolved = [
+  "Bootstrap acceptance: base 8164186 has no policy, so no approved policy governs CHG-000 (Applicable fails by construction); acceptance is a controlled transition decided by Kennedy.",
+  "L0.architecture is required and non-waivable but not implemented until CHG-003, so CHG-001 and CHG-002 cannot be Eligible under this policy either.",
+  "The CI status `ci` reports that no check failed, not eligibility; eligibility is only in the evidence record.",
+]
+
+[acceptance]
+criteria = [
+  "`cargo xtask ci --print` lists exactly the eight §12.1 commands in order",
+  "`cargo xtask ci --record evidence/CHG-000` records fmt, clippy, nextest, doctest, deny, machete, typos passed and L0.architecture not_run (not_implemented)",
+  "`cargo test -p xtask --test policy_drift` passes, and editing one argv in the policy makes it fail",
+  "CI on the PR uploads an evidence record with evidence_class \"ci\"",
+  "Branch protection on main requires the `ci` status",
+]
+replan_when = [
+  "Rust 1.98.1 cannot be installed (pin 1.98.0, record in ADR-0001)",
+  "`gh repo create` is refused",
+]
+
+[provenance]
+model_id = "claude-opus-5[1m]"
+harness = "Claude Code, VS Code extension; the CLI on PATH reports `2.1.278 (Claude Code)`; the extension build was not observed"
+output_style = "Learning (.claude/settings.local.json)"
+permission_mode = "auto, as reported to the session; enforced by the harness, not by this record"
+task_scope = "CHG-000: docs/plan/IMPLEMENTATION-PLAN.md §8 W0"
+permissions = "Workspace files, shell, network, and `gh` as kmosoti (scopes gist, project, read:org, repo, workflow) through the user's account. The Executor may not merge, tag, or edit protected surfaces after CHG-000 without Kennedy's approval (plan §2 item 2)."
+budgets = "unknown"
+reasoning_effort = "unknown (the plan asks for extra-high; not observable from the session)"
+instruction_sources = [
+  { path = "docs/plan/IMPLEMENTATION-PLAN.md", sha256 = "4c60073eacdd5f03303f0d7298a95dea35db0a9bb7bd49b9d724bedea0737afb" },
+  { path = "docs/spec/rha-spec-v0.10.md", sha256 = "4c96ded8159c35a6281a6c14183700ae1466c097e009cdc5e722b2d1eacb0907" },
+  { path = "session start message (the plan's 'How to start the executing session' text)", sha256 = "unknown" },
+  { path = "~/.claude/projects/-home-kmosoti-projects-recursive-hexogonal-architecture/memory/MEMORY.md", sha256 = "a86d119024264f26050c71dbf8fa14531e252af260766927c7c30bceece37b7d" },
+  { path = "~/.claude/projects/-home-kmosoti-projects-recursive-hexogonal-architecture/memory/feedback-stay-in-workspace.md", sha256 = "0724be6d09a28a26d2d1d2b2169714a739a6b23e93f2d9ce84a4af91d6468ea8" },
+  { path = "~/.claude/projects/-home-kmosoti-projects-recursive-hexogonal-architecture/memory/project-rha-implementation-program.md", sha256 = "5d27119d9d6ad5000ac855eaa512b353cd8bad5380c3504a9cbde368a163c22e" },
+  { path = ".claude/settings.local.json", sha256 = "21dcff94caa79881e580b87945186af2bd9c54ada5665497196b9bd835f9f816" },
+  { path = "Claude Code system prompt", sha256 = "unknown" },
+]

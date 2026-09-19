@@ -1,0 +1,5 @@
+# Assumption ledger (spec §8.2, §8.3): each consumer's assumptions about its
+# environment, their support, and their applicability state. Entries arrive
+# with the product crates in CHG-005 (seed list: IMPLEMENTATION-PLAN.md §3.3).
+schema_version = 1
+assumptions = []

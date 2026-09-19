@@ -1,0 +1,6 @@
+/target/
+# cargo-mutants output (CHG-014).
+/mutants.out*/
+# Per-user Claude Code settings; not repository policy.
+/.claude/settings.local.json
+# proptest-regressions/ directories are committed: they are persisted seeds.

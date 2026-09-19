@@ -1,0 +1,7 @@
+[profile.ci]
+fail-fast = false
+retries = 1
+flaky-result = "fail"
+
+[profile.ci.junit]
+path = "junit.xml"
