@@ -58,7 +58,7 @@ The observed rule matches the plan's expectation: per-crate discovery, no merge,
 
 Eligibility `blocked`: Authentic (no trusted producers) and Passed (`L0.architecture` not_run). Applicable and Complete hold.
 
-**CI record.** Pending: filled in after the first CI run on the pull request.
+**CI record.** Run [35470532056](https://github.com/kmosoti/recursive-hexagonal-architecture/actions/runs/35470532056), with a copy committed as [`evidence/ci/35470532056.json`](../../evidence/ci/35470532056.json): class `ci`, runner image `ubuntu24` 20260907.300.1, clean. Its subject is the merge commit `ad933459254442100e6693a358b055f6876263c8` of PR head `d011d13869184ae5f32e8b70ae498c5fb5e254c8`; the merge commit's tree, `fdc4748bae0351694a6bef5f8a2212103ac83228`, equals the head's. Outcomes match the local record: seven passed, `L0.architecture` not_run, and nextest selected 28 tests. The four corpus tests passed on the runner, so the discovery rule reproduces in a second environment. The commit that adds this copy triggers one more CI run, whose record is kept only as its artifact.
 
 **Performance.** No trigger; nothing claimed.
 
