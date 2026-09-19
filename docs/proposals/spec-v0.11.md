@@ -1,0 +1,35 @@
+# Proposed changes to the specification, v0.10 to v0.11
+
+A queue, not a decision. Every row is a proposal Kennedy accepts, amends, or drops at the version bump; until then `docs/spec/rha-spec-v0.10.md` stands as written.
+
+## Why this file exists
+
+Spec §11.7.1 gives each fact one approved owner. The specification owns rationale and normative principles; a decision record owns the trade-off and the boundary assumption; an evidence record owns the observation; machine policy owns the parameter. Duplicating an observation into the specification creates a second editable copy that goes stale when the toolchain moves, which is the defect §12.1 records against v0.7 for lane membership.
+
+So the working rule in this repository is:
+
+1. **A work item records findings in a decision record and evidence, and does not edit the specification.** A change must not rewrite the document that judges it, for the same reason §11.5 forbids a change from redefining its own policy.
+2. **Findings that bear on a normative rule or a maturity row are appended here**, which is outside `docs/spec/` on purpose, so appending needs no protected-surface approval while the specification itself keeps one. The rows follow the shape of the specification's own change-log appendices: what the current text says, what the finding is, the proposed delta, the section, and the evidence.
+3. **The specification changes in one work item per version bump**, carrying nothing else, so the diff is reviewable and the maturity table moves with evidence beside it, as Law 8 requires.
+4. **A claim the specification makes about this repository gets a check.** `xtask/tests/policy_drift.rs` already pins §12.1's command block to `.rha/policy.toml`. Untested claims are the ones that rot.
+
+Proposals below cite the evidence that supports them. A row with no evidence record is not ready.
+
+## Queue
+
+| # | Section | What v0.10 says | Finding | Proposed change | Evidence |
+| --- | --- | --- | --- | --- | --- |
+| 1 | §6.8 | The illustrative `clippy.toml` tells the implementer to verify how the pinned Clippy locates and merges configuration files. | Verified for Clippy 0.1.98: each crate is configured by the first file found from its `CARGO_MANIFEST_DIR` upward, and files are never merged. | State the consequence normatively: a core crate's own configuration replaces the root file entirely, so it repeats every root setting it still wants, and a core crate's deny list does not reach a sibling adapter. | [[adr/ADR-0002-clippy-config-discovery]] rules 1 and 2; `evidence/w1-clippy/*/2.txt`, `3.txt`, `3b.txt`, `3c.txt` |
+| 2 | §6.8 | Silent on a `.clippy.toml` beside a `clippy.toml`. | The dotfile wins, with a warning that does not change the exit status, so a deny list can be replaced by a file nobody reviewed. | Add the case to the Hole column, and require the crate-graph check to report the pair. | ADR-0002 rule 3; `evidence/w1-clippy/*/5.txt` |
+| 3 | §6.8 | The deny-list example lists types and methods without saying how a type entry behaves. | A type entry fires where the type is **named**, not where a value of it is used, so a value a dependency returns escapes it. | Say that a listed type carries its effectful methods beside it. | ADR-0002 rule 7; `evidence/w1-clippy/*/4.txt` |
+| 4 | §6.4, §6.8 | §6.4 is the only lint policy, at `deny`. Neither section discusses `forbid`. | A workspace lint table cannot `forbid` these lints where any macro expands to a group allow: `clap`'s derives emit `#[allow(clippy::style)]`, which is then `E0453`. A `serde` derive is unaffected. | Record that a core crate closes the attribute escape at its own crate root, and that a workspace-wide `forbid` is refused by ordinary derive macros. | ADR-0002 rule 8; `evidence/w1-clippy/*/7a.txt`, `7b.txt`, `7c.txt` |
+| 5 | §6.8, §11.5 | The Hole column now says a lint attribute or `--cap-lints` can lower the level. §11.5 does not name build configuration as a protected surface. | `--cap-lints=warn`, from `RUSTFLAGS` or from any `.cargo/config.toml` above the build, lowers every level at once, including `forbid`. An `-A` flag does not survive `forbid`. | Make it normative in §11.5: whatever can set lint levels for the build is part of the protected surface. This repository already protects `.cargo/config.toml`. | ADR-0002 rules 5 and 6; `evidence/w1-clippy/*/6e.txt`, `6l.txt`, `6m.txt`, `6n.txt` |
+| 6 | §1.4 | The ambient-effect deny list and the `no_std` core option share one row at **S**. | The deny list has an artifact and passing tests; the `no_std` option has neither. They graduate on different evidence. | Split the row, and promote the deny list to the maturity `docs/maturity.md` proposes, with its checking scope. | [[maturity]]; the records it cites |
+
+## Not proposed
+
+Kept out on purpose, so nobody re-derives them as gaps.
+
+- The 111 deny-list entries themselves. The specification's list is illustrative and says so; the template owns the real one.
+- Anything about Clippy versions other than 0.1.98. One measurement is one measurement.
+- The `xtask` rule ids and the `Problem` variants of `effect.core_clippy_template`. Those belong to the implementation, and §6.13 already names the checker.

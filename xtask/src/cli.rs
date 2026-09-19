@@ -59,7 +59,7 @@ pub struct CiArgs {
     /// Task id (CHG-nnn) whose task record supplies the change claim.
     #[arg(long)]
     pub task: Option<String>,
-    /// Principal that produced this record, for example agent:claude-opus-5.
+    /// Principal that produced this record, for example agent:executor.
     #[arg(long)]
     pub principal: Option<String>,
 }

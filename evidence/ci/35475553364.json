@@ -1,0 +1,599 @@
+{
+  "schema_version": 1,
+  "record_kind": "evidence",
+  "evidence_class": "ci",
+  "lane": "L0",
+  "started_at": "2026-09-19T23:14:41.748Z",
+  "finished_at": "2026-09-19T23:14:47.698Z",
+  "producer": {
+    "principal": "automation:github-actions",
+    "accountable_to": [
+      "human:kennedy"
+    ],
+    "tool": "xtask ci --lane L0",
+    "tool_version": "0.1.0",
+    "tool_git_rev": "0d8edd0d4c485b0d00530a9c57e195314dcf93bb",
+    "tool_from_dirty_tree": false
+  },
+  "change_claim": {
+    "affected_components": [],
+    "architecture_delta": "A new xtask module (clippy_template) and test-only corpus workspaces excluded from the root workspace. No new dependency.",
+    "contract_changes": "none: no product component exists",
+    "intent": "A core-crate clippy.toml deny list that fails the build on a seeded std::time::SystemTime::now(), with the pinned Clippy's configuration discovery and merge behaviour observed and recorded (spec §6.8), and a rule that every role=core crate's clippy.toml equals one template.",
+    "non_goals": [
+      "Product crates (CHG-005)",
+      "Running effect.core_clippy_template in the L0 lane: `cargo xtask architecture` is a stub until CHG-003, which wires the rule in",
+      "The no_std core option (experiment E1)",
+      "Changing .rha/policy.toml, rha-crates.toml, deny.toml, rha-baseline.json, the root clippy.toml, or `xtask ci`"
+    ],
+    "performance_impact": "none claimed",
+    "source": {
+      "path": ".rha/tasks/CHG-001-ambient-effect-deny-list.toml",
+      "sha256": "93bb5f08bdecd6cd0115612f20fadabe1e7fcf9d4c3b0a822ec06b0becf2d766"
+    },
+    "task": "CHG-001",
+    "unresolved": [
+      "L0.architecture is still not_run, and it is required and non-waivable (DP-0.5), so this change cannot be Eligible under the current policy (CHG-000 acceptance concern 2)."
+    ]
+  },
+  "artifact_identity": {
+    "revision": "0d8edd0d4c485b0d00530a9c57e195314dcf93bb",
+    "tree": "49c4f090b38aa396fbff6662286678605064fab6",
+    "snapshot_tree": "49c4f090b38aa396fbff6662286678605064fab6",
+    "branch": "chg/001-ambient-effect-deny-list",
+    "dirty": false,
+    "tracked_diff_sha256": null,
+    "untracked_inputs": [],
+    "git_object_format": "sha1",
+    "digest_algorithm": "sha256"
+  },
+  "verification_identity": {
+    "policy_path": ".rha/policy.toml",
+    "policy_digest": "sha256:dc2ef7e009b3424dd0487b093076d28f50f4ab3ae721e256353afc937f70756d",
+    "policy_read_from": "candidate_worktree",
+    "base_revision": "c55431692b838cdd3763ba2210559aa2b4b1719e",
+    "base_revision_source": "env RHA_BASE_SHA",
+    "base_policy_digest": "sha256:f102c03ad7d2ec0f994ebfd2ead0b1484eb8b03b4dca6f32e266596525c49d86",
+    "toolchain": {
+      "cargo": "cargo 1.98.1 (797e8a9bc 2026-08-05)",
+      "clippy": "clippy 0.1.98 (48a229ceae 2026-09-01)",
+      "rustc": "rustc 1.98.1 (48a229cea 2026-09-01)",
+      "rustfmt": "rustfmt 1.9.0-stable (48a229ceae 2026-09-01)"
+    },
+    "target": "x86_64-unknown-linux-gnu",
+    "features": "--all-features",
+    "profiles": "dev (clippy, doctest), test (nextest)",
+    "lockfile_sha256": "198c49ddc9211895f02c05b9a2f3081f48d3342de43929fc1f5fab09f268a7ac",
+    "configuration": [
+      {
+        "path": "rust-toolchain.toml",
+        "sha256": "6722199c2892b79fc5bb2e70ff4c636b06e24cc1ee773b2d3d88d9ba7ad78714"
+      },
+      {
+        "path": "Cargo.toml",
+        "sha256": "ffc472aeb53e8b29e39aa123f8d213277828a69d55e25fbbba643ff7bc947f34"
+      },
+      {
+        "path": ".cargo/config.toml",
+        "sha256": "c185a2b859850d94af015a9672c1568e1ef73b12612d820f596ef967b835f637"
+      },
+      {
+        "path": "clippy.toml",
+        "sha256": "13db505e12577c7d6606282e57e5d991efd8fb67059b3938412ad0382b91c592"
+      },
+      {
+        "path": ".config/nextest.toml",
+        "sha256": "67d6ba7c883e2d25826938efe51699532865fb3c1044f4fee7f06c3aad9fd078"
+      },
+      {
+        "path": "deny.toml",
+        "sha256": "69ce278dc68a8ce15abf62f15505911e3843d62dc3205a1bc29bf07489617581"
+      },
+      {
+        "path": "_typos.toml",
+        "sha256": "c9c2e8893b71deef52d90bff69eeab3e88b86a978c1a396bfd51702b7f13d54f"
+      },
+      {
+        "path": "rha-baseline.json",
+        "sha256": "bcf8223b7b475fdbf3b9bf2cc08d4cd06d7021aa7d9e1255ffc8f189d7c910d4"
+      },
+      {
+        "path": "rha-crates.toml",
+        "sha256": "ce6e0fee35cafeda9fd019def2cf2510217871a78e63d4b03cd1678fd441964f"
+      }
+    ],
+    "instruction_sources": [
+      {
+        "path": "AGENTS.md",
+        "sha256": "f961a28f04c3408b9ab4da177b9504bd05f818215bb875f21fb0eff4ac7b3a2a"
+      },
+      {
+        "path": "CONTRIBUTING.md",
+        "sha256": "f81e4df1318328c1654e8009cdb7cb415e6b0b1447f1c9dfb205fe3750d07c2d"
+      },
+      {
+        "path": ".github/pull_request_template.md",
+        "sha256": "973ee7dc93e88583cd72d223d0795e221a6c937290050dc436c45c083159be85"
+      },
+      {
+        "path": ".rha/tasks/CHG-001-ambient-effect-deny-list.toml",
+        "sha256": "93bb5f08bdecd6cd0115612f20fadabe1e7fcf9d4c3b0a822ec06b0becf2d766"
+      }
+    ]
+  },
+  "observed_checks": [
+    {
+      "id": "L0.fmt",
+      "kind": "format",
+      "argv": [
+        "cargo",
+        "fmt",
+        "--all",
+        "--",
+        "--check"
+      ],
+      "required": true,
+      "waivable": false,
+      "params": {
+        "timeout_secs": 300
+      },
+      "tool": {
+        "name": "rustfmt",
+        "probe": {
+          "state": "ready",
+          "version": "1.9.0-stable"
+        }
+      },
+      "outcome": "passed",
+      "exit_status": 0,
+      "error_class": null,
+      "reason": null,
+      "started_at": "2026-09-19T23:14:41.787Z",
+      "duration_ms": 100,
+      "selection_counts": null,
+      "artifacts": [
+        {
+          "path": "target/rha/logs/L0/L0.fmt.stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "target/rha/logs/L0/L0.fmt.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "limits": []
+    },
+    {
+      "id": "L0.clippy",
+      "kind": "lint",
+      "argv": [
+        "cargo",
+        "clippy",
+        "--workspace",
+        "--all-targets",
+        "--all-features"
+      ],
+      "required": true,
+      "waivable": false,
+      "params": {
+        "timeout_secs": 1800
+      },
+      "tool": {
+        "name": "clippy",
+        "probe": {
+          "state": "ready",
+          "version": "0.1.98"
+        }
+      },
+      "outcome": "passed",
+      "exit_status": 0,
+      "error_class": null,
+      "reason": null,
+      "started_at": "2026-09-19T23:14:41.906Z",
+      "duration_ms": 2658,
+      "selection_counts": null,
+      "artifacts": [
+        {
+          "path": "target/rha/logs/L0/L0.clippy.stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "target/rha/logs/L0/L0.clippy.stderr",
+          "sha256": "b23747fb08586aa1a2dadc8f1902a0c5c76dea37f952351eb4f50432713b3fbc"
+        }
+      ],
+      "limits": []
+    },
+    {
+      "id": "L0.nextest",
+      "kind": "test",
+      "argv": [
+        "cargo",
+        "nextest",
+        "run",
+        "--workspace",
+        "--all-features",
+        "--profile",
+        "ci"
+      ],
+      "required": true,
+      "waivable": false,
+      "params": {
+        "proptest_cases": 256,
+        "timeout_secs": 1800
+      },
+      "tool": {
+        "name": "cargo-nextest",
+        "probe": {
+          "state": "ready",
+          "version": "0.9.145"
+        }
+      },
+      "outcome": "passed",
+      "exit_status": 0,
+      "error_class": null,
+      "reason": null,
+      "started_at": "2026-09-19T23:14:44.579Z",
+      "duration_ms": 1861,
+      "selection_counts": {
+        "errors": 0,
+        "failures": 0,
+        "tests": 33
+      },
+      "artifacts": [
+        {
+          "path": "target/rha/logs/L0/L0.nextest.stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "target/rha/logs/L0/L0.nextest.stderr",
+          "sha256": "adf536bad7e78febb27bbbf47efca7e15873ce6d00713e48c5b50ece25c4dea3"
+        },
+        {
+          "path": "target/nextest/ci/junit.xml",
+          "sha256": "6bc0ca25c75c5dcc6d59532956919d1ad75ce16cf16b717355af23652952d060"
+        }
+      ],
+      "limits": []
+    },
+    {
+      "id": "L0.doctest",
+      "kind": "doctest",
+      "argv": [
+        "cargo",
+        "test",
+        "--workspace",
+        "--doc"
+      ],
+      "required": true,
+      "waivable": false,
+      "params": {
+        "proptest_cases": 256,
+        "timeout_secs": 1800
+      },
+      "tool": {
+        "name": "rustc",
+        "probe": {
+          "state": "ready",
+          "version": "1.98.1"
+        }
+      },
+      "outcome": "passed",
+      "exit_status": 0,
+      "error_class": null,
+      "reason": null,
+      "started_at": "2026-09-19T23:14:46.449Z",
+      "duration_ms": 300,
+      "selection_counts": {
+        "failed": 0,
+        "harness_runs": 1,
+        "ignored": 0,
+        "passed": 1
+      },
+      "artifacts": [
+        {
+          "path": "target/rha/logs/L0/L0.doctest.stdout",
+          "sha256": "ad38a54799944016b8ec3996692a55f81fea1872100116db06749899b39298cd"
+        },
+        {
+          "path": "target/rha/logs/L0/L0.doctest.stderr",
+          "sha256": "f6b10bd1e9cf893d6b4f72efa84bf8e270a2ae81cce58869e1dc5e4a9cbd7250"
+        }
+      ],
+      "limits": []
+    },
+    {
+      "id": "L0.architecture",
+      "kind": "architecture",
+      "argv": [
+        "cargo",
+        "xtask",
+        "architecture"
+      ],
+      "required": true,
+      "waivable": false,
+      "params": {
+        "timeout_secs": 600
+      },
+      "tool": {
+        "name": "xtask",
+        "probe": null
+      },
+      "outcome": "not_run",
+      "exit_status": null,
+      "error_class": null,
+      "reason": "not_implemented: the crate-graph checker arrives in CHG-003 (W3), the module-graph check in CHG-007 (W7) (xtask exit 4)",
+      "started_at": "2026-09-19T23:14:46.750Z",
+      "duration_ms": 50,
+      "selection_counts": null,
+      "artifacts": [
+        {
+          "path": "target/rha/logs/L0/L0.architecture.stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "target/rha/logs/L0/L0.architecture.stderr",
+          "sha256": "bd54346f661858d4020202af93fbd539c9c99f7776a6a1e119fe8c94c09a6f97"
+        },
+        {
+          "path": "target/rha/architecture.json",
+          "sha256": "02b3c76e15125bdb101fa52eb3d5b5351fe20759a408cd18ced0b16eb5142551"
+        }
+      ],
+      "limits": []
+    },
+    {
+      "id": "L0.deny",
+      "kind": "dependency",
+      "argv": [
+        "cargo",
+        "deny",
+        "check"
+      ],
+      "required": true,
+      "waivable": false,
+      "params": {
+        "timeout_secs": 900
+      },
+      "tool": {
+        "name": "cargo-deny",
+        "probe": {
+          "state": "ready",
+          "version": "0.20.2"
+        }
+      },
+      "outcome": "passed",
+      "exit_status": 0,
+      "error_class": null,
+      "reason": null,
+      "started_at": "2026-09-19T23:14:46.813Z",
+      "duration_ms": 751,
+      "selection_counts": null,
+      "artifacts": [
+        {
+          "path": "target/rha/logs/L0/L0.deny.stdout",
+          "sha256": "f1a0fca39d4280363937aabd77783990ea6480bd9ca257816de3b68fc8efa845"
+        },
+        {
+          "path": "target/rha/logs/L0/L0.deny.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "limits": []
+    },
+    {
+      "id": "L0.machete",
+      "kind": "dependency",
+      "argv": [
+        "cargo",
+        "machete"
+      ],
+      "required": true,
+      "waivable": false,
+      "params": {
+        "timeout_secs": 600
+      },
+      "tool": {
+        "name": "cargo-machete",
+        "probe": {
+          "state": "ready",
+          "version": "0.9.2"
+        }
+      },
+      "outcome": "passed",
+      "exit_status": 0,
+      "error_class": null,
+      "reason": null,
+      "started_at": "2026-09-19T23:14:47.577Z",
+      "duration_ms": 50,
+      "selection_counts": null,
+      "artifacts": [
+        {
+          "path": "target/rha/logs/L0/L0.machete.stdout",
+          "sha256": "609a16d6d9b02ee55be21ac732381d9080802acfda3330f14ba7c102b6859fa9"
+        },
+        {
+          "path": "target/rha/logs/L0/L0.machete.stderr",
+          "sha256": "9c6fea1ba9841d830a983d90afe526389fb31233f7d2431372194c493f57920b"
+        }
+      ],
+      "limits": []
+    },
+    {
+      "id": "L0.typos",
+      "kind": "spelling",
+      "argv": [
+        "typos"
+      ],
+      "required": true,
+      "waivable": false,
+      "params": {
+        "timeout_secs": 300
+      },
+      "tool": {
+        "name": "typos-cli",
+        "probe": {
+          "state": "ready",
+          "version": "1.50.2"
+        }
+      },
+      "outcome": "passed",
+      "exit_status": 0,
+      "error_class": null,
+      "reason": null,
+      "started_at": "2026-09-19T23:14:47.631Z",
+      "duration_ms": 50,
+      "selection_counts": null,
+      "artifacts": [
+        {
+          "path": "target/rha/logs/L0/L0.typos.stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "target/rha/logs/L0/L0.typos.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "limits": []
+    }
+  ],
+  "evidence_inputs": {
+    "fixtures": [
+      {
+        "path": "docs/spec/rha-spec-v0.10.md",
+        "sha256": "d95218744e2c1acec96081175778e838cfa48e7ca5dd7847e35035e9000ce117"
+      }
+    ],
+    "seeds": {
+      "persisted_regressions": [],
+      "proptest_cases": 256
+    },
+    "environment": {
+      "ci": {
+        "GITHUB_EVENT_NAME": "pull_request",
+        "GITHUB_REF": "refs/pull/2/merge",
+        "GITHUB_REPOSITORY": "kmosoti/recursive-hexagonal-architecture",
+        "GITHUB_RUN_ATTEMPT": "1",
+        "GITHUB_RUN_ID": "35475553364",
+        "GITHUB_SHA": "0d8edd0d4c485b0d00530a9c57e195314dcf93bb",
+        "GITHUB_WORKFLOW": "ci",
+        "ImageOS": "ubuntu24",
+        "ImageVersion": "20260907.300.1",
+        "RHA_PR_HEAD_SHA": "df8ec0fc773bcc4f2a106b414540bffc4bd14808",
+        "RUNNER_ARCH": "X64",
+        "RUNNER_OS": "Linux"
+      },
+      "os": "Linux 6.17.0-1022-azure x86_64",
+      "runner": "github-actions"
+    }
+  },
+  "performance": null,
+  "agent_context": {
+    "provenance": {
+      "advisory_subagents": "Two read-only workflows advised CHG-001.2 and own no artifact, so the mode stays `agent` (§11.6.2). Eleven subagents swept the Rust 1.98.1 standard-library source for effectful APIs, verified each other's lists against that source, and criticized the result; every entry they proposed is checked by experiment 4, which fails if one stops firing. Twenty-eight subagents then reviewed the branch along five dimensions and tried to refute each finding: of 23 findings, 14 survived and were fixed, including the record writer reporting a clean tree when git failed, the experiments that asserted silence without a positive control, and documents asserting a result for a template no committed record covered.",
+      "budgets": "unknown",
+      "harness": "Claude Code, VS Code extension; the CLI on PATH reports `2.1.278 (Claude Code)`; the extension build was not observed",
+      "instruction_sources": [
+        {
+          "path": "docs/plan/IMPLEMENTATION-PLAN.md (W1, at a152d94)",
+          "sha256": "4c60073eacdd5f03303f0d7298a95dea35db0a9bb7bd49b9d724bedea0737afb"
+        },
+        {
+          "path": "docs/plan/IMPLEMENTATION-PLAN.md (CHG-001.1 revision: model-agnostic Executor)",
+          "sha256": "86298ec9b06f6774752cf85eba8396633ba557d6202b96017099b639adeecfb1"
+        },
+        {
+          "path": "docs/spec/rha-spec-v0.10.md (W1 through CHG-001.2)",
+          "sha256": "4c96ded8159c35a6281a6c14183700ae1466c097e009cdc5e722b2d1eacb0907"
+        },
+        {
+          "path": "docs/spec/rha-spec-v0.10.md (CHG-001.3: §6.8 records the Clippy findings)",
+          "sha256": "d95218744e2c1acec96081175778e838cfa48e7ca5dd7847e35035e9000ce117"
+        },
+        {
+          "path": "user message of 2026-09-19 starting W1 (pre-approval of the template)",
+          "sha256": "unknown"
+        },
+        {
+          "path": "user message of 2026-09-19 answering the W1 report (CHG-001.1 and CHG-001.2 decisions above)",
+          "sha256": "unknown"
+        },
+        {
+          "path": "user message of 2026-09-19 instructing the acceptance records, the recommended decisions, the spec update, and the README (CHG-001.3)",
+          "sha256": "unknown"
+        },
+        {
+          "path": "Claude Code system prompt",
+          "sha256": "unknown"
+        }
+      ],
+      "output_style": "Learning (.claude/settings.local.json)",
+      "permission_mode": "auto, as reported to the session; project allow-list in the untracked .claude/settings.json (gh pr/run/api, git fetch, one python3 command)",
+      "permissions": "Workspace files, shell, network, and `gh` as kmosoti through the user's account. Protected surfaces: xtask/templates/core-clippy.toml only, created in W1 and extended in CHG-001.2, both approved by human:kennedy (see [[decisions]]).",
+      "reasoning_effort": "unknown",
+      "sessions": [
+        {
+          "model_id": "claude-opus-5[1m]",
+          "span": "W1: commits a152d94 through b51047d"
+        },
+        {
+          "model_id": "claude-fable-5-1",
+          "span": "CHG-001.1: commit 5fd26ca, and the report that preceded it"
+        },
+        {
+          "model_id": "claude-opus-5",
+          "span": "CHG-001.1 from commit 3bfb9fd, and CHG-001.2"
+        },
+        {
+          "model_id": "claude-opus-5[1m]",
+          "span": "CHG-001.3"
+        }
+      ],
+      "task_scope": "CHG-001: docs/plan/IMPLEMENTATION-PLAN.md §8 W1"
+    },
+    "source": {
+      "path": ".rha/tasks/CHG-001-ambient-effect-deny-list.toml",
+      "sha256": "93bb5f08bdecd6cd0115612f20fadabe1e7fcf9d4c3b0a822ec06b0becf2d766"
+    }
+  },
+  "limits": [
+    "policy read from the candidate working tree; Policy(b) selection from the base revision is not implemented (§11.7.6)",
+    "the producing xtask is candidate code; this record is advisory, not protected evidence (§11.5)",
+    "a timeout kills only the direct child process of a check"
+  ],
+  "disposition": {
+    "eligibility": "blocked",
+    "predicates": {
+      "authentic": {
+        "holds": false,
+        "reasons": [
+          "no trusted producers in policy: this ci record is unauthenticated"
+        ]
+      },
+      "applicable": {
+        "holds": false,
+        "reasons": [
+          "the candidate's policy sha256:dc2ef7e009b3424dd0487b093076d28f50f4ab3ae721e256353afc937f70756d differs from the base policy sha256:f102c03ad7d2ec0f994ebfd2ead0b1484eb8b03b4dca6f32e266596525c49d86"
+        ]
+      },
+      "complete": {
+        "holds": true,
+        "reasons": []
+      },
+      "passed": {
+        "holds": false,
+        "reasons": [
+          "L0.architecture not_run: not_implemented: the crate-graph checker arrives in CHG-003 (W3), the module-graph check in CHG-007 (W7) (xtask exit 4)"
+        ]
+      }
+    },
+    "blocking": [
+      "Authentic: no trusted producers in policy: this ci record is unauthenticated",
+      "Applicable: the candidate's policy sha256:dc2ef7e009b3424dd0487b093076d28f50f4ab3ae721e256353afc937f70756d differs from the base policy sha256:f102c03ad7d2ec0f994ebfd2ead0b1484eb8b03b4dca6f32e266596525c49d86",
+      "Passed: L0.architecture not_run: not_implemented: the crate-graph checker arrives in CHG-003 (W3), the module-graph check in CHG-007 (W7) (xtask exit 4)"
+    ],
+    "acceptance": "pending",
+    "exception": null,
+    "acceptor": null
+  }
+}

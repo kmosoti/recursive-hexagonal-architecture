@@ -888,11 +888,12 @@ Network, process execution, clocks, randomness, storage, telemetry export, and s
 | --- | --- | --- |
 | `#![no_std]` core crates with `alloc` | Removes automatic `std` linkage/prelude for that crate and makes accidental direct use of many standard-library effect APIs harder [R147]. | It is **not** an effect system or sandbox: `extern crate std` remains possible, and dependencies may link `std`. Ecosystem friction can also be substantial. Optional. |
 | Dependency allow-list for core crates, enforced by `xtask` (§6.13) | A core crate cannot acquire an effectful dependency unnoticed. | Judging whether a dependency is pure is manual. |
-| Clippy deny list of ambient-effect paths [R145] | Catches direct calls in core code. | A deny list is incomplete by nature; it does not see transitive calls. |
+| Clippy deny list of ambient-effect paths [R145] | Catches direct uses in core code. | A deny list is incomplete by nature; it does not see transitive calls, and it reports only paths someone thought to list. The configuration decides *which* paths are reported, not whether the build stops: a lint attribute in the crate lowers the level unless the crate root forbids the lint, and `--cap-lints=warn`, from `RUSTFLAGS` or from any `.cargo/config.toml` above the build, lowers every level at once. |
 
 ```toml
 # crates/planning/clippy.toml : core crates only. Illustrative and incomplete.
-# Verify how the pinned Clippy locates and merges configuration files.
+# Verify how the pinned Clippy locates and merges configuration files, and
+# record the answer where observations live; the note below says where.
 disallowed-methods = [
   { path = "std::time::SystemTime::now", reason = "time crosses a Clock port" },
   { path = "std::time::Instant::now",    reason = "time crosses a Clock port" },
@@ -905,6 +906,8 @@ disallowed-types = [
   { path = "std::net::TcpStream", reason = "network crosses a port" },
 ]
 ```
+
+Discovery, merging, and the strength of the level are properties of one tool version, so they are measured rather than assumed, and the measurements live where observations live (§11.7.1): a decision record with the literal commands and captured output, and evidence records a check reruns whenever the toolchain changes. For Clippy 0.1.98 that is `docs/adr/ADR-0002-clippy-config-discovery.md` and `evidence/w1-clippy/`; the consequences it draws for a core crate's configuration are proposed for the next version of this document in `docs/proposals/spec-v0.11.md`.
 
 ## 6.9 Ownership, concurrency, and capability
 

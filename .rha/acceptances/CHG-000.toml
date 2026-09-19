@@ -1,0 +1,103 @@
+# Acceptance record (spec §11.4, §11.7.6; §11.7.11 shape, stored as TOML).
+#
+# An acceptance is an authorized disposition linked to an exact subject. It
+# does not overwrite an observation: every outcome below is the one the
+# evidence records hold, including the check that did not run.
+#
+# Written by the Executor on 2026-09-19 at Kennedy's instruction, recording
+# the decision Kennedy had already taken by merging pull request 1 and
+# tagging the result. `.rha/acceptances/**` is a protected surface; the
+# instruction is the approval, and it is in the CHG-001 task record.
+schema_version = 1
+id = "CHG-000"
+change = "docs/changes/CHG-000-bootstrap.md"
+task = ".rha/tasks/CHG-000-bootstrap.toml"
+
+[acceptor]
+principal = "human:kennedy"
+role = "acceptor"
+date = "2026-09-19"
+authority_profile = "ECC-Solo"
+
+[subject]
+# What was accepted: the merge commit on main, not the branch.
+revision = "c55431692b838cdd3763ba2210559aa2b4b1719e"
+tree = "b21b3da0dd077a92e3156a56b6e4ca6ae22ce51d"
+parents = [
+  "81641865a4fe2a9ae6c0b660e03a8000456d6ff3",
+  "23b4869a521c90152d52a186dc6a711020f6cdfe",
+]
+pull_request = "https://github.com/kmosoti/recursive-hexagonal-architecture/pull/1"
+milestone = "M0"
+tag = "v0.10-m0"
+tag_object = "d933beeee11488ec5de1fe0d779bed62ff91e42d"
+tag_message = "M0: bootstrap accepted (CHG-000)"
+
+[[evidence]]
+path = "evidence/CHG-000/20260919T205530Z-c48f1bd1f44d.json"
+class = "local"
+subject_revision = "c48f1bd1f44dd7dce90f78de78e41f22bfd7ff54"
+subject_tree = "53a38cc1efd282a70f53b91f982706f6f0f94baa"
+note = "A commit on the candidate branch; the lane ran on a clean working tree."
+
+[[evidence]]
+path = "evidence/ci/35468943628.json"
+class = "ci"
+subject_revision = "fe465f02048a6b7954672b34acc09bc6b1b413d9"
+subject_tree = "35538a7335a5aff3ce2143a6cace1e40239428b4"
+note = "GitHub Actions run 35468943628, on the merge commit of pull request 1 with head f06ba6f68dc64da0debd82ed3399c7debf77354d."
+
+[outcomes]
+# As recorded, not as hoped (§11.4).
+passed = [
+  "L0.fmt",
+  "L0.clippy",
+  "L0.nextest",
+  "L0.doctest",
+  "L0.deny",
+  "L0.machete",
+  "L0.typos",
+]
+not_run = ["L0.architecture"]
+failed = []
+not_applicable = []
+inconclusive = []
+
+[disposition]
+decision = "accepted"
+kind = "controlled_transition"
+basis = "spec §11.5: a bootstrap contribution cannot be judged by the policy it introduces, so this acceptance is Kennedy's controlled transition and not MergeAllowed of §11.7.6."
+eligibility_at_acceptance = "blocked"
+exception = "none: no exception was issued, and the outcomes stand as recorded"
+
+[[disposition.predicates]]
+name = "Authentic"
+holds = false
+reason = "`.rha/policy.toml` lists no trusted producers until the verifier of CHG-019 and CHG-020 exists, so every record is advisory."
+
+[[disposition.predicates]]
+name = "Applicable"
+holds = false
+reason = "The base revision 8164186 holds the specification alone and no policy, so Policy(b) does not exist and the predicate fails by construction."
+
+[[disposition.predicates]]
+name = "Complete"
+holds = true
+reason = "Every check of lane L0 appears in the record with a unique id."
+
+[[disposition.predicates]]
+name = "Passed"
+holds = false
+reason = "L0.architecture is not_run (not_implemented until CHG-003) and DP-0.5 makes every L0 check required and non-waivable."
+
+[carried_forward]
+# The acceptance closes the work item, not these. Each is stated in
+# docs/changes/CHG-000-bootstrap.md under "Acceptance concerns".
+open = [
+  "L0.architecture is required and non-waivable, so CHG-001 and CHG-002 cannot be Eligible either; Kennedy decided on 2026-09-19 to leave the policy unchanged and the check not_run until CHG-003.",
+  "A green `ci` status means no check failed and no tool was missing; it does not mean eligible, which only the record states.",
+  "CI executes the candidate's own xtask and policy, so its records are class `ci`, never `protected` (docs/threat-model.md).",
+  "The repository is public and has no LICENSE, so it is all rights reserved by default.",
+  "AGENTS.md was adopted without the §11.7.3 ablation, and this harness loads CLAUDE.md rather than AGENTS.md, so its effect on the Executor is unverified.",
+  "No held-out acceptance check exists for this change; Kennedy's review of the policy and the verifier is the substitute.",
+]

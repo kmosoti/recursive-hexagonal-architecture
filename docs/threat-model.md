@@ -7,7 +7,7 @@ This repository adopts the default threat model of spec §11.0 and records its d
 | Item | This repository |
 | --- | --- |
 | Accountable authority | `human:kennedy`: Planner, Integrator, Acceptor, and exception authority. |
-| Executor | `agent:claude-opus-5`, accountable to `human:kennedy` (contribution mode `agent`). A separate agent instance does not add an accountable principal (§11.6.1). |
+| Executor | `agent:executor`, accountable to `human:kennedy` (contribution mode `agent`). The id names the role, not a model: any agent and model may act, and each task record's provenance names the model and harness per span of work. A separate agent instance or a change of model does not add an accountable principal (§11.6.1). CHG-000's records use the earlier id `agent:claude-opus-5`. |
 | Why `ECC-Solo` | One human directs the work and controls acceptance and exceptions, so separation of duties is nominal (§11.7.6). |
 | Substitute controls | Exceptions to Kennedy's own changes wait a cooling-off delay (`cooling_off_hours` in `.rha/policy.toml`) and are appended to [`.rha/exceptions.log`](../.rha/exceptions.log). The repository is public, so the log is public. |
 | Append-only log | Enforced by review and visible in git history, not by a technical control. |
