@@ -1,8 +1,18 @@
 # Core-crate clippy.toml template (spec §6.8; CHG-001, ADR-0002).
 #
 # Every crate with [package.metadata.rha] role = "core" has a clippy.toml equal
-# to this file, byte for byte (rule effect.core_clippy_template). Adapters,
-# apps, and tools have none and use the root clippy.toml.
+# to this file, byte for byte, and forbids the three lints below at its crate
+# root (rule effect.core_clippy_template):
+#
+#   #![forbid(
+#       clippy::disallowed_methods,
+#       clippy::disallowed_types,
+#       clippy::disallowed_macros
+#   )]
+#
+# without which an #[allow] anywhere in the crate switches this list off
+# (ADR-0002 rules 5 and 8). Adapters, apps, and tools have no copy of this
+# file and use the root clippy.toml.
 #
 # Clippy 0.1.98 uses the nearest clippy.toml and does not merge it with the
 # root file (ADR-0002), so the root's test allowances are repeated here;

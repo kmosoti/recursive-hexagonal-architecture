@@ -1,12 +1,22 @@
 //! Rule `effect.core_clippy_template` (CHG-001): every crate with role `core`
-//! has a `clippy.toml` byte-equal to `xtask/templates/core-clippy.toml`.
+//! has a `clippy.toml` byte-equal to `xtask/templates/core-clippy.toml`, and
+//! forbids the three lints that file configures.
 //!
 //! Clippy 0.1.98 uses the nearest `clippy.toml` and does not merge it with the
 //! root file, and a `.clippy.toml` in the same directory wins over
 //! `clippy.toml` with only a warning (ADR-0002). A core crate without its own
 //! copy therefore gets no deny list, an edited copy can silently drop entries,
-//! and a `.clippy.toml` beside the copy silently replaces it. `cargo xtask
-//! architecture` runs this rule from CHG-003; until then only tests call it.
+//! and a `.clippy.toml` beside the copy silently replaces it.
+//!
+//! The configuration decides which paths are reported; the lint level decides
+//! whether a report stops the build, and an `#[allow]` in the crate sets that
+//! level locally (ADR-0002 rule 5). The workspace lint table cannot forbid
+//! these lints, because a macro that expands to a group allow is then `E0453`
+//! and `clap`'s derives do exactly that (rule 8), so each core crate forbids
+//! them at its own crate root and this rule checks the line.
+//!
+//! `cargo xtask architecture` runs this rule from CHG-003; until then only
+//! tests call it.
 
 use std::path::PathBuf;
 
@@ -37,6 +47,39 @@ pub enum Problem {
     Differs,
     /// A `.clippy.toml` in the crate directory takes precedence over `clippy.toml`.
     Shadowed,
+    /// The crate root does not forbid every lint the template configures, so
+    /// an `#[allow]` anywhere in the crate switches that part of the deny
+    /// list off.
+    Unforbidden,
+}
+
+/// The lints a core crate's root must forbid. The template configures these
+/// three, and nothing else sets a level that an attribute cannot lower.
+pub const FORBIDDEN_LINTS: [&str; 3] = [
+    "clippy::disallowed_methods",
+    "clippy::disallowed_types",
+    "clippy::disallowed_macros",
+];
+
+/// The lints of [`FORBIDDEN_LINTS`] that `source` does not forbid at its
+/// crate root. Inner attributes only: an `#[allow]` further down cannot
+/// lower a lint the root forbids, which is the property being checked.
+#[must_use]
+pub fn unforbidden(source: &str) -> Vec<&'static str> {
+    let mut forbidden = String::new();
+    let mut rest = source;
+    while let Some(start) = rest.find("#![forbid(") {
+        rest = &rest[start + "#![forbid(".len()..];
+        let Some(end) = rest.find(")]") else { break };
+        forbidden.push_str(&rest[..end]);
+        forbidden.push(' ');
+        rest = &rest[end..];
+    }
+    let forbidden: String = forbidden.split_whitespace().collect();
+    FORBIDDEN_LINTS
+        .into_iter()
+        .filter(|lint| !forbidden.contains(lint))
+        .collect()
 }
 
 /// A violation. The witness is the path and the digests: anyone can
@@ -51,6 +94,10 @@ pub struct Finding {
     pub expected_sha256: String,
     /// The digest of the file at `path`; `None` when it is missing or unreadable.
     pub actual_sha256: Option<String>,
+    /// What is missing, where a digest does not say it: the lints a crate
+    /// root leaves unforbidden.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub detail: Option<String>,
 }
 
 /// Checks each core crate's Clippy configuration against `template`.
@@ -67,6 +114,7 @@ pub fn check(template: &[u8], cores: &[CoreCrate]) -> Vec<Finding> {
                 path: path.display().to_string(),
                 expected_sha256: expected.clone(),
                 actual_sha256: actual.map(|bytes| sha256_hex(&bytes)),
+                detail: None,
             });
         };
         let path = core.dir.join("clippy.toml");
@@ -79,6 +127,25 @@ pub fn check(template: &[u8], cores: &[CoreCrate]) -> Vec<Finding> {
         if dotfile.exists() {
             let bytes = std::fs::read(&dotfile).ok();
             finding(Problem::Shadowed, dotfile, bytes);
+        }
+        drop(finding);
+
+        let root = core.dir.join("src/lib.rs");
+        let source = std::fs::read_to_string(&root).unwrap_or_default();
+        let missing = unforbidden(&source);
+        if !missing.is_empty() {
+            findings.push(Finding {
+                rule: RULE_ID,
+                krate: core.name.clone(),
+                problem: Problem::Unforbidden,
+                path: root.display().to_string(),
+                expected_sha256: expected.clone(),
+                actual_sha256: None,
+                detail: Some(format!(
+                    "not forbidden at the crate root: {}",
+                    missing.join(", ")
+                )),
+            });
         }
     }
     findings
@@ -95,11 +162,16 @@ mod tests {
             .unwrap()
     }
 
-    /// A fresh crate directory holding `files`, unique per test and process.
+    const FORBIDDING_ROOT: &[u8] = b"#![forbid(\n    clippy::disallowed_methods,\n    clippy::disallowed_types,\n    clippy::disallowed_macros\n)]\n";
+
+    /// A fresh crate directory holding `files`, unique per test and process,
+    /// whose crate root forbids the lints unless a test overwrites it.
     fn crate_dir(test: &str, files: &[(&str, &[u8])]) -> CoreCrate {
         let dir = std::env::temp_dir().join(format!("rha-{test}-{}", std::process::id()));
         let _ = std::fs::remove_dir_all(&dir);
         std::fs::create_dir_all(&dir).unwrap();
+        std::fs::create_dir_all(dir.join("src")).unwrap();
+        std::fs::write(dir.join("src/lib.rs"), FORBIDDING_ROOT).unwrap();
         for (name, bytes) in files {
             std::fs::write(dir.join(name), bytes).unwrap();
         }
@@ -145,6 +217,34 @@ mod tests {
             (found[0].problem, found[0].actual_sha256.as_deref()),
             (Problem::Missing, None)
         );
+    }
+
+    #[test]
+    fn a_crate_root_that_does_not_forbid_the_lints_is_a_finding() {
+        let core = crate_dir("unforbidden", &[("clippy.toml", &template())]);
+        std::fs::write(core.dir.join("src/lib.rs"), b"pub fn f() {}\n").unwrap();
+        let found = check_and_clean(&core);
+        assert_eq!(found.len(), 1);
+        assert_eq!(found[0].problem, Problem::Unforbidden);
+        assert!(found[0].path.ends_with("lib.rs"));
+        for lint in FORBIDDEN_LINTS {
+            assert!(found[0].detail.as_ref().is_some_and(|d| d.contains(lint)));
+        }
+    }
+
+    #[test]
+    fn forbidding_only_some_of_the_lints_names_the_rest() {
+        assert_eq!(
+            unforbidden(std::str::from_utf8(FORBIDDING_ROOT).unwrap()),
+            Vec::<&str>::new()
+        );
+        let partial = "#![forbid(clippy::disallowed_methods)]\npub fn f() {}\n";
+        assert_eq!(
+            unforbidden(partial),
+            vec!["clippy::disallowed_types", "clippy::disallowed_macros"]
+        );
+        let deny_not_forbid = "#![deny(clippy::disallowed_methods)]\n";
+        assert_eq!(unforbidden(deny_not_forbid).len(), 3);
     }
 
     #[test]

@@ -496,6 +496,8 @@ fn a_lint_attribute_switches_the_deny_list_off() {
             core("core-allow-crate", "allow_crate.rs", Config::Template),
             core("core-forbid-crate", "forbid_crate.rs", Config::Template),
             core("core-seeded", "seeded_clock.rs", Config::Template),
+            core("core-macro-allow", "macro_group_allow.rs", Config::Template),
+            core("core-forbid-clean", "forbid_clean.rs", Config::Template),
         ],
     );
 
@@ -560,6 +562,25 @@ fn a_lint_attribute_switches_the_deny_list_off() {
         )
         .exits_zero()
         .silent("disallowed");
+
+    fixture
+        .clippy(
+            "7b",
+            "a macro-expanded #[allow(clippy::style)] under the deny level",
+            &["-p", "core-macro-allow"],
+            &[],
+        )
+        .exits_zero()
+        .silent(INCOMPATIBLE);
+
+    fixture
+        .clippy(
+            "7c",
+            "a core crate that forbids the three lints itself, with clean code",
+            &["-p", "core-forbid-clean", "--all-targets"],
+            &[],
+        )
+        .exits_zero();
 }
 
 /// Experiment 6, continued: the same crates under a lint table that forbids
@@ -575,9 +596,23 @@ fn forbid_in_the_lint_table_closes_the_attribute_escape() {
             core("core-allow-crate", "allow_crate.rs", Config::Template),
             core("core-seeded", "seeded_clock.rs", Config::Template),
             core("core-clean", "test_unwrap.rs", Config::Template),
+            core("core-macro-allow", "macro_group_allow.rs", Config::Template),
             adapter("adapter-x", "adapter_clock.rs"),
         ],
     );
+
+    // Why the repository's own lint table cannot forbid these lints: clap's
+    // derives expand to #[allow(clippy::style)], and a group allow a macro
+    // wrote is refused the same way one written by hand is.
+    fixture
+        .clippy(
+            "7a",
+            "a macro-expanded #[allow(clippy::style)] under the forbidding table",
+            &["-p", "core-macro-allow"],
+            &[],
+        )
+        .exits_nonzero()
+        .reports(INCOMPATIBLE);
 
     for (id, krate) in [
         ("6f", "core-allow-item"),

@@ -59,6 +59,12 @@ protected = [
   "rust-toolchain.toml",
   "clippy.toml",
   ".config/nextest.toml",
+  # Cargo reads .cargo/config.toml from the build directory upward, and
+  # `--cap-lints=warn` there turns every lint, including a forbidden one, into
+  # a warning: it disables the ambient-effect deny list and the workspace lint
+  # table at once (ADR-0002 rule 6, experiment 6n). Approved by human:kennedy
+  # on 2026-09-19 (CHG-001.3).
+  ".cargo/config.toml",
   "Cargo.toml",
   ".github/**",
   "xtask/src/lanes.rs",

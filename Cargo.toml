@@ -16,6 +16,12 @@ unused_must_use = "deny"
 all      = { level = "deny", priority = -1 }
 pedantic = { level = "warn", priority = -1 }
 
+# The ambient-effect lints stay at the group's deny level here. Forbidding
+# them workspace-wide is refused by any crate whose macros expand to a group
+# allow: clap's derives emit #[allow(clippy::style)], which is E0453 under
+# forbid (ADR-0002 rule 8, experiments 7a and 7b). Core crates close the
+# attribute escape with a crate-root #![forbid(...)] instead, which the rule
+# effect.core_clippy_template checks.
 dbg_macro = "deny"
 todo = "deny"
 unimplemented = "deny"
