@@ -42,6 +42,9 @@ Each experiment runs in a fixture workspace that [`xtask/tests/clippy_corpus.rs`
 | 6l | no attribute, under forbid, `RUSTFLAGS=-Aclippy::disallowed_methods` | Exit 101, the error stands: `forbid` is not lowered by an allow flag. |
 | 6m | no attribute, under forbid, `RUSTFLAGS=--cap-lints=warn` | Exit 0, the finding appears as a warning. |
 | 6n | the same `--cap-lints=warn` in the fixture's `.cargo/config.toml` | Exit 0, the finding appears as a warning. |
+| 7a | a crate whose macro expands to `#[allow(clippy::style)]`, under the forbidding lint table | Exit 101, `E0453`: a group allow a macro wrote is refused exactly as one written by hand. |
+| 7b | the same crate under the deny level | Exit 0. |
+| 7c | a core crate with `#![forbid(...)]` at its own root and nothing on the deny list | Exit 0: the per-crate route costs clean code nothing. |
 
 ## Observed rule
 
@@ -52,6 +55,7 @@ Each experiment runs in a fixture workspace that [`xtask/tests/clippy_corpus.rs`
 5. **Attributes outrank the configuration file.** The file decides *which paths* are reported; the lint level decides *whether* a report is an error, and `#[allow]`, `#[expect]`, and `#![allow]` in the crate set that level locally (6a, 6b, 6c). A `forbid` above them, from the crate root or the lint table, makes each of those attributes `E0453` (6d, 6f, 6g, 6h) without changing anything else (6i, 6j, 6k).
 6. **A level is not a ceiling.** `--cap-lints=warn`, from `RUSTFLAGS` or from `.cargo/config.toml`, lowers a forbidden finding to a warning (6m, 6n). An `-A` flag does not (6l).
 
+8. **A forbidding lint table refuses macro-generated group allows.** Where any macro in the crate expands to `#[allow(clippy::style)]`, forbidding a lint of that group is `E0453` (7a), and at the deny level the same crate is silent (7b). This is not hypothetical: setting the three lints to `forbid` in this repository's own `Cargo.toml` stopped `xtask` compiling with 15 such errors, all of them from `clap`'s `derive(Parser)` and `derive(Subcommand)`. A `serde` derive does not do this, so a core crate can forbid the lints at its own root (7c).
 7. **A type entry fires where the type is named.** It catches a type in a signature, a type annotation, or a qualified path such as `File::open`, but not a value a dependency hands back, and not a bare unit-struct value: `let a = std::alloc::System;` is silent where `let a: std::alloc::System = …;` fires. The effectful method of each such type is therefore listed beside it.
 
 Rules 1 and 2 are what the plan pre-registered as its expectation, and both hold, so the `CLIPPY_CONF_DIR` fallback is not used. Rule 3 answers the plan's listed Unknown, and its answer is the outcome the plan told the Executor to avoid rather than one it expected. Rules 4 to 7 were not pre-registered.
@@ -79,7 +83,9 @@ Rules 1 and 2 are what the plan pre-registered as its expectation, and both hold
   A type entry replaces the narrower constructor entry it subsumes, as `std::process::Command` replaced `Command::new`; by rule 7 the effectful methods of those types are listed as well, so a value obtained from elsewhere is still caught.
 
   **Candidates this change did not take**, each verified to resolve and fire, each a judgment about cost in ordinary code rather than about whether it is an effect: `Mutex::lock`, `RwLock::read` and `write`; the atomics; `Once::call_once`, `OnceLock::get_or_init` and `set`, `LazyLock`; `Condvar::wait_while` and `wait_timeout_while`, `Once::wait_force`, `mpsc::Sender::send`, `SyncSender::send`, `Receiver::iter`; `panic::panic_any`; the `Backtrace` type, whose `Display` impl formats the captured stack; and the build-time filesystem reads `include_str!` and `include_bytes!`. Extending the template is a protected change for Kennedy.
-- The attribute escape of rule 5 is recorded, not closed. Closing it means `forbid` for the three lints in the root `Cargo.toml`, a protected surface, and that is Kennedy's decision (CHG-001 acceptance concerns).
+- The attribute escape of rule 5 is closed one crate at a time, not workspace-wide. Every core crate carries `#![forbid(clippy::disallowed_methods, clippy::disallowed_types, clippy::disallowed_macros)]` at its crate root, which refuses an item-level allow (6d) and costs clean code nothing (7c). The root `Cargo.toml` keeps the deny level, because rule 8 makes a forbidding table incompatible with `clap`; it carries a comment saying so.
+- `effect.core_clippy_template` therefore reports a fourth problem, `unforbidden`, naming the lints a crate root leaves out. The check is a text scan of the crate root for `#![forbid(...)]`; it does not understand a group forbid such as `forbid(clippy::all)`, and it would be fooled by the text inside a comment.
+- `.cargo/config.toml` is a protected surface from CHG-001.3, because `--cap-lints=warn` there disables every lint at once (6n).
 
 ## Consequences
 
@@ -87,5 +93,6 @@ Rules 1 and 2 are what the plan pre-registered as its expectation, and both hold
 - A `.clippy.toml` at the repository root would shadow the root `clippy.toml` for every crate without its own file. The rule checks core crate directories only, so this remains a review item.
 - **The deny list sees direct uses only** (§6.8). It does not see a call through a helper in another crate, a call the compiler generates from a macro, or an effect reached through a trait object. Experiment 4 proves each entry fires on a direct use, and nothing more.
 - **What the list leaves out, on purpose.** `HashMap::new` and `HashMap::with_capacity` seed themselves from `RandomState`, which the list catches only when a crate names it; iteration order stays a source of nondeterminism that a deny list cannot reach. Platform extension traits, such as `std::os::unix::process::CommandExt::exec` and `std::os::unix::process::parent_id`, are effectful but would not resolve on another target, so listing them would trade a real check for a portability warning. Unstable APIs, such as `std::random`, are left out until they are stable. Each is a candidate for a later change, not an oversight.
+- **A core crate cannot allow these lints anywhere, including its own tests.** That is the point of the crate-root `forbid`, and it is also its cost: a core-crate test that wants a real clock has to take one through a port, like the code it tests.
 - **Four ways to switch it off** are now recorded. An attribute in the crate (rule 5), unless the lint table forbids the lint. An allow flag in `RUSTFLAGS`, which works at the repository's current deny level (6e) and stops working under `forbid` (6l). `--cap-lints=warn` from `RUSTFLAGS` or `.cargo/config.toml` (rule 6), which no lint level survives; `.cargo/config.toml` is not on the protected list in `.rha/policy.toml`. And a crate whose `clippy.toml` is missing, edited, or shadowed, which is what `effect.core_clippy_template` reports.
 - Until CHG-003 wires the rule in and CHG-005 creates core crates, the template protects no product code: the deny list is demonstrated on fixtures only.

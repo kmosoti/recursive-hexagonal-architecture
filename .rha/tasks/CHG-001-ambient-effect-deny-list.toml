@@ -99,6 +99,34 @@ decided_by = "human:kennedy"
 date = "2026-09-19"
 
 [[decisions]]
+id = "acceptance-records"
+question = "`.rha/acceptances/` is empty although CHG-000 was accepted and tagged. Who writes the record?"
+answer = "The Executor writes it, at Kennedy's instruction of 2026-09-19, which is the approval for that protected surface. CHG-001 gets no acceptance record: it is not merged and not accepted."
+decided_by = "human:kennedy"
+date = "2026-09-19"
+
+[[decisions]]
+id = "close-the-attribute-escape"
+question = "Close the attribute escape by forbidding the three lints in the root Cargo.toml?"
+answer = "Instructed, then refused by the toolchain: clap's derives expand to a group allow, which is E0453 under forbid, so xtask stopped compiling. Closed per core crate instead, with a crate-root #![forbid(...)] that the rule effect.core_clippy_template checks (experiments 7a to 7c)."
+decided_by = "human:kennedy"
+date = "2026-09-19"
+
+[[decisions]]
+id = "protect-cargo-config"
+question = "`--cap-lints=warn` in .cargo/config.toml disables every lint. Should that file be a protected surface?"
+answer = "Yes. It is added to [surface] protected, which changes the policy digest and makes the next record report Applicable false until this change is on main (§11.5 controlled transition)."
+decided_by = "human:kennedy"
+date = "2026-09-19"
+
+[[decisions]]
+id = "spec-research-update"
+question = "Record the Clippy findings in the specification?"
+answer = "Yes: §6.8 and its ambient-authority table state what was observed, with pointers to ADR-0002 and the records. The §1.4 maturity table stays untouched; Kennedy promotes those rows at a version bump."
+decided_by = "human:kennedy"
+date = "2026-09-19"
+
+[[decisions]]
 id = "protected-surface-approval"
 question = "Which protected surfaces may this change touch?"
 answer = "Only the creation of xtask/templates/core-clippy.toml; no other protected surface may change. Extended on the same day by the deny-list-gaps decision above, which approves editing that same file to close the gaps ADR-0002 names; no other protected surface may change."
@@ -128,6 +156,21 @@ owned_scope = [
   "xtask/tests/corpus/clippy/**, xtask/tests/clippy_corpus.rs",
   "docs/adr/ADR-0002-clippy-config-discovery.md, docs/changes/CHG-001-ambient-effect-deny-list.md, docs/maturity.md, generated docs",
   "evidence/w1-clippy/**, evidence/CHG-001/**",
+]
+
+[[work]]
+id = "W1.3"
+executor = "agent:executor"
+depends_on = ["W1.2"]
+output = "The acceptance record for CHG-000; the attribute escape closed per core crate after the workspace-wide forbid was refused by the toolchain; .cargo/config.toml protected; the Clippy findings recorded in spec §6.8; a README and GitHub description that say what works and what does not."
+owned_scope = [
+  ".rha/acceptances/CHG-000.toml (written at Kennedy's instruction)",
+  ".rha/policy.toml ([surface] protected only), Cargo.toml (a comment recording why these lints are not forbidden there)",
+  "docs/spec/rha-spec-v0.10.md §6.8 (at Kennedy's instruction; §1.4 untouched)",
+  "xtask/src/clippy_template.rs, xtask/tests/clippy_corpus.rs, xtask/tests/corpus/clippy/**, xtask/templates/core-clippy.toml (header only)",
+  "README.md, the GitHub repository description and topics",
+  "docs/adr/ADR-0002-clippy-config-discovery.md, docs/changes/CHG-001-ambient-effect-deny-list.md, docs/maturity.md, generated docs",
+  "evidence/w1-clippy/**, evidence/CHG-001/**, evidence/ci/**",
 ]
 
 [expectation]
@@ -173,9 +216,11 @@ advisory_subagents = "Two read-only workflows advised CHG-001.2 and own no artif
 instruction_sources = [
   { path = "docs/plan/IMPLEMENTATION-PLAN.md (W1, at a152d94)", sha256 = "4c60073eacdd5f03303f0d7298a95dea35db0a9bb7bd49b9d724bedea0737afb" },
   { path = "docs/plan/IMPLEMENTATION-PLAN.md (CHG-001.1 revision: model-agnostic Executor)", sha256 = "86298ec9b06f6774752cf85eba8396633ba557d6202b96017099b639adeecfb1" },
-  { path = "docs/spec/rha-spec-v0.10.md", sha256 = "4c96ded8159c35a6281a6c14183700ae1466c097e009cdc5e722b2d1eacb0907" },
+  { path = "docs/spec/rha-spec-v0.10.md (W1 through CHG-001.2)", sha256 = "4c96ded8159c35a6281a6c14183700ae1466c097e009cdc5e722b2d1eacb0907" },
+  { path = "docs/spec/rha-spec-v0.10.md (CHG-001.3: §6.8 records the Clippy findings)", sha256 = "d95218744e2c1acec96081175778e838cfa48e7ca5dd7847e35035e9000ce117" },
   { path = "user message of 2026-09-19 starting W1 (pre-approval of the template)", sha256 = "unknown" },
   { path = "user message of 2026-09-19 answering the W1 report (CHG-001.1 and CHG-001.2 decisions above)", sha256 = "unknown" },
+  { path = "user message of 2026-09-19 instructing the acceptance records, the recommended decisions, the spec update, and the README (CHG-001.3)", sha256 = "unknown" },
   { path = "Claude Code system prompt", sha256 = "unknown" },
 ]
 
@@ -192,3 +237,7 @@ span = "CHG-001.1: commit 5fd26ca, and the report that preceded it"
 [[provenance.sessions]]
 model_id = "claude-opus-5"
 span = "CHG-001.1 from commit 3bfb9fd, and CHG-001.2"
+
+[[provenance.sessions]]
+model_id = "claude-opus-5[1m]"
+span = "CHG-001.3"
