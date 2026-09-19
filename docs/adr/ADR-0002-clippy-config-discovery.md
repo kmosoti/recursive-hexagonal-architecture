@@ -48,6 +48,8 @@ Each experiment runs in a fixture workspace that [`xtask/tests/clippy_corpus.rs`
 
 ## Observed rule
 
+This record owns these observations (§11.7.1). The specification states the consequence and points here; what a finding would change in its text is queued in [`docs/spec/proposals/v0.11.md`](../spec/proposals/v0.11.md) for the version bump.
+
 1. **Per-crate discovery.** Clippy configures each crate from the first configuration file found in the crate's directory or its ancestors (1, 2, 3c). A core crate's local file does not apply to a sibling adapter.
 2. **No merge.** The file found replaces every file further up; a crate with its own file loses the root file's settings (3; control 3c; 3b).
 3. **Dotfile precedence.** In one directory, `.clippy.toml` wins over `clippy.toml`. The warning does not change the exit status, so a deny list can be replaced silently (5).

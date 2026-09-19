@@ -892,8 +892,8 @@ Network, process execution, clocks, randomness, storage, telemetry export, and s
 
 ```toml
 # crates/planning/clippy.toml : core crates only. Illustrative and incomplete.
-# How the pinned Clippy locates and merges these files is verified, not assumed;
-# the note below this block records what was observed for Clippy 0.1.98.
+# Verify how the pinned Clippy locates and merges configuration files, and
+# record the answer where observations live; the note below says where.
 disallowed-methods = [
   { path = "std::time::SystemTime::now", reason = "time crosses a Clock port" },
   { path = "std::time::Instant::now",    reason = "time crosses a Clock port" },
@@ -907,15 +907,7 @@ disallowed-types = [
 ]
 ```
 
-**Observed for Clippy 0.1.98** (2026-09-19, in this repository, under CHG-001; the literal commands, exit statuses and captured output are in `docs/adr/ADR-0002-clippy-config-discovery.md` and `evidence/w1-clippy/`, and the corpus reruns them whenever the toolchain changes). These are measurements of one tool version, not properties of Clippy, and each carries a consequence the profile has to absorb.
-
-| Observation | Consequence for a core crate |
-| --- | --- |
-| Each crate is configured by the first `clippy.toml` found from its `CARGO_MANIFEST_DIR` upward, and files are **not** merged. | A core crate's own file replaces the root file entirely, so it must repeat every root setting it still wants, and the deny list of a core crate does not apply to a sibling adapter. |
-| A `.clippy.toml` beside a `clippy.toml` in one directory wins, with a warning that does not change the exit status. | A file nobody reviewed can replace the deny list in silence; the crate-graph checker reports the pair. |
-| A configured type entry fires where the type is **named**, not where a value of it is used. | List the effectful methods of a listed type beside it, or a value obtained from another crate escapes. |
-| A workspace lint table cannot `forbid` these lints where any macro expands to a group allow: `clap`'s derives emit `#[allow(clippy::style)]`, which is then `E0453`. A `serde` derive is unaffected. | Forbid at each core crate's root instead, and check that line as part of the crate's configuration. |
-| `#[allow]`, `#[expect]` and `#![allow]` lower the level locally; `forbid` refuses them; `--cap-lints=warn` lowers even `forbid`. | The deny list is a review aid backed by a level, not a sandbox. Whatever can set lint levels for the build, `.cargo/config.toml` included, is part of the protected surface (§11.5). |
+Discovery, merging, and the strength of the level are properties of one tool version, so they are measured rather than assumed, and the measurements live where observations live (§11.7.1): a decision record with the literal commands and captured output, and evidence records a check reruns whenever the toolchain changes. For Clippy 0.1.98 that is `docs/adr/ADR-0002-clippy-config-discovery.md` and `evidence/w1-clippy/`; the consequences it draws for a core crate's configuration are proposed for the next version of this document in `docs/spec/proposals/v0.11.md`.
 
 ## 6.9 Ownership, concurrency, and capability
 

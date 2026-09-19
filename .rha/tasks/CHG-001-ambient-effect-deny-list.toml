@@ -122,7 +122,7 @@ date = "2026-09-19"
 [[decisions]]
 id = "spec-research-update"
 question = "Record the Clippy findings in the specification?"
-answer = "Yes: §6.8 and its ambient-authority table state what was observed, with pointers to ADR-0002 and the records. The §1.4 maturity table stays untouched; Kennedy promotes those rows at a version bump."
+answer = "Yes, then corrected on the same day. The first edit put an observation table in §6.8, which duplicated ADR-0002 against the one-owner rule of §11.7.1. §6.8 now keeps the normative consequence and a pointer; the proposals are queued in docs/spec/proposals/v0.11.md for the version bump, together with the rule that a work item does not edit the specification. The §1.4 maturity table stays untouched; Kennedy promotes those rows at a version bump."
 decided_by = "human:kennedy"
 date = "2026-09-19"
 
@@ -166,7 +166,7 @@ output = "The acceptance record for CHG-000; the attribute escape closed per cor
 owned_scope = [
   ".rha/acceptances/CHG-000.toml (written at Kennedy's instruction)",
   ".rha/policy.toml ([surface] protected only), Cargo.toml (a comment recording why these lints are not forbidden there)",
-  "docs/spec/rha-spec-v0.10.md §6.8 (at Kennedy's instruction; §1.4 untouched)",
+  "docs/spec/rha-spec-v0.10.md §6.8 (at Kennedy's instruction; §1.4 untouched), docs/spec/proposals/v0.11.md",
   "xtask/src/clippy_template.rs, xtask/tests/clippy_corpus.rs, xtask/tests/corpus/clippy/**, xtask/templates/core-clippy.toml (header only)",
   "README.md, the GitHub repository description and topics",
   "docs/adr/ADR-0002-clippy-config-discovery.md, docs/changes/CHG-001-ambient-effect-deny-list.md, docs/maturity.md, generated docs",
@@ -218,6 +218,7 @@ instruction_sources = [
   { path = "docs/plan/IMPLEMENTATION-PLAN.md (CHG-001.1 revision: model-agnostic Executor)", sha256 = "86298ec9b06f6774752cf85eba8396633ba557d6202b96017099b639adeecfb1" },
   { path = "docs/spec/rha-spec-v0.10.md (W1 through CHG-001.2)", sha256 = "4c96ded8159c35a6281a6c14183700ae1466c097e009cdc5e722b2d1eacb0907" },
   { path = "docs/spec/rha-spec-v0.10.md (CHG-001.3: §6.8 records the Clippy findings)", sha256 = "d95218744e2c1acec96081175778e838cfa48e7ca5dd7847e35035e9000ce117" },
+  { path = "docs/spec/rha-spec-v0.10.md (CHG-001.3 corrected: the observations move to the decision record and the v0.11 queue)", sha256 = "SPEC_DIGEST" },
   { path = "user message of 2026-09-19 starting W1 (pre-approval of the template)", sha256 = "unknown" },
   { path = "user message of 2026-09-19 answering the W1 report (CHG-001.1 and CHG-001.2 decisions above)", sha256 = "unknown" },
   { path = "user message of 2026-09-19 instructing the acceptance records, the recommended decisions, the spec update, and the README (CHG-001.3)", sha256 = "unknown" },

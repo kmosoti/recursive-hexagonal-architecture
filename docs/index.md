@@ -5,6 +5,7 @@ The landing page of the docs that `rhawiki` renders (CHG-005). Links use wiki sy
 ## Specification and plan
 
 - [[spec/rha-spec-v0.10]]: the Recursive Hexagonal Architecture working specification, v0.10.
+- [[spec/proposals/v0.11]]: findings queued for the next version of the specification, with the evidence for each.
 - [[plan/IMPLEMENTATION-PLAN]]: the authorized work order for implementing and validating its mechanisms.
 
 ## Status
