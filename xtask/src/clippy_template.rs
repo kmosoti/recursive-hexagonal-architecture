@@ -106,29 +106,30 @@ pub fn check(template: &[u8], cores: &[CoreCrate]) -> Vec<Finding> {
     let expected = sha256_hex(template);
     let mut findings = Vec::new();
     for core in cores {
-        let mut finding = |problem, path: PathBuf, actual: Option<Vec<u8>>| {
-            findings.push(Finding {
-                rule: RULE_ID,
-                krate: core.name.clone(),
-                problem,
-                path: path.display().to_string(),
-                expected_sha256: expected.clone(),
-                actual_sha256: actual.map(|bytes| sha256_hex(&bytes)),
-                detail: None,
-            });
-        };
-        let path = core.dir.join("clippy.toml");
-        match std::fs::read(&path) {
-            Ok(bytes) if bytes == template => {}
-            Ok(bytes) => finding(Problem::Differs, path, Some(bytes)),
-            Err(_) => finding(Problem::Missing, path, None),
+        {
+            let mut finding = |problem, path: PathBuf, actual: Option<Vec<u8>>| {
+                findings.push(Finding {
+                    rule: RULE_ID,
+                    krate: core.name.clone(),
+                    problem,
+                    path: path.display().to_string(),
+                    expected_sha256: expected.clone(),
+                    actual_sha256: actual.map(|bytes| sha256_hex(&bytes)),
+                    detail: None,
+                });
+            };
+            let path = core.dir.join("clippy.toml");
+            match std::fs::read(&path) {
+                Ok(bytes) if bytes == template => {}
+                Ok(bytes) => finding(Problem::Differs, path, Some(bytes)),
+                Err(_) => finding(Problem::Missing, path, None),
+            }
+            let dotfile = core.dir.join(".clippy.toml");
+            if dotfile.exists() {
+                let bytes = std::fs::read(&dotfile).ok();
+                finding(Problem::Shadowed, dotfile, bytes);
+            }
         }
-        let dotfile = core.dir.join(".clippy.toml");
-        if dotfile.exists() {
-            let bytes = std::fs::read(&dotfile).ok();
-            finding(Problem::Shadowed, dotfile, bytes);
-        }
-        drop(finding);
 
         let root = core.dir.join("src/lib.rs");
         let source = std::fs::read_to_string(&root).unwrap_or_default();
