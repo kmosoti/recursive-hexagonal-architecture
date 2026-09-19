@@ -1,0 +1,31 @@
+# Clippy corpus fixture (CHG-001): a workspace of its own, excluded from the
+# root workspace. The lint tables below copy the root Cargo.toml;
+# xtask/tests/clippy_corpus.rs fails if they drift.
+[workspace]
+members = ["crates/*"]
+resolver = "3"
+
+[workspace.package]
+edition = "2024"
+rust-version = "1.98.1"
+
+[workspace.lints.rust]
+unsafe_code = "deny"
+unsafe_op_in_unsafe_fn = "deny"
+unused_must_use = "deny"
+
+[workspace.lints.clippy]
+all      = { level = "deny", priority = -1 }
+pedantic = { level = "warn", priority = -1 }
+
+dbg_macro = "deny"
+todo = "deny"
+unimplemented = "deny"
+unwrap_used = "warn"
+expect_used = "warn"
+large_stack_arrays = "warn"
+large_types_passed_by_value = "warn"
+
+# Each normal member crate opts in:
+# [lints]
+# workspace = true

@@ -1,0 +1,105 @@
+# Task record (spec §11.7.11 shape, stored as TOML).
+schema_version = 1
+id = "CHG-001"
+slug = "ambient-effect-deny-list"
+title = "Ambient-effect deny list and Clippy configuration discovery"
+mode = "agent"
+executor_composition = "agent"
+authority_profile = "ECC-Solo"
+status = "proposed"
+plan_ref = "docs/plan/IMPLEMENTATION-PLAN.md §8 W1"
+branch = "chg/001-ambient-effect-deny-list"
+base_revision = "c55431692b838cdd3763ba2210559aa2b4b1719e"
+intent = "A core-crate clippy.toml deny list that fails the build on a seeded std::time::SystemTime::now(), with the pinned Clippy's configuration discovery and merge behaviour observed and recorded (spec §6.8), and a rule that every role=core crate's clippy.toml equals one template."
+non_goals = [
+  "Product crates (CHG-005)",
+  "Running effect.core_clippy_template in the L0 lane: `cargo xtask architecture` is a stub until CHG-003, which wires the rule in",
+  "The no_std core option (experiment E1)",
+  "Changing .rha/policy.toml, rha-crates.toml, deny.toml, rha-baseline.json, the root clippy.toml, or `xtask ci`",
+]
+
+[[actors]]
+id = "human:kennedy"
+type = "human"
+
+[[actors]]
+id = "agent:claude-opus-5"
+type = "agent"
+accountable_to = "human:kennedy"
+
+[[actors]]
+id = "automation:github-actions"
+type = "automation"
+accountable_to = "human:kennedy"
+
+[roles]
+planner = "human:kennedy"
+executor = ["agent:claude-opus-5"]
+integrator = "human:kennedy"
+verifier = ["automation:xtask-ci (local, advisory)", "automation:github-actions (class ci, advisory)"]
+acceptor = "human:kennedy"
+
+[[work]]
+id = "W1"
+executor = "agent:claude-opus-5"
+depends_on = ["CHG-000"]
+output = "Clippy corpus fixtures under xtask/tests/corpus/clippy/, the recorded experiments in evidence/w1-clippy/, ADR-0002, xtask/templates/core-clippy.toml, and the effect.core_clippy_template check function with tests."
+owned_scope = [
+  "xtask/tests/corpus/clippy/**",
+  "xtask/templates/core-clippy.toml (creation pre-approved by Kennedy, 2026-09-19)",
+  "xtask/src/clippy_template.rs, xtask/src/lib.rs",
+  "xtask/tests/clippy_corpus.rs",
+  "evidence/w1-clippy/**, evidence/CHG-001/**",
+  "docs/adr/ADR-0002-clippy-config-discovery.md, docs/changes/CHG-001-ambient-effect-deny-list.md, docs/maturity.md, generated docs",
+  ".gitignore (fixture target directories)",
+]
+
+[[decisions]]
+id = "protected-surface-approval"
+question = "Which protected surfaces may this change touch?"
+answer = "Only the creation of xtask/templates/core-clippy.toml; no other protected surface may change."
+decided_by = "human:kennedy"
+date = "2026-09-19"
+
+[expectation]
+# Written before any experiment ran (plan §8 W1). The recorded rule is whatever is observed.
+discovery = "Clippy reads the first clippy.toml found from the crate's CARGO_MANIFEST_DIR upward; a core crate's local file applies to it and not to a sibling adapter."
+merge = "No merge: the nearest file replaces the root file entirely, so a core crate's clippy.toml loses the root test allowances unless it repeats them."
+fallback_if_contradicted = "Record the observed rule; switch to CLIPPY_CONF_DIR per crate set by `xtask ci` (environment, not command, so §12.1 stays intact)."
+
+[claim]
+affected_components = []
+contract_changes = "none: no product component exists"
+architecture_delta = "A new xtask module (clippy_template) and test-only corpus workspaces excluded from the root workspace. No new dependency."
+performance_impact = "none claimed"
+unresolved = [
+  "L0.architecture is still not_run, and it is required and non-waivable (DP-0.5), so this change cannot be Eligible under the current policy (CHG-000 acceptance concern 2).",
+]
+
+[acceptance]
+criteria = [
+  "(1) In xtask/tests/corpus/clippy/core-seeded, `cargo clippy -p core-a` exits nonzero citing clippy::disallowed_methods for the seeded SystemTime::now()",
+  "(2) In xtask/tests/corpus/clippy/discovery, `cargo clippy -p adapter-x` passes with no deny-list finding",
+  "(3) With allow-unwrap-in-tests only in the fixture's root clippy.toml and a test unwrap() in core-a, whether unwrap_used fires is observed and recorded",
+  "Commands and captured stderr are in evidence/w1-clippy/; ADR-0002 states the observed rule and its consequence for per-core clippy.toml files",
+]
+replan_when = [
+  "Experiment (2) or (3) contradicts the expected rule",
+  "A deny-list path does not resolve in Clippy 0.1.98",
+]
+
+[provenance]
+model_id = "claude-opus-5[1m]"
+harness = "Claude Code, VS Code extension; the CLI on PATH reports `2.1.278 (Claude Code)`; the extension build was not observed"
+output_style = "Learning (.claude/settings.local.json)"
+permission_mode = "auto, as reported to the session; project allow-list in the untracked .claude/settings.json (gh pr/run/api, git fetch, one python3 command)"
+task_scope = "CHG-001: docs/plan/IMPLEMENTATION-PLAN.md §8 W1"
+permissions = "Workspace files, shell, network, and `gh` as kmosoti through the user's account. Protected surfaces: only the creation of xtask/templates/core-clippy.toml is approved."
+budgets = "unknown"
+reasoning_effort = "unknown"
+instruction_sources = [
+  { path = "docs/plan/IMPLEMENTATION-PLAN.md", sha256 = "4c60073eacdd5f03303f0d7298a95dea35db0a9bb7bd49b9d724bedea0737afb" },
+  { path = "docs/spec/rha-spec-v0.10.md", sha256 = "4c96ded8159c35a6281a6c14183700ae1466c097e009cdc5e722b2d1eacb0907" },
+  { path = "user message of 2026-09-19 starting W1 (pre-approval of the template)", sha256 = "unknown" },
+  { path = "Claude Code system prompt", sha256 = "unknown" },
+]

@@ -1,0 +1,12 @@
+[package]
+name = "core-a"
+version = "0.0.0"
+edition.workspace = true
+rust-version.workspace = true
+publish = false
+
+[package.metadata.rha]
+role = "core"
+
+[lints]
+workspace = true

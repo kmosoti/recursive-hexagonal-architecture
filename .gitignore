@@ -4,3 +4,5 @@
 # Per-user Claude Code settings; not repository policy.
 /.claude/settings.local.json
 # proptest-regressions/ directories are committed: they are persisted seeds.
+# Build output of the corpus fixture workspaces (their own [workspace]).
+/xtask/tests/corpus/**/target/

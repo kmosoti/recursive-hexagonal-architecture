@@ -1,0 +1,36 @@
+# Core-crate clippy.toml template (spec §6.8; CHG-001, ADR-0002).
+#
+# Every crate with [package.metadata.rha] role = "core" has a clippy.toml equal
+# to this file, byte for byte (rule effect.core_clippy_template). Adapters,
+# apps, and tools have none and use the root clippy.toml.
+#
+# Clippy 0.1.98 uses the nearest clippy.toml and does not merge it with the
+# root file (ADR-0002), so the root's test allowances are repeated here;
+# xtask/tests/clippy_corpus.rs fails if they differ from the root file.
+allow-unwrap-in-tests = true
+allow-expect-in-tests = true
+allow-dbg-in-tests = true
+
+# Ambient effects cross ports. A deny list is incomplete by nature and does
+# not see transitive calls (§6.8).
+disallowed-methods = [
+  { path = "std::time::SystemTime::now", reason = "time crosses a Clock port" },
+  { path = "std::time::Instant::now",    reason = "time crosses a Clock port" },
+  { path = "std::env::var",              reason = "environment crosses a Config port" },
+  { path = "std::env::vars",             reason = "environment crosses a Config port" },
+  { path = "std::process::Command::new", reason = "process execution crosses a port" },
+  { path = "std::thread::spawn",         reason = "concurrency is orchestrated at the edge" },
+  { path = "std::fs::read",              reason = "storage crosses a port" },
+  { path = "std::fs::read_to_string",    reason = "storage crosses a port" },
+  { path = "std::fs::write",             reason = "storage crosses a port" },
+  { path = "std::io::stdin",             reason = "input crosses a port" },
+]
+disallowed-types = [
+  { path = "std::fs::File",       reason = "storage crosses a port" },
+  { path = "std::net::TcpStream", reason = "network crosses a port" },
+]
+disallowed-macros = [
+  { path = "std::println",  reason = "output crosses a port; return data instead" },
+  { path = "std::eprintln", reason = "output crosses a port; return data instead" },
+  { path = "std::dbg",      reason = "output crosses a port; return data instead" },
+]
