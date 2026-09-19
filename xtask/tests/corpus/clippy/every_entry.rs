@@ -235,3 +235,70 @@ pub fn stack() -> String {
     let forced = std::backtrace::Backtrace::force_capture();
     format!("{captured}{forced}")
 }
+
+/// The one effectful method of each storage builder, reached without naming
+/// the builder's type.
+///
+/// # Errors
+/// Any I/O error.
+pub fn builders(options: std::fs::OpenOptions, dirs: std::fs::DirBuilder) -> std::io::Result<u64> {
+    let file = options.open("a")?;
+    dirs.create("x")?;
+    Ok(file.metadata()?.len())
+}
+
+/// The effectful methods of `Command` and `Child`, reached the same way.
+///
+/// # Errors
+/// Any I/O error.
+pub fn run(mut command: std::process::Command) -> std::io::Result<i32> {
+    let status = command.status()?;
+    let output = command.output()?;
+    let mut child = command.spawn()?;
+    child.kill()?;
+    let pending = child.try_wait()?.is_some();
+    let waited = command.spawn()?.wait()?;
+    let collected = command.spawn()?.wait_with_output()?;
+    Ok(status.code().unwrap_or(0)
+        + i32::from(output.status.success())
+        + i32::from(pending)
+        + waited.code().unwrap_or(0)
+        + i32::from(collected.status.success()))
+}
+
+/// `alloc::handle_alloc_error` and the `alloc::System` allocator.
+#[must_use]
+pub fn allocation() -> usize {
+    let allocator: std::alloc::System = std::alloc::System;
+    let fail: fn(std::alloc::Layout) -> ! = std::alloc::handle_alloc_error;
+    core::mem::size_of_val(&allocator) + core::mem::size_of_val(&fail)
+}
+
+/// Channels: `mpsc::channel`, `sync_channel`, the `Receiver` type, `recv`
+/// and `recv_timeout`.
+#[must_use]
+pub fn channels(handed_over: std::sync::mpsc::Receiver<u32>) -> u32 {
+    let (sender, receiver) = std::sync::mpsc::channel::<u32>();
+    let (bounded, _) = std::sync::mpsc::sync_channel::<u32>(1);
+    drop((sender, bounded));
+    let waited = receiver.recv().unwrap_or(0);
+    let timed = handed_over
+        .recv_timeout(std::time::Duration::from_millis(1))
+        .unwrap_or(0);
+    waited + timed
+}
+
+/// The blocking primitives: `Condvar`, `Barrier`, and `Once::wait`.
+#[must_use]
+pub fn blocking(gate: &std::sync::Condvar, all: &std::sync::Barrier) -> bool {
+    let lock = std::sync::Mutex::new(false);
+    let guard = lock.lock().unwrap_or_else(std::sync::PoisonError::into_inner);
+    let (guard, timeout) = gate
+        .wait_timeout(guard, std::time::Duration::from_millis(1))
+        .unwrap_or_else(std::sync::PoisonError::into_inner);
+    let _ = gate.wait(guard);
+    all.wait();
+    static ONCE: std::sync::Once = std::sync::Once::new();
+    ONCE.wait();
+    timeout.timed_out()
+}

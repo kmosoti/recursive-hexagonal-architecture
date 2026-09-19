@@ -75,6 +75,11 @@ disallowed-methods = [
   { path = "std::path::Path::read_dir",          reason = "storage crosses a port" },
   { path = "std::path::Path::read_link",         reason = "storage crosses a port" },
 
+  # Storage: the one effectful method of each builder type below, because a
+  # type entry cannot see a value a dependency hands back.
+  { path = "std::fs::OpenOptions::open",   reason = "storage crosses a port" },
+  { path = "std::fs::DirBuilder::create",  reason = "storage crosses a port" },
+
   # Network name resolution; the socket types are below.
   { path = "std::net::ToSocketAddrs::to_socket_addrs", reason = "resolving a host name crosses a port; addresses are data" },
 
@@ -86,6 +91,14 @@ disallowed-methods = [
   { path = "std::panic::take_hook", reason = "the panic hook is process-global state" },
   { path = "std::backtrace::Backtrace::capture",       reason = "the stack and RUST_BACKTRACE are ambient; telemetry crosses a port" },
   { path = "std::backtrace::Backtrace::force_capture", reason = "the stack is ambient; telemetry crosses a port" },
+  { path = "std::process::Command::spawn",  reason = "process execution crosses a port" },
+  { path = "std::process::Command::output", reason = "process execution crosses a port" },
+  { path = "std::process::Command::status", reason = "process execution crosses a port" },
+  { path = "std::process::Child::kill",             reason = "process control crosses a port" },
+  { path = "std::process::Child::wait",             reason = "process control crosses a port" },
+  { path = "std::process::Child::try_wait",         reason = "process control crosses a port" },
+  { path = "std::process::Child::wait_with_output", reason = "process control crosses a port" },
+  { path = "std::alloc::handle_alloc_error", reason = "it aborts the process and writes to stderr" },
 
   # Concurrency and scheduling; std::thread::Builder is below.
   { path = "std::thread::spawn",        reason = "concurrency is orchestrated at the edge" },
@@ -96,6 +109,14 @@ disallowed-methods = [
   { path = "std::thread::park_timeout", reason = "scheduling is orchestrated at the edge" },
   { path = "std::thread::yield_now",    reason = "scheduling is orchestrated at the edge" },
   { path = "std::thread::current",      reason = "the running thread's identity is ambient state" },
+  { path = "std::sync::mpsc::channel",              reason = "channels coordinate threads; that is the edge's work" },
+  { path = "std::sync::mpsc::sync_channel",         reason = "channels coordinate threads; that is the edge's work" },
+  { path = "std::sync::mpsc::Receiver::recv",       reason = "it blocks on another thread" },
+  { path = "std::sync::mpsc::Receiver::recv_timeout", reason = "it blocks and reads the monotonic clock" },
+  { path = "std::sync::Condvar::wait",              reason = "it blocks on another thread" },
+  { path = "std::sync::Condvar::wait_timeout",      reason = "it blocks and reads the monotonic clock" },
+  { path = "std::sync::Barrier::wait",              reason = "it blocks on other threads" },
+  { path = "std::sync::Once::wait",                 reason = "it blocks on another thread" },
 
   # Process-global streams.
   { path = "std::io::stdin",  reason = "input crosses a port" },
@@ -122,6 +143,10 @@ disallowed-types = [
   { path = "std::io::Stdin",         reason = "input crosses a port" },
   { path = "std::io::Stdout",        reason = "output crosses a port; return data instead" },
   { path = "std::io::Stderr",        reason = "output crosses a port; return data instead" },
+  { path = "std::sync::mpsc::Receiver", reason = "receiving coordinates threads; that is the edge's work" },
+  { path = "std::sync::Condvar",        reason = "waiting on another thread is orchestrated at the edge" },
+  { path = "std::sync::Barrier",        reason = "waiting on other threads is orchestrated at the edge" },
+  { path = "std::alloc::System",        reason = "the global allocator is the application's choice" },
 ]
 
 disallowed-macros = [
