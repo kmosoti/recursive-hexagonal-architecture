@@ -907,7 +907,7 @@ disallowed-types = [
 ]
 ```
 
-Discovery, merging, and the strength of the level are properties of one tool version, so they are measured rather than assumed, and the measurements live where observations live (§11.7.1): a decision record with the literal commands and captured output, and evidence records a check reruns whenever the toolchain changes. For Clippy 0.1.98 that is `docs/adr/ADR-0002-clippy-config-discovery.md` and `evidence/w1-clippy/`; the consequences it draws for a core crate's configuration are proposed for the next version of this document in `docs/spec/proposals/v0.11.md`.
+Discovery, merging, and the strength of the level are properties of one tool version, so they are measured rather than assumed, and the measurements live where observations live (§11.7.1): a decision record with the literal commands and captured output, and evidence records a check reruns whenever the toolchain changes. For Clippy 0.1.98 that is `docs/adr/ADR-0002-clippy-config-discovery.md` and `evidence/w1-clippy/`; the consequences it draws for a core crate's configuration are proposed for the next version of this document in `docs/proposals/spec-v0.11.md`.
 
 ## 6.9 Ownership, concurrency, and capability
 

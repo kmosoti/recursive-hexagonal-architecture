@@ -9,7 +9,7 @@ Spec §11.7.1 gives each fact one approved owner. The specification owns rationa
 So the working rule in this repository is:
 
 1. **A work item records findings in a decision record and evidence, and does not edit the specification.** A change must not rewrite the document that judges it, for the same reason §11.5 forbids a change from redefining its own policy.
-2. **Findings that bear on a normative rule or a maturity row are appended here**, in the shape of the specification's own change-log appendices: what the current text says, what the finding is, the proposed delta, the section, and the evidence.
+2. **Findings that bear on a normative rule or a maturity row are appended here**, which is outside `docs/spec/` on purpose, so appending needs no protected-surface approval while the specification itself keeps one. The rows follow the shape of the specification's own change-log appendices: what the current text says, what the finding is, the proposed delta, the section, and the evidence.
 3. **The specification changes in one work item per version bump**, carrying nothing else, so the diff is reviewable and the maturity table moves with evidence beside it, as Law 8 requires.
 4. **A claim the specification makes about this repository gets a check.** `xtask/tests/policy_drift.rs` already pins §12.1's command block to `.rha/policy.toml`. Untested claims are the ones that rot.
 

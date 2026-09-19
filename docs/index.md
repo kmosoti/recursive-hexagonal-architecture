@@ -5,12 +5,12 @@ The landing page of the docs that `rhawiki` renders (CHG-005). Links use wiki sy
 ## Specification and plan
 
 - [[spec/rha-spec-v0.10]]: the Recursive Hexagonal Architecture working specification, v0.10.
-- [[spec/proposals/v0.11]]: findings queued for the next version of the specification, with the evidence for each.
 - [[plan/IMPLEMENTATION-PLAN]]: the authorized work order for implementing and validating its mechanisms.
 
 ## Status
 
 - [[maturity]]: the maturity ledger. The Executor proposes; Kennedy accepts.
+- [[proposals/spec-v0.11]]: findings queued for the next version of the specification, with the evidence for each.
 - [[threat-model]]: deviations from spec §11.0, the `ECC-Solo` profile, and why every evidence record is advisory.
 - [[toolchain]]: tools and required versions (generated).
 
