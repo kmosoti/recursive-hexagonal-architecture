@@ -1,5 +1,5 @@
-//! Fixture: an adapter crate with no local `clippy.toml`. It makes the call
-//! that is seeded in core-seeded's core-a, and its test calls `unwrap()`.
+//! Clippy corpus source (ADR-0002): an adapter that makes the seeded call, as
+//! an adapter may, and whose test calls `unwrap()`.
 
 use std::time::SystemTime;
 

@@ -1,5 +1,5 @@
-//! Fixture: one use of every entry of the core deny list, so each entry is
-//! shown to resolve and fire under the pinned Clippy.
+//! Clippy corpus source (ADR-0002): one use of every entry of the core
+//! template, so each entry is shown to resolve and fire under the pinned Clippy.
 
 use std::io::Read as _;
 

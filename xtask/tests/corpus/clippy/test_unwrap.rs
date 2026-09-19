@@ -1,5 +1,5 @@
-//! Fixture: a core crate whose local `clippy.toml` holds only the deny list.
-//! Nothing here is on the deny list; its test calls `unwrap()`.
+//! Clippy corpus source (ADR-0002): nothing on the deny list; its test calls
+//! `unwrap()`, which only a configuration with `allow-unwrap-in-tests` permits.
 
 /// Adds one.
 #[must_use]

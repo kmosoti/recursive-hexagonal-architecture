@@ -90,54 +90,56 @@ mod tests {
 
     use super::*;
 
-    fn corpus(rel: &str) -> PathBuf {
-        Path::new(env!("CARGO_MANIFEST_DIR"))
-            .join("tests/corpus/clippy")
-            .join(rel)
-    }
-
     fn template() -> Vec<u8> {
         std::fs::read(Path::new(env!("CARGO_MANIFEST_DIR")).join("templates/core-clippy.toml"))
             .unwrap()
     }
 
-    fn core(name: &str, rel: &str) -> CoreCrate {
+    /// A fresh crate directory holding `files`, unique per test and process.
+    fn crate_dir(test: &str, files: &[(&str, &[u8])]) -> CoreCrate {
+        let dir = std::env::temp_dir().join(format!("rha-{test}-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&dir);
+        std::fs::create_dir_all(&dir).unwrap();
+        for (name, bytes) in files {
+            std::fs::write(dir.join(name), bytes).unwrap();
+        }
         CoreCrate {
-            name: name.to_owned(),
-            dir: corpus(rel),
+            name: test.to_owned(),
+            dir,
         }
     }
 
-    #[test]
-    fn copies_of_the_template_conform() {
-        let cores = [
-            core("core-a", "core-seeded/crates/core-a"),
-            core("core-b", "core-seeded/crates/core-b"),
-            core("core-every", "core-seeded/crates/core-every"),
-        ];
-        assert_eq!(check(&template(), &cores), vec![]);
+    fn check_and_clean(core: &CoreCrate) -> Vec<Finding> {
+        let found = check(&template(), std::slice::from_ref(core));
+        std::fs::remove_dir_all(&core.dir).unwrap();
+        found
     }
 
     #[test]
-    fn a_deny_list_without_the_test_allowances_is_a_finding() {
-        let found = check(&template(), &[core("core-a", "discovery/crates/core-a")]);
+    fn a_copy_of_the_template_conforms() {
+        let core = crate_dir("conforms", &[("clippy.toml", &template())]);
+        assert_eq!(check_and_clean(&core), vec![]);
+    }
+
+    #[test]
+    fn a_copy_that_differs_is_a_finding_with_both_digests() {
+        let edited = b"disallowed-methods = []\n";
+        let core = crate_dir("differs", &[("clippy.toml", edited)]);
+        let found = check_and_clean(&core);
         assert_eq!(found.len(), 1);
         let finding = &found[0];
         assert_eq!((finding.rule, finding.problem), (RULE_ID, Problem::Differs));
-        let actual = std::fs::read(corpus("discovery/crates/core-a/clippy.toml")).unwrap();
         assert_eq!(
             finding.actual_sha256.as_deref(),
-            Some(sha256_hex(&actual).as_str())
+            Some(sha256_hex(edited).as_str())
         );
         assert_eq!(finding.expected_sha256, sha256_hex(&template()));
     }
 
     #[test]
     fn a_missing_file_is_a_finding() {
-        let found = check(
-            &template(),
-            &[core("adapter-x", "discovery/crates/adapter-x")],
-        );
+        let core = crate_dir("missing", &[]);
+        let found = check_and_clean(&core);
         assert_eq!(found.len(), 1);
         assert_eq!(
             (found[0].problem, found[0].actual_sha256.as_deref()),
@@ -147,18 +149,14 @@ mod tests {
 
     #[test]
     fn a_dotfile_beside_a_correct_copy_is_a_finding() {
-        let dir = std::env::temp_dir().join(format!("rha-clippy-shadow-{}", std::process::id()));
-        std::fs::create_dir_all(&dir).unwrap();
-        std::fs::write(dir.join("clippy.toml"), template()).unwrap();
-        std::fs::write(dir.join(".clippy.toml"), b"allow-unwrap-in-tests = true\n").unwrap();
-        let found = check(
-            &template(),
-            &[CoreCrate {
-                name: "core-s".into(),
-                dir: dir.clone(),
-            }],
+        let core = crate_dir(
+            "shadowed",
+            &[
+                ("clippy.toml", &template()),
+                (".clippy.toml", b"allow-unwrap-in-tests = true\n"),
+            ],
         );
-        std::fs::remove_dir_all(&dir).unwrap();
+        let found = check_and_clean(&core);
         assert_eq!(found.len(), 1);
         assert_eq!(found[0].problem, Problem::Shadowed);
         assert!(found[0].path.ends_with(".clippy.toml"));
