@@ -6,7 +6,7 @@ The item has three parts. **W1** is the work item the plan asks for. **CHG-001.1
 
 ## Intent and scope
 
-**Behaviour.** A core crate whose `clippy.toml` is the template fails `cargo clippy` on a direct use of any of 89 ambient-effect paths, starting with the seeded `std::time::SystemTime::now()`. The pinned Clippy's configuration discovery and merge behaviour is observed and recorded, together with what switches the deny list off. The rule `effect.core_clippy_template` reports a core crate whose Clippy configuration is not the template.
+**Behaviour.** A core crate whose `clippy.toml` is the template fails `cargo clippy` on a direct use of any of 111 ambient-effect paths, starting with the seeded `std::time::SystemTime::now()`. The pinned Clippy's configuration discovery and merge behaviour is observed and recorded, together with what switches the deny list off. The rule `effect.core_clippy_template` reports a core crate whose Clippy configuration is not the template.
 
 **Affected components and contracts.** None: no product component exists. New: `xtask/templates/core-clippy.toml` (creation approved by Kennedy, extension approved for CHG-001.2), `xtask/src/clippy_template.rs`, and the Clippy corpus, whose fixture workspaces are generated at test time under `target/clippy-corpus/`.
 
@@ -30,7 +30,7 @@ The item has three parts. **W1** is the work item the plan asks for. **CHG-001.1
 **CHG-001.2, deny list and escape hatches.**
 
 - Experiment 6, fourteen runs, records what switches the deny list off and what closes it: `#[allow]`, `#[expect]`, `#![allow]`, and an allow flag in `RUSTFLAGS` all silence it; a crate-level `#![forbid]` or `forbid` in the lint table turns the attributes into `E0453`; `--cap-lints=warn` lowers even a forbidden finding. Experiment 6n shows the same flag works from `.cargo/config.toml`, which is not a protected surface.
-- The template grows from 15 entries to 89, closing the gaps ADR-0002 named. Ten of the additions are the paths that record listed; the rest come from a sweep of the Rust 1.98.1 standard-library source and an adversarial review of the result, both limited to the effects §6.8 names. ADR-0002 carries the per-category table and what was deliberately left out. Experiment 4 shows all 89 resolve and fire, in 91 findings.
+- The template grows from 15 entries to 111, closing the gaps ADR-0002 named. Ten of the additions are the paths that record listed; the rest come from a sweep of the Rust 1.98.1 standard-library source and two adversarial reviews of the result, all limited to the effects §6.8 names. ADR-0002 carries the per-category table, the candidates left for Kennedy, and what cannot be reached at all. Experiment 4 shows every entry resolve and fire.
 - `std::env::set_var` and `std::env::remove_var` are `unsafe` in edition 2024, so the fixture names them instead of calling them. The lint fires on the path reference, which is how both entries are demonstrated.
 
 **Removed, weakened, or reinterpreted tests.** The two fixture drift tests are removed with the copies they guarded: `fixtures_copy_the_root_lint_tables_and_root_clippy_file` had nothing left to compare, and the rule's `copies_of_the_template_conform`, renamed `a_copy_of_the_template_conforms`, now writes its own crate directories. No behavioural check was weakened; the corpus went from 4 tests to 7 and from 7 experiments to 21.
@@ -39,9 +39,9 @@ The item has three parts. **W1** is the work item the plan asks for. **CHG-001.1
 
 ## Evidence
 
-**Experiments.** Twenty-one experiments, each recorded with its literal command, the digests of every generated file, the exit status, and the captured output, in [`evidence/w1-clippy/20260919T221927Z-edd4bac756f9/`](../../evidence/w1-clippy/20260919T221927Z-edd4bac756f9/), written from the generated corpus at commit `edd4bac756f976b01e47f6889d8efb1145a64aca` with a clean working tree. [`evidence/w1-clippy/`](../../evidence/w1-clippy/) also keeps the seven records of the first run, at commit `28ae543c297067ad5171654f490307b13995376a`, which the shell script produced before CHG-001.1 replaced it. ADR-0002 tabulates the experiments and states what they mean. `xtask/tests/clippy_corpus.rs` reruns all of them in every `L0.nextest` run, locally and on the GitHub runner.
+**Experiments.** Twenty-three experiments, each recorded with its literal command, the digests of every generated file, the exit status, and the captured output, in [`evidence/w1-clippy/20260919T224449Z-bf5aed920d40/`](../../evidence/w1-clippy/20260919T224449Z-bf5aed920d40/), written from the generated corpus at commit `bf5aed920d409e39272ca95a8dee958142a07b33` with a clean working tree. That commit carries the template this record describes, so each record's digest of `crates/core-every/clippy.toml` equals the template's. An earlier set, at `edd4bac`, covers the same experiments against an 80-entry template and is superseded. [`evidence/w1-clippy/`](../../evidence/w1-clippy/) also keeps the seven records of the first run, at commit `28ae543c297067ad5171654f490307b13995376a`, which the shell script produced before CHG-001.1 replaced it. ADR-0002 tabulates the experiments and states what they mean. `xtask/tests/clippy_corpus.rs` reruns all of them in every `L0.nextest` run, locally and on the GitHub runner.
 
-**L0 record.** [`evidence/CHG-001/20260919T222005Z-bcaf3090691d.json`](../../evidence/CHG-001/20260919T222005Z-bcaf3090691d.json), class `local`, principal `agent:executor`. Base `c554316` (main); the policy digest equals the base policy's, `sha256:f102c03a…`, so **Applicable holds**.
+**L0 record.** [`evidence/CHG-001/20260919T224504Z-bae4b34894a2.json`](../../evidence/CHG-001/20260919T224504Z-bae4b34894a2.json), class `local`, principal `agent:executor`. Base `c554316` (main); the policy digest equals the base policy's, `sha256:f102c03a…`, so **Applicable holds**.
 
 | Check | Outcome | Detail |
 | --- | --- | --- |
@@ -56,7 +56,7 @@ The item has three parts. **W1** is the work item the plan asks for. **CHG-001.1
 
 Eligibility `blocked`: Authentic (no trusted producers) and Passed (`L0.architecture` not_run). Applicable and Complete hold.
 
-**CI records.** Every push to the branch ran the lane on the GitHub runner, image `ubuntu24`, class `ci`. Run [35470532056](https://github.com/kmosoti/recursive-hexagonal-architecture/actions/runs/35470532056) is copied as [`evidence/ci/35470532056.json`](../../evidence/ci/35470532056.json); run [35473050927](https://github.com/kmosoti/recursive-hexagonal-architecture/actions/runs/35473050927), on the merge commit `f7484bd150465966c8fd1ed3eb43966aa9239bdc` of PR head `853e19898a71a7619da6ec1169c769aac5084650` whose tree it shares, is copied as [`evidence/ci/35473050927.json`](../../evidence/ci/35473050927.json). Their outcomes match the local record, and the corpus tests pass in both environments, so the discovery rule and the escape-hatch results reproduce on a second machine.
+**CI records.** Every push to the branch ran the lane on the GitHub runner, image `ubuntu24`, class `ci`. Two runs are committed, and each covers a different revision. Run [35470532056](https://github.com/kmosoti/recursive-hexagonal-architecture/actions/runs/35470532056), copied as [`evidence/ci/35470532056.json`](../../evidence/ci/35470532056.json), covers the W1 head `d011d13` and its 28 tests; it predates the rework, so it says nothing about the escape hatches. Run [35474230710](https://github.com/kmosoti/recursive-hexagonal-architecture/actions/runs/35474230710), copied as `evidence/ci/35474230710.json`, covers the head this record describes. Its outcomes match the local record, so the discovery rule and the escape-hatch results reproduce on a second machine.
 
 **Performance.** No trigger; nothing claimed.
 

@@ -21,13 +21,15 @@ Each experiment runs in a fixture workspace that [`xtask/tests/clippy_corpus.rs`
 | 3 | core, reduced, a test calls `unwrap()`: `cargo clippy -p core-deny-only --all-targets` | Exit 0 with ``warning: used `unwrap()` on a `Result` value``: **`unwrap_used` fired**, although the fixture root sets `allow-unwrap-in-tests = true`. |
 | 3c | control for 3: the same test `unwrap()` in the adapter, whose nearest file is the fixture root | Exit 0, no `unwrap_used`: the root allowance works where the root file is the nearest. |
 | 3b | core, template, a test calls `unwrap()`: `cargo clippy -p core-clean --all-targets` | Exit 0, no `unwrap_used`: the template's repeat of the root settings restores the allowance. |
-| 4 | core, template, one use of every template entry: `cargo clippy -p core-every` | Exit 101; every entry reported as `use of a disallowed method/type/macro`. No unresolved-path warning. |
+| 2-control | core, template, the same call as 2: `cargo clippy -p core-seeded` | Exit 101 with the disallowed-method error: the deny list does fire in this fixture, which is what makes 2 and 3c meaningful. |
+| 4 | core, template, one use of every template entry: `cargo clippy -p core-every` | Exit 101; every entry reported as `use of a disallowed method/type/macro`, 122 findings for 111 entries, because a use that names a type and calls one of its methods fires both. No unresolved-path warning. |
 | 5 | core, `clippy.toml` the template and `.clippy.toml` the root file, calls the clock | Exit 0 and no finding, with ``warning: using config file `….clippy.toml`, `…clippy.toml` will be ignored``: the dotfile **silently replaces the deny list**. |
 
 **Lint attributes and flags (experiment 6).** Every crate holds the template. 6a–6e use the repository's lint table; 6f–6n use one where `disallowed_methods`, `disallowed_types`, and `disallowed_macros` are `forbid`.
 
 | # | Crate or flag | Observed |
 | --- | --- | --- |
+| 6-control | no attribute and no flag: `cargo clippy -p core-seeded` | Exit 101 with the disallowed-method error, so the silent runs below mean something. |
 | 6a | `#[allow(clippy::disallowed_methods)]` on the item | Exit 0, no finding: the deny list is off for that item. |
 | 6b | `#[expect(clippy::disallowed_methods)]` on the item | Exit 0, no finding. |
 | 6c | `#![allow(clippy::disallowed_methods)]` at the crate root | Exit 0, no finding. |
@@ -50,7 +52,9 @@ Each experiment runs in a fixture workspace that [`xtask/tests/clippy_corpus.rs`
 5. **Attributes outrank the configuration file.** The file decides *which paths* are reported; the lint level decides *whether* a report is an error, and `#[allow]`, `#[expect]`, and `#![allow]` in the crate set that level locally (6a, 6b, 6c). A `forbid` above them, from the crate root or the lint table, makes each of those attributes `E0453` (6d, 6f, 6g, 6h) without changing anything else (6i, 6j, 6k).
 6. **A level is not a ceiling.** `--cap-lints=warn`, from `RUSTFLAGS` or from `.cargo/config.toml`, lowers a forbidden finding to a warning (6m, 6n). An `-A` flag does not (6l).
 
-Rules 1 to 4 match the plan's expectation, so the `CLIPPY_CONF_DIR` fallback is not used.
+7. **A type entry fires where the type is named.** It catches a type in a signature, a type annotation, or a qualified path such as `File::open`, but not a value a dependency hands back, and not a bare unit-struct value: `let a = std::alloc::System;` is silent where `let a: std::alloc::System = …;` fires. The effectful method of each such type is therefore listed beside it.
+
+Rules 1 and 2 are what the plan pre-registered as its expectation, and both hold, so the `CLIPPY_CONF_DIR` fallback is not used. Rule 3 answers the plan's listed Unknown, and its answer is the outcome the plan told the Executor to avoid rather than one it expected. Rules 4 to 7 were not pre-registered.
 
 **Not observed.** Whether the upward search stops at the workspace root or continues to the filesystem root: in every fixture a file exists at the workspace root. `CLIPPY_CONF_DIR` itself. Whether the attribute results carry to `disallowed_types` and `disallowed_macros`: 6a to 6n name `clippy::disallowed_methods` only, although all three lints were forbidden in the second fixture. Other Clippy versions: the corpus reruns every experiment whenever the toolchain changes.
 
@@ -72,7 +76,9 @@ Rules 1 to 4 match the plan's expectation, so the `CLIPPY_CONF_DIR` fallback is 
 | Randomness | 1 | `hash::RandomState` |
 | Input and output | 12 | `io::stdin`, `stdout`, `stderr`, `pipe`, the `Stdin`, `Stdout` and `Stderr` types, and the five print macros |
 
-  A type entry fires on every mention, including associated functions, so `std::process::Command` replaced the narrower `Command::new`.
+  A type entry replaces the narrower constructor entry it subsumes, as `std::process::Command` replaced `Command::new`; by rule 7 the effectful methods of those types are listed as well, so a value obtained from elsewhere is still caught.
+
+  **Candidates this change did not take**, each verified to resolve and fire, each a judgment about cost in ordinary code rather than about whether it is an effect: `Mutex::lock`, `RwLock::read` and `write`; the atomics; `Once::call_once`, `OnceLock::get_or_init` and `set`, `LazyLock`; `Condvar::wait_while` and `wait_timeout_while`, `Once::wait_force`, `mpsc::Sender::send`, `SyncSender::send`, `Receiver::iter`; `panic::panic_any`; the `Backtrace` type, whose `Display` impl formats the captured stack; and the build-time filesystem reads `include_str!` and `include_bytes!`. Extending the template is a protected change for Kennedy.
 - The attribute escape of rule 5 is recorded, not closed. Closing it means `forbid` for the three lints in the root `Cargo.toml`, a protected surface, and that is Kennedy's decision (CHG-001 acceptance concerns).
 
 ## Consequences
@@ -81,5 +87,5 @@ Rules 1 to 4 match the plan's expectation, so the `CLIPPY_CONF_DIR` fallback is 
 - A `.clippy.toml` at the repository root would shadow the root `clippy.toml` for every crate without its own file. The rule checks core crate directories only, so this remains a review item.
 - **The deny list sees direct uses only** (§6.8). It does not see a call through a helper in another crate, a call the compiler generates from a macro, or an effect reached through a trait object. Experiment 4 proves each entry fires on a direct use, and nothing more.
 - **What the list leaves out, on purpose.** `HashMap::new` and `HashMap::with_capacity` seed themselves from `RandomState`, which the list catches only when a crate names it; iteration order stays a source of nondeterminism that a deny list cannot reach. Platform extension traits, such as `std::os::unix::process::CommandExt::exec` and `std::os::unix::process::parent_id`, are effectful but would not resolve on another target, so listing them would trade a real check for a portability warning. Unstable APIs, such as `std::random`, are left out until they are stable. Each is a candidate for a later change, not an oversight.
-- **Three ways to switch it off** are now recorded. An attribute in the crate (rule 5), unless the lint table forbids the lint. `--cap-lints=warn` from `RUSTFLAGS` or `.cargo/config.toml` (rule 6); `.cargo/config.toml` is not on the protected list in `.rha/policy.toml`. And a crate whose `clippy.toml` is missing, edited, or shadowed, which is what `effect.core_clippy_template` reports.
+- **Four ways to switch it off** are now recorded. An attribute in the crate (rule 5), unless the lint table forbids the lint. An allow flag in `RUSTFLAGS`, which works at the repository's current deny level (6e) and stops working under `forbid` (6l). `--cap-lints=warn` from `RUSTFLAGS` or `.cargo/config.toml` (rule 6), which no lint level survives; `.cargo/config.toml` is not on the protected list in `.rha/policy.toml`. And a crate whose `clippy.toml` is missing, edited, or shadowed, which is what `effect.core_clippy_template` reports.
 - Until CHG-003 wires the rule in and CHG-005 creates core crates, the template protects no product code: the deny list is demonstrated on fixtures only.
