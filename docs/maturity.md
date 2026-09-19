@@ -11,7 +11,7 @@ The **Accepted** column starts with the values printed in spec v0.10 §1.4.
 | `cargo-generate` baseline template | §6.16.7 | – | – | S: deferred (plan §10) | – | – | – | S* (spec v0.10) |
 | Module-graph check inside a crate | §6.13 | – | – | S: CHG-007 | – | – | – | S (spec v0.10) |
 | Ambient-effect deny list; `no_std` core option | §6.8 | – | – | S: CHG-001, experiment E1 | – | – | – | S (spec v0.10) |
-| Fast-lane CI configuration | §12.1 | `.rha/policy.toml` `[lanes.L0]`, `xtask/src/lanes.rs`, `.github/workflows/ci.yml` | xtask 0.1.0; tag `v0.10-m0` when Kennedy tags M0 | **I**: the eight §12.1 commands run through `cargo xtask ci` locally and in CI; `L0.architecture` is `not_run` until CHG-003, so no V is proposed | local: `evidence/CHG-000/20260919T205530Z-c48f1bd1f44d.json`; CI: pending | L0 lane on this repository | local WSL2 workstation; GitHub `ubuntu-24.04` | S (spec v0.10) |
+| Fast-lane CI configuration | §12.1 | `.rha/policy.toml` `[lanes.L0]`, `xtask/src/lanes.rs`, `.github/workflows/ci.yml` | xtask 0.1.0; tag `v0.10-m0` when Kennedy tags M0 | **I**: the eight §12.1 commands run through `cargo xtask ci` locally and in CI; `L0.architecture` is `not_run` until CHG-003, so no V is proposed | local: `evidence/CHG-000/20260919T205530Z-c48f1bd1f44d.json`; CI: `evidence/ci/35468943628.json` (run 35468943628) | L0 lane on this repository | local WSL2 workstation; GitHub `ubuntu-24.04` | S (spec v0.10) |
 | Statistical comparison protocol | §10.9 | – | – | S: CHG-016 | – | – | – | S (spec v0.10) |
 | Held-out acceptance checks | §9.14 | – | – | S: DP-1.1, DP-1.4 | – | – | – | S (spec v0.10) |
 | Review-efficacy audit with seeded changes | §11.4 | – | – | S: deferred (plan §10) | – | – | – | S (spec v0.10) |

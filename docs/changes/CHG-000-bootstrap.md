@@ -52,7 +52,7 @@ Task record: [`.rha/tasks/CHG-000-bootstrap.toml`](../../.rha/tasks/CHG-000-boot
 
 Eligibility `blocked`. Authentic: no trusted producers. Applicable: base has no policy. Passed: `L0.architecture` is `not_run`. Complete holds.
 
-**CI record.** Pending: filled in after the first CI run on the pull request.
+**CI record.** Run [35468943628](https://github.com/kmosoti/recursive-hexagonal-architecture/actions/runs/35468943628), with a copy committed as [`evidence/ci/35468943628.json`](../../evidence/ci/35468943628.json): class `ci`, producer `automation:github-actions`, runner image `ubuntu24` 20260907.300.1. Its subject is the merge commit `fe465f02048a6b7954672b34acc09bc6b1b413d9` (`refs/pull/1/merge`) of PR head `f06ba6f68dc64da0debd82ed3399c7debf77354d`. The merge commit's tree, `35538a7335a5aff3ce2143a6cace1e40239428b4`, equals the PR head's tree. Outcomes match the local record: seven passed (nextest selected 20 tests; 1 doctest), and `L0.architecture` is `not_run`. The artifact stores the record at `rha/evidence.json`, because upload-artifact strips the common `target/` prefix, not at `evidence.json` as plan §12 step 5 expects. The commit that adds this copy triggers another CI run; that run's record is kept only as its artifact.
 
 **Other checks run for this item.**
 
