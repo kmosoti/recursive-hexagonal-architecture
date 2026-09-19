@@ -7,5 +7,9 @@ name = "core-a"
 version = "0.0.0"
 
 [[package]]
+name = "core-b"
+version = "0.0.0"
+
+[[package]]
 name = "core-every"
 version = "0.0.0"

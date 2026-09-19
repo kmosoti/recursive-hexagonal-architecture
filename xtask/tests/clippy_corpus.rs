@@ -112,8 +112,10 @@ fn the_template_denies_every_entry_and_keeps_test_allowances() {
     assert!(stderr.contains("clippy::disallowed_methods"), "{stderr}");
     assert!(stderr.contains("`std::time::SystemTime::now`"), "{stderr}");
 
-    // Experiment 3b: the template's repeated allowance covers test unwrap().
-    let (_, stderr) = clippy("core-seeded", &target, &["-p", "core-a", "--all-targets"]);
+    // Experiment 3b: the template's repeated allowance covers test unwrap();
+    // core-b has nothing on the deny list, so a clean exit is decisive.
+    let (status, stderr) = clippy("core-seeded", &target, &["-p", "core-b", "--all-targets"]);
+    assert_eq!(status, 0, "{stderr}");
     assert!(!stderr.contains(UNWRAP_FINDING), "{stderr}");
 
     // Experiment 4: every path in the template is reported as disallowed.

@@ -62,8 +62,8 @@ record 3c-discovery-adapter-test-unwrap "$corpus/discovery" \
     cargo clippy -p adapter-x --all-targets
 
 record 3b-core-seeded-template-test-unwrap "$corpus/core-seeded" \
-    "the template repeats the root test allowances; core-a's test calls unwrap()" \
-    cargo clippy -p core-a --all-targets
+    "the template repeats the root test allowances; core-b (nothing on the deny list) has a test that calls unwrap()" \
+    cargo clippy -p core-b --all-targets
 
 record 4-core-seeded-every-entry "$corpus/core-seeded" \
     "one use of every deny-list entry in a crate with the template" \
