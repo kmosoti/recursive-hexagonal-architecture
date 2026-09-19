@@ -1,0 +1,269 @@
+# Machine policy for this repository.
+#
+# Single owner of check ids, check commands, check parameters, triggers, and
+# authority parameters (spec §11.7.1). CONTRIBUTING.md, the workflows, and the
+# docs link here or are generated from here; they do not copy it.
+#
+# Protected surface: after CHG-000, an edit needs explicit approval by
+# human:kennedy (spec §11.5, §11.7.6). Parameters approved as DP-0.5 on
+# 2026-09-19.
+schema_version = 1
+
+[authority]
+profile = "ECC-Solo"
+acceptance_authority = ["human:kennedy"]
+exception_authority = ["human:kennedy"]
+# ECC-Solo replaces the independent-issuer condition of ValidException with a
+# declared cooling-off delay and an append-only exception log (§11.7.6).
+cooling_off_hours = 24
+exception_log = ".rha/exceptions.log"
+# Producers whose evidence is Authentic (§11.7.6). Empty until the verifier of
+# W16 exists: no record is class "protected"; local and CI records are advisory.
+trusted_producers = []
+
+[repair_loop]
+# Unexplained repair attempts on one work item before escalation (§11.7.8).
+max_attempts = 3
+
+[proptest]
+# Cases per property, exported to checks as PROPTEST_CASES.
+L0 = 256
+L1 = 4096
+
+[evidence]
+digest_algorithm = "sha256"
+# Record fields that must be present and not "unknown" (Applicable, §11.7.6).
+required_inputs = [
+  "artifact_identity.revision",
+  "artifact_identity.tree",
+  "verification_identity.policy_digest",
+  "verification_identity.toolchain.rustc",
+  "verification_identity.lockfile_sha256",
+]
+
+[surface]
+# Total classification (§11.2): a changed path that matches no rule receives
+# the default obligations, never none.
+default_lanes = ["L0"]
+# Protected surfaces (§11.5): a change here needs explicit approval by
+# human:kennedy in addition to the default obligations.
+protected = [
+  ".rha/policy.toml",
+  ".rha/acceptances/**",
+  ".rha/exceptions.log",
+  "rha-crates.toml",
+  "crates/*/rha-modules.toml",
+  "xtask/templates/**",
+  "deny.toml",
+  "rha-baseline.json",
+  "rust-toolchain.toml",
+  "clippy.toml",
+  ".config/nextest.toml",
+  "Cargo.toml",
+  ".github/**",
+  "xtask/src/lanes.rs",
+  "xtask/src/policy.rs",
+  "xtask/src/evidence/**",
+  "AGENTS.md",
+  "**/AGENTS.md",
+  "CONTRIBUTING.md",
+  "docs/spec/**",
+]
+
+[strictness]
+# Per-parameter preorders used by refinement and join (§11.7.6).
+proptest_cases = "larger_is_stricter"
+tolerance_delta = "smaller_is_stricter"
+executions = "larger_is_stricter"
+timeout_secs = "unordered"
+
+# ---------------------------------------------------------------------------
+# L0: fast lane. Membership and order follow the spec's §12.1 command block;
+# xtask/tests/policy_drift.rs asserts that the argv lists below equal it.
+# Every L0 check is required and non-waivable (DP-0.5).
+# ---------------------------------------------------------------------------
+[lanes.L0]
+source = "docs/spec/rha-spec-v0.10.md §12.1"
+cadence = "every pull request and push"
+acceptance = true
+
+[[lanes.L0.checks]]
+id = "L0.fmt"
+kind = "format"
+argv = ["cargo", "fmt", "--all", "--", "--check"]
+tool = "rustfmt"
+validity = "exit_zero"
+required = true
+waivable = false
+timeout_secs = 300
+
+[[lanes.L0.checks]]
+id = "L0.clippy"
+kind = "lint"
+argv = ["cargo", "clippy", "--workspace", "--all-targets", "--all-features"]
+tool = "clippy"
+validity = "exit_zero"
+required = true
+waivable = false
+timeout_secs = 1800
+
+[[lanes.L0.checks]]
+id = "L0.nextest"
+kind = "test"
+argv = ["cargo", "nextest", "run", "--workspace", "--all-features", "--profile", "ci"]
+tool = "cargo-nextest"
+validity = "junit_tests_selected"
+report = "target/nextest/ci/junit.xml"
+proptest = "L0"
+required = true
+waivable = false
+timeout_secs = 1800
+
+[[lanes.L0.checks]]
+id = "L0.doctest"
+kind = "doctest"
+argv = ["cargo", "test", "--workspace", "--doc"]
+tool = "rustc"
+validity = "doctest_harness_ran"
+proptest = "L0"
+required = true
+waivable = false
+timeout_secs = 1800
+
+[[lanes.L0.checks]]
+id = "L0.architecture"
+kind = "architecture"
+argv = ["cargo", "xtask", "architecture"]
+tool = "xtask"
+validity = "architecture_report_passed"
+report = "target/rha/architecture.json"
+required = true
+waivable = false
+timeout_secs = 600
+
+[[lanes.L0.checks]]
+id = "L0.deny"
+kind = "dependency"
+argv = ["cargo", "deny", "check"]
+tool = "cargo-deny"
+validity = "exit_zero"
+required = true
+waivable = false
+timeout_secs = 900
+
+[[lanes.L0.checks]]
+id = "L0.machete"
+kind = "dependency"
+argv = ["cargo", "machete"]
+tool = "cargo-machete"
+validity = "exit_zero"
+required = true
+waivable = false
+timeout_secs = 600
+
+[[lanes.L0.checks]]
+id = "L0.typos"
+kind = "spelling"
+argv = ["typos"]
+tool = "typos-cli"
+validity = "exit_zero"
+required = true
+waivable = false
+timeout_secs = 300
+
+# ---------------------------------------------------------------------------
+# L1: risk-triggered. A check applies when a trigger glob matches a changed
+# path. The evaluator `cargo xtask l1` is not implemented yet (CHG-000 records
+# the gap), so no L1 check runs in CI.
+# ---------------------------------------------------------------------------
+[lanes.L1]
+source = "docs/spec/rha-spec-v0.10.md §12.1"
+cadence = "on a pull request, when a trigger matches the changed surface"
+acceptance = true
+
+[[lanes.L1.checks]]
+id = "L1.docs_fresh"
+kind = "docs"
+argv = ["cargo", "xtask", "docs", "--check"]
+tool = "xtask"
+validity = "exit_zero"
+required = true
+waivable = true
+timeout_secs = 600
+triggers = [".rha/**", "evidence/**", "crates/*/Cargo.toml", "rha-baseline.json"]
+
+# ---------------------------------------------------------------------------
+# L2: scheduled (.github/workflows/assurance.yml). Membership follows §12.1.
+# A check with an empty argv has no approved command yet and is recorded
+# not_run with reason no_approved_command.
+# ---------------------------------------------------------------------------
+[lanes.L2]
+source = "docs/spec/rha-spec-v0.10.md §12.1"
+cadence = "weekly and on demand"
+acceptance = false
+
+[[lanes.L2.checks]]
+id = "L2.mutation"
+kind = "mutation"
+argv = []
+note = "broad mutation on semantic crates; CHG-014 (W10), DP-2.1"
+
+[[lanes.L2.checks]]
+id = "L2.properties_deep"
+kind = "test"
+argv = []
+note = "deeper property and scenario suites"
+
+[[lanes.L2.checks]]
+id = "L2.coverage"
+kind = "coverage"
+argv = []
+note = "coverage map (locates unexercised code; not a target)"
+
+[[lanes.L2.checks]]
+id = "L2.fuzz"
+kind = "fuzz"
+argv = []
+note = "bounded fuzz campaigns"
+
+[[lanes.L2.checks]]
+id = "L2.loom"
+kind = "concurrency"
+argv = []
+note = "Loom"
+
+[[lanes.L2.checks]]
+id = "L2.kani"
+kind = "model_check"
+argv = []
+note = "Kani"
+
+[[lanes.L2.checks]]
+id = "L2.miri"
+kind = "ub_check"
+argv = []
+note = "Miri"
+
+[[lanes.L2.checks]]
+id = "L2.scaling"
+kind = "performance"
+argv = []
+note = "scaling curves on controlled hardware; CHG-015 (W11)"
+
+[[lanes.L2.checks]]
+id = "L2.perf_mutation"
+kind = "performance_mutation"
+argv = []
+note = "selected performance mutation"
+
+[[lanes.L2.checks]]
+id = "L2.fault_injection"
+kind = "fault_injection"
+argv = []
+note = "selected fault injection"
+
+[[lanes.L2.checks]]
+id = "L2.load"
+kind = "load"
+argv = []
+note = "load and capacity tests"

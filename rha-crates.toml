@@ -1,0 +1,26 @@
+# Crate-graph checker rules (spec §6.13; schema in docs/plan/IMPLEMENTATION-PLAN.md §5).
+# Read by `cargo xtask architecture` from CHG-003 on. Protected surface: the
+# allow-lists change only with Kennedy's approval.
+schema_version = 1
+
+[classification]
+adapter_prefix = "adapter-"
+app_prefix = "app-"
+tools = ["xtask"]
+harness = []
+# Every other member declares [package.metadata.rha] role =
+# "core" | "adapter" | "app" | "tool" | "harness".
+
+[core]
+# External crates a core crate may depend on; purity is judged by review (§6.8).
+allow = []
+dev_allow = []
+allow_build_scripts = false
+
+[adapters]
+require_port_owner_dependency = true
+foreign_core_dependency = "warn"
+
+[transitive]
+# L2 mode: full dependency resolution (the §4.1 transitive hole).
+enabled = false

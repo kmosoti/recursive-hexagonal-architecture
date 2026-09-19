@@ -1,0 +1,8 @@
+[files]
+# Evidence records hold digests and captured tool output; corpus fixtures are
+# synthetic crates. Neither is prose.
+extend-exclude = ["evidence/**", "xtask/tests/corpus/**"]
+
+[default.extend-words]
+# A given name in the spec's references ([R122] Mor Harchol-Balter).
+Mor = "Mor"

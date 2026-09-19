@@ -1,0 +1,65 @@
+# L0 fast lane (spec §12.1) through the one entry point, `cargo xtask ci`.
+# Records are class "ci": this job runs candidate code, including the
+# candidate's own xtask, so its evidence is advisory (docs/threat-model.md).
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    name: ci
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # Depth 2 fetches the base commit, whose policy digest the record compares.
+          fetch-depth: 2
+          persist-credentials: false
+
+      - name: Install the toolchain pinned in rust-toolchain.toml
+        run: |
+          rustup --version
+          rustup toolchain install
+          rustc --version
+
+      - name: Read the tool list from rha-baseline.json
+        id: tools
+        run: |
+          list=$(jq -r '[.tools[]
+            | select(.status == "required" and ((.ci_install // "") | startswith("install-action:")))
+            | "\(.ci_install | ltrimstr("install-action:"))@\(.required)"] | join(",")' rha-baseline.json)
+          echo "tools: $list"
+          echo "list=$list" >> "$GITHUB_OUTPUT"
+
+      - uses: taiki-e/install-action@9114bf4d891761788c546334fd37538eae1bf8b3 # v2.87.16
+        with:
+          tool: ${{ steps.tools.outputs.list }}
+
+      - name: L0 lane
+        env:
+          RHA_BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+          RHA_PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: cargo xtask ci --label ci --record target/rha
+
+      - name: Upload the evidence record
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: rha-evidence
+          path: |
+            target/rha/*.json
+            target/rha/logs/
+            target/nextest/ci/junit.xml
+          if-no-files-found: warn
+          retention-days: 90
