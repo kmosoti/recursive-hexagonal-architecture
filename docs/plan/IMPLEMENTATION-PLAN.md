@@ -1,10 +1,10 @@
 # RHA v0.10 implementation program: authorized work order
 
-> **Provenance.** Planned 2026-09-19 with Claude Fable 5.1 as a planning tool under Kennedy Mosoti's direction; approved by Kennedy the same day. This file is the Planner artifact for the program (spec §11.7.1: "Task brief or issue" owns authorized intent, acceptance examples, non-goals, and constraints; it grants no authority beyond what the executing session's permissions and `.rha/policy.toml` allow). W0 moves it to `docs/plan/` and it is rendered by the wiki like every other record.
+> **Provenance.** Planned 2026-09-19 with Claude Fable 5.1 as a planning tool under Kennedy Mosoti's direction; approved by Kennedy the same day. This file is the Planner artifact for the program (spec §11.7.1: "Task brief or issue" owns authorized intent, acceptance examples, non-goals, and constraints; it grants no authority beyond what the executing session's permissions and `.rha/policy.toml` allow). W0 moves it to `docs/plan/` and it is rendered by the wiki like every other record. Revised the same day at Kennedy's direction (CHG-001.1): the Executor is model-agnostic. Its actor id is `agent:executor`, and each task record's provenance names the model and harness that acted.
 
 ## How to start the executing session
 
-Open a new Claude Code session in this directory with Claude Opus 5, the 1M context window, and extra-high effort, then paste:
+Open a new coding-agent session in this directory, with any agent and model, then paste:
 
 ```text
 You are the Executor for the RHA v0.10 implementation program, in `agent` contribution mode under the ECC-Solo authority profile. Kennedy Mosoti is Planner, Integrator, and Acceptor.
@@ -20,7 +20,7 @@ You are the Executor for the RHA v0.10 implementation program, in `agent` contri
 
 # Plan: implement and validate RHA v0.10 mechanisms in this workspace
 
-Handoff document. Written for a fresh Claude Opus 5 session (1M context, extra-high effort) that executes it as the **Executor** in the spec's `agent` contribution mode. Kennedy Mosoti is Planner (through this plan), Integrator, and Acceptor under the `ECC-Solo` authority profile (§11.6, §11.7.6).
+Handoff document. Written for a fresh agent session, of any model, that executes it as the **Executor** in the spec's `agent` contribution mode. Kennedy Mosoti is Planner (through this plan), Integrator, and Acceptor under the `ECC-Solo` authority profile (§11.6, §11.7.6).
 
 ## 1. Context
 
@@ -32,7 +32,7 @@ Decisions Kennedy made on 2026-09-19:
 
 | Decision | Choice |
 | --- | --- |
-| Executor | Fresh Opus 5 session reading this file; Kennedy accepts each milestone |
+| Executor | A fresh agent session reading this file, of any model (revised from "Opus 5" in CHG-001.1); Kennedy accepts each milestone |
 | Hosting | GitHub remote with Actions from Phase 0 |
 | Pilot subject | A Rust-native research repository/wiki that renders markdown with custom features; working name `rhawiki` (rename at DP-0.2); it dogfoods this repo's own docs, including the spec |
 | Scope | Full program, Phases 0–4 as milestones |
@@ -41,7 +41,7 @@ Decisions Kennedy made on 2026-09-19:
 
 1. **Load context.** Read this plan fully, then the entire spec (≈65K tokens; it fits). After Phase 0 also read `AGENTS.md` and `CONTRIBUTING.md`. Do not scan other directories under `~/projects`; this workspace is self-contained.
 2. **Authority order** (§11.7.2): infrastructure permissions cap execution; `.rha/policy.toml` defines acceptance; this plan is the authorized task list; guides help. The Executor MUST NOT: edit the spec's §1.4 table or any spec text (Kennedy promotes rows at a version bump from `docs/maturity.md`); read or write held-out material (§9.14); record `passed` for a check that did not run; remove or weaken a test without the §9.14 justification; edit `.rha/policy.toml`, `rha-crates.toml` allow-lists, `.rha/acceptances/`, or `.rha/exceptions.log` after W0 without an explicit Kennedy approval (protected surfaces, §11.7.6); expand a work item beyond its Owned scope without asking; invent versions, SHAs, or command output.
-3. **Work-item loop** (§11.7.7). For each `W-nn` (change id `CHG-0nn`): write `.rha/tasks/CHG-0nn.toml` (mode `agent`, executor `agent:claude-opus-5`, `accountable_to = "human:kennedy"`, `authority_profile = "ECC-Solo"`, provenance per §11.6.5: model id, harness/version, instruction sources with digests, task scope, permissions, budgets; unknown stays `"unknown"`) → branch `chg/0nn-<slug>` → one coherent patch → `cargo xtask ci` plus the item's own checks → `evidence/CHG-0nn/<utc-ts>-<shortsha>.json` (shape in §7) → `docs/changes/CHG-0nn.md` in the §11.7.5 template → `gh pr create` with the PR template → stop and report. Kennedy reviews, merges, and writes `.rha/acceptances/CHG-0nn.toml`. "Done" is a proposal, not an acceptance event (§11.6.3).
+3. **Work-item loop** (§11.7.7). For each `W-nn` (change id `CHG-0nn`): write `.rha/tasks/CHG-0nn.toml` (mode `agent`, executor `agent:executor`, `accountable_to = "human:kennedy"`, `authority_profile = "ECC-Solo"`, provenance per §11.6.5: model id, harness/version, instruction sources with digests, task scope, permissions, budgets; unknown stays `"unknown"`) → branch `chg/0nn-<slug>` → one coherent patch → `cargo xtask ci` plus the item's own checks → `evidence/CHG-0nn/<utc-ts>-<shortsha>.json` (shape in §7) → `docs/changes/CHG-0nn.md` in the §11.7.5 template → `gh pr create` with the PR template → stop and report. Kennedy reviews, merges, and writes `.rha/acceptances/CHG-0nn.toml`. "Done" is a proposal, not an acceptance event (§11.6.3).
 4. **Iteration must buy information** (§11.7.10). Each repair attempt records hypothesis, discriminating check, change, result in the change record. After `repair_loop.max_attempts` (policy, default 3) unexplained attempts on one item, stop and escalate.
 5. **Milestones.** End of each phase: tag `v0.10-m<phase>`, update `docs/maturity.md` "Proposed" column for every mechanism the phase touched, regenerate `cargo xtask docs`, and hand Kennedy a milestone report: what reached I or V, what is `not_run`, what was refuted or downgraded.
 6. **Decision points** (§9) are where the session pauses and asks Kennedy. It never guesses at them.
@@ -355,7 +355,7 @@ Harness: `cargo xtask corpus run --level crate|module` computes `detection = det
 
 ```json
 {"schema_version": 1, "record_kind": "evidence", "evidence_class": "local",
- "producer": {"principal": "agent:claude-opus-5", "accountable_to": "human:kennedy", "tool": "xtask ci 0.1.0", "tool_git_rev": "<sha>"},
+ "producer": {"principal": "agent:executor", "accountable_to": "human:kennedy", "tool": "xtask ci 0.1.0", "tool_git_rev": "<sha>"},
  "change_claim": {"task": "CHG-003", "intent": "…", "non_goals": [], "affected_components": [], "contract_changes": "none", "architecture_delta": "none", "performance_impact": "none claimed", "unresolved": []},
  "artifact_identity": {"revision": "<40 hex>", "tree": "<40 hex>", "branch": "chg/003-…", "dirty": false, "tracked_diff_sha256": null, "untracked_inputs": [], "baseline_revision": null, "digest_algorithm": "sha256"},
  "verification_identity": {"policy_path": ".rha/policy.toml", "policy_digest": "sha256:<64 hex>", "policy_revision": "<base sha>", "toolchain": {"rustc": "1.98.1 (…)", "cargo": "1.98.1", "clippy": "0.1.98"}, "target": "x86_64-unknown-linux-gnu", "features": "--all-features", "profile": "dev", "lockfile_sha256": "<64 hex>", "instruction_sources": [{"path": "AGENTS.md", "sha256": "…"}]},
@@ -375,7 +375,7 @@ Validation rules (enforced by W15's schema and semantic checks; observed by hand
 
 ## 8. Work items
 
-Common brief fields (§11.7.4): **Mode** agent (one Executor). **Roles** Planner Kennedy (this plan), Executor the Opus 5 session, Integrator Kennedy (merges), Verifier `xtask ci` local + GitHub Actions (class `ci`, advisory, not protected), Acceptor Kennedy. **Authority** the Executor may create/edit files in the repo, run cargo/git/gh, push `chg/*` branches, open PRs; it may not merge, tag, or touch protected surfaces (§2 item 2); escalation = stop and list the unknown under "Acceptance concerns" in the PR. Each item ships its task record, change record, evidence, and `cargo xtask docs` regeneration.
+Common brief fields (§11.7.4): **Mode** agent (one Executor). **Roles** Planner Kennedy (this plan), Executor the agent session (`agent:executor`, any model), Integrator Kennedy (merges), Verifier `xtask ci` local + GitHub Actions (class `ci`, advisory, not protected), Acceptor Kennedy. **Authority** the Executor may create/edit files in the repo, run cargo/git/gh, push `chg/*` branches, open PRs; it may not merge, tag, or touch protected surfaces (§2 item 2); escalation = stop and list the unknown under "Acceptance concerns" in the PR. Each item ships its task record, change record, evidence, and `cargo xtask docs` regeneration.
 
 ### Phase 0 (milestone M0, tag `v0.10-m0`)
 
