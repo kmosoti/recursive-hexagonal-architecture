@@ -169,7 +169,7 @@ task_scope = "CHG-001: docs/plan/IMPLEMENTATION-PLAN.md §8 W1"
 permissions = "Workspace files, shell, network, and `gh` as kmosoti through the user's account. Protected surfaces: xtask/templates/core-clippy.toml only, created in W1 and extended in CHG-001.2, both approved by human:kennedy (see [[decisions]])."
 budgets = "unknown"
 reasoning_effort = "unknown"
-advisory_subagents = "CHG-001.2: a read-only workflow of eleven subagents swept the Rust 1.98.1 standard-library source for effectful APIs and criticized the result. They produced no artifact and own no work, so the mode stays `agent` (§11.6.2); the template entries and every claim were checked by experiment 4."
+advisory_subagents = "Two read-only workflows advised CHG-001.2 and own no artifact, so the mode stays `agent` (§11.6.2). Eleven subagents swept the Rust 1.98.1 standard-library source for effectful APIs, verified each other's lists against that source, and criticized the result; every entry they proposed is checked by experiment 4, which fails if one stops firing. Twenty-eight subagents then reviewed the branch along five dimensions and tried to refute each finding: of 23 findings, 14 survived and were fixed, including the record writer reporting a clean tree when git failed, the experiments that asserted silence without a positive control, and documents asserting a result for a template no committed record covered."
 instruction_sources = [
   { path = "docs/plan/IMPLEMENTATION-PLAN.md (W1, at a152d94)", sha256 = "4c60073eacdd5f03303f0d7298a95dea35db0a9bb7bd49b9d724bedea0737afb" },
   { path = "docs/plan/IMPLEMENTATION-PLAN.md (CHG-001.1 revision: model-agnostic Executor)", sha256 = "86298ec9b06f6774752cf85eba8396633ba557d6202b96017099b639adeecfb1" },
