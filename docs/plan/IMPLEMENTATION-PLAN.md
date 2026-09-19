@@ -4,7 +4,7 @@
 
 ## How to start the executing session
 
-Open a new coding-agent session in this directory, with any agent and model, then paste:
+Open a new coding-agent session in this directory, with any agent and model, and with the largest context window and the highest reasoning effort that agent offers, then paste:
 
 ```text
 You are the Executor for the RHA v0.10 implementation program, in `agent` contribution mode under the ECC-Solo authority profile. Kennedy Mosoti is Planner, Integrator, and Acceptor.
@@ -20,7 +20,7 @@ You are the Executor for the RHA v0.10 implementation program, in `agent` contri
 
 # Plan: implement and validate RHA v0.10 mechanisms in this workspace
 
-Handoff document. Written for a fresh agent session, of any model, that executes it as the **Executor** in the spec's `agent` contribution mode. Kennedy Mosoti is Planner (through this plan), Integrator, and Acceptor under the `ECC-Solo` authority profile (§11.6, §11.7.6).
+Handoff document. Written for a fresh agent session, of any model, with the largest context window and highest reasoning effort available to it, that executes it as the **Executor** in the spec's `agent` contribution mode. Kennedy Mosoti is Planner (through this plan), Integrator, and Acceptor under the `ECC-Solo` authority profile (§11.6, §11.7.6).
 
 ## 1. Context
 
@@ -393,7 +393,7 @@ Common brief fields (§11.7.4): **Mode** agent (one Executor). **Roles** Planner
 
 **W1 (CHG-001) Ambient-effect deny list and Clippy discovery experiment.**
 - Intent: a core-crate `clippy.toml` deny list that fails the build on a seeded `SystemTime::now()`, with the pinned Clippy's config discovery verified and recorded (§6.8 asks for exactly this).
-- Scope: `xtask/tests/corpus/clippy/discovery/` (root `clippy.toml` with test allowances; `crates/core-a/clippy.toml` with the deny list; `crates/adapter-x/` with no local file) and `core-seeded/` (core-a calls `std::time::SystemTime::now()`); `xtask/templates/core-clippy.toml`; rule `effect.core_clippy_template` (every `role=core` crate's `clippy.toml` must equal the template). Non-goals: product crates.
+- Scope (as pre-registered; CHG-001.1 replaced the two committed fixture workspaces with fixtures generated under `target/clippy-corpus/` from the root `Cargo.toml` lint tables, the root `clippy.toml`, and the template): `xtask/tests/corpus/clippy/discovery/` (root `clippy.toml` with test allowances; `crates/core-a/clippy.toml` with the deny list; `crates/adapter-x/` with no local file) and `core-seeded/` (core-a calls `std::time::SystemTime::now()`); `xtask/templates/core-clippy.toml`; rule `effect.core_clippy_template` (every `role=core` crate's `clippy.toml` must equal the template). Non-goals: product crates.
 - Contracts: deny list = §6.8 entries plus `std::fs::read`, `std::fs::read_to_string`, `std::fs::write`, `std::env::vars`, `std::io::stdin`, and `disallowed-macros = [std::println, std::eprintln, std::dbg]`; adapters set nothing.
 - Acceptance: three recorded experiments with literal commands and captured stderr in `evidence/w1-clippy/`: (1) `cargo clippy -p core-a` in `core-seeded` exits nonzero citing `clippy::disallowed_methods`; (2) in `discovery`, `cargo clippy -p adapter-x` with the same call passes (per-crate discovery via `CARGO_MANIFEST_DIR` ancestors); (3) with `allow-unwrap-in-tests = true` only at root and a test `unwrap()` in `core-a`, the `unwrap_used` warning appears (no merge: nearest file wins entirely). Findings go to `docs/adr/ADR-0002-clippy-config-discovery.md`. If (2) or (3) contradicts the expectation, record the observed rule and switch to `CLIPPY_CONF_DIR` per crate set by `xtask ci` (environment, not command, so §12.1 is intact).
 - Unknowns: whether Clippy 0.1.98 errors on `clippy.toml` + `.clippy.toml` in one directory (avoid the pair).

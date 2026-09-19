@@ -101,7 +101,7 @@ date = "2026-09-19"
 [[decisions]]
 id = "protected-surface-approval"
 question = "Which protected surfaces may this change touch?"
-answer = "Only the creation of xtask/templates/core-clippy.toml; no other protected surface may change."
+answer = "Only the creation of xtask/templates/core-clippy.toml; no other protected surface may change. Extended on the same day by the deny-list-gaps decision above, which approves editing that same file to close the gaps ADR-0002 names; no other protected surface may change."
 decided_by = "human:kennedy"
 date = "2026-09-19"
 
@@ -151,6 +151,8 @@ criteria = [
   "(2) In xtask/tests/corpus/clippy/discovery, `cargo clippy -p adapter-x` passes with no deny-list finding",
   "(3) With allow-unwrap-in-tests only in the fixture's root clippy.toml and a test unwrap() in core-a, whether unwrap_used fires is observed and recorded",
   "Commands and captured stderr are in evidence/w1-clippy/; ADR-0002 states the observed rule and its consequence for per-core clippy.toml files",
+  "(CHG-001.1 restatement, same experiments) The criteria above name the committed fixture workspaces of W1. The fixtures are now generated under target/clippy-corpus/ from the root Cargo.toml lint tables, the root clippy.toml, and the template, and the crates are named core-seeded, core-deny-only, core-clean, core-every and adapter-x. Experiments 1, 2 and 3 keep their meaning and their commands, which each record states in full.",
+  "(CHG-001.2) Experiment 6 records what switches the deny list off, and experiment 4 shows every template entry resolve and fire.",
 ]
 replan_when = [
   "Experiment (2) or (3) contradicts the expected rule",
@@ -164,7 +166,7 @@ harness = "Claude Code, VS Code extension; the CLI on PATH reports `2.1.278 (Cla
 output_style = "Learning (.claude/settings.local.json)"
 permission_mode = "auto, as reported to the session; project allow-list in the untracked .claude/settings.json (gh pr/run/api, git fetch, one python3 command)"
 task_scope = "CHG-001: docs/plan/IMPLEMENTATION-PLAN.md §8 W1"
-permissions = "Workspace files, shell, network, and `gh` as kmosoti through the user's account. Protected surfaces: only the creation of xtask/templates/core-clippy.toml is approved."
+permissions = "Workspace files, shell, network, and `gh` as kmosoti through the user's account. Protected surfaces: xtask/templates/core-clippy.toml only, created in W1 and extended in CHG-001.2, both approved by human:kennedy (see [[decisions]])."
 budgets = "unknown"
 reasoning_effort = "unknown"
 advisory_subagents = "CHG-001.2: a read-only workflow of eleven subagents swept the Rust 1.98.1 standard-library source for effectful APIs and criticized the result. They produced no artifact and own no work, so the mode stays `agent` (§11.6.2); the template entries and every claim were checked by experiment 4."

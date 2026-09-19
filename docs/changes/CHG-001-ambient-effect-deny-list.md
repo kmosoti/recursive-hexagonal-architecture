@@ -6,7 +6,7 @@ The item has three parts. **W1** is the work item the plan asks for. **CHG-001.1
 
 ## Intent and scope
 
-**Behaviour.** A core crate whose `clippy.toml` is the template fails `cargo clippy` on a direct use of any of 80 ambient-effect paths, starting with the seeded `std::time::SystemTime::now()`. The pinned Clippy's configuration discovery and merge behaviour is observed and recorded, together with what switches the deny list off. The rule `effect.core_clippy_template` reports a core crate whose Clippy configuration is not the template.
+**Behaviour.** A core crate whose `clippy.toml` is the template fails `cargo clippy` on a direct use of any of 89 ambient-effect paths, starting with the seeded `std::time::SystemTime::now()`. The pinned Clippy's configuration discovery and merge behaviour is observed and recorded, together with what switches the deny list off. The rule `effect.core_clippy_template` reports a core crate whose Clippy configuration is not the template.
 
 **Affected components and contracts.** None: no product component exists. New: `xtask/templates/core-clippy.toml` (creation approved by Kennedy, extension approved for CHG-001.2), `xtask/src/clippy_template.rs`, and the Clippy corpus, whose fixture workspaces are generated at test time under `target/clippy-corpus/`.
 
@@ -29,11 +29,11 @@ The item has three parts. **W1** is the work item the plan asks for. **CHG-001.1
 
 **CHG-001.2, deny list and escape hatches.**
 
-- Experiment 6, thirteen runs, records what switches the deny list off and what closes it: `#[allow]`, `#[expect]`, `#![allow]`, and an allow flag in `RUSTFLAGS` all silence it; a crate-level `#![forbid]` or `forbid` in the lint table turns the attributes into `E0453`; `--cap-lints=warn` lowers even a forbidden finding. Experiment 6n shows the same flag works from `.cargo/config.toml`, which is not a protected surface.
-- The template grows from 15 entries to 80, closing the gaps ADR-0002 named. The additions come from a sweep of the Rust 1.98.1 standard-library source, limited to the effects §6.8 names. ADR-0002 carries the per-category table and what was deliberately left out.
+- Experiment 6, fourteen runs, records what switches the deny list off and what closes it: `#[allow]`, `#[expect]`, `#![allow]`, and an allow flag in `RUSTFLAGS` all silence it; a crate-level `#![forbid]` or `forbid` in the lint table turns the attributes into `E0453`; `--cap-lints=warn` lowers even a forbidden finding. Experiment 6n shows the same flag works from `.cargo/config.toml`, which is not a protected surface.
+- The template grows from 15 entries to 89, closing the gaps ADR-0002 named. Ten of the additions are the paths that record listed; the rest come from a sweep of the Rust 1.98.1 standard-library source and an adversarial review of the result, both limited to the effects §6.8 names. ADR-0002 carries the per-category table and what was deliberately left out. Experiment 4 shows all 89 resolve and fire, in 91 findings.
 - `std::env::set_var` and `std::env::remove_var` are `unsafe` in edition 2024, so the fixture names them instead of calling them. The lint fires on the path reference, which is how both entries are demonstrated.
 
-**Removed, weakened, or reinterpreted tests.** The two fixture drift tests are removed with the copies they guarded: `fixtures_copy_the_root_lint_tables_and_root_clippy_file` had nothing left to compare, and the rule's `copies_of_the_template_conform` now writes its own crate directories. No behavioural check was weakened; the corpus went from 4 tests to 7 and from 7 experiments to 21.
+**Removed, weakened, or reinterpreted tests.** The two fixture drift tests are removed with the copies they guarded: `fixtures_copy_the_root_lint_tables_and_root_clippy_file` had nothing left to compare, and the rule's `copies_of_the_template_conform`, renamed `a_copy_of_the_template_conforms`, now writes its own crate directories. No behavioural check was weakened; the corpus went from 4 tests to 7 and from 7 experiments to 21.
 
 **Beyond the plan's three experiments,** each added to make one of them decisive or to answer a listed unknown: 3c (control), 3b (the fix for 3), 4 (every entry), 5 (the plan's unknown, `clippy.toml` beside `.clippy.toml`), and 6a to 6n (what a crate or its configuration can do to the deny list).
 

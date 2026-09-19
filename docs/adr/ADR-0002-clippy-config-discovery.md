@@ -10,7 +10,7 @@ Spec §6.8 gives core crates a `clippy.toml` deny list of ambient-effect paths a
 
 ## Observations
 
-Each experiment runs in a fixture workspace that [`xtask/tests/clippy_corpus.rs`](../../xtask/tests/clippy_corpus.rs) generates under `target/clippy-corpus/` from the three files that own the facts involved: the root `Cargo.toml` (`[workspace.package]` and the lint tables), the root `clippy.toml`, and [the template](../../xtask/templates/core-clippy.toml). Only the crate sources are committed, in [`xtask/tests/corpus/clippy/`](../../xtask/tests/corpus/clippy/). The fixture is emptied first, so no cached build stands in for a fresh one. The same file runs the experiments in every `L0.nextest` run and, with `RHA_CLIPPY_RECORD=<dir>`, writes one record per experiment: the generated files with their digests, the literal command, the exit status, and the captured output. The records are in [`evidence/w1-clippy/`](../../evidence/w1-clippy/).
+Each experiment runs in a fixture workspace that [`xtask/tests/clippy_corpus.rs`](../../xtask/tests/clippy_corpus.rs) generates under `target/clippy-corpus/` from the three files that own the facts involved: the root `Cargo.toml` (`[workspace.package]` and the lint tables), the root `clippy.toml`, and [the template](../../xtask/templates/core-clippy.toml). Only the crate sources are committed, in [`xtask/tests/corpus/clippy/`](../../xtask/tests/corpus/clippy/). The fixture is emptied first, so no cached build stands in for a fresh one. The same file runs the experiments in every `L0.nextest` run and, with `RHA_CLIPPY_RECORD=<dir>`, writes one record per experiment: the generated files with their digests, the literal command, the exit status, and the captured output. The records of these experiments are in [`evidence/w1-clippy/20260919T221927Z-edd4bac756f9/`](../../evidence/w1-clippy/20260919T221927Z-edd4bac756f9/). Seven loose files beside that directory are the first run, at `28ae543`, written by the shell script CHG-001.1 replaced; they name the committed fixtures of the time, which no longer exist.
 
 **Discovery and merging.** Crates marked *template* hold a byte-equal copy of the template; *reduced* holds the template without the settings the root file sets.
 
@@ -59,18 +59,18 @@ Rules 1 to 4 match the plan's expectation, so the `CLIPPY_CONF_DIR` fallback is 
 - Every crate with role `core` has a `clippy.toml` byte-equal to [`xtask/templates/core-clippy.toml`](../../xtask/templates/core-clippy.toml). Adapters, apps, and tools have none and use the root file. The template holds the §6.8 entries, the plan's W1 additions, the entries added in CHG-001.2, and, because of rule 2, every setting of the root `clippy.toml`.
 - Rule `effect.core_clippy_template` reports, per core crate, a missing `clippy.toml`, one that differs from the template, and a `.clippy.toml` beside it (rule 3). Its witness is the path and the sha256 digests. It is implemented in [`xtask/src/clippy_template.rs`](../../xtask/src/clippy_template.rs) and runs in L0 once `cargo xtask architecture` exists (CHG-003).
 - Fixtures are generated, not committed (CHG-001.1). A committed fixture is a copy of the root lint table, the root `clippy.toml`, or the template, and copies need drift tests to stay true. The one copy left is the template's repeat of the root settings, which rule 2 forces; `template_repeats_every_root_setting` guards it.
-- The deny list is extended in CHG-001.2 from 15 entries to 80, and experiment 4 keeps every entry honest: a path that stops resolving stops firing, and the test fails. The entries come from the ten paths this record named in CHG-001 plus a sweep of the Rust 1.98.1 standard-library source, kept to the effects §6.8 names.
+- The deny list is extended in CHG-001.2 from 15 entries to 89, and experiment 4 keeps every entry honest: a path that stops resolving stops firing, and the test fails. The entries come from the ten paths this record named in CHG-001 plus a sweep of the Rust 1.98.1 standard-library source, kept to the effects §6.8 names.
 
 | Category | Entries | Examples |
 | --- | --- | --- |
 | Clocks | 4 | `SystemTime::now`, `Instant::elapsed` |
 | Environment, arguments, working directory | 16 | `env::var_os`, `env::args`, `env::current_dir`, `path::absolute`, `IsTerminal::is_terminal` |
-| Storage | 33 | 19 `std::fs` functions, the 10 `Path` methods that touch the filesystem, and the types `File`, `OpenOptions`, `DirBuilder`, `ReadDir` |
+| Storage | 34 | 19 `std::fs` functions, the 10 `Path` methods that touch the filesystem, and the types `File`, `OpenOptions`, `DirBuilder`, `ReadDir`, `DirEntry` |
 | Network | 4 | the types `TcpStream`, `TcpListener`, `UdpSocket`, and `ToSocketAddrs::to_socket_addrs` |
-| Process execution | 5 | the types `Command` and `Child`, `process::exit`, `abort`, `id` |
-| Concurrency and scheduling | 8 | `thread::spawn`, the `Builder` type, `scope`, `sleep`, `park` |
+| Process, process-global state, telemetry | 9 | the types `Command` and `Child`, `process::exit`, `abort`, `id`, `panic::set_hook`, `take_hook`, `Backtrace::capture`, `force_capture` |
+| Concurrency and scheduling | 9 | `thread::spawn`, the `Builder` type, `scope`, `sleep`, `park`, `current` |
 | Randomness | 1 | `hash::RandomState` |
-| Input and output | 9 | `io::stdin`, `stdout`, `stderr`, `pipe`, and the five print macros |
+| Input and output | 12 | `io::stdin`, `stdout`, `stderr`, `pipe`, the `Stdin`, `Stdout` and `Stderr` types, and the five print macros |
 
   A type entry fires on every mention, including associated functions, so `std::process::Command` replaced the narrower `Command::new`.
 - The attribute escape of rule 5 is recorded, not closed. Closing it means `forbid` for the three lints in the root `Cargo.toml`, a protected surface, and that is Kennedy's decision (CHG-001 acceptance concerns).

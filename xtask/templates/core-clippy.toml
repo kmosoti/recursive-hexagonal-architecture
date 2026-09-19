@@ -76,12 +76,16 @@ disallowed-methods = [
   { path = "std::path::Path::read_link",         reason = "storage crosses a port" },
 
   # Network name resolution; the socket types are below.
-  { path = "std::net::ToSocketAddrs::to_socket_addrs", reason = "name resolution crosses a port" },
+  { path = "std::net::ToSocketAddrs::to_socket_addrs", reason = "resolving a host name crosses a port; addresses are data" },
 
   # Process control; std::process::Command and Child are below.
   { path = "std::process::exit",  reason = "process control crosses a port; return a value instead" },
   { path = "std::process::abort", reason = "process control crosses a port; return a value instead" },
   { path = "std::process::id",    reason = "the process id is ambient state" },
+  { path = "std::panic::set_hook",  reason = "the panic hook is process-global state" },
+  { path = "std::panic::take_hook", reason = "the panic hook is process-global state" },
+  { path = "std::backtrace::Backtrace::capture",       reason = "the stack and RUST_BACKTRACE are ambient; telemetry crosses a port" },
+  { path = "std::backtrace::Backtrace::force_capture", reason = "the stack is ambient; telemetry crosses a port" },
 
   # Concurrency and scheduling; std::thread::Builder is below.
   { path = "std::thread::spawn",        reason = "concurrency is orchestrated at the edge" },
@@ -91,6 +95,7 @@ disallowed-methods = [
   { path = "std::thread::park",         reason = "scheduling is orchestrated at the edge" },
   { path = "std::thread::park_timeout", reason = "scheduling is orchestrated at the edge" },
   { path = "std::thread::yield_now",    reason = "scheduling is orchestrated at the edge" },
+  { path = "std::thread::current",      reason = "the running thread's identity is ambient state" },
 
   # Process-global streams.
   { path = "std::io::stdin",  reason = "input crosses a port" },
@@ -106,6 +111,7 @@ disallowed-types = [
   { path = "std::fs::OpenOptions",   reason = "storage crosses a port" },
   { path = "std::fs::DirBuilder",    reason = "storage crosses a port" },
   { path = "std::fs::ReadDir",       reason = "storage crosses a port" },
+  { path = "std::fs::DirEntry",      reason = "storage crosses a port" },
   { path = "std::net::TcpStream",    reason = "network crosses a port" },
   { path = "std::net::TcpListener",  reason = "network crosses a port" },
   { path = "std::net::UdpSocket",    reason = "network crosses a port" },
@@ -113,6 +119,9 @@ disallowed-types = [
   { path = "std::process::Child",    reason = "process execution crosses a port" },
   { path = "std::thread::Builder",   reason = "concurrency is orchestrated at the edge" },
   { path = "std::hash::RandomState", reason = "randomness crosses a port" },
+  { path = "std::io::Stdin",         reason = "input crosses a port" },
+  { path = "std::io::Stdout",        reason = "output crosses a port; return data instead" },
+  { path = "std::io::Stderr",        reason = "output crosses a port; return data instead" },
 ]
 
 disallowed-macros = [

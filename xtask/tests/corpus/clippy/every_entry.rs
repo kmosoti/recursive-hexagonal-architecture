@@ -206,3 +206,32 @@ pub fn threads() {
 pub fn randomness() -> std::hash::RandomState {
     std::hash::RandomState::new()
 }
+
+/// `fs::DirEntry`, whose methods reach the filesystem on their own.
+///
+/// # Errors
+/// Any I/O error.
+pub fn dir_entry(entry: &std::fs::DirEntry) -> std::io::Result<bool> {
+    Ok(entry.metadata()?.is_file())
+}
+
+/// The process-global stream types, named without calling the functions above.
+pub fn stream_types(input: &std::io::Stdin, out: &std::io::Stdout, err: &std::io::Stderr) {
+    let _ = (input, out, err);
+}
+
+/// `panic::set_hook`, `panic::take_hook`, and the running thread's identity.
+#[must_use]
+pub fn process_state() -> String {
+    let previous = std::panic::take_hook();
+    std::panic::set_hook(previous);
+    std::thread::current().name().unwrap_or("?").to_owned()
+}
+
+/// `backtrace::Backtrace::capture` and `force_capture`.
+#[must_use]
+pub fn stack() -> String {
+    let captured = std::backtrace::Backtrace::capture();
+    let forced = std::backtrace::Backtrace::force_capture();
+    format!("{captured}{forced}")
+}
