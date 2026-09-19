@@ -43,7 +43,20 @@ Task record: [`.rha/tasks/CHG-001-ambient-effect-deny-list.toml`](../../.rha/tas
 
 The observed rule matches the plan's expectation: per-crate discovery, no merge, and the dotfile wins. The `CLIPPY_CONF_DIR` fallback is not used. `xtask/tests/clippy_corpus.rs` reruns experiments 1, 2, 3, 3c, 3b, and 4 on every `L0.nextest` run.
 
-**L0 record.** Pending: filled in after the run on the committed candidate.
+**L0 record.** [`evidence/CHG-001/20260919T212810Z-42c4860b5553-dirty.json`](../../evidence/CHG-001/20260919T212810Z-42c4860b5553-dirty.json), class `local`, principal `agent:claude-opus-5`. Subject: commit `42c4860b55536fb638a9f4b09fe3addc55de0fb8`, which differs from the experiments' commit `28ae543` only by the records, docs, and the ADR. It is dirty only because of the untracked `.claude/settings.json`. Base `c554316` (main); the policy digest equals the base policy's, `sha256:f102c03a…`, so **Applicable holds**.
+
+| Check | Outcome | Detail |
+| --- | --- | --- |
+| `L0.fmt` | passed | |
+| `L0.clippy` | passed | |
+| `L0.nextest` | passed | 28 tests, including the 4 corpus tests and 4 rule tests |
+| `L0.doctest` | passed | 1 doctest |
+| `L0.architecture` | **not_run** | `not_implemented` (stub, exit 4) |
+| `L0.deny` | passed | |
+| `L0.machete` | passed | also scans the fixture workspaces |
+| `L0.typos` | passed | the fixtures are excluded by `_typos.toml` |
+
+Eligibility `blocked`: Authentic (no trusted producers) and Passed (`L0.architecture` not_run). Applicable and Complete hold.
 
 **CI record.** Pending: filled in after the first CI run on the pull request.
 
