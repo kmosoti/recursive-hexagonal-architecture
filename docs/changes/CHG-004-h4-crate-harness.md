@@ -38,3 +38,45 @@ The raw reports show those checker violations, but their structured JSON omits r
 The approval decision owns the full EM-M03 correction commit. H4 reads this fixed provenance instead of treating the newest manifest edit as the historical correction. The integration test independently loads that commit and its parent and proves that their only manifest difference is the approved EM-M03 cell edit. Fixture input hashes are labelled as generated expectations; an actual mismatch is recorded as drift and fails the harness before execution.
 
 Outside packages remain siblings of the C19 and EM-C01 workspace roots, as `outside_crates.at` requires; every case workspace itself is at its requested category/id path. The full fixture tree and its drift check include those external packages.
+
+## Final H4 handoff
+
+[Final clean H4 record](../../evidence/h4-crate/20260920T121858Z-ac6f7c67af63-1471693.json) identifies `ac6f7c67af6384395a3710fc4805edd4fcf01903`. It reports 22/22 detected, 1/11 false alarms, two documented holes, 229 generated input hashes and no drift. The command exits 1; C13 is the sole failure. Every module cell remains not_run under CHG-007; no V promotion is proposed (DP-1.6). Kennedy alone runs DP-1.1b.
+
+| Case | Actual outcome |
+| --- | --- |
+| C01 | Detected; passed |
+| C02 | Detected; passed |
+| C03 | Detected; passed |
+| C04 | Detected; passed |
+| C05 | Detected; passed |
+| C06 | Detected; passed |
+| C07 | Detected; passed |
+| C08 | Detected; passed |
+| C09 | Detected; passed |
+| C10 | Detected; passed |
+| C11 | Detected; passed |
+| C12 | Detected; passed |
+| C13 | Detected; failed: unmatched adapter.foreign_core warning |
+| C14 | Detected; passed |
+| C15 | Detected; passed |
+| C16 | Detected; passed |
+| C17 | Detected; passed |
+| C18 | Detected; passed |
+| C19 | Detected; passed |
+| C20 | Detected; passed |
+| C21 | Detected; passed |
+| L01 | No alarm; passed |
+| L02 | No alarm; passed |
+| L03 | No alarm; passed |
+| L04 | No alarm; passed |
+| L05 | No alarm; passed |
+| L06 | No alarm; passed |
+| L07 | No alarm; passed |
+| L08 | No alarm; passed |
+| L09 | No alarm; passed |
+| L10 | No alarm; passed |
+| L11 | No alarm; passed |
+| EM-C01 | Documented hole; passed with no findings |
+| EM-C02 | Documented hole; passed with no findings |
+| R01 | Detected E0603; passed (cargo exit 101) |
