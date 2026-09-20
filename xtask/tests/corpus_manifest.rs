@@ -132,6 +132,152 @@ fn the_expected_outcome_counts_are_the_ones_plan_section_6_states() {
     assert_eq!(module_counts.values().sum::<usize>(), 27);
 }
 
+/// Every case's expected outcome, rule and §4.1 cells, pinned one row per
+/// case. The aggregate counts above cannot see a swap: flipping C01 to
+/// `no_alarm` and L01 to `detect` leaves every count identical, and the
+/// pre-registration would have been reversed for two cases without a test
+/// noticing. This table is the pre-registration in the form a reviewer can
+/// read in a diff.
+///
+/// Written once from the manifest at CHG-002.1 and frozen here. From now on a
+/// manifest edit must change this table too, and the change shows up in the
+/// diff of a file that is not the protected surface being edited.
+const PINNED: [(&str, &str, &str, &str); 62] = [
+    ("C01", "detect", "dir.core_to_adapter", "law3-d1 law6-d5"),
+    ("C02", "detect", "dir.core_to_app", "law3-d1"),
+    ("C03", "detect", "effect.core_disallowed_dependency", "law5"),
+    ("C04", "detect", "effect.core_build_script", "law5"),
+    ("C05", "detect", "graph.cycle", "law6-b3"),
+    ("C06", "detect", "dir.non_root_to_adapter", "law6-d5"),
+    ("C07", "detect", "dir.non_root_to_adapter", "law6-d5"),
+    ("C08", "detect", "forbidden.edge", "law3-d1"),
+    ("C09", "detect", "forbidden.edge", "law3-d1"),
+    ("C10", "detect", "class.unclassified", "classification"),
+    (
+        "C11",
+        "detect",
+        "class.prefix_role_conflict",
+        "classification",
+    ),
+    ("C12", "detect", "dir.tool_depended_on", "law3-d1"),
+    ("C13", "detect", "adapter.missing_port_owner", "law3-d1"),
+    ("C14", "detect", "adapter.port_owner_wrong_kind", "law3-d1"),
+    ("C15", "detect", "dir.core_to_adapter", "law3-d1 law6-d5"),
+    ("C16", "detect", "dir.core_to_adapter", "law3-d1 law6-d5"),
+    ("C17", "detect", "dir.core_to_adapter", "law3-d1 law6-d5"),
+    ("C18", "detect", "dir.core_to_adapter", "law3-d1 law6-d5"),
+    ("C19", "detect", "effect.core_disallowed_dependency", "law5"),
+    ("C20", "detect", "meta.unknown_port_owner", "classification"),
+    (
+        "C21",
+        "detect",
+        "effect.core_disallowed_dev_dependency",
+        "law5",
+    ),
+    ("L01", "no_alarm", "-", "law3-d1"),
+    ("L02", "no_alarm", "-", "law6-b3"),
+    ("L03", "no_alarm", "-", "law5"),
+    ("L04", "no_alarm", "-", "law5"),
+    ("L05", "no_alarm", "-", "law6-d5"),
+    ("L06", "no_alarm", "-", "law6-d5"),
+    ("L07", "no_alarm", "-", "law6-d5"),
+    ("L08", "no_alarm", "-", "law5"),
+    ("L09", "no_alarm", "-", "law3-d1"),
+    ("L10", "no_alarm", "-", "law5"),
+    ("L11", "no_alarm", "-", "classification"),
+    (
+        "EM-C01",
+        "expected_miss",
+        "transitive.core_disallowed_dependency",
+        "law5",
+    ),
+    ("EM-C02", "expected_miss", "-", "law5"),
+    ("R01", "detect", "rustc E0603", "law2-d3"),
+    ("M01", "detect", "modules.cycle", "law6-b3"),
+    ("M02", "detect", "modules.undeclared_dependency", "law3-d1"),
+    ("M03", "detect", "modules.child_to_parent_private", "d2"),
+    ("M04", "detect", "modules.child_to_parent_private", "d2"),
+    ("M05", "detect", "modules.child_to_parent_private", "d2"),
+    ("M06", "detect", "modules.foreign_internal", "law2-d3"),
+    ("M07", "no_alarm", "-", "law2-d3"),
+    ("M08", "no_alarm", "-", "d2"),
+    ("M09", "no_alarm", "-", "law6-b3"),
+    ("M10", "detect", "modules.foreign_internal", "law2-d3"),
+    ("M11", "no_alarm", "-", "law6-b3"),
+    ("M12", "detect", "modules.cycle", "law6-b3"),
+    ("M13", "detect", "modules.cycle", "law6-b3"),
+    ("M14", "detect", "modules.cycle", "law6-b3"),
+    ("M15", "detect", "modules.cycle", "law6-b3"),
+    ("M16", "detect", "modules.cycle", "law6-b3"),
+    ("M17", "detect", "modules.cycle", "law6-b3"),
+    ("M18", "detect", "modules.cycle", "law6-b3"),
+    ("M19", "detect", "modules.child_to_parent_private", "d2"),
+    ("M20", "detect", "modules.cycle", "law6-b3"),
+    ("M21", "detect", "modules.cycle", "law6-b3"),
+    ("L-M01", "no_alarm", "-", "law6-b3"),
+    ("L-M02", "no_alarm", "-", "d2"),
+    ("EM-M01", "expected_miss", "-", "law6-b3"),
+    ("EM-M02", "expected_miss", "-", "law6-b3"),
+    ("EM-M03", "expected_miss", "-", "law6-b3"),
+    ("X-M01", "reference", "-", "law6-b3"),
+];
+
+#[test]
+fn every_case_keeps_the_outcome_rule_and_cells_it_was_registered_with() {
+    let manifest = manifest();
+    let mut mismatches = Vec::new();
+    for (id, expected, rule, cells) in PINNED {
+        let Some(case) = manifest.cases.iter().find(|c| c.id == id) else {
+            mismatches.push(format!(
+                "{id}: registered in the pin table, absent from the manifest"
+            ));
+            continue;
+        };
+        let actual_expected = format!("{:?}", case.expected)
+            .chars()
+            .flat_map(|c| {
+                if c.is_uppercase() {
+                    vec!['_', c.to_ascii_lowercase()]
+                } else {
+                    vec![c]
+                }
+            })
+            .collect::<String>()
+            .trim_start_matches('_')
+            .to_owned();
+        if actual_expected != expected {
+            mismatches.push(format!(
+                "{id}: registered expected {expected}, manifest says {actual_expected}"
+            ));
+        }
+        if case.rule != rule {
+            mismatches.push(format!(
+                "{id}: registered rule {rule}, manifest says {}",
+                case.rule
+            ));
+        }
+        let actual_cells = case.cells.join(" ");
+        if actual_cells != cells {
+            mismatches.push(format!(
+                "{id}: registered cells [{cells}], manifest says [{actual_cells}]"
+            ));
+        }
+    }
+    for case in &manifest.cases {
+        if !PINNED.iter().any(|(id, ..)| *id == case.id) {
+            mismatches.push(format!(
+                "{}: present in the manifest, absent from the pin table",
+                case.id
+            ));
+        }
+    }
+    assert!(
+        mismatches.is_empty(),
+        "the corpus no longer matches its pre-registration:\n{}",
+        mismatches.join("\n")
+    );
+}
+
 #[test]
 fn every_rule_a_case_names_is_one_the_plan_lists() {
     let manifest = manifest();
