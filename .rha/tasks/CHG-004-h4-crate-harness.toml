@@ -71,3 +71,10 @@ question = "Which fixture storage and scoring contract governs W4?"
 answer = "Kennedy's W4 objective explicitly requires committed generated fixtures, a drift gate, combined 22-case detection including rustc R01, exact cargo xtask architecture invocation, full corpus_crate integration, and docs-command generation of the enforcement map. This instruction supersedes the manifest's earlier prose about uncommitted generated copies; no protected manifest prose, cases or grading are changed."
 decided_by = "human:kennedy"
 date = "2026-09-20"
+
+[[repairs]]
+id = "CHG-004.1"
+hypothesis = "The accepted checker detects the violations but omits structured fields required by registered witnesses."
+discriminating_check = "Clean committed-fixture run 20260920T121342Z-3c6c758911ff-1462546.json: 13/22 combined detections (12 checker plus R01), 10 unmatched findings, nine failed checker cases."
+change = "Expose crate, cycle members, matched forbidden selector, conflicting roles, port and owner from checker observations. Preserve every rule, warning, case and grading value."
+scope = ["xtask/src/graph/check.rs", "xtask/src/graph/report.rs", "xtask/src/architecture.rs"]

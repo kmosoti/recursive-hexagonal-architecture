@@ -22,3 +22,9 @@ The earlier crate-fixture prohibition in `corpus_manifest.rs` is replaced by the
 `cargo xtask corpus run --level crate` runs the committed cases using actual `cargo xtask architecture --manifest-path … --rules … --format json` commands and `cargo check --offline` for R01. H4 schema 2 combines all 22 detect cases while retaining checker/compiler subtotals. It records the manifest's registration identity, digest, exact correction commit, tool identity, raw outputs, witnesses and holes. Every unmatched finding remains a false alarm under DP-1.1c. `cargo xtask docs` alone projects the latest archived H4 record into the enforcement map; every module cell remains not_run until CHG-007.
 
 The first harness packet uses the accepted checker unchanged. Its failed run is retained before the checker repair determination and CHG-004.1 repair commit. Prior draft records remain archival observations of their named revisions; the final handoff will identify the replacement records explicitly.
+
+## CHG-004.1 determination, before repair
+
+[The first clean committed-fixture run](../../evidence/h4-crate/20260920T121342Z-3c6c758911ff-1462546.json) describes `3c6c758911ffa418fbe5b2678e7b538c36a69521`. It exits 1: **13/22 detected**, **10/11 unmatched findings**, two documented holes. R01 and all 11 legitimate cases pass; C04, C05, C08, C09, C10, C11, C13, C14 and C20 fail exact witness grading.
+
+The raw reports show those checker violations, but their structured JSON omits registered `crate`, cycle `members`, `matched_rule`, conflicting-role values, `port` or `owner` fields. Add those facts at the producer from its graph/rules observations; never derive an answer from the corpus inside checker code. The separate CHG-004.1 commit applies this repair after this determination and failed record. C13's additional `adapter.foreign_core` warning is accurate and must remain an unmatched finding under DP-1.1c; it is not suppressed to obtain a green H4 result.
