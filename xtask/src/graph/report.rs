@@ -4,26 +4,28 @@
 //! `--format`, so the lane has a machine-readable artifact even when a human
 //! asked for text.
 
+use std::path::Path;
+
 use serde_json::{Value, json};
 
 use crate::graph::check::{Outcome, Severity};
 use crate::graph::model::{CrateGraph, MetadataMode};
 
-/// Identity of the compiled architecture reporter. These values are captured
-/// by `xtask/build.rs`; runtime checkout changes and the subject being
-/// inspected cannot alter them.
+/// Identity of the checker that produced a report: the checkout it was built
+/// from, read at run time the way `xtask ci` reads it for the evidence
+/// record's producer, so the fact has one owner and one definition of dirty
+/// (CHG-003.2). `cargo xtask` rebuilds the binary from the working tree
+/// before every run, so the running checker is that checkout. `root` is the
+/// tool's own workspace; the subject under `--manifest-path` never reaches
+/// this. `unknown` and `null` when git cannot answer, never a guess.
 #[must_use]
-pub fn tool_identity() -> Value {
-    let dirty = match option_env!("RHA_TOOL_GIT_DIRTY") {
-        Some("true") => Value::Bool(true),
-        Some("false") => Value::Bool(false),
-        _ => Value::Null,
-    };
+pub fn tool_identity(root: &Path) -> Value {
+    let identity = crate::util::git_identity(root);
     json!({
         "name": "xtask architecture",
         "version": env!("CARGO_PKG_VERSION"),
-        "git_rev": option_env!("RHA_TOOL_GIT_REV").unwrap_or("unknown"),
-        "git_dirty": dirty,
+        "git_rev": identity.as_ref().map_or("unknown", |i| i.revision.as_str()),
+        "git_dirty": identity.as_ref().map(|i| i.dirty),
     })
 }
 
@@ -60,6 +62,7 @@ pub const fn exit_code(errors: usize) -> i32 {
 pub fn json(
     graph: &CrateGraph,
     outcome: &Outcome,
+    tool: &Value,
     rules_path: &str,
     rules_digest: &str,
     manifest_path: Option<&str>,
@@ -68,7 +71,7 @@ pub fn json(
     let errors = outcome.errors();
     json!({
         "schema_version": 1,
-        "tool": tool_identity(),
+        "tool": tool,
         "subject": {
             "workspace_root": graph.workspace_root.display().to_string(),
             "manifest_path": manifest_path,
@@ -280,7 +283,15 @@ mod tests {
             }],
             ..Outcome::default()
         };
-        let report = json(&graph(), &outcome, "rha-crates.toml", &"a".repeat(64), None);
+        let tool = tool_identity(Path::new(env!("CARGO_MANIFEST_DIR")));
+        let report = json(
+            &graph(),
+            &outcome,
+            &tool,
+            "rha-crates.toml",
+            &"a".repeat(64),
+            None,
+        );
         for key in [
             "schema_version",
             "tool",

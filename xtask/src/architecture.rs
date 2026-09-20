@@ -86,7 +86,7 @@ pub fn run(root: &Path, options: &Options) -> Result<i32> {
         .unwrap_or_else(|| root.join(RULES_PATH));
     let (rules, rules_digest) = match Rules::load(&rules_path) {
         Ok(loaded) => loaded,
-        Err(e) => return failure(root, options, &rules_path, "config_error", e.to_string()),
+        Err(e) => return failure(root, options, &rules_path, "config_error", &e.to_string()),
     };
 
     if rules.transitive.enabled {
@@ -101,7 +101,7 @@ pub fn run(root: &Path, options: &Options) -> Result<i32> {
             options,
             &rules_path,
             "config_error",
-            format!(
+            &format!(
                 "[transitive] enabled = true in {}, but this version has no transitive evaluator",
                 rules_path.display()
             ),
@@ -119,10 +119,10 @@ pub fn run(root: &Path, options: &Options) -> Result<i32> {
     let graph = match metadata::load(root, options.manifest_path.as_deref()) {
         Ok(graph) => graph,
         Err(metadata::LoadError::Configuration(e)) => {
-            return failure(root, options, &rules_path, "config_error", e.to_string());
+            return failure(root, options, &rules_path, "config_error", &e.to_string());
         }
         Err(metadata::LoadError::Environment(e)) => {
-            return failure(root, options, &rules_path, "tool_error", e.to_string());
+            return failure(root, options, &rules_path, "tool_error", &e.to_string());
         }
     };
 
@@ -136,6 +136,7 @@ pub fn run(root: &Path, options: &Options) -> Result<i32> {
     let json = report::json(
         &graph,
         &outcome,
+        &report::tool_identity(root),
         &rules_path.display().to_string(),
         &rules_digest,
         manifest.as_deref(),
@@ -241,11 +242,11 @@ fn failure(
     options: &Options,
     rules_path: &Path,
     error_class: &str,
-    reason: String,
+    reason: &str,
 ) -> Result<i32> {
     let json = serde_json::json!({
         "schema_version": 1,
-        "tool": report::tool_identity(),
+        "tool": report::tool_identity(root),
         "subject": {
             "workspace_root": options.manifest_path.is_none().then(|| root.display().to_string()),
             "manifest_path": options.manifest_path.as_ref().map(|p| p.display().to_string()),

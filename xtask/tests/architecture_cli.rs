@@ -117,7 +117,13 @@ fn malformed_metadata_is_configuration_error_and_absence_is_valid() {
     let passed_json: Value = serde_json::from_slice(&passed.stdout).expect("success JSON");
     assert_eq!(passed_json["summary"]["outcome"], "passed");
     assert_tool_revision(&passed_json["tool"]["git_rev"]);
-    assert_eq!(passed_json["tool"], xtask::graph::report::tool_identity());
+    let root = Path::new(env!("CARGO_MANIFEST_DIR"))
+        .parent()
+        .expect("xtask has a parent");
+    assert_eq!(
+        passed_json["tool"],
+        xtask::graph::report::tool_identity(root)
+    );
     assert_eq!(failed_json["tool"], passed_json["tool"]);
     std::fs::remove_dir_all(valid_root).expect("clean valid workspace");
 }
