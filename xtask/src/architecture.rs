@@ -127,7 +127,7 @@ pub fn run(root: &Path, options: &Options) -> Result<i32> {
     };
 
     let mut outcome = check::check(&graph, &rules);
-    clippy_template_rule(root, &graph, &mut outcome);
+    clippy_template_rule(root, &mut outcome);
 
     let manifest = options
         .manifest_path
@@ -162,17 +162,18 @@ pub fn run(root: &Path, options: &Options) -> Result<i32> {
 /// Until CHG-005 there is no core crate, so this rule examines nothing. That
 /// is not the same as it passing over a core crate, and the limitation says
 /// which it is.
-fn clippy_template_rule(
-    root: &Path,
-    graph: &crate::graph::model::CrateGraph,
-    outcome: &mut check::Outcome,
-) {
-    let cores: Vec<clippy_template::CoreCrate> = graph
-        .crates
+fn clippy_template_rule(root: &Path, outcome: &mut check::Outcome) {
+    // The cores come from the classification the check recorded, not from
+    // the graph as loaded: `metadata::build` leaves every role `None` and
+    // `check::check` classifies a clone, so reading the loaded graph here
+    // found no core in any workspace and the rule never examined a crate
+    // (review finding on 920cca6, CHG-003.3).
+    let cores: Vec<clippy_template::CoreCrate> = outcome
+        .classification
         .iter()
         .filter(|c| c.role == Some(crate::graph::model::Role::Core))
         .filter_map(|c| {
-            c.manifest_path
+            Path::new(&c.manifest_path)
                 .parent()
                 .map(|dir| clippy_template::CoreCrate {
                     name: c.name.clone(),

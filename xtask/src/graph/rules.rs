@@ -129,6 +129,20 @@ impl Rules {
                 rules.schema_version
             )));
         }
+        // A `role:` selector names one of the five roles or it is a rule
+        // that can never match: a misspelling silently disabled the
+        // prohibition (review finding on 920cca6, CHG-003.3).
+        for rule in &rules.forbidden {
+            if let Some(role) = rule.from.strip_prefix("role:")
+                && Role::parse(role).is_none()
+            {
+                return Err(Error::new(format!(
+                    "forbidden rule from = \"{}\": unknown role \"{role}\" (one of core, adapter, \
+                     app, tool, harness)",
+                    rule.from
+                )));
+            }
+        }
         Ok(rules)
     }
 
@@ -218,6 +232,23 @@ mod tests {
             assert!(error.to_string().contains("schema_version"));
         }
         assert!(Rules::parse("schema_version = 1\n[classification]\n").is_ok());
+    }
+
+    #[test]
+    fn a_forbidden_selector_with_an_unknown_role_is_a_parse_error() {
+        let with = |selector: &str| {
+            Rules::parse(&format!(
+                "schema_version = 1\n[classification]\n[[forbidden]]\nfrom = \"{selector}\"\nto = \"tokio\"\n"
+            ))
+        };
+        assert!(with("role:core").is_ok());
+        assert!(
+            with("core-a").is_ok(),
+            "a package name is not a role selector"
+        );
+        // Used to parse into a rule that could never match anything.
+        let error = with("role:cor").expect_err("unknown role must fail");
+        assert!(error.to_string().contains("role:cor"), "{error}");
     }
 
     #[test]

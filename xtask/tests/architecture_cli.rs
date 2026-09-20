@@ -129,6 +129,48 @@ fn malformed_metadata_is_configuration_error_and_absence_is_valid() {
 }
 
 #[test]
+fn a_core_without_the_clippy_template_is_reported_and_with_it_is_not() {
+    // Before CHG-003.3 the rule was handed the graph as loaded, whose roles
+    // are all None, so it found no core in any workspace and this exited 0.
+    let root = temp_dir("clippy-template");
+    let manifest = workspace(&root, "core-a", "[package.metadata.rha]\nrole = \"core\"\n");
+    let rules_path = rules(&root, 1);
+    let missing = run(&manifest, &rules_path);
+    assert_eq!(missing.status.code(), Some(1));
+    let json: Value = serde_json::from_slice(&missing.stdout).expect("report JSON");
+    assert!(
+        json["findings"]
+            .as_array()
+            .expect("findings array")
+            .iter()
+            .any(|f| f["rule"] == "effect.core_clippy_template"),
+        "{json}"
+    );
+
+    // Control: the template in place and the crate root forbidding the
+    // three lints, the same shape a product core will have.
+    let crate_dir = root.join("crate");
+    std::fs::copy(
+        Path::new(env!("CARGO_MANIFEST_DIR")).join("templates/core-clippy.toml"),
+        crate_dir.join("clippy.toml"),
+    )
+    .expect("core clippy template");
+    std::fs::write(
+        crate_dir.join("src/lib.rs"),
+        "#![forbid(clippy::disallowed_methods, clippy::disallowed_types, clippy::disallowed_macros)]\n",
+    )
+    .expect("core source");
+    let present = run(&manifest, &rules_path);
+    assert_eq!(
+        present.status.code(),
+        Some(0),
+        "{}",
+        String::from_utf8_lossy(&present.stderr)
+    );
+    std::fs::remove_dir_all(root).expect("clean clippy-template workspace");
+}
+
+#[test]
 fn unsupported_schema_fails_before_loading_a_missing_manifest() {
     let root = temp_dir("schema");
     let rules_path = rules(&root, 2);
