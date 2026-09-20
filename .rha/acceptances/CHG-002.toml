@@ -126,7 +126,7 @@ follow_up = "The Executor's item report cites decision ids and must not restate 
 
 [carried_forward]
 open = [
-  "DP-1.1b: Kennedy's held-out crate-level cases do not exist yet; needed by the acceptance of CHG-004, not by CHG-003.",
+  "DP-1.1b: Kennedy's held-out crate-level cases do not exist yet. Their commitment digest must be on the ledger before CHG-003 starts, or it cannot show they predate the checker; CHG-003 is blocked until then. The cases themselves run at CHG-004 acceptance.",
   "L0.architecture is required and non-waivable, so CHG-003 cannot be Eligible until its own checker runs; DP-0.5 unchanged.",
   "A registered case is not a working fixture until CHG-004 generates it; a case that cannot be expressed is re-registered with a reason before that run, which is now a protected edit.",
   "cell = \"classification\" is not a §4.1 row; queued for v0.11 (docs/proposals/spec-v0.11.md).",

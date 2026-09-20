@@ -75,13 +75,15 @@ id = "DP-1.1b"
 title = "Author two or three held-out crate-level corpus cases outside this repository (spec §9.14)"
 status = "open"
 owner = "human:kennedy"
-needed_by = "acceptance of CHG-004 (W4). Not needed by CHG-003, which may start."
+needed_by = "BEFORE CHG-003 starts: the commitment digest must be on this row before any checker code exists, or it cannot show the cases predate the checker (review finding on pull request 5). The cases themselves are run at CHG-004 acceptance."
+blocks = ["CHG-003"]
 cannot_default = true
 how_to_close = """
 Kennedy writes the cases in a directory outside this repository, in the \
 manifest's declared shape or as ready workspaces, each with its expected \
 outcome. He then records here, as `commitment`, the sha256 of a tar of that \
-directory, without committing the cases. The Executor never reads them. At \
+directory, without committing the cases, BEFORE CHG-003 starts; CHG-003 is \
+blocked until this row carries a digest. The Executor never reads them. At \
 CHG-004 acceptance Kennedy runs the checker on them himself and records the \
 per-case outcomes in that acceptance record; the commitment lets anyone verify \
 later that the cases predate the checker.\

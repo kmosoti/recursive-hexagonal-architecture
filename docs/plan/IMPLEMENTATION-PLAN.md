@@ -490,7 +490,7 @@ Milestone M4 report includes the proposed §1.4 table for v0.11 with every row's
 | 4.1 | Trusted producer keys, exception parameters for `rha-verifier`; acceptance of corpus outcomes | W16 | – |
 | any | Every exception: appended to `.rha/exceptions.log` after the cooling-off delay; never self-issued inside it | as needed | – |
 
-**Status is owned by `.rha/decisions.toml`** (CHG-002.2). This table is the catalogue; the ledger says whether each point is open, decided, or defaulted, by whom, and where. A point with a default that is still unanswered when its trigger arrives is decided as the default and recorded there with `decided_by = "default (plan §9)"`. A point marked *required* cannot default; the work that needs it waits and the report cites the id. DP-1.1 is split in the ledger into 1.1a (manifest approval, closed by the merge of PR 4), 1.1b (held-out cases, required, needed by W4 acceptance, closed by a commitment digest), and 1.1c (grading values, decided strict).
+**Status is owned by `.rha/decisions.toml`** (CHG-002.2). This table is the catalogue; the ledger says whether each point is open, decided, or defaulted, by whom, and where. A point with a default that is still unanswered when its trigger arrives is decided as the default and recorded there with `decided_by = "default (plan §9)"`. A point marked *required* cannot default; the work that needs it waits and the report cites the id. DP-1.1 is split in the ledger into 1.1a (manifest approval, closed by the merge of PR 4), 1.1b (held-out cases, required: the commitment digest is recorded before W3 starts, and the cases run at W4 acceptance), and 1.1c (grading values, decided strict).
 
 ## 10. Deferred (cannot be validated in this setting; say so, do not fake)
 
