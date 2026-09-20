@@ -105,3 +105,5 @@ Historical citations must not require history downloads to grade the current fix
 ## Delivery H4 after the CI repair
 
 [Clean delivery H4](../../evidence/h4-crate/20260920T122638Z-eec489c71f25.json) identifies `eec489c71f259423bb4cc75a5650ecaa8c10c0c3` and supersedes the earlier H4 records for this handoff. Every case has the same actual outcome as the full table above: 22/22 detected, 1/11 unmatched findings, two documented holes, C13 alone failed, exit 1. The registration and correction identities are cited from their owning records and verified byte digests; neither requires older Git objects on the CI runner.
+
+[Delivery local L0](../../evidence/CHG-004/20260920T122732Z-885a709f7f49.json) records the settled CI repair at `885a709f7f49`: all eight checks passed, 141 nextest tests. Earlier records, including failed CI run 35510429218, remain unchanged and are superseded by these delivery records for this handoff.
