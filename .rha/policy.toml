@@ -65,6 +65,13 @@ protected = [
   # table at once (ADR-0002 rule 6, experiment 6n). Approved by human:kennedy
   # on 2026-09-19 (CHG-001.3).
   ".cargo/config.toml",
+  # The pre-registered H4 corpus (CHG-002, plan §6). Its cases and their
+  # expected outcomes are fixed before any checker exists (§17, §9.14), and a
+  # protected surface is what makes that more than an intention: an expectation
+  # cannot be edited quietly after seeing what a checker does. A miss
+  # downgrades the cell in docs/enforcement-map.md; it never edits this file.
+  # Approved by human:kennedy on 2026-09-19 (CHG-002).
+  "xtask/tests/corpus/manifest.toml",
   "Cargo.toml",
   ".github/**",
   "xtask/src/lanes.rs",

@@ -1,0 +1,1040 @@
+# Pre-registered H4 corpus (CHG-002; plan §6).
+#
+# Committed BEFORE any checker code exists. Spec §17 fixes cases and
+# thresholds before data; §9.14 keeps the assurance strategy honest. The merge
+# commit of CHG-002 is the pre-registration identity every H4 evidence record
+# cites, so a case whose `expected` changes after that merge is a
+# re-registration and says so in its own change record. This file is a
+# protected surface (.rha/policy.toml [surface] protected) for exactly that
+# reason: it must not be possible to edit an expectation quietly after seeing
+# what a checker does.
+#
+# A harness reads this file. It is never the harness's output: a miss
+# downgrades the cell in docs/enforcement-map.md and fails the run; it does
+# not edit a line here.
+#
+# ---------------------------------------------------------------------------
+# GENERATION
+#
+# `generation = "declared"` means the fixture is built from this file alone:
+# CHG-004 writes each crate's Cargo.toml and src/lib.rs from [[case]].crates
+# and the case's rules overrides. No fixture workspace is committed, for the
+# reason CHG-001.1 established — a committed copy drifts from the file that
+# owns it, and the drift is silent.
+#
+# `generation = "authored"` means the seeded construct is Rust syntax that
+# would be worse encoded in TOML than written as Rust (`impl
+# crate::ordering::Trait for X`, a macro body, an `include!`). Those fixtures
+# are authored in CHG-007 under xtask/tests/corpus/module/<id>/. Their ids,
+# rules, cells and expected outcomes are pre-registered here all the same,
+# which is what pre-registration is for.
+#
+# ---------------------------------------------------------------------------
+# CRATE VOCABULARY (crate-level cases)
+#
+# Synthetic members: core-a, core-b, adapter-x, adapter-y, app-main, tool-t,
+# harness-h, and the odd names a classification case needs. Each generated
+# src/lib.rs holds `#[allow(unused_imports)] use <dep> as _;` for every
+# declared dependency, so `cargo machete` raises no false alarm on a fixture.
+# Each fixture workspace carries its own [workspace] table and is excluded
+# from the root workspace.
+#
+# [[case]].crates entries:
+#   name          required.
+#   role          the value written to [package.metadata.rha] role. Omit it to
+#                 write no metadata at all, which is what a classification
+#                 case needs.
+#   implements    [package.metadata.rha] implements = [...] (port paths).
+#   build_script  true writes a build.rs.
+#   body          Rust items appended verbatim to the crate's src/lib.rs. It
+#                 holds items, not statements: R01 needs a private module in
+#                 one crate and a reference to it from another, and EM-C02
+#                 needs a call that the crate graph cannot see.
+#   deps          dependency entries:
+#     name        required.
+#     kind        "normal" (default) | "dev" | "build".
+#     source      "path" (default when the name is a member of this fixture's
+#                 workspace, or an entry of outside_crates) | "registry".
+#     version     for a registry dependency; "*" where the case does not care.
+#     target      a cfg string, written as [target.'<cfg>'.dependencies].
+#     optional    true writes `optional = true`.
+#     rename      the key in Cargo.toml when it differs from the package name,
+#                 written as `<rename> = { package = "<name>" }`.
+#     inherit     true writes `<name>.workspace = true` and a matching
+#                 [workspace.dependencies] entry.
+#
+# Classification follows the fixture's own rules file: the adapter and app
+# prefixes, the tools and harness lists, then [package.metadata.rha] role.
+# A member matching neither is unclassified, which is C10.
+#
+# `outside_crates` are generated outside the workspace directory and are not
+# members, so nothing classifies them. Each entry's `at` is relative to the
+# WORKSPACE ROOT, and it is the only statement of where that crate goes: a
+# dependency on an outside crate names it and carries no path of its own.
+#
+# A dependency path in a Cargo.toml is resolved by cargo relative to the
+# DEPENDING CRATE's directory, not the workspace root, so the two differ by
+# one level for a member and by none for another outside crate. Until
+# CHG-002.1 a dep repeated the location as `path = "../outside-crate"`, which
+# read correctly and resolved to <workspace>/outside-crate — inside the
+# workspace, where the crate is not. The generator now computes each relative
+# path from `at` and the depending crate's own location, so the fact is
+# stated once (§11.7.1) and cannot disagree with itself.
+#
+# ---------------------------------------------------------------------------
+# WITNESS
+#
+# `witness` states what the finding must name for the case to count as
+# detected. A rule id alone is too weak: a checker that reports
+# dir.core_to_adapter for the wrong pair of crates would score a hit on C01
+# while being wrong.
+#
+# EVERY key of `witness` is matched. Prose lives in `witness_notes`, which is
+# matched against nothing and is there for the reader. The two were one table
+# until CHG-002.1, and the grading rule then had to name which kinds of key
+# counted — "every key naming a crate, port, module path or error code". That
+# enumeration silently dropped the keys that carry an outcome rather than a
+# name: `kind`, `matched_rule`, `depth` and above all `extraction`, so M20
+# could be scored as detected by a checker reporting the cycle as exact when
+# the case says a heuristic flag is required. Splitting the table removes the
+# enumeration: a key is matched because of where it sits, not because a
+# grading sentence remembered its name.
+
+schema_version = 1
+pre_registration = "CHG-002; the merge commit of this change is the identity H4 records cite"
+plan_ref = "docs/plan/IMPLEMENTATION-PLAN.md §6"
+
+# The §4.1 enforcement-map rows a case can belong to. A case names a LIST:
+# one seeded violation can be evidence for more than one row, and a miss
+# downgrades every row it names. C01 and C15 to C18 seed a core-to-adapter
+# edge, which is both the Law 3/D1 direction claim (a core must not depend on
+# an adapter) and the Law 6/D5 claim (only roots and harnesses may); crediting
+# one and not the other would leave a false claim standing after a miss.
+#
+# `classification` is not a §4.1 row: total classification (§11.2) is the
+# precondition for every row, and a member the checker cannot classify is a
+# hole in all of them at once.
+[cells]
+"law2-d3" = "Law 2, D3: sovereignty"
+"law3-d1" = "Law 3, D1: direction"
+"d2" = "D2: never upward"
+"law5" = "Law 5: explicit effects"
+"law6-b3" = "Law 6, B3: no cycles"
+"law6-d5" = "Law 6, D5: adapters only at roots"
+"b4" = "B4: compatible contracts"
+"classification" = "Not a §4.1 row: total classification (§11.2), the precondition for every row"
+
+# The rules file (rha-crates.toml shape) generated into every crate-level
+# fixture workspace, unless the case overrides it under [case.rules].
+[rules_default]
+adapter_prefix = "adapter-"
+app_prefix = "app-"
+tools = ["tool-t"]
+harness = []
+core_allow = []
+core_dev_allow = []
+core_allow_build_scripts = false
+adapters_require_port_owner_dependency = true
+transitive_enabled = false
+forbidden_edges = []
+
+# ===========================================================================
+# CRATE LEVEL — violations (expected = "detect")
+# ===========================================================================
+
+[[case]]
+id = "C01"
+level = "crate"
+generation = "declared"
+expected = "detect"
+rule = "dir.core_to_adapter"
+cells = ["law3-d1", "law6-d5"]
+seeded = "core-a declares a normal dependency on adapter-x"
+witness = { rule = "dir.core_to_adapter", from = "core-a", to = "adapter-x" }
+crates = [
+  { name = "core-a", role = "core", deps = [{ name = "adapter-x" }] },
+  { name = "adapter-x" },
+]
+
+[[case]]
+id = "C02"
+level = "crate"
+generation = "declared"
+expected = "detect"
+rule = "dir.core_to_app"
+cells = ["law3-d1"]
+seeded = "core-a declares a normal dependency on app-main"
+witness = { rule = "dir.core_to_app", from = "core-a", to = "app-main" }
+crates = [
+  { name = "core-a", role = "core", deps = [{ name = "app-main" }] },
+  { name = "app-main" },
+]
+
+[[case]]
+id = "C03"
+level = "crate"
+generation = "declared"
+expected = "detect"
+rule = "effect.core_disallowed_dependency"
+cells = ["law5"]
+seeded = "core-a depends on the external crate tokio, which core_allow does not list"
+witness = { rule = "effect.core_disallowed_dependency", from = "core-a", to = "tokio" }
+crates = [
+  { name = "core-a", role = "core", deps = [{ name = "tokio", source = "registry", version = "1" }] },
+]
+
+[[case]]
+id = "C04"
+level = "crate"
+generation = "declared"
+expected = "detect"
+rule = "effect.core_build_script"
+cells = ["law5"]
+seeded = "core-a carries a build.rs while core_allow_build_scripts is false"
+witness = { rule = "effect.core_build_script", crate = "core-a" }
+crates = [
+  { name = "core-a", role = "core", build_script = true },
+]
+
+[[case]]
+id = "C05"
+level = "crate"
+generation = "declared"
+expected = "detect"
+rule = "graph.cycle"
+cells = ["law6-b3"]
+seeded = "core-a and core-b depend on each other by path"
+# Cargo itself rejects a package cycle, so the fixture may fail to load before
+# the checker sees it. The case still requires the checker's own finding.
+#
+# Until CHG-002.1 the witness carried an `alternative` saying a cargo error on
+# this fixture would be recorded as graph.cycle. That is the corpus grading
+# itself generously: it would score the xtask DFS as detecting a cycle on the
+# strength of an error the DFS never produced, and the §4.1 Law 6/B3 crate
+# cell would be credited to a rule that had not run. If cargo refuses to
+# resolve the workspace and the checker therefore reports nothing, this case
+# is a miss, and W4 either re-registers it with a reason — for example as an
+# expected_miss whose hole is that a cargo-rejected workspace is unreachable —
+# or the fixture is rebuilt so the checker can see the cycle. Both happen in
+# the open, before a run.
+witness = { rule = "graph.cycle", members = ["core-a", "core-b"] }
+crates = [
+  { name = "core-a", role = "core", deps = [{ name = "core-b" }] },
+  { name = "core-b", role = "core", deps = [{ name = "core-a" }] },
+]
+
+[[case]]
+id = "C06"
+level = "crate"
+generation = "declared"
+expected = "detect"
+rule = "dir.non_root_to_adapter"
+cells = ["law6-d5"]
+seeded = "adapter-x depends on adapter-y; an adapter is not a composition root"
+witness = { rule = "dir.non_root_to_adapter", from = "adapter-x", to = "adapter-y" }
+crates = [
+  { name = "adapter-x", deps = [{ name = "adapter-y" }] },
+  { name = "adapter-y" },
+]
+
+[[case]]
+id = "C07"
+level = "crate"
+generation = "declared"
+expected = "detect"
+rule = "dir.non_root_to_adapter"
+cells = ["law6-d5"]
+seeded = "tool-t, which the tools list names and the harness list does not, depends on adapter-x"
+witness = { rule = "dir.non_root_to_adapter", from = "tool-t", to = "adapter-x" }
+crates = [
+  { name = "tool-t", deps = [{ name = "adapter-x" }] },
+  { name = "adapter-x" },
+]
+
+[[case]]
+id = "C08"
+level = "crate"
+generation = "declared"
+expected = "detect"
+rule = "forbidden.edge"
+cells = ["law3-d1"]
+seeded = "core-a depends on aws-sdk-s3, matched by a forbidden edge with a wildcard target"
+witness = { rule = "forbidden.edge", from = "core-a", to = "aws-sdk-s3", matched_rule = "core-a -> aws-sdk-*" }
+crates = [
+  { name = "core-a", role = "core", deps = [{ name = "aws-sdk-s3", source = "registry", version = "*" }] },
+]
+[case.rules]
+core_allow = ["aws-sdk-s3"]
+forbidden_edges = [{ from = "core-a", to = "aws-sdk-*" }]
+
+[[case]]
+id = "C09"
+level = "crate"
+generation = "declared"
+expected = "detect"
+rule = "forbidden.edge"
+cells = ["law3-d1"]
+seeded = "core-b depends on tokio, matched by a forbidden edge whose source is the role selector role:core. tokio is allow-listed so that only the forbidden-edge rule can fire."
+witness = { rule = "forbidden.edge", from = "core-b", to = "tokio", matched_rule = "role:core -> tokio" }
+crates = [
+  { name = "core-b", role = "core", deps = [{ name = "tokio", source = "registry", version = "1" }] },
+]
+[case.rules]
+core_allow = ["tokio"]
+forbidden_edges = [{ from = "role:core", to = "tokio" }]
+
+[[case]]
+id = "C10"
+level = "crate"
+generation = "declared"
+expected = "detect"
+rule = "class.unclassified"
+cells = ["classification"]
+seeded = "a member named mystery: no adapter or app prefix, absent from the tools and harness lists, and no [package.metadata.rha] role"
+witness = { rule = "class.unclassified", crate = "mystery" }
+crates = [
+  { name = "mystery" },
+]
+
+[[case]]
+id = "C11"
+level = "crate"
+generation = "declared"
+expected = "detect"
+rule = "class.prefix_role_conflict"
+cells = ["classification"]
+seeded = "adapter-x declares [package.metadata.rha] role = \"core\": the prefix and the metadata disagree"
+witness = { rule = "class.prefix_role_conflict", crate = "adapter-x", prefix_says = "adapter", metadata_says = "core" }
+crates = [
+  { name = "adapter-x", role = "core" },
+]
+
+[[case]]
+id = "C12"
+level = "crate"
+generation = "declared"
+expected = "detect"
+rule = "dir.tool_depended_on"
+cells = ["law3-d1"]
+seeded = "core-a depends on tool-t; a tool is built by the repository, not depended on by it"
+witness = { rule = "dir.tool_depended_on", from = "core-a", to = "tool-t" }
+crates = [
+  { name = "core-a", role = "core", deps = [{ name = "tool-t" }] },
+  { name = "tool-t" },
+]
+
+[[case]]
+id = "C13"
+level = "crate"
+generation = "declared"
+expected = "detect"
+rule = "adapter.missing_port_owner"
+cells = ["law3-d1"]
+seeded = "adapter-x declares implements = [\"core-a::Port\"] but depends only on core-b, so it cannot name the port it claims to implement"
+witness = { rule = "adapter.missing_port_owner", crate = "adapter-x", port = "core-a::Port", owner = "core-a" }
+crates = [
+  { name = "adapter-x", implements = ["core-a::Port"], deps = [{ name = "core-b" }] },
+  { name = "core-a", role = "core" },
+  { name = "core-b", role = "core" },
+]
+
+[[case]]
+id = "C14"
+level = "crate"
+generation = "declared"
+expected = "detect"
+rule = "adapter.port_owner_wrong_kind"
+cells = ["law3-d1"]
+seeded = "adapter-x implements core-a::Port and depends on core-a only as a dev-dependency, so the implementation does not compile outside tests"
+witness = { rule = "adapter.port_owner_wrong_kind", crate = "adapter-x", port = "core-a::Port", owner = "core-a", kind = "dev" }
+crates = [
+  { name = "adapter-x", implements = ["core-a::Port"], deps = [{ name = "core-a", kind = "dev" }] },
+  { name = "core-a", role = "core" },
+]
+
+[[case]]
+id = "C15"
+level = "crate"
+generation = "declared"
+expected = "detect"
+rule = "dir.core_to_adapter"
+cells = ["law3-d1", "law6-d5"]
+seeded = "core-a depends on adapter-x under [target.'cfg(unix)'.dependencies]"
+# The four cases C15 to C18 each hide the same edge behind a different Cargo
+# feature. They exist because a checker that parses Cargo.toml text instead of
+# reading cargo metadata's resolved fields misses one of them.
+witness = { rule = "dir.core_to_adapter", from = "core-a", to = "adapter-x" }
+crates = [
+  { name = "core-a", role = "core", deps = [{ name = "adapter-x", target = "cfg(unix)" }] },
+  { name = "adapter-x" },
+]
+
+[[case]]
+id = "C16"
+level = "crate"
+generation = "declared"
+expected = "detect"
+rule = "dir.core_to_adapter"
+cells = ["law3-d1", "law6-d5"]
+seeded = "core-a declares adapter-x = { optional = true }; an optional dependency is still a declared edge (§6.12)"
+witness = { rule = "dir.core_to_adapter", from = "core-a", to = "adapter-x" }
+crates = [
+  { name = "core-a", role = "core", deps = [{ name = "adapter-x", optional = true }] },
+  { name = "adapter-x" },
+]
+
+[[case]]
+id = "C17"
+level = "crate"
+generation = "declared"
+expected = "detect"
+rule = "dir.core_to_adapter"
+cells = ["law3-d1", "law6-d5"]
+seeded = "core-a renames the dependency: ax = { package = \"adapter-x\" }. The checker must classify by the package name, not the key."
+witness = { rule = "dir.core_to_adapter", from = "core-a", to = "adapter-x" }
+witness_notes = { note = "reported under the package name adapter-x, not the rename ax" }
+crates = [
+  { name = "core-a", role = "core", deps = [{ name = "adapter-x", rename = "ax" }] },
+  { name = "adapter-x" },
+]
+
+[[case]]
+id = "C18"
+level = "crate"
+generation = "declared"
+expected = "detect"
+rule = "dir.core_to_adapter"
+cells = ["law3-d1", "law6-d5"]
+seeded = "core-a declares adapter-x.workspace = true, inheriting the dependency from [workspace.dependencies]"
+witness = { rule = "dir.core_to_adapter", from = "core-a", to = "adapter-x" }
+crates = [
+  { name = "core-a", role = "core", deps = [{ name = "adapter-x", inherit = true }] },
+  { name = "adapter-x" },
+]
+
+[[case]]
+id = "C19"
+level = "crate"
+generation = "declared"
+expected = "detect"
+rule = "effect.core_disallowed_dependency"
+cells = ["law5"]
+seeded = "core-a depends by path on outside-crate, which lies outside the fixture workspace and is not allow-listed"
+witness = { rule = "effect.core_disallowed_dependency", from = "core-a", to = "outside-crate" }
+crates = [
+  { name = "core-a", role = "core", deps = [{ name = "outside-crate" }] },
+]
+# Generated beside the workspace, not inside it: no [workspace] membership.
+outside_crates = [
+  { name = "outside-crate", at = "../outside-crate" },
+]
+
+[[case]]
+id = "C20"
+level = "crate"
+generation = "declared"
+expected = "detect"
+rule = "meta.unknown_port_owner"
+cells = ["classification"]
+seeded = "adapter-x declares implements = [\"ghost::Port\"]; no member named ghost exists"
+witness = { rule = "meta.unknown_port_owner", crate = "adapter-x", port = "ghost::Port", owner = "ghost" }
+crates = [
+  { name = "adapter-x", implements = ["ghost::Port"] },
+]
+
+[[case]]
+id = "C21"
+level = "crate"
+generation = "declared"
+expected = "detect"
+rule = "effect.core_disallowed_dev_dependency"
+cells = ["law5"]
+seeded = "core-a takes tokio as a dev-dependency while core_dev_allow is empty"
+witness = { rule = "effect.core_disallowed_dev_dependency", from = "core-a", to = "tokio", kind = "dev" }
+crates = [
+  { name = "core-a", role = "core", deps = [{ name = "tokio", kind = "dev", source = "registry", version = "1" }] },
+]
+
+# ===========================================================================
+# CRATE LEVEL — legitimate (expected = "no_alarm")
+# ===========================================================================
+
+[[case]]
+id = "L01"
+level = "crate"
+generation = "declared"
+expected = "no_alarm"
+rule = "-"
+cells = ["law3-d1"]
+seeded = "adapter-x implements core-a::Port and depends on core-a: the edge D1 requires"
+crates = [
+  { name = "adapter-x", implements = ["core-a::Port"], deps = [{ name = "core-a" }] },
+  { name = "core-a", role = "core" },
+]
+
+[[case]]
+id = "L02"
+level = "crate"
+generation = "declared"
+expected = "no_alarm"
+rule = "-"
+cells = ["law6-b3"]
+seeded = "core-b depends on core-a: declared, and acyclic"
+crates = [
+  { name = "core-b", role = "core", deps = [{ name = "core-a" }] },
+  { name = "core-a", role = "core" },
+]
+
+[[case]]
+id = "L03"
+level = "crate"
+generation = "declared"
+expected = "no_alarm"
+rule = "-"
+cells = ["law5"]
+seeded = "core-a depends on sha2, which core_allow lists"
+crates = [
+  { name = "core-a", role = "core", deps = [{ name = "sha2", source = "registry", version = "0.10" }] },
+]
+[case.rules]
+core_allow = ["sha2"]
+
+[[case]]
+id = "L04"
+level = "crate"
+generation = "declared"
+expected = "no_alarm"
+rule = "-"
+cells = ["law5"]
+seeded = "core-a takes proptest as a dev-dependency, which core_dev_allow lists"
+crates = [
+  { name = "core-a", role = "core", deps = [{ name = "proptest", kind = "dev", source = "registry", version = "1" }] },
+]
+[case.rules]
+core_dev_allow = ["proptest"]
+
+[[case]]
+id = "L05"
+level = "crate"
+generation = "declared"
+expected = "no_alarm"
+rule = "-"
+cells = ["law6-d5"]
+seeded = "app-main, the composition root, depends on both cores and both adapters"
+crates = [
+  { name = "app-main", deps = [
+    { name = "core-a" },
+    { name = "core-b" },
+    { name = "adapter-x" },
+    { name = "adapter-y" },
+  ] },
+  { name = "core-a", role = "core" },
+  { name = "core-b", role = "core" },
+  { name = "adapter-x" },
+  { name = "adapter-y" },
+]
+
+[[case]]
+id = "L06"
+level = "crate"
+generation = "declared"
+expected = "no_alarm"
+rule = "-"
+cells = ["law6-d5"]
+seeded = "harness-h, which the harness list names, depends on adapter-x. A test harness may construct an adapter (D5)."
+crates = [
+  { name = "harness-h", deps = [{ name = "adapter-x" }] },
+  { name = "adapter-x" },
+]
+[case.rules]
+harness = ["harness-h"]
+
+[[case]]
+id = "L07"
+level = "crate"
+generation = "declared"
+expected = "no_alarm"
+rule = "-"
+cells = ["law6-d5"]
+seeded = "core-a takes adapter-x as a dev-dependency: the crate's own tests are a harness. The finding is listed under harness_edges, not raised as an alarm."
+# The one legitimate case that is also a reported fact: C01's edge, in dev
+# kind. Plan §8 W3 excludes dev-kind edges from D5 but requires them listed.
+witness = { listed_as = "harness_edges", from = "core-a", to = "adapter-x", kind = "dev" }
+witness_notes = { note = "listed, not an alarm; a run that raises a finding here fails the case" }
+crates = [
+  { name = "core-a", role = "core", deps = [{ name = "adapter-x", kind = "dev" }] },
+  { name = "adapter-x" },
+]
+
+[[case]]
+id = "L08"
+level = "crate"
+generation = "declared"
+expected = "no_alarm"
+rule = "-"
+cells = ["law5"]
+seeded = "adapter-x depends on tokio. Effects are what an adapter is for; core_allow does not apply to it."
+crates = [
+  { name = "adapter-x", deps = [{ name = "tokio", source = "registry", version = "1" }] },
+]
+
+[[case]]
+id = "L09"
+level = "crate"
+generation = "declared"
+expected = "no_alarm"
+rule = "-"
+cells = ["law3-d1"]
+seeded = "adapter-x implements two ports, core-a::Reader and core-b::Writer, and depends on both owners"
+crates = [
+  { name = "adapter-x", implements = ["core-a::Reader", "core-b::Writer"], deps = [
+    { name = "core-a" },
+    { name = "core-b" },
+  ] },
+  { name = "core-a", role = "core" },
+  { name = "core-b", role = "core" },
+]
+
+[[case]]
+id = "L10"
+level = "crate"
+generation = "declared"
+expected = "no_alarm"
+rule = "-"
+cells = ["law5"]
+seeded = "xtask, named by the tools list, depends on heavy external crates. A tool is not held to core's allow-list."
+crates = [
+  { name = "xtask", deps = [
+    { name = "clap", source = "registry", version = "4" },
+    { name = "serde_json", source = "registry", version = "1" },
+  ] },
+]
+[case.rules]
+tools = ["xtask"]
+
+[[case]]
+id = "L11"
+level = "crate"
+generation = "declared"
+expected = "no_alarm"
+rule = "-"
+cells = ["classification"]
+seeded = "planner-adapter-utils declares [package.metadata.rha] role = \"core\". The name contains \"adapter-\" but does not start with it, so adapter_prefix does not match and there is no conflict to report."
+# The case guards against a checker that searches for the prefix anywhere in
+# the name instead of at its start. Such a checker reports C11's conflict here
+# and fails this case.
+witness = {}
+witness_notes = { note = "a run that reports class.prefix_role_conflict here is matching the prefix as a substring" }
+crates = [
+  { name = "planner-adapter-utils", role = "core" },
+]
+
+# ===========================================================================
+# CRATE LEVEL — expected misses and the compiler-detected case
+# ===========================================================================
+
+[[case]]
+id = "EM-C01"
+level = "crate"
+generation = "declared"
+expected = "expected_miss"
+rule = "transitive.core_disallowed_dependency"
+cells = ["law5"]
+seeded = "core-a depends by path on pure-looking, which core_allow lists and which lies outside the fixture workspace; pure-looking depends by path on a crate named tokio, also outside the workspace"
+# pure-looking and tokio are outside_crates, not members. As workspace members
+# they would be classified and checked themselves: pure-looking would be a core
+# crate with a direct, un-allow-listed dependency on tokio, and the fixture
+# would report an ordinary effect.core_disallowed_dependency about
+# pure-looking. That finding is a real violation of a different rule, and it
+# would make the run non-silent, so the case would stop being a demonstration
+# that the transitive edge is invisible. Outside the workspace neither crate is
+# classified, and `cargo metadata --no-deps` shows core-a's direct edge to
+# pure-looking and nothing beyond it, which is precisely the hole.
+#
+# tokio is a path crate rather than a registry one so the fixture builds
+# offline, and it is named tokio because the name is what a core allow-list is
+# read against.
+hole = "§4.1, Law 5 row, Known hole: \"A deny list is incomplete by nature. Transitive dependencies can perform effects.\" The L0 mode reads `cargo metadata --no-deps`, which shows core-a's direct edges only."
+detected_when = "transitive_enabled = true (the --transitive flag of plan §5). The case is then expected to detect, with witness rule transitive.core_disallowed_dependency, path core-a -> pure-looking -> tokio."
+witness = { rule = "transitive.core_disallowed_dependency", path = ["core-a", "pure-looking", "tokio"] }
+witness_notes = { applies_when = "transitive_enabled" }
+crates = [
+  { name = "core-a", role = "core", deps = [{ name = "pure-looking" }] },
+]
+outside_crates = [
+  { name = "pure-looking", at = "../pure-looking", deps = [{ name = "tokio" }] },
+  { name = "tokio", at = "../tokio" },
+]
+[case.rules]
+core_allow = ["pure-looking"]
+
+[[case]]
+id = "EM-C02"
+level = "crate"
+generation = "declared"
+expected = "expected_miss"
+rule = "-"
+cells = ["law5"]
+seeded = "core-a calls std::fs::read in its body and declares no dependency at all"
+hole = "§4.1, Law 5 row: the crate level sees dependencies, not calls. Nothing in the crate graph distinguishes this core from a pure one."
+detected_when = "The Clippy deny list of CHG-001 (xtask/templates/core-clippy.toml) reports it as clippy::disallowed_methods, at the module level, in a different lane. This case exists to record which mechanism covers the cell, not to be caught here."
+witness = {}
+witness_notes = { note = "no crate-level finding is expected; a run that reports one is reading source, which the crate level does not claim to do" }
+crates = [
+  { name = "core-a", role = "core", body = "pub fn host() -> std::io::Result<Vec<u8>> { std::fs::read(\"/etc/hostname\") }" },
+]
+
+[[case]]
+id = "R01"
+level = "crate"
+generation = "declared"
+expected = "detect"
+rule = "rustc E0603"
+cells = ["law2-d3"]
+seeded = "core-b names core_a::private_mod::Item, a module core-a does not export"
+# Detected by the compiler, not by xtask. Law 2 and the D3 crate cell need no
+# rule of their own: the crate facade already makes a non-exported item
+# unreachable. The harness runs `cargo check --offline` on this fixture and
+# records the error code.
+detector = "cargo check --offline"
+witness = { error_code = "E0603", crate = "core-b", names = "core_a::private_mod::Item" }
+# Both bodies are required. Without them the generated workspace compiles:
+# core-a would define no private_mod::Item and core-b would name nothing, so
+# `cargo check` would exit 0 and the registered detection could never fire.
+# The module is private and the item inside it is pub, which is what makes the
+# error E0603 (the module is not accessible) rather than E0616 (private field)
+# or an unresolved-name error.
+crates = [
+  { name = "core-a", role = "core", body = "mod private_mod { pub struct Item; }" },
+  { name = "core-b", role = "core", deps = [{ name = "core-a" }], body = "pub fn take(_: core_a::private_mod::Item) {}" },
+]
+
+# ===========================================================================
+# MODULE LEVEL — pre-registered here, authored and run in CHG-007 (W7)
+#
+# One crate per case, components `constraints` and `ordering` with a glue root,
+# declared in the fixture's rha-modules.toml. `cargo check --offline` confirms
+# each fixture is legal Rust before the extractor sees it: a case that does not
+# compile tests nothing.
+# ===========================================================================
+
+[[case]]
+id = "M01"
+level = "module"
+generation = "authored"
+expected = "detect"
+rule = "modules.cycle"
+cells = ["law6-b3"]
+seeded = "constraints uses crate::ordering::Wave while the component rules declare only ordering = [constraints]"
+witness = { rule = "modules.cycle", path = ["constraints", "ordering", "constraints"] }
+
+[[case]]
+id = "M02"
+level = "module"
+generation = "authored"
+expected = "detect"
+rule = "modules.undeclared_dependency"
+cells = ["law3-d1"]
+seeded = "a third component model exists; constraints depends on it and the rules do not declare the edge"
+witness = { rule = "modules.undeclared_dependency", from = "constraints", to = "model" }
+
+[[case]]
+id = "M03"
+level = "module"
+generation = "authored"
+expected = "detect"
+rule = "modules.child_to_parent_private"
+cells = ["d2"]
+seeded = "ordering calls super::helper(), a private function of the glue root"
+witness = { rule = "modules.child_to_parent_private", from = "ordering", to = "crate::helper" }
+
+[[case]]
+id = "M04"
+level = "module"
+generation = "authored"
+expected = "detect"
+rule = "modules.child_to_parent_private"
+cells = ["d2"]
+seeded = "ordering calls crate::plan(), a public function of the glue root. D2 is never upward, public or not."
+witness = { rule = "modules.child_to_parent_private", from = "ordering", to = "crate::plan" }
+
+[[case]]
+id = "M05"
+level = "module"
+generation = "authored"
+expected = "detect"
+rule = "modules.child_to_parent_private"
+cells = ["d2"]
+seeded = "a nested component scoring = \"x::ordering::scoring\" references crate::constraints, three levels up"
+witness = { rule = "modules.child_to_parent_private", from = "scoring", to = "crate::constraints", depth = 3 }
+
+[[case]]
+id = "M06"
+level = "module"
+generation = "authored"
+expected = "detect"
+rule = "modules.foreign_internal"
+cells = ["law2-d3"]
+seeded = "ordering uses crate::constraints::rules::Rule, a path below the constraints facade"
+witness = { rule = "modules.foreign_internal", from = "ordering", to = "crate::constraints::rules::Rule" }
+
+[[case]]
+id = "M07"
+level = "module"
+generation = "authored"
+expected = "no_alarm"
+rule = "-"
+cells = ["law2-d3"]
+seeded = "use crate::constraints::* at the facade: a declared edge to the public surface"
+
+[[case]]
+id = "M08"
+level = "module"
+generation = "authored"
+expected = "no_alarm"
+rule = "-"
+cells = ["d2"]
+seeded = "self:: and super:: paths inside ordering::inner, which stay within one component"
+
+[[case]]
+id = "M09"
+level = "module"
+generation = "authored"
+expected = "no_alarm"
+rule = "-"
+cells = ["law6-b3"]
+seeded = "std::, core:: and external crate paths, which are not module edges at all"
+
+[[case]]
+id = "M10"
+level = "module"
+generation = "authored"
+expected = "detect"
+rule = "modules.foreign_internal"
+cells = ["law2-d3"]
+seeded = "#[path = \"elsewhere.rs\"] mod part; whose file references crate::constraints::rules"
+re_register_if = "the extractor does not follow #[path]. It is then re-registered as expected_miss citing §4.1's \"Extraction is approximate\" hole, in CHG-007's change record, before the run."
+witness = { rule = "modules.foreign_internal", from = "part", to = "crate::constraints::rules" }
+
+[[case]]
+id = "M11"
+level = "module"
+generation = "authored"
+expected = "no_alarm"
+rule = "-"
+cells = ["law6-b3"]
+seeded = "#[cfg(test)] mod tests referencing crate::ordering. Test edges are excluded by default and listed, not raised."
+witness = { listed_as = "test_edges", from = "constraints::tests", to = "ordering" }
+witness_notes = { note = "listed, not an alarm" }
+
+[[case]]
+id = "M12"
+level = "module"
+generation = "authored"
+expected = "detect"
+rule = "modules.cycle"
+cells = ["law6-b3"]
+seeded = "an inline mod extra {} inside constraints references crate::ordering"
+witness = { rule = "modules.cycle", path = ["constraints", "ordering", "constraints"] }
+
+[[case]]
+id = "M13"
+level = "module"
+generation = "authored"
+expected = "detect"
+rule = "modules.cycle"
+cells = ["law6-b3"]
+seeded = "impl crate::ordering::Trait for X inside constraints: the edge is in the impl header"
+witness = { rule = "modules.cycle", path = ["constraints", "ordering", "constraints"] }
+
+[[case]]
+id = "M14"
+level = "module"
+generation = "authored"
+expected = "detect"
+rule = "modules.cycle"
+cells = ["law6-b3"]
+seeded = "an expression path crate::ordering::score(x) in a function body"
+witness = { rule = "modules.cycle", path = ["constraints", "ordering", "constraints"] }
+
+[[case]]
+id = "M15"
+level = "module"
+generation = "authored"
+expected = "detect"
+rule = "modules.cycle"
+cells = ["law6-b3"]
+seeded = "a type position, fn f(w: crate::ordering::Wave)"
+witness = { rule = "modules.cycle", path = ["constraints", "ordering", "constraints"] }
+
+[[case]]
+id = "M16"
+level = "module"
+generation = "authored"
+expected = "detect"
+rule = "modules.cycle"
+cells = ["law6-b3"]
+seeded = "a use declaration inside a function body, where a scope-blind walker would not look"
+witness = { rule = "modules.cycle", path = ["constraints", "ordering", "constraints"] }
+
+[[case]]
+id = "M17"
+level = "module"
+generation = "authored"
+expected = "detect"
+rule = "modules.cycle"
+cells = ["law6-b3"]
+seeded = "a nested use tree, use crate::{ordering::Wave, constraints::Rule}"
+witness = { rule = "modules.cycle", path = ["constraints", "ordering", "constraints"] }
+
+[[case]]
+id = "M18"
+level = "module"
+generation = "authored"
+expected = "detect"
+rule = "modules.cycle"
+cells = ["law6-b3"]
+seeded = "pub use crate::ordering::Wave; inside constraints: a re-export is still a reference"
+witness = { rule = "modules.cycle", path = ["constraints", "ordering", "constraints"] }
+
+[[case]]
+id = "M19"
+level = "module"
+generation = "authored"
+expected = "detect"
+rule = "modules.child_to_parent_private"
+cells = ["d2"]
+seeded = "the root re-exports pub use ordering::score; and constraints calls crate::score(). The upward edge is reported; the hidden edge to ordering is not."
+# Documented asymmetry: the extractor sees the path as written. Reporting the
+# upward reference is correct; resolving it through the re-export to ordering
+# would be a second inference the extractor does not claim to make.
+witness = { rule = "modules.child_to_parent_private", from = "constraints", to = "crate::score" }
+witness_notes = { note = "the edge constraints -> ordering behind the re-export is not expected" }
+
+[[case]]
+id = "M20"
+level = "module"
+generation = "authored"
+expected = "detect"
+rule = "modules.cycle"
+cells = ["law6-b3"]
+seeded = "a path inside macro arguments, assert_eq!(crate::ordering::score(), 1)"
+extraction = "heuristic"
+witness = { rule = "modules.cycle", path = ["constraints", "ordering", "constraints"], extraction = "heuristic" }
+witness_notes = { note = "the finding must carry the heuristic flag; a run that reports it as exact fails the case" }
+
+[[case]]
+id = "M21"
+level = "module"
+generation = "authored"
+expected = "detect"
+rule = "modules.cycle"
+cells = ["law6-b3"]
+seeded = "use ordering::Wave;, a uniform path to a sibling with no crate:: prefix"
+witness = { rule = "modules.cycle", path = ["constraints", "ordering", "constraints"] }
+
+[[case]]
+id = "L-M01"
+level = "module"
+generation = "authored"
+expected = "no_alarm"
+rule = "-"
+cells = ["law6-b3"]
+seeded = "the real product crate site, with its own rha-modules.toml rules, once CHG-005 has built it"
+depends_on = "CHG-005"
+
+[[case]]
+id = "L-M02"
+level = "module"
+generation = "authored"
+expected = "no_alarm"
+rule = "-"
+cells = ["d2"]
+seeded = "a glue root that references both of its children. Downward is the direction D2 allows."
+
+[[case]]
+id = "EM-M01"
+level = "module"
+generation = "authored"
+expected = "expected_miss"
+rule = "-"
+cells = ["law6-b3"]
+seeded = "a macro_rules! at the root expanding to crate::ordering::score(), invoked from constraints"
+hole = "§4.1, Law 3/D1 and D2 rows, Known hole: \"Extraction is approximate for macro-generated paths.\" The path exists only after expansion, and the extractor reads unexpanded source."
+witness = {}
+witness_notes = { note = "no finding expected; a run that reports one is expanding macros, which the extractor does not claim to do" }
+
+[[case]]
+id = "EM-M02"
+level = "module"
+generation = "authored"
+expected = "expected_miss"
+rule = "-"
+cells = ["law6-b3"]
+seeded = "include!(\"../fragments/uses_ordering.in\") pulling in a file with the edge"
+hole = "§4.1, Law 3/D1 row, Known hole: extraction is approximate. include! is resolved by the compiler, not by the syn parse of the visible source."
+
+[[case]]
+id = "EM-M03"
+level = "module"
+generation = "authored"
+expected = "expected_miss"
+rule = "-"
+cells = ["law6-b3"]
+seeded = "a trait method called through a glob-imported trait, on a type from the model component"
+hole = "§4.1, Law 3/D1 row: resolving the method to its trait needs type inference, which the extractor does not perform."
+partial = "Only the edge to model is expected to be missed. The edge the glob import itself declares is a visible path and is expected to be found."
+
+[[case]]
+id = "X-M01"
+level = "module"
+generation = "authored"
+expected = "reference"
+rule = "-"
+cells = ["law6-b3"]
+seeded = "cargo modules dependencies --acyclic run on M01 and on L-M01, as a second opinion from a tool this program did not write"
+# Not scored with the others: an external tool checks the uncollapsed module
+# graph, which is stricter than B3 over declared components. A disagreement is
+# recorded and explained, not treated as a miss.
+outcome_until_installed = "not_run"
+reason_until_installed = "tool_absent: cargo-modules is not in rha-baseline.json until DP-2.1"
+depends_on = "DP-2.1"
+
+# ===========================================================================
+# GRADING
+#
+# How a run turns observed findings into detected / missed / false alarm.
+# This is what keeps H4 from grading itself generously: without it, "detected"
+# can mean no more than "the checker said something".
+# ===========================================================================
+
+[grading]
+# The three values below are the Executor's proposal, open at DP-1.1. They are
+# the strict reading in each case, because a corpus that grades itself leniently
+# measures nothing; if Kennedy relaxes one at review, the relaxation is recorded
+# here and in the CHG-002 change record before CHG-004 runs against it.
+proposed_by = "agent:executor"
+open_at = "DP-1.1"
+
+# A finding matches a witness when EVERY key of the case's `witness` table
+# equals the finding's corresponding field. There is no list of which keys
+# count, because `witness` holds only keys that count: prose was moved to
+# `witness_notes` in CHG-002.1 so that no future key can be forgotten by a
+# sentence. A finding carrying a field the witness does not mention is fine;
+# a finding contradicting or omitting one the witness does mention is not.
+detection_requires = "every key of the case's witness table must equal the finding's corresponding field; witness holds no prose, so there is no list of exempt keys, and a key added to a witness later is matched by construction"
+
+# Recall and precision are scored separately, so an over-eager rule cannot be
+# hidden by the case it happens to get right, and is not punished twice for one
+# defect either.
+extra_findings = "the case counts as detected, and every unmatched finding on that fixture is counted in the run's false_alarm total with the fixture id; neither number is derived from the other"
+
+# The strong reading: a legitimate fixture is a claim that the checker stays
+# quiet about the whole workspace, not only about one rule. `listed_as` is the
+# exception the two cases L07 and M11 need — an edge the run must report as a
+# fact without raising it — and a run that raises it fails the case.
+no_alarm_scope = "any finding on the fixture fails the case, whatever its rule; a report carrying a witness `listed_as` key is a listed fact, not a finding, and a run that raises it as a finding fails the case instead"
+
+# Not in question, and not yours to decide: these follow from §17 and §9.14.
+miss_is_terminal = "A `detect` case that is not detected fails the harness run, and CHG-004 downgrades that §4.1 cell in docs/enforcement-map.md. It never edits this file."
+expected_miss_surprise = "An `expected_miss` case that IS detected is recorded as a finding in the change record and raised with the acceptance authority. It is not silently re-registered as a detection."
