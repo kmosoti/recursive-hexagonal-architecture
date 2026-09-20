@@ -39,6 +39,8 @@ claim = "agent:executor is the sole branch writer, as Kennedy instructed, in iso
 [[decisions]]
 id = "approved-em-m03-cells"
 commit = "93843290c3f71b9a385c6f275acef3bd70266643"
+parent_manifest_sha256 = "9f5c1a93262aa6fc60eae5dc946e38e7425d707df552cf13bf6e6b458c02cbcf"
+corrected_manifest_sha256 = "18d4afbfe5a63843d498a109fe4702629548a25ddc730198848983208d3c46a4"
 question = "Which protected manifest edit is authorized before the harness?"
 answer = 'Only EM-M03 cells = ["law3-d1", "law6-b3"], plus the matching frozen test row. Kennedy explicitly approved this exact value on 2026-09-20 ("Approved and merged", PR 6), as confirmed in the W4 instruction and objective. Expected outcome, hole, partial scope and grading values remain fixed.'
 decided_by = "human:kennedy"
@@ -79,3 +81,10 @@ hypothesis = "The accepted checker detects the violations but omits structured f
 discriminating_check = "Clean committed-fixture run 20260920T121342Z-3c6c758911ff-1462546.json: 13/22 combined detections (12 checker plus R01), 10 unmatched findings, nine failed checker cases."
 change = "Expose crate, cycle members, matched forbidden selector, conflicting roles, port and owner from checker observations. Preserve every rule, warning, case and grading value."
 scope = ["xtask/src/graph/check.rs", "xtask/src/graph/report.rs", "xtask/src/architecture.rs"]
+
+[[repairs]]
+id = "CHG-004.3"
+hypothesis = "CI's fetch-depth 2 lacks the historical registration and correction objects required by the new corpus test and evidence writer."
+discriminating_check = "CI run 35510429218: 140 of 141 nextest tests passed; full_committed_corpus failed because 15d916a was unavailable. All seven other L0 checks passed."
+change = "Read the registration revision from its existing acceptance record and the correction revision from its approval decision. Pin original/corrected manifest byte digests from the actual historical objects; test the transformation by those digests in both deep and shallow checkouts. No workflow, case, grading or expected outcome changes."
+scope = ["xtask/src/corpus/runner.rs", "xtask/tests/corpus_crate.rs", ".rha/tasks/CHG-004-h4-crate-harness.toml"]

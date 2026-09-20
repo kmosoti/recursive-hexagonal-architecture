@@ -95,3 +95,9 @@ Outside packages remain siblings of the C19 and EM-C01 workspace roots, as `outs
 | L0.deny | passed |
 | L0.machete | passed |
 | L0.typos | passed |
+
+## CHG-004.3: shallow-checkout provenance determination
+
+[CI run 35510429218](https://github.com/kmosoti/recursive-hexagonal-architecture/actions/runs/35510429218), retained [unchanged](../../evidence/ci/35510429218.json), failed only L0.nextest: 140 tests passed and the full-corpus test failed when `15d916a` could not be resolved. The protected workflow uses fetch-depth 2; the local checkout had those older objects, so its lane passed.
+
+Historical citations must not require history downloads to grade the current fixtures. Read the original revision from CHG-002's existing acceptance record, and the correction from its approval decision. The decision now also records the parent and corrected manifest byte digests, measured from the actual correction commit and its parent before this repair. The test reconstructs only the approved cell change and compares both byte digests. Under §9.14 this replaces an unconditional deep-history dependency with a fixed provenance check that also runs in CI; it skips no assertion about the cases or their outcomes. The protected workflow remains unchanged. New clean H4 records also use the requested timestamp–revision filename without a process-id suffix; create-new semantics still prevent overwrites.

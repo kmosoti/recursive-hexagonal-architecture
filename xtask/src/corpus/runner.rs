@@ -61,14 +61,14 @@ fn expectation(expected: Expected) -> &'static str {
 /// than inferred from whichever manifest edit happens to be newest.
 ///
 /// # Errors
-/// Returns absent/invalid decision provenance or an unresolved revision.
+/// Returns absent/invalid decision provenance or a manifest digest mismatch.
 pub fn correction_commit(root: &Path) -> Result<String> {
     let path = root.join(".rha/tasks/CHG-004-h4-crate-harness.toml");
     let task: toml::Value = toml::from_str(
         &std::fs::read_to_string(path).context(|| "reading correction approval".to_owned())?,
     )
     .context(|| "parsing correction approval".to_owned())?;
-    let revision = task
+    let decision = task
         .get("decisions")
         .and_then(toml::Value::as_array)
         .into_iter()
@@ -76,19 +76,42 @@ pub fn correction_commit(root: &Path) -> Result<String> {
         .find(|decision| {
             decision.get("id").and_then(toml::Value::as_str) == Some("approved-em-m03-cells")
         })
-        .and_then(|decision| decision.get("commit"))
+        .ok_or_else(|| Error::new("EM-M03 correction approval is missing"))?;
+    let revision = decision
+        .get("commit")
         .and_then(toml::Value::as_str)
         .ok_or_else(|| Error::new("EM-M03 approval decision lacks its correction commit"))?;
-    let resolved = command_stdout(
-        root,
-        &["git", "rev-parse", &format!("{revision}^{{commit}}")],
-    )?;
-    if resolved != revision {
+    if revision.len() != 40 || !revision.bytes().all(|b| b.is_ascii_hexdigit()) {
         return Err(Error::new(
             "correction decision must cite a full commit identity",
         ));
     }
-    Ok(resolved)
+    if decision
+        .get("corrected_manifest_sha256")
+        .and_then(toml::Value::as_str)
+        != Some(sha256_file(&root.join(MANIFEST_PATH))?.as_str())
+    {
+        return Err(Error::new(
+            "manifest differs from the pinned correction digest",
+        ));
+    }
+    Ok(revision.to_owned())
+}
+
+fn pre_registration_revision(root: &Path) -> Result<String> {
+    let text = std::fs::read_to_string(root.join(".rha/acceptances/CHG-002.toml"))
+        .context(|| "reading pre-registration identity".to_owned())?;
+    let record: toml::Value =
+        toml::from_str(&text).context(|| "parsing pre-registration identity".to_owned())?;
+    let revision = record
+        .get("subject")
+        .and_then(|subject| subject.get("revision"))
+        .and_then(toml::Value::as_str)
+        .ok_or_else(|| Error::new("CHG-002 record lacks its subject revision"))?;
+    if revision.len() != 40 || !revision.bytes().all(|b| b.is_ascii_hexdigit()) {
+        return Err(Error::new("invalid pre-registration revision"));
+    }
+    Ok(revision.to_owned())
 }
 
 fn execute(
@@ -440,10 +463,9 @@ pub fn run(root: &Path, args: &CorpusArgs) -> Result<u8> {
     let fixtures_root = root.join(fixture::COMMITTED_ROOT);
     let fixture_drift = fixture::drift(&fixtures_root, &expected_inputs)?;
     let run_id = format!(
-        "{}-{}-{}{}",
+        "{}-{}{}",
         now.compact(),
         &subject.revision[..12],
-        std::process::id(),
         if subject.dirty { "-dirty" } else { "" }
     );
     let mut records = Vec::new();
@@ -513,7 +535,7 @@ pub fn run(root: &Path, args: &CorpusArgs) -> Result<u8> {
         "schema_version": 2, "kind": "h4", "level": "crate", "evidence_class": "local", "advisory": true,
         "created_at": now.rfc3339(), "artifact_identity": subject,
         "producer": {"name": "xtask corpus run", "version": env!("CARGO_PKG_VERSION"), "executable_sha256": sha256_file(&checker)?, "checker": expected_tool},
-        "pre_registration": {"change": "CHG-002", "identity": manifest.pre_registration, "revision": command_stdout(root, &["git", "rev-parse", "15d916a^{commit}"])?},
+        "pre_registration": {"change": "CHG-002", "identity": manifest.pre_registration, "revision": pre_registration_revision(root)?, "record": ".rha/acceptances/CHG-002.toml"},
         "manifest": {"path": MANIFEST_PATH, "sha256": sha256_file(&root.join(MANIFEST_PATH))?, "correction_commit": correction_commit(root)?, "approved_amendment": "Kennedy: Approved and merged, PR 6, 2026-09-20; EM-M03 cells [law3-d1, law6-b3]"},
         "fixtures": {"root": fixture::COMMITTED_ROOT, "drift": fixture_drift, "generated_inputs_sha256": expected_inputs.iter().map(|(path, bytes)| (path.display().to_string(), crate::util::sha256_hex(bytes))).collect::<std::collections::BTreeMap<_, _>>()},
         "template_sha256": sha256_file(&template_path)?, "grading": {"decision": "DP-1.1c", "detection_requires": manifest.grading.detection_requires, "extra_findings": manifest.grading.extra_findings, "no_alarm_scope": manifest.grading.no_alarm_scope, "expected_miss_surprise": manifest.grading.expected_miss_surprise},

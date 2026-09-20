@@ -110,40 +110,45 @@ fn full_committed_corpus_pins_observations_and_preserves_the_h4_failure() {
     assert_eq!(record["summary"]["failed_cases"], json!(["C13"]));
     assert_eq!(record["summary"]["outcome"], "failed");
     assert_eq!(record["fixtures"]["drift"], json!([]));
-    let correction = record["manifest"]["correction_commit"]
-        .as_str()
-        .expect("correction commit");
-    let manifest_at = |revision: &str| {
-        let source = xtask::util::command_stdout(
-            &root,
-            &[
-                "git",
-                "show",
-                &format!("{revision}:{}", xtask::corpus::MANIFEST_PATH),
-            ],
-        )
-        .expect("historical manifest");
-        toml::from_str::<toml::Value>(&source).expect("historical TOML")
-    };
-    let mut before = manifest_at(&format!("{correction}^"));
-    let after = manifest_at(correction);
-    let row = before["case"]
-        .as_array_mut()
-        .expect("cases")
-        .iter_mut()
-        .find(|row| row["id"].as_str() == Some("EM-M03"))
-        .expect("EM-M03");
+    let task: toml::Value = toml::from_str(
+        &std::fs::read_to_string(root.join(".rha/tasks/CHG-004-h4-crate-harness.toml"))
+            .expect("task record"),
+    )
+    .expect("task TOML");
+    let approval = task["decisions"]
+        .as_array()
+        .expect("decisions")
+        .iter()
+        .find(|row| row["id"].as_str() == Some("approved-em-m03-cells"))
+        .expect("approval");
     assert_eq!(
-        row["cells"],
-        toml::Value::Array(vec![toml::Value::String("law6-b3".to_owned())])
+        record["manifest"]["correction_commit"],
+        approval["commit"].as_str().expect("pinned correction")
     );
-    row["cells"] = toml::Value::Array(vec![
-        toml::Value::String("law3-d1".to_owned()),
-        toml::Value::String("law6-b3".to_owned()),
-    ]);
+    let current = include_str!("corpus/manifest.toml");
+    let corrected = "cells = [\"law3-d1\", \"law6-b3\"]\nseeded = \"a trait method";
+    let old = "cells = [\"law6-b3\"]\nseeded = \"a trait method";
+    assert_eq!(current.matches(corrected).count(), 1);
+    let prior = current.replace(corrected, old);
     assert_eq!(
-        before, after,
-        "cited correction changed exactly the approved row"
+        xtask::util::sha256_hex(current.as_bytes()),
+        approval["corrected_manifest_sha256"]
+            .as_str()
+            .expect("corrected digest")
+    );
+    assert_eq!(
+        xtask::util::sha256_hex(prior.as_bytes()),
+        approval["parent_manifest_sha256"]
+            .as_str()
+            .expect("parent digest")
+    );
+    let original: toml::Value = toml::from_str(include_str!("../../.rha/acceptances/CHG-002.toml"))
+        .expect("CHG-002 acceptance");
+    assert_eq!(
+        record["pre_registration"]["revision"],
+        original["subject"]["revision"]
+            .as_str()
+            .expect("registration revision")
     );
     let cases = record["cases"].as_array().expect("cases");
     assert_eq!(cases.len(), 35);
