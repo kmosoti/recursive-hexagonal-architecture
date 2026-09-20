@@ -192,10 +192,19 @@ rule = "graph.cycle"
 cells = ["law6-b3"]
 seeded = "core-a and core-b depend on each other by path"
 # Cargo itself rejects a package cycle, so the fixture may fail to load before
-# the checker sees it. Either way the case is detected: the harness records a
-# cargo error on this fixture as this finding, which is what plan §6 says.
+# the checker sees it. The case still requires the checker's own finding.
+#
+# Until CHG-002.1 the witness carried an `alternative` saying a cargo error on
+# this fixture would be recorded as graph.cycle. That is the corpus grading
+# itself generously: it would score the xtask DFS as detecting a cycle on the
+# strength of an error the DFS never produced, and the §4.1 Law 6/B3 crate
+# cell would be credited to a rule that had not run. If cargo refuses to
+# resolve the workspace and the checker therefore reports nothing, this case
+# is a miss, and W4 either re-registers it with a reason — for example as an
+# expected_miss whose hole is that a cargo-rejected workspace is unreachable —
+# or the fixture is rebuilt so the checker can see the cycle. Both happen in
+# the open, before a run.
 witness = { rule = "graph.cycle", members = ["core-a", "core-b"] }
-witness_notes = { alternative = "cargo refuses to resolve the workspace; the harness records the error as graph.cycle" }
 crates = [
   { name = "core-a", role = "core", deps = [{ name = "core-b" }] },
   { name = "core-b", role = "core", deps = [{ name = "core-a" }] },
