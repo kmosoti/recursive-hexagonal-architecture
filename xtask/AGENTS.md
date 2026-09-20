@@ -17,8 +17,9 @@ and JSON output.
   classification and every decision. Inspect all
   matching edges before denying an ordinary dependency; result order must not
   decide the outcome.
-- Producer identity belongs to the compiled checker, never to the subject
-  workspace. Keep unknown or dirty revision identity honest in reports.
+- Producer identity is the tool's own checkout, `HEAD` and working-tree
+  dirtiness read at run time by the one helper `xtask ci` also uses, never
+  the subject workspace. Unknown or dirty identity is reported as such.
 
 ## Tests and changes
 
@@ -29,6 +30,6 @@ producer and subject identities, rather than only top-level success.
 Fix a fixture that misses the intended failure; do not reverse its expected
 result to match current output.
 
-Workers use `cargo test -p xtask --locked` for targeted checks. The coordinator
-owns the full `cargo xtask ci` run and landing verification. Test changes and
-new dependencies need the justification in `CONTRIBUTING.md`.
+Targeted checks: `cargo test -p xtask --locked`. The full lane, `cargo xtask
+ci`, runs once on the settled candidate. Test changes and new dependencies
+need the justification in `CONTRIBUTING.md`.

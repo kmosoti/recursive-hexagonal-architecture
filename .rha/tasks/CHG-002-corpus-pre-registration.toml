@@ -44,7 +44,7 @@ acceptor = "human:kennedy"
 id = "W2"
 executor = "agent:executor"
 depends_on = ["CHG-001"]
-output = "xtask/tests/corpus/manifest.toml (62 cases. Crate level, 35: 21 violations, 11 legitimate, 2 expected misses, and R01 which the compiler detects. Module level, 27, authored in CHG-007: 21 violations, 2 legitimate, 3 expected misses, and X-M01, a reference-tool case that is not_run until DP-2.1); a schema test that fails on a malformed or incomplete manifest; the manifest added to [surface] protected."
+output = "xtask/tests/corpus/manifest.toml (62 cases. Crate level, 35: 21 violations, 11 legitimate, 2 expected misses, and R01 which the compiler detects. Module level, 27, authored in CHG-007: 17 violations, 6 legitimate, 3 expected misses, and X-M01, a reference-tool case that is not_run until DP-2.1; the split was corrected in CHG-003.2 from a wrong 21/2, pull request 4 review finding); a schema test that fails on a malformed or incomplete manifest; the manifest added to [surface] protected."
 owned_scope = [
   "xtask/tests/corpus/manifest.toml",
   "xtask/tests/corpus_manifest.rs",

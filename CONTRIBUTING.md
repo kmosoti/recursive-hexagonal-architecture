@@ -50,7 +50,7 @@ consumer, exit status, and report.
 - `passed` needs exit status 0 **and** the check's validity criterion; for example, nextest must select at least one test.
 - The exit status of `cargo xtask ci` is 1 when a check failed or, under `--label ci`, when a tool is missing, and 0 otherwise. It is 0 even when a required check is `not_run`. The exit status is not eligibility: read `disposition` in the record.
 - The latest record is `target/rha/evidence.json`; `--record DIR` also keeps a timestamped copy. Commit the record for your change under `evidence/CHG-0nn/`. Records are class `local` or `ci` and advisory; see [docs/threat-model.md](docs/threat-model.md).
-- Generate documentation before the final verification lane. Copying evidence or regenerating indexes changes the candidate, so an earlier record remains about its own subject; run the final check on the final candidate without rewriting historical evidence. The final check can omit `--record` so its outputs stay under `target/` and do not change tracked evidence or indexes.
+- Order: `cargo xtask docs`, then the lane, then commit. A record is taken on a clean tree and committed in the commit after the one it describes; commits that only add a record or a regenerated index need no record of their own, because the CI record for the pushed head covers them. A record taken on a dirty tree is kept and says so: its `snapshot_tree` names exactly what it saw, which is not the commit that followed.
 - After changing `.rha/**`, `evidence/**`, or `rha-baseline.json`, run `cargo xtask docs` and commit the regenerated files. `cargo xtask docs --check` lists stale ones.
 
 ## Submit and review
