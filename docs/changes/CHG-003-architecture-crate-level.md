@@ -92,6 +92,8 @@ Both agree, on two machines:
 | Complete | true | every L0 check appears with a unique id |
 | **Passed** | **true** | **first time in this repository** |
 
+**CHG-003.1, local**: `evidence/CHG-003/20260920T100013Z-1cbc47ec97f2.json` at `1cbc47e`, the repaired revision, on a clean tree: all eight checks `passed`, 112 tests selected, eligibility `blocked` on `Authentic` alone.
+
 Eligibility remains `blocked`, on `Authentic` alone. `.rha/policy.toml [acceptance.bootstrap]` records `passed_unsatisfiable_until = "CHG-003: L0.architecture is not implemented"`; that clause expires with this merge, and its `expires` condition now waits only on CHG-020.
 
 ## Acceptance concerns
