@@ -121,6 +121,13 @@ answer = "Authority: Kennedy's instruction of 2026-09-20, after disabling automa
 decided_by = "human:kennedy (authority and scope); agent:executor (determinations)"
 date = "2026-09-20"
 
+[[decisions]]
+id = "review-findings-chg-003.3"
+question = "Two findings from the last automated pass on 920cca6, posted at 10:43 UTC before that review was disabled: do they name a concrete failure on that revision?"
+answer = "Both do, each reproduced on a temporary workspace before repair. (1) P1: effect.core_clippy_template was handed the graph as loaded, whose roles are all None because check::check classifies a clone, so it found no core in any workspace: a crate declaring role = \"core\" with no clippy.toml exited 0 with the limitation 'no crate is classified core'. Repair: the rule takes its cores from the classification the check recorded; the same workspace now exits 1 with two effect.core_clippy_template findings, and with the template and the crate-root forbid in place exits 0. This repository has no core crate, so its own reports were not wrong; the mechanism was, and no core in any workspace had ever been examined. (2) P2: a forbidden rule with from = \"role:cor\" parsed into a rule that could match nothing, and the check exited 0. Repair: Rules::parse rejects a role: selector naming none of the five roles, exit 2 config_error, the same closure at parse time as CHG-003.1's foreign_core_dependency. Both are CHG-003.3: determination first, one code commit, one lane."
+decided_by = "agent:executor (determinations, under the review rules in AGENTS.md); human:kennedy (standing instruction of 2026-09-20 to bring PR 6 to a compliant state)"
+date = "2026-09-20"
+
 [expectation]
 # Written before the checker (spec §17: fixed before data).
 detection = "Every crate-level `detect` case of xtask/tests/corpus/manifest.toml is detected, and none of the 11 legitimate cases raises an alarm. That is measured in CHG-004, not here; this item is judged on its unit tests and on the lane."
@@ -190,4 +197,4 @@ write_workers = "gpt-5.6-luna, high; decided, disjoint edits; coordinator owns G
 
 [[provenance.sessions]]
 model_id = "claude-fable-5-1"
-span = "CHG-003.2: consolidation of PR 6, the older record corrections, and the thread determinations"
+span = "CHG-003.2: consolidation of PR 6, the older record corrections, and the thread determinations; CHG-003.3: the two findings from the last automated pass"
