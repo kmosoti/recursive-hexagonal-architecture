@@ -98,7 +98,7 @@ span = "CHG-004 through CHG-004.3: commits dedc8cc through 2ad75c8"
 
 [[provenance.sessions]]
 model_id = "claude-fable-5-1"
-span = "CHG-004.4: the make-ready review"
+span = "CHG-004.4: the make-ready review; CHG-004.5: the two review findings on 2fe6732"
 
 [[decisions]]
 id = "explicit-w4-fixture-scope"
@@ -113,6 +113,20 @@ question = "What did the supervising session change to make the draft ready for 
 answer = "Authority: Kennedy's request of 2026-09-20 to review and make ready the draft. Verified first, at 2ad75c8 on this machine: no fixture drift (229 inputs), generated docs current, 141 tests pass, and `cargo xtask corpus run --level crate` reproduces 22/22 detected with C13 the sole failure. Changed: (1) docs/orchestration-log.md is removed again; CHG-003.2 determination 4 removed it as a journal of the executor's internal worker roles that is not an artifact of §11.7.11 or plan §3.4, and this draft re-added it without a determination; the text stays in history at ac6f7c6. (2) docs/backlog.md is removed; its two items move to this record's unresolved list, which owns an item's open questions (§11.7.1), so the wiki does not render a third queue. (3) This record's provenance takes the shape the other task records use, with a session per span; the digests were verified against 140fdfb. (4) The change record carries the §11.7.5 headings and an acceptance-concerns section: the C13 adjudication with the exact amendment proposed for Kennedy, the four records whose subjects are not in this branch's history, and the test that pins the failed outcome. (5) The CI record for the draft's head, run 35510728858, is committed. Not changed: any case, grading value, checker rule, fixture, or protected surface; the H4 result stands as failed on C13 until Kennedy decides."
 decided_by = "human:kennedy (authority); agent:executor (determinations)"
 date = "2026-09-20"
+
+[[decisions]]
+id = "review-findings-chg-004.5"
+question = "Two automated review findings on 2fe6732, posted when the PR left draft: do they name a concrete failure on that revision?"
+answer = "Both do, and both are repaired in CHG-004.5 under the review rules in AGENTS.md. (1) P2, xtask/src/corpus/fixture.rs: `corpus generate` wrote every expected input and never removed a committed input the registration no longer produces, so after a manifest change the drift check kept failing and only manual deletion could clear it. Repair: `fixture::materialize` makes the committed tree equal the declaration, writing and pruning, leaving Cargo outputs alone and removing a case directory emptied by pruning; `sync` uses it and names each pruned path. (2) P2, xtask/src/corpus/runner.rs: a case that produced no observation was recorded as one untyped `execution_error` string, so a bad registration (unsupported detector, fixture drift) and a detector that could not be spawned looked the same in evidence, losing the config_error/tool_error distinction the checker's own reports keep. Repair: `runner::execute` returns an `ExecutionError` with a class; the record carries `error_class` beside the message. Neither repair touches a rule, a case, a grading value, or the committed fixtures; the H4 result is unchanged."
+decided_by = "agent:executor (determinations, under the review rules in AGENTS.md); human:kennedy (request of 2026-09-20 to review and resolve the PR conversations)"
+date = "2026-09-20"
+
+[[repairs]]
+id = "CHG-004.5"
+hypothesis = "Two harness defects with no effect on the H4 result: the generator cannot converge after a manifest change, and pre-observation failures lose their class."
+discriminating_check = "A scratch tree with a stray input, an emptied case directory, and Cargo output: before the repair `sync` left the stray file and the drift check failed; after it, the stray file and the empty directory are gone, the Cargo output stays, and drift is empty. An unsupported detector and a detector spawned in a missing directory now carry config_error and tool_error respectively."
+change = "fixture::materialize (write and prune); runner::ExecutionError with a class, recorded as error_class."
+scope = ["xtask/src/corpus/fixture.rs", "xtask/src/corpus/runner.rs", "xtask/tests/corpus_harness.rs"]
 
 [[repairs]]
 id = "CHG-004.1"
