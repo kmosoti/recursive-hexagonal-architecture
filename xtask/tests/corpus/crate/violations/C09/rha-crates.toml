@@ -1,0 +1,22 @@
+schema_version = 1
+
+[adapters]
+require_port_owner_dependency = true
+
+[classification]
+adapter_prefix = "adapter-"
+app_prefix = "app-"
+harness = []
+tools = ["tool-t"]
+
+[core]
+allow = ["tokio"]
+allow_build_scripts = false
+dev_allow = []
+
+[[forbidden]]
+from = "role:core"
+to = "tokio"
+
+[transitive]
+enabled = false

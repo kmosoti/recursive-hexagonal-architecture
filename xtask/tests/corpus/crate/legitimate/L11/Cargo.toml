@@ -1,0 +1,3 @@
+[workspace]
+members = ["planner-adapter-utils"]
+resolver = "3"

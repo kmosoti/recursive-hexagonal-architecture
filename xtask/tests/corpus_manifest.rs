@@ -415,11 +415,12 @@ fn the_grading_rules_state_what_a_disagreement_does() {
 /// approved requirement changing, not the test becoming inconvenient. The
 /// ordering they protected is now a historical fact: the corpus merged at
 /// 15d916a and every line of the checker is newer. What is still ahead —
-/// the fixtures — is what this test still guards.
+/// module fixtures — is what this test still guards. W4 now explicitly requires
+/// committed crate fixtures, guarded by corpus_crate.rs and the drift check.
 #[test]
-fn no_fixture_workspace_is_committed_yet() {
+fn module_fixtures_wait_for_chg_007() {
     let root = root();
-    for dir in ["xtask/tests/corpus/crate", "xtask/tests/corpus/module"] {
+    for dir in ["xtask/tests/corpus/module"] {
         assert!(
             !root.join(dir).exists(),
             "{dir} exists; fixtures are generated in CHG-004 and authored in CHG-007, not committed here"

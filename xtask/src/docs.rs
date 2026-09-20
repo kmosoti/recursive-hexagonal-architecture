@@ -57,7 +57,52 @@ pub fn generate(root: &Path) -> Result<Vec<(String, String)>> {
         ("docs/toolchain.md".to_owned(), toolchain(root)?),
         ("docs/evidence/index.md".to_owned(), evidence_index(root)?),
         ("docs/tasks/index.md".to_owned(), tasks_index(root)?),
+        ("docs/enforcement-map.md".to_owned(), enforcement_map(root)?),
     ])
+}
+
+/// Project the latest archived H4 record; never execute a check from docs.
+fn enforcement_map(root: &Path) -> Result<String> {
+    let manifest_path = crate::corpus::MANIFEST_PATH;
+    let manifest_text = std::fs::read_to_string(root.join(manifest_path))
+        .context(|| "reading public manifest for enforcement map".to_owned())?;
+    let manifest = crate::corpus::Manifest::parse(&manifest_text)
+        .context(|| "parsing public manifest for enforcement map".to_owned())?;
+    let mut files = Vec::new();
+    json_files(&root.join("evidence/h4-crate"), &mut files);
+    let mut records = Vec::new();
+    for path in files {
+        let record: Value = serde_json::from_slice(
+            &std::fs::read(&path).context(|| "reading H4 record".to_owned())?,
+        )
+        .context(|| format!("parsing H4 record {}", path.display()))?;
+        if record["kind"] == "h4" && record["level"] == "crate" {
+            let created = record["created_at"]
+                .as_str()
+                .ok_or_else(|| crate::error::Error::new("H4 record lacks creation time"))?
+                .to_owned();
+            records.push((created, path, record));
+        }
+    }
+    records.sort_by(|a, b| (&a.0, &a.1).cmp(&(&b.0, &b.1)));
+    let (evidence, cases, mut inputs) = if let Some((_, path, record)) = records.pop() {
+        let cases = record["cases"]
+            .as_array()
+            .ok_or_else(|| crate::error::Error::new("H4 record lacks case outcomes"))?
+            .clone();
+        let rel = relative(root, &path);
+        (rel.clone(), cases, vec![(rel, sha256_file(&path)?)])
+    } else {
+        ("no H4 record yet".to_owned(), Vec::new(), Vec::new())
+    };
+    inputs.push((
+        manifest_path.to_owned(),
+        sha256_file(&root.join(manifest_path))?,
+    ));
+    Ok(header(
+        "latest evidence/h4-crate record and corpus manifest",
+        &inputs,
+    ) + &crate::corpus::runner::enforcement_map(&manifest, &cases, &evidence))
 }
 
 fn header(sources: &str, inputs: &[(String, String)]) -> String {

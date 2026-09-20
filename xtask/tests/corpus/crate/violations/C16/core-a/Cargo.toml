@@ -1,0 +1,12 @@
+[dependencies.adapter-x]
+optional = true
+path = "../adapter-x"
+
+[package]
+edition = "2024"
+name = "core-a"
+publish = false
+version = "0.0.0"
+
+[package.metadata.rha]
+role = "core"

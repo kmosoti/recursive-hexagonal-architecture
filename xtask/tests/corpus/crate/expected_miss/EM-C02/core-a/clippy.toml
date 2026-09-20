@@ -1,0 +1,168 @@
+# Core-crate clippy.toml template (spec §6.8; CHG-001, ADR-0002).
+#
+# Every crate with [package.metadata.rha] role = "core" has a clippy.toml equal
+# to this file, byte for byte, and forbids the three lints below at its crate
+# root (rule effect.core_clippy_template):
+#
+#   #![forbid(
+#       clippy::disallowed_methods,
+#       clippy::disallowed_types,
+#       clippy::disallowed_macros
+#   )]
+#
+# without which an #[allow] anywhere in the crate switches this list off
+# (ADR-0002 rules 5 and 8). Adapters, apps, and tools have no copy of this
+# file and use the root clippy.toml.
+#
+# Clippy 0.1.98 uses the nearest clippy.toml and does not merge it with the
+# root file (ADR-0002), so the root's test allowances are repeated here;
+# xtask/tests/clippy_corpus.rs fails if they differ from the root file.
+allow-unwrap-in-tests = true
+allow-expect-in-tests = true
+allow-dbg-in-tests = true
+
+# Ambient effects cross ports. The list is incomplete by nature: it sees
+# direct uses only, not calls through another crate, and an #[allow] in the
+# crate switches it off unless the lint table forbids it (ADR-0002). Every
+# entry is demonstrated to resolve and fire by experiment 4, in
+# xtask/tests/corpus/clippy/every_entry.rs. Each path is the one a crate
+# writes; a type entry also catches its associated functions.
+disallowed-methods = [
+  # Clocks.
+  { path = "std::time::SystemTime::now",     reason = "time crosses a Clock port" },
+  { path = "std::time::SystemTime::elapsed", reason = "time crosses a Clock port" },
+  { path = "std::time::Instant::now",        reason = "time crosses a Clock port" },
+  { path = "std::time::Instant::elapsed",    reason = "time crosses a Clock port" },
+
+  # Environment, arguments, and the working directory.
+  { path = "std::env::var",                    reason = "environment crosses a Config port" },
+  { path = "std::env::var_os",                 reason = "environment crosses a Config port" },
+  { path = "std::env::vars",                   reason = "environment crosses a Config port" },
+  { path = "std::env::vars_os",                reason = "environment crosses a Config port" },
+  { path = "std::env::set_var",                reason = "environment crosses a Config port" },
+  { path = "std::env::remove_var",             reason = "environment crosses a Config port" },
+  { path = "std::env::args",                   reason = "arguments cross a Config port" },
+  { path = "std::env::args_os",                reason = "arguments cross a Config port" },
+  { path = "std::env::current_dir",            reason = "the working directory is ambient state" },
+  { path = "std::env::set_current_dir",        reason = "the working directory is ambient state" },
+  { path = "std::env::current_exe",            reason = "the process image is ambient state" },
+  { path = "std::env::temp_dir",               reason = "the environment names the directory" },
+  { path = "std::env::home_dir",               reason = "the environment names the directory" },
+  { path = "std::path::absolute",              reason = "it resolves against the working directory" },
+  { path = "std::thread::available_parallelism", reason = "machine capacity crosses a port" },
+  { path = "std::io::IsTerminal::is_terminal", reason = "the terminal is ambient state" },
+
+  # Storage: std::fs free functions.
+  { path = "std::fs::read",              reason = "storage crosses a port" },
+  { path = "std::fs::read_to_string",    reason = "storage crosses a port" },
+  { path = "std::fs::write",             reason = "storage crosses a port" },
+  { path = "std::fs::copy",              reason = "storage crosses a port" },
+  { path = "std::fs::rename",            reason = "storage crosses a port" },
+  { path = "std::fs::canonicalize",      reason = "storage crosses a port" },
+  { path = "std::fs::metadata",          reason = "storage crosses a port" },
+  { path = "std::fs::symlink_metadata",  reason = "storage crosses a port" },
+  { path = "std::fs::exists",            reason = "storage crosses a port" },
+  { path = "std::fs::read_dir",          reason = "storage crosses a port" },
+  { path = "std::fs::read_link",         reason = "storage crosses a port" },
+  { path = "std::fs::create_dir",        reason = "storage crosses a port" },
+  { path = "std::fs::create_dir_all",    reason = "storage crosses a port" },
+  { path = "std::fs::remove_dir",        reason = "storage crosses a port" },
+  { path = "std::fs::remove_dir_all",    reason = "storage crosses a port" },
+  { path = "std::fs::remove_file",       reason = "storage crosses a port" },
+  { path = "std::fs::hard_link",         reason = "storage crosses a port" },
+  { path = "std::fs::soft_link",         reason = "storage crosses a port" },
+  { path = "std::fs::set_permissions",   reason = "storage crosses a port" },
+
+  # Storage: the Path methods that touch the filesystem.
+  { path = "std::path::Path::exists",            reason = "storage crosses a port" },
+  { path = "std::path::Path::try_exists",        reason = "storage crosses a port" },
+  { path = "std::path::Path::is_file",           reason = "storage crosses a port" },
+  { path = "std::path::Path::is_dir",            reason = "storage crosses a port" },
+  { path = "std::path::Path::is_symlink",        reason = "storage crosses a port" },
+  { path = "std::path::Path::metadata",          reason = "storage crosses a port" },
+  { path = "std::path::Path::symlink_metadata",  reason = "storage crosses a port" },
+  { path = "std::path::Path::canonicalize",      reason = "storage crosses a port" },
+  { path = "std::path::Path::read_dir",          reason = "storage crosses a port" },
+  { path = "std::path::Path::read_link",         reason = "storage crosses a port" },
+
+  # Storage: the one effectful method of each builder type below, because a
+  # type entry cannot see a value a dependency hands back.
+  { path = "std::fs::OpenOptions::open",   reason = "storage crosses a port" },
+  { path = "std::fs::DirBuilder::create",  reason = "storage crosses a port" },
+
+  # Network name resolution; the socket types are below.
+  { path = "std::net::ToSocketAddrs::to_socket_addrs", reason = "resolving a host name crosses a port; addresses are data" },
+
+  # Process control; std::process::Command and Child are below.
+  { path = "std::process::exit",  reason = "process control crosses a port; return a value instead" },
+  { path = "std::process::abort", reason = "process control crosses a port; return a value instead" },
+  { path = "std::process::id",    reason = "the process id is ambient state" },
+  { path = "std::panic::set_hook",  reason = "the panic hook is process-global state" },
+  { path = "std::panic::take_hook", reason = "the panic hook is process-global state" },
+  { path = "std::backtrace::Backtrace::capture",       reason = "the stack and RUST_BACKTRACE are ambient; telemetry crosses a port" },
+  { path = "std::backtrace::Backtrace::force_capture", reason = "the stack is ambient; telemetry crosses a port" },
+  { path = "std::process::Command::spawn",  reason = "process execution crosses a port" },
+  { path = "std::process::Command::output", reason = "process execution crosses a port" },
+  { path = "std::process::Command::status", reason = "process execution crosses a port" },
+  { path = "std::process::Child::kill",             reason = "process control crosses a port" },
+  { path = "std::process::Child::wait",             reason = "process control crosses a port" },
+  { path = "std::process::Child::try_wait",         reason = "process control crosses a port" },
+  { path = "std::process::Child::wait_with_output", reason = "process control crosses a port" },
+  { path = "std::alloc::handle_alloc_error", reason = "it aborts the process and writes to stderr" },
+
+  # Concurrency and scheduling; std::thread::Builder is below.
+  { path = "std::thread::spawn",        reason = "concurrency is orchestrated at the edge" },
+  { path = "std::thread::scope",        reason = "concurrency is orchestrated at the edge" },
+  { path = "std::thread::Scope::spawn", reason = "concurrency is orchestrated at the edge" },
+  { path = "std::thread::sleep",        reason = "waiting crosses a Clock port" },
+  { path = "std::thread::park",         reason = "scheduling is orchestrated at the edge" },
+  { path = "std::thread::park_timeout", reason = "scheduling is orchestrated at the edge" },
+  { path = "std::thread::yield_now",    reason = "scheduling is orchestrated at the edge" },
+  { path = "std::thread::current",      reason = "the running thread's identity is ambient state" },
+  { path = "std::sync::mpsc::channel",              reason = "channels coordinate threads; that is the edge's work" },
+  { path = "std::sync::mpsc::sync_channel",         reason = "channels coordinate threads; that is the edge's work" },
+  { path = "std::sync::mpsc::Receiver::recv",       reason = "it blocks on another thread" },
+  { path = "std::sync::mpsc::Receiver::recv_timeout", reason = "it blocks and reads the monotonic clock" },
+  { path = "std::sync::Condvar::wait",              reason = "it blocks on another thread" },
+  { path = "std::sync::Condvar::wait_timeout",      reason = "it blocks and reads the monotonic clock" },
+  { path = "std::sync::Barrier::wait",              reason = "it blocks on other threads" },
+  { path = "std::sync::Once::wait",                 reason = "it blocks on another thread" },
+
+  # Process-global streams.
+  { path = "std::io::stdin",  reason = "input crosses a port" },
+  { path = "std::io::stdout", reason = "output crosses a port; return data instead" },
+  { path = "std::io::stderr", reason = "output crosses a port; return data instead" },
+  { path = "std::io::pipe",   reason = "process plumbing crosses a port" },
+]
+
+# A type entry fires on every mention, including its associated functions, so
+# a type here covers the methods that only it can reach.
+disallowed-types = [
+  { path = "std::fs::File",          reason = "storage crosses a port" },
+  { path = "std::fs::OpenOptions",   reason = "storage crosses a port" },
+  { path = "std::fs::DirBuilder",    reason = "storage crosses a port" },
+  { path = "std::fs::ReadDir",       reason = "storage crosses a port" },
+  { path = "std::fs::DirEntry",      reason = "storage crosses a port" },
+  { path = "std::net::TcpStream",    reason = "network crosses a port" },
+  { path = "std::net::TcpListener",  reason = "network crosses a port" },
+  { path = "std::net::UdpSocket",    reason = "network crosses a port" },
+  { path = "std::process::Command",  reason = "process execution crosses a port" },
+  { path = "std::process::Child",    reason = "process execution crosses a port" },
+  { path = "std::thread::Builder",   reason = "concurrency is orchestrated at the edge" },
+  { path = "std::hash::RandomState", reason = "randomness crosses a port" },
+  { path = "std::io::Stdin",         reason = "input crosses a port" },
+  { path = "std::io::Stdout",        reason = "output crosses a port; return data instead" },
+  { path = "std::io::Stderr",        reason = "output crosses a port; return data instead" },
+  { path = "std::sync::mpsc::Receiver", reason = "receiving coordinates threads; that is the edge's work" },
+  { path = "std::sync::Condvar",        reason = "waiting on another thread is orchestrated at the edge" },
+  { path = "std::sync::Barrier",        reason = "waiting on other threads is orchestrated at the edge" },
+  { path = "std::alloc::System",        reason = "the global allocator is the application's choice" },
+]
+
+disallowed-macros = [
+  { path = "std::print",    reason = "output crosses a port; return data instead" },
+  { path = "std::println",  reason = "output crosses a port; return data instead" },
+  { path = "std::eprint",   reason = "output crosses a port; return data instead" },
+  { path = "std::eprintln", reason = "output crosses a port; return data instead" },
+  { path = "std::dbg",      reason = "output crosses a port; return data instead" },
+]

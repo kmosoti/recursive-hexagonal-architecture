@@ -1,0 +1,8 @@
+[dependencies.adapter-y]
+path = "../adapter-y"
+
+[package]
+edition = "2024"
+name = "adapter-x"
+publish = false
+version = "0.0.0"

@@ -1,0 +1,9 @@
+[workspace]
+members = [
+    "core-a",
+    "adapter-x",
+]
+resolver = "3"
+
+[workspace.dependencies.adapter-x]
+path = "adapter-x"

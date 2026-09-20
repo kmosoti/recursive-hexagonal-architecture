@@ -1,0 +1,6 @@
+[workspace]
+members = [
+    "harness-h",
+    "adapter-x",
+]
+resolver = "3"

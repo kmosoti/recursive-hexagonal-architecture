@@ -3,7 +3,7 @@ use std::process::ExitCode;
 
 use clap::Parser as _;
 
-use xtask::cli::{Cli, Command, EvidenceCommand};
+use xtask::cli::{Cli, Command, CorpusCommand, EvidenceCommand};
 use xtask::error::Result;
 use xtask::{architecture, docs, evidence, lanes};
 
@@ -28,6 +28,12 @@ fn workspace_root() -> PathBuf {
 fn dispatch(root: &Path, command: &Command) -> Result<u8> {
     match command {
         Command::Ci(args) => lanes::run(root, args),
+        Command::Corpus {
+            command: CorpusCommand::Run(args),
+        } => xtask::corpus::runner::run(root, args),
+        Command::Corpus {
+            command: CorpusCommand::Generate { check },
+        } => xtask::corpus::fixture::sync(root, *check),
         Command::Architecture(args) => {
             let options = architecture::Options {
                 manifest_path: args.manifest_path.clone(),

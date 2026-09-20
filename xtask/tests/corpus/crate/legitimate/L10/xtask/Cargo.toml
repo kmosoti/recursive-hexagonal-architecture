@@ -1,0 +1,11 @@
+[dependencies.clap]
+version = "4"
+
+[dependencies.serde_json]
+version = "1"
+
+[package]
+edition = "2024"
+name = "xtask"
+publish = false
+version = "0.0.0"

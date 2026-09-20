@@ -33,7 +33,7 @@ id = "W4"
 executor = "agent:executor"
 depends_on = ["CHG-003", "DP-1.1a", "DP-1.1b", "DP-1.1c"]
 output = "Crate fixtures, corpus CLI, strict grading, H4 evidence, enforcement map, Proposed maturity and change record."
-owned_scope = ["xtask/src/corpus.rs", "xtask/src/corpus/**", "xtask/src/cli.rs", "xtask/src/main.rs", "xtask/tests/corpus*.rs", "xtask/tests/corpus/manifest.toml (EM-M03 cells only)", ".rha/acceptances/CHG-003.toml (creation)", ".rha/tasks/CHG-004-h4-crate-harness.toml", "docs/changes/CHG-004-h4-crate-harness.md", "docs/enforcement-map.md", "docs/maturity.md", "docs/orchestration-log.md", "generated docs", "evidence/CHG-004/**", "evidence/h4-crate/**", "evidence/ci/**"]
+owned_scope = ["xtask/src/corpus.rs", "xtask/src/corpus/**", "xtask/src/cli.rs", "xtask/src/main.rs", "xtask/src/docs.rs", "xtask/tests/corpus/crate/**", ".gitignore", "xtask/tests/corpus*.rs", "xtask/tests/corpus/manifest.toml (EM-M03 cells only)", ".rha/acceptances/CHG-003.toml (creation)", ".rha/tasks/CHG-004-h4-crate-harness.toml", "docs/changes/CHG-004-h4-crate-harness.md", "docs/enforcement-map.md", "docs/maturity.md", "docs/orchestration-log.md", "generated docs", "evidence/CHG-004/**", "evidence/h4-crate/**", "evidence/ci/**"]
 claim = "agent:executor is the sole branch writer, as Kennedy instructed, in isolated JJ workspace chg004. No W4 issue or board item exists; this task records ownership and status. No write packets are dispatched."
 
 [[decisions]]
@@ -64,3 +64,10 @@ instruction_sources = [
   "xtask/AGENTS.md sha256:4bc74c0bff383fd35e79f44768e92cb774c95b20d73b127c8bcfa5afa9c30e56",
   "docs/plan/IMPLEMENTATION-PLAN.md sha256:4d9b1c64e8b6c62e37d7db9b26722c330f2fdd6804441d50c45b3ca3a2fbdbdf",
 ]
+
+[[decisions]]
+id = "explicit-w4-fixture-scope"
+question = "Which fixture storage and scoring contract governs W4?"
+answer = "Kennedy's W4 objective explicitly requires committed generated fixtures, a drift gate, combined 22-case detection including rustc R01, exact cargo xtask architecture invocation, full corpus_crate integration, and docs-command generation of the enforcement map. This instruction supersedes the manifest's earlier prose about uncommitted generated copies; no protected manifest prose, cases or grading are changed."
+decided_by = "human:kennedy"
+date = "2026-09-20"

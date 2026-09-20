@@ -1,0 +1,17 @@
+[dependencies.core-a]
+path = "../core-a"
+
+[dependencies.core-b]
+path = "../core-b"
+
+[package]
+edition = "2024"
+name = "adapter-x"
+publish = false
+version = "0.0.0"
+
+[package.metadata.rha]
+implements = [
+    "core-a::Reader",
+    "core-b::Writer",
+]
