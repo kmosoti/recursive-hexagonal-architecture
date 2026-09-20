@@ -1,0 +1,122 @@
+# Acceptance record (spec §11.4, §11.7.6; §11.7.11 shape, stored as TOML).
+#
+# Written as the first commit of CHG-002.2 under .rha/policy.toml [acceptance]
+# (acceptance by merge; record creation pre-approved). The decision it records
+# is Kennedy's merge of pull request 4 on 2026-09-20.
+schema_version = 1
+id = "CHG-002"
+change = "docs/changes/CHG-002-corpus-pre-registration.md"
+task = ".rha/tasks/CHG-002-corpus-pre-registration.toml"
+
+[acceptor]
+principal = "human:kennedy"
+role = "acceptor"
+date = "2026-09-20"
+authority_profile = "ECC-Solo"
+basis = "merge of pull request 4 (.rha/policy.toml [acceptance] by_merge)"
+
+[subject]
+# What was accepted: the merge commit on main. Its tree equals the branch
+# head's tree (570fc64), because the branch had already merged main.
+revision = "15d916a16e2323612893ade5b68de792c6a47989"
+tree = "24870ebd9880943c8b03d77bd8221d9ac3eadd1e"
+parents = [
+  "9d6b57743c330bb923c929913281b133b393a601",
+  "570fc6494a4c58b7a8268bbe3cc65d6cbe3668bf",
+]
+pull_request = "https://github.com/kmosoti/recursive-hexagonal-architecture/pull/4"
+merged_at = "2026-09-20T01:23:35Z"
+milestone = "M1 (in progress; W2 of six)"
+tag = "none: M1 is tagged after W6"
+integrator_edits = "none"
+pre_registration_identity = "15d916a16e2323612893ade5b68de792c6a47989: every H4 evidence record cites this revision as the identity of the corpus it was graded against"
+
+[[evidence]]
+path = "evidence/CHG-002/20260920T011724Z-6518f6a89af5.json"
+class = "local"
+subject_revision = "6518f6a89af5"
+subject_tree = "3590d506c714"
+note = "Last local run on the candidate branch, clean tree, before the final CI records were committed."
+
+[[evidence]]
+path = "evidence/ci/35481014407.json"
+class = "ci"
+subject_revision = "6b2784b337a7b99a06c8000786cb3fffd9b7e4d1"
+subject_tree = "9265ea935ffacdb78c05b88b3350cf0e20101689"
+note = "GitHub Actions run on the ephemeral merge commit for the last pull-request head. Cited by the change record."
+
+[[evidence]]
+path = "evidence/ci/35481271471.json"
+class = "ci"
+subject_revision = "15d916a16e2323612893ade5b68de792c6a47989"
+subject_tree = "24870ebd9880943c8b03d77bd8221d9ac3eadd1e"
+note = "GitHub Actions run 35481271471 on main for the merge commit itself: revision and tree equal [subject], so this record covers exactly what was accepted. Downloaded from the run's rha-evidence artifact and committed in CHG-002.2."
+
+[outcomes]
+passed = [
+  "L0.fmt",
+  "L0.clippy",
+  "L0.nextest",
+  "L0.doctest",
+  "L0.deny",
+  "L0.machete",
+  "L0.typos",
+]
+not_run = ["L0.architecture"]
+failed = []
+not_applicable = []
+inconclusive = []
+
+[disposition]
+decision = "accepted"
+kind = "controlled_transition"
+basis = "spec §11.5: the change adds xtask/tests/corpus/manifest.toml to [surface] protected, so no record produced on the candidate satisfies Applicable against the base policy. The merge is the controlled transition."
+eligibility_at_acceptance = "blocked"
+exception = "none"
+
+[[disposition.predicates]]
+name = "Authentic"
+holds = false
+reason = "No trusted producers in .rha/policy.toml until CHG-019 and CHG-020; every record is advisory."
+
+[[disposition.predicates]]
+name = "Applicable"
+holds = false
+reason = "Every cited record reports policy_digest sha256:5497c29e… against base_policy_digest sha256:dc2ef7e0…: the candidate protects the manifest. Closed on merge; the run on main at 15d916a (evidence/ci/35481271471.json) still reports the base digest of its own parent, so the first record with both digests equal is the next item's."
+
+[[disposition.predicates]]
+name = "Complete"
+holds = true
+reason = "Every check of lane L0 appears in each record with a unique id."
+
+[[disposition.predicates]]
+name = "Passed"
+holds = false
+reason = "L0.architecture is not_run (not_implemented until CHG-003) and DP-0.5 makes every L0 check required and non-waivable."
+
+[[defects]]
+id = "D-002.1"
+severity = "pre-registration integrity"
+found_by = "automated review (Codex) on pull request 4, verified by the planning session"
+found_at = "review, 2026-09-20"
+statement = "Seven findings against the first manifest: EM-C01 declared its transitive crate as a checked core member; R01 declared no Rust bodies, so its E0603 could not occur; the grading rule matched only crate, port, path and error-code witness keys; the tests pinned outcome counts, not per-case outcomes; C01 and C15–C18 were attributed to the D5 cell only; M02 to the no-cycles cell; and a seventh P1 against the CHG-002.1 commits themselves."
+repair = "All seven fixed in CHG-002.1 before merge, with Kennedy's approval of the manifest edits as pre-registration corrections made before any checker existed."
+follow_up = "None: the manifest is a protected surface from this merge, so a later correction is a recorded decision, not a quiet edit."
+
+[[defects]]
+id = "D-002.2"
+severity = "process"
+found_by = "human:kennedy"
+found_at = "acceptance, 2026-09-20"
+statement = "Three consecutive items ended with the same three open concerns: no acceptance record, decision points unanswered, and grading values open. The acceptance decision was being made by merging while the artifacts said it had not been made."
+repair = "CHG-002.2: .rha/policy.toml [acceptance] makes the merge the acceptance and the record the next item's first commit; .rha/decisions.toml owns decision-point status; this record is the first written under that rule."
+follow_up = "The Executor's item report cites decision ids and must not restate a question that has a row."
+
+[carried_forward]
+open = [
+  "DP-1.1b: Kennedy's held-out crate-level cases do not exist yet; needed by the acceptance of CHG-004, not by CHG-003.",
+  "L0.architecture is required and non-waivable, so CHG-003 cannot be Eligible until its own checker runs; DP-0.5 unchanged.",
+  "A registered case is not a working fixture until CHG-004 generates it; a case that cannot be expressed is re-registered with a reason before that run, which is now a protected edit.",
+  "cell = \"classification\" is not a §4.1 row; queued for v0.11 (docs/proposals/spec-v0.11.md).",
+  "The lane-then-docs ordering defect found in CHG-002 repair attempt 2 is queued for v0.11; until a mechanism exists, run `cargo xtask docs` before the lane, never after.",
+]
