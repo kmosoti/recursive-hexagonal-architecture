@@ -1,0 +1,119 @@
+# Task record (spec §11.7.11 shape, stored as TOML).
+schema_version = 1
+id = "CHG-002"
+slug = "corpus-pre-registration"
+title = "Pre-registered H4 corpus manifest"
+mode = "agent"
+executor_composition = "agent"
+authority_profile = "ECC-Solo"
+status = "proposed"
+plan_ref = "docs/plan/IMPLEMENTATION-PLAN.md §6 and §8 W2"
+branch = "chg/002-corpus-preregistration"
+base_revision = "44b1e44b8216bb4ad789f600c579cba37010dc64"
+intent = "Commit xtask/tests/corpus/manifest.toml with every case of plan §6 — id, level, seeded description, rule, §4.1 cell, expected outcome — and the directory skeleton, before any checker code exists. The manifest is declarative enough that CHG-004 generates each crate-level fixture workspace from it rather than from committed copies (Kennedy, 2026-09-19)."
+non_goals = [
+  "Checker code: `cargo xtask architecture` stays the stub it is until CHG-003",
+  "The generator itself, `cargo xtask corpus run`, and the fixture workspaces: CHG-004 at crate level, CHG-007 at module level",
+  "Module-level fixtures. The module cases are pre-registered here and built in CHG-007",
+  "Editing rha-crates.toml, the root workspace, or any protected surface other than adding the manifest to [surface] protected",
+  "Kennedy's held-out cases, which live outside this repository and which the Executor must not read or write (§9.14)",
+]
+
+[[actors]]
+id = "human:kennedy"
+type = "human"
+
+[[actors]]
+id = "agent:executor"
+type = "agent"
+accountable_to = "human:kennedy"
+
+[[actors]]
+id = "automation:github-actions"
+type = "automation"
+accountable_to = "human:kennedy"
+
+[roles]
+planner = "human:kennedy"
+executor = ["agent:executor"]
+integrator = "human:kennedy"
+verifier = ["automation:xtask-ci (local, advisory)", "automation:github-actions (class ci, advisory)"]
+acceptor = "human:kennedy"
+
+[[work]]
+id = "W2"
+executor = "agent:executor"
+depends_on = ["CHG-001"]
+output = "xtask/tests/corpus/manifest.toml (62 cases. Crate level, 35: 21 violations, 11 legitimate, 2 expected misses, and R01 which the compiler detects. Module level, 27, authored in CHG-007: 21 violations, 2 legitimate, 3 expected misses, and X-M01, a reference-tool case that is not_run until DP-2.1); a schema test that fails on a malformed or incomplete manifest; the manifest added to [surface] protected."
+owned_scope = [
+  "xtask/tests/corpus/manifest.toml",
+  "xtask/tests/corpus_manifest.rs",
+  "xtask/src/corpus.rs (the manifest types and their validation; no runner)",
+  ".rha/policy.toml ([surface] protected: one line adding the manifest, pre-approved by Kennedy 2026-09-19)",
+  ".rha/tasks/CHG-002-corpus-pre-registration.toml, docs/changes/CHG-002-corpus-pre-registration.md, docs/maturity.md, generated docs",
+  "evidence/CHG-002/**, evidence/ci/**",
+]
+
+[[decisions]]
+id = "protected-surface-approval"
+question = "Which protected surfaces may this change touch?"
+answer = "Only the one line in .rha/policy.toml that adds xtask/tests/corpus/manifest.toml to [surface] protected. No other protected surface may change."
+decided_by = "human:kennedy"
+date = "2026-09-19"
+
+[[decisions]]
+id = "manifest-is-generative"
+question = "Should the manifest describe cases in prose, or declare enough structure that the fixture workspaces can be generated from it?"
+answer = "Generative: CHG-004 must be able to build each crate-level fixture workspace from the manifest alone. This follows the CHG-001.1 decision that fixtures are generated from their owning file rather than committed as copies that drift."
+decided_by = "human:kennedy"
+date = "2026-09-19"
+
+[expectation]
+# Written before the manifest (plan §17: cases and thresholds fixed before data).
+pre_registration_identity = "The merge commit of this change is cited by every H4 record as the revision at which the cases and their expected outcomes were fixed. A case whose `expected` changes after that merge is a re-registration and says so in its own change record."
+detection_target = "CHG-004 must detect all 21 crate-level violations and raise no alarm on the 11 legitimate cases. A miss or an unexplained alarm fails the harness and downgrades the cell in docs/enforcement-map.md; it does not edit this manifest."
+expected_miss_discipline = "EM-C01, EM-C02, EM-M01, EM-M02 and EM-M03 are registered as misses now, each citing the §4.1 hole that explains it. If CHG-004 detects one anyway, that is a finding to record, not a correction to make here."
+fallback_if_contradicted = "A case that cannot be expressed in the generator's vocabulary is re-registered with the reason in the change record, before CHG-004 runs. The manifest is a protected surface precisely so that this cannot happen quietly."
+
+[claim]
+affected_components = []
+contract_changes = "none: no product component exists"
+architecture_delta = "A new xtask module (corpus) holding the manifest types and their validation. No runner, no new dependency: the manifest is TOML, read by the toml crate xtask already uses."
+performance_impact = "none claimed"
+unresolved = [
+  "L0.architecture is still not_run and is required and non-waivable (DP-0.5), so this change cannot be Eligible either (CHG-001 acceptance, carried_forward 1).",
+  "DP-1.1: Kennedy reviews the manifest and authors two or three held-out crate-level cases outside this repository. The held-out cases are the only part of H4 the Executor does not write, and they are what make the acceptance more than self-assessment.",
+]
+
+[acceptance]
+criteria = [
+  "Every case of plan §6 appears exactly once, with id, level, seeded, rule, cell, expected, and a witness the finding must name",
+  "Every case with expected = \"expected_miss\" cites the §4.1 hole that explains the miss",
+  "Every crate-level case declares its workspace: each crate's name, role source, dependencies with their kind, and any rules-file override",
+  "The schema test fails on a manifest that is missing a plan §6 case, repeats an id, names an unknown rule or cell, or omits a hole citation on an expected miss",
+  "`cargo xtask ci` reports the same outcomes as on main, with L0.architecture still not_run",
+  "DP-1.1: Kennedy reviews the manifest and confirms his held-out cases exist",
+]
+replan_when = [
+  "A plan §6 case cannot be expressed declaratively; it is then described in prose with the reason, and CHG-004 builds that one by hand",
+  "The generation vocabulary needs a Cargo feature this toolchain does not support",
+]
+
+[provenance]
+harness = "Claude Code, VS Code extension; the CLI on PATH reports `2.1.278 (Claude Code)`; the extension build was not observed"
+output_style = "Learning (.claude/settings.local.json)"
+permission_mode = "auto, as reported to the session; project allow-list in the untracked .claude/settings.json (gh pr/run/api, git fetch, one python3 command)"
+task_scope = "CHG-002: docs/plan/IMPLEMENTATION-PLAN.md §6 and §8 W2"
+permissions = "Workspace files, shell, network, and `gh` as kmosoti through the user's account. Protected surfaces: one line of .rha/policy.toml, pre-approved by human:kennedy (see [[decisions]])."
+budgets = "unknown"
+reasoning_effort = "unknown"
+instruction_sources = [
+  { path = "docs/plan/IMPLEMENTATION-PLAN.md (§6 and §8 W2, at 44b1e44)", sha256 = "60c8d2cc6f4c7025287f6eca2fdedc21a7f54d1afc8dca6f0f62a5570501394c" },
+  { path = "docs/spec/rha-spec-v0.10.md (§4.1 enforcement map, at 44b1e44)", sha256 = "bd96216829035ade64c43befa5e672c58078f6afa4b04145c6183227e4e1071a" },
+  { path = "user message of 2026-09-19 accepting CHG-001 and starting W2", sha256 = "unknown" },
+  { path = "Claude Code system prompt", sha256 = "unknown" },
+]
+
+[[provenance.sessions]]
+model_id = "claude-opus-5[1m]"
+span = "CHG-002"

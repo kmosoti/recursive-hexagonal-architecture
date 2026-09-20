@@ -1,0 +1,522 @@
+//! The pre-registered H4 corpus manifest (CHG-002; plan §6).
+//!
+//! This module holds the manifest's shape and the validation that makes the
+//! pre-registration meaningful. It holds no runner: `cargo xtask corpus run`
+//! arrives in CHG-004 for the crate level and CHG-007 for the module level,
+//! and the fixture workspaces it generates do not exist yet.
+//!
+//! The manifest is committed before any checker code, so that a case cannot be
+//! written to fit what a checker turned out to do (spec §17, §9.14). The
+//! validation here is what keeps that promise mechanical rather than
+//! aspirational: it fails on a repeated id, an unknown rule or cell, an
+//! expected miss that cites no hole, and a declared case that carries no
+//! workspace for CHG-004 to generate.
+
+use std::collections::{BTreeMap, BTreeSet};
+
+use serde::Deserialize;
+
+/// Where the manifest lives, relative to the workspace root.
+pub const MANIFEST_PATH: &str = "xtask/tests/corpus/manifest.toml";
+
+/// The level a case is checked at.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum Level {
+    /// `cargo metadata` over a fixture workspace; no compilation.
+    Crate,
+    /// An extracted module graph inside one crate.
+    Module,
+}
+
+/// What the corpus expects a run to observe.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum Expected {
+    /// The violation must be reported.
+    Detect,
+    /// Nothing may be reported.
+    NoAlarm,
+    /// The violation is real and out of reach; the case cites the §4.1 hole.
+    ExpectedMiss,
+    /// A second opinion from a tool this program did not write. Recorded and
+    /// explained, never scored against the others.
+    Reference,
+}
+
+/// How a case's fixture comes into being.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum Generation {
+    /// Built from this manifest alone: `crates` says what to write.
+    Declared,
+    /// Written as Rust, because the seeded construct is Rust syntax.
+    Authored,
+}
+
+/// The kind of a declared dependency.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum DepKind {
+    #[default]
+    Normal,
+    Dev,
+    Build,
+}
+
+/// A dependency as the fixture should declare it. The four shapes C15 to C18
+/// exercise — a target `cfg`, `optional`, a rename, and workspace inheritance —
+/// are fields here rather than four hand-written Cargo.toml files.
+#[derive(Debug, Clone, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct Dep {
+    pub name: String,
+    #[serde(default)]
+    pub kind: DepKind,
+    /// `"path"` or `"registry"`; defaults to `path` for a workspace member.
+    pub source: Option<String>,
+    pub version: Option<String>,
+    /// An explicit path, for a dependency outside the fixture workspace.
+    pub path: Option<String>,
+    /// A cfg string, written as `[target.'<cfg>'.dependencies]`.
+    pub target: Option<String>,
+    #[serde(default)]
+    pub optional: bool,
+    /// The key in `Cargo.toml` when it differs from the package name.
+    pub rename: Option<String>,
+    /// `true` writes `<name>.workspace = true`.
+    #[serde(default)]
+    pub inherit: bool,
+}
+
+/// A crate in a fixture workspace.
+#[derive(Debug, Clone, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct FixtureCrate {
+    pub name: String,
+    /// The value written to `[package.metadata.rha] role`. `None` writes no
+    /// metadata at all, which is what C10 needs.
+    pub role: Option<String>,
+    #[serde(default)]
+    pub implements: Vec<String>,
+    #[serde(default)]
+    pub build_script: bool,
+    #[serde(default)]
+    pub deps: Vec<Dep>,
+    /// A statement to put in the crate's body, for a case about calls rather
+    /// than dependencies (EM-C02).
+    pub body: Option<String>,
+}
+
+/// A crate generated beside the fixture workspace rather than inside it (C19).
+#[derive(Debug, Clone, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct OutsideCrate {
+    pub name: String,
+    pub at: String,
+}
+
+/// A case's overrides to the generated rules file.
+#[derive(Debug, Clone, Default, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct Rules {
+    pub adapter_prefix: Option<String>,
+    pub app_prefix: Option<String>,
+    pub tools: Option<Vec<String>>,
+    pub harness: Option<Vec<String>>,
+    pub core_allow: Option<Vec<String>>,
+    pub core_dev_allow: Option<Vec<String>>,
+    pub core_allow_build_scripts: Option<bool>,
+    pub adapters_require_port_owner_dependency: Option<bool>,
+    pub transitive_enabled: Option<bool>,
+    pub forbidden_edges: Option<Vec<BTreeMap<String, String>>>,
+}
+
+/// One pre-registered case.
+#[derive(Debug, Clone, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct Case {
+    pub id: String,
+    pub level: Level,
+    pub generation: Generation,
+    pub expected: Expected,
+    /// The rule id a detection must carry, or `"-"` where no rule applies.
+    pub rule: String,
+    /// A key of the manifest's `[cells]` table.
+    pub cell: String,
+    /// What the fixture seeds, in words.
+    pub seeded: String,
+    /// What a finding must name. Its keys are matched per `[grading]`.
+    #[serde(default)]
+    pub witness: BTreeMap<String, toml::Value>,
+    /// Required when `expected` is `expected_miss`: the §4.1 hole that
+    /// explains why the violation is out of reach.
+    pub hole: Option<String>,
+    /// Where the violation *is* caught, for a case one level does not reach.
+    pub detected_when: Option<String>,
+    /// The crates of a declared fixture workspace.
+    #[serde(default)]
+    pub crates: Vec<FixtureCrate>,
+    #[serde(default)]
+    pub outside_crates: Vec<OutsideCrate>,
+    #[serde(default)]
+    pub rules: Rules,
+    /// A detector other than `cargo xtask architecture` (R01: `cargo check`).
+    pub detector: Option<String>,
+    /// The condition under which this case is re-registered, stated in advance.
+    pub re_register_if: Option<String>,
+    /// `"heuristic"` where the extraction is known to be approximate (M20).
+    pub extraction: Option<String>,
+    /// Which part of the case is expected to be missed (EM-M03).
+    pub partial: Option<String>,
+    pub depends_on: Option<String>,
+    pub outcome_until_installed: Option<String>,
+    pub reason_until_installed: Option<String>,
+}
+
+/// How a run turns observed findings into detected, missed and false alarm.
+#[derive(Debug, Clone, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct Grading {
+    pub proposed_by: String,
+    pub open_at: String,
+    pub detection_requires: String,
+    pub extra_findings: String,
+    pub no_alarm_scope: String,
+    pub miss_is_terminal: String,
+    pub expected_miss_surprise: String,
+}
+
+/// The default rules file written into every crate-level fixture workspace.
+#[derive(Debug, Clone, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct RulesDefault {
+    pub adapter_prefix: String,
+    pub app_prefix: String,
+    pub tools: Vec<String>,
+    pub harness: Vec<String>,
+    pub core_allow: Vec<String>,
+    pub core_dev_allow: Vec<String>,
+    pub core_allow_build_scripts: bool,
+    pub adapters_require_port_owner_dependency: bool,
+    pub transitive_enabled: bool,
+    pub forbidden_edges: Vec<BTreeMap<String, String>>,
+}
+
+/// The manifest.
+#[derive(Debug, Clone, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct Manifest {
+    pub schema_version: u32,
+    pub pre_registration: String,
+    pub plan_ref: String,
+    /// §4.1 enforcement-map rows, by id.
+    pub cells: BTreeMap<String, String>,
+    pub rules_default: RulesDefault,
+    pub grading: Grading,
+    #[serde(rename = "case")]
+    pub cases: Vec<Case>,
+}
+
+/// Why a manifest is not usable as a pre-registration.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum Defect {
+    /// Two cases share an id, so a result cannot be attributed to one of them.
+    DuplicateId(String),
+    /// A case names a `[cells]` key that does not exist.
+    UnknownCell { case: String, cell: String },
+    /// A case expects a detection but names no rule.
+    DetectWithoutRule(String),
+    /// An expected miss that cites no §4.1 hole is an excuse, not a record.
+    MissWithoutHole(String),
+    /// A declared case carries no workspace, so CHG-004 cannot generate it.
+    DeclaredWithoutCrates(String),
+    /// A declared case names a dependency on a crate that is neither in its
+    /// workspace, outside it by path, nor an external registry crate.
+    UnresolvableDep {
+        case: String,
+        krate: String,
+        dep: String,
+    },
+    /// A case that must be detected states nothing a finding has to name.
+    DetectWithoutWitness(String),
+}
+
+impl std::fmt::Display for Defect {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Self::DuplicateId(id) => write!(f, "case id {id} appears more than once"),
+            Self::UnknownCell { case, cell } => {
+                write!(f, "case {case} names cell {cell}, which [cells] does not define")
+            }
+            Self::DetectWithoutRule(id) => {
+                write!(f, "case {id} expects a detection but its rule is \"-\"")
+            }
+            Self::MissWithoutHole(id) => write!(
+                f,
+                "case {id} is an expected miss and cites no §4.1 hole; an expected miss without a hole is an excuse"
+            ),
+            Self::DeclaredWithoutCrates(id) => write!(
+                f,
+                "case {id} is declared but lists no crates, so CHG-004 cannot generate its fixture"
+            ),
+            Self::UnresolvableDep { case, krate, dep } => write!(
+                f,
+                "case {case}: {krate} depends on {dep}, which is not a member, not an outside crate, and not marked as a registry dependency"
+            ),
+            Self::DetectWithoutWitness(id) => write!(
+                f,
+                "case {id} expects a detection and states no witness, so any finding at all would score it"
+            ),
+        }
+    }
+}
+
+impl Manifest {
+    /// Parses a manifest. Unknown fields are rejected: a typo in a case must
+    /// not read as a case with a missing field.
+    ///
+    /// # Errors
+    /// Returns the TOML error when `text` is not a manifest.
+    pub fn parse(text: &str) -> Result<Self, toml::de::Error> {
+        toml::from_str(text)
+    }
+
+    /// Every defect in the manifest, in case order.
+    #[must_use]
+    pub fn defects(&self) -> Vec<Defect> {
+        let mut defects = Vec::new();
+        let mut seen = BTreeSet::new();
+        for case in &self.cases {
+            if !seen.insert(case.id.as_str()) {
+                defects.push(Defect::DuplicateId(case.id.clone()));
+            }
+            if !self.cells.contains_key(&case.cell) {
+                defects.push(Defect::UnknownCell {
+                    case: case.id.clone(),
+                    cell: case.cell.clone(),
+                });
+            }
+            match case.expected {
+                Expected::Detect => {
+                    if case.rule == "-" {
+                        defects.push(Defect::DetectWithoutRule(case.id.clone()));
+                    }
+                    if case.witness.is_empty() {
+                        defects.push(Defect::DetectWithoutWitness(case.id.clone()));
+                    }
+                }
+                Expected::ExpectedMiss if case.hole.is_none() => {
+                    defects.push(Defect::MissWithoutHole(case.id.clone()));
+                }
+                _ => {}
+            }
+            if case.generation == Generation::Declared && case.crates.is_empty() {
+                defects.push(Defect::DeclaredWithoutCrates(case.id.clone()));
+            }
+            defects.extend(self.unresolvable_deps(case));
+        }
+        defects
+    }
+
+    /// Dependencies a generator could not resolve to a file it writes.
+    fn unresolvable_deps(&self, case: &Case) -> Vec<Defect> {
+        let members: BTreeSet<&str> = case.crates.iter().map(|c| c.name.as_str()).collect();
+        let outside: BTreeSet<&str> = case
+            .outside_crates
+            .iter()
+            .map(|c| c.name.as_str())
+            .collect();
+        let mut defects = Vec::new();
+        for krate in &case.crates {
+            for dep in &krate.deps {
+                let name = dep.name.as_str();
+                let resolvable = members.contains(name)
+                    || outside.contains(name)
+                    || dep.path.is_some()
+                    || dep.source.as_deref() == Some("registry");
+                if !resolvable {
+                    defects.push(Defect::UnresolvableDep {
+                        case: case.id.clone(),
+                        krate: krate.name.clone(),
+                        dep: dep.name.clone(),
+                    });
+                }
+            }
+        }
+        defects
+    }
+
+    /// The ids of every case, in manifest order.
+    #[must_use]
+    pub fn ids(&self) -> Vec<&str> {
+        self.cases.iter().map(|c| c.id.as_str()).collect()
+    }
+
+    /// How many cases carry each expected outcome at `level`.
+    #[must_use]
+    pub fn counts(&self, level: Level) -> BTreeMap<Expected, usize> {
+        let mut counts = BTreeMap::new();
+        for case in self.cases.iter().filter(|c| c.level == level) {
+            *counts.entry(case.expected).or_insert(0) += 1;
+        }
+        counts
+    }
+
+    /// Every distinct rule id a case names, excluding the placeholder `"-"`.
+    #[must_use]
+    pub fn rules(&self) -> BTreeSet<&str> {
+        self.cases
+            .iter()
+            .map(|c| c.rule.as_str())
+            .filter(|r| *r != "-")
+            .collect()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// A manifest with one of everything the validation looks at.
+    fn minimal() -> String {
+        r#"
+schema_version = 1
+pre_registration = "test"
+plan_ref = "test"
+[cells]
+"law5" = "Law 5: explicit effects"
+[rules_default]
+adapter_prefix = "adapter-"
+app_prefix = "app-"
+tools = []
+harness = []
+core_allow = []
+core_dev_allow = []
+core_allow_build_scripts = false
+adapters_require_port_owner_dependency = true
+transitive_enabled = false
+forbidden_edges = []
+[grading]
+proposed_by = "x"
+open_at = "y"
+detection_requires = "a"
+extra_findings = "b"
+no_alarm_scope = "c"
+miss_is_terminal = "d"
+expected_miss_surprise = "e"
+[[case]]
+id = "C01"
+level = "crate"
+generation = "declared"
+expected = "detect"
+rule = "effect.core_build_script"
+cell = "law5"
+seeded = "a core with a build script"
+witness = { rule = "effect.core_build_script", crate = "core-a" }
+crates = [{ name = "core-a", role = "core", build_script = true }]
+"#
+        .to_owned()
+    }
+
+    #[test]
+    fn a_well_formed_manifest_has_no_defects() {
+        let manifest = Manifest::parse(&minimal()).unwrap();
+        assert_eq!(manifest.defects(), vec![]);
+        assert_eq!(manifest.ids(), vec!["C01"]);
+        assert_eq!(manifest.counts(Level::Crate)[&Expected::Detect], 1);
+        assert!(manifest.rules().contains("effect.core_build_script"));
+    }
+
+    #[test]
+    fn a_repeated_id_is_a_defect() {
+        let text = minimal().replace(
+            "crates = [{ name = \"core-a\", role = \"core\", build_script = true }]",
+            "crates = [{ name = \"core-a\", role = \"core\", build_script = true }]\n\
+             [[case]]\nid = \"C01\"\nlevel = \"crate\"\ngeneration = \"declared\"\n\
+             expected = \"detect\"\nrule = \"effect.core_build_script\"\ncell = \"law5\"\n\
+             seeded = \"again\"\nwitness = { crate = \"core-a\" }\n\
+             crates = [{ name = \"core-a\" }]",
+        );
+        let manifest = Manifest::parse(&text).unwrap();
+        assert!(manifest
+            .defects()
+            .contains(&Defect::DuplicateId("C01".to_owned())));
+    }
+
+    #[test]
+    fn an_unknown_cell_is_a_defect() {
+        let text = minimal().replace(r#"cell = "law5""#, r#"cell = "law99""#);
+        let manifest = Manifest::parse(&text).unwrap();
+        assert_eq!(
+            manifest.defects(),
+            vec![Defect::UnknownCell {
+                case: "C01".to_owned(),
+                cell: "law99".to_owned(),
+            }]
+        );
+    }
+
+    #[test]
+    fn an_expected_miss_without_a_hole_is_a_defect() {
+        let text = minimal().replace(r#"expected = "detect""#, r#"expected = "expected_miss""#);
+        let manifest = Manifest::parse(&text).unwrap();
+        assert_eq!(
+            manifest.defects(),
+            vec![Defect::MissWithoutHole("C01".to_owned())]
+        );
+    }
+
+    #[test]
+    fn a_detection_without_a_rule_or_a_witness_is_a_defect() {
+        let no_rule = minimal().replace(r#"rule = "effect.core_build_script""#, r#"rule = "-""#);
+        assert!(Manifest::parse(&no_rule)
+            .unwrap()
+            .defects()
+            .contains(&Defect::DetectWithoutRule("C01".to_owned())));
+
+        let no_witness = minimal().replace(
+            r#"witness = { rule = "effect.core_build_script", crate = "core-a" }"#,
+            "witness = {}",
+        );
+        assert!(Manifest::parse(&no_witness)
+            .unwrap()
+            .defects()
+            .contains(&Defect::DetectWithoutWitness("C01".to_owned())));
+    }
+
+    #[test]
+    fn a_declared_case_without_crates_cannot_be_generated() {
+        let text = minimal().replace(
+            r#"crates = [{ name = "core-a", role = "core", build_script = true }]"#,
+            "",
+        );
+        let manifest = Manifest::parse(&text).unwrap();
+        assert!(manifest
+            .defects()
+            .contains(&Defect::DeclaredWithoutCrates("C01".to_owned())));
+    }
+
+    #[test]
+    fn a_dependency_on_a_crate_the_generator_would_not_write_is_a_defect() {
+        let text = minimal().replace(
+            r#"crates = [{ name = "core-a", role = "core", build_script = true }]"#,
+            r#"crates = [{ name = "core-a", role = "core", deps = [{ name = "ghost" }] }]"#,
+        );
+        let manifest = Manifest::parse(&text).unwrap();
+        assert_eq!(
+            manifest.defects(),
+            vec![Defect::UnresolvableDep {
+                case: "C01".to_owned(),
+                krate: "core-a".to_owned(),
+                dep: "ghost".to_owned(),
+            }]
+        );
+    }
+
+    #[test]
+    fn an_unknown_field_is_rejected_rather_than_ignored() {
+        let text = minimal().replace(r#"seeded = "a core with a build script""#, "seeded = \"x\"\nexpceted = \"detect\"");
+        assert!(Manifest::parse(&text).is_err());
+    }
+}

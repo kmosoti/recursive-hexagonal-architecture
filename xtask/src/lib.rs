@@ -7,6 +7,7 @@
 pub mod architecture;
 pub mod cli;
 pub mod clippy_template;
+pub mod corpus;
 pub mod docs;
 pub mod error;
 pub mod evidence;
