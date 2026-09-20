@@ -13,7 +13,7 @@
 use std::collections::BTreeSet;
 use std::path::{Path, PathBuf};
 
-use xtask::corpus::{Expected, Generation, Level, Manifest, MANIFEST_PATH};
+use xtask::corpus::{Expected, Generation, Level, MANIFEST_PATH, Manifest};
 
 fn root() -> PathBuf {
     Path::new(env!("CARGO_MANIFEST_DIR"))
@@ -175,11 +175,7 @@ fn every_crate_level_case_declares_a_workspace_chg_004_can_generate() {
             case.id
         );
         for krate in &case.crates {
-            assert!(
-                !krate.name.is_empty(),
-                "{}: a crate has no name",
-                case.id
-            );
+            assert!(!krate.name.is_empty(), "{}: a crate has no name", case.id);
         }
     }
 }

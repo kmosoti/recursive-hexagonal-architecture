@@ -247,7 +247,10 @@ impl std::fmt::Display for Defect {
         match self {
             Self::DuplicateId(id) => write!(f, "case id {id} appears more than once"),
             Self::UnknownCell { case, cell } => {
-                write!(f, "case {case} names cell {cell}, which [cells] does not define")
+                write!(
+                    f,
+                    "case {case} names cell {cell}, which [cells] does not define"
+                )
             }
             Self::DetectWithoutRule(id) => {
                 write!(f, "case {id} expects a detection but its rule is \"-\"")
@@ -439,9 +442,11 @@ crates = [{ name = "core-a", role = "core", build_script = true }]
              crates = [{ name = \"core-a\" }]",
         );
         let manifest = Manifest::parse(&text).unwrap();
-        assert!(manifest
-            .defects()
-            .contains(&Defect::DuplicateId("C01".to_owned())));
+        assert!(
+            manifest
+                .defects()
+                .contains(&Defect::DuplicateId("C01".to_owned()))
+        );
     }
 
     #[test]
@@ -470,19 +475,23 @@ crates = [{ name = "core-a", role = "core", build_script = true }]
     #[test]
     fn a_detection_without_a_rule_or_a_witness_is_a_defect() {
         let no_rule = minimal().replace(r#"rule = "effect.core_build_script""#, r#"rule = "-""#);
-        assert!(Manifest::parse(&no_rule)
-            .unwrap()
-            .defects()
-            .contains(&Defect::DetectWithoutRule("C01".to_owned())));
+        assert!(
+            Manifest::parse(&no_rule)
+                .unwrap()
+                .defects()
+                .contains(&Defect::DetectWithoutRule("C01".to_owned()))
+        );
 
         let no_witness = minimal().replace(
             r#"witness = { rule = "effect.core_build_script", crate = "core-a" }"#,
             "witness = {}",
         );
-        assert!(Manifest::parse(&no_witness)
-            .unwrap()
-            .defects()
-            .contains(&Defect::DetectWithoutWitness("C01".to_owned())));
+        assert!(
+            Manifest::parse(&no_witness)
+                .unwrap()
+                .defects()
+                .contains(&Defect::DetectWithoutWitness("C01".to_owned()))
+        );
     }
 
     #[test]
@@ -492,9 +501,11 @@ crates = [{ name = "core-a", role = "core", build_script = true }]
             "",
         );
         let manifest = Manifest::parse(&text).unwrap();
-        assert!(manifest
-            .defects()
-            .contains(&Defect::DeclaredWithoutCrates("C01".to_owned())));
+        assert!(
+            manifest
+                .defects()
+                .contains(&Defect::DeclaredWithoutCrates("C01".to_owned()))
+        );
     }
 
     #[test]
@@ -516,7 +527,10 @@ crates = [{ name = "core-a", role = "core", build_script = true }]
 
     #[test]
     fn an_unknown_field_is_rejected_rather_than_ignored() {
-        let text = minimal().replace(r#"seeded = "a core with a build script""#, "seeded = \"x\"\nexpceted = \"detect\"");
+        let text = minimal().replace(
+            r#"seeded = "a core with a build script""#,
+            "seeded = \"x\"\nexpceted = \"detect\"",
+        );
         assert!(Manifest::parse(&text).is_err());
     }
 }

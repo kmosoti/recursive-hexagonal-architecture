@@ -67,6 +67,10 @@ Local: `evidence/CHG-002/`. CI: `evidence/ci/`. Outcomes are listed in the pull 
 
 **The policy changed again, so Applicable is false again.** Adding the manifest to the protected list moves the policy digest from `sha256:dc2ef7e0…` to `sha256:5497c29e…`, and a record is Applicable only where the candidate's policy equals the base revision's (§11.7.6). This is the second controlled transition in this repository; the first, CHG-001's, closed the moment it merged. Spec §11.5 makes it yours to accept.
 
+### Repair attempts (§11.7.8)
+
+1. **`L0.fmt` failed at `24ad160`.** The first lane run on this branch reported `L0.fmt failed: exited with 1`. Hypothesis: `xtask/src/corpus.rs` and `xtask/tests/corpus_manifest.rs` were written by hand and never formatted, and this toolchain's rustfmt reformats a chained `assert!(expr.method()...)` into a block form. Discriminating check: `cargo fmt --all -- --check`, which named four sites in `corpus.rs` and one import ordering in `corpus_manifest.rs`. Change: `cargo fmt --all`, which rewrote 32 lines across the two files and reordered `use xtask::corpus::{…, MANIFEST_PATH, Manifest}` to the edition 2024 ordering. Result: `cargo fmt --all -- --check` is silent and the lane passes `L0.fmt` at ``. The failing record is committed under `evidence/CHG-002/`, not deleted — CHG-001's repair attempt 4 deleted one and said so; this is the corrected practice.
+
 ## Acceptance concerns
 
 1. **DP-1.1 is the point of this item.** Kennedy reviews the manifest, and authors two or three held-out crate-level cases that live outside this repository. The Executor must not read or write them (§9.14). Every case here was written by the Executor from the plan; the held-out set is the only part of H4 that is not self-assessment, and without it W4's numbers measure the checker against expectations the same party wrote.
