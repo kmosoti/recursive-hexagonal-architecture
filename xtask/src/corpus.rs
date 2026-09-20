@@ -114,6 +114,11 @@ pub struct FixtureCrate {
 pub struct OutsideCrate {
     pub name: String,
     pub at: String,
+    /// An outside crate may itself depend on another outside crate: EM-C01
+    /// needs the transitive edge to exist without either end being a
+    /// classified member of the fixture workspace.
+    #[serde(default)]
+    pub deps: Vec<Dep>,
 }
 
 /// A case's overrides to the generated rules file.

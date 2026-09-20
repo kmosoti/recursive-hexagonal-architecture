@@ -607,14 +607,30 @@ generation = "declared"
 expected = "expected_miss"
 rule = "transitive.core_disallowed_dependency"
 cell = "law5"
-seeded = "core-a depends on pure-looking, which core_allow lists, and pure-looking depends on tokio"
+seeded = "core-a depends by path on pure-looking, which core_allow lists and which lies outside the fixture workspace; pure-looking depends by path on a crate named tokio, also outside the workspace"
+# pure-looking and tokio are outside_crates, not members. As workspace members
+# they would be classified and checked themselves: pure-looking would be a core
+# crate with a direct, un-allow-listed dependency on tokio, and the fixture
+# would report an ordinary effect.core_disallowed_dependency about
+# pure-looking. That finding is a real violation of a different rule, and it
+# would make the run non-silent, so the case would stop being a demonstration
+# that the transitive edge is invisible. Outside the workspace neither crate is
+# classified, and `cargo metadata --no-deps` shows core-a's direct edge to
+# pure-looking and nothing beyond it, which is precisely the hole.
+#
+# tokio is a path crate rather than a registry one so the fixture builds
+# offline, and it is named tokio because the name is what a core allow-list is
+# read against.
 hole = "§4.1, Law 5 row, Known hole: \"A deny list is incomplete by nature. Transitive dependencies can perform effects.\" The L0 mode reads `cargo metadata --no-deps`, which shows core-a's direct edges only."
 detected_when = "transitive_enabled = true (the --transitive flag of plan §5). The case is then expected to detect, with witness rule transitive.core_disallowed_dependency, path core-a -> pure-looking -> tokio."
 witness = { rule = "transitive.core_disallowed_dependency", path = ["core-a", "pure-looking", "tokio"] }
 witness_notes = { applies_when = "transitive_enabled" }
 crates = [
-  { name = "core-a", role = "core", deps = [{ name = "pure-looking" }] },
-  { name = "pure-looking", role = "core", deps = [{ name = "tokio", source = "registry", version = "1" }] },
+  { name = "core-a", role = "core", deps = [{ name = "pure-looking", path = "../pure-looking" }] },
+]
+outside_crates = [
+  { name = "pure-looking", at = "../pure-looking", deps = [{ name = "tokio", path = "../tokio" }] },
+  { name = "tokio", at = "../tokio" },
 ]
 [case.rules]
 core_allow = ["pure-looking"]
