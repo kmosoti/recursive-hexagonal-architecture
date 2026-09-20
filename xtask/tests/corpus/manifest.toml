@@ -1009,12 +1009,14 @@ depends_on = "DP-2.1"
 # ===========================================================================
 
 [grading]
-# The three values below are the Executor's proposal, open at DP-1.1. They are
-# the strict reading in each case, because a corpus that grades itself leniently
-# measures nothing; if Kennedy relaxes one at review, the relaxation is recorded
-# here and in the CHG-002 change record before CHG-004 runs against it.
+# The three values below were proposed by the Executor in CHG-002 and decided
+# by Kennedy in CHG-002.2 (DP-1.1c in .rha/decisions.toml): the strict reading
+# stands in each case, because a corpus that grades itself leniently measures
+# nothing. Relaxing one before CHG-004 runs is a protected edit recorded in the
+# decision ledger first.
 proposed_by = "agent:executor"
-open_at = "DP-1.1"
+decided_by = "human:kennedy"
+decided_in = "CHG-002.2 (DP-1.1c)"
 
 # A finding matches a witness when EVERY key of the case's `witness` table
 # equals the finding's corresponding field. There is no list of which keys

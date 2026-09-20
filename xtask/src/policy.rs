@@ -27,6 +27,46 @@ pub struct Policy {
     pub surface: Surface,
     pub strictness: BTreeMap<String, String>,
     pub lanes: BTreeMap<String, Lane>,
+    /// Acceptance by merge and the decision ledger (CHG-002.2). Optional so a
+    /// base revision written before that change still parses.
+    #[serde(default)]
+    pub acceptance: Option<Acceptance>,
+}
+
+/// What counts as the acceptance event, who materializes the record, and
+/// where decision-point status lives (`[acceptance]`).
+#[derive(Debug, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct Acceptance {
+    pub by_merge: bool,
+    pub record_written_by: String,
+    pub record_deadline: String,
+    pub record_creation_preapproved: bool,
+    pub decisions_ledger: String,
+    pub defaults_apply_when_unanswered: bool,
+    pub applies_to_merges_after: String,
+    pub bootstrap: Bootstrap,
+    pub ledger_edits: LedgerEdits,
+}
+
+/// The bounded period in which some acceptance predicates cannot hold
+/// (`[acceptance.bootstrap]`).
+#[derive(Debug, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct Bootstrap {
+    pub authentic_unsatisfiable_until: String,
+    pub passed_unsatisfiable_until: String,
+    pub every_acceptance_in_this_period: String,
+    pub expires: String,
+}
+
+/// Which edits to the protected decision ledger are pre-approved
+/// (`[acceptance.ledger_edits]`).
+#[derive(Debug, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct LedgerEdits {
+    pub preapproved: Vec<String>,
+    pub everything_else: String,
 }
 
 #[derive(Debug, Deserialize)]

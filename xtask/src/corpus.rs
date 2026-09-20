@@ -196,7 +196,11 @@ pub struct Case {
 #[serde(deny_unknown_fields)]
 pub struct Grading {
     pub proposed_by: String,
-    pub open_at: String,
+    /// Who decided the values, and where; `None` while they are a proposal.
+    #[serde(default)]
+    pub decided_by: Option<String>,
+    #[serde(default)]
+    pub decided_in: Option<String>,
     pub detection_requires: String,
     pub extra_findings: String,
     pub no_alarm_scope: String,
@@ -459,7 +463,8 @@ transitive_enabled = false
 forbidden_edges = []
 [grading]
 proposed_by = "x"
-open_at = "y"
+decided_by = "k"
+decided_in = "t"
 detection_requires = "a"
 extra_findings = "b"
 no_alarm_scope = "c"

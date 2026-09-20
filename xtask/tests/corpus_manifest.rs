@@ -395,7 +395,12 @@ fn the_grading_rules_state_what_a_disagreement_does() {
             .contains("not silently re-registered"),
         "a surprise detection must be escalated, not absorbed"
     );
-    assert_eq!(grading.open_at, "DP-1.1");
+    assert_eq!(
+        grading.decided_by.as_deref(),
+        Some("human:kennedy"),
+        "the grading values were decided at DP-1.1c; a proposal cannot grade a run"
+    );
+    assert_eq!(grading.decided_in.as_deref(), Some("CHG-002.2 (DP-1.1c)"));
 }
 
 /// No checker code exists yet, and no fixture workspace is committed. This is
