@@ -63,7 +63,19 @@ Two more are not open, because they follow from §17 and §9.14, and both tests 
 
 ## Evidence
 
-Local: `evidence/CHG-002/`. CI: `evidence/ci/`. Outcomes are listed in the pull request and in the item report, including `L0.architecture`, which is `not_run` and is reported as `not_run`.
+**Local.** Three records under `evidence/CHG-002/`, and all three are kept:
+
+| Record | Revision | Result |
+| --- | --- | --- |
+| `20260920T001651Z-24ad1602720b.json` | `24ad160` | `L0.fmt` **failed**; repair attempt 1 |
+| `20260920T001738Z-038a8ea2ba1c.json` | `038a8ea` | 7 passed, `L0.architecture` not_run — superseded by the head below |
+| `20260920T002204Z-13f665cb0893.json` | `13f665c` | 7 passed, `L0.architecture` not_run, 50 tests selected |
+
+A fourth run, at `af1e5077`, failed `L0.typos` on the sentence repair attempt 2 was in the middle of correcting; its record is not committed, and repair attempt 2 says why.
+
+**CI.** Run [35478601881](https://github.com/kmosoti/recursive-hexagonal-architecture/actions/runs/35478601881) on head `5972d91`, copied as [`evidence/ci/35478601881.json`](../../evidence/ci/35478601881.json). Subject revision `68b41dca`, GitHub's ephemeral merge commit. Seven passed, `L0.architecture` `not_run`, 50 tests selected, and all four predicates agree with the local record. The earlier CI run 35478425099 failed `L0.typos` and is not committed; repair attempt 2 cites it.
+
+`L0.architecture` is `not_run` and is reported as `not_run`. Nothing here is reported passed that did not run.
 
 **The policy changed again, so Applicable is false again.** Adding the manifest to the protected list moves the policy digest from `sha256:dc2ef7e0…` to `sha256:5497c29e…`, and a record is Applicable only where the candidate's policy equals the base revision's (§11.7.6). This is the second controlled transition in this repository; the first, CHG-001's, closed the moment it merged. Spec §11.5 makes it yours to accept.
 
