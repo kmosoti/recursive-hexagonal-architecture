@@ -73,10 +73,14 @@ record = ".rha/acceptances/CHG-002.toml"
 [[decision]]
 id = "DP-1.1b"
 title = "Author two or three held-out crate-level corpus cases outside this repository (spec §9.14)"
-status = "open"
+status = "decided"
+decided_by = "human:kennedy"
+date = "2026-09-20"
+answer = "The cases exist, in a directory outside this repository. Kennedy supplied their commitment in the working conversation before any checker code was written; this row is the second commit of CHG-003 and the first commit of that item touched no checker."
 owner = "human:kennedy"
 needed_by = "BEFORE CHG-003 starts: the commitment digest must be on this row before any checker code exists, or it cannot show the cases predate the checker (review finding on pull request 5). The cases themselves are run at CHG-004 acceptance."
 blocks = ["CHG-003"]
+unblocked_at = "The commit carrying this row. Every later commit of CHG-003 is checker code; every earlier one is this record and the CHG-002.2 acceptance."
 cannot_default = true
 how_to_close = """
 Kennedy writes the cases in a directory outside this repository, in the \
@@ -88,7 +92,22 @@ CHG-004 acceptance Kennedy runs the checker on them himself and records the \
 per-case outcomes in that acceptance record; the commitment lets anyone verify \
 later that the cases predate the checker.\
 """
-commitment = "none yet"
+# The sha256 of a tar of Kennedy's held-out directory, supplied by him and
+# recorded here before any checker code exists. The cases are NOT in this
+# repository and no agent has read them or may read them (§9.14). What this
+# digest buys: at CHG-004 acceptance Kennedy runs the checker on those cases
+# himself and records the per-case outcomes, and anyone can then re-tar the
+# directory and confirm it still hashes to this value — showing the cases were
+# fixed before the checker existed, rather than adjusted once its behaviour
+# was known. It binds the content, not the result.
+#
+# The Executor cannot verify this digest and does not claim to: it is Kennedy's
+# assertion, recorded verbatim as he gave it. What the Executor can attest is
+# the ordering, which is visible in this branch's history — this commit
+# precedes every line of checker code in CHG-003.
+commitment = "sha256:47868f629cab286f5476ad7c62737cbab8dace85fae463dcaa619dda18cea8bc"
+commitment_recorded_at = "CHG-003, second commit, before any checker code"
+commitment_verifiable_by = "human:kennedy only, by re-taring the held-out directory; the Executor never reads it"
 
 [[decision]]
 id = "DP-1.1c"
