@@ -67,7 +67,10 @@ pub struct Options {
     /// An external rules file. Defaults to `rha-crates.toml` at the root.
     pub rules_path: Option<PathBuf>,
     pub format: Format,
-    /// Accepted and reported as `not_run` unless `[transitive] enabled`.
+    /// Accepted for the L2 interface. This version has no transitive
+    /// evaluator, so the flag prints a notice, and `[transitive] enabled =
+    /// true` in the rules file is refused with exit 2 rather than run as if
+    /// it had been honoured.
     pub transitive: bool,
 }
 
@@ -81,7 +84,7 @@ pub fn run(root: &Path, options: &Options) -> Result<i32> {
         .rules_path
         .clone()
         .unwrap_or_else(|| root.join(RULES_PATH));
-    let (mut rules, rules_digest) = match Rules::load(&rules_path) {
+    let (rules, rules_digest) = match Rules::load(&rules_path) {
         Ok(loaded) => loaded,
         Err(e) => {
             eprintln!("xtask architecture: {e}");
@@ -89,16 +92,28 @@ pub fn run(root: &Path, options: &Options) -> Result<i32> {
         }
     };
 
-    if options.transitive && !rules.transitive.enabled {
-        // The flag is accepted, and turning it on is the rules file's
-        // decision, not the command line's. Say so rather than silently
-        // ignoring the flag or silently widening what is checked.
+    if rules.transitive.enabled {
+        // Requested and unimplemented is a configuration this version cannot
+        // honour, and 2 is the exit code for that (plan §5). Running the
+        // direct rules anyway and exiting 0 reported a clean summary for a
+        // check that was asked for and never performed (review finding on
+        // pull request 6, CHG-003.1). The lane records exit 2 as failed with
+        // error_class config_error, never as passed.
         eprintln!(
-            "xtask architecture: --transitive was given but [transitive] enabled is false in {}; \
-             transitive rules stay not_run",
+            "xtask architecture: [transitive] enabled = true in {}, but this version has no \
+             transitive evaluator: it reads `cargo metadata --no-deps` only. Set enabled = \
+             false, or run a version that implements transitive.core_disallowed_dependency.",
             rules_path.display()
         );
-        rules.transitive.enabled = false;
+        return Ok(EXIT_USAGE);
+    }
+    if options.transitive {
+        // The flag is accepted so the L2 interface is stable; what it asks
+        // for is not implemented, and the report's limitations say so.
+        eprintln!(
+            "xtask architecture: --transitive was given; transitive rules are not implemented \
+             in this version and stay not evaluated (see the report's limitations)"
+        );
     }
 
     let graph = match metadata::load(root, options.manifest_path.as_deref()) {
@@ -244,6 +259,27 @@ mod tests {
         assert_eq!(Format::parse("md"), Some(Format::Markdown));
         assert_eq!(Format::parse("markdown"), Some(Format::Markdown));
         assert_eq!(Format::parse("yaml"), None);
+    }
+
+    #[test]
+    fn transitive_enabled_is_refused_before_anything_runs() {
+        let dir = std::env::temp_dir().join(format!("rha-transitive-{}", std::process::id()));
+        std::fs::create_dir_all(&dir).expect("temp dir");
+        let rules = dir.join("rha-crates.toml");
+        std::fs::write(
+            &rules,
+            "schema_version = 1\n[classification]\n[transitive]\nenabled = true\n",
+        )
+        .expect("write rules");
+        let options = Options {
+            rules_path: Some(rules),
+            ..Options::default()
+        };
+        // `dir` has no Cargo.toml. If the refusal did not come first, this
+        // would be an environment failure (3), not a configuration error (2).
+        let code = run(&dir, &options).expect("run returns a code");
+        let _ = std::fs::remove_dir_all(&dir);
+        assert_eq!(code, EXIT_USAGE);
     }
 
     #[test]

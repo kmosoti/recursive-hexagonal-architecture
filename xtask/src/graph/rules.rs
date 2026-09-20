@@ -40,31 +40,39 @@ pub struct Core {
     pub allow_build_scripts: bool,
 }
 
+/// How an adapter's dependency on a core whose port it does not implement is
+/// reported. A closed set: a value outside it is a parse error, never a
+/// silent fall-back to the lenient setting. `deny_unknown_fields` guards the
+/// keys of this file; this guards a value (review finding on pull request 6,
+/// CHG-003.1).
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub enum ForeignCoreSeverity {
+    #[default]
+    Warn,
+    Error,
+}
+
 /// How strictly adapters are held to their declared ports.
 #[derive(Debug, Clone, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct Adapters {
     #[serde(default = "yes")]
     pub require_port_owner_dependency: bool,
-    /// `"warn"` or `"error"`: an adapter depending on a core whose port it
-    /// does not implement.
-    #[serde(default = "warn")]
-    pub foreign_core_dependency: String,
+    /// An adapter depending on a core whose port it does not implement.
+    #[serde(default)]
+    pub foreign_core_dependency: ForeignCoreSeverity,
 }
 
 const fn yes() -> bool {
     true
 }
 
-fn warn() -> String {
-    "warn".to_owned()
-}
-
 impl Default for Adapters {
     fn default() -> Self {
         Self {
             require_port_owner_dependency: true,
-            foreign_core_dependency: warn(),
+            foreign_core_dependency: ForeignCoreSeverity::Warn,
         }
     }
 }
@@ -132,7 +140,10 @@ impl Rules {
     /// Whether `foreign_core_dependency` is configured as an error.
     #[must_use]
     pub fn foreign_core_is_error(&self) -> bool {
-        self.adapters.foreign_core_dependency == "error"
+        matches!(
+            self.adapters.foreign_core_dependency,
+            ForeignCoreSeverity::Error
+        )
     }
 }
 
@@ -220,9 +231,27 @@ mod tests {
     fn the_defaults_are_the_strict_ones() {
         let rules = Rules::parse("schema_version = 1\n[classification]\n").expect("parses");
         assert!(rules.adapters.require_port_owner_dependency);
-        assert_eq!(rules.adapters.foreign_core_dependency, "warn");
+        assert_eq!(
+            rules.adapters.foreign_core_dependency,
+            ForeignCoreSeverity::Warn
+        );
         assert!(!rules.core.allow_build_scripts);
         assert!(!rules.transitive.enabled);
         assert!(!rules.foreign_core_is_error());
+    }
+
+    #[test]
+    fn a_foreign_core_severity_outside_the_closed_set_is_a_parse_error() {
+        let with = |value: &str| {
+            Rules::parse(&format!(
+                "schema_version = 1\n[classification]\n[adapters]\nforeign_core_dependency = \"{value}\"\n"
+            ))
+        };
+        assert!(with("error").expect("error parses").foreign_core_is_error());
+        assert!(!with("warn").expect("warn parses").foreign_core_is_error());
+        // A value outside the set used to parse and silently mean warn, so a
+        // rules file meant to be fatal produced warnings and exit 0.
+        assert!(with("fatal").is_err());
+        assert!(with("Error").is_err());
     }
 }

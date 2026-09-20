@@ -162,14 +162,24 @@ pub fn check(graph: &CrateGraph, rules: &Rules) -> Outcome {
     adapter_rules(graph, rules, &mut outcome);
     cycles(graph, &mut outcome);
 
-    if !rules.transitive.enabled {
-        outcome.limitations.push(
-            "transitive.core_disallowed_dependency: not evaluated. The graph is read with \
-             `cargo metadata --no-deps`, which shows direct declared edges only (spec §4.1, \
-             Law 5 row). Set [transitive] enabled = true to resolve fully."
-                .to_owned(),
-        );
-    }
+    // No transitive evaluator exists in this version: the graph is always
+    // read with `cargo metadata --no-deps`. The limitation is stated whether
+    // or not [transitive] enabled asks for more, because a requested rule
+    // that did not run is the one most likely to be mistaken for a clean
+    // result (review finding on pull request 6, CHG-003.1). `architecture::run`
+    // refuses the configuration outright; this keeps in-process callers honest.
+    outcome.limitations.push(if rules.transitive.enabled {
+        "transitive.core_disallowed_dependency: requested by [transitive] enabled = true and \
+         not evaluated. This version reads `cargo metadata --no-deps` only and has no \
+         transitive evaluator (L2, after CHG-004); the summary is not a pass over transitive \
+         dependencies."
+            .to_owned()
+    } else {
+        "transitive.core_disallowed_dependency: not evaluated. The graph is read with \
+         `cargo metadata --no-deps`, which shows direct declared edges only (spec §4.1, \
+         Law 5 row). No version yet honours [transitive] enabled = true."
+            .to_owned()
+    });
     outcome
 }
 

@@ -46,8 +46,9 @@ pub struct ArchitectureArgs {
     /// to target/rha/architecture.json whatever this says.
     #[arg(long, default_value = "text", value_parser = ["text", "json", "md", "markdown"])]
     pub format: String,
-    /// Resolve dependencies fully. Reported `not_run` unless the rules file
-    /// sets [transitive] enabled.
+    /// Accepted for the L2 interface. This version has no transitive
+    /// evaluator: the flag prints a notice, and [transitive] enabled = true
+    /// in the rules file is refused with exit 2.
     #[arg(long)]
     pub transitive: bool,
 }

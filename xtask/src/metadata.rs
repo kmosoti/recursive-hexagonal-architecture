@@ -65,6 +65,12 @@ struct Dependency {
     /// The key in `Cargo.toml` when it differs from the package name.
     #[serde(default)]
     rename: Option<String>,
+    /// The dependency's directory. Present only for a path dependency.
+    #[serde(default)]
+    path: Option<PathBuf>,
+    /// `null` for a path dependency; a `registry+…` or `git+…` URL otherwise.
+    #[serde(default)]
+    source: Option<String>,
 }
 
 /// What `[package.metadata.rha]` may declare.
@@ -118,7 +124,17 @@ fn build(metadata: &Metadata) -> CrateGraph {
         .iter()
         .filter(|p| metadata.workspace_members.contains(&p.id))
         .collect();
-    let member_names: Vec<&str> = members.iter().map(|p| p.name.as_str()).collect();
+    // A member is identified by where it lives, not by what it is called.
+    // `cargo metadata` reports a path dependency with `path` set and `source`
+    // null; a registry or git package has a source and no path, and is
+    // external however familiar its name. Matching by name alone let a core
+    // reach a registry crate that shares a member's name without the edge
+    // appearing in [core] allow, because the effect rules skip member targets
+    // (review finding on pull request 6, CHG-003.1).
+    let member_dirs: Vec<(&str, &Path)> = members
+        .iter()
+        .filter_map(|p| p.manifest_path.parent().map(|dir| (p.name.as_str(), dir)))
+        .collect();
 
     let mut crates = Vec::with_capacity(members.len());
     let mut edges = Vec::new();
@@ -139,14 +155,18 @@ fn build(metadata: &Metadata) -> CrateGraph {
                 .any(|t| t.kind.iter().any(|k| k == "custom-build")),
         });
         for dep in &package.dependencies {
-            let to = if member_names.contains(&dep.name.as_str()) {
-                Target::Member {
+            let member = dep
+                .path
+                .as_deref()
+                .filter(|_| dep.source.is_none())
+                .and_then(|dir| member_dirs.iter().find(|(_, d)| *d == dir));
+            let to = match member {
+                Some((name, _)) => Target::Member {
+                    name: (*name).to_owned(),
+                },
+                None => Target::External {
                     name: dep.name.clone(),
-                }
-            } else {
-                Target::External {
-                    name: dep.name.clone(),
-                }
+                },
             };
             edges.push(Edge {
                 from: package.name.clone(),
@@ -190,7 +210,8 @@ mod tests {
             r#"{
               "workspace_root": "/w",
               "workspace_members": ["core-a 0.1.0 (path+file:///w/core-a)",
-                                    "adapter-x 0.1.0 (path+file:///w/adapter-x)"],
+                                    "adapter-x 0.1.0 (path+file:///w/adapter-x)",
+                                    "core-b 0.1.0 (path+file:///w/core-b)"],
               "packages": [
                 {
                   "id": "core-a 0.1.0 (path+file:///w/core-a)",
@@ -200,7 +221,8 @@ mod tests {
                   "targets": [{ "kind": ["lib"] }, { "kind": ["custom-build"] }],
                   "dependencies": [
                     { "name": "adapter-x", "kind": null, "optional": true,
-                      "target": "cfg(unix)", "rename": "ax" },
+                      "target": "cfg(unix)", "rename": "ax",
+                      "source": null, "path": "/w/adapter-x" },
                     { "name": "tokio", "kind": "dev" }
                   ]
                 },
@@ -211,6 +233,19 @@ mod tests {
                   "metadata": { "rha": { "implements": ["core-a::Port"] } },
                   "targets": [{ "kind": ["lib"] }],
                   "dependencies": []
+                },
+                {
+                  "id": "core-b 0.1.0 (path+file:///w/core-b)",
+                  "name": "core-b",
+                  "manifest_path": "/w/core-b/Cargo.toml",
+                  "metadata": { "rha": { "role": "core" } },
+                  "targets": [{ "kind": ["lib"] }],
+                  "dependencies": [
+                    { "name": "adapter-x", "kind": null,
+                      "source": "registry+https://github.com/rust-lang/crates.io-index" },
+                    { "name": "core-a", "kind": null, "source": null,
+                      "path": "/elsewhere/core-a" }
+                  ]
                 },
                 {
                   "id": "stranger 0.1.0 (registry+x)",
@@ -229,7 +264,22 @@ mod tests {
     fn only_workspace_members_become_crates() {
         let graph = build(&sample());
         let names: Vec<&str> = graph.crates.iter().map(|c| c.name.as_str()).collect();
-        assert_eq!(names, vec!["core-a", "adapter-x"]);
+        assert_eq!(names, vec!["core-a", "adapter-x", "core-b"]);
+    }
+
+    #[test]
+    fn a_package_is_a_member_by_where_it_lives_not_by_its_name() {
+        // core-b names two packages that share a member's name. Neither lives
+        // at the member's directory, so neither is the member: a registry
+        // crate called adapter-x is not the workspace's adapter-x, and a path
+        // crate called core-a outside the workspace is not its core-a. Both
+        // are external, and therefore subject to [core] allow.
+        let graph = build(&sample());
+        let targets: Vec<(&str, bool)> = graph
+            .edges_from("core-b")
+            .map(|e| (e.to.name(), e.to.is_member()))
+            .collect();
+        assert_eq!(targets, vec![("adapter-x", false), ("core-a", false)]);
     }
 
     #[test]

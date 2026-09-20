@@ -552,6 +552,28 @@ fn a_rule_that_cannot_be_evaluated_is_a_limitation_not_a_silence() {
     );
 }
 
+#[test]
+fn em_c01_a_requested_transitive_rule_that_did_not_run_is_still_a_limitation() {
+    // [transitive] enabled = true asks for a rule this version cannot
+    // evaluate. The limitation must survive the request: a clean summary with
+    // no limitation would read as a pass over transitive dependencies (review
+    // finding on pull request 6). `architecture::run` refuses the
+    // configuration outright with exit 2; this is the in-process guard.
+    let graph = Builder::new(vec![core("core-a")]).build();
+    let rules = Rules::parse(
+        "schema_version = 1\n[classification]\nadapter_prefix = \"adapter-\"\n[transitive]\nenabled = true\n",
+    )
+    .expect("parses");
+    let outcome = check(&graph, &rules);
+    assert!(
+        outcome.limitations.iter().any(|l| {
+            l.contains("transitive.core_disallowed_dependency") && l.contains("not evaluated")
+        }),
+        "{:?}",
+        outcome.limitations
+    );
+}
+
 /// The checker must not read the corpus it is judged on (CHG-003 non-goal).
 ///
 /// Scope is the checker: `graph/`, `metadata.rs`, `architecture.rs`. Two other
