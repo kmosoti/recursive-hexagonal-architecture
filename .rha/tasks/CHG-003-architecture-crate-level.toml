@@ -13,7 +13,7 @@ base_revision = "4be4a199422d1e119d0dddc5483636b7a2052779"
 intent = "Implement the crate-graph checker of plan §5: read `cargo metadata --no-deps --offline`, classify every member totally, evaluate the rha-crates.toml rules, and report findings as JSON, text and markdown with the exit codes §5 fixes. This is the change that makes L0.architecture run, which has blocked the Passed predicate since CHG-000."
 non_goals = [
   "The module graph: module_checks reports not_run with reason not_implemented until CHG-007",
-  "Transitive mode: --transitive is accepted and reports not_run unless [transitive] enabled is true",
+  "Transitive mode: --transitive is accepted and prints a notice; [transitive] enabled = true is refused with exit 2, because this version has no transitive evaluator and must not report a requested check as clean (CHG-003.1)",
   "The H4 harness and the fixture generator: `cargo xtask corpus run` is CHG-004",
   "Reading xtask/tests/corpus/manifest.toml from the checker. The manifest is an input to CHG-004's harness, never to the checker; a checker that reads its own test set is not being tested by it",
   "Kennedy's held-out cases (DP-1.1b), which no agent may author or read (§9.14)",
@@ -54,6 +54,10 @@ owned_scope = [
   ".rha/decisions.toml (the DP-1.1b row, approved by Kennedy 2026-09-20)",
   ".rha/tasks/CHG-003-architecture-crate-level.toml, docs/changes/CHG-003-architecture-crate-level.md, docs/maturity.md, generated docs",
   "evidence/CHG-003/**, evidence/ci/**",
+  ".rha/acceptances/CHG-002.2.toml (one [[defects]] entry, D-002.2.1; editing an acceptance record is not pre-approved, approved by Kennedy 2026-09-20 for CHG-003.1)",
+  ".rha/tasks/CHG-002.2-acceptance-protocol.toml (one digest corrected, CHG-003.1)",
+  "AGENTS.md, CONTRIBUTING.md (review-finding rules, CHG-003.1)",
+  "docs/proposals/spec-v0.11.md (rows 8 and 9, CHG-003.1)",
 ]
 
 [[decisions]]
@@ -77,6 +81,13 @@ answer = "No, and it is a non-goal for that reason. The manifest is an input to 
 decided_by = "agent:executor, stated for Kennedy's review"
 date = "2026-09-20"
 
+[[decisions]]
+id = "review-findings-chg-003.1"
+question = "Which of the three automated review findings on pull request 6 (reviewed revision 776fa83) name a concrete failure on that revision, and what else does CHG-003.1 carry?"
+answer = "All three do, and each is repaired in one commit: membership decided by package name let a registry crate sharing a member's name bypass [core] allow; [transitive] enabled = true removed the limitation while nothing evaluated the rule, so a requested check could report clean; foreign_core_dependency accepted any string and read a misspelling as warn. CHG-003.1 also carries what Codex's audit of the review history (2026-09-20) established and the supervising session's assessment proposed: the D-002.2.1 defect entry on .rha/acceptances/CHG-002.2.toml, for the stale plan digest in the CHG-002.2 task record that the review completing after the merge found; that digest corrected in the task record; three review rules in AGENTS.md and one bullet in CONTRIBUTING.md; and rows 8 and 9 of docs/proposals/spec-v0.11.md. Not carried: the repeated bootstrap objection, which names no new failure mode, so the bounded bootstrap stands; and any policy edit, since the controlled_transition label is queued, not changed. Kennedy's approval is his 'proceed' of 2026-09-20 on that written assessment, which listed these actions; it covers the one protected-surface edit [acceptance] does not pre-approve, the [[defects]] entry on an existing acceptance record, and no other protected surface changes in CHG-003.1."
+decided_by = "human:kennedy"
+date = "2026-09-20"
+
 [expectation]
 # Written before the checker (spec §17: fixed before data).
 detection = "Every crate-level `detect` case of xtask/tests/corpus/manifest.toml is detected, and none of the 11 legitimate cases raises an alarm. That is measured in CHG-004, not here; this item is judged on its unit tests and on the lane."
@@ -92,6 +103,7 @@ performance_impact = "none claimed"
 unresolved = [
   "The checker runs over a workspace with one member. Its rules are exercised by unit tests on synthetic graphs and, in CHG-004, by the corpus; nothing in this repository exercises them on real crates until CHG-005.",
   "Authentic still cannot hold (CHG-019, CHG-020), so no record is Eligible even once Passed holds.",
+  "An evidence record's agent_context.provenance is copied from the task record, not hashed from the tree (D-002.2.1 on the CHG-002.2 acceptance). A hand-entered digest that goes stale is echoed, not caught, until CHG-019's record lint compares cited digests with the subject tree.",
 ]
 
 [acceptance]
@@ -127,3 +139,7 @@ instruction_sources = [
 [[provenance.sessions]]
 model_id = "claude-opus-5[1m]"
 span = "CHG-003"
+
+[[provenance.sessions]]
+model_id = "claude-fable-5-1"
+span = "CHG-003.1: the review-finding repairs and the records they cite"

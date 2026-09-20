@@ -105,13 +105,33 @@ holds = false
 reason = "L0.architecture is not_run (not_implemented until CHG-003) and DP-0.5 makes every L0 check required and non-waivable."
 
 [[defects]]
-# None found at acceptance. The item's own purpose was to repair D-002.2, the
-# process defect recorded against CHG-002; that repair is this record's
-# existence and is not restated as a defect of CHG-002.2.
-id = "none"
-severity = "none"
-statement = "No defect was found in this subject at acceptance."
-repair = "not applicable"
+# None was known at acceptance. This entry was added in CHG-003.1 with
+# Kennedy's approval of 2026-09-20 (his "proceed" on the supervising session's
+# assessment), because [acceptance] pre-approves creating a record and not
+# editing one. The item's own purpose was to repair D-002.2, the process
+# defect recorded against CHG-002; that repair is this record's existence and
+# is not restated as a defect of CHG-002.2.
+id = "D-002.2.1"
+severity = "record inconsistency; no check outcome affected"
+found_by = "automated review (Codex) on pull request 5, thread r4056593889, in the pass that completed at 09:11 UTC, two minutes after the 09:09 merge; confirmed by Codex's independent audit of the review history, 2026-09-20"
+found_at = "after acceptance, 2026-09-20"
+statement = """
+.rha/tasks/CHG-002.2-acceptance-protocol.toml listed the plan under \
+instruction_sources as "after this change" with sha256 42e6e00e06c1d3da…, which \
+is the plan as of e7a60b1, the item's first commit to touch it. b2c5ee1 edited \
+the plan again (the DP-1.1b block) and the line was not updated, so at the \
+accepted revision 4be4a19 the plan hashes to 4d9b1c64e8b6c62e…. The five \
+evidence records under evidence/CHG-002.2/ carry the same stale value: \
+agent_context.provenance is copied from the task record, not hashed from the \
+tree, so a record echoes the claim rather than checking it.\
+"""
+repair = """
+The task record is corrected in CHG-003.1 to the digest at 4be4a19, with the \
+first value noted beside it. The evidence records are left exactly as \
+recorded: an evidence record is an observation and is not rewritten to \
+describe a tree it did not see.\
+"""
+follow_up = "The general remedy, a record lint that compares each cited digest with the file at the subject revision and a producer that hashes tracked instruction sources itself, is CHG-019's scope and is queued as docs/proposals/spec-v0.11.md row 9."
 
 [carried_forward]
 # The acceptance closes the work item, not these. Each has a row in
