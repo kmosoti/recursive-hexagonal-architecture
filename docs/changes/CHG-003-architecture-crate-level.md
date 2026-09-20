@@ -93,6 +93,7 @@ Both agree, on two machines:
 | **Passed** | **true** | **first time in this repository** |
 
 **CHG-003.1, local**: `evidence/CHG-003/20260920T100013Z-1cbc47ec97f2.json` at `1cbc47e`, the repaired revision, on a clean tree: all eight checks `passed`, 112 tests selected, eligibility `blocked` on `Authentic` alone.
+**CHG-003.1, CI**: run [35503860516](https://github.com/kmosoti/recursive-hexagonal-architecture/actions/runs/35503860516) on the pushed head `b4adcf2`, copied as [`evidence/ci/35503860516.json`](../../evidence/ci/35503860516.json), subject `1731b0d6`: all eight `passed`, 112 tests.
 
 Eligibility remains `blocked`, on `Authentic` alone. `.rha/policy.toml [acceptance.bootstrap]` records `passed_unsatisfiable_until = "CHG-003: L0.architecture is not implemented"`; that clause expires with this merge, and its `expires` condition now waits only on CHG-020.
 
