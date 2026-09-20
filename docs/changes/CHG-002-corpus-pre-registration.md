@@ -111,6 +111,15 @@ Requested by Kennedy on the open pull request, as eight commits. The Codex revie
 
 Findings 1, 2 and 7 are worth separating from the rest: each described a fixture that **could not produce the result it was registered for**. A corpus whose cases cannot fire is worse than no corpus, because W4 would have reported numbers for it.
 
+### A wrong number in a commit message
+
+The commit that added the CHG-002.1 evidence record, `976a541`, says "55 tests selected". The record it commits, `evidence/CHG-002/20260920T010039Z-cfb048e479fb.json`, reports **53**: fifty in CHG-002 plus the three added by CHG-002.1, for `Defect::ProseInWitness`, `Defect::NoCells`, and the per-case pinning test.
+
+Fifty-five was not read from anything. It is the same class of defect as D-001.1 in CHG-001's acceptance record — a number in the position of a witness that no run produced — and it is worse, because a digest placeholder is visibly a placeholder and a plausible count is not.
+
+Corrected here rather than by amending the commit. Rewriting the message would leave no trace that the number had been wrong, and this repository already decided, in CHG-001's repair attempt 4, that deleting an inconvenient observation is the wrong move. The commit message stands; this paragraph is the correction, and the record is the authority.
+
+
 ## Acceptance concerns
 
 1. **DP-1.1 is the point of this item.** Kennedy reviews the manifest, and authors two or three held-out crate-level cases that live outside this repository. The Executor must not read or write them (§9.14). Every case here was written by the Executor from the plan; the held-out set is the only part of H4 that is not self-assessment, and without it W4's numbers measure the checker against expectations the same party wrote.
