@@ -18,8 +18,8 @@ pub struct Cli {
 pub enum Command {
     /// Run a lane of .rha/policy.toml and write an evidence record.
     Ci(CiArgs),
-    /// Crate-graph and module-graph checks (spec §6.13). Not implemented until CHG-003.
-    Architecture,
+    /// Crate-graph and module-graph checks (spec §6.13).
+    Architecture(ArchitectureArgs),
     /// Evidence utilities.
     Evidence {
         #[command(subcommand)]
@@ -31,6 +31,25 @@ pub enum Command {
         #[arg(long)]
         check: bool,
     },
+}
+
+/// `cargo xtask architecture` (plan §5).
+#[derive(Debug, clap::Args)]
+pub struct ArchitectureArgs {
+    /// Check an external workspace instead of this one.
+    #[arg(long, value_name = "PATH")]
+    pub manifest_path: Option<std::path::PathBuf>,
+    /// Use an external rules file instead of rha-crates.toml at the root.
+    #[arg(long, value_name = "PATH")]
+    pub rules: Option<std::path::PathBuf>,
+    /// How to render the report on stdout. The JSON report is always written
+    /// to target/rha/architecture.json whatever this says.
+    #[arg(long, default_value = "text", value_parser = ["text", "json", "md", "markdown"])]
+    pub format: String,
+    /// Resolve dependencies fully. Reported `not_run` unless the rules file
+    /// sets [transitive] enabled.
+    #[arg(long)]
+    pub transitive: bool,
 }
 
 #[derive(Debug, Subcommand)]
