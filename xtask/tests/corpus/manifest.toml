@@ -46,6 +46,10 @@
 #                 case needs.
 #   implements    [package.metadata.rha] implements = [...] (port paths).
 #   build_script  true writes a build.rs.
+#   body          Rust items appended verbatim to the crate's src/lib.rs. It
+#                 holds items, not statements: R01 needs a private module in
+#                 one crate and a reference to it from another, and EM-C02
+#                 needs a call that the crate graph cannot see.
 #   deps          dependency entries:
 #     name        required.
 #     kind        "normal" (default) | "dev" | "build".
@@ -648,7 +652,7 @@ detected_when = "The Clippy deny list of CHG-001 (xtask/templates/core-clippy.to
 witness = {}
 witness_notes = { note = "no crate-level finding is expected; a run that reports one is reading source, which the crate level does not claim to do" }
 crates = [
-  { name = "core-a", role = "core", body = "std::fs::read(\"/etc/hostname\")" },
+  { name = "core-a", role = "core", body = "pub fn host() -> std::io::Result<Vec<u8>> { std::fs::read(\"/etc/hostname\") }" },
 ]
 
 [[case]]
@@ -665,9 +669,15 @@ seeded = "core-b names core_a::private_mod::Item, a module core-a does not expor
 # records the error code.
 detector = "cargo check --offline"
 witness = { error_code = "E0603", crate = "core-b", names = "core_a::private_mod::Item" }
+# Both bodies are required. Without them the generated workspace compiles:
+# core-a would define no private_mod::Item and core-b would name nothing, so
+# `cargo check` would exit 0 and the registered detection could never fire.
+# The module is private and the item inside it is pub, which is what makes the
+# error E0603 (the module is not accessible) rather than E0616 (private field)
+# or an unresolved-name error.
 crates = [
-  { name = "core-a", role = "core" },
-  { name = "core-b", role = "core", deps = [{ name = "core-a" }] },
+  { name = "core-a", role = "core", body = "mod private_mod { pub struct Item; }" },
+  { name = "core-b", role = "core", deps = [{ name = "core-a" }], body = "pub fn take(_: core_a::private_mod::Item) {}" },
 ]
 
 # ===========================================================================

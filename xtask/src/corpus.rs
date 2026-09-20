@@ -103,8 +103,9 @@ pub struct FixtureCrate {
     pub build_script: bool,
     #[serde(default)]
     pub deps: Vec<Dep>,
-    /// A statement to put in the crate's body, for a case about calls rather
-    /// than dependencies (EM-C02).
+    /// Rust **items**, appended verbatim to the generated `src/lib.rs`. R01
+    /// needs a private module in one crate and a reference to it from
+    /// another; EM-C02 needs a call the crate graph cannot see.
     pub body: Option<String>,
 }
 
