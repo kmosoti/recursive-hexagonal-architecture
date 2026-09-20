@@ -146,9 +146,13 @@ pub struct Case {
     pub cell: String,
     /// What the fixture seeds, in words.
     pub seeded: String,
-    /// What a finding must name. Its keys are matched per `[grading]`.
+    /// What a finding must name. **Every** key here is matched; prose belongs
+    /// in [`Case::witness_notes`].
     #[serde(default)]
     pub witness: BTreeMap<String, toml::Value>,
+    /// Prose for the reader, matched against nothing.
+    #[serde(default)]
+    pub witness_notes: BTreeMap<String, toml::Value>,
     /// Required when `expected` is `expected_miss`: the §4.1 hole that
     /// explains why the violation is out of reach.
     pub hole: Option<String>,
@@ -240,7 +244,15 @@ pub enum Defect {
     },
     /// A case that must be detected states nothing a finding has to name.
     DetectWithoutWitness(String),
+    /// A prose key sits in `witness`, where every key is matched. A harness
+    /// would try to match a sentence against a finding's field.
+    ProseInWitness { case: String, key: String },
 }
+
+/// Keys that are prose, and therefore belong in `witness_notes`. The grading
+/// rule matches every key of `witness`, so a sentence left there would be
+/// compared against a finding's field.
+pub const PROSE_KEYS: [&str; 3] = ["note", "alternative", "applies_when"];
 
 impl std::fmt::Display for Defect {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -270,6 +282,10 @@ impl std::fmt::Display for Defect {
             Self::DetectWithoutWitness(id) => write!(
                 f,
                 "case {id} expects a detection and states no witness, so any finding at all would score it"
+            ),
+            Self::ProseInWitness { case, key } => write!(
+                f,
+                "case {case} has the prose key {key} in witness, where every key is matched; it belongs in witness_notes"
             ),
         }
     }
@@ -313,6 +329,14 @@ impl Manifest {
                     defects.push(Defect::MissWithoutHole(case.id.clone()));
                 }
                 _ => {}
+            }
+            for key in case.witness.keys() {
+                if PROSE_KEYS.contains(&key.as_str()) {
+                    defects.push(Defect::ProseInWitness {
+                        case: case.id.clone(),
+                        key: key.clone(),
+                    });
+                }
             }
             if case.generation == Generation::Declared && case.crates.is_empty() {
                 defects.push(Defect::DeclaredWithoutCrates(case.id.clone()));
@@ -521,6 +545,22 @@ crates = [{ name = "core-a", role = "core", build_script = true }]
                 case: "C01".to_owned(),
                 krate: "core-a".to_owned(),
                 dep: "ghost".to_owned(),
+            }]
+        );
+    }
+
+    #[test]
+    fn a_prose_key_left_in_witness_is_a_defect() {
+        let text = minimal().replace(
+            r#"witness = { rule = "effect.core_build_script", crate = "core-a" }"#,
+            r#"witness = { rule = "effect.core_build_script", crate = "core-a", note = "a sentence" }"#,
+        );
+        let manifest = Manifest::parse(&text).unwrap();
+        assert_eq!(
+            manifest.defects(),
+            vec![Defect::ProseInWitness {
+                case: "C01".to_owned(),
+                key: "note".to_owned(),
             }]
         );
     }

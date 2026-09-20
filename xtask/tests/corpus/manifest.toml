@@ -70,7 +70,18 @@
 # `witness` states what the finding must name for the case to count as
 # detected. A rule id alone is too weak: a checker that reports
 # dir.core_to_adapter for the wrong pair of crates would score a hit on C01
-# while being wrong. See [grading].
+# while being wrong.
+#
+# EVERY key of `witness` is matched. Prose lives in `witness_notes`, which is
+# matched against nothing and is there for the reader. The two were one table
+# until CHG-002.1, and the grading rule then had to name which kinds of key
+# counted — "every key naming a crate, port, module path or error code". That
+# enumeration silently dropped the keys that carry an outcome rather than a
+# name: `kind`, `matched_rule`, `depth` and above all `extraction`, so M20
+# could be scored as detected by a checker reporting the cycle as exact when
+# the case says a heuristic flag is required. Splitting the table removes the
+# enumeration: a key is matched because of where it sits, not because a
+# grading sentence remembered its name.
 
 schema_version = 1
 pre_registration = "CHG-002; the merge commit of this change is the identity H4 records cite"
@@ -172,7 +183,8 @@ seeded = "core-a and core-b depend on each other by path"
 # Cargo itself rejects a package cycle, so the fixture may fail to load before
 # the checker sees it. Either way the case is detected: the harness records a
 # cargo error on this fixture as this finding, which is what plan §6 says.
-witness = { rule = "graph.cycle", members = ["core-a", "core-b"], alternative = "cargo refuses to resolve the workspace; the harness records the error as graph.cycle" }
+witness = { rule = "graph.cycle", members = ["core-a", "core-b"] }
+witness_notes = { alternative = "cargo refuses to resolve the workspace; the harness records the error as graph.cycle" }
 crates = [
   { name = "core-a", role = "core", deps = [{ name = "core-b" }] },
   { name = "core-b", role = "core", deps = [{ name = "core-a" }] },
@@ -346,7 +358,8 @@ expected = "detect"
 rule = "dir.core_to_adapter"
 cell = "law6-d5"
 seeded = "core-a renames the dependency: ax = { package = \"adapter-x\" }. The checker must classify by the package name, not the key."
-witness = { rule = "dir.core_to_adapter", from = "core-a", to = "adapter-x", note = "reported under the package name adapter-x, not the rename ax" }
+witness = { rule = "dir.core_to_adapter", from = "core-a", to = "adapter-x" }
+witness_notes = { note = "reported under the package name adapter-x, not the rename ax" }
 crates = [
   { name = "core-a", role = "core", deps = [{ name = "adapter-x", rename = "ax" }] },
   { name = "adapter-x" },
@@ -513,7 +526,8 @@ cell = "law6-d5"
 seeded = "core-a takes adapter-x as a dev-dependency: the crate's own tests are a harness. The finding is listed under harness_edges, not raised as an alarm."
 # The one legitimate case that is also a reported fact: C01's edge, in dev
 # kind. Plan §8 W3 excludes dev-kind edges from D5 but requires them listed.
-witness = { listed_as = "harness_edges", from = "core-a", to = "adapter-x", kind = "dev", note = "listed, not an alarm; a run that raises a finding here fails the case" }
+witness = { listed_as = "harness_edges", from = "core-a", to = "adapter-x", kind = "dev" }
+witness_notes = { note = "listed, not an alarm; a run that raises a finding here fails the case" }
 crates = [
   { name = "core-a", role = "core", deps = [{ name = "adapter-x", kind = "dev" }] },
   { name = "adapter-x" },
@@ -576,7 +590,8 @@ seeded = "planner-adapter-utils declares [package.metadata.rha] role = \"core\".
 # The case guards against a checker that searches for the prefix anywhere in
 # the name instead of at its start. Such a checker reports C11's conflict here
 # and fails this case.
-witness = { note = "a run that reports class.prefix_role_conflict here is matching the prefix as a substring" }
+witness = {}
+witness_notes = { note = "a run that reports class.prefix_role_conflict here is matching the prefix as a substring" }
 crates = [
   { name = "planner-adapter-utils", role = "core" },
 ]
@@ -595,7 +610,8 @@ cell = "law5"
 seeded = "core-a depends on pure-looking, which core_allow lists, and pure-looking depends on tokio"
 hole = "§4.1, Law 5 row, Known hole: \"A deny list is incomplete by nature. Transitive dependencies can perform effects.\" The L0 mode reads `cargo metadata --no-deps`, which shows core-a's direct edges only."
 detected_when = "transitive_enabled = true (the --transitive flag of plan §5). The case is then expected to detect, with witness rule transitive.core_disallowed_dependency, path core-a -> pure-looking -> tokio."
-witness = { rule = "transitive.core_disallowed_dependency", path = ["core-a", "pure-looking", "tokio"], applies_when = "transitive_enabled" }
+witness = { rule = "transitive.core_disallowed_dependency", path = ["core-a", "pure-looking", "tokio"] }
+witness_notes = { applies_when = "transitive_enabled" }
 crates = [
   { name = "core-a", role = "core", deps = [{ name = "pure-looking" }] },
   { name = "pure-looking", role = "core", deps = [{ name = "tokio", source = "registry", version = "1" }] },
@@ -613,7 +629,8 @@ cell = "law5"
 seeded = "core-a calls std::fs::read in its body and declares no dependency at all"
 hole = "§4.1, Law 5 row: the crate level sees dependencies, not calls. Nothing in the crate graph distinguishes this core from a pure one."
 detected_when = "The Clippy deny list of CHG-001 (xtask/templates/core-clippy.toml) reports it as clippy::disallowed_methods, at the module level, in a different lane. This case exists to record which mechanism covers the cell, not to be caught here."
-witness = { note = "no crate-level finding is expected; a run that reports one is reading source, which the crate level does not claim to do" }
+witness = {}
+witness_notes = { note = "no crate-level finding is expected; a run that reports one is reading source, which the crate level does not claim to do" }
 crates = [
   { name = "core-a", role = "core", body = "std::fs::read(\"/etc/hostname\")" },
 ]
@@ -752,7 +769,8 @@ expected = "no_alarm"
 rule = "-"
 cell = "law6-b3"
 seeded = "#[cfg(test)] mod tests referencing crate::ordering. Test edges are excluded by default and listed, not raised."
-witness = { listed_as = "test_edges", from = "constraints::tests", to = "ordering", note = "listed, not an alarm" }
+witness = { listed_as = "test_edges", from = "constraints::tests", to = "ordering" }
+witness_notes = { note = "listed, not an alarm" }
 
 [[case]]
 id = "M12"
@@ -835,7 +853,8 @@ seeded = "the root re-exports pub use ordering::score; and constraints calls cra
 # Documented asymmetry: the extractor sees the path as written. Reporting the
 # upward reference is correct; resolving it through the re-export to ordering
 # would be a second inference the extractor does not claim to make.
-witness = { rule = "modules.child_to_parent_private", from = "constraints", to = "crate::score", note = "the edge constraints -> ordering behind the re-export is not expected" }
+witness = { rule = "modules.child_to_parent_private", from = "constraints", to = "crate::score" }
+witness_notes = { note = "the edge constraints -> ordering behind the re-export is not expected" }
 
 [[case]]
 id = "M20"
@@ -846,7 +865,8 @@ rule = "modules.cycle"
 cell = "law6-b3"
 seeded = "a path inside macro arguments, assert_eq!(crate::ordering::score(), 1)"
 extraction = "heuristic"
-witness = { rule = "modules.cycle", path = ["constraints", "ordering", "constraints"], extraction = "heuristic", note = "the finding must carry the heuristic flag; a run that reports it as exact fails the case" }
+witness = { rule = "modules.cycle", path = ["constraints", "ordering", "constraints"], extraction = "heuristic" }
+witness_notes = { note = "the finding must carry the heuristic flag; a run that reports it as exact fails the case" }
 
 [[case]]
 id = "M21"
@@ -886,7 +906,8 @@ rule = "-"
 cell = "law6-b3"
 seeded = "a macro_rules! at the root expanding to crate::ordering::score(), invoked from constraints"
 hole = "§4.1, Law 3/D1 and D2 rows, Known hole: \"Extraction is approximate for macro-generated paths.\" The path exists only after expansion, and the extractor reads unexpanded source."
-witness = { note = "no finding expected; a run that reports one is expanding macros, which the extractor does not claim to do" }
+witness = {}
+witness_notes = { note = "no finding expected; a run that reports one is expanding macros, which the extractor does not claim to do" }
 
 [[case]]
 id = "EM-M02"
@@ -940,13 +961,13 @@ depends_on = "DP-2.1"
 proposed_by = "agent:executor"
 open_at = "DP-1.1"
 
-# A finding matches a witness when its rule id equals `witness.rule` AND every
-# witness key that names a crate, a port, a path or an error code equals the
-# finding's corresponding field. The prose keys `note` and `alternative`, and
-# the conditional key `applies_when`, are read by people and are not matched.
-# Rule id alone is too weak: it would score C01 for a checker that reported
-# dir.core_to_adapter about the wrong pair of crates.
-detection_requires = "the rule id plus every witness key naming a crate, port, module path or error code; the keys note, alternative and applies_when are prose and are not matched"
+# A finding matches a witness when EVERY key of the case's `witness` table
+# equals the finding's corresponding field. There is no list of which keys
+# count, because `witness` holds only keys that count: prose was moved to
+# `witness_notes` in CHG-002.1 so that no future key can be forgotten by a
+# sentence. A finding carrying a field the witness does not mention is fine;
+# a finding contradicting or omitting one the witness does mention is not.
+detection_requires = "every key of the case's witness table must equal the finding's corresponding field; witness holds no prose, so there is no list of exempt keys, and a key added to a witness later is matched by construction"
 
 # Recall and precision are scored separately, so an over-eager rule cannot be
 # hidden by the case it happens to get right, and is not punished twice for one
