@@ -1,5 +1,6 @@
 //! H4 boundary and negative controls. The public manifest remains fixed.
 
+use std::collections::BTreeMap;
 use std::path::{Path, PathBuf};
 use std::process::Command;
 use std::sync::atomic::{AtomicU64, Ordering};
@@ -419,4 +420,82 @@ fn edge_kind_and_cycle_path_cannot_be_omitted_or_faked() {
             }
         }
     }
+}
+
+#[test]
+fn materialize_prunes_inputs_the_registration_no_longer_produces() {
+    // Before CHG-004.5 `corpus generate` only wrote expected files, so a
+    // committed input the manifest stopped producing stayed behind and the
+    // drift check could never be cleared by the command itself.
+    let temp = Temp::new();
+    let base = temp.0.join("committed");
+    let expected: BTreeMap<PathBuf, Vec<u8>> = [
+        (
+            PathBuf::from("violations/X/Cargo.toml"),
+            b"[workspace]\n".to_vec(),
+        ),
+        (
+            PathBuf::from("violations/X/core-a/src/lib.rs"),
+            b"pub fn v() {}\n".to_vec(),
+        ),
+    ]
+    .into_iter()
+    .collect();
+    std::fs::create_dir_all(base.join("violations/X/core-a/src")).expect("dirs");
+    std::fs::write(base.join("violations/X/core-a/build.rs"), "fn main() {}\n").expect("stray");
+    std::fs::create_dir_all(base.join("violations/OLD/src")).expect("old case");
+    std::fs::write(base.join("violations/OLD/src/lib.rs"), "").expect("old input");
+    std::fs::create_dir_all(base.join("violations/X/target")).expect("cargo output dir");
+    std::fs::write(base.join("violations/X/target/keep"), "").expect("cargo output");
+    std::fs::write(base.join("violations/X/Cargo.lock"), "").expect("lockfile");
+
+    let removed = fixture::materialize(&base, &expected).expect("materialize");
+    assert_eq!(
+        removed,
+        vec![
+            PathBuf::from("violations/OLD/src/lib.rs"),
+            PathBuf::from("violations/X/core-a/build.rs"),
+        ]
+    );
+    assert!(
+        !base.join("violations/OLD").exists(),
+        "a case directory emptied by pruning goes with its last input"
+    );
+    assert!(
+        base.join("violations/X/target/keep").exists()
+            && base.join("violations/X/Cargo.lock").exists(),
+        "Cargo output is neither an input nor pruned"
+    );
+    assert!(
+        fixture::drift(&base, &expected)
+            .expect("compare")
+            .is_empty()
+    );
+    assert!(
+        fixture::materialize(&base, &expected)
+            .expect("second run")
+            .is_empty(),
+        "a converged tree prunes nothing"
+    );
+}
+
+#[test]
+fn execution_errors_keep_their_class() {
+    // An unsupported detector is the registration's fault; a detector that
+    // cannot be spawned is the environment's. Before CHG-004.5 both were one
+    // untyped string in the record.
+    let temp = Temp::new();
+    let mut unsupported = case("R01");
+    unsupported.detector = Some("python".to_owned());
+    let Err(error) = runner::execute(&temp.0, &unsupported, &temp.0, &json!({})) else {
+        panic!("an unsupported detector produces no observation");
+    };
+    assert_eq!(error.class, "config_error");
+    assert!(error.message.contains("python"), "{}", error.message);
+
+    let missing = temp.0.join("does-not-exist");
+    let Err(error) = runner::execute(&temp.0, &case("R01"), &missing, &json!({})) else {
+        panic!("a detector that cannot start produces no observation");
+    };
+    assert_eq!(error.class, "tool_error");
 }

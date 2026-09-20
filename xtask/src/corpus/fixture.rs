@@ -416,6 +416,43 @@ pub fn drift(base: &Path, expected: &BTreeMap<PathBuf, Vec<u8>>) -> Result<Vec<P
         .collect())
 }
 
+/// Makes the committed tree equal the declaration: writes every expected
+/// input and removes committed inputs the registration no longer produces,
+/// so one run converges after a manifest change instead of leaving drift
+/// that only manual cleanup could clear (review finding on 2fe6732,
+/// CHG-004.5). Cargo outputs (`target`, `Cargo.lock`) are neither inputs nor
+/// pruned; a directory emptied by pruning goes with its last input. Returns
+/// the removed paths, relative to `base`.
+///
+/// # Errors
+/// Returns file-writing or removal failures, or an unsafe committed input.
+pub fn materialize(base: &Path, expected: &BTreeMap<PathBuf, Vec<u8>>) -> Result<Vec<PathBuf>> {
+    let mut actual = BTreeMap::new();
+    if base.is_dir() {
+        committed_files(base, base, &mut actual)?;
+    }
+    let mut removed = Vec::new();
+    for path in actual.keys() {
+        if expected.contains_key(path) {
+            continue;
+        }
+        let full = base.join(path);
+        std::fs::remove_file(&full).context(|| format!("removing {}", full.display()))?;
+        removed.push(path.clone());
+        let mut dir = full.parent();
+        while let Some(d) = dir {
+            if d == base || std::fs::remove_dir(d).is_err() {
+                break;
+            }
+            dir = d.parent();
+        }
+    }
+    for (path, bytes) in expected {
+        write(&base.join(path), bytes)?;
+    }
+    Ok(removed)
+}
+
 /// Explicit fixture-generation command. `--check` never repairs drift.
 ///
 /// # Errors
@@ -430,8 +467,8 @@ pub fn sync(root: &Path, check: bool) -> Result<u8> {
     let expected = expected_tree(root, &manifest)?;
     let base = root.join(COMMITTED_ROOT);
     if !check {
-        for (path, bytes) in &expected {
-            write(&base.join(path), bytes)?;
+        for path in materialize(&base, &expected)? {
+            eprintln!("fixture pruned: {}", path.display());
         }
     }
     let differences = drift(&base, &expected)?;

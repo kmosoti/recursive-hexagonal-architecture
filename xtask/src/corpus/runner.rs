@@ -114,15 +114,53 @@ fn pre_registration_revision(root: &Path) -> Result<String> {
     Ok(revision.to_owned())
 }
 
-fn execute(
+/// Why a case produced no observation at all, in the two classes the
+/// checker's own reports use (plan §5): the registration or the committed
+/// inputs are wrong (`config_error`), or the environment could not run the
+/// detector (`tool_error`). One untyped string carried both before, so an
+/// evidence reader could not tell a bad registration from a missing cargo
+/// (review finding on 2fe6732, CHG-004.5).
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ExecutionError {
+    pub class: &'static str,
+    pub message: String,
+}
+
+impl ExecutionError {
+    fn config(message: impl Into<String>) -> Self {
+        Self {
+            class: "config_error",
+            message: message.into(),
+        }
+    }
+
+    fn tool(message: impl Into<String>) -> Self {
+        Self {
+            class: "tool_error",
+            message: message.into(),
+        }
+    }
+}
+
+/// Runs one case's detector on its committed workspace and grades the
+/// observation. Public so the failure classes can be tested without a full
+/// corpus run.
+///
+/// # Errors
+/// An [`ExecutionError`] when no observation was produced: an unsupported
+/// detector is a configuration error, a detector that could not be spawned a
+/// tool error. A detector that ran and failed is an observation, not an error.
+pub fn execute(
     root: &Path,
     case: &Case,
     workspace: &Path,
     expected_tool: &Value,
-) -> Result<(Vec<String>, Output, Value, grade::Grade)> {
+) -> std::result::Result<(Vec<String>, Output, Value, grade::Grade), ExecutionError> {
     if let Some(detector) = &case.detector {
         if detector != "cargo check --offline" {
-            return Err(Error::new(format!("unsupported detector {detector}")));
+            return Err(ExecutionError::config(format!(
+                "unsupported detector {detector}"
+            )));
         }
         let args = vec![
             "check".to_owned(),
@@ -136,7 +174,7 @@ fn execute(
             .current_dir(workspace)
             .env("CARGO_TARGET_DIR", workspace.join("target"))
             .output()
-            .context(|| "running compiler detector".to_owned())?;
+            .map_err(|e| ExecutionError::tool(format!("running compiler detector: {e}")))?;
         let facts = compiler_observations(&output);
         let graded = grade::compiler(case, output.status.code(), &facts);
         let mut argv = vec!["cargo".to_owned()];
@@ -162,7 +200,7 @@ fn execute(
         .args(&args)
         .current_dir(root)
         .output()
-        .context(|| "executing architecture checker".to_owned())?;
+        .map_err(|e| ExecutionError::tool(format!("executing architecture checker: {e}")))?;
     let report: Value = serde_json::from_slice(&output.stdout).unwrap_or(Value::Null);
     let mut graded = grade::architecture(case, output.status.code(), &report);
     if let Err(error) = validate_report(case, workspace, expected_tool, &report) {
@@ -470,9 +508,9 @@ pub fn run(root: &Path, args: &CorpusArgs) -> Result<u8> {
     );
     let mut records = Vec::new();
     for case in cases {
-        let observed = (|| -> Result<Value> {
+        let observed = (|| -> std::result::Result<Value, ExecutionError> {
             if !fixture_drift.is_empty() {
-                return Err(Error::new(format!(
+                return Err(ExecutionError::config(format!(
                     "committed fixture drift: {fixture_drift:?}; run corpus generate --check"
                 )));
             }
@@ -485,7 +523,7 @@ pub fn run(root: &Path, args: &CorpusArgs) -> Result<u8> {
         let mut record = match observed {
             Ok(value) => value,
             Err(error) => {
-                json!({"grade": grade::Grade { reasons: vec![error.to_string()], ..Default::default() }, "execution_error": error.to_string()})
+                json!({"grade": grade::Grade { reasons: vec![format!("{}: {}", error.class, error.message)], ..Default::default() }, "execution_error": error.message, "error_class": error.class})
             }
         };
         record["id"] = json!(case.id);
