@@ -87,6 +87,13 @@ answer = "Yes, as CHG-002.1 in eight commits. Kennedy approved the manifest edit
 decided_by = "human:kennedy"
 date = "2026-09-19"
 
+[[decisions]]
+id = "resolve-open-conversations"
+question = "Is a work item ready to hand over while review conversations are still open?"
+answer = "No. Open conversations are reviewed and resolved before the item is reported ready. Reviewing them surfaced a seventh finding, a P1 against the CHG-002.1 commits, which had not been read. Its fix edits the manifest a fourth time, outside the approval for commits 3, 5 and 6, and is flagged in the change record for that reason."
+decided_by = "human:kennedy"
+date = "2026-09-19"
+
 [expectation]
 # Written before the manifest (plan §17: cases and thresholds fixed before data).
 pre_registration_identity = "The merge commit of this change is cited by every H4 record as the revision at which the cases and their expected outcomes were fixed. A case whose `expected` changes after that merge is a re-registration and says so in its own change record."

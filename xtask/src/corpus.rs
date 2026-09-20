@@ -73,11 +73,14 @@ pub struct Dep {
     pub name: String,
     #[serde(default)]
     pub kind: DepKind,
-    /// `"path"` or `"registry"`; defaults to `path` for a workspace member.
+    /// `"path"` or `"registry"`; defaults to `path` for a workspace member or
+    /// an [`OutsideCrate`]. An outside crate's location is stated once, by
+    /// [`OutsideCrate::at`], and the generator computes the relative path from
+    /// there and the depending crate's own directory — cargo resolves a
+    /// dependency path relative to the depending crate, not the workspace
+    /// root, so a path repeated here would differ by one level for a member.
     pub source: Option<String>,
     pub version: Option<String>,
-    /// An explicit path, for a dependency outside the fixture workspace.
-    pub path: Option<String>,
     /// A cfg string, written as `[target.'<cfg>'.dependencies]`.
     pub target: Option<String>,
     #[serde(default)]
@@ -114,6 +117,8 @@ pub struct FixtureCrate {
 #[serde(deny_unknown_fields)]
 pub struct OutsideCrate {
     pub name: String,
+    /// Where the crate is generated, relative to the **workspace root**. The
+    /// single owner of this crate's location.
     pub at: String,
     /// An outside crate may itself depend on another outside crate: EM-C01
     /// needs the transitive edge to exist without either end being a
@@ -291,7 +296,7 @@ impl std::fmt::Display for Defect {
             ),
             Self::UnresolvableDep { case, krate, dep } => write!(
                 f,
-                "case {case}: {krate} depends on {dep}, which is not a member, not an outside crate, and not marked as a registry dependency"
+                "case {case}: {krate} depends on {dep}, which is not a member of the fixture workspace, not an outside crate, and not marked as a registry dependency"
             ),
             Self::DetectWithoutWitness(id) => write!(
                 f,
@@ -374,17 +379,26 @@ impl Manifest {
             .map(|c| c.name.as_str())
             .collect();
         let mut defects = Vec::new();
-        for krate in &case.crates {
-            for dep in &krate.deps {
+        let all: Vec<(&str, &Vec<Dep>)> = case
+            .crates
+            .iter()
+            .map(|c| (c.name.as_str(), &c.deps))
+            .chain(
+                case.outside_crates
+                    .iter()
+                    .map(|c| (c.name.as_str(), &c.deps)),
+            )
+            .collect();
+        for (krate_name, deps) in all {
+            for dep in deps {
                 let name = dep.name.as_str();
                 let resolvable = members.contains(name)
                     || outside.contains(name)
-                    || dep.path.is_some()
                     || dep.source.as_deref() == Some("registry");
                 if !resolvable {
                     defects.push(Defect::UnresolvableDep {
                         case: case.id.clone(),
-                        krate: krate.name.clone(),
+                        krate: krate_name.to_owned(),
                         dep: dep.name.clone(),
                     });
                 }
@@ -563,6 +577,26 @@ crates = [{ name = "core-a", role = "core", build_script = true }]
             vec![Defect::UnresolvableDep {
                 case: "C01".to_owned(),
                 krate: "core-a".to_owned(),
+                dep: "ghost".to_owned(),
+            }]
+        );
+    }
+
+    /// An outside crate's own dependencies are checked like a member's. They
+    /// were not until CHG-002.1, which is how EM-C01's `pure-looking` could
+    /// name a crate the generator had no instructions to write.
+    #[test]
+    fn an_outside_crates_dependencies_are_validated_too() {
+        let text = minimal().replace(
+            r#"crates = [{ name = "core-a", role = "core", build_script = true }]"#,
+            "crates = [{ name = \"core-a\", role = \"core\", deps = [{ name = \"friend\" }] }]\n             outside_crates = [{ name = \"friend\", at = \"../friend\", deps = [{ name = \"ghost\" }] }]",
+        );
+        let manifest = Manifest::parse(&text).unwrap();
+        assert_eq!(
+            manifest.defects(),
+            vec![Defect::UnresolvableDep {
+                case: "C01".to_owned(),
+                krate: "friend".to_owned(),
                 dep: "ghost".to_owned(),
             }]
         );

@@ -95,7 +95,7 @@ A fourth run, at `af1e5077`, failed `L0.typos` on the sentence repair attempt 2 
 
 ## CHG-002.1: review findings and their determinations
 
-Requested by Kennedy on the open pull request, as eight commits. The Codex review of commits `9e7bb89` and `8dc1969` raised six findings; all six are accepted and fixed. One further change is Kennedy's own.
+Requested by Kennedy on the open pull request, as eight commits. The Codex review of commits `9e7bb89` and `8dc1969` raised six findings, and a seventh P1 against the CHG-002.1 commits themselves. All seven are accepted and fixed. One further change is Kennedy's own.
 
 | # | Source | Finding | Determination |
 | --- | --- | --- | --- |
@@ -105,7 +105,12 @@ Requested by Kennedy on the open pull request, as eight commits. The Codex revie
 | 4 | Codex **P2** | *Pin each expected outcome to its case ID.* Aggregate counts cannot see a swap: flipping C01 to `no_alarm` and L01 to `detect` leaves every count identical. | **Accepted, fixed, and verified against the stated scenario.** With exactly that swap applied, the counts test still passes and the new `PINNED` test fails naming both cases. |
 | 5 | Codex **P2** | *Attribute core-to-adapter cases to the D1 cell.* C01 and C15–C18 named `law6-d5` alone, so a miss would downgrade the D5 claim and leave D1 credited. | **Accepted, fixed more broadly than proposed.** Codex asked to move the cases from D5 to D1. A core-to-adapter edge is genuinely evidence for both rows, so `cell` became `cells`, a list, and those five name both. Moving them would have left the other claim falsely standing, in the opposite direction. |
 | 6 | Codex **P2** | *Map the undeclared-dependency case to Law 3/D1.* M02 seeds a directional edge, not a cycle, yet named `law6-b3`. | **Accepted, fixed.** M02 names `law3-d1`. |
+| 8 | Codex **P1** | *Point dependencies at the actual outside-crate location.* A member's `path = "../outside-crate"` is resolved by cargo relative to the **depending crate's** directory, so it lands at `<workspace>/outside-crate` — inside the workspace — while `outside_crates.at` means beside it. C19 could not load, and EM-C01's new `core-a → pure-looking` edge had the same fault. | **Accepted, fixed structurally.** Codex offered two remedies: write `../../` in the dep, or have the generator normalise. The first hard-codes the depth of a layout the manifest does not define, and would break the moment a fixture nested differently. Instead `Dep::path` is removed: `outside_crates.at` is the single owner of an outside crate's location (§11.7.1), a dependency names the crate and nothing more, and the generator computes each relative path. All three uses of `path` named an outside crate, so the field was pure duplication — and the duplication is what let the two disagree. |
 | 7 | **Kennedy** | C05's witness carried an `alternative` letting a Cargo error be recorded as `graph.cycle`. | **Accepted, fixed.** It is the corpus grading itself generously — crediting the xtask DFS for an error it never produced, and the Law 6/B3 cell to a rule that did not run. Removed; C05 now requires the checker's own finding. |
+
+Finding 8 arrived on the CHG-002.1 commits themselves and is a fault I introduced in finding 1's fix: moving `pure-looking` outside the workspace added a second member-to-outside edge with the same broken path. It also exposed a gap in the validation — an outside crate's own dependencies were not checked at all, so `pure-looking` could name a crate the generator had no instruction to write. `Manifest::defects()` now walks outside crates too, with a test.
+
+**Approval note.** Kennedy approved manifest edits in commits 3, 5 and 6. Finding 8's fix is a ninth commit and edits the manifest again, outside that approval, on the instruction to resolve open review conversations. It changes no case's expected outcome, rule, cells or seeded description — only the removal of a redundant `path` key from three dependency entries. It is flagged here so it can be reverted as easily as it was made.
 
 **What did not change.** No case's `expected` outcome was altered, no case was added or dropped, and no rule id changed. Findings 1, 5, 6 and 7 are pre-registration corrections that Kennedy approved explicitly, before any checker exists; findings 2 and 3 are structural, changing how a case is expressed rather than what it expects.
 

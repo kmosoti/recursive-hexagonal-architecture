@@ -54,9 +54,8 @@
 #     name        required.
 #     kind        "normal" (default) | "dev" | "build".
 #     source      "path" (default when the name is a member of this fixture's
-#                 workspace) | "registry" (default otherwise).
+#                 workspace, or an entry of outside_crates) | "registry".
 #     version     for a registry dependency; "*" where the case does not care.
-#     path        explicit path, for a dependency outside the workspace.
 #     target      a cfg string, written as [target.'<cfg>'.dependencies].
 #     optional    true writes `optional = true`.
 #     rename      the key in Cargo.toml when it differs from the package name,
@@ -67,6 +66,20 @@
 # Classification follows the fixture's own rules file: the adapter and app
 # prefixes, the tools and harness lists, then [package.metadata.rha] role.
 # A member matching neither is unclassified, which is C10.
+#
+# `outside_crates` are generated outside the workspace directory and are not
+# members, so nothing classifies them. Each entry's `at` is relative to the
+# WORKSPACE ROOT, and it is the only statement of where that crate goes: a
+# dependency on an outside crate names it and carries no path of its own.
+#
+# A dependency path in a Cargo.toml is resolved by cargo relative to the
+# DEPENDING CRATE's directory, not the workspace root, so the two differ by
+# one level for a member and by none for another outside crate. Until
+# CHG-002.1 a dep repeated the location as `path = "../outside-crate"`, which
+# read correctly and resolved to <workspace>/outside-crate — inside the
+# workspace, where the crate is not. The generator now computes each relative
+# path from `at` and the depending crate's own location, so the fact is
+# stated once (§11.7.1) and cannot disagree with itself.
 #
 # ---------------------------------------------------------------------------
 # WITNESS
@@ -409,7 +422,7 @@ cells = ["law5"]
 seeded = "core-a depends by path on outside-crate, which lies outside the fixture workspace and is not allow-listed"
 witness = { rule = "effect.core_disallowed_dependency", from = "core-a", to = "outside-crate" }
 crates = [
-  { name = "core-a", role = "core", deps = [{ name = "outside-crate", path = "../outside-crate" }] },
+  { name = "core-a", role = "core", deps = [{ name = "outside-crate" }] },
 ]
 # Generated beside the workspace, not inside it: no [workspace] membership.
 outside_crates = [
@@ -646,10 +659,10 @@ detected_when = "transitive_enabled = true (the --transitive flag of plan §5). 
 witness = { rule = "transitive.core_disallowed_dependency", path = ["core-a", "pure-looking", "tokio"] }
 witness_notes = { applies_when = "transitive_enabled" }
 crates = [
-  { name = "core-a", role = "core", deps = [{ name = "pure-looking", path = "../pure-looking" }] },
+  { name = "core-a", role = "core", deps = [{ name = "pure-looking" }] },
 ]
 outside_crates = [
-  { name = "pure-looking", at = "../pure-looking", deps = [{ name = "tokio", path = "../tokio" }] },
+  { name = "pure-looking", at = "../pure-looking", deps = [{ name = "tokio" }] },
   { name = "tokio", at = "../tokio" },
 ]
 [case.rules]
