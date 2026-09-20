@@ -148,8 +148,10 @@ pub struct Case {
     pub expected: Expected,
     /// The rule id a detection must carry, or `"-"` where no rule applies.
     pub rule: String,
-    /// A key of the manifest's `[cells]` table.
-    pub cell: String,
+    /// The §4.1 rows this case is evidence for, as keys of `[cells]`. A miss
+    /// downgrades every one of them: one seeded violation can carry more
+    /// than one claim.
+    pub cells: Vec<String>,
     /// What the fixture seeds, in words.
     pub seeded: String,
     /// What a finding must name. **Every** key here is matched; prose belongs
@@ -235,6 +237,8 @@ pub enum Defect {
     DuplicateId(String),
     /// A case names a `[cells]` key that does not exist.
     UnknownCell { case: String, cell: String },
+    /// A case names no §4.1 row, so a miss would downgrade nothing.
+    NoCells(String),
     /// A case expects a detection but names no rule.
     DetectWithoutRule(String),
     /// An expected miss that cites no §4.1 hole is an excuse, not a record.
@@ -270,6 +274,10 @@ impl std::fmt::Display for Defect {
                     "case {case} names cell {cell}, which [cells] does not define"
                 )
             }
+            Self::NoCells(id) => write!(
+                f,
+                "case {id} names no §4.1 cell, so a miss on it would downgrade nothing"
+            ),
             Self::DetectWithoutRule(id) => {
                 write!(f, "case {id} expects a detection but its rule is \"-\"")
             }
@@ -316,11 +324,16 @@ impl Manifest {
             if !seen.insert(case.id.as_str()) {
                 defects.push(Defect::DuplicateId(case.id.clone()));
             }
-            if !self.cells.contains_key(&case.cell) {
-                defects.push(Defect::UnknownCell {
-                    case: case.id.clone(),
-                    cell: case.cell.clone(),
-                });
+            if case.cells.is_empty() {
+                defects.push(Defect::NoCells(case.id.clone()));
+            }
+            for cell in &case.cells {
+                if !self.cells.contains_key(cell) {
+                    defects.push(Defect::UnknownCell {
+                        case: case.id.clone(),
+                        cell: cell.clone(),
+                    });
+                }
             }
             match case.expected {
                 Expected::Detect => {
@@ -444,7 +457,7 @@ level = "crate"
 generation = "declared"
 expected = "detect"
 rule = "effect.core_build_script"
-cell = "law5"
+cells = ["law5"]
 seeded = "a core with a build script"
 witness = { rule = "effect.core_build_script", crate = "core-a" }
 crates = [{ name = "core-a", role = "core", build_script = true }]
@@ -467,7 +480,7 @@ crates = [{ name = "core-a", role = "core", build_script = true }]
             "crates = [{ name = \"core-a\", role = \"core\", build_script = true }]",
             "crates = [{ name = \"core-a\", role = \"core\", build_script = true }]\n\
              [[case]]\nid = \"C01\"\nlevel = \"crate\"\ngeneration = \"declared\"\n\
-             expected = \"detect\"\nrule = \"effect.core_build_script\"\ncell = \"law5\"\n\
+             expected = \"detect\"\nrule = \"effect.core_build_script\"\ncells = [\"law5\"]\n\
              seeded = \"again\"\nwitness = { crate = \"core-a\" }\n\
              crates = [{ name = \"core-a\" }]",
         );
@@ -481,7 +494,7 @@ crates = [{ name = "core-a", role = "core", build_script = true }]
 
     #[test]
     fn an_unknown_cell_is_a_defect() {
-        let text = minimal().replace(r#"cell = "law5""#, r#"cell = "law99""#);
+        let text = minimal().replace(r#"cells = ["law5"]"#, r#"cells = ["law99"]"#);
         let manifest = Manifest::parse(&text).unwrap();
         assert_eq!(
             manifest.defects(),
@@ -552,6 +565,17 @@ crates = [{ name = "core-a", role = "core", build_script = true }]
                 krate: "core-a".to_owned(),
                 dep: "ghost".to_owned(),
             }]
+        );
+    }
+
+    #[test]
+    fn a_case_naming_no_cell_is_a_defect() {
+        let text = minimal().replace("cells = [\"law5\"]\nseeded", "cells = []\nseeded");
+        let manifest = Manifest::parse(&text).unwrap();
+        assert!(
+            manifest
+                .defects()
+                .contains(&Defect::NoCells("C01".to_owned()))
         );
     }
 
