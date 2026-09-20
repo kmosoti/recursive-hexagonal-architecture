@@ -1,0 +1,107 @@
+# First commit of CHG-004; creation pre-approved by .rha/policy.toml [acceptance].
+schema_version = 1
+id = "CHG-003"
+change = "docs/changes/CHG-003-architecture-crate-level.md"
+task = ".rha/tasks/CHG-003-architecture-crate-level.toml"
+
+[acceptor]
+principal = "human:kennedy"
+role = "acceptor"
+date = "2026-09-20"
+authority_profile = "ECC-Solo"
+basis = 'The merge is the acceptance under .rha/policy.toml [acceptance]. Kennedy confirmed in the working conversation: "CHG-003 is accepted at 140fdfb (merge of PR 6)."'
+event = "merge of pull request 6"
+
+[subject]
+revision = "140fdfb92d62d3481d95f3e2efc1d24a0206fcc4"
+tree = "3db48ec0e7df0fd99ca3718d28ce4efdae8e6d5a"
+parents = ["4be4a199422d1e119d0dddc5483636b7a2052779", "defc33288efb43540ce7d6a858aa16eb1c27c628"]
+pull_request = "https://github.com/kmosoti/recursive-hexagonal-architecture/pull/6"
+milestone = "M1 (in progress; between W3 and W4)"
+tag = "none: M1 is tagged after W6"
+integrator_edits = "none: merge tree equals the second parent tree"
+
+[[evidence]]
+path = "evidence/ci/35507880475.json"
+class = "ci"
+subject_revision = "140fdfb92d62d3481d95f3e2efc1d24a0206fcc4"
+subject_tree = "3db48ec0e7df0fd99ca3718d28ce4efdae8e6d5a"
+note = "GitHub Actions run 35507880475 on main at the accepted merge itself. Downloaded unchanged from rha-evidence. All eight L0 checks passed; nextest selected 124 tests."
+
+[outcomes]
+passed = ["L0.fmt", "L0.clippy", "L0.nextest", "L0.doctest", "L0.architecture", "L0.deny", "L0.machete", "L0.typos"]
+not_run = []
+failed = []
+not_applicable = []
+inconclusive = []
+
+[disposition]
+decision = "accepted"
+kind = "controlled_transition"
+merge_allowed = false
+basis = "spec §11.5 and .rha/policy.toml [acceptance.bootstrap]. All L0 checks now pass; the record remains advisory because trusted producers and the protected verifier arrive in CHG-019 and CHG-020."
+eligibility_at_acceptance = "blocked"
+exception = "none"
+
+[[disposition.predicates]]
+name = "Authentic"
+holds = false
+reason = "No trusted producers in policy; this CI record is unauthenticated."
+
+[[disposition.predicates]]
+name = "Applicable"
+holds = true
+reason = "Candidate and base policy digests agree; all required identity inputs are present."
+
+[[disposition.predicates]]
+name = "Complete"
+holds = true
+reason = "Every required L0 check has an outcome."
+
+[[disposition.predicates]]
+name = "Passed"
+holds = true
+reason = "All eight L0 checks passed, including L0.architecture; nextest selected 124 tests."
+
+[[defects]]
+id = "D-003.1"
+status = "repaired_before_acceptance"
+found_by = "review and reproduction recorded in the CHG-003 change record"
+record = "docs/changes/CHG-003-architecture-crate-level.md: CHG-003.1 determinations"
+statement = "Registry packages sharing a member name were treated as members; enabling unimplemented transitive analysis could silently pass; unsupported foreign_core_dependency values silently fell back to warning."
+repair = "Membership now uses source and path identity; unsupported transitive configuration and adapter-policy values fail with config_error. The changes and regression results are in the CHG-003.1 determinations."
+
+[[defects]]
+id = "D-003.1-follow-up"
+status = "repaired_before_acceptance"
+found_by = "review and reproduction recorded in the CHG-003 change record"
+record = "docs/changes/CHG-003-architecture-crate-level.md: CHG-003.1 follow-up determinations"
+statement = "Port-owner checks could select an external namesake or wrong-kind edge despite a normal member edge; malformed metadata and unsupported rules schemas could pass; reports did not reliably identify the checker."
+repair = "Preserve actual member identity and prefer the normal edge; distinguish malformed metadata from absent input; reject unsupported schemas; identify the tool checkout. The identity implementation was subsequently consolidated in CHG-003.2."
+
+[[defects]]
+id = "D-003.2"
+status = "repaired_before_acceptance"
+found_by = "review and reproduction recorded in the CHG-003 change record"
+record = "docs/changes/CHG-003-architecture-crate-level.md: CHG-003.2 determinations"
+statement = "Build-time and run-time checker identity had different definitions of dirty; the protected PR template was changed without a recorded approval; earlier bookkeeping carried stale provenance, module totals and incomplete evidence listings."
+repair = "Use util::git_identity as the single run-time identity source, remove the build script, restore the PR template, consolidate guidance, and correct the identified record summaries without rewriting historical evidence. EM-M03 remained pending as acceptance concern 9."
+
+[[defects]]
+id = "D-003.3"
+status = "repaired_before_acceptance"
+found_by = "review and reproduction recorded in the CHG-003 change record"
+record = "docs/changes/CHG-003-architecture-crate-level.md: CHG-003.3 determinations"
+statement = "The core Clippy-template rule received unclassified graph nodes and therefore examined no core; unknown role selectors parsed as rules that could never match."
+repair = "Take core crates from outcome.classification and reject unknown role selectors at parse time. The change record records failing invalid controls and passing valid controls; accepted-main CI selected 124 tests."
+
+[carried_forward]
+open = [
+  "Acceptance concern 7: CHG-000 and CHG-001 had zero completed automated review passes; the absence of findings in their records is not a clean review. Those records are unchanged.",
+  "Acceptance concern 8: controlled_transition is the bootstrap policy label; docs/proposals/spec-v0.11.md row 8 proposes a distinct kind, requiring Kennedy policy approval. No policy change is made here.",
+  "Acceptance concern 9: EM-M03 was assigned only law6-b3 at the accepted merge although its hole names Law 3/D1. Kennedy approved cells [law3-d1, law6-b3] for the second commit of CHG-004; the protected correction follows this acceptance record, before the harness.",
+  "H4 fixture generation and crate-level validation: CHG-004.",
+  "DP-1.1b: Kennedy runs the private held-out cases at W4 acceptance; the Executor does not read them.",
+  "DP-1.6: acceptance of the maturity proposal remains Kennedy's decision.",
+  "Module checks: CHG-007; transitive analysis remains a disclosed limitation.",
+]

@@ -1,0 +1,11 @@
+[dependencies.core-a]
+path = "../core-a"
+
+[package]
+edition = "2024"
+name = "adapter-x"
+publish = false
+version = "0.0.0"
+
+[package.metadata.rha]
+implements = ["core-a::Port"]

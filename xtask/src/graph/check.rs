@@ -45,6 +45,9 @@ pub struct Finding {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub witness: Option<Witness>,
     pub message: String,
+    /// Structured rule-specific facts; rendered without consulting any corpus.
+    #[serde(flatten)]
+    pub details: std::collections::BTreeMap<String, serde_json::Value>,
 }
 
 /// Where the thing the finding is about is written down.
@@ -60,6 +63,15 @@ pub struct Witness {
     /// The key used in `Cargo.toml`, when it differs from the package name.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rename: Option<String>,
+}
+
+impl Finding {
+    fn detail(mut self, key: &str, value: impl serde::Serialize) -> Self {
+        if let Ok(value) = serde_json::to_value(value) {
+            self.details.insert(key.to_owned(), value);
+        }
+        self
+    }
 }
 
 impl Witness {
@@ -135,6 +147,7 @@ fn edge_finding(
     message: String,
 ) -> Finding {
     Finding {
+        details: std::collections::BTreeMap::new(),
         rule,
         severity,
         from: edge.from.clone(),
@@ -194,6 +207,7 @@ fn classified(graph: &CrateGraph, rules: &Rules, outcome: &mut Outcome) -> Crate
         let manifest_path = node.manifest_path.display().to_string();
         match result.problem {
             Some(Problem::Unclassified) => outcome.findings.push(Finding {
+                details: std::collections::BTreeMap::new(),
                 rule: "class.unclassified",
                 severity: Severity::Error,
                 from: node.name.clone(),
@@ -212,6 +226,10 @@ fn classified(graph: &CrateGraph, rules: &Rules, outcome: &mut Outcome) -> Crate
                 prefix_says,
                 metadata_says,
             }) => outcome.findings.push(Finding {
+                details: std::collections::BTreeMap::from([
+                    ("prefix_says".to_owned(), serde_json::json!(prefix_says)),
+                    ("metadata_says".to_owned(), serde_json::json!(metadata_says)),
+                ]),
                 rule: "class.prefix_role_conflict",
                 severity: Severity::Error,
                 from: node.name.clone(),
@@ -228,6 +246,7 @@ fn classified(graph: &CrateGraph, rules: &Rules, outcome: &mut Outcome) -> Crate
                 ),
             }),
             Some(Problem::UnknownRole { declared }) => outcome.findings.push(Finding {
+                details: std::collections::BTreeMap::new(),
                 rule: "class.unclassified",
                 severity: Severity::Error,
                 from: node.name.clone(),
@@ -411,19 +430,22 @@ fn forbidden_rules(
                 .reason
                 .clone()
                 .unwrap_or_else(|| "forbidden by rha-crates.toml".to_owned());
-            outcome.findings.push(edge_finding(
-                "forbidden.edge",
-                Severity::Error,
-                graph,
-                edge,
-                format!(
-                    "{} -> {} matches the forbidden rule {} -> {}: {reason}",
-                    edge.from,
-                    edge.to.name(),
-                    rule.from,
-                    rule.to
-                ),
-            ));
+            outcome.findings.push(
+                edge_finding(
+                    "forbidden.edge",
+                    Severity::Error,
+                    graph,
+                    edge,
+                    format!(
+                        "{} -> {} matches the forbidden rule {} -> {}: {reason}",
+                        edge.from,
+                        edge.to.name(),
+                        rule.from,
+                        rule.to
+                    ),
+                )
+                .detail("matched_rule", format!("{} -> {}", rule.from, rule.to)),
+            );
         }
     }
 }
@@ -436,6 +458,10 @@ fn adapter_rules(graph: &CrateGraph, rules: &Rules, outcome: &mut Outcome) {
             let owner_is_member = graph.crate_named(&port.owner).is_some();
             if !owner_is_member {
                 outcome.findings.push(Finding {
+                    details: std::collections::BTreeMap::from([
+                        ("port".to_owned(), serde_json::json!(port.path)),
+                        ("owner".to_owned(), serde_json::json!(port.owner)),
+                    ]),
                     rule: "meta.unknown_port_owner",
                     severity: Severity::Error,
                     from: node.name.clone(),
@@ -469,21 +495,29 @@ fn adapter_rules(graph: &CrateGraph, rules: &Rules, outcome: &mut Outcome) {
                 .find(|e| e.kind != DepKind::Normal);
             match normal.or(other) {
                 Some(e) if e.kind == DepKind::Normal => {}
-                Some(e) => outcome.findings.push(edge_finding(
-                    "adapter.port_owner_wrong_kind",
-                    Severity::Error,
-                    graph,
-                    e,
-                    format!(
-                        "{} implements {} but depends on {} only as a {}-dependency, so the \
+                Some(e) => outcome.findings.push(
+                    edge_finding(
+                        "adapter.port_owner_wrong_kind",
+                        Severity::Error,
+                        graph,
+                        e,
+                        format!(
+                            "{} implements {} but depends on {} only as a {}-dependency, so the \
                          implementation does not compile outside that context",
-                        node.name,
-                        port.path,
-                        port.owner,
-                        e.kind.as_str()
-                    ),
-                )),
+                            node.name,
+                            port.path,
+                            port.owner,
+                            e.kind.as_str()
+                        ),
+                    )
+                    .detail("port", &port.path)
+                    .detail("owner", &port.owner),
+                ),
                 None => outcome.findings.push(Finding {
+                    details: std::collections::BTreeMap::from([
+                        ("port".to_owned(), serde_json::json!(port.path)),
+                        ("owner".to_owned(), serde_json::json!(port.owner)),
+                    ]),
                     rule: "adapter.missing_port_owner",
                     severity: Severity::Error,
                     from: node.name.clone(),
@@ -520,6 +554,7 @@ fn build_script_and_foreign_core(
         if node.role == Some(Role::Core) && node.has_build_script && !rules.core.allow_build_scripts
         {
             outcome.findings.push(Finding {
+                details: std::collections::BTreeMap::new(),
                 rule: "effect.core_build_script",
                 severity: Severity::Error,
                 from: node.name.clone(),
@@ -643,6 +678,15 @@ fn cycles(graph: &CrateGraph, outcome: &mut Outcome) {
         let joined = cycle.join(" -> ");
         let first = cycle.first().copied().unwrap_or_default();
         outcome.findings.push(Finding {
+            details: std::collections::BTreeMap::from([(
+                "members".to_owned(),
+                serde_json::json!(
+                    cycle
+                        .iter()
+                        .copied()
+                        .collect::<std::collections::BTreeSet<_>>()
+                ),
+            )]),
             rule: "graph.cycle",
             severity: Severity::Error,
             from: first.to_owned(),

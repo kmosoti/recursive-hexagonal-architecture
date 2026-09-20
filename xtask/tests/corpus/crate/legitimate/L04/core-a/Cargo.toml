@@ -1,0 +1,11 @@
+[dev-dependencies.proptest]
+version = "1"
+
+[package]
+edition = "2024"
+name = "core-a"
+publish = false
+version = "0.0.0"
+
+[package.metadata.rha]
+role = "core"

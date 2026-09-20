@@ -1,0 +1,6 @@
+[workspace]
+members = [
+    "core-a",
+    "core-b",
+]
+resolver = "3"

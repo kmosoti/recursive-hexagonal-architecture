@@ -84,8 +84,8 @@ pub fn json(
         },
         "classification": outcome.classification,
         "edges_examined": { "normal": normal, "dev": dev, "build": build },
-        "findings": outcome.findings,
-        "harness_edges": outcome.harness_edges,
+        "findings": outcome.findings.iter().map(finding_json).collect::<Vec<_>>(),
+        "harness_edges": outcome.harness_edges.iter().map(finding_json).collect::<Vec<_>>(),
         "module_checks": module_checks(graph),
         "limitations": outcome.limitations,
         "summary": {
@@ -95,6 +95,13 @@ pub fn json(
             "outcome": if errors == 0 { "passed" } else { "failed" },
         },
     })
+}
+
+fn finding_json(finding: &crate::graph::check::Finding) -> Value {
+    let mut value = json!(finding);
+    // `from` names the subject of both edge and per-crate diagnostics.
+    value["crate"] = json!(finding.from);
+    value
 }
 
 /// The text report, in the shape plan §5 gives:

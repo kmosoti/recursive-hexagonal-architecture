@@ -7,3 +7,5 @@
 # proptest-regressions/ directories are committed: they are persisted seeds.
 # Build output of the corpus fixture workspaces (their own [workspace]).
 /xtask/tests/corpus/**/target/
+# Cargo's generated locks are output for the synthetic fixture workspaces.
+/xtask/tests/corpus/crate/**/Cargo.lock

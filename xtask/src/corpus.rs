@@ -1,9 +1,7 @@
 //! The pre-registered H4 corpus manifest (CHG-002; plan §6).
 //!
-//! This module holds the manifest's shape and the validation that makes the
-//! pre-registration meaningful. It holds no runner: `cargo xtask corpus run`
-//! arrives in CHG-004 for the crate level and CHG-007 for the module level,
-//! and the fixture workspaces it generates do not exist yet.
+//! This module owns the manifest's shape and validation. CHG-004 adds the
+//! crate-level generator and runner; module execution arrives in CHG-007.
 //!
 //! The manifest is committed before any checker code, so that a case cannot be
 //! written to fit what a checker turned out to do (spec §17, §9.14). The
@@ -15,6 +13,10 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 use serde::Deserialize;
+
+pub mod fixture;
+pub mod grade;
+pub mod runner;
 
 /// Where the manifest lives, relative to the workspace root.
 pub const MANIFEST_PATH: &str = "xtask/tests/corpus/manifest.toml";

@@ -20,6 +20,11 @@ pub enum Command {
     Ci(CiArgs),
     /// Crate-graph and module-graph checks (spec §6.13).
     Architecture(ArchitectureArgs),
+    /// Run the pre-registered H4 corpus (crate level; modules arrive in W7).
+    Corpus {
+        #[command(subcommand)]
+        command: CorpusCommand,
+    },
     /// Evidence utilities.
     Evidence {
         #[command(subcommand)]
@@ -31,6 +36,26 @@ pub enum Command {
         #[arg(long)]
         check: bool,
     },
+}
+
+#[derive(Debug, Subcommand)]
+pub enum CorpusCommand {
+    /// Materialize the declared fixtures, or fail if committed inputs drift.
+    Generate {
+        #[arg(long)]
+        check: bool,
+    },
+    /// Check committed fixtures, grade every case and write H4 evidence.
+    Run(CorpusArgs),
+}
+
+#[derive(Debug, Args)]
+pub struct CorpusArgs {
+    #[arg(long, default_value = "crate", value_parser = ["crate", "module"])]
+    pub level: String,
+    /// Directory for the timestamped advisory H4 record.
+    #[arg(long, default_value = "evidence/h4-crate")]
+    pub evidence: PathBuf,
 }
 
 /// `cargo xtask architecture` (plan §5).

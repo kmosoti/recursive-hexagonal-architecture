@@ -1,0 +1,17 @@
+[dependencies.adapter-x]
+path = "../adapter-x"
+
+[dependencies.adapter-y]
+path = "../adapter-y"
+
+[dependencies.core-a]
+path = "../core-a"
+
+[dependencies.core-b]
+path = "../core-b"
+
+[package]
+edition = "2024"
+name = "app-main"
+publish = false
+version = "0.0.0"

@@ -1,0 +1,5 @@
+[package]
+edition = "2024"
+name = "tool-t"
+publish = false
+version = "0.0.0"

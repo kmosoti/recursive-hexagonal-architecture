@@ -1,0 +1,2 @@
+#[allow(unused_imports)] use core_a as _;
+#[allow(unused_imports)] use core_b as _;

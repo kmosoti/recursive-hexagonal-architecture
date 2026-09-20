@@ -1,0 +1,6 @@
+[workspace]
+members = [
+    "tool-t",
+    "adapter-x",
+]
+resolver = "3"

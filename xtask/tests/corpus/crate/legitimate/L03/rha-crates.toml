@@ -1,0 +1,19 @@
+forbidden = []
+schema_version = 1
+
+[adapters]
+require_port_owner_dependency = true
+
+[classification]
+adapter_prefix = "adapter-"
+app_prefix = "app-"
+harness = []
+tools = ["tool-t"]
+
+[core]
+allow = ["sha2"]
+allow_build_scripts = false
+dev_allow = []
+
+[transitive]
+enabled = false
