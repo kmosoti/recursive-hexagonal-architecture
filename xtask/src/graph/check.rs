@@ -16,7 +16,7 @@
 //!   absence of findings (corpus EM-C01).
 
 use crate::graph::classify::{self, Problem};
-use crate::graph::model::{CrateGraph, DepKind, Edge, Role, RoleSource};
+use crate::graph::model::{CrateGraph, DepKind, Edge, Role, RoleSource, Target};
 use crate::graph::rules::{Rules, glob_matches, selector_matches};
 
 /// How much a finding matters.
@@ -453,10 +453,21 @@ fn adapter_rules(graph: &CrateGraph, rules: &Rules, outcome: &mut Outcome) {
             if !rules.adapters.require_port_owner_dependency {
                 continue;
             }
-            let edge = graph
+            // The owner must be the workspace member named by the port. An
+            // external package with the same name cannot provide the member's
+            // port, and a normal member edge must win over a dev/build edge
+            // regardless of declaration order.
+            let is_owner =
+                |e: &&Edge| matches!(&e.to, Target::Member { name } if name == &port.owner);
+            let normal = graph
                 .edges_from(&node.name)
-                .find(|e| e.to.name() == port.owner);
-            match edge {
+                .filter(is_owner)
+                .find(|e| e.kind == DepKind::Normal);
+            let other = graph
+                .edges_from(&node.name)
+                .filter(is_owner)
+                .find(|e| e.kind != DepKind::Normal);
+            match normal.or(other) {
                 Some(e) if e.kind == DepKind::Normal => {}
                 Some(e) => outcome.findings.push(edge_finding(
                     "adapter.port_owner_wrong_kind",

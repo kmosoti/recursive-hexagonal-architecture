@@ -9,6 +9,24 @@ use serde_json::{Value, json};
 use crate::graph::check::{Outcome, Severity};
 use crate::graph::model::{CrateGraph, MetadataMode};
 
+/// Identity of the compiled architecture reporter. These values are captured
+/// by `xtask/build.rs`; runtime checkout changes and the subject being
+/// inspected cannot alter them.
+#[must_use]
+pub fn tool_identity() -> Value {
+    let dirty = match option_env!("RHA_TOOL_GIT_DIRTY") {
+        Some("true") => Value::Bool(true),
+        Some("false") => Value::Bool(false),
+        _ => Value::Null,
+    };
+    json!({
+        "name": "xtask architecture",
+        "version": env!("CARGO_PKG_VERSION"),
+        "git_rev": option_env!("RHA_TOOL_GIT_REV").unwrap_or("unknown"),
+        "git_dirty": dirty,
+    })
+}
+
 /// What the report says about the module-level checks, which do not exist
 /// until CHG-007. `not_run` with a reason, never an empty list of findings
 /// that reads like a pass (§11.4).
@@ -50,10 +68,7 @@ pub fn json(
     let errors = outcome.errors();
     json!({
         "schema_version": 1,
-        "tool": {
-            "name": "xtask architecture",
-            "version": env!("CARGO_PKG_VERSION"),
-        },
+        "tool": tool_identity(),
         "subject": {
             "workspace_root": graph.workspace_root.display().to_string(),
             "manifest_path": manifest_path,
@@ -282,6 +297,10 @@ mod tests {
         assert_eq!(report["subject"]["metadata_mode"], "no_deps");
         assert_eq!(report["summary"]["errors"], 0);
         assert_eq!(report["summary"]["outcome"], "passed");
+        assert!(report["tool"]["name"].is_string());
+        assert!(report["tool"]["version"].is_string());
+        assert!(report["tool"]["git_rev"].is_string());
+        assert!(report["tool"].get("git_dirty").is_some());
         assert!(
             report["subject"]["rules_digest"]
                 .as_str()

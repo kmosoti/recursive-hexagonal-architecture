@@ -21,7 +21,7 @@ The shared workflow for human and agent contributors (spec §11.7.4). The machin
   | --- | --- |
   | `cargo xtask ci` (a lane from the policy, evidence record) | implemented (CHG-000) |
   | `cargo xtask docs [--check]` (generated docs) | implemented (CHG-000) |
-  | `cargo xtask architecture` | stub: reports `not_run` until CHG-003 |
+  | `cargo xtask architecture` | implemented at crate level (CHG-003.1); H4 corpus validation pending (CHG-004); module checks (CHG-007) and transitive analysis unavailable |
   | `cargo xtask l1` (risk-triggered lane) | not implemented; L1 checks do not run |
   | Record schemas, `cargo xtask rha …` | not implemented (CHG-019 onward) |
   | Protected verifier | not implemented (CHG-020); every record is advisory |
@@ -29,6 +29,12 @@ The shared workflow for human and agent contributors (spec §11.7.4). The machin
 ## Define the change
 
 Each change is one work item with a task record, `.rha/tasks/CHG-0nn-<slug>.toml`, written before the code. It states the observable behaviour, the affected components and contracts, non-goals, compatibility and resource implications, the contribution mode, and the actors and roles (spec §11.6). Copy the shape of an existing record. A change that creates a crate needs a boundary decision record in `docs/adr/` whose refutation criterion is written first (spec §7.8 step 10, §7.9).
+
+Before authoring, derive assertions from the owned contract for invalid, missing,
+unsupported, and non-default input. A negative regression must fail before the
+repair and its nearest valid control must pass. After repairing a producer,
+validation rule, or identity field, trace the complete pipeline through the
+consumer, exit status, and report.
 
 ## Implement
 
@@ -44,15 +50,17 @@ Each change is one work item with a task record, `.rha/tasks/CHG-0nn-<slug>.toml
 - `passed` needs exit status 0 **and** the check's validity criterion; for example, nextest must select at least one test.
 - The exit status of `cargo xtask ci` is 1 when a check failed or, under `--label ci`, when a tool is missing, and 0 otherwise. It is 0 even when a required check is `not_run`. The exit status is not eligibility: read `disposition` in the record.
 - The latest record is `target/rha/evidence.json`; `--record DIR` also keeps a timestamped copy. Commit the record for your change under `evidence/CHG-0nn/`. Records are class `local` or `ci` and advisory; see [docs/threat-model.md](docs/threat-model.md).
+- Generate documentation before the final verification lane. Copying evidence or regenerating indexes changes the candidate, so an earlier record remains about its own subject; run the final check on the final candidate without rewriting historical evidence. The final check can omit `--record` so its outputs stay under `target/` and do not change tracked evidence or indexes.
 - After changing `.rha/**`, `evidence/**`, or `rha-baseline.json`, run `cargo xtask docs` and commit the regenerated files. `cargo xtask docs --check` lists stale ones.
 
 ## Submit and review
 
 - Open the PR with the template. It is a review index: link the task record, the change record `docs/changes/CHG-0nn-<slug>.md`, and the evidence, and list every `not_run`, `failed`, or `inconclusive` result with its reason. Do not transcribe CI output.
+- Compute counts and full hashes from their owning files or commands; never infer a full hash from a prefix. Link each human summary to the exact evidence it summarizes.
 - CI (`.github/workflows/ci.yml`) reruns the lane on the PR's merge commit and uploads the record as the `rha-evidence` artifact (class `ci`). The branch must be up to date with `main` before it merges.
 - The acceptance authority named in `.rha/policy.toml` `[authority]` reviews and merges. **The merge is the acceptance** (`[acceptance] by_merge`). The Executor writes `.rha/acceptances/CHG-0nn.toml` as the first commit of the next item, citing the merge commit, its tree, and the CI record for that exact revision (download it from the run on `main` and commit it under `evidence/ci/`). A contributor's "done" is a proposal, not an acceptance.
 - Open questions are cited by id from `.rha/decisions.toml`, the single owner of decision-point status. A point with a default that is unanswered when its trigger arrives is recorded as decided by default; a point marked required waits. Do not restate a question that has a row.
-- Review findings on an open PR are verified against the reviewed revision. One that names a concrete failure becomes a `CHG-0nn.k` commit, determination first (task record and change record), then the change. Bookkeeping findings (counts, digests, wording) are batched into one determination, not one commit each, and an evidence record is never rewritten to describe a tree it did not see. A resolved thread reopens only on a new failure mode or an unaddressed consequence.
+- Review findings on an open PR are verified against the reviewed revision. Group findings that name the same failure on the same revision into one repair and batch bookkeeping corrections into one determination, not one commit each. A concrete failure becomes a `CHG-0nn.k` commit, determination first (task record and change record), then the change. An evidence record is never rewritten to describe a tree it did not see; archival records describe their preceding subject truthfully. A resolved thread reopens only on a new failure mode or an unaddressed consequence.
 - Acceptor's checklist before merging: every decision point the item names has a row in `.rha/decisions.toml`; any defect to be recorded is stated so it can go under `[[defects]]` of the acceptance record; a change to a protected surface has its approval in the task record.
 
 ## Exceptions and policy changes

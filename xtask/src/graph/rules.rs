@@ -7,7 +7,7 @@ use std::path::Path;
 
 use serde::Deserialize;
 
-use crate::error::{Context as _, Result};
+use crate::error::{Context as _, Error, Result};
 use crate::graph::model::Role;
 use crate::util::sha256_hex;
 
@@ -117,10 +117,19 @@ impl Rules {
     /// Parses a rules file.
     ///
     /// # Errors
-    /// Returns the TOML error. Unknown fields are rejected, so a misspelled
-    /// key is a usage error rather than a rule that silently does nothing.
-    pub fn parse(text: &str) -> std::result::Result<Self, toml::de::Error> {
-        toml::from_str(text)
+    /// Unknown fields are rejected, so a misspelled key is a usage error
+    /// rather than a rule that silently does nothing. Schema versions are
+    /// validated before the caller can attempt cargo metadata.
+    pub fn parse(text: &str) -> Result<Self> {
+        let rules: Self =
+            toml::from_str(text).context(|| "parsing rha-crates.toml TOML".to_owned())?;
+        if rules.schema_version != 1 {
+            return Err(Error::new(format!(
+                "unsupported rha-crates.toml schema_version {} (expected 1)",
+                rules.schema_version
+            )));
+        }
+        Ok(rules)
     }
 
     /// Reads a rules file, returning it with the digest of its bytes. The
@@ -199,6 +208,16 @@ mod tests {
     fn an_unknown_key_is_an_error_not_a_rule_that_does_nothing() {
         let text = "schema_version = 1\n[classification]\nadaptor_prefix = \"adapter-\"\n";
         assert!(Rules::parse(text).is_err());
+    }
+
+    #[test]
+    fn only_schema_version_one_is_accepted() {
+        for version in [0, 2] {
+            let error = Rules::parse(&format!("schema_version = {version}\n[classification]\n"))
+                .expect_err("unsupported schema must fail");
+            assert!(error.to_string().contains("schema_version"));
+        }
+        assert!(Rules::parse("schema_version = 1\n[classification]\n").is_ok());
     }
 
     #[test]

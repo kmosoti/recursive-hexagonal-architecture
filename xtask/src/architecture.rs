@@ -86,10 +86,7 @@ pub fn run(root: &Path, options: &Options) -> Result<i32> {
         .unwrap_or_else(|| root.join(RULES_PATH));
     let (rules, rules_digest) = match Rules::load(&rules_path) {
         Ok(loaded) => loaded,
-        Err(e) => {
-            eprintln!("xtask architecture: {e}");
-            return Ok(EXIT_USAGE);
-        }
+        Err(e) => return failure(root, options, &rules_path, "config_error", e.to_string()),
     };
 
     if rules.transitive.enabled {
@@ -99,13 +96,16 @@ pub fn run(root: &Path, options: &Options) -> Result<i32> {
         // check that was asked for and never performed (review finding on
         // pull request 6, CHG-003.1). The lane records exit 2 as failed with
         // error_class config_error, never as passed.
-        eprintln!(
-            "xtask architecture: [transitive] enabled = true in {}, but this version has no \
-             transitive evaluator: it reads `cargo metadata --no-deps` only. Set enabled = \
-             false, or run a version that implements transitive.core_disallowed_dependency.",
-            rules_path.display()
+        return failure(
+            root,
+            options,
+            &rules_path,
+            "config_error",
+            format!(
+                "[transitive] enabled = true in {}, but this version has no transitive evaluator",
+                rules_path.display()
+            ),
         );
-        return Ok(EXIT_USAGE);
     }
     if options.transitive {
         // The flag is accepted so the L2 interface is stable; what it asks
@@ -118,23 +118,11 @@ pub fn run(root: &Path, options: &Options) -> Result<i32> {
 
     let graph = match metadata::load(root, options.manifest_path.as_deref()) {
         Ok(graph) => graph,
-        Err(e) => {
-            // An environment failure is never a pass (plan §5).
-            eprintln!("xtask architecture: environment failure: {e}");
-            write_report(
-                root,
-                &serde_json::json!({
-                    "schema_version": 1,
-                    "tool": { "name": "xtask architecture", "version": env!("CARGO_PKG_VERSION") },
-                    "subject": { "workspace_root": root.display().to_string() },
-                    "summary": {
-                        "errors": null, "warnings": null,
-                        "outcome": "failed", "error_class": "tool_error",
-                        "reason": e.to_string(),
-                    },
-                }),
-            )?;
-            return Ok(EXIT_ENVIRONMENT);
+        Err(metadata::LoadError::Configuration(e)) => {
+            return failure(root, options, &rules_path, "config_error", e.to_string());
+        }
+        Err(metadata::LoadError::Environment(e)) => {
+            return failure(root, options, &rules_path, "tool_error", e.to_string());
         }
     };
 
@@ -246,6 +234,46 @@ fn write_report(root: &Path, json: &serde_json::Value) -> Result<()> {
         serde_json::to_string_pretty(json).context(|| "serializing the report".to_owned())?;
     text.push('\n');
     std::fs::write(&path, text).context(|| format!("writing {}", path.display()))
+}
+
+fn failure(
+    root: &Path,
+    options: &Options,
+    rules_path: &Path,
+    error_class: &str,
+    reason: String,
+) -> Result<i32> {
+    let json = serde_json::json!({
+        "schema_version": 1,
+        "tool": report::tool_identity(),
+        "subject": {
+            "workspace_root": options.manifest_path.is_none().then(|| root.display().to_string()),
+            "manifest_path": options.manifest_path.as_ref().map(|p| p.display().to_string()),
+            "rules_path": rules_path.display().to_string(),
+        },
+        "summary": {
+            "errors": null,
+            "warnings": null,
+            "outcome": "failed",
+            "error_class": error_class,
+            "reason": reason,
+        },
+    });
+    write_report(root, &json)?;
+    if options.format == Format::Json {
+        let mut text = serde_json::to_string_pretty(&json)
+            .context(|| "serializing the failure report".to_owned())?;
+        text.push('\n');
+        print!("{text}");
+    } else {
+        eprintln!("xtask architecture: {}", json["summary"]["reason"]);
+    }
+    let code = if error_class == "tool_error" {
+        EXIT_ENVIRONMENT
+    } else {
+        EXIT_USAGE
+    };
+    Ok(code)
 }
 
 #[cfg(test)]

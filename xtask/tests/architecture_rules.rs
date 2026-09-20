@@ -67,11 +67,11 @@ impl Builder {
         }
     }
 
-    fn edge(mut self, from: &str, to: &str, kind: DepKind) -> Self {
+    fn edge(self, from: &str, to: &str, kind: DepKind) -> Self {
         let member = self.crates.iter().any(|c| c.name == to);
-        self.edges.push(Edge {
-            from: from.to_owned(),
-            to: if member {
+        self.target_edge(
+            from,
+            if member {
                 Target::Member {
                     name: to.to_owned(),
                 }
@@ -80,6 +80,14 @@ impl Builder {
                     name: to.to_owned(),
                 }
             },
+            kind,
+        )
+    }
+
+    fn target_edge(mut self, from: &str, to: Target, kind: DepKind) -> Self {
+        self.edges.push(Edge {
+            from: from.to_owned(),
+            to,
             kind,
             optional: false,
             target_cfg: None,
@@ -402,6 +410,71 @@ fn c14_a_port_owner_reached_only_as_a_dev_dependency_is_reported() {
         found.contains(&"adapter.port_owner_wrong_kind"),
         "{found:?}"
     );
+}
+
+#[test]
+fn an_external_same_name_never_satisfies_a_declared_port_owner() {
+    let mut adapter = node("adapter-x", None);
+    adapter.implements = vec![PortRef::parse("core-a::Port")];
+    let graph = Builder::new(vec![adapter, core("core-a")])
+        .target_edge(
+            "adapter-x",
+            Target::External {
+                name: "core-a".to_owned(),
+            },
+            DepKind::Normal,
+        )
+        .build();
+    assert_eq!(
+        error_rules(&graph, &rules("")),
+        vec!["adapter.missing_port_owner"]
+    );
+}
+
+#[test]
+fn a_member_dev_edge_wins_over_an_external_same_name_and_is_wrong_kind() {
+    let mut adapter = node("adapter-x", None);
+    adapter.implements = vec![PortRef::parse("core-a::Port")];
+    let graph = Builder::new(vec![adapter, core("core-a")])
+        .target_edge(
+            "adapter-x",
+            Target::External {
+                name: "core-a".to_owned(),
+            },
+            DepKind::Normal,
+        )
+        .edge("adapter-x", "core-a", DepKind::Dev)
+        .build();
+    assert_eq!(
+        error_rules(&graph, &rules("")),
+        vec!["adapter.port_owner_wrong_kind"]
+    );
+}
+
+#[test]
+fn any_normal_member_edge_satisfies_the_owner_before_dev_edges() {
+    let mut adapter = node("adapter-x", None);
+    adapter.implements = vec![PortRef::parse("core-a::Port")];
+    for edges in [
+        vec![
+            (DepKind::Dev, "dev first"),
+            (DepKind::Normal, "normal second"),
+        ],
+        vec![
+            (DepKind::Normal, "normal first"),
+            (DepKind::Dev, "dev second"),
+        ],
+    ] {
+        let mut builder = Builder::new(vec![adapter.clone(), core("core-a")]);
+        for (kind, _) in edges {
+            builder = builder.edge("adapter-x", "core-a", kind);
+        }
+        let graph = builder.build();
+        assert!(
+            !error_rules(&graph, &rules("")).contains(&"adapter.port_owner_wrong_kind"),
+            "a normal member owner edge must be accepted"
+        );
+    }
 }
 
 #[test]

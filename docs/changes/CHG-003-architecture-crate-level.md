@@ -51,7 +51,7 @@ The exclusion now covers D1 as well as D5, and the edge is listed under `harness
 
 ## Tests
 
-26 tests on synthetic crate graphs in [`xtask/tests/architecture_rules.rs`](../../xtask/tests/architecture_rules.rs), one or more per rule, each named after the corpus case it mirrors so that a disagreement in W4 reads as a disagreement rather than as two unrelated failures.
+Tests on synthetic crate graphs in [`xtask/tests/architecture_rules.rs`](../../xtask/tests/architecture_rules.rs), one or more per rule, each named after the corpus case it mirrors so that a disagreement in W4 reads as a disagreement rather than as two unrelated failures.
 
 They are synthetic **on purpose**. The checker must not read `xtask/tests/corpus/manifest.toml`: a checker that reads the cases it is judged on can satisfy one without implementing the rule, which is what pre-registration exists to prevent. A test asserts that no checker module names the manifest. Two other places in xtask do name it legitimately and are out of that test's scope — `corpus.rs` holds the manifest's types for CHG-004's harness, and `evidence/mod.rs` lists it among the fixtures whose digests go into a record, which is the opposite of consulting the answers.
 
@@ -70,6 +70,53 @@ The rule applied, adopted on 2026-09-20 after Codex's audit of this repository's
 1. **P1, a registry package with a member's name was classified as the member. Confirmed.** `metadata::build` decided membership by comparing the dependency's package name with the member names. A core depending on a registry crate named like a member (crates.io has a `graph`; this repository will have one) got a `Target::Member` edge, and `effect_rules` skips member targets, so the dependency escaped `[core] allow`. Change: membership is decided by location. `cargo metadata` reports a path dependency with `path` set and `source` null; a dependency is a member only when its `path` is a member's manifest directory. A registry or git package, and a path package outside the workspace, are external whatever they are called, which also covers corpus C19. Result: a unit test seeds both shapes from a core and asserts both edges are external.
 2. **P1, `[transitive] enabled = true` removed the limitation while nothing evaluated the rule. Confirmed.** Metadata is always read with `--no-deps` and no transitive evaluator exists, so a rules file that enabled it got a clean summary and exit 0 for a check that was requested and never performed: on an EM-C01 workspace, a silent pass over the very hole the case registers. Change: `architecture::run` refuses `enabled = true` with exit 2, the plan §5 code for a configuration this version cannot honour, before `cargo metadata` runs; the lane records exit 2 as `failed` with `error_class: config_error`, never `passed`. `check()` states the limitation in both settings, so an in-process caller is told too. `--transitive` alone prints a notice and continues, as before. Result: a test with a rules file enabling transitive mode and no `Cargo.toml` gets 2, not the environment failure 3 it would get if anything had run first; the in-process limitation is asserted with `enabled = true`.
 3. **P2, `foreign_core_dependency` accepted any string and read a misspelling as warn. Confirmed.** `deny_unknown_fields` guards this file's keys, not its values; a value such as `"fatal"` parsed and meant warn, so a rules file meant to be fatal produced warnings and exit 0. Change: the value is a closed enum, `warn | error`; anything else is a parse error and exit 2. Result: a unit test asserts `error` is fatal, `warn` is not, and two other spellings are rejected.
+
+### CHG-003.1 follow-up on reviewed revision `4e33733`
+
+Kennedy requested repairs for the remaining P1/P2 findings and authoring
+guidance based on this review history. Seven open threads describe four
+distinct defects; duplicate comments on the same revision are one repair
+obligation. The three earlier CHG-003.1 repairs above are unchanged history.
+
+| Finding | Discriminating observation before the repair | Required result |
+| --- | --- | --- |
+| [Port-owner identity](https://github.com/kmosoti/recursive-hexagonal-architecture/pull/6#discussion_r4056688908), repeated in `4056690736` | An adapter claims a member's port but depends on an external package with the same name; the CLI exits 0 with no findings. | Only a normal dependency on the actual member satisfies the declaration. A valid normal edge must work even when a dev edge occurs first. |
+| [Malformed metadata](https://github.com/kmosoti/recursive-hexagonal-architecture/pull/6#discussion_r4056688909) | A prefixed adapter with a string-valued `implements` table entry exits 0 because the declaration is discarded. | Missing optional metadata remains valid; present malformed metadata reports its manifest and exits 2 as a configuration error. Cargo execution failures remain exit 3. |
+| [Unsupported schema](https://github.com/kmosoti/recursive-hexagonal-architecture/pull/6#discussion_r4056688910), repeated in `4056690738` | Rules declaring schema version 2 produce a clean report under version 1 semantics. | Reject unsupported versions at the parser, before loading Cargo metadata. |
+| [Checker identity](https://github.com/kmosoti/recursive-hexagonal-architecture/pull/6#discussion_r4056688912), repeated in `4056690740` | Successful JSON has only the tool name and package version; `tool.git_rev` is absent. | Success and failure reports identify the checker built from this source, independently of the checked workspace, and disclose dirty or unavailable identity. |
+
+The baseline CLI was built from `4e33733`; all three invalid-input fixtures
+exited 0, and the fourth observation confirmed the missing field. These
+small external workspaces are regression probes, not the deferred H4 corpus
+runner. The same probes after repair return exit 1 for the wrong member and
+exit 2 for malformed metadata and the unsupported schema. A valid workspace
+still exits 0; a missing Cargo manifest exits 3 with `tool_error`. The compiled
+checker identity is shared by success and failure reports, while a failed
+load leaves the unknown subject root null. The observations are retained in
+[review-followup-probes.txt](../../evidence/CHG-003/review-followup-probes.txt).
+
+The port check now prefers any normal edge to the actual member, regardless
+of dev/build edge order. Metadata errors preserve their configuration or
+transport classification, and the rules parser rejects unsupported versions.
+Valid `composite` metadata and the declared `--transitive` flag-only behavior
+remain supported. The old unit test that treated malformed metadata as absent
+was corrected under §9.14: absence and invalid declarations have different
+contracts, now checked separately. No corpus expectation was changed.
+
+A standard-library-only build script in the `xtask` tool captures Git revision
+and dirty source status. Its Git reads occur when building repository tooling,
+not in a core crate; it adds no dependency. Resolved worktree HEAD/branch/index
+paths refresh that identity without scanning the shared Git directory. A
+binary keeps its compiled identity when used on another workspace.
+
+Independent closure approved the corrected tests, exit/report semantics,
+identity watches and guide changes. The package's targeted test run passed;
+the final lane result is recorded below.
+
+The authoring changes address the demonstrated causes: distinguish absence
+from malformed input; preserve identity through downstream decisions; test
+real input boundaries alongside synthetic graphs; and assert nested report
+contracts. They do not add another approval stage or a fixed review quota.
 
 ## Evidence
 
@@ -94,6 +141,13 @@ Both agree, on two machines:
 
 **CHG-003.1, local**: `evidence/CHG-003/20260920T100013Z-1cbc47ec97f2.json` at `1cbc47e`, the repaired revision, on a clean tree: all eight checks `passed`, 112 tests selected, eligibility `blocked` on `Authentic` alone.
 **CHG-003.1, CI**: run [35503860516](https://github.com/kmosoti/recursive-hexagonal-architecture/actions/runs/35503860516) on the pushed head `b4adcf2`, copied as [`evidence/ci/35503860516.json`](../../evidence/ci/35503860516.json), subject `1731b0d6`: all eight `passed`, 112 tests.
+
+**CHG-003.1 follow-up, local snapshot**: [20260920T103310Z-4e337339c121-dirty.json](../../evidence/CHG-003/20260920T103310Z-4e337339c121-dirty.json)
+records all eight L0 checks `passed`, with 121 tests selected. It identifies
+an explicitly dirty snapshot based on `4e337339c121`;
+it does not claim to cover later evidence/index edits. After those edits are
+committed, the final lane is run again without `--record`, keeping its clean
+candidate result in `target/rha/evidence.json` without another archive cycle.
 
 Eligibility remains `blocked`, on `Authentic` alone. `.rha/policy.toml [acceptance.bootstrap]` records `passed_unsatisfiable_until = "CHG-003: L0.architecture is not implemented"`; that clause expires with this merge, and its `expires` condition now waits only on CHG-020.
 

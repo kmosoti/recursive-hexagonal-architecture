@@ -58,7 +58,19 @@ owned_scope = [
   ".rha/tasks/CHG-002.2-acceptance-protocol.toml (one digest corrected, CHG-003.1)",
   "AGENTS.md, CONTRIBUTING.md (review-finding rules, CHG-003.1)",
   "docs/proposals/spec-v0.11.md (rows 8 and 9, CHG-003.1)",
+  "xtask/build.rs, xtask/tests/architecture_cli.rs (CHG-003.1 follow-up: checker build identity and CLI regression cases)",
+  "AGENTS.md, CONTRIBUTING.md, xtask/AGENTS.md, .github/pull_request_template.md (CHG-003.1 follow-up: authoring lessons requested by Kennedy)",
+  "docs/orchestration-log.md (CHG-003.1 follow-up)",
+  "README.md, docs/maturity.md (CHG-003.1 follow-up: correct the stale stub description; Accepted maturity is unchanged)",
 ]
+
+[[work]]
+id = "W3.1-follow-up"
+executor = "agent:executor"
+depends_on = ["CHG-003.1 at 4e337339c12195fffab33bc5790baab056d77d30"]
+output = "One follow-up for four distinct defects in seven open PR 6 threads: preserve member identity at port-owner checks, reject malformed metadata and unsupported rules schemas, and identify the compiled checker in reports. Derive concise authoring rules from the demonstrated failure modes."
+owned_scope = ["xtask/src/metadata.rs", "xtask/src/architecture.rs", "xtask/src/graph/check.rs", "xtask/src/graph/rules.rs", "xtask/src/graph/report.rs", "xtask/build.rs", "xtask/tests/architecture_rules.rs", "xtask/tests/architecture_cli.rs", "AGENTS.md", "CONTRIBUTING.md", "xtask/AGENTS.md", ".github/pull_request_template.md", "README.md", "docs/maturity.md", ".rha/tasks/CHG-003-architecture-crate-level.toml", "docs/changes/CHG-003-architecture-crate-level.md", "docs/orchestration-log.md", "generated docs", "evidence/CHG-003/**"]
+claim = "Codex, acting as agent:executor, owns this follow-up in the isolated Git worktree on codex/pr6-review-followup. PR 6 has no linked project board; ownership is recorded here. The original Claude worktree remains separate."
 
 [[decisions]]
 id = "protected-surface-approval"
@@ -88,6 +100,13 @@ answer = "All three do, and each is repaired in one commit: membership decided b
 decided_by = "human:kennedy"
 date = "2026-09-20"
 
+[[decisions]]
+id = "review-findings-chg-003.1-follow-up"
+question = "Which open findings on PR 6 at 4e33733 require another repair, and which authoring changes are authorized?"
+answer = "Kennedy's current request explicitly asks for the open P1/P2 repairs and improvements to AGENTS.md, CONTRIBUTING.md and related agentic files. This authorizes the verifier repairs, those instruction files, a scoped xtask/AGENTS.md and the PR template. Seven open threads contain four distinct failures; duplicate comments are one repair obligation. All four were reproduced with the CLI on the reviewed revision before authoring: wrong member identity, malformed metadata and schema version 2 each exited 0; tool.git_rev was absent. The existing CHG-003.1 repairs remain history. No specification, policy, corpus, acceptance record, review setting or remote state change is included."
+decided_by = "human:kennedy (scope and authorization); agent:codex (verified determinations)"
+date = "2026-09-20"
+
 [expectation]
 # Written before the checker (spec §17: fixed before data).
 detection = "Every crate-level `detect` case of xtask/tests/corpus/manifest.toml is detected, and none of the 11 legitimate cases raises an alarm. That is measured in CHG-004, not here; this item is judged on its unit tests and on the lane."
@@ -98,7 +117,7 @@ fallback_if_contradicted = "If `cargo metadata --no-deps` lacks a field a rule n
 [claim]
 affected_components = []
 contract_changes = "none: no product component exists"
-architecture_delta = "New xtask modules: metadata, and graph with model, classify, rules, check and report. No new dependency: cargo metadata output is parsed with the serde_json xtask already has."
+architecture_delta = "New xtask modules: metadata, and graph with model, classify, rules, check and report. No new dependency: cargo metadata output is parsed with the serde_json xtask already has. The CHG-003.1 follow-up adds a standard-library-only build script to the xtask tool to capture the compiled checker Git identity; these build-time Git reads add no core effect."
 performance_impact = "none claimed"
 unresolved = [
   "The checker runs over a workspace with one member. Its rules are exercised by unit tests on synthetic graphs and, in CHG-004, by the corpus; nothing in this repository exercises them on real crates until CHG-005.",
@@ -126,7 +145,7 @@ harness = "Claude Code, VS Code extension; the CLI on PATH reports `2.1.278 (Cla
 output_style = "Learning (.claude/settings.local.json)"
 permission_mode = "auto, as reported to the session"
 task_scope = "CHG-003: docs/plan/IMPLEMENTATION-PLAN.md §5 and §8 W3"
-permissions = "Workspace files, shell, network, and `gh` as kmosoti through the user's account. Protected surfaces: the three named in the protected-surface-approval decision, and no others."
+permissions = "Workspace files, shell, network, and gh through the user account. Initial CHG-003 approval is recorded in protected-surface-approval; CHG-003.1 approval in review-findings-chg-003.1; the current follow-up approval in review-findings-chg-003.1-follow-up. Each span is limited to its recorded scope; no other protected surface is authorized."
 budgets = "unknown"
 reasoning_effort = "not exposed to the session"
 instruction_sources = [
@@ -134,6 +153,7 @@ instruction_sources = [
   { path = "docs/spec/rha-spec-v0.10.md (§4.1, §6.13, at 4be4a19)", sha256 = "bd96216829035ade64c43befa5e672c58078f6afa4b04145c6183227e4e1071a" },
   { path = "user message of 2026-09-20 accepting CHG-002.2, supplying the DP-1.1b commitment, and starting W3", sha256 = "unknown" },
   { path = "Claude Code system prompt", sha256 = "unknown" },
+  { path = "user message of 2026-09-20 requesting PR 6 open P1/P2 repairs and AGENTS.md, CONTRIBUTING.md and related agentic-file improvements (CHG-003.1 follow-up)", sha256 = "unknown" },
 ]
 
 [[provenance.sessions]]
@@ -143,3 +163,11 @@ span = "CHG-003"
 [[provenance.sessions]]
 model_id = "claude-fable-5-1"
 span = "CHG-003.1: the review-finding repairs and the records they cite"
+
+[[provenance.sessions]]
+model_id = "unknown"
+harness = "Codex"
+span = "CHG-003.1 follow-up after 4e33733, requested by Kennedy in this conversation"
+permissions = "Git worktree, local code and regression tests, task/change/evidence records, AGENTS.md, CONTRIBUTING.md, scoped xtask/AGENTS.md, and PR-template authoring guidance. Authorization: Kennedy's current request; user-message digest unavailable."
+advisory_verifier = "gpt-5.6-sol, max; read-only independent verification and closure"
+write_workers = "gpt-5.6-luna, high; decided, disjoint edits; coordinator owns Git and final verification"

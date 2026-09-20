@@ -75,20 +75,48 @@ struct Dependency {
 
 /// What `[package.metadata.rha]` may declare.
 #[derive(Debug, Default, Deserialize)]
+#[serde(deny_unknown_fields)]
 struct RhaMetadata {
     #[serde(default)]
     role: Option<String>,
     #[serde(default)]
     implements: Vec<String>,
+    /// Reserved for the module-level rules file introduced by W5. It is
+    /// validated here so a valid metadata declaration is not rejected before
+    /// module checking exists.
+    #[serde(default, rename = "composite")]
+    _composite: Option<String>,
 }
+
+/// Why loading the graph failed. Configuration errors come from the checked
+/// workspace itself; environment errors mean cargo could not provide usable
+/// metadata at all.
+#[derive(Debug)]
+pub enum LoadError {
+    Configuration(Error),
+    Environment(Error),
+}
+
+impl std::fmt::Display for LoadError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Self::Configuration(error) | Self::Environment(error) => error.fmt(f),
+        }
+    }
+}
+
+impl std::error::Error for LoadError {}
 
 /// Runs `cargo metadata` and builds the graph.
 ///
 /// # Errors
-/// Fails when cargo cannot be run, exits nonzero, or writes output this
-/// cannot parse. Every one of those is an environment failure, reported with
-/// exit code 3 and never as a pass (plan §5).
-pub fn load(root: &Path, manifest_path: Option<&Path>) -> Result<CrateGraph> {
+/// Cargo spawn, nonzero exit, and invalid metadata JSON are environment
+/// failures, reported with exit code 3. A malformed `package.metadata.rha`
+/// declaration is a configuration failure, reported with exit code 2.
+pub fn load(
+    root: &Path,
+    manifest_path: Option<&Path>,
+) -> std::result::Result<CrateGraph, LoadError> {
     let mut command = crate::util::command("cargo");
     command
         .current_dir(root)
@@ -100,25 +128,29 @@ pub fn load(root: &Path, manifest_path: Option<&Path>) -> Result<CrateGraph> {
     if let Some(path) = manifest_path {
         command.arg("--manifest-path").arg(path);
     }
-    let output = command
-        .output()
-        .context(|| "running `cargo metadata`".to_owned())?;
+    let output = command.output().map_err(|error| {
+        LoadError::Environment(Error::new(format!("running `cargo metadata`: {error}")))
+    })?;
     if !output.status.success() {
         let stderr = String::from_utf8_lossy(&output.stderr);
-        return Err(Error::new(format!(
+        return Err(LoadError::Environment(Error::new(format!(
             "`cargo metadata` exited {}: {}",
             output.status.code().unwrap_or(-1),
             stderr.trim()
-        )));
+        ))));
     }
-    let metadata: Metadata = serde_json::from_slice(&output.stdout)
-        .context(|| "parsing `cargo metadata` output".to_owned())?;
-    Ok(build(&metadata))
+    let metadata: Metadata = serde_json::from_slice(&output.stdout).map_err(|error| {
+        LoadError::Environment(Error::new(format!(
+            "parsing `cargo metadata` output: {error}"
+        )))
+    })?;
+    build(&metadata).map_err(LoadError::Configuration)
 }
 
 /// Builds the graph from parsed metadata. Split out so tests can drive it
-/// with recorded output instead of running cargo.
-fn build(metadata: &Metadata) -> CrateGraph {
+/// with recorded output instead of running cargo. Malformed RHA declarations
+/// are returned as configuration errors with crate and manifest context.
+fn build(metadata: &Metadata) -> Result<CrateGraph> {
     let members: Vec<&Package> = metadata
         .packages
         .iter()
@@ -139,7 +171,7 @@ fn build(metadata: &Metadata) -> CrateGraph {
     let mut crates = Vec::with_capacity(members.len());
     let mut edges = Vec::new();
     for package in &members {
-        let rha = rha_metadata(package.metadata.as_ref());
+        let rha = rha_metadata(package)?;
         crates.push(CrateNode {
             name: package.name.clone(),
             manifest_path: package.manifest_path.clone(),
@@ -178,22 +210,64 @@ fn build(metadata: &Metadata) -> CrateGraph {
             });
         }
     }
-    CrateGraph {
+    Ok(CrateGraph {
         workspace_root: metadata.workspace_root.clone(),
         crates,
         edges,
         mode: MetadataMode::NoDeps,
-    }
+    })
 }
 
-/// Reads `[package.metadata.rha]`, tolerating its absence. A malformed table
-/// is treated as absent here; the crate is then unclassified, which
-/// `class.unclassified` reports, rather than silently defaulting to a role.
-fn rha_metadata(metadata: Option<&serde_json::Value>) -> RhaMetadata {
-    metadata
-        .and_then(|m| m.get("rha"))
-        .and_then(|m| serde_json::from_value(m.clone()).ok())
-        .unwrap_or_default()
+/// Reads `[package.metadata.rha]`, tolerating its absence. When the table is
+/// present, its shape is configuration and malformed values must stop the run
+/// with the crate and manifest named in the error.
+fn rha_metadata(package: &Package) -> Result<RhaMetadata> {
+    let Some(metadata) = package.metadata.as_ref() else {
+        return Ok(RhaMetadata::default());
+    };
+    let Some(metadata) = metadata.as_object() else {
+        return Err(Error::new(format!(
+            "crate {} manifest {} has malformed package.metadata: expected a table",
+            package.name,
+            package.manifest_path.display()
+        )));
+    };
+    let Some(rha) = metadata.get("rha") else {
+        return Ok(RhaMetadata::default());
+    };
+    if !rha.is_object() {
+        return Err(Error::new(format!(
+            "crate {} manifest {} has malformed package.metadata.rha: expected a table",
+            package.name,
+            package.manifest_path.display()
+        )));
+    }
+    if let Some(role) = rha.get("role")
+        && !role.is_null()
+        && !role.is_string()
+    {
+        return Err(Error::new(format!(
+            "crate {} manifest {} has malformed package.metadata.rha.role: expected a string",
+            package.name,
+            package.manifest_path.display()
+        )));
+    }
+    if let Some(implements) = rha.get("implements")
+        && !implements.is_array()
+    {
+        return Err(Error::new(format!(
+            "crate {} manifest {} has malformed package.metadata.rha.implements: expected an array",
+            package.name,
+            package.manifest_path.display()
+        )));
+    }
+    serde_json::from_value(rha.clone()).context(|| {
+        format!(
+            "crate {} manifest {} has malformed package.metadata.rha",
+            package.name,
+            package.manifest_path.display()
+        )
+    })
 }
 
 #[cfg(test)]
@@ -262,7 +336,7 @@ mod tests {
 
     #[test]
     fn only_workspace_members_become_crates() {
-        let graph = build(&sample());
+        let graph = build(&sample()).expect("sample graph builds");
         let names: Vec<&str> = graph.crates.iter().map(|c| c.name.as_str()).collect();
         assert_eq!(names, vec!["core-a", "adapter-x", "core-b"]);
     }
@@ -274,7 +348,7 @@ mod tests {
         // crate called adapter-x is not the workspace's adapter-x, and a path
         // crate called core-a outside the workspace is not its core-a. Both
         // are external, and therefore subject to [core] allow.
-        let graph = build(&sample());
+        let graph = build(&sample()).expect("sample graph builds");
         let targets: Vec<(&str, bool)> = graph
             .edges_from("core-b")
             .map(|e| (e.to.name(), e.to.is_member()))
@@ -284,7 +358,7 @@ mod tests {
 
     #[test]
     fn a_renamed_optional_target_dependency_keeps_every_field() {
-        let graph = build(&sample());
+        let graph = build(&sample()).expect("sample graph builds");
         let edge = graph
             .edges_from("core-a")
             .find(|e| e.to.name() == "adapter-x")
@@ -298,7 +372,7 @@ mod tests {
 
     #[test]
     fn a_dependency_outside_the_workspace_is_external() {
-        let graph = build(&sample());
+        let graph = build(&sample()).expect("sample graph builds");
         let edge = graph
             .edges_from("core-a")
             .find(|e| e.to.name() == "tokio")
@@ -309,7 +383,7 @@ mod tests {
 
     #[test]
     fn declared_metadata_is_carried_without_being_interpreted() {
-        let graph = build(&sample());
+        let graph = build(&sample()).expect("sample graph builds");
         let core = graph.crate_named("core-a").expect("core-a is a member");
         assert_eq!(core.declared_role.as_deref(), Some("core"));
         assert!(
@@ -329,11 +403,57 @@ mod tests {
     }
 
     #[test]
-    fn a_missing_or_malformed_rha_table_is_absent_not_a_default_role() {
-        assert_eq!(rha_metadata(None).role, None);
-        let not_a_table = serde_json::json!({ "rha": "core" });
-        assert_eq!(rha_metadata(Some(&not_a_table)).role, None);
+    fn a_missing_rha_table_is_absent_not_a_default_role() {
+        let mut package = sample().packages.remove(0);
+        package.metadata = None;
+        assert_eq!(rha_metadata(&package).expect("absent metadata").role, None);
         let empty = serde_json::json!({});
-        assert!(rha_metadata(Some(&empty)).implements.is_empty());
+        package.metadata = Some(empty);
+        assert!(
+            rha_metadata(&package)
+                .expect("absent rha table")
+                .implements
+                .is_empty()
+        );
+    }
+
+    #[test]
+    fn malformed_rha_table_is_a_configuration_error_with_context() {
+        let mut package = sample().packages.remove(0);
+        for (index, value) in [
+            serde_json::json!(null),
+            serde_json::json!("core"),
+            serde_json::json!([]),
+            serde_json::json!({ "implements": "core-a::Port" }),
+            serde_json::json!({ "role": 7 }),
+            serde_json::json!({ "unknown": true }),
+        ]
+        .into_iter()
+        .enumerate()
+        {
+            package.metadata = Some(serde_json::json!({ "rha": value }));
+            let error = match rha_metadata(&package) {
+                Ok(got) => panic!("malformed metadata case {index} unexpectedly parsed: {got:?}"),
+                Err(error) => error,
+            };
+            let text = error.to_string();
+            assert!(text.contains("core-a"), "{text}");
+            assert!(text.contains("Cargo.toml"), "{text}");
+        }
+    }
+
+    #[test]
+    fn the_declared_composite_rules_file_is_accepted_for_later_module_checks() {
+        let mut package = sample().packages.remove(0);
+        package.metadata = Some(serde_json::json!({
+            "rha": { "role": "core", "composite": "rha-modules.toml" }
+        }));
+        assert_eq!(
+            rha_metadata(&package)
+                .expect("valid metadata")
+                .role
+                .as_deref(),
+            Some("core")
+        );
     }
 }

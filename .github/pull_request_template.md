@@ -8,6 +8,9 @@ Unsafe/concurrency/authority/policy: none or explanation.
 Removed/weakened/reinterpreted tests: none or justification.
 
 ## Evidence
+
+Regression and valid control; reviewed revision and duplicate findings grouped; producer/subject identities and generated docs checked.
+
 Candidate/snapshot; policy reference; verification artifact links.
 Checks actually run; omissions; failed or inconclusive results.
 Performance-trigger rationale and comparison link when required.
