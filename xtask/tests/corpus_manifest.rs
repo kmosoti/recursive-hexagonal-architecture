@@ -420,10 +420,8 @@ fn the_grading_rules_state_what_a_disagreement_does() {
 #[test]
 fn module_fixtures_wait_for_chg_007() {
     let root = root();
-    for dir in ["xtask/tests/corpus/module"] {
-        assert!(
-            !root.join(dir).exists(),
-            "{dir} exists; fixtures are generated in CHG-004 and authored in CHG-007, not committed here"
-        );
-    }
+    assert!(
+        !root.join("xtask/tests/corpus/module").exists(),
+        "module fixtures are authored in CHG-007"
+    );
 }

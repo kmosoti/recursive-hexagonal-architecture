@@ -38,6 +38,7 @@ claim = "agent:executor is the sole branch writer, as Kennedy instructed, in iso
 
 [[decisions]]
 id = "approved-em-m03-cells"
+commit = "93843290c3f71b9a385c6f275acef3bd70266643"
 question = "Which protected manifest edit is authorized before the harness?"
 answer = 'Only EM-M03 cells = ["law3-d1", "law6-b3"], plus the matching frozen test row. Kennedy explicitly approved this exact value on 2026-09-20 ("Approved and merged", PR 6), as confirmed in the W4 instruction and objective. Expected outcome, hole, partial scope and grading values remain fixed.'
 decided_by = "human:kennedy"

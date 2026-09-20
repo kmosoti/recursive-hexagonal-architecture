@@ -28,3 +28,13 @@ The first harness packet uses the accepted checker unchanged. Its failed run is 
 [The first clean committed-fixture run](../../evidence/h4-crate/20260920T121342Z-3c6c758911ff-1462546.json) describes `3c6c758911ffa418fbe5b2678e7b538c36a69521`. It exits 1: **13/22 detected**, **10/11 unmatched findings**, two documented holes. R01 and all 11 legitimate cases pass; C04, C05, C08, C09, C10, C11, C13, C14 and C20 fail exact witness grading.
 
 The raw reports show those checker violations, but their structured JSON omits registered `crate`, cycle `members`, `matched_rule`, conflicting-role values, `port` or `owner` fields. Add those facts at the producer from its graph/rules observations; never derive an answer from the corpus inside checker code. The separate CHG-004.1 commit applies this repair after this determination and failed record. C13's additional `adapter.foreign_core` warning is accurate and must remain an unmatched finding under DP-1.1c; it is not suppressed to obtain a green H4 result.
+
+## Repaired result
+
+[Clean H4 record](../../evidence/h4-crate/20260920T121505Z-f1c2c55a5550-1465488.json) describes `f1c2c55a5550f5ee8852f83a46f03d5d2ac86292`: **22/22 detected** (21 checker and R01), **1/11 false alarms**, **2 documented holes**, exit **1**. C13 alone fails because its accurate `adapter.foreign_core` warning is unmatched under DP-1.1c. No V promotion is proposed, and `law3-d1` is downgraded. All 16 corpus tests pass, including the full public command, byte-drift negative controls, and exact-witness/report validation.
+
+## Handoff provenance
+
+The approval decision owns the full EM-M03 correction commit. H4 reads this fixed provenance instead of treating the newest manifest edit as the historical correction. The integration test independently loads that commit and its parent and proves that their only manifest difference is the approved EM-M03 cell edit. Fixture input hashes are labelled as generated expectations; an actual mismatch is recorded as drift and fails the harness before execution.
+
+Outside packages remain siblings of the C19 and EM-C01 workspace roots, as `outside_crates.at` requires; every case workspace itself is at its requested category/id path. The full fixture tree and its drift check include those external packages.

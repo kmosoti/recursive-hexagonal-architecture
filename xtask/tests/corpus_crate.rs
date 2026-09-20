@@ -110,20 +110,41 @@ fn full_committed_corpus_pins_observations_and_preserves_the_h4_failure() {
     assert_eq!(record["summary"]["failed_cases"], json!(["C13"]));
     assert_eq!(record["summary"]["outcome"], "failed");
     assert_eq!(record["fixtures"]["drift"], json!([]));
-    let correction = xtask::util::command_stdout(
-        &root,
-        &[
-            "git",
-            "log",
-            "-1",
-            "--format=%H",
-            "HEAD",
-            "--",
-            xtask::corpus::MANIFEST_PATH,
-        ],
-    )
-    .expect("correction identity");
-    assert_eq!(record["manifest"]["correction_commit"], correction);
+    let correction = record["manifest"]["correction_commit"]
+        .as_str()
+        .expect("correction commit");
+    let manifest_at = |revision: &str| {
+        let source = xtask::util::command_stdout(
+            &root,
+            &[
+                "git",
+                "show",
+                &format!("{revision}:{}", xtask::corpus::MANIFEST_PATH),
+            ],
+        )
+        .expect("historical manifest");
+        toml::from_str::<toml::Value>(&source).expect("historical TOML")
+    };
+    let mut before = manifest_at(&format!("{correction}^"));
+    let after = manifest_at(correction);
+    let row = before["case"]
+        .as_array_mut()
+        .expect("cases")
+        .iter_mut()
+        .find(|row| row["id"].as_str() == Some("EM-M03"))
+        .expect("EM-M03");
+    assert_eq!(
+        row["cells"],
+        toml::Value::Array(vec![toml::Value::String("law6-b3".to_owned())])
+    );
+    row["cells"] = toml::Value::Array(vec![
+        toml::Value::String("law3-d1".to_owned()),
+        toml::Value::String("law6-b3".to_owned()),
+    ]);
+    assert_eq!(
+        before, after,
+        "cited correction changed exactly the approved row"
+    );
     let cases = record["cases"].as_array().expect("cases");
     assert_eq!(cases.len(), 35);
     for expected in registration()
