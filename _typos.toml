@@ -3,6 +3,18 @@
 # synthetic crates. Neither is prose.
 extend-exclude = ["evidence/**", "xtask/tests/corpus/**"]
 
+[default]
+# Git revisions and sha256 digests are hex, and a spell checker splits them on
+# their digits and reads the letter runs as words: the record filename
+# 038a8ea2ba1c yielded `ba`, "should be `by`, `be`". They appear in generated
+# projections under docs/, in change records, and in task and acceptance
+# records, so excluding one file would only move the problem. Twelve is the
+# shortest run this repository uses — the git short revision in a record
+# filename — and no English word is twelve hex characters long, so this masks
+# nothing that could be a typo. Added in CHG-002 after the CI run 35478425099
+# failed on a digest a local run had not yet generated.
+extend-ignore-re = ["\\b[0-9a-f]{12,}\\b"]
+
 [default.extend-words]
 # A given name in the spec's references ([R122] Mor Harchol-Balter).
 Mor = "Mor"
