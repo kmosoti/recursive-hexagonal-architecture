@@ -27,6 +27,23 @@ pub struct Policy {
     pub surface: Surface,
     pub strictness: BTreeMap<String, String>,
     pub lanes: BTreeMap<String, Lane>,
+    /// Acceptance by merge and the decision ledger (CHG-002.2). Optional so a
+    /// base revision written before that change still parses.
+    #[serde(default)]
+    pub acceptance: Option<Acceptance>,
+}
+
+/// What counts as the acceptance event, who materializes the record, and
+/// where decision-point status lives (`[acceptance]`).
+#[derive(Debug, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct Acceptance {
+    pub by_merge: bool,
+    pub record_written_by: String,
+    pub record_deadline: String,
+    pub record_creation_preapproved: bool,
+    pub decisions_ledger: String,
+    pub defaults_apply_when_unanswered: bool,
 }
 
 #[derive(Debug, Deserialize)]

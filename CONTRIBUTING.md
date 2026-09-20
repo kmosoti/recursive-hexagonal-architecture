@@ -50,7 +50,9 @@ Each change is one work item with a task record, `.rha/tasks/CHG-0nn-<slug>.toml
 
 - Open the PR with the template. It is a review index: link the task record, the change record `docs/changes/CHG-0nn-<slug>.md`, and the evidence, and list every `not_run`, `failed`, or `inconclusive` result with its reason. Do not transcribe CI output.
 - CI (`.github/workflows/ci.yml`) reruns the lane on the PR's merge commit and uploads the record as the `rha-evidence` artifact (class `ci`). The branch must be up to date with `main` before it merges.
-- The acceptance authority named in `.rha/policy.toml` `[authority]` reviews, merges, and writes `.rha/acceptances/CHG-0nn.toml`. A contributor's "done" is a proposal, not an acceptance.
+- The acceptance authority named in `.rha/policy.toml` `[authority]` reviews and merges. **The merge is the acceptance** (`[acceptance] by_merge`). The Executor writes `.rha/acceptances/CHG-0nn.toml` as the first commit of the next item, citing the merge commit, its tree, and the CI record for that exact revision (download it from the run on `main` and commit it under `evidence/ci/`). A contributor's "done" is a proposal, not an acceptance.
+- Open questions are cited by id from `.rha/decisions.toml`, the single owner of decision-point status. A point with a default that is unanswered when its trigger arrives is recorded as decided by default; a point marked required waits. Do not restate a question that has a row.
+- Acceptor's checklist before merging: every decision point the item names has a row in `.rha/decisions.toml`; any defect to be recorded is stated so it can go under `[[defects]]` of the acceptance record; a change to a protected surface has its approval in the task record.
 
 ## Exceptions and policy changes
 

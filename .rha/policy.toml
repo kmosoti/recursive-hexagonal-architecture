@@ -280,3 +280,32 @@ id = "L2.load"
 kind = "load"
 argv = []
 note = "load and capacity tests"
+
+[acceptance]
+# Acceptance by merge (spec §11.4, §11.6.1; profile ECC-Solo). Adopted in
+# CHG-002.2 after three consecutive items closed with "merged, not accepted"
+# and the same open questions carried from report to report.
+#
+# A merge into main performed by the acceptance authority IS the acceptance
+# decision for that pull request's subject, the merge commit. The record that
+# materializes it (.rha/acceptances/CHG-nnn.toml) is written by the Executor
+# as the FIRST commit of the next work item, citing the merge commit, its
+# tree, and the CI record for that exact revision (downloaded from the run on
+# main and committed under evidence/ci/). Creating that record is pre-approved
+# by this section; editing an existing acceptance record is not. A defect the
+# Acceptor wants on the record does not block acceptance: it goes under
+# [[defects]] with its repair or follow-up.
+by_merge = true
+record_written_by = "agent:executor"
+record_deadline = "first commit of the next work item; no item's own work starts before the previous item's record exists"
+record_creation_preapproved = true
+
+# Decision points (plan §9) are owned by .rha/decisions.toml, the single place
+# that says whether a point is open, decided, or defaulted, by whom, and where.
+# A point with a stated default that is still unanswered when its trigger
+# arrives is decided as that default and recorded with
+# decided_by = "default (plan §9)". A point marked required cannot default; the
+# work that needs it waits, and the item report cites the id. Reports cite
+# ledger ids; they do not restate open questions.
+decisions_ledger = ".rha/decisions.toml"
+defaults_apply_when_unanswered = true

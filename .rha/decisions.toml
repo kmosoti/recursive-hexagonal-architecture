@@ -1,0 +1,167 @@
+# Decision ledger (plan §9; .rha/policy.toml [acceptance]).
+#
+# The plan's §9 table is the catalogue of decision points. This file is the
+# single owner of their STATUS: open, decided, or defaulted; by whom; when; and
+# where the answer is recorded. An item report cites an id here instead of
+# restating an open question, and a decision made in conversation is not a
+# decision until it has a row here or in a task record this row points to.
+schema_version = 1
+
+[[decision]]
+id = "DP-0.1"
+title = "Git identity for the repository"
+status = "decided"
+decided_by = "human:kennedy"
+date = "2026-09-19"
+answer = "Kennedy Mosoti <47609243+kmosoti@users.noreply.github.com>, repo-local"
+record = ".rha/tasks/CHG-000-bootstrap.toml"
+
+[[decision]]
+id = "DP-0.2"
+title = "GitHub repository name and visibility; product name"
+status = "decided"
+decided_by = "human:kennedy"
+date = "2026-09-19"
+answer = "kmosoti/recursive-hexagonal-architecture, public; product rhawiki"
+record = ".rha/tasks/CHG-000-bootstrap.toml"
+
+[[decision]]
+id = "DP-0.3"
+title = "Move the specification to docs/spec/"
+status = "decided"
+decided_by = "human:kennedy"
+date = "2026-09-19"
+answer = "Move (git mv; content unchanged)"
+record = ".rha/tasks/CHG-000-bootstrap.toml"
+
+[[decision]]
+id = "DP-0.4"
+title = ".rha/ record format"
+status = "decided"
+decided_by = "human:kennedy"
+date = "2026-09-19"
+answer = "TOML"
+record = ".rha/tasks/CHG-000-bootstrap.toml"
+
+[[decision]]
+id = "DP-0.5"
+title = "Policy parameters"
+status = "decided"
+decided_by = "human:kennedy"
+date = "2026-09-19"
+answer = "cooling_off_hours 24; repair_loop.max_attempts 3; proptest L0 256, L1 4096; all L0 checks non-waivable; protected surfaces as listed in .rha/policy.toml [surface]"
+record = ".rha/tasks/CHG-000-bootstrap.toml"
+
+[[decision]]
+id = "DP-0.6"
+title = "Branch protection"
+status = "decided"
+decided_by = "human:kennedy"
+date = "2026-09-19"
+answer = "PR required with 0 approvals; required status check `ci`, strict; enforce_admins; no force-push; no deletion"
+record = ".rha/tasks/CHG-000-bootstrap.toml"
+
+[[decision]]
+id = "DP-1.1a"
+title = "Approve the pre-registered corpus manifest"
+status = "decided"
+decided_by = "human:kennedy (merge of pull request 4, 15d916a)"
+date = "2026-09-20"
+answer = "Approved as merged, including the seven review-found corrections of CHG-002.1. The merge commit 15d916a is the pre-registration identity every H4 record cites."
+record = ".rha/acceptances/CHG-002.toml"
+
+[[decision]]
+id = "DP-1.1b"
+title = "Author two or three held-out crate-level corpus cases outside this repository (spec §9.14)"
+status = "open"
+owner = "human:kennedy"
+needed_by = "acceptance of CHG-004 (W4). Not needed by CHG-003, which may start."
+cannot_default = true
+how_to_close = """
+Kennedy writes the cases in a directory outside this repository, in the \
+manifest's declared shape or as ready workspaces, each with its expected \
+outcome. He then records here, as `commitment`, the sha256 of a tar of that \
+directory, without committing the cases. The Executor never reads them. At \
+CHG-004 acceptance Kennedy runs the checker on them himself and records the \
+per-case outcomes in that acceptance record; the commitment lets anyone verify \
+later that the cases predate the checker.\
+"""
+commitment = "none yet"
+
+[[decision]]
+id = "DP-1.1c"
+title = "The three [grading] values of the corpus manifest"
+status = "decided"
+decided_by = "human:kennedy (merge of CHG-002.2)"
+date = "2026-09-20"
+answer = "The strict readings stand as written in CHG-002: detection_requires, extra_findings, no_alarm_scope. Relaxing one before CHG-004 runs is a protected edit of the manifest, recorded here first."
+record = "xtask/tests/corpus/manifest.toml [grading]"
+
+[[decision]]
+id = "DP-1.2"
+title = "Clock port and the 'built at' footer in W5 scope"
+status = "open"
+owner = "human:kennedy"
+needed_by = "start of CHG-005 (W5)"
+default = "yes"
+
+[[decision]]
+id = "DP-1.3"
+title = "Refutation criteria for BDR-0001 to BDR-0004 (metric, source, window, threshold, action), written before the crates exist (spec §7.8 step 10)"
+status = "open"
+owner = "human:kennedy"
+needed_by = "start of CHG-005 (W5)"
+cannot_default = true
+
+[[decision]]
+id = "DP-1.4"
+title = "Private markdown held-out fixtures with expected `rhawiki check --format json` output"
+status = "open"
+owner = "human:kennedy"
+needed_by = "acceptance of CHG-005 (W5)"
+cannot_default = true
+
+[[decision]]
+id = "DP-1.5"
+title = "Accept or annotate the `rhawiki check` witness list on this repository's docs"
+status = "open"
+owner = "human:kennedy"
+needed_by = "acceptance of CHG-005 (W5)"
+default = "zero witnesses expected"
+
+[[decision]]
+id = "DP-1.6"
+title = "Accept the maturity proposals (crate-graph checker, deny list, fast lane)"
+status = "open"
+owner = "human:kennedy"
+needed_by = "acceptance of CHG-004 and CHG-006"
+
+[[decision]]
+id = "DP-2.1"
+title = "Install cargo-modules and cargo-mutants; module-level held-out cases"
+status = "open"
+owner = "human:kennedy"
+needed_by = "CHG-007 and CHG-014"
+default = "install"
+
+[[decision]]
+id = "DP-2.2"
+title = "Adjudicate surviving mutants"
+status = "open"
+owner = "human:kennedy"
+needed_by = "CHG-014"
+
+[[decision]]
+id = "DP-3.1"
+title = "Primary metric, delta, alpha, workload envelope, hardware description, secondaries, count budgets"
+status = "open"
+owner = "human:kennedy"
+needed_by = "before any measurement (CHG-015)"
+default = "median wall-clock of `rhawiki build` on synth-5k; delta 5 %; alpha 0.05"
+
+[[decision]]
+id = "DP-4.1"
+title = "Trusted producer keys and exception parameters for rha-verifier; acceptance of its corpus outcomes"
+status = "open"
+owner = "human:kennedy"
+needed_by = "CHG-020"
