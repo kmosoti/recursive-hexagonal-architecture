@@ -166,6 +166,7 @@ candidate result in `target/rha/evidence.json` without another archive cycle.
 **CHG-003.1 follow-up, CI**: run [35505682590](https://github.com/kmosoti/recursive-hexagonal-architecture/actions/runs/35505682590) on the pushed head `920cca6`, copied as [`evidence/ci/35505682590.json`](../../evidence/ci/35505682590.json), subject `de02534d`: all eight `passed`, 121 tests. `920cca6` has no committed local record: the snapshot record above carries `snapshot_tree` `1fb5abcd…`, which is not that commit's tree, `041fcd1d…` (CHG-003.2 added this record and this note).
 
 **CHG-003.2, local**: `evidence/CHG-003/20260920T111037Z-956707e0b1da.json` at `956707e`, the consolidated revision, on a clean tree: all eight `passed`, 122 tests, eligibility `blocked` on `Authentic` alone.
+**CHG-003.2, CI**: run [35507106318](https://github.com/kmosoti/recursive-hexagonal-architecture/actions/runs/35507106318) on the pushed head `26e7519`, copied as [`evidence/ci/35507106318.json`](../../evidence/ci/35507106318.json), subject `7a419405`: all eight `passed`, 122 tests. This local record and this CI record are the evidence for the code this PR proposes; every earlier record is kept as what it was.
 
 Eligibility remains `blocked`, on `Authentic` alone. `.rha/policy.toml [acceptance.bootstrap]` records `passed_unsatisfiable_until = "CHG-003: L0.architecture is not implemented"`; that clause expires with this merge, and its `expires` condition now waits only on CHG-020.
 
