@@ -65,7 +65,26 @@ They are synthetic **on purpose**. The checker must not read `xtask/tests/corpus
 
 ## Evidence
 
-Records under `evidence/CHG-003/`, CI under `evidence/ci/`. The lane result is in the pull request and the item report, with `L0.architecture` reporting `passed` for the first time.
+**Local**: `evidence/CHG-003/20260920T093725Z-53563857be6c.json` at `5356385`.
+**CI**: run [35502859792](https://github.com/kmosoti/recursive-hexagonal-architecture/actions/runs/35502859792), copied as [`evidence/ci/35502859792.json`](../../evidence/ci/35502859792.json), subject `329dcc4d`.
+
+Both agree, on two machines:
+
+| Check | Outcome |
+| --- | --- |
+| `L0.fmt`, `L0.clippy`, `L0.nextest`, `L0.doctest`, `L0.deny`, `L0.machete`, `L0.typos` | passed |
+| **`L0.architecture`** | **passed** |
+
+108 tests selected. `cargo xtask architecture` on the CI runner reports `{"crates": 1, "errors": 0, "outcome": "passed", "warnings": 0}`, the same as locally.
+
+| Predicate | Holds | Why |
+| --- | --- | --- |
+| Authentic | **false** | no trusted producers in `.rha/policy.toml` until CHG-019 and CHG-020 |
+| Applicable | true | the candidate's policy equals the base's; this change edits no policy |
+| Complete | true | every L0 check appears with a unique id |
+| **Passed** | **true** | **first time in this repository** |
+
+Eligibility remains `blocked`, on `Authentic` alone. `.rha/policy.toml [acceptance.bootstrap]` records `passed_unsatisfiable_until = "CHG-003: L0.architecture is not implemented"`; that clause expires with this merge, and its `expires` condition now waits only on CHG-020.
 
 ## Acceptance concerns
 
