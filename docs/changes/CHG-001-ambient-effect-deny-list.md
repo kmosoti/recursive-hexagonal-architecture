@@ -84,3 +84,19 @@ Eligibility `blocked`: Authentic (no trusted producers), Applicable (the policy 
 5. **What the deny list cannot reach.** Direct uses only: not a call through another crate, not one the compiler generates from a macro. `HashMap::new` seeds itself from `RandomState` without naming it, so iteration-order nondeterminism stays out of reach. Platform extension traits and unstable APIs are left out on purpose (ADR-0002).
 6. **The rule is not yet in L0.** `effect.core_clippy_template` is exercised only by its unit tests until CHG-003 calls it from `cargo xtask architecture`.
 7. **Held-out cases.** None exist for this change. The fixtures and the expected rule were written by the Executor; the expectation was written into the task record before the experiments ran. The deny-list additions were proposed by advisory subagents reading the standard-library source, and every one of them is checked by experiment 4, which fails if an entry stops firing.
+
+## Acceptance (CHG-001.4)
+
+Kennedy accepted this change at `44b1e44`, the merge commit of [pull request 2](https://github.com/kmosoti/recursive-hexagonal-architecture/pull/2), on 2026-09-19. The record is [`.rha/acceptances/CHG-001.toml`](../../.rha/acceptances/CHG-001.toml), written by the Executor at his instruction, which is also the approval for that protected surface.
+
+The merge added nothing of its own: `44b1e44^{tree}` equals `a31cdd1^{tree}`, both `336f32c8`, and `git diff a31cdd1 44b1e44` is empty.
+
+**The evidence that covers the accepted tree.** The records committed before the merge stop short of it. The last local record, [`evidence/CHG-001/20260919T232940Z-78fe0093c4a4.json`](../../evidence/CHG-001/20260919T232940Z-78fe0093c4a4.json), was taken at `78fe009`, two commits before the head; run 35476272071 covers head `5c24f54`. CHG-001.4 therefore downloads the `rha-evidence` artifact of run [35476379661](https://github.com/kmosoti/recursive-hexagonal-architecture/actions/runs/35476379661), the run on head `a31cdd1`, and commits it as [`evidence/ci/35476379661.json`](../../evidence/ci/35476379661.json). Its `artifact_identity.tree` is `336f32c8968d8f9b523cae4d96f168ba59c485c9`, equal to the accepted tree, so the lane ran on exactly the content now on `main`; its `revision` is GitHub's ephemeral merge commit `5343431`, which no longer exists as a branch. Seven checks passed, `L0.architecture` is `not_run`, and all four predicates match the local record.
+
+That the record arrives after the item it describes is itself a weakness, listed in the acceptance record's `carried_forward`: an acceptance whose evidence has to be fetched from a CI artifact is reproducible only while the artifact lives.
+
+**The transition closed.** Every cited record reports `base_policy_digest` `sha256:f102c03a…` against its own `policy_digest` `sha256:dc2ef7e0…`, so Applicable is false on all of them. A lane run at `44b1e44` reports both as `sha256:dc2ef7e0…` and Applicable true: the base is now the policy this change proposed. That run is reported in the working conversation and is not committed, so `main` carries no record of its own.
+
+### Defect found at acceptance
+
+**D-001.1, record integrity.** The task record shipped at `44b1e44` with the literal string `SPEC_DIGEST` where the sha256 of `docs/spec/rha-spec-v0.10.md` belonged, in the fifth `instruction_sources` entry. The record asserted a witness it did not hold, in the one field that lets a reader reproduce the Executor's inputs. Nothing caught it: no check reads task records, and the record-schema check that would reject a non-hex digest belongs to CHG-019. CHG-001.4 fills in `bd96216829035ade64c43befa5e672c58078f6afa4b04145c6183227e4e1071a`, verifiable with `git show 44b1e44:docs/spec/rha-spec-v0.10.md | sha256sum`, and the acceptance record states the defect in full.

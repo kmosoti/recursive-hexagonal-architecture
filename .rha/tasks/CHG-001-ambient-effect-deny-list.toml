@@ -6,7 +6,7 @@ title = "Ambient-effect deny list and Clippy configuration discovery"
 mode = "agent"
 executor_composition = "agent"
 authority_profile = "ECC-Solo"
-status = "proposed"
+status = "accepted"   # at 44b1e44, 2026-09-19 (CHG-001.4); see .rha/acceptances/CHG-001.toml
 plan_ref = "docs/plan/IMPLEMENTATION-PLAN.md §8 W1"
 branch = "chg/001-ambient-effect-deny-list"
 base_revision = "c55431692b838cdd3763ba2210559aa2b4b1719e"
@@ -173,6 +173,25 @@ owned_scope = [
   "evidence/w1-clippy/**, evidence/CHG-001/**, evidence/ci/**",
 ]
 
+[[work]]
+id = "W1.4"
+executor = "agent:executor"
+depends_on = ["W1.3"]
+output = "After the merge and Kennedy's acceptance at 44b1e44: the acceptance record for CHG-001, the SPEC_DIGEST placeholder replaced by the real digest, that placeholder recorded as defect D-001.1, and the CI record covering the accepted tree committed."
+owned_scope = [
+  ".rha/acceptances/CHG-001.toml (written at Kennedy's instruction of 2026-09-19, which is the approval for that protected surface)",
+  ".rha/tasks/CHG-001-ambient-effect-deny-list.toml (the placeholder and this entry)",
+  "evidence/ci/35476379661.json",
+  "docs/changes/CHG-001-ambient-effect-deny-list.md, generated docs",
+]
+
+[[decisions]]
+id = "accepted-at"
+question = "Is CHG-001 accepted, and at which revision?"
+answer = "Accepted at 44b1e44, the merge commit of pull request 2. The Executor writes .rha/acceptances/CHG-001.toml as CHG-001.4; this instruction is the approval for that protected surface."
+decided_by = "human:kennedy"
+date = "2026-09-19"
+
 [expectation]
 # Written before any experiment ran (plan §8 W1). The recorded rule is whatever is observed.
 discovery = "Clippy reads the first clippy.toml found from the crate's CARGO_MANIFEST_DIR upward; a core crate's local file applies to it and not to a sibling adapter."
@@ -218,7 +237,9 @@ instruction_sources = [
   { path = "docs/plan/IMPLEMENTATION-PLAN.md (CHG-001.1 revision: model-agnostic Executor)", sha256 = "86298ec9b06f6774752cf85eba8396633ba557d6202b96017099b639adeecfb1" },
   { path = "docs/spec/rha-spec-v0.10.md (W1 through CHG-001.2)", sha256 = "4c96ded8159c35a6281a6c14183700ae1466c097e009cdc5e722b2d1eacb0907" },
   { path = "docs/spec/rha-spec-v0.10.md (CHG-001.3: §6.8 records the Clippy findings)", sha256 = "d95218744e2c1acec96081175778e838cfa48e7ca5dd7847e35035e9000ce117" },
-  { path = "docs/spec/rha-spec-v0.10.md (CHG-001.3 corrected: the observations move to the decision record and the v0.11 queue)", sha256 = "SPEC_DIGEST" },
+  # Filled in CHG-001.4. It shipped at 44b1e44 as the placeholder SPEC_DIGEST,
+  # recorded as defect D-001.1 in .rha/acceptances/CHG-001.toml.
+  { path = "docs/spec/rha-spec-v0.10.md (CHG-001.3 corrected: the observations move to the decision record and the v0.11 queue)", sha256 = "bd96216829035ade64c43befa5e672c58078f6afa4b04145c6183227e4e1071a" },
   { path = "user message of 2026-09-19 starting W1 (pre-approval of the template)", sha256 = "unknown" },
   { path = "user message of 2026-09-19 answering the W1 report (CHG-001.1 and CHG-001.2 decisions above)", sha256 = "unknown" },
   { path = "user message of 2026-09-19 instructing the acceptance records, the recommended decisions, the spec update, and the README (CHG-001.3)", sha256 = "unknown" },
