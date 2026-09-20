@@ -1,0 +1,66 @@
+schema_version = 1
+id = "CHG-004"
+slug = "h4-crate-harness"
+title = "H4 crate-level corpus harness and evidence"
+mode = "agent"
+executor_composition = "agent"
+authority_profile = "ECC-Solo"
+status = "proposed"
+plan_ref = "docs/plan/IMPLEMENTATION-PLAN.md §6 and §8 W4"
+branch = "chg/004-h4-crate-harness"
+base_revision = "140fdfb92d62d3481d95f3e2efc1d24a0206fcc4"
+intent = "Generate declared crate-level fixtures; run and strictly grade the checker and separate compiler case; retain H4 evidence and generate the enforcement map."
+non_goals = ["Module harness (CHG-007)", "Transitive evaluator", "Reading or running Kennedy's held-out cases (DP-1.1b)", "Changing Accepted maturity (DP-1.6)", "Changing manifest expectations or grading"]
+
+[[actors]]
+id = "human:kennedy"
+type = "human"
+
+[[actors]]
+id = "agent:executor"
+type = "agent"
+accountable_to = "human:kennedy"
+
+[roles]
+planner = "human:kennedy"
+executor = ["agent:executor"]
+integrator = "human:kennedy"
+verifier = ["automation:xtask-ci (local, advisory)", "automation:github-actions (CI, advisory)"]
+acceptor = "human:kennedy"
+
+[[work]]
+id = "W4"
+executor = "agent:executor"
+depends_on = ["CHG-003", "DP-1.1a", "DP-1.1b", "DP-1.1c"]
+output = "Crate fixtures, corpus CLI, strict grading, H4 evidence, enforcement map, Proposed maturity and change record."
+owned_scope = ["xtask/src/corpus.rs", "xtask/src/corpus/**", "xtask/src/cli.rs", "xtask/src/main.rs", "xtask/tests/corpus*.rs", "xtask/tests/corpus/manifest.toml (EM-M03 cells only)", ".rha/acceptances/CHG-003.toml (creation)", ".rha/tasks/CHG-004-h4-crate-harness.toml", "docs/changes/CHG-004-h4-crate-harness.md", "docs/enforcement-map.md", "docs/maturity.md", "docs/orchestration-log.md", "generated docs", "evidence/CHG-004/**", "evidence/h4-crate/**", "evidence/ci/**"]
+claim = "agent:executor is the sole branch writer, as Kennedy instructed, in isolated JJ workspace chg004. No W4 issue or board item exists; this task records ownership and status. No write packets are dispatched."
+
+[[decisions]]
+id = "approved-em-m03-cells"
+question = "Which protected manifest edit is authorized before the harness?"
+answer = 'Only EM-M03 cells = ["law3-d1", "law6-b3"], plus the matching frozen test row. Kennedy explicitly approved this exact value on 2026-09-20 ("Approved and merged", PR 6), as confirmed in the W4 instruction and objective. Expected outcome, hole, partial scope and grading values remain fixed.'
+decided_by = "human:kennedy"
+date = "2026-09-20"
+
+[[decisions]]
+id = "commit-order"
+question = "What must precede harness code?"
+answer = "Kennedy requires first the CHG-003 acceptance record, second the approved EM-M03 edit citing approval, then the harness."
+decided_by = "human:kennedy"
+date = "2026-09-20"
+
+[compatibility]
+api = "Additive corpus CLI; existing architecture report and exit codes preserved."
+schema = "New advisory H4 record; manifest schema unchanged."
+dependencies = "No new dependencies planned."
+resources = "Offline Cargo metadata per fixture and cargo check for R01; generated fixtures are committed under xtask/tests/corpus/crate/ and checked for drift; build output stays ignored."
+
+[provenance]
+model_id = "GPT-6 (session default)"
+instruction_sources = [
+  "AGENTS.md sha256:5c3e2af3bd6c0fc44a8f9bc9a4d51641dc56cdd7a11f768ac0d800eb0ed690fe",
+  "CONTRIBUTING.md sha256:9de567ddb7dfa07a6a03e7dc483a93c490357347fa1ac4f98565d00a225ff3b9",
+  "xtask/AGENTS.md sha256:4bc74c0bff383fd35e79f44768e92cb774c95b20d73b127c8bcfa5afa9c30e56",
+  "docs/plan/IMPLEMENTATION-PLAN.md sha256:4d9b1c64e8b6c62e37d7db9b26722c330f2fdd6804441d50c45b3ca3a2fbdbdf",
+]

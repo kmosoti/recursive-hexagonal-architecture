@@ -218,7 +218,7 @@ const PINNED: [(&str, &str, &str, &str); 62] = [
     ("L-M02", "no_alarm", "-", "d2"),
     ("EM-M01", "expected_miss", "-", "law6-b3"),
     ("EM-M02", "expected_miss", "-", "law6-b3"),
-    ("EM-M03", "expected_miss", "-", "law6-b3"),
+    ("EM-M03", "expected_miss", "-", "law3-d1 law6-b3"),
     ("X-M01", "reference", "-", "law6-b3"),
 ];
 
