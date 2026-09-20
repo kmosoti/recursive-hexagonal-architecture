@@ -1,0 +1,129 @@
+# Task record (spec §11.7.11 shape, stored as TOML).
+schema_version = 1
+id = "CHG-003"
+slug = "architecture-crate-level"
+title = "cargo xtask architecture: the crate-graph checker"
+mode = "agent"
+executor_composition = "agent"
+authority_profile = "ECC-Solo"
+status = "proposed"
+plan_ref = "docs/plan/IMPLEMENTATION-PLAN.md §5 and §8 W3"
+branch = "chg/003-architecture-crate-level"
+base_revision = "4be4a199422d1e119d0dddc5483636b7a2052779"
+intent = "Implement the crate-graph checker of plan §5: read `cargo metadata --no-deps --offline`, classify every member totally, evaluate the rha-crates.toml rules, and report findings as JSON, text and markdown with the exit codes §5 fixes. This is the change that makes L0.architecture run, which has blocked the Passed predicate since CHG-000."
+non_goals = [
+  "The module graph: module_checks reports not_run with reason not_implemented until CHG-007",
+  "Transitive mode: --transitive is accepted and reports not_run unless [transitive] enabled is true",
+  "The H4 harness and the fixture generator: `cargo xtask corpus run` is CHG-004",
+  "Reading xtask/tests/corpus/manifest.toml from the checker. The manifest is an input to CHG-004's harness, never to the checker; a checker that reads its own test set is not being tested by it",
+  "Kennedy's held-out cases (DP-1.1b), which no agent may author or read (§9.14)",
+  "Product crates: none exist until CHG-005, so the checker runs over a workspace whose only member is xtask",
+]
+
+[[actors]]
+id = "human:kennedy"
+type = "human"
+
+[[actors]]
+id = "agent:executor"
+type = "agent"
+accountable_to = "human:kennedy"
+
+[[actors]]
+id = "automation:github-actions"
+type = "automation"
+accountable_to = "human:kennedy"
+
+[roles]
+planner = "human:kennedy"
+executor = ["agent:executor"]
+integrator = "human:kennedy"
+verifier = ["automation:xtask-ci (local, advisory)", "automation:github-actions (class ci, advisory)"]
+acceptor = "human:kennedy"
+
+[[work]]
+id = "W3"
+executor = "agent:executor"
+depends_on = ["CHG-002", "CHG-002.2", "DP-1.1b"]
+output = "xtask/src/metadata.rs and xtask/src/graph/{mod,model,classify,rules,check,report}.rs; rha-crates.toml given the plan §5 schema with empty allow-lists; `cargo xtask architecture` wired into the L0 lane so L0.architecture stops reporting not_run; unit tests per rule on synthetic CrateGraphs."
+owned_scope = [
+  "xtask/src/metadata.rs, xtask/src/graph/**, xtask/src/architecture.rs, xtask/src/cli.rs, xtask/src/lib.rs",
+  "xtask/tests/architecture_*.rs",
+  "rha-crates.toml (the plan §5 schema with empty allow-lists, pre-approved by Kennedy 2026-09-20)",
+  ".rha/acceptances/CHG-002.2.toml (creation pre-approved by .rha/policy.toml [acceptance])",
+  ".rha/decisions.toml (the DP-1.1b row, approved by Kennedy 2026-09-20)",
+  ".rha/tasks/CHG-003-architecture-crate-level.toml, docs/changes/CHG-003-architecture-crate-level.md, docs/maturity.md, generated docs",
+  "evidence/CHG-003/**, evidence/ci/**",
+]
+
+[[decisions]]
+id = "protected-surface-approval"
+question = "Which protected surfaces may this change touch?"
+answer = "Three, each approved separately: .rha/acceptances/CHG-002.2.toml, whose creation is pre-approved by .rha/policy.toml [acceptance]; the DP-1.1b row of .rha/decisions.toml, approved in the working conversation of 2026-09-20; and rha-crates.toml, pre-approved in the same message to receive the plan §5 schema with empty allow-lists. No other protected surface may change."
+decided_by = "human:kennedy"
+date = "2026-09-20"
+
+[[decisions]]
+id = "held-out-commitment"
+question = "DP-1.1b required the held-out commitment before any checker code. Is it recorded?"
+answer = "Yes. The cases exist outside the repository and Kennedy supplied the commitment digest; it is on the DP-1.1b row as the second commit of this item, ahead of every line of checker code. The Executor never reads the cases and cannot verify the digest; it attests only the ordering, which the branch history shows."
+decided_by = "human:kennedy"
+date = "2026-09-20"
+
+[[decisions]]
+id = "checker-must-not-read-the-corpus"
+question = "The corpus manifest declares every case the checker will be judged on. May the checker read it?"
+answer = "No, and it is a non-goal for that reason. The manifest is an input to CHG-004's harness. A checker that reads its own test set can satisfy it without implementing the rule, which is what pre-registration exists to prevent (§17, §9.14)."
+decided_by = "agent:executor, stated for Kennedy's review"
+date = "2026-09-20"
+
+[expectation]
+# Written before the checker (spec §17: fixed before data).
+detection = "Every crate-level `detect` case of xtask/tests/corpus/manifest.toml is detected, and none of the 11 legitimate cases raises an alarm. That is measured in CHG-004, not here; this item is judged on its unit tests and on the lane."
+on_this_repository = "The workspace has one member, xtask, classified `tool` by the [classification] tools list. `cargo xtask architecture` exits 0 with `crates: 1 (xtask)` and no findings. A finding here would mean the checker misclassifies its own repository."
+l0_architecture = "L0.architecture stops being not_run and becomes passed. It is the last of the eight L0 checks to run, so the Passed predicate can hold for the first time since CHG-000 — Authentic still cannot, until CHG-019 and CHG-020."
+fallback_if_contradicted = "If `cargo metadata --no-deps` lacks a field a rule needs, switch to resolved mode with --offline --locked and record the mode in the report's subject.metadata_mode (plan §8 W3 replan)."
+
+[claim]
+affected_components = []
+contract_changes = "none: no product component exists"
+architecture_delta = "New xtask modules: metadata, and graph with model, classify, rules, check and report. No new dependency: cargo metadata output is parsed with the serde_json xtask already has."
+performance_impact = "none claimed"
+unresolved = [
+  "The checker runs over a workspace with one member. Its rules are exercised by unit tests on synthetic graphs and, in CHG-004, by the corpus; nothing in this repository exercises them on real crates until CHG-005.",
+  "Authentic still cannot hold (CHG-019, CHG-020), so no record is Eligible even once Passed holds.",
+]
+
+[acceptance]
+criteria = [
+  "Unit tests per rule id on synthetic CrateGraphs, including the classification precedence of plan §5 and the four dependency shapes C15 to C18 exercise",
+  "`cargo xtask architecture` on this repository exits 0, reports one crate classified tool, and writes target/rha/architecture.json",
+  "The JSON report carries the plan §5 field set, including module_checks with outcome not_run and limitations",
+  "Exit codes as plan §5 fixes them: 0 no errors, 1 error findings, 2 usage or config error, 3 environment failure and never a pass",
+  "L0.architecture reports passed in both a local and a CI record",
+  "xtask/tests/policy_drift.rs still passes: the lane command block is unchanged",
+  "The checker does not read xtask/tests/corpus/manifest.toml; a test asserts it",
+]
+replan_when = [
+  "`cargo metadata --no-deps` lacks a needed field; switch to resolved mode with --offline --locked and record the mode",
+  "A plan §5 rule id cannot be evaluated from no-deps metadata; it is reported as a limitation rather than silently omitted",
+]
+
+[provenance]
+harness = "Claude Code, VS Code extension; the CLI on PATH reports `2.1.278 (Claude Code)`; the extension build was not observed"
+output_style = "Learning (.claude/settings.local.json)"
+permission_mode = "auto, as reported to the session"
+task_scope = "CHG-003: docs/plan/IMPLEMENTATION-PLAN.md §5 and §8 W3"
+permissions = "Workspace files, shell, network, and `gh` as kmosoti through the user's account. Protected surfaces: the three named in the protected-surface-approval decision, and no others."
+budgets = "unknown"
+reasoning_effort = "not exposed to the session"
+instruction_sources = [
+  { path = "docs/plan/IMPLEMENTATION-PLAN.md (§5 and §8 W3, at 4be4a19)", sha256 = "4d9b1c64e8b6c62e37d7db9b26722c330f2fdd6804441d50c45b3ca3a2fbdbdf" },
+  { path = "docs/spec/rha-spec-v0.10.md (§4.1, §6.13, at 4be4a19)", sha256 = "bd96216829035ade64c43befa5e672c58078f6afa4b04145c6183227e4e1071a" },
+  { path = "user message of 2026-09-20 accepting CHG-002.2, supplying the DP-1.1b commitment, and starting W3", sha256 = "unknown" },
+  { path = "Claude Code system prompt", sha256 = "unknown" },
+]
+
+[[provenance.sessions]]
+model_id = "claude-opus-5[1m]"
+span = "CHG-003"
