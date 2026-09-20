@@ -63,6 +63,8 @@ They are synthetic **on purpose**. The checker must not read `xtask/tests/corpus
 
    `_typos.toml` was not touched. A real misspelling is not a false positive, and adding it to `extend-words` to make a check pass is exactly the shape §9.14 warns about. This paragraph also avoids quoting the misspelling, because CHG-002 learned that documenting one puts it back in the tree.
 
+2. **A lane ran on an uncommitted tree during CHG-003.2.** The consolidation was staged as two commits, but the `git add` for each named a path that `git rm` had already removed, so the shell skipped both commits and the lane that followed ran on the working tree. Hypothesis: a shell ordering error, nothing about the code. Discriminating check: `git log` showed no new commit and the record is named `-dirty`. The record, `evidence/CHG-003/20260920T110910Z-920cca6b07b7-dirty.json`, is what CONTRIBUTING says a dirty record is, all eight checks `passed` over the not-yet-committed consolidation, and it is kept. Change: the two commits were made, then this record committed on its own, then the lane re-run on the clean tree. Result: the CHG-003.2 record under Evidence.
+
 ### Review findings (Codex on pull request 6, reviewed revision `776fa83`), determinations
 
 The rule applied, adopted on 2026-09-20 after Codex's audit of this repository's review history: a finding becomes a `CHG-00n.k` commit only when it names a concrete failure on the reviewed revision; bookkeeping findings are batched into one determination; a resolved thread reopens only on a new failure mode. All three findings here name a failure, so all three are repaired, in one commit.
