@@ -23,7 +23,7 @@ The module cases are registered here and built in CHG-007; only their ids, rules
 
 **[`xtask/tests/corpus/manifest.toml`](../../xtask/tests/corpus/manifest.toml)** — the corpus. Each case carries `id`, `level`, `generation`, `expected`, `rule`, `cell`, `seeded`, and a `witness`.
 
-`cell` names a row of spec §4.1's enforcement map, so a miss downgrades a named cell rather than an unnamed feeling. The manifest adds one id the spec's table does not have, `classification`, with a comment saying why: total classification (§11.2) is not a §4.1 row but the precondition for every row, and a member the checker cannot classify is a hole in all of them at once. C10, C11 and C20 sit there.
+`cells` names the rows of spec §4.1's enforcement map a case is evidence for, so a miss downgrades named cells rather than an unnamed feeling. It is a list because one seeded violation can carry more than one claim (CHG-002.1). The manifest adds one id the spec's table does not have, `classification`, with a comment saying why: total classification (§11.2) is not a §4.1 row but the precondition for every row, and a member the checker cannot classify is a hole in all of them at once. C10, C11 and C20 sit there.
 
 `witness` states what a finding must name. A rule id alone would score C01 for a checker that reported `dir.core_to_adapter` about the wrong pair of crates, so C01's witness is `{ rule, from = "core-a", to = "adapter-x" }`, C20's names a crate and a port, and R01's names an error code.
 
@@ -55,7 +55,7 @@ Four groups do work beyond covering a rule.
 
 `[grading]` is what stops H4 grading itself generously. Three values are the Executor's proposal and are **open at DP-1.1**:
 
-- `detection_requires` — the rule id plus every witness key naming a crate, port, module path or error code; `note`, `alternative` and `applies_when` are prose and are not matched.
+- `detection_requires` — every key of the case's `witness` table must equal the finding's corresponding field. There is no exempt list, because prose lives in `witness_notes` (CHG-002.1).
 - `extra_findings` — the case counts as detected, and every unmatched finding on that fixture is counted in the run's `false_alarm` total. Recall and precision are scored separately so an over-eager rule is neither hidden by a case it gets right nor punished twice for one defect.
 - `no_alarm_scope` — any finding on a legitimate fixture fails the case, whatever its rule, except a report carrying `listed_as`.
 
@@ -93,11 +93,29 @@ A fourth run, at `af1e5077`, failed `L0.typos` on the sentence repair attempt 2 
 
    **Process finding, not a tool finding.** A lane result is only about the tree that existed when it ran. `cargo xtask docs` changes tracked files, so running it after the lane invalidates the record the lane just wrote. CONTRIBUTING tells contributors to regenerate docs after changing `.rha/**` or `evidence/**`; it does not say to re-run the lane afterwards. Queued for the v0.11 proposals as a workflow correction.
 
+## CHG-002.1: review findings and their determinations
+
+Requested by Kennedy on the open pull request, as eight commits. The Codex review of commits `9e7bb89` and `8dc1969` raised six findings; all six are accepted and fixed. One further change is Kennedy's own.
+
+| # | Source | Finding | Determination |
+| --- | --- | --- | --- |
+| 1 | Codex **P1** | *Keep the transitive dependency out of the core member set.* EM-C01's `pure-looking` was a workspace member with `role = "core"` and a direct, un-allow-listed `tokio` dependency, so the checker would report an ordinary `effect.core_disallowed_dependency` about it. | **Accepted, fixed.** The finding is correct and it invalidated the case: a real detection of a *different* rule would have made the fixture non-silent, so it would no longer demonstrate that the transitive edge is invisible. `pure-looking` and `tokio` are now `outside_crates` reached by path, classified by nothing. |
+| 2 | Codex **P1** | *Encode the Rust source required by R01.* Neither crate declared a body, so a generated R01 workspace would compile and the registered `E0603` could never fire. | **Accepted, fixed.** Both bodies are declared. Verified by building the pair outside the repository: rustc 1.98.1 reports `error[E0603]: module 'private_mod' is private` at `core-b/src/lib.rs`, so the witness holds against a real run. |
+| 3 | Codex **P1** | *Match every outcome-bearing witness field.* `detection_requires` matched "every key naming a crate, port, module path or error code", which omits `kind`, `matched_rule`, `depth` and `extraction`; M20 could be scored detected by a checker reporting the cycle as exact. | **Accepted, fixed differently than proposed.** Codex asked for the enumeration to be completed. Completing it would be correct today and silently wrong the next time a witness key is added. Instead `witness` now holds only matched keys and prose moved to `witness_notes`, so position decides what is matched. `Defect::ProseInWitness` stops the split regressing. |
+| 4 | Codex **P2** | *Pin each expected outcome to its case ID.* Aggregate counts cannot see a swap: flipping C01 to `no_alarm` and L01 to `detect` leaves every count identical. | **Accepted, fixed, and verified against the stated scenario.** With exactly that swap applied, the counts test still passes and the new `PINNED` test fails naming both cases. |
+| 5 | Codex **P2** | *Attribute core-to-adapter cases to the D1 cell.* C01 and C15–C18 named `law6-d5` alone, so a miss would downgrade the D5 claim and leave D1 credited. | **Accepted, fixed more broadly than proposed.** Codex asked to move the cases from D5 to D1. A core-to-adapter edge is genuinely evidence for both rows, so `cell` became `cells`, a list, and those five name both. Moving them would have left the other claim falsely standing, in the opposite direction. |
+| 6 | Codex **P2** | *Map the undeclared-dependency case to Law 3/D1.* M02 seeds a directional edge, not a cycle, yet named `law6-b3`. | **Accepted, fixed.** M02 names `law3-d1`. |
+| 7 | **Kennedy** | C05's witness carried an `alternative` letting a Cargo error be recorded as `graph.cycle`. | **Accepted, fixed.** It is the corpus grading itself generously — crediting the xtask DFS for an error it never produced, and the Law 6/B3 cell to a rule that did not run. Removed; C05 now requires the checker's own finding. |
+
+**What did not change.** No case's `expected` outcome was altered, no case was added or dropped, and no rule id changed. Findings 1, 5, 6 and 7 are pre-registration corrections that Kennedy approved explicitly, before any checker exists; findings 2 and 3 are structural, changing how a case is expressed rather than what it expects.
+
+Findings 1, 2 and 7 are worth separating from the rest: each described a fixture that **could not produce the result it was registered for**. A corpus whose cases cannot fire is worse than no corpus, because W4 would have reported numbers for it.
+
 ## Acceptance concerns
 
 1. **DP-1.1 is the point of this item.** Kennedy reviews the manifest, and authors two or three held-out crate-level cases that live outside this repository. The Executor must not read or write them (§9.14). Every case here was written by the Executor from the plan; the held-out set is the only part of H4 that is not self-assessment, and without it W4's numbers measure the checker against expectations the same party wrote.
 2. **The three `[grading]` values are a proposal.** They are the strict reading in each case. If any is relaxed, the relaxation belongs here and in the manifest before CHG-004 runs, not after a result is known.
 3. **Still not Eligible.** `L0.architecture` is `not_run` and required and non-waivable under DP-0.5, unchanged since CHG-000's acceptance.
 4. **A registered case is not a working fixture.** Nothing has generated a workspace from this manifest yet. The declaration vocabulary is validated for internal consistency only; CHG-004 is where it meets `cargo metadata`, and a case that cannot be expressed is re-registered with its reason *before* that run, per the task record's `replan_when`.
-5. **C05 may never reach the checker.** Cargo rejects a package cycle while loading the workspace, so the fixture may fail before `cargo xtask architecture` sees it. The witness carries an `alternative` saying the harness records that error as `graph.cycle`. Whether this counts as the checker detecting the cycle, or as Cargo doing it, is a question for W4.
+5. **C05 may never reach the checker.** Cargo rejects a package cycle while loading the workspace, so the fixture may fail before `cargo xtask architecture` sees it. CHG-002.1 removed the `alternative` that would have let a Cargo error count as the checker's detection. If the checker reports nothing, C05 is a **miss**, and W4 re-registers it with a stated reason or rebuilds the fixture — in the open, before a run.
 6. **`cell = "classification"` is not a §4.1 row.** The manifest says so in a comment. If Kennedy would rather §4.1 gained a classification row, that is a v0.11 proposal, not an edit here.

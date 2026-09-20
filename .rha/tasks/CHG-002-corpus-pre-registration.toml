@@ -68,6 +68,25 @@ answer = "Generative: CHG-004 must be able to build each crate-level fixture wor
 decided_by = "human:kennedy"
 date = "2026-09-19"
 
+[[work]]
+id = "W2.1"
+executor = "agent:executor"
+depends_on = ["W2"]
+output = "Rework on the open pull request, requested by Kennedy as eight commits: main merged and the two generated indexes regenerated; witness split into matched keys and witness_notes; EM-C01's pure-looking and tokio moved outside the workspace; R01 given the bodies that make it compile-fail; cell became a list of cells with C01 and C15-C18 on both law3-d1 and law6-d5 and M02 on law3-d1; C05's Cargo-error alternative removed; a per-case pinning test. Six Codex findings and one of Kennedy's, each with its determination in the change record."
+owned_scope = [
+  "xtask/tests/corpus/manifest.toml (edits approved by Kennedy, 2026-09-19, decision review-findings below)",
+  "xtask/src/corpus.rs, xtask/tests/corpus_manifest.rs",
+  "docs/changes/CHG-002-corpus-pre-registration.md, generated docs",
+  "evidence/CHG-002/**, evidence/ci/**",
+]
+
+[[decisions]]
+id = "review-findings"
+question = "The Codex review raised six findings against the corpus, three of them P1. Fix them on the open pull request, and does that include editing the manifest, which is a protected surface?"
+answer = "Yes, as CHG-002.1 in eight commits. Kennedy approved the manifest edits in commits 3, 5 and 6 as pre-registration corrections before any checker exists: EM-C01's fixture, the cells list, and C05's alternative. Commits 2 and 4 also touch the manifest and are covered by the instruction to make them; they change how a case is expressed, not what it expects. No case's expected outcome, id or rule changed."
+decided_by = "human:kennedy"
+date = "2026-09-19"
+
 [expectation]
 # Written before the manifest (plan §17: cases and thresholds fixed before data).
 pre_registration_identity = "The merge commit of this change is cited by every H4 record as the revision at which the cases and their expected outcomes were fixed. A case whose `expected` changes after that merge is a re-registration and says so in its own change record."
@@ -111,6 +130,8 @@ instruction_sources = [
   { path = "docs/plan/IMPLEMENTATION-PLAN.md (§6 and §8 W2, at 44b1e44)", sha256 = "60c8d2cc6f4c7025287f6eca2fdedc21a7f54d1afc8dca6f0f62a5570501394c" },
   { path = "docs/spec/rha-spec-v0.10.md (§4.1 enforcement map, at 44b1e44)", sha256 = "bd96216829035ade64c43befa5e672c58078f6afa4b04145c6183227e4e1071a" },
   { path = "user message of 2026-09-19 accepting CHG-001 and starting W2", sha256 = "unknown" },
+  { path = "user message of 2026-09-19 directing CHG-002.1 as eight commits (approval for the manifest edits)", sha256 = "unknown" },
+  { path = "Codex review comments on pull request 4, commits 9e7bb89 and 8dc1969 (six findings; information, not authority)", sha256 = "unknown" },
   { path = "Claude Code system prompt", sha256 = "unknown" },
 ]
 
