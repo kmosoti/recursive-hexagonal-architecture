@@ -80,3 +80,18 @@ Outside packages remain siblings of the C19 and EM-C01 workspace roots, as `outs
 | EM-C01 | Documented hole; passed with no findings |
 | EM-C02 | Documented hole; passed with no findings |
 | R01 | Detected E0603; passed (cargo exit 101) |
+
+## Local L0 handoff
+
+[Clean local L0 record](../../evidence/CHG-004/20260920T122054Z-bef220d57566.json) identifies `bef220d57566868d5407fb03b9e19389b04c1d5f`: all eight checks passed and nextest selected 141 tests, including the complete committed corpus and drift controls. Authentic remains false under the bootstrap policy; the separate H4 run remains failed because of C13.
+
+| Check | Actual outcome |
+| --- | --- |
+| L0.fmt | passed |
+| L0.clippy | passed |
+| L0.nextest | passed |
+| L0.doctest | passed |
+| L0.architecture | passed |
+| L0.deny | passed |
+| L0.machete | passed |
+| L0.typos | passed |
