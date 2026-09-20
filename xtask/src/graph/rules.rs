@@ -166,7 +166,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn the_repositorys_own_rules_parse() {
+    fn the_rules_file_of_this_repository_parses() {
         let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
             .parent()
             .expect("xtask has a parent")
