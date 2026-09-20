@@ -63,17 +63,19 @@ Two more are not open, because they follow from §17 and §9.14, and both tests 
 
 ## Evidence
 
-**Local.** Three records under `evidence/CHG-002/`, and all three are kept:
+**Local.** Five records under `evidence/CHG-002/`, and all five are kept (this list was corrected in CHG-003.2; it had named three and `13f665c` as the head, a pull request 4 review finding):
 
 | Record | Revision | Result |
 | --- | --- | --- |
 | `20260920T001651Z-24ad1602720b.json` | `24ad160` | `L0.fmt` **failed**; repair attempt 1 |
-| `20260920T001738Z-038a8ea2ba1c.json` | `038a8ea` | 7 passed, `L0.architecture` not_run — superseded by the head below |
-| `20260920T002204Z-13f665cb0893.json` | `13f665c` | 7 passed, `L0.architecture` not_run, 50 tests selected |
+| `20260920T001738Z-038a8ea2ba1c.json` | `038a8ea` | 7 passed, `L0.architecture` not_run, 50 tests; superseded |
+| `20260920T002204Z-13f665cb0893.json` | `13f665c` | 7 passed, `L0.architecture` not_run, 50 tests; the head before review |
+| `20260920T010039Z-cfb048e479fb.json` | `cfb048e` | 7 passed, `L0.architecture` not_run, 53 tests; after the CHG-002.1 determinations |
+| `20260920T011724Z-6518f6a89af5.json` | `6518f6a` | 7 passed, `L0.architecture` not_run, 54 tests; **the head of the item**, after the outside-crate repair |
 
 A fourth run, at `af1e5077`, failed `L0.typos` on the sentence repair attempt 2 was in the middle of correcting; its record is not committed, and repair attempt 2 says why.
 
-**CI.** Run [35478601881](https://github.com/kmosoti/recursive-hexagonal-architecture/actions/runs/35478601881) on head `5972d91`, copied as [`evidence/ci/35478601881.json`](../../evidence/ci/35478601881.json). Subject revision `68b41dca`, GitHub's ephemeral merge commit. Seven passed, `L0.architecture` `not_run`, 50 tests selected, and all four predicates agree with the local record. The earlier CI run 35478425099 failed `L0.typos` and is not committed; repair attempt 2 cites it.
+**CI.** Run [35478601881](https://github.com/kmosoti/recursive-hexagonal-architecture/actions/runs/35478601881) on head `5972d91`, copied as [`evidence/ci/35478601881.json`](../../evidence/ci/35478601881.json). Subject revision `68b41dca`, GitHub's ephemeral merge commit. Seven passed, `L0.architecture` `not_run`, 50 tests selected, and all four predicates agree with the local record. The earlier CI run 35478425099 failed `L0.typos` and is not committed; repair attempt 2 cites it. After the CHG-002.1 repairs: run [35480297907](https://github.com/kmosoti/recursive-hexagonal-architecture/actions/runs/35480297907), subject `1c9f7e1`, 53 tests; run [35481014407](https://github.com/kmosoti/recursive-hexagonal-architecture/actions/runs/35481014407), subject `6b2784b`, 54 tests, the last run on the branch; and run [35481271471](https://github.com/kmosoti/recursive-hexagonal-architecture/actions/runs/35481271471) on `main` at `15d916a`, 54 tests, which `.rha/acceptances/CHG-002.toml` cites. All three report seven passed and `L0.architecture` `not_run`; the two branch subjects are GitHub's ephemeral merge commits. (Added in CHG-003.2.)
 
 `L0.architecture` is `not_run` and is reported as `not_run`. Nothing here is reported passed that did not run.
 

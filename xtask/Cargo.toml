@@ -6,8 +6,12 @@ edition.workspace = true
 rust-version.workspace = true
 publish = false
 
-[package.metadata.rha]
-role = "tool"
+# No [package.metadata.rha] role. xtask is classified by the `tools` list in
+# rha-crates.toml, which plan §5 makes the owner of that fact for tools and
+# harnesses; plan §8 W5's acceptance expects `xtask: tool (list)`. Declaring
+# the role here as well would state one fact in two places (§11.7.1), and the
+# copy that lost would be silent — metadata wins over a list, so removing
+# xtask from the list would stop having any effect.
 
 [lints]
 workspace = true

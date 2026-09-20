@@ -1,0 +1,30 @@
+CHG-003.1 follow-up: independent CLI regression probes
+Baseline revision: 4e337339c12195fffab33bc5790baab056d77d30
+After: the follow-up working tree, before its commit; tool.git_dirty = true.
+These are observations of isolated minimal Cargo workspaces, not an H4 corpus result.
+Fixture definitions are retained as regression tests in xtask/tests/architecture_cli.rs.
+
+Inputs:
+- member_identity: adapter-x claims core-a::Port; member core-a is version 0.1.0,
+  but the normal dependency is an external path package named core-a at version 0.2.0.
+- malformed_metadata: a prefixed adapter declares implements as a string, not an array.
+- unsupported_schema: a valid adapter workspace is checked with schema_version = 2.
+- report_identity: a valid external adapter workspace under schema_version = 1.
+
+Observed outcomes:
+member_identity: before exit 0; after exit 1; summary {"crates": 2, "errors": 1, "outcome": "failed", "warnings": 0}
+command: /home/kmosoti/projects/recursive_hexogonal_architecture-pr6-review/target/debug/xtask architecture --manifest-path /tmp/rha-pr6-followup-v2j1jimw/member-identity/Cargo.toml --rules /tmp/rha-pr6-followup-v2j1jimw/rules-v1.toml --format json
+malformed_metadata: before exit 0; after exit 2; summary {"error_class": "config_error", "errors": null, "outcome": "failed", "reason": "crate adapter-x manifest /tmp/rha-pr6-followup-v2j1jimw/malformed/Cargo.toml has malformed package.metadata.rha.implements: expected an array", "warnings": null}
+command: /home/kmosoti/projects/recursive_hexogonal_architecture-pr6-review/target/debug/xtask architecture --manifest-path /tmp/rha-pr6-followup-v2j1jimw/malformed/Cargo.toml --rules /tmp/rha-pr6-followup-v2j1jimw/rules-v1.toml --format json
+unsupported_schema: before exit 0; after exit 2; summary {"error_class": "config_error", "errors": null, "outcome": "failed", "reason": "parsing /tmp/rha-pr6-followup-v2j1jimw/rules-v2.toml: unsupported rha-crates.toml schema_version 2 (expected 1)", "warnings": null}
+command: /home/kmosoti/projects/recursive_hexogonal_architecture-pr6-review/target/debug/xtask architecture --manifest-path /tmp/rha-pr6-followup-v2j1jimw/valid/Cargo.toml --rules /tmp/rha-pr6-followup-v2j1jimw/rules-v2.toml --format json
+report_identity: before exit 0; after exit 0; summary {"crates": 1, "errors": 0, "outcome": "passed", "warnings": 0}
+command: /home/kmosoti/projects/recursive_hexogonal_architecture-pr6-review/target/debug/xtask architecture --manifest-path /tmp/rha-pr6-followup-v2j1jimw/valid/Cargo.toml --rules /tmp/rha-pr6-followup-v2j1jimw/rules-v1.toml --format json
+
+Controls: --transitive alone retains exit 0 and its declared limitation;
+a missing Cargo manifest returns exit 3 with error_class tool_error.
+All successful and failed reports identify the same compiled checker revision,
+which equals the Git HEAD used for that build, and mark its modified source dirty.
+Configuration failures before a graph is available leave subject.workspace_root null.
+
+Full-lane evidence is recorded separately; these probes do not claim whole-repository verification.

@@ -1,0 +1,200 @@
+# Task record (spec §11.7.11 shape, stored as TOML).
+schema_version = 1
+id = "CHG-003"
+slug = "architecture-crate-level"
+title = "cargo xtask architecture: the crate-graph checker"
+mode = "agent"
+executor_composition = "agent"
+authority_profile = "ECC-Solo"
+status = "proposed"
+plan_ref = "docs/plan/IMPLEMENTATION-PLAN.md §5 and §8 W3"
+branch = "chg/003-crate-graph-checker"
+base_revision = "4be4a199422d1e119d0dddc5483636b7a2052779"
+intent = "Implement the crate-graph checker of plan §5: read `cargo metadata --no-deps --offline`, classify every member totally, evaluate the rha-crates.toml rules, and report findings as JSON, text and markdown with the exit codes §5 fixes. This is the change that makes L0.architecture run, which has blocked the Passed predicate since CHG-000."
+non_goals = [
+  "The module graph: module_checks reports not_run with reason not_implemented until CHG-007",
+  "Transitive mode: --transitive is accepted and prints a notice; [transitive] enabled = true is refused with exit 2, because this version has no transitive evaluator and must not report a requested check as clean (CHG-003.1)",
+  "The H4 harness and the fixture generator: `cargo xtask corpus run` is CHG-004",
+  "Reading xtask/tests/corpus/manifest.toml from the checker. The manifest is an input to CHG-004's harness, never to the checker; a checker that reads its own test set is not being tested by it",
+  "Kennedy's held-out cases (DP-1.1b), which no agent may author or read (§9.14)",
+  "Product crates: none exist until CHG-005, so the checker runs over a workspace whose only member is xtask",
+]
+
+[[actors]]
+id = "human:kennedy"
+type = "human"
+
+[[actors]]
+id = "agent:executor"
+type = "agent"
+accountable_to = "human:kennedy"
+
+[[actors]]
+id = "automation:github-actions"
+type = "automation"
+accountable_to = "human:kennedy"
+
+[roles]
+planner = "human:kennedy"
+executor = ["agent:executor"]
+integrator = "human:kennedy"
+verifier = ["automation:xtask-ci (local, advisory)", "automation:github-actions (class ci, advisory)"]
+acceptor = "human:kennedy"
+
+[[work]]
+id = "W3"
+executor = "agent:executor"
+depends_on = ["CHG-002", "CHG-002.2", "DP-1.1b"]
+output = "xtask/src/metadata.rs and xtask/src/graph/{mod,model,classify,rules,check,report}.rs; rha-crates.toml given the plan §5 schema with empty allow-lists; `cargo xtask architecture` wired into the L0 lane so L0.architecture stops reporting not_run; unit tests per rule on synthetic CrateGraphs."
+owned_scope = [
+  "xtask/src/metadata.rs, xtask/src/graph/**, xtask/src/architecture.rs, xtask/src/cli.rs, xtask/src/lib.rs",
+  "xtask/tests/architecture_*.rs",
+  "rha-crates.toml (the plan §5 schema with empty allow-lists, pre-approved by Kennedy 2026-09-20)",
+  ".rha/acceptances/CHG-002.2.toml (creation pre-approved by .rha/policy.toml [acceptance])",
+  ".rha/decisions.toml (the DP-1.1b row, approved by Kennedy 2026-09-20)",
+  ".rha/tasks/CHG-003-architecture-crate-level.toml, docs/changes/CHG-003-architecture-crate-level.md, docs/maturity.md, generated docs",
+  "evidence/CHG-003/**, evidence/ci/**",
+  ".rha/acceptances/CHG-002.2.toml (one [[defects]] entry, D-002.2.1; editing an acceptance record is not pre-approved, approved by Kennedy 2026-09-20 for CHG-003.1)",
+  ".rha/tasks/CHG-002.2-acceptance-protocol.toml (one digest corrected, CHG-003.1)",
+  "AGENTS.md, CONTRIBUTING.md (review-finding rules, CHG-003.1)",
+  "docs/proposals/spec-v0.11.md (rows 8 and 9, CHG-003.1)",
+  "xtask/build.rs, xtask/tests/architecture_cli.rs (CHG-003.1 follow-up: checker build identity and CLI regression cases)",
+  "AGENTS.md, CONTRIBUTING.md, xtask/AGENTS.md, .github/pull_request_template.md (CHG-003.1 follow-up: authoring lessons requested by Kennedy)",
+  "docs/orchestration-log.md (CHG-003.1 follow-up)",
+  "README.md, docs/maturity.md (CHG-003.1 follow-up: correct the stale stub description; Accepted maturity is unchanged)",
+]
+
+[[work]]
+id = "W3.1-follow-up"
+executor = "agent:executor"
+depends_on = ["CHG-003.1 at 4e337339c12195fffab33bc5790baab056d77d30"]
+output = "One follow-up for four distinct defects in seven open PR 6 threads: preserve member identity at port-owner checks, reject malformed metadata and unsupported rules schemas, and identify the compiled checker in reports. Derive concise authoring rules from the demonstrated failure modes."
+owned_scope = ["xtask/src/metadata.rs", "xtask/src/architecture.rs", "xtask/src/graph/check.rs", "xtask/src/graph/rules.rs", "xtask/src/graph/report.rs", "xtask/build.rs", "xtask/tests/architecture_rules.rs", "xtask/tests/architecture_cli.rs", "AGENTS.md", "CONTRIBUTING.md", "xtask/AGENTS.md", ".github/pull_request_template.md", "README.md", "docs/maturity.md", ".rha/tasks/CHG-003-architecture-crate-level.toml", "docs/changes/CHG-003-architecture-crate-level.md", "docs/orchestration-log.md", "generated docs", "evidence/CHG-003/**"]
+claim = "Codex, acting as agent:executor, owns this follow-up in the isolated Git worktree on codex/pr6-review-followup. PR 6 has no linked project board; ownership is recorded here. The original Claude worktree remains separate."
+
+[[work]]
+id = "W3.2-consolidation"
+executor = "agent:executor"
+depends_on = ["W3.1-follow-up at 920cca6b07b79b8cde1812b9c968cbe9f278d4a8"]
+output = "PR 6 settled into one candidate: the follow-up's four repairs kept with their tests; the checker's identity read at run time by the helper xtask ci already uses, the build script removed; the protected PR template restored; the orchestration journal removed from docs/; review and authoring guidance owned once, by CONTRIBUTING.md and the scoped xtask guide; the older record discrepancies from pull requests 3, 4 and 5 corrected where no approval is needed; every open review thread answered with its determination; one clean local record and one CI record for the final head."
+owned_scope = ["xtask/src/util.rs, xtask/src/graph/report.rs, xtask/src/architecture.rs, xtask/tests/architecture_cli.rs", "xtask/build.rs (removed)", "xtask/AGENTS.md, AGENTS.md, CONTRIBUTING.md", ".github/pull_request_template.md (restored to its state at 4e33733; protected, no approval names it)", "docs/orchestration-log.md (removed)", ".rha/tasks/CHG-001-ambient-effect-deny-list.toml, .rha/tasks/CHG-002-corpus-pre-registration.toml, docs/changes/CHG-002-corpus-pre-registration.md (record corrections)", ".rha/tasks/CHG-003-architecture-crate-level.toml, docs/changes/CHG-003-architecture-crate-level.md, docs/maturity.md, generated docs", "evidence/CHG-003/**, evidence/ci/**"]
+
+[[decisions]]
+id = "protected-surface-approval"
+question = "Which protected surfaces may this change touch?"
+answer = "Three, each approved separately: .rha/acceptances/CHG-002.2.toml, whose creation is pre-approved by .rha/policy.toml [acceptance]; the DP-1.1b row of .rha/decisions.toml, approved in the working conversation of 2026-09-20; and rha-crates.toml, pre-approved in the same message to receive the plan §5 schema with empty allow-lists. No other protected surface may change."
+decided_by = "human:kennedy"
+date = "2026-09-20"
+
+[[decisions]]
+id = "held-out-commitment"
+question = "DP-1.1b required the held-out commitment before any checker code. Is it recorded?"
+answer = "Yes. The cases exist outside the repository and Kennedy supplied the commitment digest; it is on the DP-1.1b row as the second commit of this item, ahead of every line of checker code. The Executor never reads the cases and cannot verify the digest; it attests only the ordering, which the branch history shows."
+decided_by = "human:kennedy"
+date = "2026-09-20"
+
+[[decisions]]
+id = "checker-must-not-read-the-corpus"
+question = "The corpus manifest declares every case the checker will be judged on. May the checker read it?"
+answer = "No, and it is a non-goal for that reason. The manifest is an input to CHG-004's harness. A checker that reads its own test set can satisfy it without implementing the rule, which is what pre-registration exists to prevent (§17, §9.14)."
+decided_by = "agent:executor, stated for Kennedy's review"
+date = "2026-09-20"
+
+[[decisions]]
+id = "review-findings-chg-003.1"
+question = "Which of the three automated review findings on pull request 6 (reviewed revision 776fa83) name a concrete failure on that revision, and what else does CHG-003.1 carry?"
+answer = "All three do, and each is repaired in one commit: membership decided by package name let a registry crate sharing a member's name bypass [core] allow; [transitive] enabled = true removed the limitation while nothing evaluated the rule, so a requested check could report clean; foreign_core_dependency accepted any string and read a misspelling as warn. CHG-003.1 also carries what Codex's audit of the review history (2026-09-20) established and the supervising session's assessment proposed: the D-002.2.1 defect entry on .rha/acceptances/CHG-002.2.toml, for the stale plan digest in the CHG-002.2 task record that the review completing after the merge found; that digest corrected in the task record; three review rules in AGENTS.md and one bullet in CONTRIBUTING.md; and rows 8 and 9 of docs/proposals/spec-v0.11.md. Not carried: the repeated bootstrap objection, which names no new failure mode, so the bounded bootstrap stands; and any policy edit, since the controlled_transition label is queued, not changed. Kennedy's approval is his 'proceed' of 2026-09-20 on that written assessment, which listed these actions; it covers the one protected-surface edit [acceptance] does not pre-approve, the [[defects]] entry on an existing acceptance record, and no other protected surface changes in CHG-003.1."
+decided_by = "human:kennedy"
+date = "2026-09-20"
+
+[[decisions]]
+id = "review-findings-chg-003.1-follow-up"
+question = "Which open findings on PR 6 at 4e33733 require another repair, and which authoring changes are authorized?"
+answer = "Kennedy's current request explicitly asks for the open P1/P2 repairs and improvements to AGENTS.md, CONTRIBUTING.md and related agentic files. This authorizes the verifier repairs, those instruction files, a scoped xtask/AGENTS.md and the PR template. Seven open threads contain four distinct failures; duplicate comments are one repair obligation. All four were reproduced with the CLI on the reviewed revision before authoring: wrong member identity, malformed metadata and schema version 2 each exited 0; tool.git_rev was absent. The existing CHG-003.1 repairs remain history. No specification, policy, corpus, acceptance record, review setting or remote state change is included."
+decided_by = "human:kennedy (scope and authorization); agent:codex (verified determinations)"
+date = "2026-09-20"
+
+[[decisions]]
+id = "consolidation-chg-003.2"
+question = "What in the CHG-003.1 follow-up (920cca6) stays, what changes, and on whose authority?"
+answer = "Authority: Kennedy's instruction of 2026-09-20, after disabling automated review, to bring PR 6 to a compliant and efficient state and to fix the churn according to the spec. The four repairs stay, with their tests. Four things change. (1) The build script: it made the tool's revision a fact with two owners, read at build time here and at run time by xtask ci for the evidence record, with two definitions of dirty (the tool's own paths there, the whole tree here); §11.7.1 gives a fact one owner, and a build script that reads git is the build-time ambient effect the checker itself forbids in core crates. The report now reads HEAD and working-tree dirtiness at run time through one helper; cargo xtask rebuilds the binary from the working tree before every run, so the running checker is that checkout. (2) The PR template is restored: .github/** is protected and no recorded approval names it; its one line of guidance is owned by CONTRIBUTING.md. (3) docs/orchestration-log.md is removed: a journal of the executor's internal worker roles is not an artifact of §11.7.11 or plan §3.4, its provenance facts are on this record's [[provenance.sessions]], and the text remains at 920cca6. (4) Guidance is owned once: AGENTS.md keeps its entry-point shape, CONTRIBUTING.md the workflow rules, xtask/AGENTS.md the scoped ones, with the follow-up's internal worker vocabulary replaced by repository terms. Batched here as bookkeeping: the CHG-001 task record's provenance gains the W1.4 permission, instruction and session it lacked (pull request 3 thread); the CHG-002 task record's module-level totals and its change record's evidence list are corrected to what the manifest and evidence/ hold (two pull request 4 threads); the third pull request 4 thread, EM-M03's cell, needs a protected-manifest edit and is listed under unresolved for Kennedy; the two pull request 5 threads are answered by D-002.2.1 and by the determination that the repeated bootstrap objection names no new failure mode."
+decided_by = "human:kennedy (authority and scope); agent:executor (determinations)"
+date = "2026-09-20"
+
+[[decisions]]
+id = "review-findings-chg-003.3"
+question = "Two findings from the last automated pass on 920cca6, posted at 10:43 UTC before that review was disabled: do they name a concrete failure on that revision?"
+answer = "Both do, each reproduced on a temporary workspace before repair. (1) P1: effect.core_clippy_template was handed the graph as loaded, whose roles are all None because check::check classifies a clone, so it found no core in any workspace: a crate declaring role = \"core\" with no clippy.toml exited 0 with the limitation 'no crate is classified core'. Repair: the rule takes its cores from the classification the check recorded; the same workspace now exits 1 with two effect.core_clippy_template findings, and with the template and the crate-root forbid in place exits 0. This repository has no core crate, so its own reports were not wrong; the mechanism was, and no core in any workspace had ever been examined. (2) P2: a forbidden rule with from = \"role:cor\" parsed into a rule that could match nothing, and the check exited 0. Repair: Rules::parse rejects a role: selector naming none of the five roles, exit 2 config_error, the same closure at parse time as CHG-003.1's foreign_core_dependency. Both are CHG-003.3: determination first, one code commit, one lane."
+decided_by = "agent:executor (determinations, under the review rules in AGENTS.md); human:kennedy (standing instruction of 2026-09-20 to bring PR 6 to a compliant state)"
+date = "2026-09-20"
+
+[expectation]
+# Written before the checker (spec §17: fixed before data).
+detection = "Every crate-level `detect` case of xtask/tests/corpus/manifest.toml is detected, and none of the 11 legitimate cases raises an alarm. That is measured in CHG-004, not here; this item is judged on its unit tests and on the lane."
+on_this_repository = "The workspace has one member, xtask, classified `tool` by the [classification] tools list. `cargo xtask architecture` exits 0 with `crates: 1 (xtask)` and no findings. A finding here would mean the checker misclassifies its own repository."
+l0_architecture = "L0.architecture stops being not_run and becomes passed. It is the last of the eight L0 checks to run, so the Passed predicate can hold for the first time since CHG-000 — Authentic still cannot, until CHG-019 and CHG-020."
+fallback_if_contradicted = "If `cargo metadata --no-deps` lacks a field a rule needs, switch to resolved mode with --offline --locked and record the mode in the report's subject.metadata_mode (plan §8 W3 replan)."
+
+[claim]
+affected_components = []
+contract_changes = "none: no product component exists"
+architecture_delta = "New xtask modules: metadata, and graph with model, classify, rules, check and report. No new dependency: cargo metadata output is parsed with the serde_json xtask already has. The report identifies the checker by its own checkout, read at run time (CHG-003.2); no build script."
+performance_impact = "none claimed"
+unresolved = [
+  "The checker runs over a workspace with one member. Its rules are exercised by unit tests on synthetic graphs and, in CHG-004, by the corpus; nothing in this repository exercises them on real crates until CHG-005.",
+  "Authentic still cannot hold (CHG-019, CHG-020), so no record is Eligible even once Passed holds.",
+  "An evidence record's agent_context.provenance is copied from the task record, not hashed from the tree (D-002.2.1 on the CHG-002.2 acceptance). A hand-entered digest that goes stale is echoed, not caught, until CHG-019's record lint compares cited digests with the subject tree.",
+  "EM-M03's manifest row assigns only law6-b3, while its own hole names a Law 3/D1 extraction miss, so law3-d1 belongs beside it (pull request 4 review finding). The manifest is protected; the edit waits for Kennedy's approval and is proposed in the change record's acceptance concerns.",
+]
+
+[acceptance]
+criteria = [
+  "Unit tests per rule id on synthetic CrateGraphs, including the classification precedence of plan §5 and the four dependency shapes C15 to C18 exercise",
+  "`cargo xtask architecture` on this repository exits 0, reports one crate classified tool, and writes target/rha/architecture.json",
+  "The JSON report carries the plan §5 field set, including module_checks with outcome not_run and limitations",
+  "Exit codes as plan §5 fixes them: 0 no errors, 1 error findings, 2 usage or config error, 3 environment failure and never a pass",
+  "L0.architecture reports passed in both a local and a CI record",
+  "xtask/tests/policy_drift.rs still passes: the lane command block is unchanged",
+  "The checker does not read xtask/tests/corpus/manifest.toml; a test asserts it",
+]
+replan_when = [
+  "`cargo metadata --no-deps` lacks a needed field; switch to resolved mode with --offline --locked and record the mode",
+  "A plan §5 rule id cannot be evaluated from no-deps metadata; it is reported as a limitation rather than silently omitted",
+]
+
+[provenance]
+harness = "Claude Code, VS Code extension; the CLI on PATH reports `2.1.278 (Claude Code)`; the extension build was not observed"
+output_style = "Learning (.claude/settings.local.json)"
+permission_mode = "auto, as reported to the session"
+task_scope = "CHG-003: docs/plan/IMPLEMENTATION-PLAN.md §5 and §8 W3"
+permissions = "Workspace files, shell, network, and gh through the user account. Initial CHG-003 approval is recorded in protected-surface-approval; CHG-003.1 approval in review-findings-chg-003.1; the current follow-up approval in review-findings-chg-003.1-follow-up; CHG-003.2 in consolidation-chg-003.2. Each span is limited to its recorded scope; no other protected surface is authorized."
+budgets = "unknown"
+reasoning_effort = "not exposed to the session"
+instruction_sources = [
+  { path = "docs/plan/IMPLEMENTATION-PLAN.md (§5 and §8 W3, at 4be4a19)", sha256 = "4d9b1c64e8b6c62e37d7db9b26722c330f2fdd6804441d50c45b3ca3a2fbdbdf" },
+  { path = "docs/spec/rha-spec-v0.10.md (§4.1, §6.13, at 4be4a19)", sha256 = "bd96216829035ade64c43befa5e672c58078f6afa4b04145c6183227e4e1071a" },
+  { path = "user message of 2026-09-20 accepting CHG-002.2, supplying the DP-1.1b commitment, and starting W3", sha256 = "unknown" },
+  { path = "Claude Code system prompt", sha256 = "unknown" },
+  { path = "user message of 2026-09-20 requesting PR 6 open P1/P2 repairs and AGENTS.md, CONTRIBUTING.md and related agentic-file improvements (CHG-003.1 follow-up)", sha256 = "unknown" },
+  { path = "user message of 2026-09-20 asking that PR 6 be brought to a compliant and efficient state and the churn fixed according to the spec (CHG-003.2)", sha256 = "unknown" },
+]
+
+[[provenance.sessions]]
+model_id = "claude-opus-5[1m]"
+span = "CHG-003"
+
+[[provenance.sessions]]
+model_id = "claude-fable-5-1"
+span = "CHG-003.1: the review-finding repairs and the records they cite"
+
+[[provenance.sessions]]
+model_id = "unknown"
+harness = "Codex"
+span = "CHG-003.1 follow-up after 4e33733, requested by Kennedy in this conversation"
+permissions = "Git worktree, local code and regression tests, task/change/evidence records, AGENTS.md, CONTRIBUTING.md, scoped xtask/AGENTS.md, and PR-template authoring guidance. Authorization: Kennedy's current request; user-message digest unavailable."
+advisory_verifier = "gpt-5.6-sol, max; read-only independent verification and closure"
+write_workers = "gpt-5.6-luna, high; decided, disjoint edits; coordinator owns Git and final verification"
+
+[[provenance.sessions]]
+model_id = "claude-fable-5-1"
+span = "CHG-003.2: consolidation of PR 6, the older record corrections, and the thread determinations; CHG-003.3: the two findings from the last automated pass"

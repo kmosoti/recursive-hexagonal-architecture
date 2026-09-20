@@ -95,7 +95,10 @@ permissions = "Workspace files, shell, git, gh as kmosoti. Protected surfaces as
 budgets = "unknown"
 reasoning_effort = "unknown"
 instruction_sources = [
-  { path = "docs/plan/IMPLEMENTATION-PLAN.md (after this change)", sha256 = "42e6e00e06c1d3da65803926366f666b6f8e03458df870442b29a73865831fcf" },
+  # Corrected in CHG-003.1 (D-002.2.1 on .rha/acceptances/CHG-002.2.toml). The
+  # value first recorded here, 42e6e00e06c1d3da…, is the plan at e7a60b1;
+  # b2c5ee1 edited the plan again and this line was not updated.
+  { path = "docs/plan/IMPLEMENTATION-PLAN.md (after this change, at 4be4a19)", sha256 = "4d9b1c64e8b6c62e37d7db9b26722c330f2fdd6804441d50c45b3ca3a2fbdbdf" },
   { path = "docs/spec/rha-spec-v0.10.md", sha256 = "bd96216829035ade64c43befa5e672c58078f6afa4b04145c6183227e4e1071a" },
   { path = "user message of 2026-09-20 asking that the artifacts stop carrying the recurring open items", sha256 = "unknown" },
 ]

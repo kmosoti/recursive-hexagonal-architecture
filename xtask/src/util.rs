@@ -168,6 +168,36 @@ pub fn command_stdout(root: &Path, argv: &[&str]) -> Result<String> {
     Ok(String::from_utf8_lossy(&output.stdout).trim().to_owned())
 }
 
+/// The identity of the checkout at `root`: `HEAD`, and whether the working
+/// tree differs from it in a tracked file or holds an untracked, non-ignored
+/// file. This is what `xtask ci` records for the tool that ran (the evidence
+/// record's `producer`), and the architecture report reads it through the
+/// same helper so the fact has one owner (§11.7.1). `None` when git cannot
+/// answer, which a caller reports as unknown, never as clean.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct GitIdentity {
+    pub revision: String,
+    pub dirty: bool,
+}
+
+#[must_use]
+pub fn git_identity(root: &Path) -> Option<GitIdentity> {
+    let revision = command_stdout(root, &["git", "rev-parse", "--verify", "HEAD"]).ok()?;
+    let full = matches!(revision.len(), 40 | 64) && revision.bytes().all(|b| b.is_ascii_hexdigit());
+    if !full {
+        return None;
+    }
+    let status = command_stdout(
+        root,
+        &["git", "status", "--porcelain", "--untracked-files=all"],
+    )
+    .ok()?;
+    Some(GitIdentity {
+        revision,
+        dirty: !status.is_empty(),
+    })
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -205,5 +235,27 @@ mod tests {
         assert_eq!(first_version("cargo-deny 0.20.2"), Some("0.20.2"));
         assert_eq!(first_version("1.98"), None);
         assert_eq!(first_version("date 2026-09-01"), None);
+    }
+}
+
+#[cfg(test)]
+mod git_identity_tests {
+    use super::*;
+
+    #[test]
+    fn a_checkout_names_its_head_and_a_plain_directory_names_nothing() {
+        let root = Path::new(env!("CARGO_MANIFEST_DIR"))
+            .parent()
+            .expect("xtask has a parent");
+        let identity = git_identity(root).expect("this crate lives in a git checkout");
+        assert_eq!(identity.revision.len(), 40);
+        assert!(identity.revision.bytes().all(|b| b.is_ascii_hexdigit()));
+
+        let plain = std::env::temp_dir().join(format!("rha-not-a-repo-{}", std::process::id()));
+        std::fs::create_dir_all(&plain).expect("temp dir");
+        let none = git_identity(&plain);
+        let _ = std::fs::remove_dir_all(&plain);
+        // Unknown is reported as unknown, never as a clean revision.
+        assert_eq!(none, None);
     }
 }

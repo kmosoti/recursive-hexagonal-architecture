@@ -1,0 +1,567 @@
+{
+  "schema_version": 1,
+  "record_kind": "evidence",
+  "evidence_class": "local",
+  "lane": "L0",
+  "started_at": "2026-09-20T10:00:13.905Z",
+  "finished_at": "2026-09-20T10:00:20.137Z",
+  "producer": {
+    "principal": "agent:executor",
+    "accountable_to": [
+      "human:kennedy"
+    ],
+    "tool": "xtask ci --lane L0",
+    "tool_version": "0.1.0",
+    "tool_git_rev": "1cbc47ec97f21a29a42ac1b60f96e53f94eebfe7",
+    "tool_from_dirty_tree": false
+  },
+  "change_claim": {
+    "affected_components": [],
+    "architecture_delta": "New xtask modules: metadata, and graph with model, classify, rules, check and report. No new dependency: cargo metadata output is parsed with the serde_json xtask already has.",
+    "contract_changes": "none: no product component exists",
+    "intent": "Implement the crate-graph checker of plan §5: read `cargo metadata --no-deps --offline`, classify every member totally, evaluate the rha-crates.toml rules, and report findings as JSON, text and markdown with the exit codes §5 fixes. This is the change that makes L0.architecture run, which has blocked the Passed predicate since CHG-000.",
+    "non_goals": [
+      "The module graph: module_checks reports not_run with reason not_implemented until CHG-007",
+      "Transitive mode: --transitive is accepted and prints a notice; [transitive] enabled = true is refused with exit 2, because this version has no transitive evaluator and must not report a requested check as clean (CHG-003.1)",
+      "The H4 harness and the fixture generator: `cargo xtask corpus run` is CHG-004",
+      "Reading xtask/tests/corpus/manifest.toml from the checker. The manifest is an input to CHG-004's harness, never to the checker; a checker that reads its own test set is not being tested by it",
+      "Kennedy's held-out cases (DP-1.1b), which no agent may author or read (§9.14)",
+      "Product crates: none exist until CHG-005, so the checker runs over a workspace whose only member is xtask"
+    ],
+    "performance_impact": "none claimed",
+    "source": {
+      "path": ".rha/tasks/CHG-003-architecture-crate-level.toml",
+      "sha256": "580f7229510ecfd7a8958522b33a5feea4d30cfded6c3b715848623a4d367824"
+    },
+    "task": "CHG-003",
+    "unresolved": [
+      "The checker runs over a workspace with one member. Its rules are exercised by unit tests on synthetic graphs and, in CHG-004, by the corpus; nothing in this repository exercises them on real crates until CHG-005.",
+      "Authentic still cannot hold (CHG-019, CHG-020), so no record is Eligible even once Passed holds.",
+      "An evidence record's agent_context.provenance is copied from the task record, not hashed from the tree (D-002.2.1 on the CHG-002.2 acceptance). A hand-entered digest that goes stale is echoed, not caught, until CHG-019's record lint compares cited digests with the subject tree."
+    ]
+  },
+  "artifact_identity": {
+    "revision": "1cbc47ec97f21a29a42ac1b60f96e53f94eebfe7",
+    "tree": "304df2d48a1b9d0f0a9eda74822051d9be2ac524",
+    "snapshot_tree": "304df2d48a1b9d0f0a9eda74822051d9be2ac524",
+    "branch": "chg/003-crate-graph-checker",
+    "dirty": false,
+    "tracked_diff_sha256": null,
+    "untracked_inputs": [],
+    "git_object_format": "sha1",
+    "digest_algorithm": "sha256"
+  },
+  "verification_identity": {
+    "policy_path": ".rha/policy.toml",
+    "policy_digest": "sha256:72bf2e5218b241b1dbf4ee4b96935fa89d45bd0a22fbe65c9c5a94b79bb314b3",
+    "policy_read_from": "candidate_worktree",
+    "base_revision": "4be4a199422d1e119d0dddc5483636b7a2052779",
+    "base_revision_source": "git merge-base HEAD origin/main",
+    "base_policy_digest": "sha256:72bf2e5218b241b1dbf4ee4b96935fa89d45bd0a22fbe65c9c5a94b79bb314b3",
+    "toolchain": {
+      "cargo": "cargo 1.98.1 (797e8a9bc 2026-08-05)",
+      "clippy": "clippy 0.1.98 (48a229ceae 2026-09-01)",
+      "rustc": "rustc 1.98.1 (48a229cea 2026-09-01)",
+      "rustfmt": "rustfmt 1.9.0-stable (48a229ceae 2026-09-01)"
+    },
+    "target": "x86_64-unknown-linux-gnu",
+    "features": "--all-features",
+    "profiles": "dev (clippy, doctest), test (nextest)",
+    "lockfile_sha256": "198c49ddc9211895f02c05b9a2f3081f48d3342de43929fc1f5fab09f268a7ac",
+    "configuration": [
+      {
+        "path": "rust-toolchain.toml",
+        "sha256": "6722199c2892b79fc5bb2e70ff4c636b06e24cc1ee773b2d3d88d9ba7ad78714"
+      },
+      {
+        "path": "Cargo.toml",
+        "sha256": "ffc472aeb53e8b29e39aa123f8d213277828a69d55e25fbbba643ff7bc947f34"
+      },
+      {
+        "path": ".cargo/config.toml",
+        "sha256": "c185a2b859850d94af015a9672c1568e1ef73b12612d820f596ef967b835f637"
+      },
+      {
+        "path": "clippy.toml",
+        "sha256": "13db505e12577c7d6606282e57e5d991efd8fb67059b3938412ad0382b91c592"
+      },
+      {
+        "path": ".config/nextest.toml",
+        "sha256": "67d6ba7c883e2d25826938efe51699532865fb3c1044f4fee7f06c3aad9fd078"
+      },
+      {
+        "path": "deny.toml",
+        "sha256": "69ce278dc68a8ce15abf62f15505911e3843d62dc3205a1bc29bf07489617581"
+      },
+      {
+        "path": "_typos.toml",
+        "sha256": "331e6698960ab2176fe2d28a618361126a259300089ba0fd157ec5d7ddd1ea70"
+      },
+      {
+        "path": "rha-baseline.json",
+        "sha256": "bcf8223b7b475fdbf3b9bf2cc08d4cd06d7021aa7d9e1255ffc8f189d7c910d4"
+      },
+      {
+        "path": "rha-crates.toml",
+        "sha256": "b788f8d8e8fbad73a0a7ac44ba451ef8deeaf8a9ab201668c78f54e0c1322b93"
+      }
+    ],
+    "instruction_sources": [
+      {
+        "path": "AGENTS.md",
+        "sha256": "5c3e2af3bd6c0fc44a8f9bc9a4d51641dc56cdd7a11f768ac0d800eb0ed690fe"
+      },
+      {
+        "path": "CONTRIBUTING.md",
+        "sha256": "107d481fef24d77ea69f5a6377454eac1fe5c688f68d755815dc9576ac2179a0"
+      },
+      {
+        "path": ".github/pull_request_template.md",
+        "sha256": "973ee7dc93e88583cd72d223d0795e221a6c937290050dc436c45c083159be85"
+      },
+      {
+        "path": ".rha/tasks/CHG-003-architecture-crate-level.toml",
+        "sha256": "580f7229510ecfd7a8958522b33a5feea4d30cfded6c3b715848623a4d367824"
+      }
+    ]
+  },
+  "observed_checks": [
+    {
+      "id": "L0.fmt",
+      "kind": "format",
+      "argv": [
+        "cargo",
+        "fmt",
+        "--all",
+        "--",
+        "--check"
+      ],
+      "required": true,
+      "waivable": false,
+      "params": {
+        "timeout_secs": 300
+      },
+      "tool": {
+        "name": "rustfmt",
+        "probe": {
+          "state": "ready",
+          "version": "1.9.0-stable"
+        }
+      },
+      "outcome": "passed",
+      "exit_status": 0,
+      "error_class": null,
+      "reason": null,
+      "started_at": "2026-09-20T10:00:13.993Z",
+      "duration_ms": 150,
+      "selection_counts": null,
+      "artifacts": [
+        {
+          "path": "target/rha/logs/L0/L0.fmt.stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "target/rha/logs/L0/L0.fmt.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "limits": []
+    },
+    {
+      "id": "L0.clippy",
+      "kind": "lint",
+      "argv": [
+        "cargo",
+        "clippy",
+        "--workspace",
+        "--all-targets",
+        "--all-features"
+      ],
+      "required": true,
+      "waivable": false,
+      "params": {
+        "timeout_secs": 1800
+      },
+      "tool": {
+        "name": "clippy",
+        "probe": {
+          "state": "ready",
+          "version": "0.1.98"
+        }
+      },
+      "outcome": "passed",
+      "exit_status": 0,
+      "error_class": null,
+      "reason": null,
+      "started_at": "2026-09-20T10:00:14.171Z",
+      "duration_ms": 1854,
+      "selection_counts": null,
+      "artifacts": [
+        {
+          "path": "target/rha/logs/L0/L0.clippy.stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "target/rha/logs/L0/L0.clippy.stderr",
+          "sha256": "40942f01011ad0a0b81c6a61c44c7f95cb06efc63fb1e0073fd40c2adc00389e"
+        }
+      ],
+      "limits": []
+    },
+    {
+      "id": "L0.nextest",
+      "kind": "test",
+      "argv": [
+        "cargo",
+        "nextest",
+        "run",
+        "--workspace",
+        "--all-features",
+        "--profile",
+        "ci"
+      ],
+      "required": true,
+      "waivable": false,
+      "params": {
+        "proptest_cases": 256,
+        "timeout_secs": 1800
+      },
+      "tool": {
+        "name": "cargo-nextest",
+        "probe": {
+          "state": "ready",
+          "version": "0.9.145"
+        }
+      },
+      "outcome": "passed",
+      "exit_status": 0,
+      "error_class": null,
+      "reason": null,
+      "started_at": "2026-09-20T10:00:16.047Z",
+      "duration_ms": 2107,
+      "selection_counts": {
+        "errors": 0,
+        "failures": 0,
+        "tests": 112
+      },
+      "artifacts": [
+        {
+          "path": "target/rha/logs/L0/L0.nextest.stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "target/rha/logs/L0/L0.nextest.stderr",
+          "sha256": "b39f2d2e3892c405120ab2e6513f40aa2488bb6b6e89abe503859aef25a002e6"
+        },
+        {
+          "path": "target/nextest/ci/junit.xml",
+          "sha256": "90a4a45517a4717f8c0cf580d737c1b7b097aa852f21bcb7adbabe8880ad6548"
+        }
+      ],
+      "limits": []
+    },
+    {
+      "id": "L0.doctest",
+      "kind": "doctest",
+      "argv": [
+        "cargo",
+        "test",
+        "--workspace",
+        "--doc"
+      ],
+      "required": true,
+      "waivable": false,
+      "params": {
+        "proptest_cases": 256,
+        "timeout_secs": 1800
+      },
+      "tool": {
+        "name": "rustc",
+        "probe": {
+          "state": "ready",
+          "version": "1.98.1"
+        }
+      },
+      "outcome": "passed",
+      "exit_status": 0,
+      "error_class": null,
+      "reason": null,
+      "started_at": "2026-09-20T10:00:18.168Z",
+      "duration_ms": 602,
+      "selection_counts": {
+        "failed": 0,
+        "harness_runs": 1,
+        "ignored": 0,
+        "passed": 1
+      },
+      "artifacts": [
+        {
+          "path": "target/rha/logs/L0/L0.doctest.stdout",
+          "sha256": "ddfd9499078e06e82e7b34a1e29f94bb9b31d54e30730030854a1cb67e008fc5"
+        },
+        {
+          "path": "target/rha/logs/L0/L0.doctest.stderr",
+          "sha256": "7cc3aced7b7070a8e707dbd23d361e6a976edfd2eb5aac880694dfcc0fbeb0fe"
+        }
+      ],
+      "limits": []
+    },
+    {
+      "id": "L0.architecture",
+      "kind": "architecture",
+      "argv": [
+        "cargo",
+        "xtask",
+        "architecture"
+      ],
+      "required": true,
+      "waivable": false,
+      "params": {
+        "timeout_secs": 600
+      },
+      "tool": {
+        "name": "xtask",
+        "probe": null
+      },
+      "outcome": "passed",
+      "exit_status": 0,
+      "error_class": null,
+      "reason": null,
+      "started_at": "2026-09-20T10:00:18.770Z",
+      "duration_ms": 151,
+      "selection_counts": {
+        "crates": 1,
+        "errors": 0,
+        "warnings": 0
+      },
+      "artifacts": [
+        {
+          "path": "target/rha/logs/L0/L0.architecture.stdout",
+          "sha256": "bc2156cb726fe990ccb01c339d98a28610713b8fdee361911b241f4e684042a7"
+        },
+        {
+          "path": "target/rha/logs/L0/L0.architecture.stderr",
+          "sha256": "ae65bb7cc92a02149efa18f471e7f450218408d62990af47f528a8b80dc52168"
+        },
+        {
+          "path": "target/rha/architecture.json",
+          "sha256": "5cddd87820a4e5acffd68df078bd815ccd1389d873db3ec115d241b3e419355c"
+        }
+      ],
+      "limits": []
+    },
+    {
+      "id": "L0.deny",
+      "kind": "dependency",
+      "argv": [
+        "cargo",
+        "deny",
+        "check"
+      ],
+      "required": true,
+      "waivable": false,
+      "params": {
+        "timeout_secs": 900
+      },
+      "tool": {
+        "name": "cargo-deny",
+        "probe": {
+          "state": "ready",
+          "version": "0.20.2"
+        }
+      },
+      "outcome": "passed",
+      "exit_status": 0,
+      "error_class": null,
+      "reason": null,
+      "started_at": "2026-09-20T10:00:18.947Z",
+      "duration_ms": 1004,
+      "selection_counts": null,
+      "artifacts": [
+        {
+          "path": "target/rha/logs/L0/L0.deny.stdout",
+          "sha256": "f1a0fca39d4280363937aabd77783990ea6480bd9ca257816de3b68fc8efa845"
+        },
+        {
+          "path": "target/rha/logs/L0/L0.deny.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "limits": []
+    },
+    {
+      "id": "L0.machete",
+      "kind": "dependency",
+      "argv": [
+        "cargo",
+        "machete"
+      ],
+      "required": true,
+      "waivable": false,
+      "params": {
+        "timeout_secs": 600
+      },
+      "tool": {
+        "name": "cargo-machete",
+        "probe": {
+          "state": "ready",
+          "version": "0.9.2"
+        }
+      },
+      "outcome": "passed",
+      "exit_status": 0,
+      "error_class": null,
+      "reason": null,
+      "started_at": "2026-09-20T10:00:19.979Z",
+      "duration_ms": 51,
+      "selection_counts": null,
+      "artifacts": [
+        {
+          "path": "target/rha/logs/L0/L0.machete.stdout",
+          "sha256": "609a16d6d9b02ee55be21ac732381d9080802acfda3330f14ba7c102b6859fa9"
+        },
+        {
+          "path": "target/rha/logs/L0/L0.machete.stderr",
+          "sha256": "9c6fea1ba9841d830a983d90afe526389fb31233f7d2431372194c493f57920b"
+        }
+      ],
+      "limits": []
+    },
+    {
+      "id": "L0.typos",
+      "kind": "spelling",
+      "argv": [
+        "typos"
+      ],
+      "required": true,
+      "waivable": false,
+      "params": {
+        "timeout_secs": 300
+      },
+      "tool": {
+        "name": "typos-cli",
+        "probe": {
+          "state": "ready",
+          "version": "1.50.2"
+        }
+      },
+      "outcome": "passed",
+      "exit_status": 0,
+      "error_class": null,
+      "reason": null,
+      "started_at": "2026-09-20T10:00:20.047Z",
+      "duration_ms": 50,
+      "selection_counts": null,
+      "artifacts": [
+        {
+          "path": "target/rha/logs/L0/L0.typos.stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "target/rha/logs/L0/L0.typos.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "limits": []
+    }
+  ],
+  "evidence_inputs": {
+    "fixtures": [
+      {
+        "path": "docs/spec/rha-spec-v0.10.md",
+        "sha256": "bd96216829035ade64c43befa5e672c58078f6afa4b04145c6183227e4e1071a"
+      },
+      {
+        "path": "xtask/tests/corpus/manifest.toml",
+        "sha256": "9f5c1a93262aa6fc60eae5dc946e38e7425d707df552cf13bf6e6b458c02cbcf"
+      }
+    ],
+    "seeds": {
+      "persisted_regressions": [],
+      "proptest_cases": 256
+    },
+    "environment": {
+      "ci": null,
+      "os": "Linux 6.18.33.2-microsoft-standard-WSL2 x86_64",
+      "runner": "local"
+    }
+  },
+  "performance": null,
+  "agent_context": {
+    "provenance": {
+      "budgets": "unknown",
+      "harness": "Claude Code, VS Code extension; the CLI on PATH reports `2.1.278 (Claude Code)`; the extension build was not observed",
+      "instruction_sources": [
+        {
+          "path": "docs/plan/IMPLEMENTATION-PLAN.md (§5 and §8 W3, at 4be4a19)",
+          "sha256": "4d9b1c64e8b6c62e37d7db9b26722c330f2fdd6804441d50c45b3ca3a2fbdbdf"
+        },
+        {
+          "path": "docs/spec/rha-spec-v0.10.md (§4.1, §6.13, at 4be4a19)",
+          "sha256": "bd96216829035ade64c43befa5e672c58078f6afa4b04145c6183227e4e1071a"
+        },
+        {
+          "path": "user message of 2026-09-20 accepting CHG-002.2, supplying the DP-1.1b commitment, and starting W3",
+          "sha256": "unknown"
+        },
+        {
+          "path": "Claude Code system prompt",
+          "sha256": "unknown"
+        }
+      ],
+      "output_style": "Learning (.claude/settings.local.json)",
+      "permission_mode": "auto, as reported to the session",
+      "permissions": "Workspace files, shell, network, and `gh` as kmosoti through the user's account. Protected surfaces: the three named in the protected-surface-approval decision, and no others.",
+      "reasoning_effort": "not exposed to the session",
+      "sessions": [
+        {
+          "model_id": "claude-opus-5[1m]",
+          "span": "CHG-003"
+        },
+        {
+          "model_id": "claude-fable-5-1",
+          "span": "CHG-003.1: the review-finding repairs and the records they cite"
+        }
+      ],
+      "task_scope": "CHG-003: docs/plan/IMPLEMENTATION-PLAN.md §5 and §8 W3"
+    },
+    "source": {
+      "path": ".rha/tasks/CHG-003-architecture-crate-level.toml",
+      "sha256": "580f7229510ecfd7a8958522b33a5feea4d30cfded6c3b715848623a4d367824"
+    }
+  },
+  "limits": [
+    "policy read from the candidate working tree; Policy(b) selection from the base revision is not implemented (§11.7.6)",
+    "the producing xtask is candidate code; this record is advisory, not protected evidence (§11.5)",
+    "a timeout kills only the direct child process of a check"
+  ],
+  "disposition": {
+    "eligibility": "blocked",
+    "predicates": {
+      "authentic": {
+        "holds": false,
+        "reasons": [
+          "no trusted producers in policy: this local record is unauthenticated"
+        ]
+      },
+      "applicable": {
+        "holds": true,
+        "reasons": []
+      },
+      "complete": {
+        "holds": true,
+        "reasons": []
+      },
+      "passed": {
+        "holds": true,
+        "reasons": []
+      }
+    },
+    "blocking": [
+      "Authentic: no trusted producers in policy: this local record is unauthenticated"
+    ],
+    "acceptance": "pending",
+    "exception": null,
+    "acceptor": null
+  }
+}

@@ -369,13 +369,13 @@ impl Manifest {
             if case.generation == Generation::Declared && case.crates.is_empty() {
                 defects.push(Defect::DeclaredWithoutCrates(case.id.clone()));
             }
-            defects.extend(self.unresolvable_deps(case));
+            defects.extend(Self::unresolvable_deps(case));
         }
         defects
     }
 
     /// Dependencies a generator could not resolve to a file it writes.
-    fn unresolvable_deps(&self, case: &Case) -> Vec<Defect> {
+    fn unresolvable_deps(case: &Case) -> Vec<Defect> {
         let members: BTreeSet<&str> = case.crates.iter().map(|c| c.name.as_str()).collect();
         let outside: BTreeSet<&str> = case
             .outside_crates

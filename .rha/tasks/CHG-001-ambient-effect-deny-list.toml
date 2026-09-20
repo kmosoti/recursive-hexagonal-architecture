@@ -228,7 +228,10 @@ harness = "Claude Code, VS Code extension; the CLI on PATH reports `2.1.278 (Cla
 output_style = "Learning (.claude/settings.local.json)"
 permission_mode = "auto, as reported to the session; project allow-list in the untracked .claude/settings.json (gh pr/run/api, git fetch, one python3 command)"
 task_scope = "CHG-001: docs/plan/IMPLEMENTATION-PLAN.md §8 W1"
-permissions = "Workspace files, shell, network, and `gh` as kmosoti through the user's account. Protected surfaces: xtask/templates/core-clippy.toml only, created in W1 and extended in CHG-001.2, both approved by human:kennedy (see [[decisions]])."
+# Corrected in CHG-003.2 (pull request 3 review finding): this line named only
+# the template, and the W1.4 record evidence/CHG-001/20260920T000645Z-da317050b06f.json
+# copied it as it stood. That record is an observation and is not rewritten.
+permissions = "Workspace files, shell, network, and `gh` as kmosoti through the user's account. Protected surfaces: xtask/templates/core-clippy.toml, created in W1 and extended in CHG-001.2, both approved by human:kennedy (see [[decisions]]); and .rha/acceptances/CHG-001.toml, created in CHG-001.4 under the approval recorded in decision W1.4."
 budgets = "unknown"
 reasoning_effort = "unknown"
 advisory_subagents = "Two read-only workflows advised CHG-001.2 and own no artifact, so the mode stays `agent` (§11.6.2). Eleven subagents swept the Rust 1.98.1 standard-library source for effectful APIs, verified each other's lists against that source, and criticized the result; every entry they proposed is checked by experiment 4, which fails if one stops firing. Twenty-eight subagents then reviewed the branch along five dimensions and tried to refute each finding: of 23 findings, 14 survived and were fixed, including the record writer reporting a clean tree when git failed, the experiments that asserted silence without a positive control, and documents asserting a result for a template no committed record covered."
@@ -243,6 +246,7 @@ instruction_sources = [
   { path = "user message of 2026-09-19 starting W1 (pre-approval of the template)", sha256 = "unknown" },
   { path = "user message of 2026-09-19 answering the W1 report (CHG-001.1 and CHG-001.2 decisions above)", sha256 = "unknown" },
   { path = "user message of 2026-09-19 instructing the acceptance records, the recommended decisions, the spec update, and the README (CHG-001.3)", sha256 = "unknown" },
+  { path = "user message of 2026-09-20 instructing CHG-001.4, the acceptance record and the SPEC_DIGEST repair (added in CHG-003.2)", sha256 = "unknown" },
   { path = "Claude Code system prompt", sha256 = "unknown" },
 ]
 
@@ -263,3 +267,7 @@ span = "CHG-001.1 from commit 3bfb9fd, and CHG-001.2"
 [[provenance.sessions]]
 model_id = "claude-opus-5[1m]"
 span = "CHG-001.3"
+
+[[provenance.sessions]]
+model_id = "claude-opus-5[1m]"
+span = "CHG-001.4: commit da31705 (added in CHG-003.2; the commit trailer names the model)"

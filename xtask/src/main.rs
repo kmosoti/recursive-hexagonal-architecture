@@ -28,8 +28,14 @@ fn workspace_root() -> PathBuf {
 fn dispatch(root: &Path, command: &Command) -> Result<u8> {
     match command {
         Command::Ci(args) => lanes::run(root, args),
-        Command::Architecture => {
-            let code = architecture::run(root)?;
+        Command::Architecture(args) => {
+            let options = architecture::Options {
+                manifest_path: args.manifest_path.clone(),
+                rules_path: args.rules.clone(),
+                format: architecture::Format::parse(&args.format).unwrap_or_default(),
+                transitive: args.transitive,
+            };
+            let code = architecture::run(root, &options)?;
             Ok(u8::try_from(code).unwrap_or(2))
         }
         Command::Evidence {

@@ -403,10 +403,21 @@ fn the_grading_rules_state_what_a_disagreement_does() {
     assert_eq!(grading.decided_in.as_deref(), Some("CHG-002.2 (DP-1.1c)"));
 }
 
-/// No checker code exists yet, and no fixture workspace is committed. This is
-/// what makes the manifest a pre-registration rather than a description.
+/// No fixture workspace is committed. Generating them is CHG-004's job at the
+/// crate level and CHG-007's at the module level, and a committed fixture is a
+/// copy of the manifest that owns it (the CHG-001.1 decision).
+///
+/// **Narrowed in CHG-003, and deliberately (§9.14).** Until then this test
+/// also asserted that `xtask/src/graph` did not exist and that
+/// `xtask/src/architecture.rs` still contained `EXIT_NOT_RUN` — CHG-002's way
+/// of proving it had not smuggled the checker into the pre-registration. Both
+/// assertions became false when CHG-003 implemented the checker, which is the
+/// approved requirement changing, not the test becoming inconvenient. The
+/// ordering they protected is now a historical fact: the corpus merged at
+/// 15d916a and every line of the checker is newer. What is still ahead —
+/// the fixtures — is what this test still guards.
 #[test]
-fn no_fixture_workspace_and_no_checker_is_committed_yet() {
+fn no_fixture_workspace_is_committed_yet() {
     let root = root();
     for dir in ["xtask/tests/corpus/crate", "xtask/tests/corpus/module"] {
         assert!(
@@ -414,14 +425,4 @@ fn no_fixture_workspace_and_no_checker_is_committed_yet() {
             "{dir} exists; fixtures are generated in CHG-004 and authored in CHG-007, not committed here"
         );
     }
-    assert!(
-        !root.join("xtask/src/graph").exists(),
-        "xtask/src/graph exists; the crate-graph checker is CHG-003, after this pre-registration"
-    );
-    let stub = std::fs::read_to_string(root.join("xtask/src/architecture.rs"))
-        .expect("the architecture stub is readable");
-    assert!(
-        stub.contains("EXIT_NOT_RUN"),
-        "xtask/src/architecture.rs no longer reports not_run; CHG-002 must not implement the checker"
-    );
 }

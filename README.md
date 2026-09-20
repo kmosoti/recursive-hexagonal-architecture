@@ -14,7 +14,7 @@ A maturity ledger, [docs/maturity.md](docs/maturity.md), is the only place that 
 | --- | --- |
 | **Ambient-effect deny list** | 111 paths a pure core crate may not touch: clocks, the filesystem, sockets, processes, the environment, blocking, randomness, every way of printing. A fixture crate uses each one and the build fails 122 times. |
 | **Fast lane** | Eight commands, one entry point, `cargo xtask ci`, which writes a JSON record of what ran rather than a green tick. |
-| **Crate-graph checker** | Specified, not written. Its stub exits 4 and reports `not_run`, because a check that has not run must not look like one that passed. |
+| **Crate-graph checker** | Implemented at crate level; H4 corpus validation is pending (CHG-004), with scope and limits in the [maturity ledger](docs/maturity.md). Module checks (CHG-007) and transitive analysis remain unavailable. |
 | **Everything else** | Specified. The [plan](docs/plan/IMPLEMENTATION-PLAN.md) says in what order, and the ledger will say when. |
 
 ## The parts worth reading
