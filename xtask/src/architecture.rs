@@ -204,6 +204,7 @@ fn clippy_template_rule(root: &Path, outcome: &mut check::Outcome) {
             .clone()
             .unwrap_or_else(|| format!("{:?}", finding.problem));
         outcome.findings.push(check::Finding {
+            details: std::collections::BTreeMap::new(),
             rule: clippy_template::RULE_ID,
             severity: check::Severity::Error,
             from: finding.krate.clone(),
