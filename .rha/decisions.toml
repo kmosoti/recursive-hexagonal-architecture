@@ -65,9 +65,9 @@ record = ".rha/tasks/CHG-000-bootstrap.toml"
 id = "DP-1.1a"
 title = "Approve the pre-registered corpus manifest"
 status = "decided"
-decided_by = "human:kennedy (merge of pull request 4, 15d916a)"
+decided_by = "human:kennedy (review and merge of pull request 4; confirmed by the acceptance of CHG-002 in pull request 5)"
 date = "2026-09-20"
-answer = "Approved as merged, including the seven review-found corrections of CHG-002.1. The merge commit 15d916a is the pre-registration identity every H4 record cites."
+answer = "Approved, including the seven review-found corrections of CHG-002.1. The merge commit 15d916a is the pre-registration identity every H4 record cites."
 record = ".rha/acceptances/CHG-002.toml"
 
 [[decision]]

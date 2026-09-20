@@ -44,6 +44,29 @@ pub struct Acceptance {
     pub record_creation_preapproved: bool,
     pub decisions_ledger: String,
     pub defaults_apply_when_unanswered: bool,
+    pub applies_to_merges_after: String,
+    pub bootstrap: Bootstrap,
+    pub ledger_edits: LedgerEdits,
+}
+
+/// The bounded period in which some acceptance predicates cannot hold
+/// (`[acceptance.bootstrap]`).
+#[derive(Debug, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct Bootstrap {
+    pub authentic_unsatisfiable_until: String,
+    pub passed_unsatisfiable_until: String,
+    pub every_acceptance_in_this_period: String,
+    pub expires: String,
+}
+
+/// Which edits to the protected decision ledger are pre-approved
+/// (`[acceptance.ledger_edits]`).
+#[derive(Debug, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct LedgerEdits {
+    pub preapproved: Vec<String>,
+    pub everything_else: String,
 }
 
 #[derive(Debug, Deserialize)]

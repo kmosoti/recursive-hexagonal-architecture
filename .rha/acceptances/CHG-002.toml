@@ -1,8 +1,11 @@
 # Acceptance record (spec §11.4, §11.7.6; §11.7.11 shape, stored as TOML).
 #
-# Written as the first commit of CHG-002.2 under .rha/policy.toml [acceptance]
-# (acceptance by merge; record creation pre-approved). The decision it records
-# is Kennedy's merge of pull request 4 on 2026-09-20.
+# Written in CHG-002.2. The acceptance EVENT is Kennedy's merge of pull
+# request 5, which carries this record and the [acceptance] policy: at the
+# merge of pull request 4 (2026-09-20T01:23:35Z) that policy did not exist, so
+# that merge integrated the subject but is not cited as the acceptance
+# (review finding on pull request 5). Acceptance is not eligibility: see
+# [disposition].
 schema_version = 1
 id = "CHG-002"
 change = "docs/changes/CHG-002-corpus-pre-registration.md"
@@ -13,7 +16,8 @@ principal = "human:kennedy"
 role = "acceptor"
 date = "2026-09-20"
 authority_profile = "ECC-Solo"
-basis = "merge of pull request 4 (.rha/policy.toml [acceptance] by_merge)"
+basis = "Kennedy's explicit acceptance of CHG-002, expressed by merging pull request 5, which carries this record. The [acceptance] by_merge rule applies to merges after its own approval; PR 4's merge integrated the subject and predates it."
+event = "merge of pull request 5"
 
 [subject]
 # What was accepted: the merge commit on main. Its tree equals the branch
@@ -70,9 +74,17 @@ inconclusive = []
 [disposition]
 decision = "accepted"
 kind = "controlled_transition"
-basis = "spec §11.5: the change adds xtask/tests/corpus/manifest.toml to [surface] protected, so no record produced on the candidate satisfies Applicable against the base policy. The merge is the controlled transition."
+# MergeAllowed (§11.7.6) does NOT hold: the subject is not Eligible and no
+# exception exists, nor could one, because L0.architecture is non-waivable.
+# This acceptance is a controlled transition inside the bounded bootstrap of
+# .rha/policy.toml [acceptance.bootstrap]: Authentic cannot hold until CHG-020
+# and Passed cannot hold until CHG-003. Applicable additionally fails because
+# the change protects the manifest. Each failed predicate is listed below with
+# its reason; none is waived.
+merge_allowed = false
+basis = "spec §11.5 controlled transition, bounded by .rha/policy.toml [acceptance.bootstrap]; plus the policy-digest change this subject introduces (the manifest joins [surface] protected)"
 eligibility_at_acceptance = "blocked"
-exception = "none"
+exception = "none, and none possible: the failing check is non-waivable"
 
 [[disposition.predicates]]
 name = "Authentic"

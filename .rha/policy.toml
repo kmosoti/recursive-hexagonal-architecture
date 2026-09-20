@@ -72,6 +72,10 @@ protected = [
   # downgrades the cell in docs/enforcement-map.md; it never edits this file.
   # Approved by human:kennedy on 2026-09-19 (CHG-002).
   "xtask/tests/corpus/manifest.toml",
+  # The decision ledger is authority-bearing: a status change is a decision
+  # (CHG-002.2, review finding). Two edits are pre-approved in
+  # [acceptance.ledger_edits]; everything else needs Kennedy.
+  ".rha/decisions.toml",
   "Cargo.toml",
   ".github/**",
   "xtask/src/lanes.rs",
@@ -309,3 +313,26 @@ record_creation_preapproved = true
 # ledger ids; they do not restate open questions.
 decisions_ledger = ".rha/decisions.toml"
 defaults_apply_when_unanswered = true
+# This rule governs merges made after its own approval. Earlier acceptances
+# cite the decision that actually authorized them.
+applies_to_merges_after = "the merge of CHG-002.2"
+
+# The merge is the acceptance EVENT. It does not make a subject Eligible:
+# MergeAllowed (§11.7.6) holds only where Eligible or ValidException holds,
+# and a non-waivable check cannot be excepted. Until the verifier exists some
+# predicates cannot hold at all, so the bootstrap is bounded here rather than
+# waived silently (§11.5 controlled transition).
+[acceptance.bootstrap]
+authentic_unsatisfiable_until = "CHG-020: no trusted producers exist, so Authentic is false for every record"
+passed_unsatisfiable_until = "CHG-003: L0.architecture is not implemented; its not_run is recorded, never waived, and blocks Passed"
+every_acceptance_in_this_period = "kind = \"controlled_transition\", merge_allowed = false, and the failed predicates listed with their reasons in [[disposition.predicates]]"
+expires = "when Passed can hold (CHG-003 merged) and Authentic can hold (CHG-020 merged); after that a controlled transition needs a cause of its own, stated in the record, and the acceptor's merge is MergeAllowed only if Eligible or ValidException holds"
+
+# The ledger is protected. These two edits are pre-approved; any other needs
+# explicit approval recorded in the task record.
+[acceptance.ledger_edits]
+preapproved = [
+  "adding or updating a row with decided_by = \"default (plan §9)\" for a point that states a default, at or after its trigger",
+  "changing a row's status to decided when the answer and its date are already recorded in a task record under [[decisions]] with decided_by = human:kennedy, citing that record",
+]
+everything_else = "protected-surface approval by human:kennedy, recorded in the task record"
