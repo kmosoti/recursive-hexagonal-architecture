@@ -108,6 +108,14 @@ later that the cases predate the checker.\
 commitment = "sha256:47868f629cab286f5476ad7c62737cbab8dace85fae463dcaa619dda18cea8bc"
 commitment_recorded_at = "CHG-003, second commit, before any checker code"
 commitment_verifiable_by = "human:kennedy only, by re-taring the held-out directory; the Executor never reads it"
+# Amended in CHG-004.6: who operates the run.
+amendment_date = "2026-09-20"
+amendment_decided_by = "human:kennedy"
+amendment_approved_in = "Kennedy's instruction of 2026-09-20 to the executor to run the held-out checks on his behalf, and his instruction to the supervising session that the runner belong under xtask, not in a scripts/ directory"
+amendment_text = "The executor's process may run the accepted checker on the private cases through `cargo xtask corpus held-out`, which prints only opaque case ids, exit statuses, finding counts and the commitment check. Raw reports stay outside the repository. No agent reads the cases. Kennedy grades the observations against his expectations and records the per-case outcomes in the acceptance record. A run after the merge is recorded as a post-acceptance observation."
+amendment_why = "Kennedy prefers not to open a terminal for the run. The property this row protects, that the cases were fixed before the checker existed and were never tuned to, holds as long as the checker under test is the accepted one and the grading stays Kennedy's."
+commitment_command = "tar --sort=name --mtime='2026-09-20' --owner=0 --group=0 --numeric-owner -cf - -C <dir> . | sha256sum"
+
 
 [[decision]]
 id = "DP-1.1c"
@@ -117,6 +125,14 @@ decided_by = "human:kennedy (merge of CHG-002.2)"
 date = "2026-09-20"
 answer = "The strict readings stand as written in CHG-002: detection_requires, extra_findings, no_alarm_scope. Relaxing one before CHG-004 runs is a protected edit of the manifest, recorded here first."
 record = "xtask/tests/corpus/manifest.toml [grading]"
+# Amended in CHG-004.6, after the data (option (a) of CHG-004's acceptance concern 1).
+amendment_date = "2026-09-20"
+amendment_decided_by = "human:kennedy"
+amendment_approved_in = "the CHG-004.6 kickoff of 2026-09-20: \"C13: I choose (a). I approve the DP-1.1c amendment row and the C13 manifest amendment exactly as the goal states.\""
+amendment_text = "A finding matching an entry of a case's expected_findings is a registered fact, neither a detection nor a false alarm."
+amendment_scope = "detect cases; C13 is the only case that registers one: expected_findings = [{ rule = \"adapter.foreign_core\", crate = \"adapter-x\", to = \"core-b\" }]. Matching uses the every-key rule of witness. A registered fact never supplies a required detection."
+amendment_disclosure = "Made after the data. CHG-004's H4 runs (evidence/h4-crate/20260920T122638Z-eec489c71f25.json and the baseline at 434b706) graded C13 failed on this exact warning. The warning was listed in plan §5 before any data existed, and C13's seeded shape, an adapter depending on a core whose port it does not implement, is its trigger; the registration, not the checker, was incomplete. The failed records are kept beside the amended run, and a V proposal built on the amended run carries this disclosure."
+
 
 [[decision]]
 id = "DP-1.2"
