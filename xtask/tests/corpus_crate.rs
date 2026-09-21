@@ -1,5 +1,10 @@
 //! The complete committed crate corpus, exercised through the public command.
-//! C13 remains an explicit failed H4 result; this test does not waive it.
+//!
+//! Until CHG-004.6 this file pinned C13 as the one failed case. The DP-1.1c
+//! amendment Kennedy approved registered C13's accurate `adapter.foreign_core`
+//! warning as a fact, so the pin moved to the amended expectation: 22/22
+//! detected, no unmatched finding, the warning under `registered_facts` and
+//! nowhere else (§9.14; the previous assertion is in the change record).
 
 use serde_json::{Value, json};
 use std::path::{Path, PathBuf};
@@ -62,7 +67,7 @@ fn committed_fixtures_equal_generation_and_the_drift_check_detects_changes() {
 }
 
 #[test]
-fn full_committed_corpus_pins_observations_and_preserves_the_h4_failure() {
+fn full_committed_corpus_pins_observations_under_the_amended_registration() {
     let root = root();
     let directory = root.join("target/rha").join(format!(
         "corpus-integration-{}-{}",
@@ -81,7 +86,7 @@ fn full_committed_corpus_pins_observations_and_preserves_the_h4_failure() {
         .expect("run complete public corpus");
     assert_eq!(
         output.status.code(),
-        Some(1),
+        Some(0),
         "{}",
         String::from_utf8_lossy(&output.stderr)
     );
@@ -104,11 +109,12 @@ fn full_committed_corpus_pins_observations_and_preserves_the_h4_failure() {
         record["summary"]["compiler"],
         json!({"detected":1,"cases":1})
     );
-    assert_eq!(record["summary"]["false_alarm"]["alarms"], 1);
+    assert_eq!(record["summary"]["false_alarm"]["alarms"], 0);
+    assert_eq!(record["summary"]["registered_facts"], 1);
     assert_eq!(record["summary"]["false_alarm"]["legitimate"], 11);
     assert_eq!(record["summary"]["expected_miss"]["documented"], 2);
-    assert_eq!(record["summary"]["failed_cases"], json!(["C13"]));
-    assert_eq!(record["summary"]["outcome"], "failed");
+    assert_eq!(record["summary"]["failed_cases"], json!([]));
+    assert_eq!(record["summary"]["outcome"], "passed");
     assert_eq!(record["fixtures"]["drift"], json!([]));
     // The amendment chain: pre-registration, then EM-M03 (CHG-004), then C13
     // (CHG-004.6). Each link is owned by its approval decision and verified
@@ -197,12 +203,26 @@ fn full_committed_corpus_pins_observations_and_preserves_the_h4_failure() {
         assert_eq!(matching.len(), 1, "{}", expected.id);
         let case = matching[0];
         assert_eq!(
-            case["grade"]["passed"],
-            expected.id != "C13",
+            case["grade"]["passed"], true,
             "{}: {}",
-            expected.id,
-            case["grade"]
+            expected.id, case["grade"]
         );
+        let registered = case["grade"]["registered_facts"]
+            .as_array()
+            .map_or(0, Vec::len);
+        assert_eq!(
+            registered,
+            usize::from(expected.id == "C13"),
+            "{}",
+            expected.id
+        );
+        if expected.id == "C13" {
+            let fact = &case["grade"]["registered_facts"][0];
+            assert_eq!(fact["rule"], "adapter.foreign_core");
+            assert_eq!(fact["crate"], "adapter-x");
+            assert_eq!(fact["to"], "core-b");
+            assert_eq!(fact["severity"], "warning");
+        }
         assert_eq!(
             case["fixture_path"],
             json!(Path::new(fixture::COMMITTED_ROOT).join(fixture::case_path(expected)))

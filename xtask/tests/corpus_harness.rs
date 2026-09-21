@@ -271,15 +271,16 @@ fn rule_specific_witness_fields_survive_the_real_cli() {
         let (exit, report) = architecture(&workspace);
         let graded = grade::architecture(case, exit, &report);
         assert!(graded.detected, "{id}: {graded:?}\n{report}");
+        // Until CHG-004.6 this asserted that C13's accurate extra warning
+        // failed grading. The DP-1.1c amendment registered it (§9.14): it is
+        // now a registered fact, and nothing else about the case changed.
+        assert!(graded.passed, "{id}: {graded:?}");
         if id == "C13" {
-            assert!(
-                !graded.passed,
-                "strict grading must reject the accurate extra warning"
-            );
-            assert_eq!(graded.false_alarms.len(), 1);
-            assert_eq!(graded.false_alarms[0]["rule"], "adapter.foreign_core");
+            assert_eq!(graded.registered_facts.len(), 1);
+            assert_eq!(graded.registered_facts[0]["rule"], "adapter.foreign_core");
+            assert!(graded.false_alarms.is_empty());
         } else {
-            assert!(graded.passed, "{id}: {graded:?}");
+            assert!(graded.registered_facts.is_empty(), "{id}");
         }
     }
 }
@@ -498,4 +499,59 @@ fn execution_errors_keep_their_class() {
         panic!("a detector that cannot start produces no observation");
     };
     assert_eq!(error.class, "tool_error");
+}
+
+#[test]
+fn a_registered_fact_is_neither_a_detection_nor_a_false_alarm() {
+    // C13 registers adapter.foreign_core on adapter-x -> core-b (CHG-004.6).
+    let c13 = case("C13");
+    let fact = json!({"rule":"adapter.foreign_core", "severity":"warning", "from":"adapter-x", "crate":"adapter-x", "to":"core-b"});
+    let graded = grade::architecture(&c13, Some(1), &report(vec![finding(&c13), fact.clone()]));
+    assert!(graded.detected && graded.passed, "{:?}", graded.reasons);
+    assert_eq!(graded.registered_facts, vec![fact.clone()]);
+    assert!(graded.false_alarms.is_empty());
+
+    // Negative controls: a changed key is not the registered fact, and a
+    // missing key is not either. A finding without a rule is malformed and
+    // rejected before grading, so the missing-key control covers the others.
+    for key in ["rule", "crate", "to"] {
+        let mut wrong = fact.clone();
+        wrong[key] = json!("other");
+        let graded = grade::architecture(&c13, Some(1), &report(vec![finding(&c13), wrong]));
+        assert!(
+            !graded.passed && graded.false_alarms.len() == 1,
+            "{key} changed"
+        );
+    }
+    for key in ["crate", "to"] {
+        let mut missing = fact.clone();
+        missing.as_object_mut().expect("object").remove(key);
+        let graded = grade::architecture(&c13, Some(1), &report(vec![finding(&c13), missing]));
+        assert!(
+            !graded.passed && graded.false_alarms.len() == 1,
+            "{key} missing"
+        );
+    }
+
+    // A registered fact cannot stand in for the required witness.
+    let graded = grade::architecture(&c13, Some(0), &report(vec![fact.clone()]));
+    assert!(!graded.detected && !graded.passed);
+    assert_eq!(graded.registered_facts.len(), 1);
+
+    // An unregistered extra finding still fails the case.
+    let extra = json!({"rule":"another.rule", "severity":"warning", "from":"adapter-x"});
+    let graded = grade::architecture(
+        &c13,
+        Some(1),
+        &report(vec![finding(&c13), fact.clone(), extra.clone()]),
+    );
+    assert!(!graded.passed);
+    assert_eq!(graded.false_alarms, vec![extra]);
+
+    // Only C13 registers the fact; the same warning on C01 is a false alarm.
+    let c01 = case("C01");
+    let graded = grade::architecture(&c01, Some(1), &report(vec![finding(&c01), fact]));
+    assert!(!graded.passed);
+    assert_eq!(graded.false_alarms.len(), 1);
+    assert!(graded.registered_facts.is_empty());
 }

@@ -503,7 +503,15 @@ pub fn summarize(records: &[Value]) -> Value {
         .map(|c| c["grade"]["false_alarms"].as_array().map_or(0, Vec::len))
         .sum();
     let failed = records.iter().any(|c| c["grade"]["passed"] != true);
-    json!({"outcome": if failed { "failed" } else { "passed" }, "detection": {"detected": detected, "violations": violations}, "checker": {"detected": count("detect", Some("detected"), true), "cases": count("detect", None, true)}, "false_alarm": {"alarms": false_alarms, "legitimate": legitimate, "legitimate_cases_with_alarms": legitimate_alarms}, "expected_miss": {"cases": count("expected_miss", None, true), "documented": count("expected_miss", Some("documented_miss"), true), "surprises": count("expected_miss", Some("unexpected_detection"), true)}, "compiler": {"cases": records.iter().filter(|c| c["detector"] != "xtask architecture").count(), "detected": records.iter().filter(|c| c["detector"] != "xtask architecture" && c["grade"]["detected"] == true).count()}, "failed_cases": records.iter().filter(|c| c["grade"]["passed"] != true).map(|c| &c["id"]).collect::<Vec<_>>()})
+    let registered: usize = records
+        .iter()
+        .map(|c| {
+            c["grade"]["registered_facts"]
+                .as_array()
+                .map_or(0, Vec::len)
+        })
+        .sum();
+    json!({"outcome": if failed { "failed" } else { "passed" }, "detection": {"detected": detected, "violations": violations}, "registered_facts": registered, "checker": {"detected": count("detect", Some("detected"), true), "cases": count("detect", None, true)}, "false_alarm": {"alarms": false_alarms, "legitimate": legitimate, "legitimate_cases_with_alarms": legitimate_alarms}, "expected_miss": {"cases": count("expected_miss", None, true), "documented": count("expected_miss", Some("documented_miss"), true), "surprises": count("expected_miss", Some("unexpected_detection"), true)}, "compiler": {"cases": records.iter().filter(|c| c["detector"] != "xtask architecture").count(), "detected": records.iter().filter(|c| c["detector"] != "xtask architecture" && c["grade"]["detected"] == true).count()}, "failed_cases": records.iter().filter(|c| c["grade"]["passed"] != true).map(|c| &c["id"]).collect::<Vec<_>>()})
 }
 
 /// Run all public committed crate cases and write one immutable record.
@@ -618,7 +626,7 @@ pub fn run(root: &Path, args: &CorpusArgs) -> Result<u8> {
         "template_sha256": sha256_file(&template_path)?, "grading": {"decision": "DP-1.1c", "detection_requires": manifest.grading.detection_requires, "extra_findings": manifest.grading.extra_findings, "no_alarm_scope": manifest.grading.no_alarm_scope, "expected_miss_surprise": manifest.grading.expected_miss_surprise},
         "environment": {"os": std::env::consts::OS, "arch": std::env::consts::ARCH, "cargo": command_stdout(root, &["cargo", "--version"])?, "rustc": command_stdout(root, &["rustc", "--version"])?},
         "summary": summary, "cases": records, "downgraded_cells": downgraded,
-        "held_out": {"outcome": "not_run", "reason": "Kennedy runs the private cases at acceptance (DP-1.1b); Executor never reads them"},
+        "held_out": {"outcome": "not_part_of_this_run", "reason": "the private cases are observed separately by `cargo xtask corpus held-out` under the DP-1.1b amendment (CHG-004.6), and graded by Kennedy; no agent reads them"},
     });
     let bytes =
         serde_json::to_vec_pretty(&record).context(|| "serializing H4 evidence".to_owned())?;

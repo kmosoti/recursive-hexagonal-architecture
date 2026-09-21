@@ -34,6 +34,9 @@ fn dispatch(root: &Path, command: &Command) -> Result<u8> {
         Command::Corpus {
             command: CorpusCommand::Generate { check },
         } => xtask::corpus::fixture::sync(root, *check),
+        Command::Corpus {
+            command: CorpusCommand::HeldOut(args),
+        } => xtask::corpus::held_out::run(root, args),
         Command::Architecture(args) => {
             let options = architecture::Options {
                 manifest_path: args.manifest_path.clone(),
