@@ -381,6 +381,30 @@ fn the_classification_cases_declare_absent_and_conflicting_metadata() {
 
 /// The pre-registration says what happens when a run disagrees with it. Both
 /// directions are stated, and neither ends in editing the manifest.
+/// The C13 registration amendment (CHG-004.6, the DP-1.1c amendment Kennedy
+/// approved on 2026-09-20 after the data): exactly one registered fact, on
+/// C13, with exactly these three keys, and no other case registers any.
+#[test]
+fn only_c13_registers_a_fact_and_it_is_the_foreign_core_warning() {
+    let manifest = manifest();
+    for case in &manifest.cases {
+        if case.id == "C13" {
+            assert_eq!(case.expected_findings.len(), 1);
+            let entry = &case.expected_findings[0];
+            let keys: Vec<&str> = entry.keys().map(String::as_str).collect();
+            assert_eq!(keys, ["crate", "rule", "to"]);
+            assert_eq!(entry["rule"].as_str(), Some("adapter.foreign_core"));
+            assert_eq!(entry["crate"].as_str(), Some("adapter-x"));
+            assert_eq!(entry["to"].as_str(), Some("core-b"));
+        } else {
+            assert!(case.expected_findings.is_empty(), "{}", case.id);
+        }
+    }
+    assert!(manifest.grading.extra_findings.contains(
+        "A finding matching an entry of a case's expected_findings is a registered fact"
+    ));
+}
+
 #[test]
 fn the_grading_rules_state_what_a_disagreement_does() {
     let manifest = manifest();

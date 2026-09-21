@@ -57,45 +57,83 @@ fn expectation(expected: Expected) -> &'static str {
     }
 }
 
-/// Historical correction identity, owned by its approval decision rather
-/// than inferred from whichever manifest edit happens to be newest.
+/// The approved amendments to the manifest since its pre-registration, in
+/// order, each owned by the decision that approved it rather than inferred
+/// from whichever manifest edit is newest. The chain is verified by bytes:
+/// every amendment's parent digest equals the previous corrected digest, and
+/// the last corrected digest equals the manifest as read. The commit of the
+/// newest amendment is recorded as given; its digests are what is checked.
 ///
 /// # Errors
-/// Returns absent/invalid decision provenance or a manifest digest mismatch.
-pub fn correction_commit(root: &Path) -> Result<String> {
-    let path = root.join(".rha/tasks/CHG-004-h4-crate-harness.toml");
-    let task: toml::Value = toml::from_str(
-        &std::fs::read_to_string(path).context(|| "reading correction approval".to_owned())?,
-    )
-    .context(|| "parsing correction approval".to_owned())?;
-    let decision = task
-        .get("decisions")
-        .and_then(toml::Value::as_array)
-        .into_iter()
-        .flatten()
-        .find(|decision| {
-            decision.get("id").and_then(toml::Value::as_str) == Some("approved-em-m03-cells")
-        })
-        .ok_or_else(|| Error::new("EM-M03 correction approval is missing"))?;
-    let revision = decision
-        .get("commit")
-        .and_then(toml::Value::as_str)
-        .ok_or_else(|| Error::new("EM-M03 approval decision lacks its correction commit"))?;
-    if revision.len() != 40 || !revision.bytes().all(|b| b.is_ascii_hexdigit()) {
+/// Returns absent or invalid decision provenance, or a broken digest chain.
+pub fn amendments(root: &Path) -> Result<Vec<Value>> {
+    const CHAIN: [(&str, &str, &str); 2] = [
+        (
+            "CHG-004",
+            ".rha/tasks/CHG-004-h4-crate-harness.toml",
+            "approved-em-m03-cells",
+        ),
+        (
+            "CHG-004.6",
+            ".rha/tasks/CHG-004.6-c13-registration.toml",
+            "approved-c13-registration",
+        ),
+    ];
+    let current = sha256_file(&root.join(MANIFEST_PATH))?;
+    let mut previous: Option<String> = None;
+    let mut out = Vec::new();
+    for (change, path, id) in CHAIN {
+        let task: toml::Value = toml::from_str(
+            &std::fs::read_to_string(root.join(path))
+                .context(|| format!("reading {change} approval"))?,
+        )
+        .context(|| format!("parsing {change} approval"))?;
+        let decision = task
+            .get("decisions")
+            .and_then(toml::Value::as_array)
+            .into_iter()
+            .flatten()
+            .find(|d| d.get("id").and_then(toml::Value::as_str) == Some(id))
+            .ok_or_else(|| Error::new(format!("{change}: decision {id} is missing")))?;
+        let field = |key: &str| -> Result<String> {
+            decision
+                .get(key)
+                .and_then(toml::Value::as_str)
+                .map(str::to_owned)
+                .ok_or_else(|| Error::new(format!("{change}: decision {id} lacks {key}")))
+        };
+        let is_digest = |v: &str| v.len() == 64 && v.bytes().all(|b| b.is_ascii_hexdigit());
+        let parent = field("parent_manifest_sha256")?;
+        let corrected = field("corrected_manifest_sha256")?;
+        if !is_digest(&parent) || !is_digest(&corrected) {
+            return Err(Error::new(format!(
+                "{change}: decision {id} must pin full manifest digests"
+            )));
+        }
+        if let Some(prev) = &previous
+            && *prev != parent
+        {
+            return Err(Error::new(format!(
+                "amendment chain broken at {change}: its parent digest is not the previous corrected digest"
+            )));
+        }
+        previous = Some(corrected.clone());
+        out.push(json!({
+            "change": change,
+            "decision": id,
+            "commit": field("commit")?,
+            "parent_manifest_sha256": parent,
+            "corrected_manifest_sha256": corrected,
+            "decided_by": field("decided_by")?,
+            "date": field("date")?,
+        }));
+    }
+    if previous.as_deref() != Some(current.as_str()) {
         return Err(Error::new(
-            "correction decision must cite a full commit identity",
+            "manifest differs from the last approved amendment's digest",
         ));
     }
-    if decision
-        .get("corrected_manifest_sha256")
-        .and_then(toml::Value::as_str)
-        != Some(sha256_file(&root.join(MANIFEST_PATH))?.as_str())
-    {
-        return Err(Error::new(
-            "manifest differs from the pinned correction digest",
-        ));
-    }
-    Ok(revision.to_owned())
+    Ok(out)
 }
 
 fn pre_registration_revision(root: &Path) -> Result<String> {
@@ -500,6 +538,7 @@ pub fn run(root: &Path, args: &CorpusArgs) -> Result<u8> {
     let expected_inputs = fixture::expected_tree(root, &manifest)?;
     let fixtures_root = root.join(fixture::COMMITTED_ROOT);
     let fixture_drift = fixture::drift(&fixtures_root, &expected_inputs)?;
+    let amendments = amendments(root)?;
     let run_id = format!(
         "{}-{}{}",
         now.compact(),
@@ -574,7 +613,7 @@ pub fn run(root: &Path, args: &CorpusArgs) -> Result<u8> {
         "created_at": now.rfc3339(), "artifact_identity": subject,
         "producer": {"name": "xtask corpus run", "version": env!("CARGO_PKG_VERSION"), "executable_sha256": sha256_file(&checker)?, "checker": expected_tool},
         "pre_registration": {"change": "CHG-002", "identity": manifest.pre_registration, "revision": pre_registration_revision(root)?, "record": ".rha/acceptances/CHG-002.toml"},
-        "manifest": {"path": MANIFEST_PATH, "sha256": sha256_file(&root.join(MANIFEST_PATH))?, "correction_commit": correction_commit(root)?, "approved_amendment": "Kennedy: Approved and merged, PR 6, 2026-09-20; EM-M03 cells [law3-d1, law6-b3]"},
+        "manifest": {"path": MANIFEST_PATH, "sha256": sha256_file(&root.join(MANIFEST_PATH))?, "amendments": amendments, "correction_commit": amendments.last().map(|a| a["commit"].clone()).unwrap_or(Value::Null)},
         "fixtures": {"root": fixture::COMMITTED_ROOT, "drift": fixture_drift, "generated_inputs_sha256": expected_inputs.iter().map(|(path, bytes)| (path.display().to_string(), crate::util::sha256_hex(bytes))).collect::<std::collections::BTreeMap<_, _>>()},
         "template_sha256": sha256_file(&template_path)?, "grading": {"decision": "DP-1.1c", "detection_requires": manifest.grading.detection_requires, "extra_findings": manifest.grading.extra_findings, "no_alarm_scope": manifest.grading.no_alarm_scope, "expected_miss_surprise": manifest.grading.expected_miss_surprise},
         "environment": {"os": std::env::consts::OS, "arch": std::env::consts::ARCH, "cargo": command_stdout(root, &["cargo", "--version"])?, "rustc": command_stdout(root, &["rustc", "--version"])?},

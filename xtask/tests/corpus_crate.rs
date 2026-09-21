@@ -110,37 +110,70 @@ fn full_committed_corpus_pins_observations_and_preserves_the_h4_failure() {
     assert_eq!(record["summary"]["failed_cases"], json!(["C13"]));
     assert_eq!(record["summary"]["outcome"], "failed");
     assert_eq!(record["fixtures"]["drift"], json!([]));
-    let task: toml::Value = toml::from_str(
-        &std::fs::read_to_string(root.join(".rha/tasks/CHG-004-h4-crate-harness.toml"))
-            .expect("task record"),
-    )
-    .expect("task TOML");
-    let approval = task["decisions"]
+    // The amendment chain: pre-registration, then EM-M03 (CHG-004), then C13
+    // (CHG-004.6). Each link is owned by its approval decision and verified
+    // from the manifest's bytes by reverting the amendment textually.
+    let decision = |task_path: &str, id: &str| -> toml::Value {
+        let task: toml::Value =
+            toml::from_str(&std::fs::read_to_string(root.join(task_path)).expect("task record"))
+                .expect("task TOML");
+        task["decisions"]
+            .as_array()
+            .expect("decisions")
+            .iter()
+            .find(|row| row["id"].as_str() == Some(id))
+            .cloned()
+            .expect("approval decision")
+    };
+    let em_m03 = decision(
+        ".rha/tasks/CHG-004-h4-crate-harness.toml",
+        "approved-em-m03-cells",
+    );
+    let c13 = decision(
+        ".rha/tasks/CHG-004.6-c13-registration.toml",
+        "approved-c13-registration",
+    );
+    let amendments = record["manifest"]["amendments"]
         .as_array()
-        .expect("decisions")
-        .iter()
-        .find(|row| row["id"].as_str() == Some("approved-em-m03-cells"))
-        .expect("approval");
+        .expect("amendments");
+    assert_eq!(amendments.len(), 2);
+    assert_eq!(amendments[0]["decision"], "approved-em-m03-cells");
+    assert_eq!(amendments[1]["decision"], "approved-c13-registration");
     assert_eq!(
         record["manifest"]["correction_commit"],
-        approval["commit"].as_str().expect("pinned correction")
+        c13["commit"].as_str().expect("c13 commit")
     );
     let current = include_str!("corpus/manifest.toml");
-    let corrected = "cells = [\"law3-d1\", \"law6-b3\"]\nseeded = \"a trait method";
-    let old = "cells = [\"law6-b3\"]\nseeded = \"a trait method";
-    assert_eq!(current.matches(corrected).count(), 1);
-    let prior = current.replace(corrected, old);
+    let fact_block = "# Registered fact (CHG-004.6, DP-1.1c amendment, approved by Kennedy 2026-09-20\n# after the data): the adapter's dependency on core-b, whose port it does not\n# implement, necessarily raises adapter.foreign_core, listed as a warning in\n# plan §5 before any data existed. Matched by the every-key rule; neither the\n# detection nor a false alarm.\nexpected_findings = [{ rule = \"adapter.foreign_core\", crate = \"adapter-x\", to = \"core-b\" }]\n";
+    let sentence = " A finding matching an entry of a case's expected_findings is a registered fact, neither a detection nor a false alarm.";
+    assert_eq!(current.matches(fact_block).count(), 1);
+    assert_eq!(current.matches(sentence).count(), 1);
+    let before_c13 = current.replace(fact_block, "").replace(sentence, "");
     assert_eq!(
         xtask::util::sha256_hex(current.as_bytes()),
-        approval["corrected_manifest_sha256"]
+        c13["corrected_manifest_sha256"]
             .as_str()
-            .expect("corrected digest")
+            .expect("c13 corrected digest")
     );
     assert_eq!(
-        xtask::util::sha256_hex(prior.as_bytes()),
-        approval["parent_manifest_sha256"]
+        xtask::util::sha256_hex(before_c13.as_bytes()),
+        c13["parent_manifest_sha256"]
             .as_str()
-            .expect("parent digest")
+            .expect("c13 parent digest")
+    );
+    assert_eq!(
+        c13["parent_manifest_sha256"], em_m03["corrected_manifest_sha256"],
+        "the C13 amendment's parent is the EM-M03 correction"
+    );
+    let corrected = "cells = [\"law3-d1\", \"law6-b3\"]\nseeded = \"a trait method";
+    let old = "cells = [\"law6-b3\"]\nseeded = \"a trait method";
+    assert_eq!(before_c13.matches(corrected).count(), 1);
+    let prior = before_c13.replace(corrected, old);
+    assert_eq!(
+        xtask::util::sha256_hex(prior.as_bytes()),
+        em_m03["parent_manifest_sha256"]
+            .as_str()
+            .expect("em-m03 parent digest")
     );
     let original: toml::Value = toml::from_str(include_str!("../../.rha/acceptances/CHG-002.toml"))
         .expect("CHG-002 acceptance");

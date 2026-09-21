@@ -61,7 +61,7 @@ decided_by = "human:kennedy"
 date = "2026-09-20"
 commit = "pending: filled once the manifest commit exists"
 parent_manifest_sha256 = "18d4afbfe5a63843d498a109fe4702629548a25ddc730198848983208d3c46a4"
-corrected_manifest_sha256 = "pending: filled once the manifest commit exists"
+corrected_manifest_sha256 = "406e37b04e82cbaa34efbbd9a33800ec787209a4616a63dc963ae5193c04c29e"
 
 [[decisions]]
 id = "delegated-held-out-execution"
