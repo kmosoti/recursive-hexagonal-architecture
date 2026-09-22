@@ -40,7 +40,7 @@ Decisions Kennedy made: the Executor is model-agnostic in the records. Hosting i
 
 ### 2.1 What the first five items cost, and why
 
-Measured on `main` at `bb1ee4e`. There are 132 non-merge commits in 8 pull requests for 5 plan items, and 60 CI runs. **46 commits, 35%, touch nothing but evidence records, generated indexes and change records.** Counting task and acceptance records as records too, the figure is 61, or 46%. Recount by listing each commit's paths with `git show --name-only` and matching them against those directories. Each lesson below becomes a rule in §2.2 or a guard in §8.1.
+Measured on `main` at `bb1ee4e`. There are 132 non-merge commits in 8 pull requests for 5 plan items, and 60 CI runs. **46 commits, 35%, touch only paths under `evidence/` and `docs/changes/` and the generated files `docs/evidence/index.md`, `docs/tasks/index.md` and `docs/enforcement-map.md`.** Adding `.rha/tasks/` and `.rha/acceptances/` to that set gives 61, or 46%. Recount with `git log --no-merges --format=%h bb1ee4e`, then `git show --name-only --format= <commit>` for each commit, and count the commits whose every path matches the set. Each lesson below becomes a rule in §2.2 or a guard in §8.1.
 
 | # | Observation | Evidence | Rule |
 | --- | --- | --- | --- |
@@ -430,7 +430,7 @@ Six packets finish the program. Each covers revision-1 CHG ids, whose detailed b
 - *Stage 3, continued.* The stage 1 corpus runs against the lint and the verifier, graded as registered. Outcomes go to `evidence/h5/`.
 - *Stage 4, cut-over.* **Gate DP-4.1**: trusted producer keys. Kennedy's policy edit retires `[acceptance.bootstrap]`. The first record for which `Authentic` holds is produced. The isolation exercise stays `not_run`.
 
-**P-C. Module level (CHG-007, E1).** The W7 brief. Random module graphs are generated with seeds before stage 1. They are checked in stage 3 against an independent reference extractor, which a separate session writes before it sees the real one (§2.4 rules 2, 4 and 5). The registered M, L-M and EM-M cases stay the headline measure. **Gate DP-2.1** comes before the module held-out run. E1 (`no_std` for `graph`) is a stage in `experiments/`, with no effect on the product.
+**P-C. Module level (CHG-007, E1).** The W7 brief. Before stage 1, and before any real extractor code exists, a separate session writes and commits two things: the seeded random module graphs, and an independent reference extractor with its expected outputs on them. Stage 3 checks the real extractor against that committed reference (§2.4 rules 2, 4 and 5). The registered M, L-M and EM-M cases stay the headline measure. **Gate DP-2.1** comes before the module held-out run. E1 (`no_std` for `graph`) is a stage in `experiments/`, with no effect on the product.
 
 **P-D. Growth under measurement (CHG-008 to CHG-014).** The W8, W9 and W10 briefs in one PR. Each feature is its own stage and commit range. The expected touched set is committed at the start of the stage, and the observed set is recorded at its end, so change-spread is measured per stage (`git diff --numstat <stage-start>..<stage-end>`), not per PR. Stage 3 waits for DP-2.1 if P-C has not recorded it. Mutation survivors are explained by a generated question per survivor, and Kennedy adjudicates (DP-2.2).
 

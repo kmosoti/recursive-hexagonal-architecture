@@ -27,6 +27,14 @@ The measurements behind §2.1 were taken on `main` at `bb1ee4e`: 132 non-merge c
 5. **P2, DP-2.1 was gated only in P-C although P-D's mutation stage needs it. Confirmed.** P-D stage 3 now waits for it if P-C has not recorded it.
 6. **P2, graded corpora were generated after the code they grade. Confirmed; it contradicted §2.4 rule 2.** P-A registers the markdown corpus in stage 1, before any product code. P-B registers its lint and verifier corpora in stage 1, before any lint code. P-C generates its random graphs, and a separate session writes the reference extractor, before the real extractor exists.
 
+### Review round 2 on `43539c1`, determinations
+
+Findings 3, 4 and 5 were confirmed resolved, and the reviewer confirmed that this repository's files do not require the rules declined in round 1.
+
+- **Finding 2, not resolved: the recount still lacked exact path filters. Confirmed.** §2.1 now lists every path in the set and the exact recount commands.
+- **Finding 6, not resolved: the P-C reference extractor was not fixed before the real extractor existed. Confirmed.** It is now written and committed, with its expected outputs on the seeded graphs, before stage 1.
+- **New P1: the task record's plan digest was stale. Confirmed.** It named the plan at `b85e5c0`, the evidence record `20260922T201134Z-87d53f35c7ac.json` copied it, and the plan had since changed. This is lesson L6 recurring inside the change that records it. The digest is now set in the same commit as the final plan text. The earlier evidence record is kept as observed. P-B's lint is the lasting remedy.
+
 ## Acceptance concerns
 
 1. **Merging this approves revision 2** (DP-5.1): the packets, the method, and the generation protocol.
