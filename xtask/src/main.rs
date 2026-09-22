@@ -57,5 +57,6 @@ fn dispatch(root: &Path, command: &Command) -> Result<u8> {
             Ok(0)
         }
         Command::Docs { check } => docs::run(root, *check),
+        Command::Scope { task, base } => xtask::scope::run(root, task, base),
     }
 }

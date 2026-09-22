@@ -290,7 +290,7 @@ fn failed_cases_downgrade_every_named_cell_without_changing_manifest() {
     let manifest = manifest();
     let records =
         vec![json!({"id":"C01", "cells":["law3-d1", "law6-d5"], "grade":{"passed":false}})];
-    let map = runner::enforcement_map(&manifest, &records, "evidence/test.json");
+    let map = runner::enforcement_map(&manifest, &records, "evidence/test.json", None);
     for id in ["law3-d1", "law6-d5"] {
         assert!(
             map.lines()
@@ -305,6 +305,7 @@ fn failed_cases_downgrade_every_named_cell_without_changing_manifest() {
         &manifest,
         &[json!({"id":"C10","cells":["classification"],"grade":{"passed":false}})],
         "evidence/test.json",
+        None,
     );
     assert_eq!(
         map.lines()
@@ -312,6 +313,17 @@ fn failed_cases_downgrade_every_named_cell_without_changing_manifest() {
             .count(),
         manifest.cells.len()
     );
+}
+
+#[test]
+fn a_record_of_an_earlier_manifest_claims_no_cell() {
+    let manifest = manifest();
+    let passing = vec![json!({"id":"C01", "cells":["law3-d1"], "grade":{"passed":true}})];
+    let map = runner::enforcement_map(&manifest, &passing, "evidence/old.json", Some("abc"));
+    assert!(map.contains("**Stale.**"));
+    assert!(!map.contains("validated"), "{map}");
+    let fresh = runner::enforcement_map(&manifest, &passing, "evidence/new.json", None);
+    assert!(fresh.contains("validated"));
 }
 
 #[test]

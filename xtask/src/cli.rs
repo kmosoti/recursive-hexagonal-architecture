@@ -30,6 +30,16 @@ pub enum Command {
         #[command(subcommand)]
         command: EvidenceCommand,
     },
+    /// Check that the change stays inside its task record's scope and the
+    /// repository layout (plan §2.2 M4).
+    Scope {
+        /// The task record id, for example CHG-005.
+        #[arg(long)]
+        task: String,
+        /// The revision the change is compared with, by merge base.
+        #[arg(long, default_value = "origin/main")]
+        base: String,
+    },
     /// Write the generated docs, or with --check report stale ones.
     Docs {
         /// Compare instead of writing; exit 1 if any generated file is stale.

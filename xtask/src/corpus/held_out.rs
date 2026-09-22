@@ -235,7 +235,6 @@ fn observe(root: &Path, id: &str, workspace: &Path) -> Result<(Value, Vec<u8>, V
     let mut row = json!({"case_id": id, "exit_status": exit, "graded": false});
     let outcome = match exit {
         Some(2) => "config_error",
-        Some(3) => "tool_error",
         Some(0 | 1) => match (summary["errors"].as_u64(), summary["warnings"].as_u64()) {
             (Some(errors), Some(warnings)) if exit == Some(i32::from(errors > 0)) => {
                 row["errors"] = json!(errors);
