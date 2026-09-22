@@ -183,7 +183,8 @@ pub fn task(root: &Path, id: &str) -> Result<toml::Value> {
 }
 
 /// Paths changed since the merge base with `base`, committed or not. Git's
-/// path quoting is off: by default it prints `café.md` as `"caf\303\251.md"`,
+/// path quoting is off: by default it prints `café.md` as a quoted string of
+/// octal escapes,
 /// which matched no glob (found by the markdown corpus in P-A stage 1).
 ///
 /// # Errors

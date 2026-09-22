@@ -9,7 +9,7 @@ fn name() -> impl Strategy<Value = String> {
         "a",
         "A",
         "b",
-        "caf\u{e9}",
+        "café",
         "cafe\u{301}",
         "x/y",
         "x/Y",

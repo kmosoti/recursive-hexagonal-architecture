@@ -105,7 +105,7 @@ mod tests {
     #[test]
     fn ids_are_nfc_and_keep_case() {
         let nfd = RelPath::new("Cafe\u{301}/Page.md").expect("valid");
-        assert_eq!(PageId::from_path(&nfd).as_str(), "Caf\u{e9}/Page");
+        assert_eq!(PageId::from_path(&nfd).as_str(), "Café/Page");
         assert_eq!(PageId::from_path(&nfd).basename(), "Page");
     }
 

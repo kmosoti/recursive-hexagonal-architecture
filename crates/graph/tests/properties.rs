@@ -43,8 +43,8 @@ proptest! {
         for r in &g.resolved {
             prop_assert!(g.backlinks.get(&r.to).is_some_and(|s| s.contains(&r.from)));
         }
-        for (to, froms) in &g.backlinks {
-            for from in froms {
+        for (to, sources) in &g.backlinks {
+            for from in sources {
                 prop_assert!(g.resolved.iter().any(|r| &r.to == to && &r.from == from));
             }
         }
