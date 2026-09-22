@@ -46,6 +46,8 @@ Decomposition A, as BDR-0001 to BDR-0004 accepted it. Every core has the templat
 
 The first run graded **59 of 60** sites as registered. MD051 failed: the product applied NFC to slugs, which the W5 brief asks for. The registered contract derives slugs without NFC, so a combining mark is dropped. The registration was fixed first and grades the product, so the product now follows it (decision `slug-without-nfc`). The disclosed defect is the Executor's: the brief's NFC was dropped when the registration contract was written. After the change, **60 of 60** sites pass. The first run was a check, not a recorded harness run, so no failed record exists for it; this paragraph is its record. `cargo xtask corpus run --level markdown` writes the evidence below, and an app-cli test pins it under `L0.nextest`.
 
+**Evidence:** `evidence/md-corpus/20260922T210717Z-58e45f444c9f.json` at `58e45f4`, clean tree: 60 of 60 sites graded as registered, with the registration's tree digest verified before the run.
+
 ### Repair attempts (§11.7.10)
 
 1. **The scope guard reported 52 false findings on the corpus commit.** The hypothesis was git's default path quoting. The discriminating check: every flagged path was an octal-escaped non-ASCII name such as `caf\303\251.md`. The change turns off `core.quotePath` in every git call the guard makes. Result: 0 findings. The adversarial corpus found a defect in the guard before any product code existed.
