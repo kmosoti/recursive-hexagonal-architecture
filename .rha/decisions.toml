@@ -137,7 +137,10 @@ amendment_disclosure = "Made after the data. CHG-004's H4 runs (evidence/h4-crat
 [[decision]]
 id = "DP-1.2"
 title = "Clock port and the 'built at' footer in W5 scope"
-status = "open"
+status = "decided"
+decided_by = "default (plan §9)"
+date = "2026-09-22"
+answer = "yes: the Clock port and the built-at footer are in W5 scope (recorded at the start of CHG-005, its trigger)"
 owner = "human:kennedy"
 needed_by = "start of CHG-005 (W5)"
 default = "yes"
@@ -145,7 +148,10 @@ default = "yes"
 [[decision]]
 id = "DP-1.3"
 title = "Refutation criteria for BDR-0001 to BDR-0004 (metric, source, window, threshold, action), written before the crates exist (spec §7.8 step 10)"
-status = "open"
+status = "decided"
+decided_by = "human:kennedy"
+date = "2026-09-22"
+answer = "Accepted all four proposed criteria as written in docs/adr/BDR-0001 to BDR-0004, decomposition A (asked at the P-A stage 1 gate)"
 owner = "human:kennedy"
 needed_by = "start of CHG-005 (W5)"
 cannot_default = true
@@ -154,6 +160,7 @@ cannot_default = true
 id = "DP-1.4"
 title = "Private markdown held-out fixtures with expected `rhawiki check --format json` output"
 status = "open"
+disposition = "Authoring held-out cases is Kennedy's alone (spec §9.14); no agent may write or read them, so the delegation cannot close this row. Under the delegation of 2026-09-22, CHG-005 proceeds with this check recorded not_run; the row stays open for Kennedy."
 owner = "human:kennedy"
 needed_by = "acceptance of CHG-005 (W5)"
 cannot_default = true
@@ -161,7 +168,11 @@ cannot_default = true
 [[decision]]
 id = "DP-1.5"
 title = "Accept or annotate the `rhawiki check` witness list on this repository's docs"
-status = "open"
+status = "decided"
+decided_by = "agent:executor under human:kennedy's delegation"
+date = "2026-09-22"
+answer = "The default: zero witnesses expected, and zero observed (`rhawiki check --root docs --format json`: 27 pages, witnesses [])."
+delegation = "Kennedy, 2026-09-22: 'Use recommended. ... Accept the recommend and most correct implementations going forward instead of escalating to me.' (quoted in full in .rha/tasks/CHG-005-rhawiki-m1.toml, decision delegation-2026-09-22)"
 owner = "human:kennedy"
 needed_by = "acceptance of CHG-005 (W5)"
 default = "zero witnesses expected"
@@ -169,7 +180,11 @@ default = "zero witnesses expected"
 [[decision]]
 id = "DP-1.6"
 title = "Accept the maturity proposals (crate-graph checker, deny list, fast lane)"
-status = "open"
+status = "decided"
+decided_by = "agent:executor under human:kennedy's delegation"
+date = "2026-09-22"
+answer = "Accepted as proposed in docs/maturity.md: V for the crate-graph checker (crate level), the ambient-effect deny list (crate level) and the fast-lane CI configuration; I for held-out checks. The Accepted column is written with P-A's acceptance record, which cites the merge."
+delegation = "Kennedy, 2026-09-22: 'Use recommended. ... Accept the recommend and most correct implementations going forward instead of escalating to me.' (quoted in full in .rha/tasks/CHG-005-rhawiki-m1.toml, decision delegation-2026-09-22)"
 owner = "human:kennedy"
 needed_by = "acceptance of CHG-004 and CHG-006"
 
@@ -209,6 +224,27 @@ owner = "human:kennedy"
 needed_by = "CHG-020"
 
 [[decision]]
+id = "DP-5.1"
+title = "Approve plan revision 2: packets, method M1 to M10, the stochastic-generation protocol"
+status = "decided"
+decided_by = "human:kennedy"
+date = "2026-09-22"
+answer = "Approved by the instruction 'Can you implement each packet', on which pull request 15 was merged at 72c5cfd. The same instruction changed the reviewer to the Codex CLI with gpt-6-astra at extra-high effort."
+owner = "human:kennedy"
+
+[[decision]]
+id = "DP-5.2"
+title = "Make `cargo xtask scope` an L1 check in .rha/policy.toml, or keep it a pre-PR command"
+status = "decided"
+decided_by = "agent:executor under human:kennedy's delegation"
+date = "2026-09-22"
+answer = "The default: a pre-PR command, documented in CONTRIBUTING.md; the policy is unchanged. The CONTRIBUTING line reverted in 7616a18 is restored with this answer, and CHG-004.6's held-out paragraph (ad13efa) is approved retroactively."
+delegation = "Kennedy, 2026-09-22: 'Use recommended. ... Accept the recommend and most correct implementations going forward instead of escalating to me.' (quoted in full in .rha/tasks/CHG-005-rhawiki-m1.toml, decision delegation-2026-09-22)"
+owner = "human:kennedy"
+needed_by = "P-A acceptance"
+default = "pre-PR command"
+
+[[decision]]
 id = "DP-5.3"
 title = "Retire [acceptance.bootstrap] once Authentic can hold, and name the bootstrap acceptance kind (spec-v0.11 row 8)"
 status = "decided"
@@ -217,5 +253,12 @@ date = "2026-09-22"
 answer = "Not retired, because Authentic cannot hold (DP-4.1). Named: the period's acceptances are kind = bootstrap_acceptance in .rha/policy.toml, and controlled_transition keeps its §11.5 meaning."
 record = ".rha/tasks/CHG-019-trust.toml, decision dp-5.3"
 delegation = "Kennedy, 2026-09-22: 'Use recommended. ... Accept the recommend and most correct implementations going forward instead of escalating to me.' (quoted in full in .rha/tasks/CHG-019-trust.toml, decision delegation-2026-09-22)"
-# P-A (pull request 16) also adds the DP-5 rows; whichever pull request merges
-# second resolves the two appends into one DP-5.3 row, with this answer.
+
+[[decision]]
+id = "DP-5.4"
+title = "The reviewer's role: validate conformance to the deterministic contracts, not regenerate"
+status = "decided"
+decided_by = "human:kennedy"
+date = "2026-09-22"
+answer = "Codex (gpt-6-astra, extra-high, read-only) validates that the code conforms to the registered deterministic contracts and schemas (the fixture contracts, corpus registrations, record shapes, .rha/schemas once they exist) and to the RHA guidelines (spec laws, AGENTS.md, scoped guides, policy). It does not generate code, corpora or oracles. A finding cites the contract clause or guideline it breaks. Amends plan M6 and §2.4's use of Codex as a generator; the plan text follows at its next revision."
+delegation = "Kennedy, 2026-09-22: 'Use recommended. ... Accept the recommend and most correct implementations going forward instead of escalating to me.' (quoted in full in .rha/tasks/CHG-005-rhawiki-m1.toml, decision delegation-2026-09-22)"

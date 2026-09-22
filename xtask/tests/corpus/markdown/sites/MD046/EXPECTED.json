@@ -1,0 +1,1 @@
+{"site":"MD046","purpose":"Inline code pseudoheadings cannot consume duplicate suffix numbers.","witnesses":[{"kind":"duplicate_slug","page":"Guide","slug":"topic"},{"kind":"missing_anchor","from":"index","target":"Guide","heading":"topic-3"}]}

@@ -1,0 +1,1 @@
+{"site":"MD053","purpose":"Plain heading text preserves literal spaces across inline markup.","witnesses":[{"kind":"duplicate_slug","page":"Guide","slug":"a--b"},{"kind":"missing_anchor","from":"index","target":"Guide","heading":"a-b"}]}

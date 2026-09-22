@@ -1,0 +1,23 @@
+[package]
+name = "app-cli"
+version = "0.1.0"
+description = "rhawiki: the composition root and command line"
+edition.workspace = true
+rust-version.workspace = true
+publish = false
+
+[[bin]]
+name = "rhawiki"
+path = "src/main.rs"
+
+[dependencies]
+adapter-fs = { path = "../adapter-fs" }
+adapter-html = { path = "../adapter-html" }
+adapter-sys = { path = "../adapter-sys" }
+clap = { version = "4.6.7", features = ["derive"] }
+library = { path = "../library" }
+serde_json = "1.0.151"
+site = { path = "../site" }
+
+[lints]
+workspace = true

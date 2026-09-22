@@ -85,7 +85,13 @@ fn enforcement_map(root: &Path) -> Result<String> {
         }
     }
     records.sort_by(|a, b| (&a.0, &a.1).cmp(&(&b.0, &b.1)));
+    let current = sha256_file(&root.join(manifest_path))?;
+    let mut stale = None;
     let (evidence, cases, mut inputs) = if let Some((_, path, record)) = records.pop() {
+        let graded = record["manifest"]["sha256"].as_str().unwrap_or_default();
+        if graded != current {
+            stale = Some(graded.to_owned());
+        }
         let cases = record["cases"]
             .as_array()
             .ok_or_else(|| crate::error::Error::new("H4 record lacks case outcomes"))?
@@ -102,7 +108,7 @@ fn enforcement_map(root: &Path) -> Result<String> {
     Ok(header(
         "latest evidence/h4-crate record and corpus manifest",
         &inputs,
-    ) + &crate::corpus::runner::enforcement_map(&manifest, &cases, &evidence))
+    ) + &crate::corpus::runner::enforcement_map(&manifest, &cases, &evidence, stale.as_deref()))
 }
 
 fn header(sources: &str, inputs: &[(String, String)]) -> String {

@@ -60,5 +60,6 @@ fn dispatch(root: &Path, command: &Command) -> Result<u8> {
         Command::Rha {
             command: RhaCommand::Lint { files },
         } => xtask::record_lint::run(root, files),
+        Command::Scope { task, base } => xtask::scope::run(root, task, base),
     }
 }

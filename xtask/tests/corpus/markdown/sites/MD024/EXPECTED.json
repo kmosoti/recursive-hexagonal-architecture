@@ -1,0 +1,1 @@
+{"site":"MD024","purpose":"Explicit .md targets stay literal, and the EXPECTED.json sidecar is not a page.","witnesses":[{"kind":"broken_link","from":"index","target":"Guide.md"},{"kind":"broken_link","from":"index","target":"docs/Notes.md"},{"kind":"broken_link","from":"index","target":"EXPECTED"},{"kind":"broken_link","from":"index","target":"EXPECTED.json"}]}

@@ -1,0 +1,1 @@
+{"site":"MD047","purpose":"Fenced and indented code cannot affect heading deduplication or links.","witnesses":[{"kind":"duplicate_slug","page":"Guide","slug":"repeat"},{"kind":"missing_anchor","from":"index","target":"Guide","heading":"repeat-3"}]}

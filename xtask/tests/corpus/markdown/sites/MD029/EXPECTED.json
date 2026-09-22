@@ -1,0 +1,1 @@
+{"site":"MD029","purpose":"Broken anchored targets emit broken links without anchor witnesses.","witnesses":[{"kind":"broken_link","from":"index","target":"Ghost"},{"kind":"broken_link","from":"index","target":"Ghost"}]}

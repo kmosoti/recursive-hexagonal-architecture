@@ -17,6 +17,7 @@ use serde::Deserialize;
 pub mod fixture;
 pub mod grade;
 pub mod held_out;
+pub mod markdown;
 pub mod runner;
 
 /// Where the manifest lives, relative to the workspace root.

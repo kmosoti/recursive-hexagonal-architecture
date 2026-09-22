@@ -1,0 +1,20 @@
+[package]
+name = "document"
+version = "0.1.0"
+description = "rhawiki core: markdown to a typed document, with headings, slugs and wikilinks"
+edition.workspace = true
+rust-version.workspace = true
+publish = false
+
+[package.metadata.rha]
+role = "core"
+
+[dependencies]
+library = { path = "../library" }
+pulldown-cmark = { version = "0.13.4", default-features = false }
+
+[dev-dependencies]
+proptest = "1.11.0"
+
+[lints]
+workspace = true

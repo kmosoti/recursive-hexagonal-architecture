@@ -1,0 +1,577 @@
+{
+  "advisory": true,
+  "artifact_identity": {
+    "branch": "chg/005-rhawiki-m1",
+    "digest_algorithm": "sha256",
+    "dirty": false,
+    "git_object_format": "sha1",
+    "revision": "58e45f444c9f2d974e04b69be74ca3edc10aa638",
+    "snapshot_tree": "2ab2c2537a28d8e16d44c19f95e521361f95c31b",
+    "tracked_diff_sha256": null,
+    "tree": "2ab2c2537a28d8e16d44c19f95e521361f95c31b",
+    "untracked_inputs": []
+  },
+  "cases": [
+    {
+      "exit_status": 0,
+      "expected_witnesses": 0,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 0,
+      "passed": true,
+      "site": "MD001"
+    },
+    {
+      "exit_status": 0,
+      "expected_witnesses": 0,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 0,
+      "passed": true,
+      "site": "MD002"
+    },
+    {
+      "exit_status": 0,
+      "expected_witnesses": 0,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 0,
+      "passed": true,
+      "site": "MD003"
+    },
+    {
+      "exit_status": 0,
+      "expected_witnesses": 0,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 0,
+      "passed": true,
+      "site": "MD004"
+    },
+    {
+      "exit_status": 0,
+      "expected_witnesses": 0,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 0,
+      "passed": true,
+      "site": "MD005"
+    },
+    {
+      "exit_status": 0,
+      "expected_witnesses": 0,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 0,
+      "passed": true,
+      "site": "MD006"
+    },
+    {
+      "exit_status": 0,
+      "expected_witnesses": 0,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 0,
+      "passed": true,
+      "site": "MD007"
+    },
+    {
+      "exit_status": 0,
+      "expected_witnesses": 0,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 0,
+      "passed": true,
+      "site": "MD008"
+    },
+    {
+      "exit_status": 0,
+      "expected_witnesses": 0,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 0,
+      "passed": true,
+      "site": "MD009"
+    },
+    {
+      "exit_status": 0,
+      "expected_witnesses": 0,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 0,
+      "passed": true,
+      "site": "MD010"
+    },
+    {
+      "exit_status": 0,
+      "expected_witnesses": 0,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 0,
+      "passed": true,
+      "site": "MD011"
+    },
+    {
+      "exit_status": 0,
+      "expected_witnesses": 0,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 0,
+      "passed": true,
+      "site": "MD012"
+    },
+    {
+      "exit_status": 0,
+      "expected_witnesses": 0,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 0,
+      "passed": true,
+      "site": "MD013"
+    },
+    {
+      "exit_status": 0,
+      "expected_witnesses": 0,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 0,
+      "passed": true,
+      "site": "MD014"
+    },
+    {
+      "exit_status": 0,
+      "expected_witnesses": 0,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 0,
+      "passed": true,
+      "site": "MD015"
+    },
+    {
+      "exit_status": 0,
+      "expected_witnesses": 0,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 0,
+      "passed": true,
+      "site": "MD016"
+    },
+    {
+      "exit_status": 0,
+      "expected_witnesses": 0,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 0,
+      "passed": true,
+      "site": "MD017"
+    },
+    {
+      "exit_status": 0,
+      "expected_witnesses": 0,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 0,
+      "passed": true,
+      "site": "MD018"
+    },
+    {
+      "exit_status": 0,
+      "expected_witnesses": 0,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 0,
+      "passed": true,
+      "site": "MD019"
+    },
+    {
+      "exit_status": 0,
+      "expected_witnesses": 0,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 0,
+      "passed": true,
+      "site": "MD020"
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 1,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 1,
+      "passed": true,
+      "site": "MD021"
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 3,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 3,
+      "passed": true,
+      "site": "MD022"
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 3,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 3,
+      "passed": true,
+      "site": "MD023"
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 4,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 4,
+      "passed": true,
+      "site": "MD024"
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 2,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 2,
+      "passed": true,
+      "site": "MD025"
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 2,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 2,
+      "passed": true,
+      "site": "MD026"
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 1,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 1,
+      "passed": true,
+      "site": "MD027"
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 2,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 2,
+      "passed": true,
+      "site": "MD028"
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 2,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 2,
+      "passed": true,
+      "site": "MD029"
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 3,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 3,
+      "passed": true,
+      "site": "MD030"
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 3,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 3,
+      "passed": true,
+      "site": "MD031"
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 2,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 2,
+      "passed": true,
+      "site": "MD032"
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 5,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 5,
+      "passed": true,
+      "site": "MD033"
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 2,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 2,
+      "passed": true,
+      "site": "MD034"
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 2,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 2,
+      "passed": true,
+      "site": "MD035"
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 1,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 1,
+      "passed": true,
+      "site": "MD036"
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 1,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 1,
+      "passed": true,
+      "site": "MD037"
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 3,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 3,
+      "passed": true,
+      "site": "MD038"
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 4,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 4,
+      "passed": true,
+      "site": "MD039"
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 6,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 6,
+      "passed": true,
+      "site": "MD040"
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 1,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 1,
+      "passed": true,
+      "site": "MD041"
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 4,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 4,
+      "passed": true,
+      "site": "MD042"
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 2,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 2,
+      "passed": true,
+      "site": "MD043"
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 2,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 2,
+      "passed": true,
+      "site": "MD044"
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 3,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 3,
+      "passed": true,
+      "site": "MD045"
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 2,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 2,
+      "passed": true,
+      "site": "MD046"
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 2,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 2,
+      "passed": true,
+      "site": "MD047"
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 5,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 5,
+      "passed": true,
+      "site": "MD048"
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 2,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 2,
+      "passed": true,
+      "site": "MD049"
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 3,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 3,
+      "passed": true,
+      "site": "MD050"
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 2,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 2,
+      "passed": true,
+      "site": "MD051"
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 2,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 2,
+      "passed": true,
+      "site": "MD052"
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 2,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 2,
+      "passed": true,
+      "site": "MD053"
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 8,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 8,
+      "passed": true,
+      "site": "MD054"
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 1,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 1,
+      "passed": true,
+      "site": "MD055"
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 1,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 1,
+      "passed": true,
+      "site": "MD056"
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 1,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 1,
+      "passed": true,
+      "site": "MD057"
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 1,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 1,
+      "passed": true,
+      "site": "MD058"
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 2,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 2,
+      "passed": true,
+      "site": "MD059"
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 1,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 1,
+      "passed": true,
+      "site": "MD060"
+    }
+  ],
+  "created_at": "2026-09-22T21:07:17.666Z",
+  "evidence_class": "local",
+  "grading": "exact multiset of witnesses, every key equal, no extras; exit 1 iff any witness",
+  "kind": "markdown_corpus",
+  "product": {
+    "binary": "rhawiki",
+    "git_dirty": false,
+    "git_rev": "58e45f444c9f2d974e04b69be74ca3edc10aa638"
+  },
+  "registration": {
+    "generator": "{ harness = \"codex-cli 0.155.1\", model = \"gpt-6-astra\", reasoning_effort = \"xhigh\", sandbox = \"workspace-write, limited by prompt to this directory\" }",
+    "path": "xtask/tests/corpus/markdown/registration.toml",
+    "tree_sha256": "f7a33823e66ad231553403c1321374c4ce0ed2cd7b39ec0d7fdbe55f80813315"
+  },
+  "schema_version": 1,
+  "summary": {
+    "failed": 0,
+    "outcome": "passed",
+    "passed": 60,
+    "sites": 60
+  }
+}

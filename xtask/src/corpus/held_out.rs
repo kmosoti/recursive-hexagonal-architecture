@@ -27,11 +27,18 @@ pub const COMMITMENT_TAR_FLAGS: [&str; 5] = [
     "--numeric-owner",
 ];
 
-/// The commitment recorded on the DP-1.1b row.
+/// The ledger row whose commitment binds a kind of held-out case: DP-1.1b
+/// for crate workspaces, DP-1.4 for markdown sites (review finding 6).
+#[must_use]
+pub fn commitment_row(kind: &str) -> &'static str {
+    if kind == "check" { "DP-1.4" } else { "DP-1.1b" }
+}
+
+/// The commitment recorded on a ledger row.
 ///
 /// # Errors
 /// Fails if the ledger cannot be read or the row carries no commitment.
-pub fn commitment(root: &Path) -> Result<String> {
+pub fn commitment(root: &Path, row_id: &str) -> Result<String> {
     let text = std::fs::read_to_string(root.join(".rha/decisions.toml"))
         .context(|| "reading the decision ledger".to_owned())?;
     let ledger: toml::Value =
@@ -41,11 +48,11 @@ pub fn commitment(root: &Path) -> Result<String> {
         .and_then(toml::Value::as_array)
         .into_iter()
         .flatten()
-        .find(|row| row.get("id").and_then(toml::Value::as_str) == Some("DP-1.1b"))
+        .find(|row| row.get("id").and_then(toml::Value::as_str) == Some(row_id))
         .and_then(|row| row.get("commitment"))
         .and_then(toml::Value::as_str)
         .map(str::to_owned)
-        .ok_or_else(|| Error::new("DP-1.1b carries no commitment"))
+        .ok_or_else(|| Error::new(format!("{row_id} carries no commitment")))
 }
 
 fn status(expected: &str, actual: &str) -> &'static str {
@@ -213,6 +220,57 @@ pub fn workspaces(source: &Path) -> Result<Vec<PathBuf>> {
     Ok(out)
 }
 
+/// Markdown sites for `--kind check`: every immediate subdirectory, sorted,
+/// not hidden, not a link.
+///
+/// # Errors
+/// On an unreadable directory.
+pub fn sites(source: &Path) -> Result<Vec<PathBuf>> {
+    let mut out: Vec<PathBuf> = std::fs::read_dir(source)
+        .context(|| "reading the sites directory".to_owned())?
+        .filter_map(std::result::Result::ok)
+        .map(|e| e.path())
+        .filter(|p| !p.is_symlink() && p.is_dir())
+        .filter(|p| {
+            p.file_name()
+                .and_then(|n| n.to_str())
+                .is_some_and(|n| !n.starts_with('.'))
+        })
+        .collect();
+    out.sort();
+    Ok(out)
+}
+
+/// One site's bounded `rhawiki check` observation: exit status and witness
+/// counts by kind, never the witnesses themselves.
+fn observe_check(root: &Path, id: &str, site: &Path) -> Result<(Value, Vec<u8>, Vec<u8>)> {
+    let output = command("cargo")
+        .args([
+            "run", "-q", "-p", "app-cli", "--", "check", "--format", "json", "--root",
+        ])
+        .arg(site)
+        .current_dir(root)
+        .output()
+        .context(|| "running rhawiki check".to_owned())?;
+    let exit = output.status.code();
+    let report: Option<Value> = serde_json::from_slice(&output.stdout).ok();
+    let mut row = json!({"case_id": id, "exit_status": exit, "graded": false});
+    let outcome = match (
+        exit,
+        report.as_ref().and_then(|r| r["witnesses"].as_array()),
+    ) {
+        (Some(code @ (0 | 1)), Some(ws)) if code == i32::from(!ws.is_empty()) => {
+            row["witnesses"] = json!(ws.len());
+            row["counts"] = report.as_ref().map_or(Value::Null, |r| r["counts"].clone());
+            "observed"
+        }
+        (Some(2), _) => "config_error",
+        _ => "tool_error",
+    };
+    row["outcome"] = json!(outcome);
+    Ok((row, output.stdout, output.stderr))
+}
+
 /// One case's bounded observation, with the raw output returned for the
 /// caller to keep privately.
 fn observe(root: &Path, id: &str, workspace: &Path) -> Result<(Value, Vec<u8>, Vec<u8>)> {
@@ -235,7 +293,6 @@ fn observe(root: &Path, id: &str, workspace: &Path) -> Result<(Value, Vec<u8>, V
     let mut row = json!({"case_id": id, "exit_status": exit, "graded": false});
     let outcome = match exit {
         Some(2) => "config_error",
-        Some(3) => "tool_error",
         Some(0 | 1) => match (summary["errors"].as_u64(), summary["warnings"].as_u64()) {
             (Some(errors), Some(warnings)) if exit == Some(i32::from(errors > 0)) => {
                 row["errors"] = json!(errors);
@@ -282,7 +339,21 @@ fn not_run(reason: &str, check: Option<Value>) -> Value {
 /// # Errors
 /// Fails on ledger, archive, file-system or checker-spawn failures.
 pub fn execute(root: &Path, args: &HeldOutArgs) -> Result<(Value, u8)> {
-    let expected = commitment(root)?;
+    let row = commitment_row(&args.kind);
+    // Private cases need their commitment; public controls only report it.
+    let expected = match commitment(root, row) {
+        Ok(c) => c,
+        Err(_) if args.purpose == "held_out" => {
+            return Ok((
+                not_run(
+                    &format!("{row} carries no commitment yet, so nothing can be verified"),
+                    None,
+                ),
+                2,
+            ));
+        }
+        Err(_) => format!("none: {row} carries no commitment"),
+    };
     let now = UtcTime::now();
     let run_dir = args
         .private_dir
@@ -326,11 +397,20 @@ pub fn execute(root: &Path, args: &HeldOutArgs) -> Result<(Value, u8)> {
         }
         (None, None) => return Ok((not_run("no --archive or --cases was given", None), 2)),
     };
-    let cases = workspaces(&source)?;
+    let check_kind = args.kind == "check";
+    let cases = if check_kind {
+        sites(&source)?
+    } else {
+        workspaces(&source)?
+    };
     if cases.is_empty() {
         return Ok((
             not_run(
-                "no ready workspace with Cargo.toml and rha-crates.toml was found",
+                if check_kind {
+                    "no site directory was found"
+                } else {
+                    "no ready workspace with Cargo.toml and rha-crates.toml was found"
+                },
                 Some(check),
             ),
             2,
@@ -342,7 +422,11 @@ pub fn execute(root: &Path, args: &HeldOutArgs) -> Result<(Value, u8)> {
     let mut map = serde_json::Map::new();
     for (index, workspace) in cases.iter().enumerate() {
         let id = format!("H{:03}", index + 1);
-        let (row, stdout, stderr) = observe(root, &id, workspace)?;
+        let (row, stdout, stderr) = if check_kind {
+            observe_check(root, &id, workspace)?
+        } else {
+            observe(root, &id, workspace)?
+        };
         std::fs::write(run_dir.join(format!("{id}.stdout")), stdout)
             .context(|| "keeping a raw report privately".to_owned())?;
         std::fs::write(run_dir.join(format!("{id}.stderr")), stderr)

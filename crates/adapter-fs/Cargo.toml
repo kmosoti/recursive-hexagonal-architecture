@@ -1,0 +1,17 @@
+[package]
+name = "adapter-fs"
+version = "0.1.0"
+description = "rhawiki adapter: markdown sources from and output to the filesystem"
+edition.workspace = true
+rust-version.workspace = true
+publish = false
+
+[package.metadata.rha]
+implements = ["library::SourceRepository", "site::OutputSink"]
+
+[dependencies]
+library = { path = "../library" }
+site = { path = "../site" }
+
+[lints]
+workspace = true
