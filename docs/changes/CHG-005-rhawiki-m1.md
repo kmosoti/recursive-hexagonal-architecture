@@ -24,6 +24,10 @@ Packet P-A of plan revision 2 covers CHG-005 (W5) and CHG-006 (W6). It builds th
 
 - **Markdown corpus registered (§2.4 rules 2 and 5).** A separate Codex session (`gpt-6-astra`, extra-high) generated 60 sites, 300 pages and 99 planted witnesses by construction, with 20 clean sites. It ran before any product crate existed. `xtask/tests/corpus/markdown/registration.toml` records the generator, the prompt digest (the prompt itself is committed beside it), and the tree digest, which `xtask/tests/corpus_markdown.rs` pins. The implementing session has not edited a site. The witness keys it uses fix part of the `check --format json` schema in advance; stage 3 conforms to them.
 
+### Repair attempts (§11.7.10)
+
+1. **The scope guard reported 52 false findings on the corpus commit.** The hypothesis was git's default path quoting. The discriminating check: every flagged path was an octal-escaped non-ASCII name such as `caf\303\251.md`. The change turns off `core.quotePath` in every git call the guard makes. Result: 0 findings. The adversarial corpus found a defect in the guard before any product code existed.
+
 ## Acceptance concerns
 
 1. **An earlier unapproved protected edit, found by the new guard.** CHG-004.6's commit `ad13efa` added the held-out paragraph to CONTRIBUTING.md. That was a protected edit whose approval was recorded only as owned scope, not quoted from Kennedy. The CHG-004.6 acceptance record cannot be edited, so it is disclosed here. Kennedy may approve the paragraph retroactively or have it removed.
