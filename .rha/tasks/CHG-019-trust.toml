@@ -82,3 +82,16 @@ sample = "run 1 of 1, 2026-09-22"
 separation = "generated against docs/architecture/verifier-contract.md before any lint or verifier code existed"
 omissions = "the generator recorded every case the contract does not determine (schema requiredness, nested unknown keys, comparison intervals, permissions and graph rows) in each REGISTRATION.md; none were invented"
 
+
+[[provenance.generations]]
+artifact = "tools/rha-verifier/tests/reference/mod.rs"
+generation = "sampled"
+model = "gpt-6-astra"
+reasoning_effort = "xhigh"
+harness = "codex-cli 0.155.1, workspace-write"
+prompt_path = "tools/rha-verifier/tests/reference/REFERENCE-PROMPT.md"
+prompt_sha256 = "ba3f1d48b19c19ea37dffcd7e580e5db35424b9e3ac659fd6fc731329840ea84"
+sample = "run 1 of 1, 2026-09-22"
+first_committed_sha256 = "924570934352601661b44f5375b09facdc78a9fa3f3bcdf1d89423a200a698a8"
+edits = "none"
+separation = "written from the contract before the implementation existed; told not to read the corpus or tools/rha-verifier/src"

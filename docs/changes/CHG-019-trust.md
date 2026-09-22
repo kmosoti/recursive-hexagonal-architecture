@@ -17,6 +17,8 @@ Packet P-B covers CHG-019 and CHG-020. It builds the record lint and the accepta
 
 `evaluate(fixture)` computes `R_eff` (triggers, total classification, local policies that only add, the strictness preorders, the join and its conflicts), the four predicates, `Eligible`, `ValidException` with the ECC-Solo cooling-off path, and `MergeAllowed`. **It decides all 152 registered fixtures exactly as registered on its first run**, every key of every expected object included. It is a `tool` by metadata. `Cargo.toml` gains the plan's `tools/*` workspace member (decision `workspace-tools-member`).
 
+**Differential and model properties (§2.4 rule 4; W16).** A separate Codex session wrote an independent reference verifier, `tests/reference/mod.rs`, from the contract alone. It did so before this crate's code existed, and it was told not to read the corpus. The two implementations agree on all 152 fixtures and on 512 random mutations: surface, outcomes, test counts, duplicate entries, integrity, time, revocation, parameters, acceptor and producer. Property tests over the same mutations check Lemma 1 (obligations only grow), Lemma 3 (evidence cannot choose the obligations) and Proposition 2 (no silent pass). `rha-verifier corpus <dir> <out>` writes the H5 record to `evidence/h5/`.
+
 ### Stage 2, the record lint (`cargo xtask rha lint`)
 
 The lint implements the contract's reason codes over evidence (JSON), task and acceptance (TOML) records. Its field rules are stated at the top of `xtask/src/record_lint.rs`. The first run graded **77 of 80** as registered. All three disagreements were defects in the lint:

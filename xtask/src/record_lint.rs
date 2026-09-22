@@ -144,13 +144,13 @@ fn walk(
                     {
                         out.insert("timestamp.malformed");
                     }
-                    Value::Array(items) if k == "parents" => {
-                        if items
-                            .iter()
-                            .any(|i| i.as_str().is_none_or(|s| !is_hex(s, 40, false)))
-                        {
-                            out.insert("revision.malformed");
-                        }
+                    Value::Array(items)
+                        if k == "parents"
+                            && items
+                                .iter()
+                                .any(|i| i.as_str().is_none_or(|s| !is_hex(s, 40, false))) =>
+                    {
+                        out.insert("revision.malformed");
                     }
                     _ => {}
                 }
