@@ -148,7 +148,10 @@ default = "yes"
 [[decision]]
 id = "DP-1.3"
 title = "Refutation criteria for BDR-0001 to BDR-0004 (metric, source, window, threshold, action), written before the crates exist (spec §7.8 step 10)"
-status = "open"
+status = "decided"
+decided_by = "human:kennedy"
+date = "2026-09-22"
+answer = "Accepted all four proposed criteria as written in docs/adr/BDR-0001 to BDR-0004, decomposition A (asked at the P-A stage 1 gate)"
 owner = "human:kennedy"
 needed_by = "start of CHG-005 (W5)"
 cannot_default = true

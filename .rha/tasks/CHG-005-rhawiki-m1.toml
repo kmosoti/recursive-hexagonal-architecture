@@ -85,6 +85,13 @@ answer = "In stage 3. It wraps `rhawiki check`, which does not exist until stage
 decided_by = "agent:executor"
 date = "2026-09-22"
 
+[[decisions]]
+id = "dp-1.3"
+question = "Gate DP-1.3: do the four refutation criteria stand?"
+answer = "Kennedy chose 'Accept all four' when asked at the stage 1 gate on 2026-09-22; decomposition A. Recorded on the ledger before any product crate exists (§7.8 step 10)."
+decided_by = "human:kennedy"
+date = "2026-09-22"
+
 [provenance]
 harness = "Claude Code"
 task_scope = "P-A"

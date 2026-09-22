@@ -1,6 +1,6 @@
 # BDR-0002: `document` depends on `library`
 
-> **Status: proposed for DP-1.3.** Drafted by the Executor in P-A stage 1. Kennedy accepts or amends the refutation criterion before any product crate exists (§7.8 step 10). The candidate scoring is in [`evidence/CHG-005/bdr-candidates/`](../../evidence/CHG-005/bdr-candidates/): three stub decompositions were run through `cargo xtask architecture`. A is this plan's §3, B has fewer crates, C has more. All three pass the checker with zero errors. The choice therefore rests on the §7.2 evidence below, not on a rule violation.
+> **Status: accepted at DP-1.3** by Kennedy on 2026-09-22, criteria as written. Originally proposed: Drafted by the Executor in P-A stage 1. Kennedy accepts or amends the refutation criterion before any product crate exists (§7.8 step 10). The candidate scoring is in [`evidence/CHG-005/bdr-candidates/`](../../evidence/CHG-005/bdr-candidates/): three stub decompositions were run through `cargo xtask architecture`. A is this plan's §3, B has fewer crates, C has more. All three pass the checker with zero errors. The choice therefore rests on the §7.2 evidence below, not on a rule violation.
 
 ```text
 Boundary: document  (markdown to typed document), with the declared edge document -> library
