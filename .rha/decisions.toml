@@ -137,7 +137,10 @@ amendment_disclosure = "Made after the data. CHG-004's H4 runs (evidence/h4-crat
 [[decision]]
 id = "DP-1.2"
 title = "Clock port and the 'built at' footer in W5 scope"
-status = "open"
+status = "decided"
+decided_by = "default (plan §9)"
+date = "2026-09-22"
+answer = "yes: the Clock port and the built-at footer are in W5 scope (recorded at the start of CHG-005, its trigger)"
 owner = "human:kennedy"
 needed_by = "start of CHG-005 (W5)"
 default = "yes"
@@ -202,3 +205,27 @@ title = "Trusted producer keys and exception parameters for rha-verifier; accept
 status = "open"
 owner = "human:kennedy"
 needed_by = "CHG-020"
+
+[[decision]]
+id = "DP-5.1"
+title = "Approve plan revision 2: packets, method M1 to M10, the stochastic-generation protocol"
+status = "decided"
+decided_by = "human:kennedy"
+date = "2026-09-22"
+answer = "Approved by the instruction 'Can you implement each packet', on which pull request 15 was merged at 72c5cfd. The same instruction changed the reviewer to the Codex CLI with gpt-6-astra at extra-high effort."
+owner = "human:kennedy"
+
+[[decision]]
+id = "DP-5.2"
+title = "Make `cargo xtask scope` an L1 check in .rha/policy.toml, or keep it a pre-PR command"
+status = "open"
+owner = "human:kennedy"
+needed_by = "P-A acceptance"
+default = "pre-PR command"
+
+[[decision]]
+id = "DP-5.3"
+title = "Retire [acceptance.bootstrap] once Authentic can hold, and name the bootstrap acceptance kind (spec-v0.11 row 8)"
+status = "open"
+owner = "human:kennedy"
+needed_by = "P-B stage 4"

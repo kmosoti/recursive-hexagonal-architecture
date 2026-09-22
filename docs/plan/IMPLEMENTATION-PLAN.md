@@ -4,7 +4,7 @@
 
 ## How to start a packet
 
-Open a coding-agent session in this directory. The recommended assignment (§2.2) is Claude Opus 5.5 in Claude Code as Executor, with the largest context and effort available, and the local Codex CLI (`gpt-5.6-sol`, medium, read-only) as reviewer. Records stay model-agnostic: the actor is `agent:executor` and provenance names the model. Paste:
+Open a coding-agent session in this directory. The recommended assignment (§2.2) is Claude Opus 5.5 in Claude Code as Executor, with the largest context and effort available, and the local Codex CLI (`gpt-6-astra`, extra-high effort, read-only) as reviewer and adversarial generator. Records stay model-agnostic: the actor is `agent:executor` and provenance names the model. Paste:
 
 ```text
 You are the Executor for packet P-<X> of docs/plan/IMPLEMENTATION-PLAN.md (revision 2), in `agent` mode under ECC-Solo. Kennedy Mosoti is Planner, Integrator and Acceptor.
@@ -64,13 +64,13 @@ Measured on `main` at `bb1ee4e`. There are 132 non-merge commits in 8 pull reque
 - **M3, one writer.** The task record's `[[work]] claim` names the writing session. Every other session is read-only on that branch. Pull `--ff-only` before every push. Keep no parallel JJ bookmark with the branch's name.
 - **M4, scope and layout.** Before the PR, `cargo xtask scope --task <id>` compares `git diff --name-only <base>...HEAD` with the task record's `owned_scope` globs and the §4 layout. A path outside either fails. Widening scope is a task-record decision quoted from Kennedy, recorded before the change.
 - **M5, evidence discipline.** Regenerate docs, then run the lane, then commit. Take **one** local L0 record per packet, on the settled clean head, plus the packet's own harness records (H4, H5, bench). Keep failed and superseded records; never rewrite them. Do not commit PR-head CI records; the CI run is visible on the PR. The next acceptance record downloads and commits the record of the run on `main` at the merge.
-- **M6, review.** When the packet is ready, run one local Codex review: `codex exec -m gpt-5.6-sol -c model_reasoning_effort=medium -s read-only`, with the packet's checklist. Findings are judged by AGENTS.md. Every confirmed finding gets a determination in the change record and a repair. Re-reviews see only the repair diff. After three rounds, remaining disagreements go to Kennedy. The approval is advisory and is posted on the PR; the merge is Kennedy's.
+- **M6, review.** When the packet is ready, run one local Codex review: `codex exec -m gpt-6-astra -c model_reasoning_effort=xhigh -s read-only`, with the packet's checklist (Kennedy, 2026-09-22; it replaced Sol at medium effort). The same reviewer is the adversarial generator when the Executor's confidence in a stage is low (§2.4 rules 2 and 5): it writes cases, the Executor never grades its own. Findings are judged by AGENTS.md. Every confirmed finding gets a determination in the change record and a repair. Re-reviews see only the repair diff. After three rounds, remaining disagreements go to Kennedy. The approval is advisory and is posted on the PR; the merge is Kennedy's.
 - **M7, registration before data.** Every graded corpus (H4 module level, markdown witnesses, verifier conformance, bench decisions) is committed, or committed by digest, before the code it grades runs on it. A registration review lists, for each fixture, every finding its shape necessarily triggers under the current rule catalogue, and registers each as a witness or an `expected_findings` entry.
 - **M8, computed provenance.** Digests, counts and identities in records come from tools, never from typing. Until P-B's lint exists, a record that states a digest is checked by the reviewer against the file.
 - **M9, shell hygiene.** Scripts run under `set -euo pipefail`. Stage paths explicitly. After `git rm`, never `git add` the removed path. History is never rewritten; a wrong commit is disclosed in the change record.
 - **M10, decisions.** Status lives in `.rha/decisions.toml`. Reports cite ids and do not restate questions. A gate (§8.1) is a decision point inside a packet: the Executor stops, asks, and records the answer in the task record before continuing.
 
-**Recommended assignment** (Kennedy's direction, 2026-09-22): Claude Opus 5.5 as Executor for packets; the local Codex CLI with Sol at medium effort as reviewer. Using two model families is deliberate: the reviewer's errors are less correlated with the author's. The records stay model-agnostic.
+**Recommended assignment** (Kennedy's direction, 2026-09-22): Claude Opus 5.5 as Executor for packets; the local Codex CLI with `gpt-6-astra` at extra-high effort as reviewer and adversarial generator. Using two model families is deliberate: the reviewer's errors are less correlated with the author's. The records stay model-agnostic.
 
 ### 2.3 Why larger items now
 

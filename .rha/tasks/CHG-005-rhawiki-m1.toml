@@ -1,0 +1,97 @@
+# Task record (spec §11.7.11 shape, stored as TOML). Packet P-A of plan revision 2.
+schema_version = 1
+id = "CHG-005"
+covers = ["CHG-005", "CHG-006"]
+slug = "rhawiki-m1"
+title = "P-A: the rhawiki product and the M1 close"
+mode = "agent"
+executor_composition = "agent"
+authority_profile = "ECC-Solo"
+status = "in_progress"
+plan_ref = "docs/plan/IMPLEMENTATION-PLAN.md §8.1 P-A; §8.2 W5 and W6 briefs"
+branch = "chg/005-rhawiki-m1"
+base_revision = "72c5cfd2fa96efbb81adb817ae10a93e03c87713"
+intent = "Build the guards revision 2 names, then the rhawiki product (W5) and the M1 close (W6), in gated stages: 0 guards; 1 boundary decisions and markdown-corpus registration; 2 cores; 3 adapters and CLI; 4 corpus run; 5 CI and self-assessment."
+non_goals = ["Module-level checks (P-C)", "The verifier (P-B)", "Reading Kennedy's held-out material (DP-1.1b, DP-1.4)", "Editing the spec"]
+
+# Machine-readable scope for `cargo xtask scope` (plan §2.2 M4). A changed
+# path must match one of scope_globs; a changed protected path (policy
+# [surface]) must also match one of protected_scope, each backed by an
+# approval in [[decisions]].
+scope_globs = [
+  ".rha/acceptances/PLAN-2.toml",
+  ".rha/decisions.toml",
+  ".rha/tasks/CHG-005-rhawiki-m1.toml",
+  ".rha/assumptions.toml",
+  ".rha/architecture.toml",
+  "docs/**",
+  "evidence/**",
+  "xtask/**",
+  "crates/**",
+  "Cargo.lock",
+  "rha-crates.toml",
+  "CONTRIBUTING.md",
+  "AGENTS.md",
+  "README.md",
+]
+protected_scope = [
+  ".rha/acceptances/PLAN-2.toml",
+  ".rha/decisions.toml",
+  "rha-crates.toml",
+  "crates/*/rha-modules.toml",
+]
+
+[[actors]]
+id = "human:kennedy"
+type = "human"
+
+[[actors]]
+id = "agent:executor"
+type = "agent"
+accountable_to = "human:kennedy"
+
+[roles]
+planner = "human:kennedy"
+executor = ["agent:executor"]
+integrator = "human:kennedy"
+verifier = ["automation:xtask-ci (local, advisory)", "automation:github-actions (class ci, advisory)", "local Codex review, gpt-6-astra extra-high (advisory)"]
+acceptor = "human:kennedy"
+
+[[work]]
+id = "P-A"
+executor = "agent:executor"
+depends_on = ["PLAN-2 (accepted at 72c5cfd)"]
+output = "See plan §8.1 P-A, stages 0 to 5."
+claim = "The supervising session (Claude Opus 5.5) is the only writer on chg/005-rhawiki-m1 (M3)."
+
+[[decisions]]
+id = "authority"
+question = "On whose authority does P-A run, and who reviews?"
+answer = "Kennedy, 2026-09-22: 'Can you implement each packet. Then once ready to review or need an adversarial generation when confidence is low pass to codex cli to gpt-6-astra extra high.' The reviewer and adversarial generator is `codex exec -m gpt-6-astra -c model_reasoning_effort=xhigh -s read-only`."
+decided_by = "human:kennedy"
+date = "2026-09-22"
+
+[[decisions]]
+id = "ledger-rows-dp-5"
+question = "May P-A add ledger rows DP-5.1 to DP-5.3 and record DP-1.2's default?"
+answer = "Yes. Plan revision 2 §9, approved by the merge of PR 15, says the DP-5 rows are added in P-A's first stage. DP-1.2's row names 'start of CHG-005' as its trigger with default yes; recording a default at its trigger is pre-approved by [acceptance.ledger_edits]."
+decided_by = "human:kennedy (plan approval); ledger_edits pre-approval"
+date = "2026-09-22"
+
+[[decisions]]
+id = "held-out-check-kind-in-stage-3"
+question = "Plan §8.1 P-A stage 0 lists `corpus held-out --kind check`. Where does it land?"
+answer = "In stage 3. It wraps `rhawiki check`, which does not exist until stage 3; building it earlier would test a stub. Recorded here as a deviation from the stage list, not from the scope."
+decided_by = "agent:executor"
+date = "2026-09-22"
+
+[provenance]
+harness = "Claude Code"
+task_scope = "P-A"
+permissions = "Workspace files, shell, git and gh through the user's account; protected paths as listed in protected_scope, each with its decision."
+budgets = "unknown"
+reasoning_effort = "unknown"
+
+[[provenance.sessions]]
+model_id = "claude-opus-5-5"
+span = "P-A"
