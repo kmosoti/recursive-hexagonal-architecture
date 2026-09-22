@@ -51,7 +51,9 @@ pub fn parse_rfc3339(text: &str) -> Option<i128> {
             }
             i += 1;
         }
-        if i == start {
+        // More than nine digits is precision this model cannot compare, so
+        // the timestamp is refused, never rounded (review round 2).
+        if i == start || i - start > 9 {
             return None;
         }
         for _ in (i - start)..9 {
@@ -107,5 +109,10 @@ mod tests {
         assert!(parse_rfc3339("2024-02-29T00:00:00Z").is_some());
         assert_eq!(parse_rfc3339("2026-09-22T12:00:00+25:00"), None);
         assert_eq!(parse_rfc3339("2026-09-22T12:00:00\u{e9}xxxx"), None);
+        assert_eq!(
+            parse_rfc3339("2026-09-21T12:00:00.0000000001Z"),
+            None,
+            "sub-nanosecond precision is refused"
+        );
     }
 }

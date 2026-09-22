@@ -109,3 +109,14 @@ sample = "run 1 of 1, 2026-09-22"
 first_committed_sha256 = "924570934352601661b44f5375b09facdc78a9fa3f3bcdf1d89423a200a698a8"
 edits = "none"
 separation = "written from the contract before the implementation existed; told not to read the corpus or tools/rha-verifier/src"
+
+[[provenance.generations]]
+artifact = "the Executor's own work in this packet: tools/rha-verifier/src/**, the non-reference tests, xtask/src/record_lint.rs, the records and documents"
+generation = "sampled"
+model = "claude-opus-5-5"
+harness = "Claude Code"
+prompt = "Kennedy's instruction as quoted in decision authority: 'Can you implement each packet. Then once ready to review or need an adversarial generation when confidence is low pass to codex cli to gpt-6-astra extra high.'"
+prompt_sha256 = "a362345f5550853748062a579fc7765e0c07464380f472b912ab8f3412794f18"
+sample = "one interactive session, iterated under review (rounds recorded in the change record)"
+oracles = "the registered corpora (152, 80), the independent reference verifier, the property tests, the lane"
+

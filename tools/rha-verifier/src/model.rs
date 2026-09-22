@@ -75,9 +75,21 @@ fn compare_numbers(a: &Value, b: &Value) -> Option<std::cmp::Ordering> {
             .map(i128::from)
             .or_else(|| v.as_u64().map(i128::from))
     };
+    // JSON decimals are rounded to f64 when parsed, so a decimal at or above
+    // 2^53, or compared with an integer that large, cannot be ordered exactly
+    // and is incomparable: a conflict or a non-refinement, never a silent
+    // pass (review round 2: 9007199254740993 against 9007199254740992.0).
+    const EXACT: f64 = 9_007_199_254_740_992.0;
     match (int(a), int(b)) {
         (Some(x), Some(y)) => Some(x.cmp(&y)),
-        _ => a.as_f64()?.partial_cmp(&b.as_f64()?),
+        (Some(x), None) | (None, Some(x)) if x.unsigned_abs() >= 9_007_199_254_740_992 => None,
+        _ => {
+            let (x, y) = (a.as_f64()?, b.as_f64()?);
+            if x.abs() >= EXACT || y.abs() >= EXACT {
+                return None;
+            }
+            x.partial_cmp(&y)
+        }
     }
 }
 

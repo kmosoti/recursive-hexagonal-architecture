@@ -278,6 +278,8 @@ proptest! {
         let d = rha_verifier::evaluate(&f);
         if d["merge_allowed"] == true {
             prop_assert_eq!(&d["conflict"], &json!(false));
+            prop_assert!(d["authentic"] == true && d["applicable"] == true && d["complete"] == true);
+            prop_assert!(d["eligible"] == true || d["valid_exception"] == true);
             let waived: Vec<&str> = f["exception"]["waived"].as_array().into_iter().flatten().filter_map(Value::as_str).collect();
             let non_waivable: Vec<&str> = f["policy"]["non_waivable"].as_array().into_iter().flatten().filter_map(Value::as_str).collect();
             for check in d["r_eff"].as_array().unwrap() {
@@ -286,4 +288,24 @@ proptest! {
             }
         }
     }
+}
+
+#[test]
+fn mixed_numbers_at_the_limit_are_incomparable_not_equal() {
+    let base = corpus().into_iter().find(|f| f["id"] == "V002").unwrap();
+    let mut f = base.clone();
+    if let Some(c) = f["policy"]["checks"]
+        .as_array_mut()
+        .and_then(|a| a.first_mut())
+    {
+        c["params"]["n"] = json!(9_007_199_254_740_993_u64);
+    }
+    if let Some(e) = f["evidence"]["entries"]
+        .as_array_mut()
+        .and_then(|a| a.first_mut())
+    {
+        e["params"]["n"] = json!(9_007_199_254_740_992.0_f64);
+    }
+    let d = rha_verifier::evaluate(&f);
+    assert_ne!(d["merge_allowed"], json!(true), "{d}");
 }

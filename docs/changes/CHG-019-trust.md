@@ -36,7 +36,7 @@ After the fixes it grades **80 of 80**.
 | `.rha/acceptances/CHG-002.toml`; `.rha/tasks/CHG-004.6-c13-registration.toml`; two `evidence/CHG-004.6/` records that copied the latter's provenance | `revision.malformed` | abbreviated revisions (`6518f6a89af5`, `5ef607c`) where a full identity is required |
 | `evidence/CHG-000/`, `evidence/CHG-001/`, three early `evidence/ci/` records | `digest.malformed` | `base_policy_digest = "absent"` where the field needed `null`, from W0 when no base policy existed |
 
-### Review round 1 (Codex, `gpt-6-astra`, extra-high, read-only) on `2b5cd89`, determinations
+### Review round 1 (Codex, `gpt-6-astra`, extra-high, read-only) on `edf4ed1`, determinations
 
 REQUEST_CHANGES: seven P1 and one P2.
 
@@ -50,6 +50,16 @@ REQUEST_CHANGES: seven P1 and one P2.
 8. **P2, generation provenance for the Executor's own code. Declined.** Rule 1 governs artifacts from separate generator sessions; the Executor's work is covered by `[[provenance.sessions]]`. Revision 3 of the plan should say so plainly.
 
 The mutation generator also gains fractional timestamps and integer parameters near 2^53, so the differential test now reaches findings 1 and 2.
+
+### Review round 2 on `10273a1`, determinations
+
+Findings 3 to 7 were confirmed resolved. Two were incomplete, one was new, and one determination was overturned:
+
+- **Finding 1, incomplete: digits past the ninth were dropped. Confirmed.** A timestamp with more than nine fractional digits is now refused rather than rounded, so an exception fails closed.
+- **Finding 2, incomplete: mixed integer and decimal at 2^53. Confirmed.** JSON parsing already rounds such a decimal to `f64`, so it cannot be ordered exactly. The comparison is now incomparable in that range, which is a conflict or a non-refinement. There is a regression test.
+- **New P1: Proposition 2 had lost its validity assertions in round 1's rewrite. Confirmed.** Both the validity assertions and the independent pass checks now stand.
+- **New P2: a wrong revision in the round 1 heading. Confirmed.** Corrected to `edf4ed1`.
+- **Finding 8, overturned.** The reviewer showed that plan §2.4 rule 1 names generated code explicitly, so the declination did not hold under the current text. The Executor's work now has a `[[provenance.generations]]` entry. Its prompt is Kennedy's quoted instruction in the task record's `authority` decision, and its digest is the sha256 of that exact quoted string. P-A's task record gets the same entry.
 
 ### Not done in this packet, and why
 
