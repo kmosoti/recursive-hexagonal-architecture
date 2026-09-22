@@ -157,6 +157,7 @@ fn full_committed_corpus_pins_observations_under_the_amended_registration() {
     for link in amendments {
         assert_ne!(link["commit_verified"], false, "{link}");
     }
+    assert_ne!(amendments[0]["anchor_verified"], false);
     assert_eq!(
         record["manifest"]["correction_commit"],
         c13["commit"].as_str().expect("c13 commit")
