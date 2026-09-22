@@ -150,7 +150,9 @@ pub enum RhaCommand {
     /// Lint task, acceptance and evidence records; exit 1 if any is rejected.
     Lint {
         /// Record files: `.json` is evidence; TOML with `[acceptor]` is an
-        /// acceptance record; other TOML is a task record.
+        /// acceptance record; other TOML is a task record. At least one is
+        /// required: an empty run would pass having checked nothing.
+        #[arg(required = true)]
         files: Vec<PathBuf>,
     },
 }
