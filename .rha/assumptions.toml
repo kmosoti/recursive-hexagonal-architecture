@@ -1,5 +1,86 @@
 # Assumption ledger (spec §8.2, §8.3): each consumer's assumptions about its
-# environment, their support, and their applicability state. Entries arrive
-# with the product crates in CHG-005 (seed list: IMPLEMENTATION-PLAN.md §3.3).
+# environment, how each is supported, and its state. Seeded from plan §3.3 in
+# CHG-005 (P-A). A `support` path is the test that discharges it; P-F's ledger
+# tool flips an entry to needs_revalidation when that support changes.
 schema_version = 1
-assumptions = []
+
+[[assumptions]]
+id = "library.source_repository.complete_or_fail"
+consumer = "library"
+port = "library::SourceRepository"
+statement = "list() returns every .md page under the root exactly once with stable relative paths; read() returns the whole text or fails"
+support = ["crates/library/tests/contract_seeded.rs", "crates/adapter-fs/tests/contract.rs"]
+support_kind = "contract suite per implementation (MemorySources, FsSources); sampled"
+state = "current"
+
+[[assumptions]]
+id = "document.source_complete"
+consumer = "document"
+port = "G(library)"
+statement = "Source.text is the whole file"
+support = ["crates/library/tests/properties.rs", "crates/library/tests/contract_seeded.rs"]
+support_kind = "library's complete-or-fail load and contract; sampled"
+state = "current"
+
+[[assumptions]]
+id = "graph.slugs_unique_or_witnessed"
+consumer = "graph"
+port = "G(document)"
+statement = "heading slugs are unique per document, or a DuplicateSlug witness exists"
+support = ["crates/document/tests/properties.rs"]
+support_kind = "property test; sampled"
+state = "current"
+
+[[assumptions]]
+id = "site.build.assemble_deterministic"
+consumer = "site::build"
+port = "site::assembly::Assemble"
+statement = "equal inputs give an equal PageModel"
+support = ["crates/site/tests/build_properties.rs"]
+support_kind = "test over the default assembler; sampled"
+state = "current"
+
+[[assumptions]]
+id = "site.build.renderer_deterministic_total"
+consumer = "site::build"
+port = "site::PageRenderer"
+statement = "render never panics and is deterministic"
+support = ["crates/site/tests/build_properties.rs", "crates/adapter-html/tests/escaping.rs"]
+support_kind = "site::contract::page_renderer per implementation (StubRenderer, HtmlRenderer); sampled"
+state = "current"
+
+[[assumptions]]
+id = "site.glue.sink_atomic_listable"
+consumer = "site"
+port = "site::OutputSink"
+statement = "write is all or nothing; list reflects every completed write with its digest"
+support = ["crates/site/tests/build_properties.rs", "crates/adapter-fs/tests/contract.rs"]
+support_kind = "site::contract::output_sink per implementation (RecordingSink, FsSink); sampled; atomicity by temp-file-and-rename, not tested under crash"
+state = "current"
+
+[[assumptions]]
+id = "site.glue.clock_display_only"
+consumer = "site"
+port = "site::Clock"
+statement = "now() affects displayed text only"
+support = []
+support_kind = "asserted by construction: the clock's value reaches only AssembleContext.built_at, rendered in the footer"
+state = "current"
+
+[[assumptions]]
+id = "root.output_dir_not_concurrently_modified"
+consumer = "app-cli"
+port = "composition root"
+statement = "nothing else writes the output directory during a build"
+support = []
+support_kind = "none"
+state = "undischarged"
+
+[[assumptions]]
+id = "root.fs_listing_fresh"
+consumer = "app-cli"
+port = "composition root"
+statement = "the output listing reflects all completed writes"
+support = []
+support_kind = "none until the Law 15 traces of W14 (P-E)"
+state = "undischarged"
