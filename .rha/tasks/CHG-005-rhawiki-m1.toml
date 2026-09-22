@@ -92,6 +92,27 @@ answer = "Kennedy chose 'Accept all four' when asked at the stage 1 gate on 2026
 decided_by = "human:kennedy"
 date = "2026-09-22"
 
+[[decisions]]
+id = "core-allow-list"
+question = "Which external crates may core crates use? (rha-crates.toml is protected)"
+answer = "Kennedy chose 'Approve as proposed' on 2026-09-22: [core] allow = pulldown-cmark, sha2, unicode-normalization; dev_allow = proptest; forbidden edges site -> pulldown-cmark, role:core -> tokio, library -> notify. Asked at the start of stage 2 rather than stage 3, because stage 2 cannot end green under L0.architecture without it."
+decided_by = "human:kennedy"
+date = "2026-09-22"
+
+[[decisions]]
+id = "site-module-rules"
+question = "May P-A create crates/site/rha-modules.toml (protected)?"
+answer = "Yes, with exactly the content plan §3.1 gives, which Kennedy approved with revision 2 (DP-5.1) and whose composite shape BDR-0003 accepted at DP-1.3."
+decided_by = "human:kennedy (plan approval, DP-1.3)"
+date = "2026-09-22"
+
+[[decisions]]
+id = "heading-attributes-off"
+question = "The W5 brief lists pulldown-cmark's ENABLE_HEADING_ATTRIBUTES. Is it on?"
+answer = "Off. It strips `{…}` from heading text, and the registered markdown contract derives slugs from the heading text as written; enabling it would make the product contradict a registration fixed before the code. Custom heading ids are not a Phase 1 feature."
+decided_by = "agent:executor"
+date = "2026-09-22"
+
 [provenance]
 harness = "Claude Code"
 task_scope = "P-A"

@@ -1,0 +1,22 @@
+[package]
+name = "site"
+version = "0.1.0"
+description = "rhawiki core: page assembly and the pure build step, glued to output and clock ports"
+edition.workspace = true
+rust-version.workspace = true
+publish = false
+
+[package.metadata.rha]
+role = "core"
+composite = "rha-modules.toml"
+
+[dependencies]
+document = { path = "../document" }
+graph = { path = "../graph" }
+library = { path = "../library" }
+
+[dev-dependencies]
+proptest = "1.11.0"
+
+[lints]
+workspace = true

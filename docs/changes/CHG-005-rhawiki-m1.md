@@ -24,6 +24,16 @@ Packet P-A of plan revision 2 covers CHG-005 (W5) and CHG-006 (W6). It builds th
 
 - **Markdown corpus registered (§2.4 rules 2 and 5).** A separate Codex session (`gpt-6-astra`, extra-high) generated 60 sites, 300 pages and 99 planted witnesses by construction, with 20 clean sites. It ran before any product crate existed. `xtask/tests/corpus/markdown/registration.toml` records the generator, the prompt digest (the prompt itself is committed beside it), and the tree digest, which `xtask/tests/corpus_markdown.rs` pins. The implementing session has not edited a site. The witness keys it uses fix part of the `check --format json` schema in advance; stage 3 conforms to them.
 
+### Stage 2, cores
+
+Decomposition A, as BDR-0001 to BDR-0004 accepted it. Every core has the template `clippy.toml`, the crate-root `forbid` line, and `role = "core"`. `cargo xtask architecture` classifies them by metadata and reports 0 errors and 0 warnings.
+
+- **`library`**: `PageId` (NFC, case kept), `RelPath`, `Digest` (sha256), `Source`, and `Corpus`. `Corpus` is strict through `new`; `with_witnesses` keeps the first path per id and returns one `DuplicatePageId` per duplicated id. `load` is complete-or-fail. The `SourceRepository` contract suite catches all four seeded violators of the W5 brief, and `MemorySources` passes it.
+- **`document`**: a total parser to an owned node tree. It keeps headings with base and final slugs, where a repeat gets `-2`, `-3` and a `DuplicateSlug` diagnostic. Wikilinks are split into target, anchor and alias; links in code spans and blocks are ignored. `ENABLE_HEADING_ATTRIBUTES` is off (decision `heading-attributes-off`).
+- **`graph`**: exact-id, then unique case-insensitive basename resolution; broken, ambiguous and missing-anchor witnesses; symmetric backlinks. Properties: every link resolves or is witnessed, backlinks are symmetric, and results do not depend on input order.
+- **`site`**, the composite: `assembly` (`Assemble`, `PageModel`, the TOC, backlinks and link targets) and `build` (`PageRenderer`, the pure `step`, `Inv_K` checked by a separate function), glued to `OutputSink` and `Clock`. `rha-modules.toml` has the plan §3.1 content, and a scoped `AGENTS.md` states the child rules. The contract suites catch a panicking and a nondeterministic renderer, and the fakes pass.
+- `check` witnesses use the registered corpus's key shape (`site::CheckWitness`).
+
 ### Repair attempts (§11.7.10)
 
 1. **The scope guard reported 52 false findings on the corpus commit.** The hypothesis was git's default path quoting. The discriminating check: every flagged path was an octal-escaped non-ASCII name such as `caf\303\251.md`. The change turns off `core.quotePath` in every git call the guard makes. Result: 0 findings. The adversarial corpus found a defect in the guard before any product code existed.
