@@ -53,21 +53,47 @@ fn relative(from: &PageId, to: &PageId) -> String {
     format!("{}{}.html", "../".repeat(depth), encode(to.as_str(), true))
 }
 
-/// An ordinary link: a relative `.md` destination becomes the `.html` page
-/// the build produces, keeping any fragment. Absolute paths, scheme URLs and
-/// everything else are left as written (review finding 5).
+/// Whether a reference starts with a URI scheme (RFC 3986 §3.1): a letter,
+/// then letters, digits, `+`, `-` or `.`, then `:`, all before any `/`, `?`
+/// or `#`. So `mailto:x` has one and `./a:b.md` does not.
+fn has_scheme(href: &str) -> bool {
+    let Some((head, _)) = href.split_once(':') else {
+        return false;
+    };
+    let mut chars = head.chars();
+    chars.next().is_some_and(|c| c.is_ascii_alphabetic())
+        && chars.all(|c| c.is_ascii_alphanumeric() || matches!(c, '+' | '-' | '.'))
+}
+
+/// An ordinary link: a relative reference whose PATH ends in `.md` points at
+/// the `.html` page the build produces. The query and fragment are kept byte
+/// for byte, so `download?file=manual.md` is untouched (its path is
+/// `download`) and `x.md?print=1#sec` becomes `x.html?print=1#sec`. Absolute
+/// paths, scheme URLs and fragment-only links are left as written (review
+/// findings 5 and round 2).
 #[must_use]
 pub fn rewrite_href(href: &str) -> String {
-    let is_relative = !href.starts_with('/')
-        && !href.starts_with('#')
-        && !href.contains("://")
-        && !href.contains(':');
-    let (path, fragment) = href
+    if href.starts_with('/') || href.starts_with('#') || has_scheme(href) {
+        return href.to_owned();
+    }
+    let (before_fragment, fragment) = href
         .split_once('#')
         .map_or((href, None), |(p, f)| (p, Some(f)));
+    let (path, query) = before_fragment
+        .split_once('?')
+        .map_or((before_fragment, None), |(p, q)| (p, Some(q)));
     match path.strip_suffix(".md") {
-        Some(stem) if is_relative && !stem.is_empty() => {
-            fragment.map_or_else(|| format!("{stem}.html"), |f| format!("{stem}.html#{f}"))
+        Some(stem) if !stem.is_empty() && !stem.ends_with('/') => {
+            let mut out = format!("{stem}.html");
+            if let Some(q) = query {
+                out.push('?');
+                out.push_str(q);
+            }
+            if let Some(f) = fragment {
+                out.push('#');
+                out.push_str(f);
+            }
+            out
         }
         _ => href.to_owned(),
     }

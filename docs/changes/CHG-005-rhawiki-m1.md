@@ -79,6 +79,12 @@ REQUEST_CHANGES: 11 findings, 2 P1 and 9 P2. Each names a concrete failing input
 
 **Repairs committed in `25b035e`.** L0 at that revision: `evidence/CHG-005/20260922T213429Z-25b035eac999.json`, clean tree, all eight `passed`, 192 tests. The earlier stage 5 record describes the reviewed revision and is kept.
 
+### Review round 2 on `52ceb20`, determinations
+
+Ten of 11 were confirmed resolved. On finding 5, and one new P2 in the same function: `rewrite_href` took the query as part of the path (`x.md?print=1` kept `.md`, and `download?file=manual.md` was rewritten), and it took any colon as a scheme (`./a:b.md`). **Confirmed.** Repair: the reference is split as RFC 3986 parses it, fragment then query. A scheme is recognized only by §3.1's syntax before any `/`, `?` or `#`. Only the path's `.md` suffix is rewritten, and the query and fragment are kept byte for byte. All four inputs are regression tests.
+
+**A void review run.** The first attempt at round 3 reviewed `52ceb20` unchanged, because the Executor's script failed before committing the repair: a rustfmt-reformatted anchor did not match. Its verdict describes the old code and is not counted as a round under M6. Round 3 below reviews the committed repair.
+
 ### Repair attempts (§11.7.10)
 
 2. **`L0.typos` failed in CI run 35784806281, and the lane had not been run locally.** Hypothesis: the spell checker splits Unicode escapes such as `\u{e9}` and reads the letters before them as a word; one variable name also read as a misspelling. (This note does not quote it, which is CHG-002's lesson.) Discriminating check: `typos --format brief` reproduced all nine findings locally. Change: the characters are written literally and the variable is renamed. No dictionary exception was added, following CHG-003's precedent. Result: `typos` is clean. A method lesson too: M5's full lane belongs before the first push, not only before the record.

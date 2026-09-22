@@ -59,12 +59,25 @@ fn hrefs_are_encoded_and_md_links_point_at_the_produced_page() {
         "../proposals/spec-v0.11.html"
     );
     assert_eq!(rewrite_href("x.md#sec"), "x.html#sec");
+    assert_eq!(rewrite_href("x.md?print=1#sec"), "x.html?print=1#sec");
+    assert_eq!(
+        rewrite_href("./a:b.md"),
+        "./a:b.html",
+        "a colon after a slash is not a scheme"
+    );
+    assert_eq!(
+        rewrite_href("download?file=manual.md"),
+        "download?file=manual.md",
+        "the query is not the path"
+    );
     for kept in [
         "https://example.com/a.md",
         "/abs/a.md",
         "#local",
         "mailto:a@b",
         "notes.txt",
+        "dir/.md",
+        "x+y:z.md",
     ] {
         assert_eq!(rewrite_href(kept), kept);
     }
