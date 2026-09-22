@@ -27,11 +27,18 @@ pub const COMMITMENT_TAR_FLAGS: [&str; 5] = [
     "--numeric-owner",
 ];
 
-/// The commitment recorded on the DP-1.1b row.
+/// The ledger row whose commitment binds a kind of held-out case: DP-1.1b
+/// for crate workspaces, DP-1.4 for markdown sites (review finding 6).
+#[must_use]
+pub fn commitment_row(kind: &str) -> &'static str {
+    if kind == "check" { "DP-1.4" } else { "DP-1.1b" }
+}
+
+/// The commitment recorded on a ledger row.
 ///
 /// # Errors
 /// Fails if the ledger cannot be read or the row carries no commitment.
-pub fn commitment(root: &Path) -> Result<String> {
+pub fn commitment(root: &Path, row_id: &str) -> Result<String> {
     let text = std::fs::read_to_string(root.join(".rha/decisions.toml"))
         .context(|| "reading the decision ledger".to_owned())?;
     let ledger: toml::Value =
@@ -41,11 +48,11 @@ pub fn commitment(root: &Path) -> Result<String> {
         .and_then(toml::Value::as_array)
         .into_iter()
         .flatten()
-        .find(|row| row.get("id").and_then(toml::Value::as_str) == Some("DP-1.1b"))
+        .find(|row| row.get("id").and_then(toml::Value::as_str) == Some(row_id))
         .and_then(|row| row.get("commitment"))
         .and_then(toml::Value::as_str)
         .map(str::to_owned)
-        .ok_or_else(|| Error::new("DP-1.1b carries no commitment"))
+        .ok_or_else(|| Error::new(format!("{row_id} carries no commitment")))
 }
 
 fn status(expected: &str, actual: &str) -> &'static str {
@@ -332,7 +339,21 @@ fn not_run(reason: &str, check: Option<Value>) -> Value {
 /// # Errors
 /// Fails on ledger, archive, file-system or checker-spawn failures.
 pub fn execute(root: &Path, args: &HeldOutArgs) -> Result<(Value, u8)> {
-    let expected = commitment(root)?;
+    let row = commitment_row(&args.kind);
+    // Private cases need their commitment; public controls only report it.
+    let expected = match commitment(root, row) {
+        Ok(c) => c,
+        Err(_) if args.purpose == "held_out" => {
+            return Ok((
+                not_run(
+                    &format!("{row} carries no commitment yet, so nothing can be verified"),
+                    None,
+                ),
+                2,
+            ));
+        }
+        Err(_) => format!("none: {row} carries no commitment"),
+    };
     let now = UtcTime::now();
     let run_dir = args
         .private_dir

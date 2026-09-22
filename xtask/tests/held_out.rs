@@ -274,3 +274,32 @@ fn markdown_sites_are_observed_as_counts_only() {
     std::fs::remove_dir_all(cases).expect("clean");
     std::fs::remove_dir_all(private).expect("clean");
 }
+
+#[test]
+fn each_kind_verifies_against_its_own_ledger_row() {
+    assert_eq!(held_out::commitment_row("architecture"), "DP-1.1b");
+    assert_eq!(held_out::commitment_row("check"), "DP-1.4");
+    let root = root();
+    assert!(held_out::commitment(&root, "DP-1.1b").is_ok());
+    let cases = temp("dp14");
+    let private = temp("dp14-private");
+    let args = HeldOutArgs {
+        cases: Some(cases.clone()),
+        archive: None,
+        purpose: "held_out".to_owned(),
+        private_dir: Some(private.clone()),
+        kind: "check".to_owned(),
+    };
+    let (summary, code) = held_out::execute(&root, &args).expect("runner");
+    if held_out::commitment(&root, "DP-1.4").is_err() {
+        assert_eq!(code, 2);
+        assert!(
+            summary["reason"]
+                .as_str()
+                .is_some_and(|r| r.contains("DP-1.4")),
+            "{summary}"
+        );
+    }
+    std::fs::remove_dir_all(cases).expect("clean");
+    std::fs::remove_dir_all(private).expect("clean");
+}

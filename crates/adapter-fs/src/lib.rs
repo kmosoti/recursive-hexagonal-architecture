@@ -104,6 +104,53 @@ fn sink_error(path: &RelPath, e: &std::io::Error) -> SinkError {
     }
 }
 
+/// Whether `name` is one of this sink's temporary files. Renderer outputs
+/// never end in `.tmp` (pages are `.html`), so a page cannot be mistaken for
+/// one (review finding 2).
+fn is_temporary(name: &str) -> bool {
+    name.starts_with(".rhawiki-tmp-") && name.ends_with(".tmp")
+}
+
+impl FsSink {
+    /// Refuses a path any of whose existing components under the root is a
+    /// symbolic link, and creates missing directories one level at a time, so
+    /// nothing is written outside the root (review finding 1).
+    fn prepare(&self, path: &RelPath) -> Result<PathBuf, SinkError> {
+        let refuse = |at: &Path| SinkError {
+            path: Some(path.clone()),
+            message: format!(
+                "{} is a symbolic link; refusing to write through it",
+                at.display()
+            ),
+        };
+        // The root is the caller's choice and may not exist yet; everything
+        // below it is checked one level at a time.
+        fs::create_dir_all(&self.root).map_err(|e| sink_error(path, &e))?;
+        let mut dir = self.root.clone();
+        let segments: Vec<&str> = path.as_str().split('/').collect();
+        let (file, parents) = segments.split_last().unwrap_or((&"", &[]));
+        for segment in parents {
+            dir.push(segment);
+            match fs::symlink_metadata(&dir) {
+                Ok(m) if m.file_type().is_symlink() => return Err(refuse(&dir)),
+                Ok(m) if m.is_dir() => {}
+                Ok(_) => {
+                    return Err(SinkError {
+                        path: Some(path.clone()),
+                        message: format!("{} is not a directory", dir.display()),
+                    });
+                }
+                Err(_) => fs::create_dir(&dir).map_err(|e| sink_error(path, &e))?,
+            }
+        }
+        let full = dir.join(file);
+        if fs::symlink_metadata(&full).is_ok_and(|m| m.file_type().is_symlink()) {
+            return Err(refuse(&full));
+        }
+        Ok(full)
+    }
+}
+
 impl OutputSink for FsSink {
     fn list(&self) -> Result<Vec<(RelPath, Digest)>, SinkError> {
         let paths = walk(&self.root).map_err(|message| SinkError {
@@ -112,12 +159,7 @@ impl OutputSink for FsSink {
         })?;
         paths
             .into_iter()
-            .filter(|p| {
-                !p.as_str()
-                    .rsplit('/')
-                    .next()
-                    .is_some_and(|n| n.starts_with(".rhawiki-tmp-"))
-            })
+            .filter(|p| !p.as_str().rsplit('/').next().is_some_and(is_temporary))
             .map(|p| {
                 let bytes = fs::read(self.root.join(p.as_str())).map_err(|e| sink_error(&p, &e))?;
                 Ok((p, Digest::of(&bytes)))
@@ -126,12 +168,25 @@ impl OutputSink for FsSink {
     }
 
     fn write(&mut self, path: &RelPath, bytes: &[u8]) -> Result<(), SinkError> {
-        let full = self.root.join(path.as_str());
+        use std::io::Write as _;
+        static COUNTER: std::sync::atomic::AtomicU64 = std::sync::atomic::AtomicU64::new(0);
+        let full = self.prepare(path)?;
         let dir = full.parent().unwrap_or(&self.root).to_path_buf();
-        fs::create_dir_all(&dir).map_err(|e| sink_error(path, &e))?;
-        let name = full.file_name().and_then(|n| n.to_str()).unwrap_or("out");
-        let tmp = dir.join(format!(".rhawiki-tmp-{name}"));
-        fs::write(&tmp, bytes).map_err(|e| sink_error(path, &e))?;
+        let n = COUNTER.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
+        let tmp = dir.join(format!(".rhawiki-tmp-{}-{n}.tmp", std::process::id()));
+        // create_new: an existing file or link at this name is an error, never
+        // truncated through (review finding 2).
+        let mut file = fs::OpenOptions::new()
+            .write(true)
+            .create_new(true)
+            .open(&tmp)
+            .map_err(|e| sink_error(path, &e))?;
+        let written = file.write_all(bytes).and_then(|()| file.sync_all());
+        drop(file);
+        if let Err(e) = written {
+            let _ = fs::remove_file(&tmp);
+            return Err(sink_error(path, &e));
+        }
         fs::rename(&tmp, &full).map_err(|e| {
             let _ = fs::remove_file(&tmp);
             sink_error(path, &e)
@@ -139,6 +194,20 @@ impl OutputSink for FsSink {
     }
 
     fn delete(&mut self, path: &RelPath) -> Result<(), SinkError> {
+        let mut dir = self.root.clone();
+        let segments: Vec<&str> = path.as_str().split('/').collect();
+        for segment in &segments[..segments.len().saturating_sub(1)] {
+            dir.push(segment);
+            if fs::symlink_metadata(&dir).is_ok_and(|m| m.file_type().is_symlink()) {
+                return Err(SinkError {
+                    path: Some(path.clone()),
+                    message: format!(
+                        "{} is a symbolic link; refusing to delete through it",
+                        dir.display()
+                    ),
+                });
+            }
+        }
         fs::remove_file(self.root.join(path.as_str())).map_err(|e| sink_error(path, &e))
     }
 }

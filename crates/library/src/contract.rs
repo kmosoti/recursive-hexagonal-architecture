@@ -21,13 +21,17 @@ pub enum Violation {
     ListingIncomplete {
         missing: Vec<RelPath>,
     },
+    /// A read returned text other than the fixture's content, consistently or
+    /// not (review finding 10: a consistently truncating source passed).
+    ContentMismatch(RelPath),
 }
 
-/// Checks `repository` against `expected`, the pages the fixture holds.
+/// Checks `repository` against `expected`: the pages the fixture holds and
+/// their exact contents.
 #[must_use]
 pub fn source_repository(
     repository: &impl SourceRepository,
-    expected: &[RelPath],
+    expected: &[(RelPath, String)],
 ) -> Vec<Violation> {
     let mut out = Vec::new();
     let first = match repository.list() {
@@ -46,6 +50,7 @@ pub fn source_repository(
     }
     let missing: Vec<RelPath> = expected
         .iter()
+        .map(|(p, _)| p)
         .filter(|p| !seen.contains(*p))
         .cloned()
         .collect();
@@ -54,7 +59,11 @@ pub fn source_repository(
     }
     for path in &seen {
         match (repository.read(path), repository.read(path)) {
-            (Ok(a), Ok(b)) if a == b => {}
+            (Ok(a), Ok(b)) if a == b => {
+                if expected.iter().any(|(p, text)| p == path && *text != a) {
+                    out.push(Violation::ContentMismatch(path.clone()));
+                }
+            }
             (Ok(_), Ok(_)) => out.push(Violation::ReadUnstable(path.clone())),
             (Err(error), _) | (_, Err(error)) => out.push(Violation::ReadFailed {
                 path: path.clone(),

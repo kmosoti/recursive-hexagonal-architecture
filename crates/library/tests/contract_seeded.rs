@@ -7,28 +7,26 @@ use library::contract::{Violation, source_repository};
 use library::testing::MemorySources;
 use library::{RelPath, RepositoryError, SourceRepository};
 
-fn paths(names: &[&str]) -> Vec<RelPath> {
-    names
-        .iter()
-        .map(|n| RelPath::new(n).expect("valid"))
-        .collect()
-}
-
 const FILES: [(&str, &str); 3] = [
     ("a.md", "alpha text"),
     ("b/c.md", "gamma"),
     ("d.md", "delta"),
 ];
 
+fn expected() -> Vec<(RelPath, String)> {
+    FILES
+        .iter()
+        .map(|(p, t)| (RelPath::new(p).expect("valid"), (*t).to_owned()))
+        .collect()
+}
+
 #[test]
 fn the_memory_fake_meets_the_contract() {
     let repo = MemorySources::new(&FILES);
-    assert_eq!(
-        source_repository(&repo, &paths(&["a.md", "b/c.md", "d.md"])),
-        vec![]
-    );
+    assert_eq!(source_repository(&repo, &expected()), vec![]);
 }
 
+/// Drops the last file from the listing.
 struct SilentPartialSource(MemorySources);
 impl SourceRepository for SilentPartialSource {
     fn list(&self) -> Result<Vec<RelPath>, RepositoryError> {
@@ -41,8 +39,21 @@ impl SourceRepository for SilentPartialSource {
     }
 }
 
-struct TruncatingSource(MemorySources, Cell<bool>);
+/// W5 brief: returns half the text, on every read (consistently).
+struct TruncatingSource(MemorySources);
 impl SourceRepository for TruncatingSource {
+    fn list(&self) -> Result<Vec<RelPath>, RepositoryError> {
+        self.0.list()
+    }
+    fn read(&self, p: &RelPath) -> Result<String, RepositoryError> {
+        let text = self.0.read(p)?;
+        Ok(text[..text.len() / 2].to_owned())
+    }
+}
+
+/// Alternates whole and truncated reads.
+struct UnstableReadSource(MemorySources, Cell<bool>);
+impl SourceRepository for UnstableReadSource {
     fn list(&self) -> Result<Vec<RelPath>, RepositoryError> {
         self.0.list()
     }
@@ -57,6 +68,7 @@ impl SourceRepository for TruncatingSource {
     }
 }
 
+/// Changes the listing's order between calls.
 struct UnstablePathsSource(MemorySources, Cell<u32>);
 impl SourceRepository for UnstablePathsSource {
     fn list(&self) -> Result<Vec<RelPath>, RepositoryError> {
@@ -72,6 +84,7 @@ impl SourceRepository for UnstablePathsSource {
     }
 }
 
+/// Lists one path twice.
 struct DuplicatePathSource(MemorySources);
 impl SourceRepository for DuplicatePathSource {
     fn list(&self) -> Result<Vec<RelPath>, RepositoryError> {
@@ -86,7 +99,7 @@ impl SourceRepository for DuplicatePathSource {
 
 #[test]
 fn every_seeded_violator_is_reported() {
-    let expected = paths(&["a.md", "b/c.md", "d.md"]);
+    let expected = expected();
     let partial = source_repository(&SilentPartialSource(MemorySources::new(&FILES)), &expected);
     assert!(
         partial
@@ -94,15 +107,22 @@ fn every_seeded_violator_is_reported() {
             .any(|v| matches!(v, Violation::ListingIncomplete { .. })),
         "{partial:?}"
     );
-    let truncating = source_repository(
-        &TruncatingSource(MemorySources::new(&FILES), Cell::new(false)),
-        &expected,
-    );
+    let truncating = source_repository(&TruncatingSource(MemorySources::new(&FILES)), &expected);
     assert!(
         truncating
             .iter()
+            .any(|v| matches!(v, Violation::ContentMismatch(_))),
+        "a consistently truncating source is caught: {truncating:?}"
+    );
+    let unstable_reads = source_repository(
+        &UnstableReadSource(MemorySources::new(&FILES), Cell::new(false)),
+        &expected,
+    );
+    assert!(
+        unstable_reads
+            .iter()
             .any(|v| matches!(v, Violation::ReadUnstable(_))),
-        "{truncating:?}"
+        "{unstable_reads:?}"
     );
     let unstable = source_repository(
         &UnstablePathsSource(MemorySources::new(&FILES), Cell::new(0)),

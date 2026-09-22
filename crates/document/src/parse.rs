@@ -106,6 +106,8 @@ struct Builder {
     links: Vec<Link>,
     diagnostics: Vec<Diagnostic>,
     seen: BTreeMap<String, (usize, usize)>,
+    /// Every final slug allocated so far on the page.
+    used: std::collections::BTreeSet<String>,
 }
 
 impl Builder {
@@ -222,6 +224,18 @@ impl Builder {
         let node = match frame {
             Frame::Heading { level, line, text } => {
                 let base = slugify(&text);
+                // Final slugs are unique on the page. A repeated base gets the
+                // next `-k` (k from 2) that no heading has taken, and a natural
+                // slug that collides with an allocated one advances the same
+                // way; only a repeated BASE is a DuplicateSlug witness, as the
+                // registered contract says (review finding 3: `# A`, `# A`,
+                // `# A-2` gave `a`, `a-2`, `a-2`).
+                let next_free = |used: &std::collections::BTreeSet<String>, from: usize| {
+                    (from..)
+                        .map(|k| format!("{base}-{k}"))
+                        .find(|c| !used.contains(c))
+                        .unwrap_or_default()
+                };
                 let slug = match self.seen.get_mut(&base) {
                     Some((count, first_line)) => {
                         *count += 1;
@@ -230,13 +244,18 @@ impl Builder {
                             first_line: *first_line,
                             second_line: line,
                         });
-                        format!("{base}-{count}")
+                        next_free(&self.used, *count)
                     }
                     None => {
                         self.seen.insert(base.clone(), (1, line));
-                        base.clone()
+                        if self.used.contains(&base) {
+                            next_free(&self.used, 2)
+                        } else {
+                            base.clone()
+                        }
                     }
                 };
+                self.used.insert(slug.clone());
                 self.headings.push(Heading {
                     level,
                     text,
@@ -357,6 +376,7 @@ pub fn parse(source: &Source) -> Document {
         links: Vec::new(),
         diagnostics: Vec::new(),
         seen: BTreeMap::new(),
+        used: std::collections::BTreeSet::new(),
     };
     for (event, range) in Parser::new_ext(text, options()).into_offset_iter() {
         let line = line_of(&starts, range.start);

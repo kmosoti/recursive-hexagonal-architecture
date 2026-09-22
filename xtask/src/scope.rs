@@ -200,6 +200,9 @@ pub fn changed(root: &Path, base: &str) -> Result<BTreeSet<String>> {
             "core.quotePath=false",
             "diff",
             "--name-only",
+            // Both endpoints of a rename: a moved protected file must be
+            // seen at its source too (review finding 9).
+            "--no-renames",
             &merge_base,
         ],
     )?

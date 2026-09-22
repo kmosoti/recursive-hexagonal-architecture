@@ -29,9 +29,48 @@ pub struct HtmlRenderer;
 
 const STYLE: &str = "body{font-family:system-ui,sans-serif;max-width:52rem;margin:2rem auto;padding:0 1rem;line-height:1.5}\nnav.toc{font-size:.9rem}\n.broken{color:#b00020;text-decoration:underline dotted}\npre{overflow-x:auto;background:#f5f5f5;padding:.5rem}\nblockquote{border-left:3px solid #ccc;margin-left:0;padding-left:1rem}\ntable{border-collapse:collapse}td,th{border:1px solid #ccc;padding:.2rem .4rem}\nfooter{margin-top:3rem;font-size:.8rem;color:#666}\n";
 
+/// Percent-encodes everything outside RFC 3986's unreserved set, keeping
+/// `/` when `keep_slash`, so a page id like `Budget?2026` stays a path and
+/// never becomes a query (review finding 4).
+#[must_use]
+pub fn encode(text: &str, keep_slash: bool) -> String {
+    let mut out = String::with_capacity(text.len());
+    for b in text.bytes() {
+        if b.is_ascii_alphanumeric()
+            || matches!(b, b'-' | b'.' | b'_' | b'~')
+            || (keep_slash && b == b'/')
+        {
+            out.push(char::from(b));
+        } else {
+            let _ = write!(out, "%{b:02X}");
+        }
+    }
+    out
+}
+
 fn relative(from: &PageId, to: &PageId) -> String {
     let depth = from.as_str().matches('/').count();
-    format!("{}{}.html", "../".repeat(depth), to.as_str())
+    format!("{}{}.html", "../".repeat(depth), encode(to.as_str(), true))
+}
+
+/// An ordinary link: a relative `.md` destination becomes the `.html` page
+/// the build produces, keeping any fragment. Absolute paths, scheme URLs and
+/// everything else are left as written (review finding 5).
+#[must_use]
+pub fn rewrite_href(href: &str) -> String {
+    let is_relative = !href.starts_with('/')
+        && !href.starts_with('#')
+        && !href.contains("://")
+        && !href.contains(':');
+    let (path, fragment) = href
+        .split_once('#')
+        .map_or((href, None), |(p, f)| (p, Some(f)));
+    match path.strip_suffix(".md") {
+        Some(stem) if is_relative && !stem.is_empty() => {
+            fragment.map_or_else(|| format!("{stem}.html"), |f| format!("{stem}.html#{f}"))
+        }
+        _ => href.to_owned(),
+    }
 }
 
 struct Ctx<'a> {
@@ -85,7 +124,7 @@ impl Ctx<'_> {
             Node::Strong(c) => self.wrap(out, "strong", c),
             Node::Strikethrough(c) => self.wrap(out, "del", c),
             Node::Link { href, children } => {
-                let _ = write!(out, "<a href=\"{}\">", escape(href));
+                let _ = write!(out, "<a href=\"{}\">", escape(&rewrite_href(href)));
                 self.nodes(out, children);
                 out.push_str("</a>");
             }
@@ -96,7 +135,10 @@ impl Ctx<'_> {
                     } else {
                         relative(&self.page.id, id)
                     };
-                    let frag = anchor.as_ref().map(|a| format!("#{a}")).unwrap_or_default();
+                    let frag = anchor
+                        .as_ref()
+                        .map(|a| format!("#{}", encode(a, false)))
+                        .unwrap_or_default();
                     let _ = write!(
                         out,
                         "<a class=\"wikilink\" href=\"{}{}\">",

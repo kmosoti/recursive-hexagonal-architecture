@@ -20,17 +20,18 @@ fn fs_sources_meet_the_source_repository_contract() {
     #[cfg(unix)]
     std::os::unix::fs::symlink(root.join("a.md"), root.join("link.md")).expect("symlink");
     let expected = vec![
-        RelPath::new("a.md").expect("v"),
-        RelPath::new("b/c.md").expect("v"),
+        (RelPath::new("a.md").expect("v"), "alpha".to_owned()),
+        (RelPath::new("b/c.md").expect("v"), "gamma".to_owned()),
     ];
     let repo = FsSources::new(&root);
     assert_eq!(
         library::contract::source_repository(&repo, &expected),
         vec![]
     );
+    let paths: Vec<RelPath> = expected.iter().map(|(p, _)| p.clone()).collect();
     assert_eq!(
         library::SourceRepository::list(&repo).expect("list"),
-        expected,
+        paths,
         "no .txt, no symlink"
     );
     std::fs::remove_dir_all(root).expect("clean");
@@ -42,4 +43,41 @@ fn fs_sink_meets_the_output_sink_contract() {
     let mut sink = FsSink::new(&root);
     assert!(site::contract::output_sink(&mut sink).is_empty());
     std::fs::remove_dir_all(root).expect("clean");
+}
+
+#[cfg(unix)]
+#[test]
+fn nothing_is_written_through_a_symlinked_directory_or_a_planted_temporary() {
+    use site::OutputSink as _;
+    let out = temp("escape-out");
+    let elsewhere = temp("escape-target");
+    std::os::unix::fs::symlink(&elsewhere, out.join("guide")).expect("symlink");
+    let mut sink = FsSink::new(&out);
+    let err = sink.write(&RelPath::new("guide/page.html").expect("v"), b"x");
+    assert!(
+        err.is_err(),
+        "writing through a symlinked directory is refused"
+    );
+    assert!(
+        !elsewhere.join("page.html").exists(),
+        "nothing escaped the output root"
+    );
+    // A page whose name looks like a temporary file is an ordinary output.
+    sink.write(&RelPath::new(".rhawiki-tmp-foo.html").expect("v"), b"page")
+        .expect("write");
+    sink.write(&RelPath::new("foo.html").expect("v"), b"other")
+        .expect("write");
+    let listed: Vec<String> = sink
+        .list()
+        .expect("list")
+        .into_iter()
+        .map(|(p, _)| p.to_string())
+        .collect();
+    assert!(
+        listed.contains(&".rhawiki-tmp-foo.html".to_owned())
+            && listed.contains(&"foo.html".to_owned()),
+        "{listed:?}"
+    );
+    std::fs::remove_dir_all(out).expect("clean");
+    std::fs::remove_dir_all(elsewhere).expect("clean");
 }

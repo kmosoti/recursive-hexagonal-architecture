@@ -51,6 +51,37 @@ fn multiset(v: &Value) -> BTreeMap<String, usize> {
     m
 }
 
+/// Builds `rhawiki` and returns the executable Cargo reports, wherever
+/// `CARGO_TARGET_DIR` puts it, so the record never describes a stale binary
+/// (review finding 7).
+///
+/// # Errors
+/// If the build fails or reports no `rhawiki` executable.
+pub fn built_binary(root: &Path) -> Result<std::path::PathBuf> {
+    let out = command("cargo")
+        .args([
+            "build",
+            "-q",
+            "-p",
+            "app-cli",
+            "--bin",
+            "rhawiki",
+            "--message-format=json",
+        ])
+        .current_dir(root)
+        .output()
+        .context(|| "building rhawiki".to_owned())?;
+    if !out.status.success() {
+        return Err(Error::new("rhawiki did not build"));
+    }
+    String::from_utf8_lossy(&out.stdout)
+        .lines()
+        .filter_map(|l| serde_json::from_str::<Value>(l).ok())
+        .filter(|m| m["reason"] == "compiler-artifact" && m["target"]["name"] == "rhawiki")
+        .find_map(|m| m["executable"].as_str().map(std::path::PathBuf::from))
+        .ok_or_else(|| Error::new("cargo reported no rhawiki executable"))
+}
+
 /// Runs every registered site and writes the record. Exit 1 on any site not
 /// graded as registered, and 2 if the corpus differs from its registration.
 ///
@@ -73,15 +104,7 @@ pub fn run(root: &Path, evidence: &Path) -> Result<u8> {
         eprintln!("corpus differs from its registration: sha256 {actual} != {registered}");
         return Ok(2);
     }
-    let build = command("cargo")
-        .args(["build", "-q", "-p", "app-cli"])
-        .current_dir(root)
-        .status()
-        .context(|| "building rhawiki".to_owned())?;
-    if !build.success() {
-        return Err(Error::new("rhawiki did not build"));
-    }
-    let binary = root.join("target/debug/rhawiki");
+    let binary = built_binary(root)?;
     let mut sites: Vec<_> = std::fs::read_dir(base.join("sites"))
         .context(|| "reading sites".to_owned())?
         .filter_map(std::result::Result::ok)
@@ -101,6 +124,10 @@ pub fn run(root: &Path, evidence: &Path) -> Result<u8> {
             .output()
             .context(|| "running rhawiki".to_owned())?;
         let got: Value = serde_json::from_slice(&out.stdout).unwrap_or(Value::Null);
+        // Graded only on well-formed output: an empty stdout, `{}`, or a
+        // non-array `witnesses` is a failed case, never an empty multiset
+        // that passes a clean site (review finding 8).
+        let well_formed = got["schema_version"] == 1 && got["witnesses"].is_array();
         let want = multiset(&expected["witnesses"]);
         let have = multiset(&got["witnesses"]);
         let exit_ok = out.status.code() == Some(i32::from(!want.is_empty()));
@@ -118,7 +145,8 @@ pub fn run(root: &Path, evidence: &Path) -> Result<u8> {
             "observed_witnesses": got["witnesses"].as_array().map_or(0, Vec::len),
             "exit_status": out.status.code(),
             "missing": missing, "extra": extra,
-            "passed": missing.is_empty() && extra.is_empty() && exit_ok,
+            "well_formed": well_formed,
+            "passed": well_formed && missing.is_empty() && extra.is_empty() && exit_ok,
         }));
     }
     let passed = cases.iter().filter(|c| c["passed"] == true).count();
@@ -128,7 +156,7 @@ pub fn run(root: &Path, evidence: &Path) -> Result<u8> {
     let record = json!({
         "schema_version": 1, "kind": "markdown_corpus", "evidence_class": "local", "advisory": true,
         "created_at": now.rfc3339(), "artifact_identity": subject,
-        "product": {"binary": "rhawiki", "git_rev": identity.as_ref().map(|i| i.revision.clone()), "git_dirty": identity.as_ref().map(|i| i.dirty)},
+        "product": {"binary": binary.display().to_string(), "binary_sha256": crate::util::sha256_file(&binary)?, "git_rev": identity.as_ref().map(|i| i.revision.clone()), "git_dirty": identity.as_ref().map(|i| i.dirty)},
         "registration": {"path": format!("{ROOT}/registration.toml"), "tree_sha256": registered, "generator": registration.get("generator").map(|g| g.to_string())},
         "grading": "exact multiset of witnesses, every key equal, no extras; exit 1 iff any witness",
         "summary": {"sites": cases.len(), "passed": passed, "failed": cases.len() - passed, "outcome": if passed == cases.len() { "passed" } else { "failed" }},

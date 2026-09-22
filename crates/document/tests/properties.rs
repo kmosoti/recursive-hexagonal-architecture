@@ -60,3 +60,16 @@ fn heading_text_keeps_code_and_link_text() {
     assert_eq!(doc.headings[1].slug, "head-code-x-em-2");
     assert_eq!(doc.title, "Head code x em");
 }
+
+#[test]
+fn a_generated_suffix_never_collides_with_a_natural_slug() {
+    let doc = parse(&source("# A\n# A\n# A-2\n# A-2\n"));
+    let slugs: Vec<&str> = doc.headings.iter().map(|h| h.slug.as_str()).collect();
+    assert_eq!(slugs, ["a", "a-2", "a-2-2", "a-2-3"]);
+    let witnesses = doc
+        .diagnostics
+        .iter()
+        .filter(|d| matches!(d, Diagnostic::DuplicateSlug { .. }))
+        .count();
+    assert_eq!(witnesses, 2, "one per repeated base: a once, a-2 once");
+}

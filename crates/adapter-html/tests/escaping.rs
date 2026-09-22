@@ -47,3 +47,45 @@ fn the_renderer_meets_the_site_contract_and_escapes_page_text() {
     assert!(a.contains("<span class=\"broken\">"), "{a}");
     assert!(a.contains("<pre class=\"mermaid\">"), "{a}");
 }
+
+#[test]
+fn hrefs_are_encoded_and_md_links_point_at_the_produced_page() {
+    use adapter_html::{encode, rewrite_href};
+    assert_eq!(encode("Budget?2026", true), "Budget%3F2026");
+    assert_eq!(encode("a b/c#d", true), "a%20b/c%23d");
+    assert_eq!(encode("é", false), "%C3%A9");
+    assert_eq!(
+        rewrite_href("../proposals/spec-v0.11.md"),
+        "../proposals/spec-v0.11.html"
+    );
+    assert_eq!(rewrite_href("x.md#sec"), "x.html#sec");
+    for kept in [
+        "https://example.com/a.md",
+        "/abs/a.md",
+        "#local",
+        "mailto:a@b",
+        "notes.txt",
+    ] {
+        assert_eq!(rewrite_href(kept), kept);
+    }
+    let (corpus, _) = library::load(&MemorySources::new(&[
+        ("guide/Start.md", "[[Budget?2026]]"),
+        ("Budget?2026.md", "# B"),
+    ]))
+    .expect("loads");
+    let (docs, graph) = site::analyse(&corpus);
+    let none = |_: &library::PageId| None;
+    let start = docs
+        .iter()
+        .find(|d| d.id.as_str() == "guide/Start")
+        .expect("page");
+    let html = String::from_utf8(
+        site::PageRenderer::render(
+            &HtmlRenderer,
+            &DefaultAssembler.assemble(start, &graph, &none, &AssembleContext::default()),
+        )
+        .bytes,
+    )
+    .expect("utf8");
+    assert!(html.contains("href=\"../Budget%3F2026.html\""), "{html}");
+}
