@@ -66,10 +66,25 @@ fn superset(a: &Value, b: &Value) -> Option<bool> {
 }
 
 /// Whether `a` is at least as strict as `b` for `key`.
+/// Compares two JSON numbers exactly: two integers compare as integers, and
+/// only a fractional value falls back to `f64` (review round 1, finding 2:
+/// above 2^53, `f64` equates distinct integers).
+fn compare_numbers(a: &Value, b: &Value) -> Option<std::cmp::Ordering> {
+    let int = |v: &Value| {
+        v.as_i64()
+            .map(i128::from)
+            .or_else(|| v.as_u64().map(i128::from))
+    };
+    match (int(a), int(b)) {
+        (Some(x), Some(y)) => Some(x.cmp(&y)),
+        _ => a.as_f64()?.partial_cmp(&b.as_f64()?),
+    }
+}
+
 fn at_least_as_strict(key: &str, a: &Value, b: &Value) -> bool {
     match order(key) {
-        Order::Smaller => matches!((a.as_f64(), b.as_f64()), (Some(x), Some(y)) if x <= y),
-        Order::Larger => matches!((a.as_f64(), b.as_f64()), (Some(x), Some(y)) if x >= y),
+        Order::Smaller => compare_numbers(a, b).is_some_and(std::cmp::Ordering::is_le),
+        Order::Larger => compare_numbers(a, b).is_some_and(std::cmp::Ordering::is_ge),
         Order::Superset => superset(a, b) == Some(true),
         Order::Equal => a == b,
     }
@@ -291,7 +306,7 @@ pub fn evaluate(f: &Value) -> Value {
                 now,
                 policy["cooling_off_hours"].as_i64(),
             ) {
-                (Some(logged), Some(n), Some(h)) => n >= logged + h * 3600,
+                (Some(logged), Some(n), Some(h)) => n >= logged + i128::from(h) * 3_600_000_000_000,
                 _ => false,
             };
         json!(

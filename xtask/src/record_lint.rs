@@ -44,6 +44,9 @@ fn digest_ok(v: &str, unknown_allowed: bool) -> bool {
             .is_some_and(|h| is_hex(h, 64, true))
 }
 
+/// RFC 3339 with a real calendar date, a valid time, and `Z` or `±HH:MM`.
+/// Byte-based throughout, so a non-ASCII suffix is malformed rather than a
+/// panic, and 30 February is rejected (review round 1, findings 5 and 6).
 fn rfc3339(v: &str) -> bool {
     let b = v.as_bytes();
     if b.len() < 20
@@ -56,13 +59,12 @@ fn rfc3339(v: &str) -> bool {
         return false;
     }
     let num = |r: std::ops::Range<usize>| -> Option<u32> {
-        let s = v.get(r)?;
-        s.bytes()
-            .all(|c| c.is_ascii_digit())
-            .then(|| s.parse().ok())
-            .flatten()
+        let s = b.get(r)?;
+        s.iter()
+            .all(u8::is_ascii_digit)
+            .then(|| s.iter().fold(0u32, |n, d| n * 10 + u32::from(d - b'0')))
     };
-    let (Some(_), Some(mo), Some(d), Some(h), Some(mi), Some(se)) = (
+    let (Some(y), Some(mo), Some(d), Some(h), Some(mi), Some(se)) = (
         num(0..4),
         num(5..7),
         num(8..10),
@@ -72,25 +74,37 @@ fn rfc3339(v: &str) -> bool {
     ) else {
         return false;
     };
-    if !(1..=12).contains(&mo) || !(1..=31).contains(&d) || h > 23 || mi > 59 || se > 60 {
+    let leap = (y % 4 == 0 && y % 100 != 0) || y % 400 == 0;
+    let days = match mo {
+        1 | 3 | 5 | 7 | 8 | 10 | 12 => 31,
+        4 | 6 | 9 | 11 => 30,
+        2 if leap => 29,
+        2 => 28,
+        _ => return false,
+    };
+    if d < 1 || d > days || h > 23 || mi > 59 || se > 60 {
         return false;
     }
-    let mut rest = &v[19..];
-    if let Some(frac) = rest.strip_prefix('.') {
-        let n = frac.bytes().take_while(u8::is_ascii_digit).count();
-        if n == 0 {
+    let mut i = 19;
+    if b.get(i) == Some(&b'.') {
+        let start = i + 1;
+        i = start;
+        while b.get(i).is_some_and(u8::is_ascii_digit) {
+            i += 1;
+        }
+        if i == start {
             return false;
         }
-        rest = &frac[n..];
     }
-    if matches!(rest, "Z" | "z") {
-        return true;
+    match &b[i..] {
+        [b'Z' | b'z'] => true,
+        [b'+' | b'-', h1, h2, b':', m1, m2]
+            if [h1, h2, m1, m2].iter().all(|c| c.is_ascii_digit()) =>
+        {
+            (h1 - b'0') * 10 + (h2 - b'0') <= 23 && (m1 - b'0') * 10 + (m2 - b'0') <= 59
+        }
+        _ => false,
     }
-    rest.len() == 6
-        && matches!(&rest[..1], "+" | "-")
-        && &rest[3..4] == ":"
-        && rest[1..3].parse::<u32>().is_ok_and(|oh| oh <= 23)
-        && rest[4..6].parse::<u32>().is_ok_and(|om| om <= 59)
 }
 
 fn is_digest_key(k: &str) -> bool {
@@ -297,4 +311,23 @@ pub fn run(root: &Path, files: &[std::path::PathBuf]) -> crate::error::Result<u8
         }
     }
     Ok(u8::from(rejected > 0))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::rfc3339;
+
+    #[test]
+    fn calendar_offsets_and_bytes() {
+        assert!(rfc3339("2026-09-22T12:00:00Z"));
+        assert!(rfc3339("2024-02-29T00:00:00.123+05:30"));
+        assert!(!rfc3339("2026-02-30T12:00:00Z"), "30 February");
+        assert!(!rfc3339("2025-02-29T12:00:00Z"), "not a leap year");
+        assert!(!rfc3339("2026-09-22T12:00:00+25:00"));
+        assert!(
+            !rfc3339("2026-09-22T12:00:00\u{e9}xxxx"),
+            "a non-ASCII suffix is malformed, not a panic"
+        );
+        assert!(!rfc3339("not-a-timestamp"));
+    }
 }

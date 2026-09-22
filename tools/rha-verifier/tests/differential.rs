@@ -52,7 +52,7 @@ fn mutate(mut f: Value, which: u8, pick: usize) -> Value {
         "unmatched/x",
         "crates/core/AGENTS.md",
     ];
-    match which % 10 {
+    match which % 12 {
         0 => f["surface"] = json!([paths[pick % paths.len()]]),
         1 => {
             if let Some(e) = nth_mut(&mut f["evidence"]["entries"], pick) {
@@ -92,6 +92,33 @@ fn mutate(mut f: Value, which: u8, pick: usize) -> Value {
             }
         }
         8 => f["acceptor"] = json!(["human:kennedy", "agent:executor"][pick % 2]),
+        // Fractional times on the exception and at the decision instant
+        // (review round 1, finding 1).
+        10 if f["exception"].is_object() => {
+            let frac = ["", ".100", ".900", ".999999999"][pick % 4];
+            for key in ["logged_at", "issued_at"] {
+                if let Some(t) = f["exception"][key].as_str().map(str::to_owned) {
+                    f["exception"][key] = json!(format!(
+                        "{}{frac}Z",
+                        t.trim_end_matches('Z')
+                            .split('.')
+                            .next()
+                            .unwrap_or_default()
+                    ));
+                }
+            }
+        }
+        // Integer parameters around 2^53, on the check and on its entries
+        // (review round 1, finding 2).
+        11 => {
+            let big = 9_007_199_254_740_992_u64 + (pick % 3) as u64;
+            if let Some(c) = nth_mut(&mut f["policy"]["checks"], pick) {
+                c["params"]["n"] = json!(big + 1);
+            }
+            if let Some(e) = nth_mut(&mut f["evidence"]["entries"], pick) {
+                e["params"]["n"] = json!(big);
+            }
+        }
         _ => f["evidence"]["producer"] = json!(["automation:ci", "agent:executor"][pick % 2]),
     }
     f
@@ -106,15 +133,71 @@ proptest! {
         if twice {
             f = mutate(f, which2, pick / 2);
         }
-        prop_assert_eq!(rha_verifier::evaluate(&f), reference::evaluate(&f), "fixture {} mutation {} {}", index, which % 10, which2 % 10);
+        prop_assert_eq!(rha_verifier::evaluate(&f), reference::evaluate(&f), "fixture {} mutation {} {}", index, which % 12, which2 % 12);
     }
 }
 
-/// Whether `a` is at least as strict as `b` for the contract's keys.
+/// Independent: the root checks the policy triggers on the surface, by the
+/// contract's rules, computed without the crate (Lemma 1's precondition).
+fn triggered_root_ids(f: &Value) -> Vec<String> {
+    let rules = f["policy"]["rules"].as_array().cloned().unwrap_or_default();
+    let mut ids = Vec::new();
+    let mut unmatched = false;
+    for path in f["surface"]
+        .as_array()
+        .into_iter()
+        .flatten()
+        .filter_map(Value::as_str)
+    {
+        let mut hit = false;
+        for r in &rules {
+            if r["scope"]
+                .as_str()
+                .is_some_and(|g| rha_verifier::glob(g, path))
+            {
+                hit = true;
+                ids.extend(
+                    r["requires"]
+                        .as_array()
+                        .into_iter()
+                        .flatten()
+                        .filter_map(Value::as_str)
+                        .map(str::to_owned),
+                );
+            }
+        }
+        unmatched |= !hit;
+    }
+    if unmatched {
+        ids.extend(
+            f["policy"]["default_obligations"]
+                .as_array()
+                .into_iter()
+                .flatten()
+                .filter_map(Value::as_str)
+                .map(str::to_owned),
+        );
+    }
+    ids.sort();
+    ids.dedup();
+    ids
+}
+
+/// Exact number order for the property checks (never through `f64` for two
+/// integers).
+fn number_cmp(a: &Value, b: &Value) -> Option<std::cmp::Ordering> {
+    match (a.as_u64(), b.as_u64()) {
+        (Some(x), Some(y)) => Some(x.cmp(&y)),
+        _ => a.as_f64()?.partial_cmp(&b.as_f64()?),
+    }
+}
+
 fn at_least(key: &str, a: &Value, b: &Value) -> bool {
     match key {
-        "delta" => a.as_f64() <= b.as_f64(),
-        "n" | "executions" | "proptest_cases" => a.as_f64() >= b.as_f64(),
+        "delta" => number_cmp(a, b).is_some_and(std::cmp::Ordering::is_le),
+        "n" | "executions" | "proptest_cases" => {
+            number_cmp(a, b).is_some_and(std::cmp::Ordering::is_ge)
+        }
         "selection" => b.as_array().is_some_and(|bs| {
             bs.iter()
                 .all(|x| a.as_array().is_some_and(|aa| aa.contains(x)))
@@ -123,21 +206,48 @@ fn at_least(key: &str, a: &Value, b: &Value) -> bool {
     }
 }
 
+/// Independent: whether the evidence passes one required check (outcome and
+/// kind validity), recomputed without the crate (Proposition 2).
+fn passes(f: &Value, check: &Value) -> bool {
+    let entries: Vec<&Value> = f["evidence"]["entries"]
+        .as_array()
+        .into_iter()
+        .flatten()
+        .filter(|e| e["id"] == check["id"])
+        .collect();
+    let Some(e) = entries.first() else {
+        return false;
+    };
+    e["outcome"] == "passed"
+        && match check["kind"].as_str().unwrap_or_default() {
+            "test" => e["selected_tests"].as_u64().is_some_and(|n| n > 0),
+            "comparison" => e["performed"] == true,
+            "corpus" => {
+                !check["params"]["corpus_digest"].is_null()
+                    && e["corpus_digest"] == check["params"]["corpus_digest"]
+            }
+            _ => true,
+        }
+}
+
 proptest! {
     #![proptest_config(ProptestConfig { cases: 512, ..ProptestConfig::default() })]
 
-    /// Lemma 1: without a conflict, every triggered root check appears in
-    /// R_eff with parameters at least as strict (obligations only grow).
+    /// Lemma 1: without a conflict, every triggered root check is in R_eff,
+    /// with parameters at least as strict. Presence is asserted, so an
+    /// evaluator that drops an obligation fails here (review round 1, 3).
     #[test]
     fn lemma_1_obligations_only_grow(index in 0usize..152, which in any::<u8>(), pick in 0usize..16) {
         let f = mutate(corpus()[index].clone(), which, pick);
         let d = rha_verifier::evaluate(&f);
         if d["conflict"] == false {
             let r_eff = d["r_eff"].as_array().unwrap();
-            for root in f["policy"]["checks"].as_array().into_iter().flatten() {
-                if let Some(eff) = r_eff.iter().find(|c| c["id"] == root["id"]) {
+            for id in triggered_root_ids(&f) {
+                let eff = r_eff.iter().find(|c| c["id"] == id.as_str());
+                prop_assert!(eff.is_some(), "triggered root check {} is missing from R_eff", id);
+                if let Some(root) = f["policy"]["checks"].as_array().into_iter().flatten().find(|c| c["id"] == id.as_str()) {
                     for (k, v) in root["params"].as_object().into_iter().flatten() {
-                        prop_assert!(at_least(k, &eff["params"][k.as_str()], v), "{}: {} weaker than root", root["id"], k);
+                        prop_assert!(at_least(k, &eff.unwrap()["params"][k.as_str()], v), "{}: {} weaker than root", id, k);
                     }
                 }
             }
@@ -147,17 +257,18 @@ proptest! {
     /// Lemma 3: R_eff depends on the candidate only through the surface; the
     /// evidence, exception, acceptor and time cannot change it.
     #[test]
-    fn lemma_3_evidence_cannot_choose_the_obligations(index in 0usize..152, which in 1u8..10, pick in 0usize..16) {
+    fn lemma_3_evidence_cannot_choose_the_obligations(index in 0usize..152, which in 1u8..11, pick in 0usize..16) {
         let base = corpus()[index].clone();
-        let mutated = mutate(base.clone(), if which == 7 { 1 } else { which }, pick);
+        let which = if which == 7 { 1 } else { which };
+        let mutated = mutate(base.clone(), which, pick);
         let (a, b) = (rha_verifier::evaluate(&base), rha_verifier::evaluate(&mutated));
         prop_assert_eq!(&a["r_eff"], &b["r_eff"]);
         prop_assert_eq!(&a["conflict"], &b["conflict"]);
     }
 
-    /// Proposition 2: no silent pass. If merge is allowed, then either every
-    /// required check passed on authentic, applicable, complete evidence, or a
-    /// valid exception covers every non-passing check and none is non-waivable.
+    /// Proposition 2: no silent pass. When merge is allowed, every required
+    /// check either passes, recomputed here independently, or is waived by
+    /// the exception and is not non-waivable (review round 1, finding 4).
     #[test]
     fn proposition_2_no_silent_pass(index in 0usize..152, which in any::<u8>(), pick in 0usize..16, twice in any::<bool>()) {
         let mut f = mutate(corpus()[index].clone(), which, pick);
@@ -166,12 +277,12 @@ proptest! {
         }
         let d = rha_verifier::evaluate(&f);
         if d["merge_allowed"] == true {
-            prop_assert!(d["authentic"] == true && d["applicable"] == true && d["complete"] == true);
-            prop_assert!(d["eligible"] == true || d["valid_exception"] == true);
-            if d["eligible"] != true {
-                let waived: Vec<&Value> = f["exception"]["waived"].as_array().unwrap().iter().collect();
-                let nw: Vec<&Value> = f["policy"]["non_waivable"].as_array().into_iter().flatten().collect();
-                prop_assert!(waived.iter().all(|w| !nw.contains(w)));
+            prop_assert_eq!(&d["conflict"], &json!(false));
+            let waived: Vec<&str> = f["exception"]["waived"].as_array().into_iter().flatten().filter_map(Value::as_str).collect();
+            let non_waivable: Vec<&str> = f["policy"]["non_waivable"].as_array().into_iter().flatten().filter_map(Value::as_str).collect();
+            for check in d["r_eff"].as_array().unwrap() {
+                let id = check["id"].as_str().unwrap_or_default();
+                prop_assert!(passes(&f, check) || (waived.contains(&id) && !non_waivable.contains(&id)), "{} neither passed nor validly waived", id);
             }
         }
     }
