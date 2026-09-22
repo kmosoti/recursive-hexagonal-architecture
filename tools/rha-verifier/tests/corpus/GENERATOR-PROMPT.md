@@ -1,0 +1,12 @@
+You are the ADVERSARIAL CORPUS GENERATOR for packet P-B of this repository (plan docs/plan/IMPLEMENTATION-PLAN.md §2.4 and §8.1 P-B stage 1). No lint or verifier code exists; do not write any. Read docs/architecture/verifier-contract.md (the contract you generate against), docs/spec/rha-spec-v0.10.md §11.7.6, §11.7.9 and §17.2, and .rha/policy.toml (its [lanes.L0] check ids). Write ONLY under `tools/rha-verifier/tests/corpus/` and `xtask/tests/corpus/records/`. Do not commit, push, or run cargo.
+
+1. Verifier corpus, `tools/rha-verifier/tests/corpus/V###.json`, in the contract's fixture format, each with a fully worked `expected` fixed by construction. Cover:
+   - every row of the §11.7.9 table that the contract can express (not the harness, graph or team rows), at least 3 fixtures per row;
+   - §17.2's adversarial additions as they apply here;
+   - the edges of each predicate: join conflicts (unordered timeout, incomparable selections); local policy that tries to loosen a root check; a path that matches no rule (default obligations); zero selected tests; an inconclusive comparison; subject, policy or base mismatch; required input "unknown"; untrusted producer; invalid integrity; duplicate entry ids; weaker entry params; exceptions that are expired, not yet issued, revoked, bound elsewhere, waiving a non-waivable check, missing a reason, self-issued under ECC-Team, self-issued under ECC-Solo inside and after the cooling-off; an acceptor outside the acceptance authority;
+   - at least 25 legitimate fixtures that must pass (eligible, or merge allowed by a valid exception).
+   Aim for 120 to 160 fixtures. Compute each `expected` by hand from the contract; if the contract does not determine an outcome, do not write that case.
+2. Record-lint corpus, `xtask/tests/corpus/records/R###/`, each with one record file (TOML for task and acceptance records, JSON for evidence records, in the shapes of the existing files under .rha/tasks/, .rha/acceptances/ and evidence/CHG-004.6/) and `EXPECTED.json` as the contract states. Include about 20 accepted records (copy real ones, then vary them legally) and about 60 malformed ones, each with its exact reason-code set; give `digest.mismatch` cases the file they cite beside the record.
+3. Write `tools/rha-verifier/tests/corpus/REGISTRATION.md` and `xtask/tests/corpus/records/REGISTRATION.md`: counts by row or reason code, and any case you omitted because the contract left it open, with the reason.
+
+Print a summary with counts. Do not print file contents.

@@ -1,0 +1,132 @@
+{
+  "id": "V020",
+  "row": "11.7.9#2",
+  "purpose": "Protected edit retains obligations: xtask/src/main.rs",
+  "policy": {
+    "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "profile": "ECC-Solo",
+    "checks": [
+      {
+        "id": "L0.nextest",
+        "kind": "test",
+        "params": {
+          "selection": [
+            "unit"
+          ],
+          "timeout_secs": 600
+        }
+      },
+      {
+        "id": "L0.fmt",
+        "kind": "format",
+        "params": {}
+      }
+    ],
+    "rules": [
+      {
+        "id": "protected.change",
+        "scope": "xtask/src/main.rs",
+        "requires": [
+          "L0.nextest",
+          "L0.fmt"
+        ]
+      }
+    ],
+    "default_obligations": [
+      "L0.fmt"
+    ],
+    "non_waivable": [
+      "L0.fmt",
+      "L0.nextest"
+    ],
+    "trusted_producers": [
+      "automation:ci"
+    ],
+    "required_inputs": [
+      "toolchain",
+      "lockfile"
+    ],
+    "exception_authority": [
+      "human:reviewer",
+      "human:kennedy"
+    ],
+    "acceptance_authority": [
+      "human:kennedy"
+    ],
+    "cooling_off_hours": 24
+  },
+  "local_policies": [
+    {
+      "scope": "xtask/src/main.rs",
+      "checks": [],
+      "rules": []
+    }
+  ],
+  "base": "1111111111111111111111111111111111111111",
+  "candidate_tree": "2222222222222222222222222222222222222222",
+  "surface": [
+    "xtask/src/main.rs"
+  ],
+  "evidence": {
+    "producer": "automation:ci",
+    "integrity": "valid",
+    "subject": "2222222222222222222222222222222222222222",
+    "policy": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "base": "1111111111111111111111111111111111111111",
+    "inputs": {
+      "toolchain": "1.98.1",
+      "lockfile": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    },
+    "entries": [
+      {
+        "id": "L0.nextest",
+        "kind": "test",
+        "params": {
+          "selection": [
+            "unit"
+          ],
+          "timeout_secs": 600
+        },
+        "outcome": "passed",
+        "selected_tests": 1
+      },
+      {
+        "id": "L0.fmt",
+        "kind": "format",
+        "params": {},
+        "outcome": "passed"
+      }
+    ]
+  },
+  "exception": null,
+  "acceptor": "human:kennedy",
+  "accountable_change_authority": "human:kennedy",
+  "now": "2026-09-22T12:00:00Z",
+  "expected": {
+    "r_eff": [
+      {
+        "id": "L0.fmt",
+        "kind": "format",
+        "params": {}
+      },
+      {
+        "id": "L0.nextest",
+        "kind": "test",
+        "params": {
+          "selection": [
+            "unit"
+          ],
+          "timeout_secs": 600
+        }
+      }
+    ],
+    "conflict": false,
+    "authentic": true,
+    "applicable": true,
+    "complete": true,
+    "passed": true,
+    "eligible": true,
+    "valid_exception": null,
+    "merge_allowed": true
+  }
+}

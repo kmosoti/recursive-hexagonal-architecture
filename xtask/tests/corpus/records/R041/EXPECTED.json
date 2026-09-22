@@ -1,0 +1,9 @@
+{
+  "id": "R041",
+  "record": "record.json",
+  "kind": "evidence",
+  "accept": false,
+  "reasons": [
+    "evidence.duplicate_check_id"
+  ]
+}

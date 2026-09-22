@@ -1,0 +1,9 @@
+{
+  "id": "R067",
+  "record": "record.json",
+  "kind": "evidence",
+  "accept": false,
+  "reasons": [
+    "evidence.inconclusive_outside_comparison"
+  ]
+}

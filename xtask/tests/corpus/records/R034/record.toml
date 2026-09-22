@@ -10,7 +10,7 @@ authority_profile = "ECC-Solo"
 status = "in_progress"
 plan_ref = "docs/plan/IMPLEMENTATION-PLAN.md §8.1 P-B; §8.2 W15 and W16"
 branch = "chg/019-trust"
-base_revision = "72c5cfd2fa96efbb81adb817ae10a93e03c87713"
+base_revision = "main"
 intent = "Stage 1: fix the verifier and lint contract and register both corpora from a separate generator session before any code. Stage 2: schemas and `cargo xtask rha lint`. Stage 3: `tools/rha-verifier` with a differential second implementation, graded on the stage 1 corpus. Stage 4: keys and the cut-over (gate DP-4.1, DP-5.3)."
 non_goals = ["Product crates (P-A)", "The isolation exercise, which stays not_run (no protected runner exists)", "Editing .rha/policy.toml before gate DP-5.3"]
 scope_globs = [".rha/tasks/CHG-019-trust.toml", "docs/**", "evidence/**", "xtask/**", "tools/**", "Cargo.lock", ".rha/schemas/**"]
@@ -63,15 +63,3 @@ reasoning_effort = "unknown"
 [[provenance.sessions]]
 model_id = "claude-opus-5-5"
 span = "P-B"
-
-[[provenance.generations]]
-artifact = "tools/rha-verifier/tests/corpus/V*.json (152) and xtask/tests/corpus/records/R* (80)"
-generation = "sampled"
-model = "gpt-6-astra"
-reasoning_effort = "xhigh"
-harness = "codex-cli 0.155.1, workspace-write"
-prompt_path = "tools/rha-verifier/tests/corpus/GENERATOR-PROMPT.md"
-sample = "run 1 of 1, 2026-09-22"
-separation = "generated against docs/architecture/verifier-contract.md before any lint or verifier code existed"
-omissions = "the generator recorded every case the contract does not determine (schema requiredness, nested unknown keys, comparison intervals, permissions and graph rows) in each REGISTRATION.md; none were invented"
-

@@ -1,0 +1,9 @@
+{
+  "id": "R075",
+  "record": "record.toml",
+  "kind": "acceptance",
+  "accept": false,
+  "reasons": [
+    "revision.malformed"
+  ]
+}
