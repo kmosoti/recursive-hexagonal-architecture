@@ -60,6 +60,20 @@ answer = "Yes, as the approved plan lays it out: §4.1 gives members = [\"crates
 decided_by = "human:kennedy (plan approval, DP-5.1)"
 date = "2026-09-22"
 
+[[decisions]]
+id = "protected-edits-quoted"
+question = "The review found that the Cargo.toml edit had no quoted approval (M1). Asked of Kennedy on 2026-09-22: 'Three protected edits follow the approved plan's layout, but no approval of yours is quoted for them. Do you approve them?' (Cargo.toml tools/*; crates/site/rha-modules.toml; crates/site/AGENTS.md)."
+answer = "Kennedy chose 'Approve all three'."
+decided_by = "human:kennedy"
+date = "2026-09-22"
+
+[[decisions]]
+id = "review-round-1"
+question = "Codex (gpt-6-astra, extra-high) requested changes with 7 P1 and 1 P2. Which are concrete failures?"
+answer = "Findings 1 to 7 are confirmed; determinations are in the change record under 'Review round 1'. Finding 7 is closed by the quoted approval above. Finding 8, sampling provenance for the Executor's own code, is declined: plan §2.4 rule 1 governs artifacts from separate generator sessions, and the Executor's work is covered by [[provenance.sessions]]. The wording is proposed for plan revision 3."
+decided_by = "agent:executor (under the AGENTS.md review rules)"
+date = "2026-09-22"
+
 [provenance]
 harness = "Claude Code"
 task_scope = "P-B"

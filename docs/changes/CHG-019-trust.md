@@ -36,6 +36,21 @@ After the fixes it grades **80 of 80**.
 | `.rha/acceptances/CHG-002.toml`; `.rha/tasks/CHG-004.6-c13-registration.toml`; two `evidence/CHG-004.6/` records that copied the latter's provenance | `revision.malformed` | abbreviated revisions (`6518f6a89af5`, `5ef607c`) where a full identity is required |
 | `evidence/CHG-000/`, `evidence/CHG-001/`, three early `evidence/ci/` records | `digest.malformed` | `base_policy_digest = "absent"` where the field needed `null`, from W0 when no base policy existed |
 
+### Review round 1 (Codex, `gpt-6-astra`, extra-high, read-only) on `2b5cd89`, determinations
+
+REQUEST_CHANGES: seven P1 and one P2.
+
+1. **P1, fractional seconds were truncated. Confirmed.** A `logged_at` or `issued_at` with `.900` validated an exception 0.9 s early. Repair: timestamps are compared in nanoseconds.
+2. **P1, integer parameters were compared as `f64`. Confirmed.** Above 2^53, `n = 9007199254740992` satisfied a required `9007199254740993`, and a join could drop the stricter value. Repair: two integers compare exactly, and floating point is used only when either side is fractional.
+3. **P1, Lemma 1 was vacuous for a missing obligation. Confirmed.** Repair: the test derives the triggered root checks independently and asserts each is present in `R_eff`.
+4. **P1, Proposition 2 was vacuous for a wrongly passed check. Confirmed.** Repair: the test recomputes every check's pass (outcome and kind validity) itself. When merge is allowed, either all pass or the exception waives every one that does not.
+5. **P1, the lint accepted 30 February. Confirmed.** Repair: days in month, with leap years.
+6. **P1, the lint panicked on a non-ASCII timestamp suffix. Confirmed.** Repair: the offset is parsed from bytes, never by slicing a string at a byte index.
+7. **P1, the `Cargo.toml` edit had no quoted approval. Confirmed.** Kennedy was asked and approved all three plan-derived protected edits (decision `protected-edits-quoted`). P-A's task record quotes the same answer.
+8. **P2, generation provenance for the Executor's own code. Declined.** Rule 1 governs artifacts from separate generator sessions; the Executor's work is covered by `[[provenance.sessions]]`. Revision 3 of the plan should say so plainly.
+
+The mutation generator also gains fractional timestamps and integer parameters near 2^53, so the differential test now reaches findings 1 and 2.
+
 ### Not done in this packet, and why
 
 - **JSON Schema files under `.rha/schemas/`** (W15). The generator found that the contract fixes no required fields, types or allowed keys, so the `schema.*` codes have no registered cases. Writing schemas now would be the invented contract §2.4 rule 6 forbids. They need a schema decision first, which is proposed as a gate for P-B's continuation.
