@@ -85,6 +85,13 @@ Ten of 11 were confirmed resolved. On finding 5, and one new P2 in the same func
 
 **A void review run.** The first attempt at round 3 reviewed `52ceb20` unchanged, because the Executor's script failed before committing the repair: a rustfmt-reformatted anchor did not match. Its verdict describes the old code and is not counted as a round under M6. Round 3 below reviews the committed repair.
 
+### Automated review threads on PR 16 (`chatgpt-codex-connector`, on `8b81dd5`), determinations
+
+Two threads were open after round 3. Each was checked against the code before any repair.
+
+1. **A symlinked output root (P1). Confirmed.** `prepare` and `delete` checked every segment *below* the root and `list` walked the root with `read_dir`, which follows a link. So `--out` pointing at a symbolic link to a populated directory would inventory that directory, and the build would delete what it did not produce there. Repair: `FsSink` refuses a root that is itself a symbolic link, before `list`, `write` and `delete`. Discriminating check: a new contract test, `a_symlinked_output_root_is_refused_before_listing_writing_or_deleting`, fails on `8b81dd5` (the target is inventoried) and passes on the repair; the seeded file is untouched. A symbolic link *source* root (`--root`) stays allowed: reading through it deletes nothing.
+2. **A panic on a non-ASCII glob segment (P2). Refuted.** `glob`'s `segment` matches `&[u8]`, and a byte slice has no character boundary to split, so `&text[i..]` cannot panic. Discriminating check: `glob("docs/*.md", "docs/café.md")`, `glob("docs/c*é.md", "docs/café.md")` and the negative `docs/*.rs` ran against `8b81dd5` and gave the expected answers without a panic. Byte-wise matching agrees with character-wise matching here because the only wildcard is `*` and literals compare whole UTF-8 sequences. The three assertions are kept as a regression test; no code changed.
+
 ### Repair attempts (§11.7.10)
 
 2. **`L0.typos` failed in CI run 35784806281, and the lane had not been run locally.** Hypothesis: the spell checker splits Unicode escapes such as `\u{e9}` and reads the letters before them as a word; one variable name also read as a misspelling. (This note does not quote it, which is CHG-002's lesson.) Discriminating check: `typos --format brief` reproduced all nine findings locally. Change: the characters are written literally and the variable is renamed. No dictionary exception was added, following CHG-003's precedent. Result: `typos` is clean. A method lesson too: M5's full lane belongs before the first push, not only before the record.

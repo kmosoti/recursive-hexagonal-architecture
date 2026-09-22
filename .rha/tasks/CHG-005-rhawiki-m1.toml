@@ -142,6 +142,20 @@ answer = "Kennedy chose 'Approve all three'. This quotes the approval for the tw
 decided_by = "human:kennedy"
 date = "2026-09-22"
 
+[[decisions]]
+id = "delegation-2026-09-22"
+question = "Who decides the open recommended options, and what is the reviewer for?"
+answer = "Kennedy delegated both on 2026-09-22: 'Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me.' From this commit the Executor records the recommended option of each open decision as decided under this delegation, cites it, and does not escalate. Codex validates conformance to the registered contracts and schemas and to the RHA guidelines; it does not regenerate code or corpora (ledger DP-5.4). Held-out material stays Kennedy's (§9.14), so DP-1.4 is recorded not_run rather than authored by an agent."
+decided_by = "human:kennedy"
+date = "2026-09-22"
+
+[[decisions]]
+id = "automated-review-threads"
+question = "Two open threads from the automated Codex reviewer on PR 16, at 8b81dd5."
+answer = "Output-root symlink: confirmed and repaired. Non-ASCII glob panic: refuted by running it; kept as a regression test. Determinations in the change record."
+decided_by = "agent:executor"
+date = "2026-09-22"
+
 [provenance]
 harness = "Claude Code"
 task_scope = "P-A"
