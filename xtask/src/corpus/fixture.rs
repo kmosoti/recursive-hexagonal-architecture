@@ -2,6 +2,7 @@
 //! consulted here; Cargo sees the dependency spellings in the registration.
 
 use std::collections::BTreeMap;
+use std::fmt::Write as _;
 use std::path::{Component, Path, PathBuf};
 
 use serde_json::{Value, json};
@@ -140,19 +141,20 @@ fn source(deps: &[Dep], core: bool, body: Option<&str>) -> String {
             continue;
         }
         if let Some(target) = &dep.target {
-            text.push_str(&format!("#[{target}]\n"));
+            let _ = writeln!(text, "#[{target}]");
         }
         if dep.kind == DepKind::Dev {
             text.push_str("#[cfg(test)]\n");
         }
         if dep.optional {
-            text.push_str(&format!(
-                "#[cfg(feature = {:?})]\n",
+            let _ = writeln!(
+                text,
+                "#[cfg(feature = {:?})]",
                 dep.rename.as_deref().unwrap_or(&dep.name)
-            ));
+            );
         }
         let ident = dep.rename.as_deref().unwrap_or(&dep.name).replace('-', "_");
-        text.push_str(&format!("#[allow(unused_imports)] use {ident} as _;\n"));
+        let _ = writeln!(text, "#[allow(unused_imports)] use {ident} as _;");
     }
     if let Some(body) = body {
         text.push_str(body);

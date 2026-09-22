@@ -1,0 +1,1 @@
+{"site":"MD025","purpose":"Full paths use exact case without a case-insensitive fallback.","witnesses":[{"kind":"broken_link","from":"index","target":"Docs/Guide"},{"kind":"broken_link","from":"index","target":"docs/guide"}]}

@@ -1,0 +1,1 @@
+{"site":"MD050","purpose":"Unicode lowercase collisions retain accents in witness slugs.","witnesses":[{"kind":"duplicate_slug","page":"École","slug":"école"},{"kind":"duplicate_slug","page":"École","slug":"école"},{"kind":"missing_anchor","from":"index","target":"École","heading":"ecole"}]}

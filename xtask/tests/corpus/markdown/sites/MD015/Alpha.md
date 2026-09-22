@@ -1,0 +1,6 @@
+# Alpha
+
+~~~
+# Alpha
+[[Ghost]]
+~~~

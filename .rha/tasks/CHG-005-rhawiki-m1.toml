@@ -1,0 +1,228 @@
+# Task record (spec §11.7.11 shape, stored as TOML). Packet P-A of plan revision 2.
+schema_version = 1
+id = "CHG-005"
+covers = ["CHG-005", "CHG-006"]
+slug = "rhawiki-m1"
+title = "P-A: the rhawiki product and the M1 close"
+mode = "agent"
+executor_composition = "agent"
+authority_profile = "ECC-Solo"
+status = "in_progress"
+plan_ref = "docs/plan/IMPLEMENTATION-PLAN.md §8.1 P-A; §8.2 W5 and W6 briefs"
+branch = "chg/005-rhawiki-m1"
+base_revision = "72c5cfd2fa96efbb81adb817ae10a93e03c87713"
+intent = "Build the guards revision 2 names, then the rhawiki product (W5) and the M1 close (W6), in gated stages: 0 guards; 1 boundary decisions and markdown-corpus registration; 2 cores; 3 adapters and CLI; 4 corpus run; 5 CI and self-assessment."
+non_goals = ["Module-level checks (P-C)", "The verifier (P-B)", "Reading Kennedy's held-out material (DP-1.1b, DP-1.4)", "Editing the spec"]
+
+# Machine-readable scope for `cargo xtask scope` (plan §2.2 M4). A changed
+# path must match one of scope_globs; a changed protected path (policy
+# [surface]) must also match one of protected_scope, each backed by an
+# approval in [[decisions]].
+scope_globs = [
+  ".rha/acceptances/PLAN-2.toml",
+  ".rha/decisions.toml",
+  ".rha/tasks/CHG-005-rhawiki-m1.toml",
+  ".rha/assumptions.toml",
+  ".rha/architecture.toml",
+  "docs/**",
+  "evidence/**",
+  "xtask/**",
+  "crates/**",
+  "Cargo.lock",
+  "rha-crates.toml",
+  "CONTRIBUTING.md",
+  "AGENTS.md",
+  "README.md",
+]
+protected_scope = [
+  ".rha/acceptances/PLAN-2.toml",
+  ".rha/decisions.toml",
+  "rha-crates.toml",
+  "crates/*/rha-modules.toml",
+  "crates/site/AGENTS.md",
+  "CONTRIBUTING.md",
+]
+
+[[actors]]
+id = "human:kennedy"
+type = "human"
+
+[[actors]]
+id = "agent:executor"
+type = "agent"
+accountable_to = "human:kennedy"
+
+[roles]
+planner = "human:kennedy"
+executor = ["agent:executor"]
+integrator = "human:kennedy"
+verifier = ["automation:xtask-ci (local, advisory)", "automation:github-actions (class ci, advisory)", "local Codex review, gpt-6-astra extra-high (advisory)"]
+acceptor = "human:kennedy"
+
+[[work]]
+id = "P-A"
+executor = "agent:executor"
+depends_on = ["PLAN-2 (accepted at 72c5cfd)"]
+output = "See plan §8.1 P-A, stages 0 to 5."
+claim = "The supervising session (Claude Opus 5.5) is the only writer on chg/005-rhawiki-m1 (M3)."
+
+[[decisions]]
+id = "authority"
+question = "On whose authority does P-A run, and who reviews?"
+answer = "Kennedy, 2026-09-22: 'Can you implement each packet. Then once ready to review or need an adversarial generation when confidence is low pass to codex cli to gpt-6-astra extra high.' The reviewer and adversarial generator is `codex exec -m gpt-6-astra -c model_reasoning_effort=xhigh -s read-only`."
+decided_by = "human:kennedy"
+date = "2026-09-22"
+
+[[decisions]]
+id = "ledger-rows-dp-5"
+question = "May P-A add ledger rows DP-5.1 to DP-5.3 and record DP-1.2's default?"
+answer = "Yes. Plan revision 2 §9, approved by the merge of PR 15, says the DP-5 rows are added in P-A's first stage. DP-1.2's row names 'start of CHG-005' as its trigger with default yes; recording a default at its trigger is pre-approved by [acceptance.ledger_edits]."
+decided_by = "human:kennedy (plan approval); ledger_edits pre-approval"
+date = "2026-09-22"
+
+[[decisions]]
+id = "held-out-check-kind-in-stage-3"
+question = "Plan §8.1 P-A stage 0 lists `corpus held-out --kind check`. Where does it land?"
+answer = "In stage 3. It wraps `rhawiki check`, which does not exist until stage 3; building it earlier would test a stub. Recorded here as a deviation from the stage list, not from the scope."
+decided_by = "agent:executor"
+date = "2026-09-22"
+
+[[decisions]]
+id = "dp-1.3"
+question = "Gate DP-1.3: do the four refutation criteria stand?"
+answer = "Kennedy chose 'Accept all four' when asked at the stage 1 gate on 2026-09-22; decomposition A. Recorded on the ledger before any product crate exists (§7.8 step 10)."
+decided_by = "human:kennedy"
+date = "2026-09-22"
+
+[[decisions]]
+id = "core-allow-list"
+question = "Which external crates may core crates use? (rha-crates.toml is protected)"
+answer = "Kennedy chose 'Approve as proposed' on 2026-09-22: [core] allow = pulldown-cmark, sha2, unicode-normalization; dev_allow = proptest; forbidden edges site -> pulldown-cmark, role:core -> tokio, library -> notify. Asked at the start of stage 2 rather than stage 3, because stage 2 cannot end green under L0.architecture without it."
+decided_by = "human:kennedy"
+date = "2026-09-22"
+
+[[decisions]]
+id = "site-module-rules"
+question = "May P-A create crates/site/rha-modules.toml (protected)?"
+answer = "Yes, with exactly the content plan §3.1 gives, which Kennedy approved with revision 2 (DP-5.1) and whose composite shape BDR-0003 accepted at DP-1.3."
+decided_by = "human:kennedy (plan approval, DP-1.3)"
+date = "2026-09-22"
+
+[[decisions]]
+id = "heading-attributes-off"
+question = "The W5 brief lists pulldown-cmark's ENABLE_HEADING_ATTRIBUTES. Is it on?"
+answer = "Off. It strips `{…}` from heading text, and the registered markdown contract derives slugs from the heading text as written; enabling it would make the product contradict a registration fixed before the code. Custom heading ids are not a Phase 1 feature."
+decided_by = "agent:executor"
+date = "2026-09-22"
+
+[[decisions]]
+id = "slug-without-nfc"
+question = "Stage 4's first corpus run failed site MD051: the registered contract derives slugs without NFC, and the W5 brief says NFC. Which governs?"
+answer = "The registered contract. It was committed before any product code and it grades the product (§2.4 rule 2); page ids stay NFC as both say. Disclosed defect: the Executor wrote the registration's contract from the W5 brief and dropped the brief's NFC for slugs, so the two documents disagree. The product now follows the registration. For Kennedy at acceptance: the plan brief's slug wording should be read as superseded by the registration, or amended in revision 3."
+decided_by = "agent:executor"
+date = "2026-09-22"
+
+[[decisions]]
+id = "site-scoped-guide"
+question = "May P-A create crates/site/AGENTS.md (protected by **/AGENTS.md)?"
+answer = "Yes: the W5 brief (plan §8.2), approved with revision 2 at DP-5.1, lists `site` with `rha-modules.toml` and a scoped AGENTS.md (§11.7.3). The scope guard flagged it before this decision was recorded; recorded here, before the PR."
+decided_by = "human:kennedy (plan approval, DP-5.1)"
+date = "2026-09-22"
+
+[[decisions]]
+id = "review-round-1"
+question = "Codex (gpt-6-astra, extra-high) requested changes on 3c4a41f with 11 findings. Which are concrete failures?"
+answer = "All 11; determinations in the change record under 'Review round 1'. Repaired in the next commit, determination first (M6)."
+decided_by = "agent:executor (under the AGENTS.md review rules)"
+date = "2026-09-22"
+
+[[decisions]]
+id = "protected-edits-quoted"
+question = "The P-B review found plan-derived protected edits without a quoted approval (M1). Asked of Kennedy on 2026-09-22: 'Three protected edits follow the approved plan's layout, but no approval of yours is quoted for them. Do you approve them?' (Cargo.toml tools/*; crates/site/rha-modules.toml; crates/site/AGENTS.md)."
+answer = "Kennedy chose 'Approve all three'. This quotes the approval for the two site files, whose decisions site-module-rules and site-scoped-guide had cited only the plan."
+decided_by = "human:kennedy"
+date = "2026-09-22"
+
+[[decisions]]
+id = "delegation-2026-09-22"
+question = "Who decides the open recommended options, and what is the reviewer for?"
+answer = "Kennedy delegated both on 2026-09-22: 'Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me.' From this commit the Executor records the recommended option of each open decision as decided under this delegation, cites it, and does not escalate. Codex validates conformance to the registered contracts and schemas and to the RHA guidelines; it does not regenerate code or corpora (ledger DP-5.4). Held-out material stays Kennedy's (§9.14), so DP-1.4 is recorded not_run rather than authored by an agent."
+decided_by = "human:kennedy"
+date = "2026-09-22"
+
+[[decisions]]
+id = "automated-review-threads"
+question = "Two open threads from the automated Codex reviewer on PR 16, at 8b81dd5."
+answer = "Output-root symlink: confirmed and repaired. Non-ASCII glob panic: refuted by running it; kept as a regression test. Determinations in the change record."
+decided_by = "agent:executor"
+date = "2026-09-22"
+
+[[decisions]]
+id = "contributing-scope-line"
+question = "The CONTRIBUTING line for cargo xtask scope (reverted in 7616a18) and CHG-004.6's unquoted held-out paragraph (ad13efa)."
+answer = "Restored and approved under the delegation of 2026-09-22 (decision delegation-2026-09-22), with DP-5.2 decided as a pre-PR command; the held-out paragraph is approved retroactively. CONTRIBUTING.md joins protected_scope on this decision."
+decided_by = "agent:executor under human:kennedy's delegation"
+date = "2026-09-22"
+
+[provenance]
+harness = "Claude Code"
+task_scope = "P-A"
+permissions = "Workspace files, shell, git and gh through the user's account; protected paths as listed in protected_scope, each with its decision."
+budgets = "unknown"
+reasoning_effort = "unknown"
+
+[[provenance.sessions]]
+model_id = "claude-opus-5-5"
+span = "P-A"
+
+# Generated artifacts (plan §2.4 rule 1), added in the review round 1 repair
+# (finding 11). Each names the model, the effort, the committed prompt and its
+# digest. The sample identifier is the single run of each prompt.
+[[provenance.generations]]
+artifact = "xtask/tests/corpus/markdown/sites/** (60 sites, 99 witnesses)"
+generation = "sampled"
+model = "gpt-6-astra"
+reasoning_effort = "xhigh"
+harness = "codex-cli 0.155.1, workspace-write"
+prompt_path = "xtask/tests/corpus/markdown/GENERATOR-PROMPT.md"
+prompt_sha256 = "d8b7d2010a4557db093288ea0c81a06362535393583270f272f4d9f00fd9c5e2"
+sample = "run 1 of 1, 2026-09-22"
+separation = "generated before any product crate existed"
+
+[[provenance.generations]]
+artifact = "crates/document/tests/oracle_slug.rs"
+generation = "sampled"
+model = "gpt-6-astra"
+reasoning_effort = "xhigh"
+harness = "codex-cli 0.155.1, workspace-write"
+prompt_path = "xtask/tests/corpus/oracles/ORACLE-PROMPT.md"
+prompt_sha256 = "63dcecdd87acdb2fc9864b7db466db5df719f98d3ceae68fd757e607df56c3d5"
+sample = "run 1 of 1, 2026-09-22"
+first_committed_sha256 = "a7f0925de00e5c8dba0b052ed73eb1abd2a55786a140342e9f17954b7132bb97"
+edits = "one, made before the first commit (6c17977), so the as-generated bytes were never committed: the NFC step removed to match the registered contract (decision slug-without-nfc), marked in the file"
+separation = "told not to read crates/*/src; worked from the contract"
+
+[[provenance.generations]]
+artifact = "crates/graph/tests/oracle_resolve.rs"
+generation = "sampled"
+model = "gpt-6-astra"
+reasoning_effort = "xhigh"
+harness = "codex-cli 0.155.1, workspace-write"
+prompt_path = "xtask/tests/corpus/oracles/ORACLE-PROMPT.md"
+prompt_sha256 = "63dcecdd87acdb2fc9864b7db466db5df719f98d3ceae68fd757e607df56c3d5"
+sample = "run 1 of 1, 2026-09-22"
+first_committed_sha256 = "2b15f66c947269786cc65024ef3585ac4c93bb60668608ef2a8b0b66aff4a16a"
+edits = "none"
+separation = "told not to read crates/*/src; worked from the contract"
+
+[[provenance.generations]]
+artifact = "the Executor's own work in this packet: crates/**/src, the non-oracle tests, xtask changes, the records and documents"
+generation = "sampled"
+model = "claude-opus-5-5"
+harness = "Claude Code"
+prompt = "Kennedy's instruction as quoted in decision authority: 'Can you implement each packet. Then once ready to review or need an adversarial generation when confidence is low pass to codex cli to gpt-6-astra extra high.'"
+prompt_sha256 = "a362345f5550853748062a579fc7765e0c07464380f472b912ab8f3412794f18"
+sample = "one interactive session, iterated under review (rounds recorded in the change record)"
+oracles = "the registered markdown corpus (60 sites), the independent slug and resolution oracles, the contract suites and property tests, the lane"
+note = "Added after P-B's review showed that plan §2.4 rule 1 names generated code; P-A follows the same reading."
+

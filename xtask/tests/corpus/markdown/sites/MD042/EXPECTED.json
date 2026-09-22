@@ -1,0 +1,1 @@
+{"site":"MD042","purpose":"Repeated headings across levels consume deterministic anchor suffixes.","witnesses":[{"kind":"duplicate_slug","page":"Guide","slug":"item"},{"kind":"duplicate_slug","page":"Guide","slug":"item"},{"kind":"duplicate_slug","page":"Guide","slug":"item"},{"kind":"missing_anchor","from":"index","target":"Guide","heading":"item-5"}]}

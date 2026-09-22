@@ -26,10 +26,12 @@ harness = []
 
 [core]
 # External crates a core crate may depend on; purity is judged by review (§6.8).
-# Empty: no core crate exists yet, and none may depend on anything external.
-allow = []
-# Dev-dependencies of a core crate. Empty for the same reason.
-dev_allow = []
+# Approved by Kennedy on 2026-09-22 at the P-A stage 2 gate (CHG-005 decision
+# core-allow-list): pulldown-cmark for document only, sha2 for library's
+# digest, unicode-normalization for NFC page ids and slugs.
+allow = ["pulldown-cmark", "sha2", "unicode-normalization"]
+# Dev-dependencies of a core crate (approved with the list above).
+dev_allow = ["proptest"]
 # A build script runs arbitrary code at build time, which is an ambient effect
 # the deny list of CHG-001 cannot see (§4.1, Law 5 row).
 allow_build_scripts = false
@@ -52,12 +54,20 @@ foreign_core_dependency = "warn"
 # section is documented rather than populated so that the first real entry is
 # a reviewed decision, not a schema change.
 #
-# [[forbidden]]
-# from = "library";   to = "notify";         reason = "change observation crosses SourceRepository"
-# [[forbidden]]
-# from = "site";      to = "pulldown-cmark"; reason = "parsing is document's decision"
-# [[forbidden]]
-# from = "role:core"; to = "tokio";          reason = "no runtime in cores"
+[[forbidden]]
+from = "site"
+to = "pulldown-cmark"
+reason = "parsing is document's decision (BDR-0002)"
+
+[[forbidden]]
+from = "role:core"
+to = "tokio"
+reason = "no runtime in cores"
+
+[[forbidden]]
+from = "library"
+to = "notify"
+reason = "change observation crosses SourceRepository"
 
 [transitive]
 # L2 mode: full dependency resolution (the §4.1 transitive hole). Disabled, so

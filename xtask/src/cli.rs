@@ -30,6 +30,16 @@ pub enum Command {
         #[command(subcommand)]
         command: EvidenceCommand,
     },
+    /// Check that the change stays inside its task record's scope and the
+    /// repository layout (plan §2.2 M4).
+    Scope {
+        /// The task record id, for example CHG-005.
+        #[arg(long)]
+        task: String,
+        /// The revision the change is compared with, by merge base.
+        #[arg(long, default_value = "origin/main")]
+        base: String,
+    },
     /// Write the generated docs, or with --check report stale ones.
     Docs {
         /// Compare instead of writing; exit 1 if any generated file is stale.
@@ -72,11 +82,16 @@ pub struct HeldOutArgs {
     /// $XDG_STATE_HOME/rha/held-out, else ~/.local/state/rha/held-out.
     #[arg(long)]
     pub private_dir: Option<PathBuf>,
+    /// `architecture`: each workspace with Cargo.toml and rha-crates.toml
+    /// runs `cargo xtask architecture` (DP-1.1b). `check`: each immediate
+    /// subdirectory is a markdown site and runs `rhawiki check` (DP-1.4).
+    #[arg(long, default_value = "architecture", value_parser = ["architecture", "check"])]
+    pub kind: String,
 }
 
 #[derive(Debug, Args)]
 pub struct CorpusArgs {
-    #[arg(long, default_value = "crate", value_parser = ["crate", "module"])]
+    #[arg(long, default_value = "crate", value_parser = ["crate", "module", "markdown"])]
     pub level: String,
     /// Directory for the timestamped advisory H4 record.
     #[arg(long, default_value = "evidence/h4-crate")]

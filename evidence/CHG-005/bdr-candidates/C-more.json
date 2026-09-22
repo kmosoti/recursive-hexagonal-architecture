@@ -1,0 +1,35 @@
+{
+  "candidate": "C-more",
+  "exit": 0,
+  "summary": {
+    "crates": 10,
+    "errors": 0,
+    "outcome": "passed",
+    "warnings": 2
+  },
+  "findings": [
+    {
+      "rule": "adapter.foreign_core",
+      "from": "adapter-html",
+      "to": "assembly",
+      "severity": "warning"
+    },
+    {
+      "rule": "adapter.foreign_core",
+      "from": "adapter-html",
+      "to": "document",
+      "severity": "warning"
+    }
+  ],
+  "edges_examined": {
+    "build": 0,
+    "dev": 0,
+    "normal": 28
+  },
+  "tool": {
+    "git_dirty": true,
+    "git_rev": "7616a18bf768fe5eb927a33137e0a2270b058aaa",
+    "name": "xtask architecture",
+    "version": "0.1.0"
+  }
+}
