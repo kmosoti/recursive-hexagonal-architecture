@@ -40,6 +40,7 @@ protected_scope = [
   "rha-crates.toml",
   "crates/*/rha-modules.toml",
   "crates/site/AGENTS.md",
+  "CONTRIBUTING.md",
 ]
 
 [[actors]]
@@ -154,6 +155,13 @@ id = "automated-review-threads"
 question = "Two open threads from the automated Codex reviewer on PR 16, at 8b81dd5."
 answer = "Output-root symlink: confirmed and repaired. Non-ASCII glob panic: refuted by running it; kept as a regression test. Determinations in the change record."
 decided_by = "agent:executor"
+date = "2026-09-22"
+
+[[decisions]]
+id = "contributing-scope-line"
+question = "The CONTRIBUTING line for cargo xtask scope (reverted in 7616a18) and CHG-004.6's unquoted held-out paragraph (ad13efa)."
+answer = "Restored and approved under the delegation of 2026-09-22 (decision delegation-2026-09-22), with DP-5.2 decided as a pre-PR command; the held-out paragraph is approved retroactively. CONTRIBUTING.md joins protected_scope on this decision."
+decided_by = "agent:executor under human:kennedy's delegation"
 date = "2026-09-22"
 
 [provenance]

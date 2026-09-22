@@ -100,5 +100,6 @@ Two threads were open after round 3. Each was checked against the code before an
 
 ## Acceptance concerns
 
-1. **An earlier unapproved protected edit, found by the new guard.** CHG-004.6's commit `ad13efa` added the held-out paragraph to CONTRIBUTING.md. That was a protected edit whose approval was recorded only as owned scope, not quoted from Kennedy. The CHG-004.6 acceptance record cannot be edited, so it is disclosed here. Kennedy may approve the paragraph retroactively or have it removed.
-2. **The CONTRIBUTING line for `cargo xtask scope`** waits for approval (DP-5.2).
+1. **An earlier protected edit without a quoted approval, found by the new guard.** CHG-004.6's commit `ad13efa` added the held-out paragraph to CONTRIBUTING.md; its approval was recorded only as owned scope. Resolved: approved retroactively under Kennedy's delegation of 2026-09-22 (task record decision `contributing-scope-line`; ledger DP-5.2).
+2. **The CONTRIBUTING line for `cargo xtask scope`.** Resolved: restored, with DP-5.2 decided as a pre-PR command.
+3. **DP-1.4, the private markdown held-out fixtures, is not_run.** Authoring them is Kennedy's alone (§9.14), so the delegation cannot close it. The row stays open; a run after the merge is dated as a post-acceptance observation.
