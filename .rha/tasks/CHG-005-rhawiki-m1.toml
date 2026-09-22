@@ -135,6 +135,13 @@ answer = "All 11; determinations in the change record under 'Review round 1'. Re
 decided_by = "agent:executor (under the AGENTS.md review rules)"
 date = "2026-09-22"
 
+[[decisions]]
+id = "protected-edits-quoted"
+question = "The P-B review found plan-derived protected edits without a quoted approval (M1). Asked of Kennedy on 2026-09-22: 'Three protected edits follow the approved plan's layout, but no approval of yours is quoted for them. Do you approve them?' (Cargo.toml tools/*; crates/site/rha-modules.toml; crates/site/AGENTS.md)."
+answer = "Kennedy chose 'Approve all three'. This quotes the approval for the two site files, whose decisions site-module-rules and site-scoped-guide had cited only the plan."
+decided_by = "human:kennedy"
+date = "2026-09-22"
+
 [provenance]
 harness = "Claude Code"
 task_scope = "P-A"
