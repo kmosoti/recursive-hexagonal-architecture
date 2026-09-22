@@ -54,6 +54,13 @@ The first run graded **59 of 60** sites as registered. MD051 failed: the product
 
 **Evidence:** `evidence/md-corpus/20260922T210717Z-58e45f444c9f.json` at `58e45f4`, clean tree: 60 of 60 sites graded as registered, with the registration's tree digest verified before the run.
 
+### Stage 5, M1 close
+
+- `.rha/assumptions.toml`: nine entries from plan §3.3, each naming the test that discharges it. Two are undischarged at the composition root.
+- `docs/conformance/self-assessment.md`: every §15 item answered, with the gaps named.
+- `docs/maturity.md` proposes: the crate-graph checker at V (crate level, from CHG-004.6); the deny list at V (crate level); the fast lane at V; held-out checks at I.
+- **L0 at the settled head:** `evidence/CHG-005/20260922T211312Z-e213c0b52b98.json` at `e213c0b`, clean tree, all eight `passed`, 188 tests. Tag `v0.10-m1` follows Kennedy's merge.
+
 ### Repair attempts (§11.7.10)
 
 2. **`L0.typos` failed in CI run 35784806281, and the lane had not been run locally.** Hypothesis: the spell checker splits Unicode escapes such as `\u{e9}` and reads the letters before them as a word; one variable name also read as a misspelling. (This note does not quote it, which is CHG-002's lesson.) Discriminating check: `typos --format brief` reproduced all nine findings locally. Change: the characters are written literally and the variable is renamed. No dictionary exception was added, following CHG-003's precedent. Result: `typos` is clean. A method lesson too: M5's full lane belongs before the first push, not only before the record.
