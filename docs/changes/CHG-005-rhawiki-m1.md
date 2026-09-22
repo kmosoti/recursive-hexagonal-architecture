@@ -77,6 +77,8 @@ REQUEST_CHANGES: 11 findings, 2 P1 and 9 P2. Each names a concrete failing input
 10. **P2: the source contract could not detect consistent truncation.** The seeded `TruncatingSource` alternated, so only instability was tested, and the change record's claim about the W5 violators was unsupported. Repair: the suite takes the fixture's expected contents and compares every read with them. The seeded violator now truncates every read, as the W5 brief describes. The unstable-read case is kept as its own violator.
 11. **P2: the oracles lacked generation provenance (§2.4 rule 1).** Repair: the oracle prompt is committed beside the markdown corpus's prompt. The task record gains a `[[provenance.generations]]` entry for each generated artifact (the corpus and both oracles), with model, effort, prompt path and digest.
 
+**Repairs committed in `25b035e`.** L0 at that revision: `evidence/CHG-005/20260922T213429Z-25b035eac999.json`, clean tree, all eight `passed`, 192 tests. The earlier stage 5 record describes the reviewed revision and is kept.
+
 ### Repair attempts (§11.7.10)
 
 2. **`L0.typos` failed in CI run 35784806281, and the lane had not been run locally.** Hypothesis: the spell checker splits Unicode escapes such as `\u{e9}` and reads the letters before them as a word; one variable name also read as a misspelling. (This note does not quote it, which is CHG-002's lesson.) Discriminating check: `typos --format brief` reproduced all nine findings locally. Change: the characters are written literally and the variable is renamed. No dictionary exception was added, following CHG-003's precedent. Result: `typos` is clean. A method lesson too: M5's full lane belongs before the first push, not only before the record.
