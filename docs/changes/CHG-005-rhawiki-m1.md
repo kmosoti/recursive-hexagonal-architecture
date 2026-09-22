@@ -34,6 +34,12 @@ Decomposition A, as BDR-0001 to BDR-0004 accepted it. Every core has the templat
 - **`site`**, the composite: `assembly` (`Assemble`, `PageModel`, the TOC, backlinks and link targets) and `build` (`PageRenderer`, the pure `step`, `Inv_K` checked by a separate function), glued to `OutputSink` and `Clock`. `rha-modules.toml` has the plan §3.1 content, and a scoped `AGENTS.md` states the child rules. The contract suites catch a panicking and a nondeterministic renderer, and the fakes pass.
 - `check` witnesses use the registered corpus's key shape (`site::CheckWitness`).
 
+**Differential oracles (§2.4 rule 4).** A separate Codex session (`gpt-6-astra`, extra-high) wrote independent reference implementations of `slugify` and of resolution. It worked from the contract alone and was told not to read `crates/*/src`. The results are `crates/document/tests/oracle_slug.rs` and `crates/graph/tests/oracle_resolve.rs`, compared under proptest.
+
+- **The resolver oracle agreed from the first run.**
+- **The slug oracle found a real defect.** I lowercased character by character, so a word-final `Σ` became `σ`. The oracle lowercased the whole string, which applies Unicode's context-sensitive final sigma and gives `ς`, as GitHub's slugger does. The contract's "Unicode-lowercase" is best read as the full string mapping, so the product changed. The minimal inputs were `HΣ२Z` and `e\u{301}Σ`. No registered site contains `Σ`, so the corpus result is unaffected.
+- **One edit to the oracle.** It had been given the W5 brief's NFC step, and its NFC line was removed to match the registered contract (decision `slug-without-nfc`). The file marks that edit.
+
 ### Stage 3, adapters and CLI
 
 - **`adapter-fs`**: `FsSources` and `FsSink`. It walks directories itself, never follows symlinks, and writes through a temporary file and a rename. Both owners' contract suites pass.
