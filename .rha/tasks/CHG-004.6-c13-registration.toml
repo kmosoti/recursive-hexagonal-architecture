@@ -61,7 +61,7 @@ decided_by = "human:kennedy"
 date = "2026-09-20"
 # The first manifest commit, b671fb7, appended the sentence without a full
 # stop (CHG-004.6.1 determination 5); the commit below carries the corrected text.
-commit = "pending: pinned in the commit after the CHG-004.6.1 repair"
+commit = "c9fa524b4997475e95852c49c866e0587d76156e"
 parent_manifest_sha256 = "18d4afbfe5a63843d498a109fe4702629548a25ddc730198848983208d3c46a4"
 corrected_manifest_sha256 = "07059dd444a7023552026ea3fa3051b71290b030c0d960f5ca3d1f1509196e03"
 
