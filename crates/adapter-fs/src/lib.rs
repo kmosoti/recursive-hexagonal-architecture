@@ -91,9 +91,14 @@ pub struct FsSink {
 }
 
 impl FsSink {
+    /// The root is kept as its components, so a trailing `/` or `.` cannot
+    /// make `symlink_metadata` resolve through a link at the last component
+    /// (validation round, PR 16: `--out out-link/`).
     #[must_use]
     pub fn new(root: impl Into<PathBuf>) -> Self {
-        Self { root: root.into() }
+        Self {
+            root: root.into().components().collect(),
+        }
     }
 }
 

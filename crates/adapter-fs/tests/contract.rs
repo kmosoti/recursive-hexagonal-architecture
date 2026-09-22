@@ -91,11 +91,21 @@ fn a_symlinked_output_root_is_refused_before_listing_writing_or_deleting() {
     std::fs::write(populated.join("keep.txt"), b"not ours").expect("seed");
     let link = parent.join("out");
     std::os::unix::fs::symlink(&populated, &link).expect("symlink");
-    let mut sink = FsSink::new(&link);
     let page = RelPath::new("keep.txt").expect("v");
-    assert!(sink.list().is_err(), "the target is not inventoried");
-    assert!(sink.write(&page, b"x").is_err(), "nothing is written");
-    assert!(sink.delete(&page).is_err(), "nothing is deleted");
+    // Each spelling names the link itself; a trailing `/` or `/.` must not
+    // resolve through it.
+    let spellings = [
+        link.clone(),
+        std::path::PathBuf::from(format!("{}/", link.display())),
+        std::path::PathBuf::from(format!("{}/.", link.display())),
+    ];
+    for spelling in spellings {
+        let mut sink = FsSink::new(&spelling);
+        let at = spelling.display();
+        assert!(sink.list().is_err(), "{at}: the target is not inventoried");
+        assert!(sink.write(&page, b"x").is_err(), "{at}: nothing is written");
+        assert!(sink.delete(&page).is_err(), "{at}: nothing is deleted");
+    }
     assert_eq!(
         std::fs::read(populated.join("keep.txt")).expect("still there"),
         b"not ours"
