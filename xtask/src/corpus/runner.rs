@@ -57,45 +57,147 @@ fn expectation(expected: Expected) -> &'static str {
     }
 }
 
-/// Historical correction identity, owned by its approval decision rather
-/// than inferred from whichever manifest edit happens to be newest.
+/// The manifest's digest at its pre-registration, the merge of CHG-002 at
+/// 15d916a. Every amendment chain starts here.
+pub const PRE_REGISTRATION_COMMIT: &str = "15d916a16e2323612893ade5b68de792c6a47989";
+pub const PRE_REGISTRATION_MANIFEST_SHA256: &str =
+    "f4fcef6f99fb3deda695ed65446171d4604e77b97873009ae0395f91dc8227ab";
+/// The commit of CHG-002.2 that recorded the DP-1.1c grading decision in the
+/// manifest, and the digest it produced (unchanged at its merge, 4be4a19).
+pub const CHG_002_2_MANIFEST_COMMIT: &str = "e7a60b189b06f4331bcd78364a6c1e3a627ae41e";
+pub const CHG_002_2_MANIFEST_SHA256: &str =
+    "9f5c1a93262aa6fc60eae5dc946e38e7425d707df552cf13bf6e6b458c02cbcf";
+
+/// The digest of the manifest at `commit`, or `None` when the object is not
+/// present (a shallow checkout) or `commit` is not a full identity. Absent is
+/// reported as unverified, never as verified.
+fn manifest_at(root: &Path, commit: &str) -> Option<String> {
+    if commit.len() != 40 || !commit.bytes().all(|b| b.is_ascii_hexdigit()) {
+        return None;
+    }
+    let output = command("git")
+        .args(["show", &format!("{commit}:{MANIFEST_PATH}")])
+        .current_dir(root)
+        .output()
+        .ok()?;
+    output
+        .status
+        .success()
+        .then(|| crate::util::sha256_hex(&output.stdout))
+}
+
+/// The approved amendments to the manifest since its pre-registration, in
+/// order, each owned by the decision that approved it rather than inferred
+/// from whichever manifest edit is newest. The chain is verified by bytes:
+/// every amendment's parent digest equals the previous corrected digest, and
+/// the last corrected digest equals the manifest as read. The commit of the
+/// newest amendment is recorded as given; its digests are what is checked.
 ///
 /// # Errors
-/// Returns absent/invalid decision provenance or a manifest digest mismatch.
-pub fn correction_commit(root: &Path) -> Result<String> {
-    let path = root.join(".rha/tasks/CHG-004-h4-crate-harness.toml");
-    let task: toml::Value = toml::from_str(
-        &std::fs::read_to_string(path).context(|| "reading correction approval".to_owned())?,
-    )
-    .context(|| "parsing correction approval".to_owned())?;
-    let decision = task
-        .get("decisions")
-        .and_then(toml::Value::as_array)
-        .into_iter()
-        .flatten()
-        .find(|decision| {
-            decision.get("id").and_then(toml::Value::as_str) == Some("approved-em-m03-cells")
-        })
-        .ok_or_else(|| Error::new("EM-M03 correction approval is missing"))?;
-    let revision = decision
-        .get("commit")
-        .and_then(toml::Value::as_str)
-        .ok_or_else(|| Error::new("EM-M03 approval decision lacks its correction commit"))?;
-    if revision.len() != 40 || !revision.bytes().all(|b| b.is_ascii_hexdigit()) {
+/// Returns absent or invalid decision provenance, or a broken digest chain.
+pub fn amendments(root: &Path) -> Result<Vec<Value>> {
+    const CHAIN: [(&str, &str, &str); 2] = [
+        (
+            "CHG-004",
+            ".rha/tasks/CHG-004-h4-crate-harness.toml",
+            "approved-em-m03-cells",
+        ),
+        (
+            "CHG-004.6",
+            ".rha/tasks/CHG-004.6-c13-registration.toml",
+            "approved-c13-registration",
+        ),
+    ];
+    let current = sha256_file(&root.join(MANIFEST_PATH))?;
+    // Both constants fail closed where their commits are present, like every
+    // later link (review of b423829, CHG-004.6.1); a shallow checkout reports
+    // them unverified instead.
+    let anchor_verified =
+        manifest_at(root, PRE_REGISTRATION_COMMIT).map(|d| d == PRE_REGISTRATION_MANIFEST_SHA256);
+    let first_verified =
+        manifest_at(root, CHG_002_2_MANIFEST_COMMIT).map(|d| d == CHG_002_2_MANIFEST_SHA256);
+    if anchor_verified == Some(false) || first_verified == Some(false) {
         return Err(Error::new(
-            "correction decision must cite a full commit identity",
+            "the pre-registration anchor or the CHG-002.2 link does not match the manifest at its commit",
         ));
     }
-    if decision
-        .get("corrected_manifest_sha256")
-        .and_then(toml::Value::as_str)
-        != Some(sha256_file(&root.join(MANIFEST_PATH))?.as_str())
-    {
+    // The anchor, and the one change between the pre-registration and the
+    // first decision-owned amendment: CHG-002.2's DP-1.1c grading decision,
+    // which pinned no digests of its own (review finding on 5ef607c,
+    // CHG-004.6.1).
+    let mut out = vec![json!({
+        "change": "CHG-002.2",
+        "decision": "DP-1.1c (grading values decided)",
+        "commit": CHG_002_2_MANIFEST_COMMIT,
+        "parent_manifest_sha256": PRE_REGISTRATION_MANIFEST_SHA256,
+        "corrected_manifest_sha256": CHG_002_2_MANIFEST_SHA256,
+        "decided_by": "human:kennedy",
+        "date": "2026-09-20",
+        "commit_verified": first_verified,
+        "anchor_commit": PRE_REGISTRATION_COMMIT,
+        "anchor_verified": anchor_verified,
+    })];
+    let mut previous: Option<String> = Some(CHG_002_2_MANIFEST_SHA256.to_owned());
+    for (change, path, id) in CHAIN {
+        let task: toml::Value = toml::from_str(
+            &std::fs::read_to_string(root.join(path))
+                .context(|| format!("reading {change} approval"))?,
+        )
+        .context(|| format!("parsing {change} approval"))?;
+        let decision = task
+            .get("decisions")
+            .and_then(toml::Value::as_array)
+            .into_iter()
+            .flatten()
+            .find(|d| d.get("id").and_then(toml::Value::as_str) == Some(id))
+            .ok_or_else(|| Error::new(format!("{change}: decision {id} is missing")))?;
+        let field = |key: &str| -> Result<String> {
+            decision
+                .get(key)
+                .and_then(toml::Value::as_str)
+                .map(str::to_owned)
+                .ok_or_else(|| Error::new(format!("{change}: decision {id} lacks {key}")))
+        };
+        let is_digest = |v: &str| v.len() == 64 && v.bytes().all(|b| b.is_ascii_hexdigit());
+        let parent = field("parent_manifest_sha256")?;
+        let corrected = field("corrected_manifest_sha256")?;
+        if !is_digest(&parent) || !is_digest(&corrected) {
+            return Err(Error::new(format!(
+                "{change}: decision {id} must pin full manifest digests"
+            )));
+        }
+        if let Some(prev) = &previous
+            && *prev != parent
+        {
+            return Err(Error::new(format!(
+                "amendment chain broken at {change}: its parent digest is not the previous corrected digest"
+            )));
+        }
+        previous = Some(corrected.clone());
+        let commit = field("commit")?;
+        let commit_verified = manifest_at(root, &commit).map(|d| d == corrected);
+        if commit_verified == Some(false) {
+            return Err(Error::new(format!(
+                "{change}: the manifest at {commit} does not hash to the approved corrected digest"
+            )));
+        }
+        out.push(json!({
+            "change": change,
+            "decision": id,
+            "commit": commit,
+            "commit_verified": commit_verified,
+            "parent_manifest_sha256": parent,
+            "corrected_manifest_sha256": corrected,
+            "decided_by": field("decided_by")?,
+            "date": field("date")?,
+        }));
+    }
+    if previous.as_deref() != Some(current.as_str()) {
         return Err(Error::new(
-            "manifest differs from the pinned correction digest",
+            "manifest differs from the last approved amendment's digest",
         ));
     }
-    Ok(revision.to_owned())
+    Ok(out)
 }
 
 fn pre_registration_revision(root: &Path) -> Result<String> {
@@ -465,7 +567,15 @@ pub fn summarize(records: &[Value]) -> Value {
         .map(|c| c["grade"]["false_alarms"].as_array().map_or(0, Vec::len))
         .sum();
     let failed = records.iter().any(|c| c["grade"]["passed"] != true);
-    json!({"outcome": if failed { "failed" } else { "passed" }, "detection": {"detected": detected, "violations": violations}, "checker": {"detected": count("detect", Some("detected"), true), "cases": count("detect", None, true)}, "false_alarm": {"alarms": false_alarms, "legitimate": legitimate, "legitimate_cases_with_alarms": legitimate_alarms}, "expected_miss": {"cases": count("expected_miss", None, true), "documented": count("expected_miss", Some("documented_miss"), true), "surprises": count("expected_miss", Some("unexpected_detection"), true)}, "compiler": {"cases": records.iter().filter(|c| c["detector"] != "xtask architecture").count(), "detected": records.iter().filter(|c| c["detector"] != "xtask architecture" && c["grade"]["detected"] == true).count()}, "failed_cases": records.iter().filter(|c| c["grade"]["passed"] != true).map(|c| &c["id"]).collect::<Vec<_>>()})
+    let registered: usize = records
+        .iter()
+        .map(|c| {
+            c["grade"]["registered_facts"]
+                .as_array()
+                .map_or(0, Vec::len)
+        })
+        .sum();
+    json!({"outcome": if failed { "failed" } else { "passed" }, "detection": {"detected": detected, "violations": violations}, "registered_facts": registered, "checker": {"detected": count("detect", Some("detected"), true), "cases": count("detect", None, true)}, "false_alarm": {"alarms": false_alarms, "legitimate": legitimate, "legitimate_cases_with_alarms": legitimate_alarms}, "expected_miss": {"cases": count("expected_miss", None, true), "documented": count("expected_miss", Some("documented_miss"), true), "surprises": count("expected_miss", Some("unexpected_detection"), true)}, "compiler": {"cases": records.iter().filter(|c| c["detector"] != "xtask architecture").count(), "detected": records.iter().filter(|c| c["detector"] != "xtask architecture" && c["grade"]["detected"] == true).count()}, "failed_cases": records.iter().filter(|c| c["grade"]["passed"] != true).map(|c| &c["id"]).collect::<Vec<_>>()})
 }
 
 /// Run all public committed crate cases and write one immutable record.
@@ -500,6 +610,7 @@ pub fn run(root: &Path, args: &CorpusArgs) -> Result<u8> {
     let expected_inputs = fixture::expected_tree(root, &manifest)?;
     let fixtures_root = root.join(fixture::COMMITTED_ROOT);
     let fixture_drift = fixture::drift(&fixtures_root, &expected_inputs)?;
+    let amendments = amendments(root)?;
     let run_id = format!(
         "{}-{}{}",
         now.compact(),
@@ -574,12 +685,12 @@ pub fn run(root: &Path, args: &CorpusArgs) -> Result<u8> {
         "created_at": now.rfc3339(), "artifact_identity": subject,
         "producer": {"name": "xtask corpus run", "version": env!("CARGO_PKG_VERSION"), "executable_sha256": sha256_file(&checker)?, "checker": expected_tool},
         "pre_registration": {"change": "CHG-002", "identity": manifest.pre_registration, "revision": pre_registration_revision(root)?, "record": ".rha/acceptances/CHG-002.toml"},
-        "manifest": {"path": MANIFEST_PATH, "sha256": sha256_file(&root.join(MANIFEST_PATH))?, "correction_commit": correction_commit(root)?, "approved_amendment": "Kennedy: Approved and merged, PR 6, 2026-09-20; EM-M03 cells [law3-d1, law6-b3]"},
+        "manifest": {"path": MANIFEST_PATH, "sha256": sha256_file(&root.join(MANIFEST_PATH))?, "amendments": amendments, "correction_commit": amendments.last().map(|a| a["commit"].clone()).unwrap_or(Value::Null)},
         "fixtures": {"root": fixture::COMMITTED_ROOT, "drift": fixture_drift, "generated_inputs_sha256": expected_inputs.iter().map(|(path, bytes)| (path.display().to_string(), crate::util::sha256_hex(bytes))).collect::<std::collections::BTreeMap<_, _>>()},
         "template_sha256": sha256_file(&template_path)?, "grading": {"decision": "DP-1.1c", "detection_requires": manifest.grading.detection_requires, "extra_findings": manifest.grading.extra_findings, "no_alarm_scope": manifest.grading.no_alarm_scope, "expected_miss_surprise": manifest.grading.expected_miss_surprise},
         "environment": {"os": std::env::consts::OS, "arch": std::env::consts::ARCH, "cargo": command_stdout(root, &["cargo", "--version"])?, "rustc": command_stdout(root, &["rustc", "--version"])?},
         "summary": summary, "cases": records, "downgraded_cells": downgraded,
-        "held_out": {"outcome": "not_run", "reason": "Kennedy runs the private cases at acceptance (DP-1.1b); Executor never reads them"},
+        "held_out": {"outcome": "not_part_of_this_run", "reason": "the private cases are observed separately by `cargo xtask corpus held-out` under the DP-1.1b amendment (CHG-004.6), and graded by Kennedy; no agent reads them"},
     });
     let bytes =
         serde_json::to_vec_pretty(&record).context(|| "serializing H4 evidence".to_owned())?;

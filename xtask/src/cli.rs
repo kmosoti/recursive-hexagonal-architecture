@@ -47,6 +47,31 @@ pub enum CorpusCommand {
     },
     /// Check committed fixtures, grade every case and write H4 evidence.
     Run(CorpusArgs),
+    /// Run the accepted checker on Kennedy's private cases without any agent
+    /// reading them (DP-1.1b as amended in CHG-004.6). Prints opaque ids,
+    /// exit statuses and counts; grades nothing.
+    HeldOut(HeldOutArgs),
+}
+
+#[derive(Debug, Args)]
+pub struct HeldOutArgs {
+    /// A directory of ready workspaces, each holding Cargo.toml and
+    /// rha-crates.toml; verified against the DP-1.1b commitment by
+    /// re-creating the committed tar stream.
+    #[arg(long, conflicts_with = "archive")]
+    pub cases: Option<PathBuf>,
+    /// The original committed tar archive; verified by its bytes, then
+    /// extracted into the private directory.
+    #[arg(long)]
+    pub archive: Option<PathBuf>,
+    /// `held_out` refuses a mismatched archive; `public_control` exercises
+    /// the runner on public fixtures.
+    #[arg(long, default_value = "held_out", value_parser = ["held_out", "public_control"])]
+    pub purpose: String,
+    /// Where raw reports and the private case map go. Defaults to
+    /// $XDG_STATE_HOME/rha/held-out, else ~/.local/state/rha/held-out.
+    #[arg(long)]
+    pub private_dir: Option<PathBuf>,
 }
 
 #[derive(Debug, Args)]

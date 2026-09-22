@@ -16,6 +16,7 @@ use serde::Deserialize;
 
 pub mod fixture;
 pub mod grade;
+pub mod held_out;
 pub mod runner;
 
 /// Where the manifest lives, relative to the workspace root.
@@ -182,6 +183,12 @@ pub struct Case {
     pub rules: Rules,
     /// A detector other than `cargo xtask architecture` (R01: `cargo check`).
     pub detector: Option<String>,
+    /// Facts a detect case registers in advance, each matched by the same
+    /// every-key rule as `witness` (DP-1.1c amendment, CHG-004.6). A finding
+    /// matching one is neither the detection nor a false alarm, and never
+    /// supplies a required detection. Only a detect case may register them.
+    #[serde(default)]
+    pub expected_findings: Vec<BTreeMap<String, toml::Value>>,
     /// The condition under which this case is re-registered, stated in advance.
     pub re_register_if: Option<String>,
     /// `"heuristic"` where the extraction is known to be approximate (M20).
@@ -268,6 +275,13 @@ pub enum Defect {
     /// A prose key sits in `witness`, where every key is matched. A harness
     /// would try to match a sentence against a finding's field.
     ProseInWitness { case: String, key: String },
+    /// A registered fact on a case that is not a detect case: the DP-1.1c
+    /// amendment covers detect cases only.
+    RegisteredFactOutsideDetect(String),
+    /// A registered fact with no keys would match every finding.
+    EmptyRegisteredFact(String),
+    /// A prose key in a registered fact, where every key is matched.
+    ProseInRegisteredFact { case: String, key: String },
 }
 
 /// Keys that are prose, and therefore belong in `witness_notes`. The grading
@@ -312,6 +326,18 @@ impl std::fmt::Display for Defect {
                 f,
                 "case {case} has the prose key {key} in witness, where every key is matched; it belongs in witness_notes"
             ),
+            Self::RegisteredFactOutsideDetect(id) => write!(
+                f,
+                "case {id} registers an expected finding but is not a detect case; the DP-1.1c amendment covers detect cases only"
+            ),
+            Self::EmptyRegisteredFact(id) => write!(
+                f,
+                "case {id} registers an expected finding with no keys, which would match every finding"
+            ),
+            Self::ProseInRegisteredFact { case, key } => write!(
+                f,
+                "case {case} has the prose key {key} in a registered fact, where every key is matched"
+            ),
         }
     }
 }
@@ -337,6 +363,22 @@ impl Manifest {
             }
             if case.cells.is_empty() {
                 defects.push(Defect::NoCells(case.id.clone()));
+            }
+            if !case.expected_findings.is_empty() && case.expected != Expected::Detect {
+                defects.push(Defect::RegisteredFactOutsideDetect(case.id.clone()));
+            }
+            for entry in &case.expected_findings {
+                if entry.is_empty() {
+                    defects.push(Defect::EmptyRegisteredFact(case.id.clone()));
+                }
+                for key in entry.keys() {
+                    if PROSE_KEYS.contains(&key.as_str()) {
+                        defects.push(Defect::ProseInRegisteredFact {
+                            case: case.id.clone(),
+                            key: key.clone(),
+                        });
+                    }
+                }
             }
             for cell in &case.cells {
                 if !self.cells.contains_key(cell) {

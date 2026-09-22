@@ -12,7 +12,24 @@ pub struct Grade {
     pub documented_miss: bool,
     pub unexpected_detection: bool,
     pub false_alarms: Vec<Value>,
+    /// Findings matching one of the case's registered facts (DP-1.1c
+    /// amendment, CHG-004.6): neither detections nor false alarms.
+    pub registered_facts: Vec<Value>,
     pub reasons: Vec<String>,
+}
+
+/// A registered fact: every key of one of the case's `expected_findings`
+/// entries equals the finding's field, by the rule `witness` uses. A rule
+/// name alone registers nothing, and a registered fact never supplies a
+/// required detection.
+#[must_use]
+pub fn registered(case: &Case, finding: &Value) -> bool {
+    case.expected_findings.iter().any(|entry| {
+        !entry.is_empty()
+            && entry.iter().all(|(key, expected)| {
+                serde_json::to_value(expected).is_ok_and(|value| finding.get(key) == Some(&value))
+            })
+    })
 }
 
 /// Every witness key must exist and equal its corresponding observation.
@@ -67,7 +84,16 @@ pub fn architecture(case: &Case, exit: Option<i32>, report: &Value) -> Grade {
         Expected::Detect => {
             let detection = |f: &Value| matches(case, f) && f["severity"] == "error";
             grade.detected = findings.iter().any(detection);
-            grade.false_alarms = findings.iter().filter(|f| !detection(f)).cloned().collect();
+            grade.registered_facts = findings
+                .iter()
+                .filter(|f| !detection(f) && registered(case, f))
+                .cloned()
+                .collect();
+            grade.false_alarms = findings
+                .iter()
+                .filter(|f| !detection(f) && !registered(case, f))
+                .cloned()
+                .collect();
             if !grade.detected {
                 grade
                     .reasons
