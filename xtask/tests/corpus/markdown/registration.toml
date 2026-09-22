@@ -1,0 +1,17 @@
+# Registration of the adversarial markdown corpus (plan §2.4 rules 1, 2 and 5; P-A stage 1).
+# Committed before any product code exists. The digest below is over the sorted
+# lines "<path relative to sites/> <sha256 of bytes>"; xtask/tests/corpus_markdown.rs
+# pins it, so an edit to any site or expectation fails L0.nextest.
+schema_version = 1
+registered_in = "CHG-005 (P-A stage 1)"
+generation = "sampled"
+generator = { harness = "codex-cli 0.155.1", model = "gpt-6-astra", reasoning_effort = "xhigh", sandbox = "workspace-write, limited by prompt to this directory" }
+prompt_path = "xtask/tests/corpus/markdown/GENERATOR-PROMPT.md"
+prompt_sha256 = "d8b7d2010a4557db093288ea0c81a06362535393583270f272f4d9f00fd9c5e2"
+separate_session = "The generator ran before any product crate existed and was told not to read crates/; the implementing session did not write or edit any site."
+sites = 60
+pages = 300
+witnesses = { broken_link = 27, ambiguous_link = 8, missing_anchor = 31, duplicate_slug = 26, duplicate_page_id = 7 }
+clean_sites = 20
+tree_sha256 = "f7a33823e66ad231553403c1321374c4ce0ed2cd7b39ec0d7fdbe55f80813315"
+grading = "Every site: `rhawiki check --root <site> --format json` must report exactly EXPECTED.json's witnesses as a multiset, every key equal, no extras; exit 1 when any witness, 0 when none."

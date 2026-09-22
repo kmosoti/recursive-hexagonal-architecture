@@ -1,0 +1,1 @@
+{"site":"MD045","purpose":"Inline markup shares plain heading text and duplicate slugs.","witnesses":[{"kind":"duplicate_slug","page":"Guide","slug":"read-api"},{"kind":"duplicate_slug","page":"Guide","slug":"read-api"},{"kind":"duplicate_slug","page":"Guide","slug":"read-api"}]}

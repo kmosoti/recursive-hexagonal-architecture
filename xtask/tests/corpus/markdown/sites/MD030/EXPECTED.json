@@ -1,0 +1,1 @@
+{"site":"MD030","purpose":"Anchors match exactly and absent suffixes remain missing.","witnesses":[{"kind":"missing_anchor","from":"index","target":"Guide","heading":"Ready"},{"kind":"missing_anchor","from":"index","target":"Guide","heading":"absent"},{"kind":"missing_anchor","from":"index","target":"Guide","heading":"ready-2"}]}

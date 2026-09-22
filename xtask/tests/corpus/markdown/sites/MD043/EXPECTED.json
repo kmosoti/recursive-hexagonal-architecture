@@ -1,0 +1,1 @@
+{"site":"MD043","purpose":"Lowercasing makes heading slugs collide across heading levels.","witnesses":[{"kind":"duplicate_slug","page":"Guide","slug":"guide"},{"kind":"duplicate_slug","page":"Guide","slug":"guide"}]}

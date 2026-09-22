@@ -1,0 +1,1 @@
+{"site":"MD051","purpose":"Combining and precomposed accents exercise distinct slug normalization rules.","witnesses":[{"kind":"duplicate_slug","page":"Guide","slug":"cafe"},{"kind":"missing_anchor","from":"index","target":"Guide","heading":"café-2"}]}
