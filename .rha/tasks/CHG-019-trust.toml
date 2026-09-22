@@ -74,6 +74,21 @@ answer = "Findings 1 to 7 are confirmed; determinations are in the change record
 decided_by = "agent:executor (under the AGENTS.md review rules)"
 date = "2026-09-22"
 
+
+[[decisions]]
+id = "delegation-2026-09-22"
+question = "Who decides the open recommended options, and what is the reviewer for?"
+answer = "Kennedy delegated both on 2026-09-22: 'Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me.' The Executor records the recommended or most correct option as decided under this delegation, cites it, and does not escalate. Codex validates conformance to the registered contracts and schemas and to the RHA guidelines, and does not regenerate (ledger DP-5.4, recorded on P-A)."
+decided_by = "human:kennedy"
+date = "2026-09-22"
+
+[[decisions]]
+id = "automated-review-threads"
+question = "Two open threads from the automated Codex reviewer on PR 17, at 9bcffad."
+answer = "Both confirmed. The lint requires an operand; the verifier refuses a corpus directory whose registration digest does not hold or that is empty. Determinations in the change record."
+decided_by = "agent:executor"
+date = "2026-09-22"
+
 [provenance]
 harness = "Claude Code"
 task_scope = "P-B"
