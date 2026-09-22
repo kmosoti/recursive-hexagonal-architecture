@@ -40,11 +40,11 @@ Decisions Kennedy made: the Executor is model-agnostic in the records. Hosting i
 
 ### 2.1 What the first five items cost, and why
 
-Measured on `main` at `bb1ee4e`. There are 132 non-merge commits in 8 pull requests for 5 plan items. **46 commits, 35%, touch only records, indexes or change records.** There have been 60 CI runs. Each lesson below becomes a rule in §2.2 or a guard in §8.1.
+Measured on `main` at `bb1ee4e`. There are 132 non-merge commits in 8 pull requests for 5 plan items, and 60 CI runs. **46 commits, 35%, touch nothing but evidence records, generated indexes and change records.** Counting task and acceptance records as records too, the figure is 61, or 46%. Recount by listing each commit's paths with `git show --name-only` and matching them against those directories. Each lesson below becomes a rule in §2.2 or a guard in §8.1.
 
 | # | Observation | Evidence | Rule |
 | --- | --- | --- | --- |
-| L1 | Recording is the main source of churn. A lane record, then a docs regeneration, then a CI record, each committed, each triggering another CI run and review | 46 of 132 commits; PR 2 had 38 commits | M5: one local record per settled packet. A PR-head CI record is never committed; the next acceptance record commits `main`'s |
+| L1 | Recording is the main source of churn. A lane record, then a docs regeneration, then a CI record, each committed, each triggering another CI run and review | 46 to 61 of 132 commits, depending on definition (above); PR 2 had 38 commits | M5: one local record per settled packet. A PR-head CI record is never committed; the next acceptance record commits `main`'s |
 | L2 | Pre-registration pays. It caught a real checker bug (L07) and a real gap in the registration (C13) | CHG-003 change record; CHG-004 acceptance concern 1 | Keep §6's discipline. M7 adds a registration review: before data, list every finding a fixture's shape necessarily triggers under the rule catalogue |
 | L3 | Automated review on every push multiplied churn. One review at "ready" plus focused re-reviews converged in three rounds and found real defects each time | PRs 4 to 6: 17 findings; PR 14: 7 findings, 3 rounds | M6: one local review when the packet is ready, re-reviews only of the repair diff, at most three rounds, by the AGENTS.md rules |
 | L4 | An executor improvises layout and scope. It created a `scripts/` directory, journals under `docs/`, a build script reading git, and an edit to a protected template. Each was caught by a person, late | CHG-003.2, CHG-004.4, CHG-004.6 D-004.6.2 | M4: `cargo xtask scope --task <id>` fails a diff outside the task's `owned_scope` or outside the §4 layout. Built in P-A stage 0 |
@@ -373,7 +373,7 @@ Each case: `id`, `level`, `seeded`, `rule`, `cell` (§4.1 row), `expected ∈ {d
 | EM-M03 | trait method via glob-imported trait; type from `model` | – | expected_miss for the `model` edge only |
 | X-M01 | `cargo modules dependencies --acyclic` on M01 and L-M01 | reference tool (uncollapsed, stricter) | recorded; `not_run` until installed (DP-2.1) |
 
-Harness: `cargo xtask corpus run --level crate|module` computes `detection = detected/|violations|`, `false_alarm = alarms/|legitimate|`, lists expected-miss cases with hole citations, writes `evidence/h4-<level>/<ts>-<sha>.json`; any miss or unexplained alarm fails the harness and downgrades the cell in `docs/enforcement-map.md`. Kennedy's held-out cases (outside the repo) run via `cargo xtask architecture --manifest-path <held-out>/Cargo.toml --rules <held-out>/rha-crates.toml --format json` at acceptance.
+Harness: `cargo xtask corpus run --level crate|module` computes `detection = detected/|violations|`, `false_alarm = alarms/|legitimate|`, lists expected-miss cases with hole citations, writes `evidence/h4-<level>/<ts>-<sha>.json`; any miss or unexplained alarm fails the harness and downgrades the cell in `docs/enforcement-map.md`. Kennedy's held-out cases (outside the repo) run via `cargo xtask corpus held-out --archive <tar>` (or `--cases <dir>`), which verifies the DP-1.1b commitment, runs the checker as above on each workspace, and prints only opaque ids and counts (revision 2; the bare `cargo xtask architecture` command is not used on private material).
 
 ## 7. Evidence record and maturity ledger shapes
 
@@ -407,31 +407,32 @@ Six packets finish the program. Each covers revision-1 CHG ids, whose detailed b
 
 | Packet | Covers | Milestone | Stages | Gates (Kennedy) |
 | --- | --- | --- | --- | --- |
-| **P-A** Product and M1 close | CHG-005, CHG-006 | M1, tag `v0.10-m1` | 0 guards · 1 BDRs · 2 cores · 3 adapters and CLI · 4 markdown corpus · 5 CI and self-assessment | DP-1.3 before stage 2; DP-1.4 after stage 3; DP-1.2, DP-1.5, DP-1.6 at acceptance |
-| **P-B** Trust: record lint and verifier | CHG-019, CHG-020 | ends the bootstrap | 1 schemas and lint · 2 acceptance model · 3 conformance and adversarial corpus · 4 keys and cut-over | DP-4.1 before stage 4; the policy edit that retires `[acceptance.bootstrap]` |
+| **P-A** Product and M1 close | CHG-005, CHG-006 | M1, tag `v0.10-m1` | 0 guards · 1 BDRs and corpus registration · 2 cores · 3 adapters and CLI · 4 markdown corpus run · 5 CI and self-assessment | DP-1.3 before stage 2; DP-1.2 before stage 3; DP-1.4 after stage 3; DP-1.5, DP-1.6 at acceptance |
+| **P-B** Trust: record lint and verifier | CHG-019, CHG-020 | ends the bootstrap | 1 corpus registration · 2 schemas and lint · 3 acceptance model and corpus run · 4 keys and cut-over | DP-4.1 before stage 4; the policy edit that retires `[acceptance.bootstrap]` |
 | **P-C** Module level | CHG-007, E1 | M2 (part) | 1 extraction · 2 rules · 3 corpus and random graphs · 4 `site` passes · E1 | DP-2.1 before stage 3 |
-| **P-D** Growth under measurement | CHG-008 to CHG-014 | M2 | 1 `adapter-json` and H3 · 2 five features, one stage each · 3 mutation | DP-2.2 at acceptance |
+| **P-D** Growth under measurement | CHG-008 to CHG-014 | M2 | 1 `adapter-json` and H3 · 2 five features, one stage each · 3 mutation | DP-2.1 before stage 3 (if P-C has not recorded it); DP-2.2 at acceptance |
 | **P-E** Efficiency | CHG-015 to CHG-018 | M3 | 1 bench · 2 compare and its validation · 3 counts · 4 optional `serve` | DP-3.1 before any measurement |
 | **P-F** Model and close | CHG-021, CHG-022, v0.11 | M4 | 1 derive and explain · 2 ledger · 3 the proposed v0.11 §1.4 table | Kennedy's version bump |
 
 **P-A. Product and M1 close (CHG-005, CHG-006).**
 - *Stage 0, guards.* Build `cargo xtask scope --task <id>` (M4), with tests: a path outside `owned_scope` fails, a new top-level directory fails, and a valid diff passes. Extend `cargo xtask corpus held-out` with `--kind check`, so Kennedy's markdown fixtures (DP-1.4) run through `rhawiki check --format json` under the same privacy rules. Make the docs projection reject a stale manifest digest (CHG-004 unresolved list). Tidy the pedantic warnings in `xtask/src/corpus/`.
-- *Stage 1, boundary decisions (§7.8 step 10).* Generate three candidate decompositions per §2.4 rule 3, scored by the crate checker on stub manifests and against B1 to B4 and D1 to D5. Draft BDR-0001 to BDR-0004 from the winners, each with a proposed refutation criterion (metric, source, window, threshold, action) and the rejected alternatives. **Gate DP-1.3**: Kennedy accepts or amends the criteria. No product crate exists before this gate.
+- *Stage 1, boundary decisions and corpus registration (§7.8 step 10; §2.4 rule 2).* A separate generator session, which never sees product code, produces several hundred seeded markdown documents. Their expected witnesses use the §3.2 witness kinds, and the whole corpus is committed before any stage 2 code exists. Separately, Generate three candidate decompositions per §2.4 rule 3, scored by the crate checker on stub manifests and against B1 to B4 and D1 to D5. Draft BDR-0001 to BDR-0004 from the winners, each with a proposed refutation criterion (metric, source, window, threshold, action) and the rejected alternatives. **Gate DP-1.3**: Kennedy accepts or amends the criteria. No product crate exists before this gate.
 - *Stage 2, cores.* `library`, `document`, `graph`, `site` (with `assembly` and `build`), as specified in §3 and the W5 brief. Contract suites and fakes live in the owners. Build a differential oracle for `slugify` and resolution (§2.4 rule 4), plus the property tests of §3.2. `rha-crates.toml` allow-list entries are proposed in the task record and approved at the gate below.
-- *Stage 3, adapters and CLI.* `adapter-fs`, `adapter-html`, `adapter-sys` (DP-1.2 defaults to yes), and `app-cli` with `build` and `check`. Fix the `check --format json` schema in the change record. **Gate DP-1.4**: Kennedy writes the private markdown fixtures against that schema and records their commitment. **Gate**: allow-list approval.
-- *Stage 4, markdown corpus.* A separate generator session produces and registers several hundred seeded markdown documents with expected witnesses, before stage 2 and 3 code is run on them (§2.4 rules 2 and 5). The spec renders with 182 headings and 2 mermaid fences. `rhawiki check --root docs` reports zero witnesses, or a list for DP-1.5.
+- *Stage 3, adapters and CLI.* **Gate DP-1.2** first: recorded as answered or as its default (yes) before `adapter-sys` or the footer is written. Then `adapter-fs`, `adapter-html`, `adapter-sys`, and `app-cli` with `build` and `check`. Fix the `check --format json` schema in the change record. **Gate DP-1.4**: Kennedy writes the private markdown fixtures against that schema and records their commitment. **Gate**: allow-list approval.
+- *Stage 4, markdown corpus run.* The corpus registered in stage 1 runs through `rhawiki check --format json`, graded as registered; an amendment follows the ledger procedure and is disclosed, as C13's was. The spec renders with 182 headings and 2 mermaid fences. `rhawiki check --root docs` reports zero witnesses, or a list for DP-1.5.
 - *Stage 5, M1 close.* One CI run with all eight checks `passed` is cited. `docs/conformance/self-assessment.md` is written. `docs/maturity.md` proposes V for the fast lane and the deny list at crate level. The milestone report follows, and the tag is created after the merge by Kennedy.
 - *Acceptance.* All W5 and W6 brief criteria; the markdown corpus passes as registered; `cargo xtask scope` passes; held-out markdown observations recorded for Kennedy to grade.
 
 **P-B. Trust (CHG-019, CHG-020).** Placed second because every acceptance until it lands is a disclosed bootstrap exception (L10), and it depends on nothing in the product.
-- *Stage 1.* JSON Schema for the task record, policy, evidence and acceptance records, plus `cargo xtask rha lint` with semantic checks. The lint recomputes cited digests from the subject revision (L6). Malformed fixtures are generated at scale, each registered with its expected rejection reason before the lint runs on it.
-- *Stage 2.* `tools/rha-verifier` implements the §11.7.6 model per the W16 brief, with a differential second implementation of the predicates (§2.4 rule 4) and proptest for Lemmas 1 to 3 and Proposition 2.
-- *Stage 3.* The conformance corpus: the 14 rows of §11.7.9, the §17.2 adversarial additions generated by a separate session, and legitimate fixtures, all registered before the verifier runs. Outcomes go to `evidence/h5/`.
+- *Stage 1, registration.* A separate generator session, which never sees lint or verifier code, produces the malformed-record fixtures with their expected rejection reasons, and the conformance and adversarial corpus with each fixture's expected decision: the 14 rows of §11.7.9, the §17.2 additions, and legitimate fixtures. All of it is committed before stage 2 code exists (§2.4 rule 2).
+- *Stage 2.* JSON Schema for the task record, policy, evidence and acceptance records, plus `cargo xtask rha lint` with semantic checks. The lint recomputes cited digests from the subject revision (L6).
+- *Stage 3.* `tools/rha-verifier` implements the §11.7.6 model per the W16 brief, with a differential second implementation of the predicates (§2.4 rule 4) and proptest for Lemmas 1 to 3 and Proposition 2.
+- *Stage 3, continued.* The stage 1 corpus runs against the lint and the verifier, graded as registered. Outcomes go to `evidence/h5/`.
 - *Stage 4, cut-over.* **Gate DP-4.1**: trusted producer keys. Kennedy's policy edit retires `[acceptance.bootstrap]`. The first record for which `Authentic` holds is produced. The isolation exercise stays `not_run`.
 
-**P-C. Module level (CHG-007, E1).** The W7 brief. Stage 3 adds random module graphs generated with seeds and checked against an independent reference extractor (§2.4 rules 4 and 5). The registered M, L-M and EM-M cases stay the headline measure. **Gate DP-2.1** comes before the module held-out run. E1 (`no_std` for `graph`) is a stage in `experiments/`, with no effect on the product.
+**P-C. Module level (CHG-007, E1).** The W7 brief. Random module graphs are generated with seeds before stage 1. They are checked in stage 3 against an independent reference extractor, which a separate session writes before it sees the real one (§2.4 rules 2, 4 and 5). The registered M, L-M and EM-M cases stay the headline measure. **Gate DP-2.1** comes before the module held-out run. E1 (`no_std` for `graph`) is a stage in `experiments/`, with no effect on the product.
 
-**P-D. Growth under measurement (CHG-008 to CHG-014).** The W8, W9 and W10 briefs in one PR. Each feature is its own stage and commit range. The expected touched set is committed at the start of the stage, and the observed set is recorded at its end, so change-spread is measured per stage (`git diff --numstat <stage-start>..<stage-end>`), not per PR. Mutation survivors are explained by a generated question per survivor, and Kennedy adjudicates (DP-2.2).
+**P-D. Growth under measurement (CHG-008 to CHG-014).** The W8, W9 and W10 briefs in one PR. Each feature is its own stage and commit range. The expected touched set is committed at the start of the stage, and the observed set is recorded at its end, so change-spread is measured per stage (`git diff --numstat <stage-start>..<stage-end>`), not per PR. Stage 3 waits for DP-2.1 if P-C has not recorded it. Mutation survivors are explained by a generated question per survivor, and Kennedy adjudicates (DP-2.2).
 
 **P-E. Efficiency (CHG-015 to CHG-018).** The W11 to W14 briefs. **Gate DP-3.1** comes before any measurement; the bench decision rule is registered with δ and α before the first comparison runs. W14 (`serve`) is optional and its own stage.
 
@@ -545,12 +546,12 @@ Milestone M4 report includes the proposed §1.4 table for v0.11 with every row's
 | --- | --- | --- | --- |
 | 0.1 to 0.6 | Identity, repository, spec location, record format, policy parameters, branch protection | decided in W0 | – |
 | 1.1a, 1.1b, 1.1c | Corpus manifest; held-out crate cases (amended in CHG-004.6: the Executor's process may run them with `corpus held-out`, and Kennedy grades); grading (amended in CHG-004.6: registered facts) | decided; the held-out run is pending Kennedy's archive | – |
-| 1.2 | `Clock` port and "built at" footer | P-A stage 3 | yes |
+| 1.2 | `Clock` port and "built at" footer | P-A, start of stage 3 | yes |
 | 1.3 | Refutation criteria for BDR-0001 to BDR-0004 | P-A, end of stage 1 | required |
 | 1.4 | Private markdown fixtures with expected `check --format json` output | P-A, after stage 3 fixes the schema | required |
 | 1.5 | Accept or annotate the `rhawiki check` witness list on this repository | P-A acceptance | zero witnesses expected |
 | 1.6 | Accept maturity proposals: crate-graph checker V (crate level, amendment disclosed), deny list, fast lane | now, and at P-A acceptance | – |
-| 2.1 | Install cargo-modules and cargo-mutants; module held-out cases | P-C stage 3 | install |
+| 2.1 | Install cargo-modules and cargo-mutants; module held-out cases | P-C stage 3 or P-D stage 3, whichever comes first | install |
 | 2.2 | Adjudicate surviving mutants | P-D acceptance | – |
 | 3.1 | Primary metric, δ, α, workload envelope, hardware, secondaries, count budgets | before any P-E measurement | median wall-clock of `rhawiki build` on synth-5k; δ = 5%; α = 0.05 |
 | 4.1 | Trusted producer keys and exception parameters for `rha-verifier` | P-B stage 4 | – |

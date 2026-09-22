@@ -18,6 +18,15 @@ Kennedy asked that the lessons of W0 to W4 be taken into a redeveloped plan, wit
 
 The measurements behind §2.1 were taken on `main` at `bb1ee4e`: 132 non-merge commits, 46 of them records-only, in 8 pull requests; 60 CI runs. The L0 record for this change is under `evidence/PLAN-2/`.
 
+### Review (local Codex, gpt-5.6-sol, medium, read-only), round 1 on `b85e5c0`, determinations
+
+1. **P1, "the executor must use JJ, a separate workspace and the deep verify tier." Declined.** These rules come from the reviewer's own global instructions, not this repository. The repository's AGENTS.md and CONTRIBUTING.md say none of it, and Kennedy told the Codex executor to use Git here.
+2. **P2, the record-only count is not reproducible. Confirmed.** The count depends on which paths count as records. §2.1 now states the definition: 46 of 132 counting evidence, generated indexes and change records, or 61 also counting task and acceptance records. It also gives the recount method.
+3. **P1, §6 still ran held-out cases through the bare checker. Confirmed.** §6 now names `cargo xtask corpus held-out`, which verifies the commitment and prints only opaque output.
+4. **P1, DP-1.2 had three triggers. Confirmed.** It is now one gate at the start of P-A stage 3, in the table, the stage and §9.
+5. **P2, DP-2.1 was gated only in P-C although P-D's mutation stage needs it. Confirmed.** P-D stage 3 now waits for it if P-C has not recorded it.
+6. **P2, graded corpora were generated after the code they grade. Confirmed; it contradicted §2.4 rule 2.** P-A registers the markdown corpus in stage 1, before any product code. P-B registers its lint and verifier corpora in stage 1, before any lint code. P-C generates its random graphs, and a separate session writes the reference extractor, before the real extractor exists.
+
 ## Acceptance concerns
 
 1. **Merging this approves revision 2** (DP-5.1): the packets, the method, and the generation protocol.
