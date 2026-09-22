@@ -1,0 +1,88 @@
+# Task record (spec §11.7.11 shape, stored as TOML).
+schema_version = 1
+id = "PLAN-2"
+slug = "plan-revision"
+title = "Redevelop the implementation plan from the lessons of W0 to W4"
+mode = "agent"
+executor_composition = "agent"
+authority_profile = "ECC-Solo"
+status = "proposed"
+plan_ref = "docs/plan/IMPLEMENTATION-PLAN.md (revision 1 at bb1ee4e, revised here)"
+branch = "chg/plan-2-redevelopment"
+base_revision = "bb1ee4e1ec3a6a45b4d50d85bff35e91fe3ecec4"
+intent = "Revise the Planner artifact after W0 to W4: record the measured lessons, replace the operating method with one that removes recording and review churn, regroup W5 to W18 into six gated packets for a capable executor, and add a protocol for using stochastic generation without weakening verification."
+non_goals = [
+  "Any code, policy, ledger or spec change: the plan names guards (cargo xtask scope) and ledger rows (DP-5.1 to 5.3) that later packets build under approval",
+  "Changing §3 to §7 (subject, layout, xtask design, corpus, record shapes) or the acceptance criteria of the W5 to W18 briefs, which stay as the reference",
+  "Renumbering CHG ids: records and code cite them",
+]
+
+[[actors]]
+id = "human:kennedy"
+type = "human"
+
+[[actors]]
+id = "agent:executor"
+type = "agent"
+accountable_to = "human:kennedy"
+
+[roles]
+planner = "human:kennedy"
+executor = ["agent:executor"]
+integrator = "human:kennedy"
+verifier = ["automation:xtask-ci (local, advisory)", "automation:github-actions (class ci, advisory)", "local Codex review (advisory)"]
+acceptor = "human:kennedy"
+
+[[work]]
+id = "PLAN-2"
+executor = "agent:executor"
+depends_on = ["CHG-004.6 (accepted at bb1ee4e)"]
+output = "The CHG-004.6 acceptance record; docs/plan/IMPLEMENTATION-PLAN.md revision 2; this task record and its change record."
+owned_scope = [".rha/acceptances/CHG-004.6.toml (creation)", "evidence/ci/35776292128.json", "docs/plan/IMPLEMENTATION-PLAN.md", ".rha/tasks/PLAN-2-plan-revision.toml", "docs/changes/PLAN-2-plan-revision.md", "generated docs", "evidence/PLAN-2/**"]
+claim = "The supervising session (Claude Opus 5.5) is the only writer on this branch."
+
+[[decisions]]
+id = "authority"
+question = "On whose authority is the plan revised?"
+answer = "Kennedy, 2026-09-22: 'We then need to take all lessons so far and redevelop the plan. With larger work items leveraging the extremely capable opus 5.5 stochastic generation.' Kennedy is the Planner; the merge of this PR approves revision 2 (DP-5.1)."
+decided_by = "human:kennedy"
+date = "2026-09-22"
+
+[[decisions]]
+id = "keep-chg-ids"
+question = "Do packets renumber the work?"
+answer = "No. Packets cover revision-1 CHG ids, because .rha/policy.toml [acceptance.bootstrap], the maturity ledger, the checker's report strings and several records cite CHG-007, CHG-019 and CHG-020 by number."
+decided_by = "agent:executor"
+date = "2026-09-22"
+
+[[decisions]]
+id = "verifier-second"
+question = "Why does the verifier (CHG-019, CHG-020) move from last to second?"
+answer = "Every acceptance so far is a disclosed bootstrap exception because Authentic cannot hold until the verifier exists (lesson L10), and the verifier depends on nothing in the product. Proposed for Kennedy's approval with the revision; DP-4.1 and DP-5.3 gate its cut-over."
+decided_by = "agent:executor, proposed; human:kennedy at merge"
+date = "2026-09-22"
+
+[claim]
+affected_components = []
+contract_changes = "none"
+architecture_delta = "none"
+performance_impact = "none claimed"
+unresolved = [
+  "DP-1.6, DP-1.1b and DP-1.3 are unchanged by the revision and remain Kennedy's.",
+  "The guards the method names (cargo xtask scope, the stale-digest check, held-out --kind check) are P-A stage 0 work, not this item's.",
+]
+
+[provenance]
+harness = "Claude Code"
+task_scope = "PLAN-2"
+permissions = "Workspace files, shell, git and gh through the user's account; no protected surface beyond the acceptance record's pre-approved creation."
+budgets = "unknown"
+reasoning_effort = "unknown"
+instruction_sources = [
+  { path = "docs/plan/IMPLEMENTATION-PLAN.md (revision 2, this change)", sha256 = "fc8240f77045f4d05c1b2db2245d7d0c7540899caaa6692f9621bf48510096a7" },
+  { path = "user message of 2026-09-22 asking to redevelop the plan", sha256 = "unknown" },
+]
+
+[[provenance.sessions]]
+model_id = "claude-opus-5-5"
+span = "PLAN-2, all commits"
