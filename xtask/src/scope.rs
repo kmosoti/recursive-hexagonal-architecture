@@ -182,18 +182,42 @@ pub fn task(root: &Path, id: &str) -> Result<toml::Value> {
     )))
 }
 
-/// Paths changed since the merge base with `base`, committed or not.
+/// Paths changed since the merge base with `base`, committed or not. Git's
+/// path quoting is off: by default it prints `café.md` as `"caf\303\251.md"`,
+/// which matched no glob (found by the markdown corpus in P-A stage 1).
 ///
 /// # Errors
 /// Fails if git cannot answer.
 pub fn changed(root: &Path, base: &str) -> Result<BTreeSet<String>> {
     let merge_base = command_stdout(root, &["git", "merge-base", "HEAD", base])?;
     let mut out = BTreeSet::new();
-    for line in command_stdout(root, &["git", "diff", "--name-only", &merge_base])?.lines() {
+    for line in command_stdout(
+        root,
+        &[
+            "git",
+            "-c",
+            "core.quotePath=false",
+            "diff",
+            "--name-only",
+            &merge_base,
+        ],
+    )?
+    .lines()
+    {
         out.insert(line.to_owned());
     }
-    for line in
-        command_stdout(root, &["git", "ls-files", "--others", "--exclude-standard"])?.lines()
+    for line in command_stdout(
+        root,
+        &[
+            "git",
+            "-c",
+            "core.quotePath=false",
+            "ls-files",
+            "--others",
+            "--exclude-standard",
+        ],
+    )?
+    .lines()
     {
         out.insert(line.to_owned());
     }
@@ -323,7 +347,8 @@ mod tests {
         let root = Path::new(env!("CARGO_MANIFEST_DIR"))
             .parent()
             .expect("root");
-        let tracked = command_stdout(root, &["git", "ls-files"]).expect("git ls-files");
+        let tracked = command_stdout(root, &["git", "-c", "core.quotePath=false", "ls-files"])
+            .expect("git ls-files");
         let outside: Vec<&str> = tracked
             .lines()
             .filter(|p| layout_problem(p).is_some())
