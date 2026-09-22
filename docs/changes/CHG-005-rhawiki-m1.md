@@ -17,6 +17,11 @@ Packet P-A of plan revision 2 covers CHG-005 (W5) and CHG-006 (W6). It builds th
 
 **The guard's first run caught this packet.** Stage 0 had added a line about the new command to CONTRIBUTING.md, which `.rha/policy.toml` has protected since CHG-000, and no approval quoted it. The line is reverted. It is proposed for Kennedy's approval with DP-5.2.
 
+### Stage 1, boundary decisions (§7.8 step 10) and corpus registration
+
+- **Best-of-N (§2.4 rule 3).** Three decompositions were built as stub workspaces and run through `cargo xtask architecture`; the reports are in `evidence/CHG-005/bdr-candidates/`. A is the plan's §3, B merges `library` and `document`, C splits `assembly` and `build` into crates. All pass with zero errors, so the §7.2 evidence decides. A is chosen, and each BDR records B and C with the reasons they lost.
+- **BDR-0001 to BDR-0004** in `docs/adr/` each carry a proposed refutation criterion (metric, source, window, threshold, action). **Gate DP-1.3:** Kennedy accepts or amends the four criteria before any product crate exists. BDR-0003 records the real trade-off. Until P-C validates the module check, the direction between `assembly` and `build` is enforced by review only. Candidate C is the fallback its criterion names.
+
 ## Acceptance concerns
 
 1. **An earlier unapproved protected edit, found by the new guard.** CHG-004.6's commit `ad13efa` added the held-out paragraph to CONTRIBUTING.md. That was a protected edit whose approval was recorded only as owned scope, not quoted from Kennedy. The CHG-004.6 acceptance record cannot be edited, so it is disclosed here. Kennedy may approve the paragraph retroactively or have it removed.
