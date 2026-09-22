@@ -13,8 +13,8 @@ branch = "chg/019-trust"
 base_revision = "72c5cfd2fa96efbb81adb817ae10a93e03c87713"
 intent = "Stage 1: fix the verifier and lint contract and register both corpora from a separate generator session before any code. Stage 2: schemas and `cargo xtask rha lint`. Stage 3: `tools/rha-verifier` with a differential second implementation, graded on the stage 1 corpus. Stage 4: keys and the cut-over (gate DP-4.1, DP-5.3)."
 non_goals = ["Product crates (P-A)", "The isolation exercise, which stays not_run (no protected runner exists)", "Editing .rha/policy.toml before gate DP-5.3"]
-scope_globs = [".rha/tasks/CHG-019-trust.toml", "docs/**", "evidence/**", "xtask/**", "tools/**", "Cargo.lock", ".rha/schemas/**"]
-protected_scope = ["Cargo.toml"]
+scope_globs = [".rha/tasks/CHG-019-trust.toml", ".rha/policy.toml", "docs/**", "evidence/**", "xtask/**", "tools/**", "Cargo.lock", ".rha/schemas/**"]
+protected_scope = ["Cargo.toml", ".rha/policy.toml"]
 
 [[actors]]
 id = "human:kennedy"
@@ -87,6 +87,31 @@ id = "automated-review-threads"
 question = "Two open threads from the automated Codex reviewer on PR 17, at 9bcffad."
 answer = "Both confirmed. The lint requires an operand; the verifier refuses a corpus directory whose registration digest does not hold or that is empty. Determinations in the change record."
 decided_by = "agent:executor"
+date = "2026-09-22"
+
+
+[[decisions]]
+id = "dp-4.1"
+question = "DP-4.1: trusted producer keys and exception parameters for rha-verifier; acceptance of its corpus outcomes (stage 4 gate)."
+answer = "No key is created. Every producer available now is either the Executor or a CI job that runs the candidate's own xtask (docs/threat-model.md: CI evidence is class ci, never protected); a key either could use would make Authentic hold for records the candidate controls, the failure spec §11.7.6 and the §11.7.9 row 'schema-valid but unauthenticated' exist to prevent. TrustedProducers stays empty, Authentic stays false, and stage 4's key cut-over is not_run with that reason. Exception parameters are the policy's existing ones (DP-0.5). The corpus outcomes, 152/152 decided as registered, are accepted."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "'Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me.'"
+date = "2026-09-22"
+
+[[decisions]]
+id = "dp-5.3"
+question = "DP-5.3: retire [acceptance.bootstrap] once Authentic can hold, and name the bootstrap acceptance kind (spec-v0.11 row 8)."
+answer = "Not retired: Authentic cannot hold (dp-4.1). Named: .rha/policy.toml [acceptance.bootstrap] now labels the period's acceptances kind = bootstrap_acceptance, with merge_allowed = false and no claim of conformance, and controlled_transition keeps its §11.5 meaning. The expiry now names DP-4.1 only, since Passed has been satisfiable since CHG-003. This decision is the quoted approval of that protected edit; earlier records keep their label."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "'Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me.'"
+date = "2026-09-22"
+
+
+[[decisions]]
+id = "schema-contract"
+question = "The schema contract for .rha/schemas/ that stage 2 found missing: how are required fields, types and allowed keys fixed without inventing them (§2.4 rule 6)?"
+answer = "Derived mechanically from the record shapes committed so far (task, acceptance and evidence records, the policy), registered with malformed cases before any schema file is written, as a follow-on item after this packet. Codex validates against that registration and verifier-contract.md, and does not author either (DP-5.4)."
+decided_by = "agent:executor under human:kennedy's delegation (decision delegation-2026-09-22)"
 date = "2026-09-22"
 
 [provenance]

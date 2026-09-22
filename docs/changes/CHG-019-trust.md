@@ -68,11 +68,10 @@ Findings 3 to 7 were confirmed resolved. Two were incomplete, one was new, and o
 
 ### Not done in this packet, and why
 
-- **JSON Schema files under `.rha/schemas/`** (W15). The generator found that the contract fixes no required fields, types or allowed keys, so the `schema.*` codes have no registered cases. Writing schemas now would be the invented contract §2.4 rule 6 forbids. They need a schema decision first, which is proposed as a gate for P-B's continuation.
-- **Stage 4, keys and cut-over** (DP-4.1, DP-5.3): Kennedy's.
+- **JSON Schema files under `.rha/schemas/`** (W15). The generator found that the contract fixes no required fields, types or allowed keys, so the `schema.*` codes have no registered cases. Writing schemas now would be the invented contract §2.4 rule 6 forbids. The schema decision is taken under Kennedy's delegation of 2026-09-22 (task record decision `schema-contract`): required fields, types and allowed keys are derived mechanically from the record shapes committed so far and registered, with their malformed cases, before any schema file exists. That is its own follow-on item, not this packet.
+- **Stage 4, keys and cut-over** (DP-4.1, DP-5.3): decided under Kennedy's delegation of 2026-09-22 (task record decisions `dp-4.1`, `dp-5.3`). The key cut-over is **not_run**: no producer isolated from the candidate exists, and a key the Executor or a candidate-run CI job could use would make `Authentic` vacuous. The bootstrap is not retired; its acceptance kind is renamed `bootstrap_acceptance` (proposal row 8) in `.rha/policy.toml`.
 
 ## Acceptance concerns
 
-1. **DP-4.1:** trusted producer keys. Until they exist, `Authentic` is false for every record. The verifier computes it correctly, as 152 fixtures show, but no record can satisfy it.
-2. **DP-5.3:** retiring `[acceptance.bootstrap]` is a policy edit that waits for stage 4.
-3. **A schema contract** for `.rha/schemas/`, as above.
+1. **`Authentic` cannot hold, by decision.** DP-4.1 creates no key (above). Every acceptance stays `bootstrap_acceptance` with `merge_allowed = false` until a producer isolated from the candidate exists. The spec's §11.7.6 model is implemented and graded at predicate level; the authentication channel stays in plan §10's deferred list.
+2. **The schema files are a follow-on item** (above). Until they exist, Codex validates against `docs/architecture/verifier-contract.md` and the two corpus registrations (DP-5.4).
