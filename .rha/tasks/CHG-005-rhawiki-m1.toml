@@ -39,6 +39,7 @@ protected_scope = [
   ".rha/decisions.toml",
   "rha-crates.toml",
   "crates/*/rha-modules.toml",
+  "crates/site/AGENTS.md",
 ]
 
 [[actors]]
@@ -118,6 +119,13 @@ id = "slug-without-nfc"
 question = "Stage 4's first corpus run failed site MD051: the registered contract derives slugs without NFC, and the W5 brief says NFC. Which governs?"
 answer = "The registered contract. It was committed before any product code and it grades the product (§2.4 rule 2); page ids stay NFC as both say. Disclosed defect: the Executor wrote the registration's contract from the W5 brief and dropped the brief's NFC for slugs, so the two documents disagree. The product now follows the registration. For Kennedy at acceptance: the plan brief's slug wording should be read as superseded by the registration, or amended in revision 3."
 decided_by = "agent:executor"
+date = "2026-09-22"
+
+[[decisions]]
+id = "site-scoped-guide"
+question = "May P-A create crates/site/AGENTS.md (protected by **/AGENTS.md)?"
+answer = "Yes: the W5 brief (plan §8.2), approved with revision 2 at DP-5.1, lists `site` with `rha-modules.toml` and a scoped AGENTS.md (§11.7.3). The scope guard flagged it before this decision was recorded; recorded here, before the PR."
+decided_by = "human:kennedy (plan approval, DP-5.1)"
 date = "2026-09-22"
 
 [provenance]
