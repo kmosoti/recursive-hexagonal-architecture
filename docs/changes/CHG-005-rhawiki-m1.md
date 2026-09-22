@@ -61,6 +61,22 @@ The first run graded **59 of 60** sites as registered. MD051 failed: the product
 - `docs/maturity.md` proposes: the crate-graph checker at V (crate level, from CHG-004.6); the deny list at V (crate level); the fast lane at V; held-out checks at I.
 - **L0 at the settled head:** `evidence/CHG-005/20260922T211312Z-e213c0b52b98.json` at `e213c0b`, clean tree, all eight `passed`, 188 tests. Tag `v0.10-m1` follows Kennedy's merge.
 
+### Review round 1 (Codex, `gpt-6-astra`, extra-high, read-only) on `3c4a41f`, determinations
+
+REQUEST_CHANGES: 11 findings, 2 P1 and 9 P2. Each names a concrete failing input or scenario on the reviewed revision, and all are confirmed and repaired in the commit after this one.
+
+1. **P1: writes escape through directory symlinks.** `FsSink::write` used `create_dir_all` and `write`, which follow a symlinked directory under `--out`. Repair: every existing component of the target path is checked with `symlink_metadata`, a link is refused, and directories are created one level at a time. `delete` gets the same check.
+2. **P1: predictable temporary names.** A pre-planted `.rhawiki-tmp-…` symlink was truncated through, and a source page named like a temporary file had its output overwritten and renamed. Repair: temporary files are `.rhawiki-tmp-<pid>-<counter>.tmp`, opened with `create_new`, so an existing file or link fails. `list` hides only that exact pattern, which no renderer output can take, because pages become `.html`.
+3. **P2: generated slug suffixes collided with natural slugs.** `# A`, `# A`, `# A-2` gave `a`, `a-2`, `a-2`. Repair: the allocator tracks every final slug, and both a generated suffix and a colliding natural slug advance to the next unused one: `a`, `a-2`, `a-2-2`. `DuplicateSlug` still fires only for a repeated base, as the contract says.
+4. **P2: wikilink hrefs were not URL-encoded.** `Budget?2026` became a query. Repair: path segments and fragments are percent-encoded outside RFC 3986's unreserved set, for wikilinks and backlinks alike.
+5. **P2: ordinary relative `.md` links pointed at files that are never produced.** Repair: a relative destination with no scheme and a `.md` path becomes `.html`, keeping any fragment. Absolute and scheme URLs are unchanged.
+6. **P2: the markdown held-out mode verified against the crate-level commitment.** Repair: `--kind check` reads DP-1.4's commitment, and it is `not_run` while that row carries none.
+7. **P2: the markdown harness could run a stale binary.** It ran `target/debug/rhawiki` whatever `CARGO_TARGET_DIR` said. Repair: the executable path comes from Cargo's own build output (`--message-format=json`).
+8. **P2: invalid checker output passed clean sites.** Empty stdout, `{}`, or a non-array `witnesses` became an empty multiset. Repair: a case is graded only when the output is JSON with `schema_version == 1` and a `witnesses` array; anything else fails the case.
+9. **P2: renames hid protected sources from the scope guard.** Git's rename detection listed only the destination. Repair: `--no-renames`, so both endpoints are checked.
+10. **P2: the source contract could not detect consistent truncation.** The seeded `TruncatingSource` alternated, so only instability was tested, and the change record's claim about the W5 violators was unsupported. Repair: the suite takes the fixture's expected contents and compares every read with them. The seeded violator now truncates every read, as the W5 brief describes. The unstable-read case is kept as its own violator.
+11. **P2: the oracles lacked generation provenance (§2.4 rule 1).** Repair: the oracle prompt is committed beside the markdown corpus's prompt. The task record gains a `[[provenance.generations]]` entry for each generated artifact (the corpus and both oracles), with model, effort, prompt path and digest.
+
 ### Repair attempts (§11.7.10)
 
 2. **`L0.typos` failed in CI run 35784806281, and the lane had not been run locally.** Hypothesis: the spell checker splits Unicode escapes such as `\u{e9}` and reads the letters before them as a word; one variable name also read as a misspelling. (This note does not quote it, which is CHG-002's lesson.) Discriminating check: `typos --format brief` reproduced all nine findings locally. Change: the characters are written literally and the variable is renamed. No dictionary exception was added, following CHG-003's precedent. Result: `typos` is clean. A method lesson too: M5's full lane belongs before the first push, not only before the record.
