@@ -113,6 +113,16 @@ pub fn safe_member(name: &str) -> bool {
             .any(|c| matches!(c, Component::ParentDir | Component::Prefix(_)))
 }
 
+/// Whether every line of a `tar -tv` listing is a regular file (`-`) or a
+/// directory (`d`).
+#[must_use]
+pub fn only_files_and_directories(verbose_listing: &str) -> bool {
+    verbose_listing
+        .lines()
+        .filter(|l| !l.is_empty())
+        .all(|l| matches!(l.as_bytes().first(), Some(b'-' | b'd')))
+}
+
 /// Extracts an archive into `dest` after checking every member name. The
 /// offending name of an unsafe member is not reported: it is private.
 ///
@@ -131,6 +141,23 @@ pub fn extract(archive: &Path, dest: &Path) -> Result<()> {
     if names.lines().any(|n| !safe_member(n)) {
         return Err(Error::new(
             "an archive member would escape the extraction directory",
+        ));
+    }
+    // A safe name is not enough: a symlink or hard-link member can redirect a
+    // later member outside the directory. Only regular files and directories
+    // are accepted, read from the type column of the verbose listing
+    // (review finding on 5ef607c, CHG-004.6.1).
+    let verbose = command("tar")
+        .arg("-tvf")
+        .arg(archive)
+        .output()
+        .context(|| "listing the archive's member types".to_owned())?;
+    if !verbose.status.success() {
+        return Err(Error::new("the archive could not be listed"));
+    }
+    if !only_files_and_directories(&String::from_utf8_lossy(&verbose.stdout)) {
+        return Err(Error::new(
+            "an archive member is a link or special file; only files and directories are accepted",
         ));
     }
     std::fs::create_dir_all(dest)
@@ -281,7 +308,22 @@ pub fn execute(root: &Path, args: &HeldOutArgs) -> Result<(Value, u8)> {
             extract(archive, &inputs)?;
             (inputs, check)
         }
-        (None, Some(dir)) => (dir.clone(), verify_directory(dir, &expected)),
+        (None, Some(dir)) => {
+            let check = verify_directory(dir, &expected);
+            // Unverified is not matched: without the check, altered cases
+            // would be observed and reported as if they were the committed
+            // ones (review finding on 5ef607c, CHG-004.6.1).
+            if check["status"] != "matched" && args.purpose == "held_out" {
+                return Ok((
+                    not_run(
+                        "the directory does not verify against the DP-1.1b commitment",
+                        Some(check),
+                    ),
+                    2,
+                ));
+            }
+            (dir.clone(), check)
+        }
         (None, None) => return Ok((not_run("no --archive or --cases was given", None), 2)),
     };
     let cases = workspaces(&source)?;
@@ -355,7 +397,12 @@ pub fn execute(root: &Path, args: &HeldOutArgs) -> Result<(Value, u8)> {
 /// # Errors
 /// See [`execute`].
 pub fn run(root: &Path, args: &HeldOutArgs) -> Result<u8> {
-    let (summary, code) = execute(root, args)?;
+    let (mut summary, code) = execute(root, args)?;
+    // The report directory is written to summary.json inside it, not printed:
+    // what is printed is what an agent reads (CHG-004.6.1).
+    if let Some(object) = summary.as_object_mut() {
+        object.remove("private_reports");
+    }
     let mut text =
         serde_json::to_string_pretty(&summary).context(|| "serializing the summary".to_owned())?;
     text.push('\n');

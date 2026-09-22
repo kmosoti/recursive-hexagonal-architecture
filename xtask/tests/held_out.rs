@@ -181,3 +181,58 @@ fn a_mismatched_archive_is_not_run_for_the_held_out_purpose() {
     );
     std::fs::remove_dir_all(private).expect("clean");
 }
+
+#[test]
+fn a_directory_that_does_not_verify_is_not_run_for_the_held_out_purpose() {
+    let root = root();
+    let cases = temp("unverified");
+    copy_dir(
+        &root.join("xtask/tests/corpus/crate/legitimate/L01"),
+        &cases.join("one"),
+    );
+    let private = temp("private-unverified");
+    let args = HeldOutArgs {
+        cases: Some(cases.clone()),
+        archive: None,
+        purpose: "held_out".to_owned(),
+        private_dir: Some(private.clone()),
+    };
+    let (summary, code) = held_out::execute(&root, &args).expect("runner");
+    assert_eq!(code, 2, "{summary}");
+    assert_eq!(summary["outcome"], "not_run");
+    assert!(summary.get("cases").is_none(), "nothing was observed");
+    std::fs::remove_dir_all(cases).expect("clean");
+    std::fs::remove_dir_all(private).expect("clean");
+}
+
+#[test]
+fn link_members_are_refused_before_extraction() {
+    assert!(held_out::only_files_and_directories(
+        "drwxr-xr-x 0/0 0 2026-09-20 00:00 ./\n-rw-r--r-- 0/0 2 2026-09-20 00:00 ./a\n"
+    ));
+    assert!(!held_out::only_files_and_directories(
+        "lrwxrwxrwx 0/0 0 2026-09-20 00:00 ./link -> /etc\n"
+    ));
+    assert!(!held_out::only_files_and_directories(
+        "hrw-r--r-- 0/0 0 2026-09-20 00:00 ./b link to ./a\n"
+    ));
+    let dir = temp("links");
+    std::fs::write(dir.join("a"), "x").expect("file");
+    #[cfg(unix)]
+    std::os::unix::fs::symlink("/etc", dir.join("link")).expect("symlink");
+    let archive = temp("links-archive").join("t.tar");
+    let made = Command::new("tar")
+        .arg("-cf")
+        .arg(&archive)
+        .arg("-C")
+        .arg(&dir)
+        .arg(".")
+        .status();
+    if made.is_ok_and(|s| s.success()) {
+        let dest = temp("links-dest");
+        assert!(held_out::extract(&archive, &dest).is_err());
+        assert!(!dest.join("a").exists(), "nothing is extracted");
+        std::fs::remove_dir_all(dest).expect("clean");
+    }
+    std::fs::remove_dir_all(dir).expect("clean");
+}

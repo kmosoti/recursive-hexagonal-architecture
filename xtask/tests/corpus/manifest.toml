@@ -1035,7 +1035,7 @@ detection_requires = "every key of the case's witness table must equal the findi
 # Recall and precision are scored separately, so an over-eager rule cannot be
 # hidden by the case it happens to get right, and is not punished twice for one
 # defect either.
-extra_findings = "the case counts as detected, and every unmatched finding on that fixture is counted in the run's false_alarm total with the fixture id; neither number is derived from the other A finding matching an entry of a case's expected_findings is a registered fact, neither a detection nor a false alarm."
+extra_findings = "the case counts as detected, and every unmatched finding on that fixture is counted in the run's false_alarm total with the fixture id; neither number is derived from the other. A finding matching an entry of a case's expected_findings is a registered fact, neither a detection nor a false alarm."
 
 # The strong reading: a legitimate fixture is a claim that the checker stays
 # quiet about the whole workspace, not only about one rule. `listed_as` is the

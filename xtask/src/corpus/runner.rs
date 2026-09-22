@@ -57,6 +57,34 @@ fn expectation(expected: Expected) -> &'static str {
     }
 }
 
+/// The manifest's digest at its pre-registration, the merge of CHG-002 at
+/// 15d916a. Every amendment chain starts here.
+pub const PRE_REGISTRATION_MANIFEST_SHA256: &str =
+    "f4fcef6f99fb3deda695ed65446171d4604e77b97873009ae0395f91dc8227ab";
+/// The commit of CHG-002.2 that recorded the DP-1.1c grading decision in the
+/// manifest, and the digest it produced (unchanged at its merge, 4be4a19).
+pub const CHG_002_2_MANIFEST_COMMIT: &str = "e7a60b189b06f4331bcd78364a6c1e3a627ae41e";
+pub const CHG_002_2_MANIFEST_SHA256: &str =
+    "9f5c1a93262aa6fc60eae5dc946e38e7425d707df552cf13bf6e6b458c02cbcf";
+
+/// The digest of the manifest at `commit`, or `None` when the object is not
+/// present (a shallow checkout) or `commit` is not a full identity. Absent is
+/// reported as unverified, never as verified.
+fn manifest_at(root: &Path, commit: &str) -> Option<String> {
+    if commit.len() != 40 || !commit.bytes().all(|b| b.is_ascii_hexdigit()) {
+        return None;
+    }
+    let output = command("git")
+        .args(["show", &format!("{commit}:{MANIFEST_PATH}")])
+        .current_dir(root)
+        .output()
+        .ok()?;
+    output
+        .status
+        .success()
+        .then(|| crate::util::sha256_hex(&output.stdout))
+}
+
 /// The approved amendments to the manifest since its pre-registration, in
 /// order, each owned by the decision that approved it rather than inferred
 /// from whichever manifest edit is newest. The chain is verified by bytes:
@@ -80,8 +108,22 @@ pub fn amendments(root: &Path) -> Result<Vec<Value>> {
         ),
     ];
     let current = sha256_file(&root.join(MANIFEST_PATH))?;
-    let mut previous: Option<String> = None;
-    let mut out = Vec::new();
+    // The anchor, and the one change between the pre-registration and the
+    // first decision-owned amendment: CHG-002.2's DP-1.1c grading decision,
+    // which pinned no digests of its own (review finding on 5ef607c,
+    // CHG-004.6.1).
+    let mut out = vec![json!({
+        "change": "CHG-002.2",
+        "decision": "DP-1.1c (grading values decided)",
+        "commit": CHG_002_2_MANIFEST_COMMIT,
+        "parent_manifest_sha256": PRE_REGISTRATION_MANIFEST_SHA256,
+        "corrected_manifest_sha256": CHG_002_2_MANIFEST_SHA256,
+        "decided_by": "human:kennedy",
+        "date": "2026-09-20",
+        "commit_verified": manifest_at(root, CHG_002_2_MANIFEST_COMMIT)
+            .map(|d| d == CHG_002_2_MANIFEST_SHA256),
+    })];
+    let mut previous: Option<String> = Some(CHG_002_2_MANIFEST_SHA256.to_owned());
     for (change, path, id) in CHAIN {
         let task: toml::Value = toml::from_str(
             &std::fs::read_to_string(root.join(path))
@@ -118,10 +160,18 @@ pub fn amendments(root: &Path) -> Result<Vec<Value>> {
             )));
         }
         previous = Some(corrected.clone());
+        let commit = field("commit")?;
+        let commit_verified = manifest_at(root, &commit).map(|d| d == corrected);
+        if commit_verified == Some(false) {
+            return Err(Error::new(format!(
+                "{change}: the manifest at {commit} does not hash to the approved corrected digest"
+            )));
+        }
         out.push(json!({
             "change": change,
             "decision": id,
-            "commit": field("commit")?,
+            "commit": commit,
+            "commit_verified": commit_verified,
             "parent_manifest_sha256": parent,
             "corrected_manifest_sha256": corrected,
             "decided_by": field("decided_by")?,

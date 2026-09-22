@@ -142,16 +142,28 @@ fn full_committed_corpus_pins_observations_under_the_amended_registration() {
     let amendments = record["manifest"]["amendments"]
         .as_array()
         .expect("amendments");
-    assert_eq!(amendments.len(), 2);
-    assert_eq!(amendments[0]["decision"], "approved-em-m03-cells");
-    assert_eq!(amendments[1]["decision"], "approved-c13-registration");
+    assert_eq!(amendments.len(), 3);
+    assert_eq!(amendments[0]["change"], "CHG-002.2");
+    assert_eq!(
+        amendments[0]["parent_manifest_sha256"],
+        xtask::corpus::runner::PRE_REGISTRATION_MANIFEST_SHA256
+    );
+    assert_eq!(amendments[1]["decision"], "approved-em-m03-cells");
+    assert_eq!(amendments[2]["decision"], "approved-c13-registration");
+    assert_eq!(
+        amendments[1]["parent_manifest_sha256"],
+        amendments[0]["corrected_manifest_sha256"]
+    );
+    for link in amendments {
+        assert_ne!(link["commit_verified"], false, "{link}");
+    }
     assert_eq!(
         record["manifest"]["correction_commit"],
         c13["commit"].as_str().expect("c13 commit")
     );
     let current = include_str!("corpus/manifest.toml");
     let fact_block = "# Registered fact (CHG-004.6, DP-1.1c amendment, approved by Kennedy 2026-09-20\n# after the data): the adapter's dependency on core-b, whose port it does not\n# implement, necessarily raises adapter.foreign_core, listed as a warning in\n# plan §5 before any data existed. Matched by the every-key rule; neither the\n# detection nor a false alarm.\nexpected_findings = [{ rule = \"adapter.foreign_core\", crate = \"adapter-x\", to = \"core-b\" }]\n";
-    let sentence = " A finding matching an entry of a case's expected_findings is a registered fact, neither a detection nor a false alarm.";
+    let sentence = ". A finding matching an entry of a case's expected_findings is a registered fact, neither a detection nor a false alarm.";
     assert_eq!(current.matches(fact_block).count(), 1);
     assert_eq!(current.matches(sentence).count(), 1);
     let before_c13 = current.replace(fact_block, "").replace(sentence, "");

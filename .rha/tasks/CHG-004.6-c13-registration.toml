@@ -59,9 +59,11 @@ question = "Which protected changes did Kennedy approve, and what is their exact
 answer = "Kennedy stated in the CHG-004.6 kickoff of 2026-09-20: \"C13: I choose (a). I approve the DP-1.1c amendment row and the C13 manifest amendment exactly as the goal states.\" The manifest gains, on C13 only, expected_findings = [{ rule = \"adapter.foreign_core\", crate = \"adapter-x\", to = \"core-b\" }], and [grading] extra_findings gains one sentence: \"A finding matching an entry of a case's expected_findings is a registered fact, neither a detection nor a false alarm.\" The amendment is made after the data and is disclosed on the DP-1.1c row, in every H4 record that grades under it, and in the maturity row. The failed records stay."
 decided_by = "human:kennedy"
 date = "2026-09-20"
-commit = "b671fb773a753d2c7f30116d3703fd7c99048bb3"
+# The first manifest commit, b671fb7, appended the sentence without a full
+# stop (CHG-004.6.1 determination 5); the commit below carries the corrected text.
+commit = "pending: pinned in the commit after the CHG-004.6.1 repair"
 parent_manifest_sha256 = "18d4afbfe5a63843d498a109fe4702629548a25ddc730198848983208d3c46a4"
-corrected_manifest_sha256 = "406e37b04e82cbaa34efbbd9a33800ec787209a4616a63dc963ae5193c04c29e"
+corrected_manifest_sha256 = "07059dd444a7023552026ea3fa3051b71290b030c0d960f5ca3d1f1509196e03"
 
 [[decisions]]
 id = "delegated-held-out-execution"
