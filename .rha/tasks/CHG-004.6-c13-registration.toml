@@ -77,6 +77,13 @@ answer = "First the CHG-004 acceptance record with its CI record; second the two
 decided_by = "human:kennedy (order); agent:executor (record preparation)"
 date = "2026-09-20"
 
+[[decisions]]
+id = "review-findings-chg-004.6.1"
+question = "A local Codex review (gpt-5.6-sol, medium, read-only) of PR 14 at 5ef607c requested changes. Which findings name a concrete failure?"
+answer = "All five. (1) P1: `--cases` ran even when the directory's commitment check was mismatched or unverified, so altered cases could be observed and reported with exit 0; for the held_out purpose anything but matched now refuses with exit 2, as the archive path already did. (2) P1: the printed summary carried the absolute path of the private report directory, an invitation to read raw reports; the printed summary drops it and summary.json in that directory keeps it. (3) P1: archive checking inspected member names only, so a symlink or hard-link member could make a later member write outside the extraction directory; members other than regular files and directories are now refused before extraction, from tar's verbose listing. (4) P1: the amendment chain was not anchored, and its first link skipped a real change: the manifest at the pre-registration 15d916a hashes to f4fcef6f..., and CHG-002.2's DP-1.1c grading decision changed it to 9f5c1a93... at 4be4a19 before EM-M03. The chain now starts at the pre-registration digest, records the CHG-002.2 link, and where a link's commit object is present verifies that the manifest at that commit hashes to its corrected digest (`commit_verified`; absent objects in a shallow checkout are reported, not assumed). (5) P2: the approved sentence was appended to extra_findings without ending the previous one, reading 'derived from the other A finding'; a full stop is inserted, which is punctuation inside the approved change, and the corrected digest and pinned commit move with it."
+decided_by = "agent:executor (determinations under the review rules in AGENTS.md); human:kennedy (request of 2026-09-22 to have Codex review and to merge if no real issue remains)"
+date = "2026-09-22"
+
 [expectation]
 # Written before the amended run.
 amended_run = "22/22 detected, 0 unmatched findings, 0 legitimate cases with an alarm, EM-C01 and EM-C02 documented, exit 0; C13's warning appears under registered_facts and nowhere else."
@@ -116,3 +123,12 @@ span = "CHG-004.6 preparation in the executor's worktree: the acceptance-record 
 [[provenance.sessions]]
 model_id = "claude-fable-5-1"
 span = "CHG-004.6 from commit 1: the records, the amendments, the harness, the held-out runner, the evidence"
+
+[[provenance.sessions]]
+model_id = "claude-opus-5-5"
+span = "CHG-004.6.1: the five findings of the local Codex review of PR 14"
+
+[[provenance.reviews]]
+reviewer = "local Codex CLI 0.155.1, model gpt-5.6-sol, reasoning medium, read-only sandbox"
+revision = "5ef607c"
+verdict = "REQUEST_CHANGES: five findings, all confirmed (decision review-findings-chg-004.6.1)"
