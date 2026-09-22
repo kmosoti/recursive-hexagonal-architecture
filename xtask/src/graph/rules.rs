@@ -209,12 +209,14 @@ mod tests {
         assert_eq!(rules.schema_version, 1);
         assert_eq!(rules.classification.tools, vec!["xtask".to_owned()]);
         assert_eq!(digest.len(), 64);
-        // Empty by decision, not by accident (CHG-003): no core crate exists,
-        // and none may depend on anything external.
-        assert!(rules.core.allow.is_empty());
-        assert!(rules.core.dev_allow.is_empty());
+        // Empty from CHG-003 until Kennedy approved the first entries at the
+        // P-A stage 2 gate (CHG-005 decision core-allow-list). Pinned so a
+        // widening is a visible change to this test, not a quiet edit (§9.14:
+        // the approved requirement changed).
+        assert_eq!(rules.core.allow, ["pulldown-cmark", "sha2", "unicode-normalization"]);
+        assert_eq!(rules.core.dev_allow, ["proptest"]);
         assert!(!rules.core.allow_build_scripts);
-        assert!(rules.forbidden.is_empty());
+        assert_eq!(rules.forbidden.len(), 3);
         assert!(!rules.transitive.enabled);
     }
 

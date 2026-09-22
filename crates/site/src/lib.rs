@@ -13,11 +13,16 @@ mod port;
 pub mod testing;
 
 pub use build::{PageRenderer, Rendered};
+/// What a renderer needs from the owners of the model, re-exported so that a
+/// rendering adapter depends on its port's owner only (D1; no
+/// `adapter.foreign_core`).
+pub use document::{Align, CalloutKind, Node};
+pub use library::{PageId, RelPath};
 pub use port::{Clock, OutputSink, SinkError};
 
 use document::{Diagnostic, Document};
 use graph::{SiteGraph, Witness};
-use library::{Corpus, DuplicatePageId, RelPath};
+use library::{Corpus, DuplicatePageId};
 
 /// What a build did.
 #[derive(Debug, Clone, PartialEq, Eq, Default)]

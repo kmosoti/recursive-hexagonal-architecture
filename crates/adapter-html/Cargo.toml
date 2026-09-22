@@ -1,0 +1,20 @@
+[package]
+name = "adapter-html"
+version = "0.1.0"
+description = "rhawiki adapter: page models to HTML (the presentational, non-target part)"
+edition.workspace = true
+rust-version.workspace = true
+publish = false
+
+[package.metadata.rha]
+implements = ["site::PageRenderer"]
+
+[dependencies]
+site = { path = "../site" }
+
+[dev-dependencies]
+library = { path = "../library" }
+proptest = "1.11.0"
+
+[lints]
+workspace = true

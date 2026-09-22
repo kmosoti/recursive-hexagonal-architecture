@@ -3,6 +3,30 @@
 version = 4
 
 [[package]]
+name = "adapter-fs"
+version = "0.1.0"
+dependencies = [
+ "library",
+ "site",
+]
+
+[[package]]
+name = "adapter-html"
+version = "0.1.0"
+dependencies = [
+ "library",
+ "proptest",
+ "site",
+]
+
+[[package]]
+name = "adapter-sys"
+version = "0.1.0"
+dependencies = [
+ "site",
+]
+
+[[package]]
 name = "anstream"
 version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -50,6 +74,19 @@ dependencies = [
  "anstyle",
  "once_cell_polyfill",
  "windows-sys",
+]
+
+[[package]]
+name = "app-cli"
+version = "0.1.0"
+dependencies = [
+ "adapter-fs",
+ "adapter-html",
+ "adapter-sys",
+ "clap",
+ "library",
+ "serde_json",
+ "site",
 ]
 
 [[package]]

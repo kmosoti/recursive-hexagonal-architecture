@@ -1,0 +1,16 @@
+[package]
+name = "adapter-sys"
+version = "0.1.0"
+description = "rhawiki adapter: the system clock (DP-1.2)"
+edition.workspace = true
+rust-version.workspace = true
+publish = false
+
+[package.metadata.rha]
+implements = ["site::Clock"]
+
+[dependencies]
+site = { path = "../site" }
+
+[lints]
+workspace = true
