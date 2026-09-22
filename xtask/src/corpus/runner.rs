@@ -598,6 +598,9 @@ pub fn summarize(records: &[Value]) -> Value {
 /// # Errors
 /// Returns unsupported-level, invalid manifest or evidence I/O failures.
 pub fn run(root: &Path, args: &CorpusArgs) -> Result<u8> {
+    if args.level == "markdown" {
+        return super::markdown::run(root, &args.evidence);
+    }
     if args.level != "crate" {
         return Err(Error::new("module corpus not_implemented until CHG-007"));
     }

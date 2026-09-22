@@ -72,6 +72,7 @@ fn public_controls_are_observed_without_naming_them() {
         archive: None,
         purpose: "public_control".to_owned(),
         private_dir: Some(private.clone()),
+        kind: "architecture".to_owned(),
     };
     let (summary, code) = held_out::execute(&root, &args).expect("runner");
     assert_eq!(code, 0, "{summary}");
@@ -170,6 +171,7 @@ fn a_mismatched_archive_is_not_run_for_the_held_out_purpose() {
         archive: Some(archive.clone()),
         purpose: "held_out".to_owned(),
         private_dir: Some(private.clone()),
+        kind: "architecture".to_owned(),
     };
     let (summary, code) = held_out::execute(&root(), &args).expect("runner");
     assert_eq!(code, 2);
@@ -196,6 +198,7 @@ fn a_directory_that_does_not_verify_is_not_run_for_the_held_out_purpose() {
         archive: None,
         purpose: "held_out".to_owned(),
         private_dir: Some(private.clone()),
+        kind: "architecture".to_owned(),
     };
     let (summary, code) = held_out::execute(&root, &args).expect("runner");
     assert_eq!(code, 2, "{summary}");
@@ -235,4 +238,39 @@ fn link_members_are_refused_before_extraction() {
         std::fs::remove_dir_all(dest).expect("clean");
     }
     std::fs::remove_dir_all(dir).expect("clean");
+}
+
+#[test]
+fn markdown_sites_are_observed_as_counts_only() {
+    let root = root();
+    let cases = temp("md");
+    copy_dir(
+        &root.join("xtask/tests/corpus/markdown/sites/MD001"),
+        &cases.join("s1"),
+    );
+    copy_dir(
+        &root.join("xtask/tests/corpus/markdown/sites/MD051"),
+        &cases.join("s2"),
+    );
+    let private = temp("md-private");
+    let args = HeldOutArgs {
+        cases: Some(cases.clone()),
+        archive: None,
+        purpose: "public_control".to_owned(),
+        private_dir: Some(private.clone()),
+        kind: "check".to_owned(),
+    };
+    let (summary, code) = held_out::execute(&root, &args).expect("runner");
+    assert_eq!(code, 0, "{summary}");
+    let rows = summary["cases"].as_array().expect("cases");
+    assert_eq!(rows.len(), 2);
+    assert!(rows.iter().all(|r| r["outcome"] == "observed"), "{summary}");
+    assert_eq!(rows[1]["witnesses"], 2, "MD051 has two witnesses");
+    let text = serde_json::to_string(&summary).expect("json");
+    assert!(
+        !text.contains("Guide") && !text.contains("cafe"),
+        "no page names or witness text"
+    );
+    std::fs::remove_dir_all(cases).expect("clean");
+    std::fs::remove_dir_all(private).expect("clean");
 }

@@ -34,6 +34,18 @@ Decomposition A, as BDR-0001 to BDR-0004 accepted it. Every core has the templat
 - **`site`**, the composite: `assembly` (`Assemble`, `PageModel`, the TOC, backlinks and link targets) and `build` (`PageRenderer`, the pure `step`, `Inv_K` checked by a separate function), glued to `OutputSink` and `Clock`. `rha-modules.toml` has the plan §3.1 content, and a scoped `AGENTS.md` states the child rules. The contract suites catch a panicking and a nondeterministic renderer, and the fakes pass.
 - `check` witnesses use the registered corpus's key shape (`site::CheckWitness`).
 
+### Stage 3, adapters and CLI
+
+- **`adapter-fs`**: `FsSources` and `FsSink`. It walks directories itself, never follows symlinks, and writes through a temporary file and a rename. Both owners' contract suites pass.
+- **`adapter-html`**: one escape function, with a property test that decodes its output. It renders the TOC, backlinks, relative wikilink hrefs, broken links as marked spans, `pre.mermaid` blocks, and the footer. The renderer contract passes. It depends on `site` only, through re-exports, so the checker reports **0 errors and 0 warnings** over the whole product.
+- **`adapter-sys`**: `SystemClock` with an RFC 3339 formatter (DP-1.2 recorded as its default, yes).
+- **`app-cli`** is the `rhawiki` binary with `build` and `check --format json`. The check schema is `{schema_version, pages, witnesses[{kind, …}], counts}`, with witness keys exactly as the registered corpus uses them. **Gate DP-1.4:** Kennedy's private markdown fixtures can now be written against this schema. `cargo xtask corpus held-out --kind check --archive <tar>` runs them, one site per subdirectory, printing only opaque ids, exit statuses and counts.
+- **On this repository:** `rhawiki check --root docs` finds 26 pages and 0 witnesses (DP-1.5's expectation). `rhawiki build` renders the spec with exactly **182** headings and **2** mermaid blocks, as W5 requires. `xtask/tests/` in app-cli pins both.
+
+### Stage 4, markdown corpus run
+
+The first run graded **59 of 60** sites as registered. MD051 failed: the product applied NFC to slugs, which the W5 brief asks for. The registered contract derives slugs without NFC, so a combining mark is dropped. The registration was fixed first and grades the product, so the product now follows it (decision `slug-without-nfc`). The disclosed defect is the Executor's: the brief's NFC was dropped when the registration contract was written. After the change, **60 of 60** sites pass. The first run was a check, not a recorded harness run, so no failed record exists for it; this paragraph is its record. `cargo xtask corpus run --level markdown` writes the evidence below, and an app-cli test pins it under `L0.nextest`.
+
 ### Repair attempts (§11.7.10)
 
 1. **The scope guard reported 52 false findings on the corpus commit.** The hypothesis was git's default path quoting. The discriminating check: every flagged path was an octal-escaped non-ASCII name such as `caf\303\251.md`. The change turns off `core.quotePath` in every git call the guard makes. Result: 0 findings. The adversarial corpus found a defect in the guard before any product code existed.

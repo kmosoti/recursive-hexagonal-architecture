@@ -213,6 +213,57 @@ pub fn workspaces(source: &Path) -> Result<Vec<PathBuf>> {
     Ok(out)
 }
 
+/// Markdown sites for `--kind check`: every immediate subdirectory, sorted,
+/// not hidden, not a link.
+///
+/// # Errors
+/// On an unreadable directory.
+pub fn sites(source: &Path) -> Result<Vec<PathBuf>> {
+    let mut out: Vec<PathBuf> = std::fs::read_dir(source)
+        .context(|| "reading the sites directory".to_owned())?
+        .filter_map(std::result::Result::ok)
+        .map(|e| e.path())
+        .filter(|p| !p.is_symlink() && p.is_dir())
+        .filter(|p| {
+            p.file_name()
+                .and_then(|n| n.to_str())
+                .is_some_and(|n| !n.starts_with('.'))
+        })
+        .collect();
+    out.sort();
+    Ok(out)
+}
+
+/// One site's bounded `rhawiki check` observation: exit status and witness
+/// counts by kind, never the witnesses themselves.
+fn observe_check(root: &Path, id: &str, site: &Path) -> Result<(Value, Vec<u8>, Vec<u8>)> {
+    let output = command("cargo")
+        .args([
+            "run", "-q", "-p", "app-cli", "--", "check", "--format", "json", "--root",
+        ])
+        .arg(site)
+        .current_dir(root)
+        .output()
+        .context(|| "running rhawiki check".to_owned())?;
+    let exit = output.status.code();
+    let report: Option<Value> = serde_json::from_slice(&output.stdout).ok();
+    let mut row = json!({"case_id": id, "exit_status": exit, "graded": false});
+    let outcome = match (
+        exit,
+        report.as_ref().and_then(|r| r["witnesses"].as_array()),
+    ) {
+        (Some(code @ (0 | 1)), Some(ws)) if code == i32::from(!ws.is_empty()) => {
+            row["witnesses"] = json!(ws.len());
+            row["counts"] = report.as_ref().map_or(Value::Null, |r| r["counts"].clone());
+            "observed"
+        }
+        (Some(2), _) => "config_error",
+        _ => "tool_error",
+    };
+    row["outcome"] = json!(outcome);
+    Ok((row, output.stdout, output.stderr))
+}
+
 /// One case's bounded observation, with the raw output returned for the
 /// caller to keep privately.
 fn observe(root: &Path, id: &str, workspace: &Path) -> Result<(Value, Vec<u8>, Vec<u8>)> {
@@ -325,11 +376,20 @@ pub fn execute(root: &Path, args: &HeldOutArgs) -> Result<(Value, u8)> {
         }
         (None, None) => return Ok((not_run("no --archive or --cases was given", None), 2)),
     };
-    let cases = workspaces(&source)?;
+    let check_kind = args.kind == "check";
+    let cases = if check_kind {
+        sites(&source)?
+    } else {
+        workspaces(&source)?
+    };
     if cases.is_empty() {
         return Ok((
             not_run(
-                "no ready workspace with Cargo.toml and rha-crates.toml was found",
+                if check_kind {
+                    "no site directory was found"
+                } else {
+                    "no ready workspace with Cargo.toml and rha-crates.toml was found"
+                },
                 Some(check),
             ),
             2,
@@ -341,7 +401,11 @@ pub fn execute(root: &Path, args: &HeldOutArgs) -> Result<(Value, u8)> {
     let mut map = serde_json::Map::new();
     for (index, workspace) in cases.iter().enumerate() {
         let id = format!("H{:03}", index + 1);
-        let (row, stdout, stderr) = observe(root, &id, workspace)?;
+        let (row, stdout, stderr) = if check_kind {
+            observe_check(root, &id, workspace)?
+        } else {
+            observe(root, &id, workspace)?
+        };
         std::fs::write(run_dir.join(format!("{id}.stdout")), stdout)
             .context(|| "keeping a raw report privately".to_owned())?;
         std::fs::write(run_dir.join(format!("{id}.stderr")), stderr)

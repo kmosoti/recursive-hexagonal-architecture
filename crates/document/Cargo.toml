@@ -12,7 +12,6 @@ role = "core"
 [dependencies]
 library = { path = "../library" }
 pulldown-cmark = { version = "0.13.4", default-features = false }
-unicode-normalization = "0.1.25"
 
 [dev-dependencies]
 proptest = "1.11.0"
