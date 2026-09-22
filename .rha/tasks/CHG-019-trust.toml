@@ -14,7 +14,7 @@ base_revision = "72c5cfd2fa96efbb81adb817ae10a93e03c87713"
 intent = "Stage 1: fix the verifier and lint contract and register both corpora from a separate generator session before any code. Stage 2: schemas and `cargo xtask rha lint`. Stage 3: `tools/rha-verifier` with a differential second implementation, graded on the stage 1 corpus. Stage 4: keys and the cut-over (gate DP-4.1, DP-5.3)."
 non_goals = ["Product crates (P-A)", "The isolation exercise, which stays not_run (no protected runner exists)", "Editing .rha/policy.toml before gate DP-5.3"]
 scope_globs = [".rha/tasks/CHG-019-trust.toml", "docs/**", "evidence/**", "xtask/**", "tools/**", "Cargo.lock", ".rha/schemas/**"]
-protected_scope = []
+protected_scope = ["Cargo.toml"]
 
 [[actors]]
 id = "human:kennedy"
@@ -51,6 +51,13 @@ id = "authority"
 question = "On whose authority, and who reviews and generates?"
 answer = "Kennedy, 2026-09-22: 'Can you implement each packet. Then once ready to review or need an adversarial generation when confidence is low pass to codex cli to gpt-6-astra extra high.'"
 decided_by = "human:kennedy"
+date = "2026-09-22"
+
+[[decisions]]
+id = "workspace-tools-member"
+question = "May P-B add tools/* to the workspace members (Cargo.toml is protected)?"
+answer = "Yes, as the approved plan lays it out: §4.1 gives members = [\"crates/*\", \"xtask\", \"tools/*\"] and W16 puts the verifier at tools/rha-verifier; W0 installed only the first two. Approved with revision 1 and again with revision 2 (DP-5.1). The edit adds that one entry and nothing else."
+decided_by = "human:kennedy (plan approval, DP-5.1)"
 date = "2026-09-22"
 
 [provenance]

@@ -3,7 +3,7 @@ use std::process::ExitCode;
 
 use clap::Parser as _;
 
-use xtask::cli::{Cli, Command, CorpusCommand, EvidenceCommand};
+use xtask::cli::{Cli, Command, CorpusCommand, EvidenceCommand, RhaCommand};
 use xtask::error::Result;
 use xtask::{architecture, docs, evidence, lanes};
 
@@ -57,5 +57,8 @@ fn dispatch(root: &Path, command: &Command) -> Result<u8> {
             Ok(0)
         }
         Command::Docs { check } => docs::run(root, *check),
+        Command::Rha {
+            command: RhaCommand::Lint { files },
+        } => xtask::record_lint::run(root, files),
     }
 }

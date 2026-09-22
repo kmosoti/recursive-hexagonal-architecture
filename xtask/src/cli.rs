@@ -30,6 +30,11 @@ pub enum Command {
         #[command(subcommand)]
         command: EvidenceCommand,
     },
+    /// Record tooling (spec §11.7.11; P-B).
+    Rha {
+        #[command(subcommand)]
+        command: RhaCommand,
+    },
     /// Write the generated docs, or with --check report stale ones.
     Docs {
         /// Compare instead of writing; exit 1 if any generated file is stale.
@@ -138,4 +143,14 @@ pub struct CiArgs {
 pub enum Label {
     Local,
     Ci,
+}
+
+#[derive(Debug, Subcommand)]
+pub enum RhaCommand {
+    /// Lint task, acceptance and evidence records; exit 1 if any is rejected.
+    Lint {
+        /// Record files: `.json` is evidence; TOML with `[acceptor]` is an
+        /// acceptance record; other TOML is a task record.
+        files: Vec<PathBuf>,
+    },
 }
