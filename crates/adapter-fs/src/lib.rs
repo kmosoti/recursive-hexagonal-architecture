@@ -112,6 +112,22 @@ fn is_temporary(name: &str) -> bool {
 }
 
 impl FsSink {
+    /// Refuses a root that is itself a symbolic link. `list` would inventory
+    /// its target and the build would delete what it does not produce there
+    /// (review round 4, PR 16 thread on the output root).
+    fn checked_root(&self, path: Option<&RelPath>) -> Result<(), SinkError> {
+        if fs::symlink_metadata(&self.root).is_ok_and(|m| m.file_type().is_symlink()) {
+            return Err(SinkError {
+                path: path.cloned(),
+                message: format!(
+                    "output root {} is a symbolic link; refusing to use it",
+                    self.root.display()
+                ),
+            });
+        }
+        Ok(())
+    }
+
     /// Refuses a path any of whose existing components under the root is a
     /// symbolic link, and creates missing directories one level at a time, so
     /// nothing is written outside the root (review finding 1).
@@ -125,6 +141,7 @@ impl FsSink {
         };
         // The root is the caller's choice and may not exist yet; everything
         // below it is checked one level at a time.
+        self.checked_root(Some(path))?;
         fs::create_dir_all(&self.root).map_err(|e| sink_error(path, &e))?;
         let mut dir = self.root.clone();
         let segments: Vec<&str> = path.as_str().split('/').collect();
@@ -153,6 +170,7 @@ impl FsSink {
 
 impl OutputSink for FsSink {
     fn list(&self) -> Result<Vec<(RelPath, Digest)>, SinkError> {
+        self.checked_root(None)?;
         let paths = walk(&self.root).map_err(|message| SinkError {
             path: None,
             message,
@@ -194,6 +212,7 @@ impl OutputSink for FsSink {
     }
 
     fn delete(&mut self, path: &RelPath) -> Result<(), SinkError> {
+        self.checked_root(Some(path))?;
         let mut dir = self.root.clone();
         let segments: Vec<&str> = path.as_str().split('/').collect();
         for segment in &segments[..segments.len().saturating_sub(1)] {

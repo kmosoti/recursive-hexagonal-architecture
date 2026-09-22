@@ -289,6 +289,11 @@ mod tests {
         assert!(glob("evidence/CHG-*/**", "evidence/CHG-005/a.json"));
         assert!(!glob("docs/*.md", "docs/changes/a.md"));
         assert!(glob("Cargo.lock", "Cargo.lock"));
+        // Matching is byte-wise, so a non-ASCII segment cannot split a
+        // character (PR 16 thread: refuted, kept as a regression test).
+        assert!(glob("docs/*.md", "docs/café.md"));
+        assert!(glob("docs/c*é.md", "docs/café.md"));
+        assert!(!glob("docs/*.rs", "docs/café.md"));
     }
 
     #[test]
