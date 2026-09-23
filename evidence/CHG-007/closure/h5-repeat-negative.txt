@@ -1,0 +1,23 @@
+   Compiling rha-verifier v0.1.0 (/home/kmosoti/projects/rha-m2/tools/rha-verifier)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.47s
+     Running tests/cli.rs (target/debug/deps/cli-fb150d0957d9ac29)
+
+running 1 test
+H5 conformance: 152/152 fixtures decided as registered; evidence /tmp/rha-verifier-repeat-out-2796518/ed79a7a8e0ac-dirty.json
+H5 conformance: 152/152 fixtures decided as registered; evidence /tmp/rha-verifier-repeat-out-2796518/ed79a7a8e0ac-dirty.json
+
+thread 'repeated_registered_corpus_runs_preserve_distinct_evidence_records' (2796519) panicked at tools/rha-verifier/tests/cli.rs:82:5:
+assertion `left == right` failed
+  left: (Some(0), 1)
+ right: (Some(0), 2)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test repeated_registered_corpus_runs_preserve_distinct_evidence_records ... FAILED
+
+failures:
+
+failures:
+    repeated_registered_corpus_runs_preserve_distinct_evidence_records
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.12s
+
+error: test failed, to rerun pass `-p rha-verifier --test cli`

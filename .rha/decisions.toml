@@ -278,3 +278,15 @@ answer = "Append the enforced fixture-shape contract and register separate malfo
 amendment_disclosure = "Made after P-B data and code. The P-B review repairs enforce shape absent from the original written contract; V001–V152 and R001–R080 and their existing grading remain unchanged. New cases grade the explicit extension; historical malformed records remain immutable and disclosed."
 amendment_scope = "docs/architecture/verifier-contract.md shape and whole test-count validity; docs/architecture/record-schema-contract.md structural types/requiredness, corpus-report families and unchecked citation notes"
 amendment_approved_in = "Kennedy, 2026-09-22: Determine a large slice to hand off to gpt-6-astra ultra. Make sure it has a goal to implement its work and fix any and all issue in accordance with rha design. (Let it flag and improve the architecture and tooling if it can justify it no need for my approval). I approve all PRs as long as both an opus 5.5 and gpt-6 agent has reviewed and approved the code. Kennedy, 2026-09-22: Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me."
+
+[[decision]]
+id = "CHG-019.1-markdown-shape-amendment"
+title = "Add the observed markdown producer fields to the record schema contract"
+status = "decided"
+decided_by = "agent:executor under human:kennedy's delegation"
+date = "2026-09-22"
+answer = "Disclosed after-data optional shape extension for cases[*].well_formed and product.binary_sha256. Separate registration precedes schema projection changes; original recipes and corpus grading stay unchanged."
+record = ".rha/tasks/CHG-007-module-level.toml#markdown-shape-amendment"
+amendment_scope = "docs/architecture/markdown-record-shape-amendment.md and the markdown_corpus schema only"
+amendment_disclosure = "The markdown report already existed when the missing schema properties were observed. This is an additive optional shape amendment; the original 1497 structural recipes and markdown corpus finding grades are retained."
+amendment_approved_in = "Kennedy, 2026-09-22: Determine a large slice to hand off to gpt-6-astra ultra. Make sure it has a goal to implement its work and fix any and all issue in accordance with rha design. (Let it flag and improve the architecture and tooling if it can justify it no need for my approval). I approve all PRs as long as both an opus 5.5 and gpt-6 agent has reviewed and approved the code. Kennedy, 2026-09-22: Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me."

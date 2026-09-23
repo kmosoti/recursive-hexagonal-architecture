@@ -1,0 +1,3 @@
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.09s
+     Running `target/debug/xtask corpus run --level markdown --evidence evidence/md-corpus`
+markdown corpus: 60/60 sites graded as registered; evidence evidence/md-corpus/20260923T044415Z-ed79a7a8e0ac.json

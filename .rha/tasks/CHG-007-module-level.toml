@@ -13,7 +13,7 @@ base_revision = "ec493b794040ede8878705132c89f9a4855f2dbe"
 intent = "Deliver milestone M2: P-C CHG-007, CHG-019.1 and E1; P-D CHG-008 to CHG-014. Implement all required stages, fix every confirmed issue within M2 scope, keep registered grading unchanged absent a disclosed amendment, obtain separate GPT-6 validation, open two green stacked PRs, and never merge."
 non_goals = ["Editing docs/spec/**", "Reading or writing held-out material", "Merge or tag", "Rewriting pushed history", "P-D product growth before the P-C head"]
 scope_globs = [".rha/tasks/CHG-007-module-level.toml", ".rha/acceptances/CHG-019.toml", ".rha/decisions.toml", ".rha/schemas/**", "docs/**", "evidence/**", "xtask/**", "tools/rha-verifier/**", "experiments/no-std-graph/**", "Cargo.lock", "rha-baseline.json", "CONTRIBUTING.md", "deny.toml", "crates/site/AGENTS.md"]
-protected_scope = [".rha/acceptances/CHG-019.toml", ".rha/decisions.toml", "rha-baseline.json", "CONTRIBUTING.md", ".rha/schemas/**", "xtask/Cargo.toml", "xtask/src/record_lint.rs", "xtask/src/record_schema.rs", "xtask/schema_codegen.py", "xtask/src/lib.rs", "xtask/src/modules/**", "xtask/src/metadata.rs", "xtask/src/graph/**", "xtask/src/architecture.rs", "xtask/src/corpus/**", "xtask/src/corpus.rs", "xtask/src/docs.rs", "xtask/src/scope.rs", "xtask/src/clippy_template.rs", "xtask/src/cli.rs", "xtask/src/main.rs", "xtask/src/util.rs", "deny.toml", "crates/site/AGENTS.md", "experiments/no-std-graph/Cargo.toml"]
+protected_scope = [".rha/acceptances/CHG-019.toml", ".rha/decisions.toml", "rha-baseline.json", "CONTRIBUTING.md", ".rha/schemas/**", "xtask/Cargo.toml", "xtask/src/record_lint.rs", "xtask/src/record_schema.rs", "xtask/schema_codegen.py", "xtask/src/lib.rs", "xtask/src/modules/**", "xtask/src/metadata.rs", "xtask/src/graph/**", "xtask/src/architecture.rs", "xtask/src/corpus/**", "xtask/src/corpus.rs", "xtask/src/docs.rs", "xtask/src/scope.rs", "xtask/src/clippy_template.rs", "xtask/src/cli.rs", "xtask/src/main.rs", "xtask/src/util.rs", "deny.toml", "crates/site/AGENTS.md", "experiments/no-std-graph/Cargo.toml", "tools/rha-verifier/src/main.rs"]
 
 [[actors]]
 id = "human:kennedy"
@@ -567,3 +567,43 @@ prompt_sha256 = "96b81f81ddd5abef6cec9049680b6a23c2f060019f33d93d8fa274773cb5bdc
 sample = "sample 1"
 separation = "Root computed baseline source/test hashes, applied the script and ran its positive and negative controls."
 edits = "Process deviation: the read-only worker attempted jj status despite the handoff Git-only rule. It failed with no JJ repository and made no repository change. Root did not initialize JJ or create bookmarks. All subsequent worker prompts explicitly forbid JJ including read-only commands."
+
+[[decisions]]
+id = "h5-immutable-observations"
+question = "Two repeated H5 runs at one subject overwrite the same evidence pathname."
+answer = "A tool-backed probe runs the registered corpus twice and observes one record with a changed modification time. Give each observation a measured timestamp/PID filename and create_new semantics, preserving all earlier bytes even on a collision. Keep the H5 body schema and all 152 fixture grades unchanged. Reject overwriting, silently skipping a rerun, or removing old records; immutable evidence is already required by M5. This completes corpus-report tooling needed by P-C, without changing the RHA method."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: Determine a large slice to hand off to gpt-6-astra ultra. Make sure it has a goal to implement its work and fix any and all issue in accordance with rha design. (Let it flag and improve the architecture and tooling if it can justify it no need for my approval). I approve all PRs as long as both an opus 5.5 and gpt-6 agent has reviewed and approved the code. Kennedy, 2026-09-22: Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me."
+date = "2026-09-22"
+
+[[provenance.generations]]
+artifact = "Immutable H5 observation storage"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "OpenAI Codex v0.156.1, profile write, read-only patch proposal"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-007/h5-immutable-prompt.md"
+prompt_sha256 = "8dc0b78fbc6f76601bafb1144650c06919281095d941a23dfc564c3e25e0360b"
+sample = "sample 1"
+separation = "Root ran the repeat-output probe and new regression against old code before applying the production fix."
+edits = "Formatting only; fixture data, grading, and H5 body schema unchanged. Worker prompt explicitly forbids JJ."
+
+[[decisions]]
+id = "markdown-shape-amendment"
+question = "The frozen record census predates two fields emitted by the current markdown corpus producer: cases[*].well_formed and product.binary_sha256."
+answer = "Disclose this shape extension as after the report data. Register a separate mechanically derived optional-property supplement and malformed-type controls before implementing its schema projection. Retain the original 1497 recipes and every markdown finding grade unchanged. The new properties are optional for historical compatibility; object key closure remains. Reject dropping producer evidence fields, editing the historical census, or permitting arbitrary extra keys. Ledger CHG-019.1-markdown-shape-amendment owns this extension."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: Determine a large slice to hand off to gpt-6-astra ultra. Make sure it has a goal to implement its work and fix any and all issue in accordance with rha design. (Let it flag and improve the architecture and tooling if it can justify it no need for my approval). I approve all PRs as long as both an opus 5.5 and gpt-6 agent has reviewed and approved the code. Kennedy, 2026-09-22: Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me."
+date = "2026-09-22"
+
+[[provenance.generations]]
+artifact = "After-data markdown record-shape supplement"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "OpenAI Codex v0.156.1, separate generator restricted to target/m2/markdown-schema-supplement"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-007/markdown-schema-supplement-prompt.md"
+prompt_sha256 = "5ed732158951998ae26ccf30ec4783f66dcf278fd530c65e4a653684c3af7cf7"
+sample = "deterministic census and 16 contract-derived recipes; no PRNG"
+separation = "Generator forbidden to read schema files, schema compiler or lint implementation. Root verifies all payload/source hashes and commits this supplement before schema support code."
+note = "After-data amendment, ledger CHG-019.1-markdown-shape-amendment. Content SHA256 e271498e5619751e3fd8d50eeee26728a7154d3b9cb451f9c75cffa37913b183. Original1497 recipes and markdown finding grades unchanged. Reproduce only in the original target/m2 staging layout; the committed package is immutable."

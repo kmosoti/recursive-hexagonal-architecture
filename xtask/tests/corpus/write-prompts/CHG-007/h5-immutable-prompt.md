@@ -1,0 +1,6 @@
+WRITE-tier bounded decided patch, READ ONLY /home/kmosoti/projects/rha-m2. Root solewriter. USER HARD LIMIT: NEVER RUN JJ (includingstatus/init); no historychanges, no actualwrites/apply_patch/tests/agents/siblings/held-out/specedits. Onlyread twoassignedfiles. Returnapply_patch only for tools/rha-verifier/src/main.rs and tests/cli.rs.
+Confirmed target/m2/h5-repeat-probe.txt: two successfulregisteredcorpus runs at samehead outputonefilename, secondoverwritesmtime. Repair existingM5immutability:
+- Existingfilename shortSHA[-dirty].json -> shortSHA[-dirty]-<measuredSystemTimeUNIXnanos>-<processid>.json; SystemTime errorfailclosed. BodySCHEMAUNCHANGED no created_at/newfields, gradersunchanged.
+- std::fs::OpenOptions write(true).create_new(true) and Write::write_all; no fswrite overwritingpath. Collisions error notoverwrite.
+- CLIregression runoriginalregisteredcorpus twice sameoutdir; firststatus0 count1, capture firstpathbytes+metadata(ifassertmtime portabilitydon'tneed), secondstatus0 count2, originalbytesunchanged anddistinctname. Ensuretestpositivesrequired, no alteringregisteredfixtures. Rootwillrunnewtestagainstoldmain beforefix toprovefails thenapplymain.
+No otherchanges, no newdeps, no resultclaims. Cargo profiletoolI/Oclockallowed CLIonly coremodel untouched. Returnpatchonly.

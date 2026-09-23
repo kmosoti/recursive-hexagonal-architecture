@@ -27,6 +27,15 @@ fn run(dir: &Path, out: &Path) -> (Option<i32>, usize) {
     (status.code(), records)
 }
 
+fn output_paths(out: &Path) -> Vec<PathBuf> {
+    let mut paths: Vec<PathBuf> = std::fs::read_dir(out)
+        .expect("out")
+        .map(|entry| entry.expect("entry").path())
+        .collect();
+    paths.sort();
+    paths
+}
+
 #[test]
 fn an_empty_directory_is_refused_and_writes_no_record() {
     let dir = temp("empty");
@@ -60,4 +69,27 @@ fn a_corpus_with_a_deleted_fixture_is_refused() {
 fn the_registered_corpus_is_decided_as_registered() {
     let out = temp("full-out");
     assert_eq!(run(&corpus(), &out), (Some(0), 1));
+}
+
+#[test]
+fn repeated_registered_corpus_runs_preserve_distinct_evidence_records() {
+    let out = temp("repeat-out");
+
+    assert_eq!(run(&corpus(), &out), (Some(0), 1));
+    let first_path = output_paths(&out).pop().expect("first record");
+    let first_bytes = std::fs::read(&first_path).expect("first record bytes");
+
+    assert_eq!(run(&corpus(), &out), (Some(0), 2));
+    let paths = output_paths(&out);
+    assert_eq!(paths.len(), 2);
+    let second_path = paths
+        .iter()
+        .find(|path| *path != &first_path)
+        .expect("second record");
+
+    assert_ne!(first_path.file_name(), second_path.file_name());
+    assert_eq!(
+        std::fs::read(&first_path).expect("original record bytes"),
+        first_bytes
+    );
 }

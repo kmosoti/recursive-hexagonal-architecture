@@ -1,0 +1,31 @@
+   Compiling rha-verifier v0.1.0 (/home/kmosoti/projects/rha-m2/tools/rha-verifier)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.52s
+     Running tests/cli.rs (target/debug/deps/cli-fb150d0957d9ac29)
+
+running 4 tests
+rha-verifier: /tmp/rha-verifier-empty-2796842/registration.toml: No such file or directory (os error 2); refusing an unregistered corpus
+test an_empty_directory_is_refused_and_writes_no_record ... ok
+rha-verifier: /tmp/rha-verifier-partial-2796842: tree_sha256 is ec6c8fab48ee0f3482d9030718854312e23cf1b532d595a0a13e7f1a4aafab73, registered 8f347b6e6299cb0eeee7a849887068afecd97fc181243cd360d83abcc34fb984; refusing a changed corpus
+test a_corpus_with_a_deleted_fixture_is_refused ... ok
+H5 conformance: 152/152 fixtures decided as registered; evidence /tmp/rha-verifier-full-out-2796842/ed79a7a8e0ac-dirty-1790138753984359714-2796849.json
+H5 conformance: 152/152 fixtures decided as registered; evidence /tmp/rha-verifier-repeat-out-2796842/ed79a7a8e0ac-dirty-1790138753984360614-2796848.json
+test the_registered_corpus_is_decided_as_registered ... ok
+H5 conformance: 152/152 fixtures decided as registered; evidence /tmp/rha-verifier-repeat-out-2796842/ed79a7a8e0ac-dirty-1790138754043454014-2796863.json
+test repeated_registered_corpus_runs_preserve_distinct_evidence_records ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+
+     Running tests/corpus.rs (target/debug/deps/corpus-28e266c0ec215db7)
+
+running 1 test
+test every_registered_fixture_is_decided_as_registered ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/shape_corpus.rs (target/debug/deps/shape_corpus-5a04cda2fbc4dfde)
+
+running 1 test
+test every_supplementary_shape_fixture_has_exactly_its_registered_decision ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+

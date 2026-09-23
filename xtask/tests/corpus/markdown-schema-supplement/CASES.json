@@ -1,0 +1,453 @@
+[
+  {
+    "baseline": "old.json",
+    "expected_schema_codes": [],
+    "id": "control_old_unchanged",
+    "mutations": []
+  },
+  {
+    "baseline": "new.json",
+    "expected_schema_codes": [],
+    "id": "control_new_unchanged",
+    "mutations": []
+  },
+  {
+    "baseline": "new.json",
+    "expected_schema_codes": [],
+    "id": "historical_remove_both_additions",
+    "mutations": [
+      {
+        "op": "remove",
+        "path": "/cases/0/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/1/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/2/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/3/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/4/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/5/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/6/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/7/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/8/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/9/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/10/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/11/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/12/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/13/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/14/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/15/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/16/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/17/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/18/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/19/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/20/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/21/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/22/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/23/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/24/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/25/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/26/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/27/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/28/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/29/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/30/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/31/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/32/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/33/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/34/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/35/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/36/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/37/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/38/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/39/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/40/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/41/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/42/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/43/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/44/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/45/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/46/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/47/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/48/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/49/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/50/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/51/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/52/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/53/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/54/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/55/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/56/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/57/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/58/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/cases/59/well_formed"
+      },
+      {
+        "op": "remove",
+        "path": "/product/binary_sha256"
+      }
+    ]
+  },
+  {
+    "baseline": "new.json",
+    "expected_schema_codes": [],
+    "id": "well_formed_false_accepted",
+    "mutations": [
+      {
+        "op": "set",
+        "path": "/cases/0/well_formed",
+        "value": false
+      }
+    ]
+  },
+  {
+    "baseline": "new.json",
+    "expected_schema_codes": [
+      "schema.wrong_type"
+    ],
+    "id": "well_formed_null_wrong_type",
+    "mutations": [
+      {
+        "op": "set",
+        "path": "/cases/0/well_formed",
+        "value": null
+      }
+    ]
+  },
+  {
+    "baseline": "new.json",
+    "expected_schema_codes": [
+      "schema.wrong_type"
+    ],
+    "id": "well_formed_integer_wrong_type",
+    "mutations": [
+      {
+        "op": "set",
+        "path": "/cases/0/well_formed",
+        "value": 7
+      }
+    ]
+  },
+  {
+    "baseline": "new.json",
+    "expected_schema_codes": [
+      "schema.wrong_type"
+    ],
+    "id": "well_formed_string_wrong_type",
+    "mutations": [
+      {
+        "op": "set",
+        "path": "/cases/0/well_formed",
+        "value": "not-a-boolean"
+      }
+    ]
+  },
+  {
+    "baseline": "new.json",
+    "expected_schema_codes": [
+      "schema.wrong_type"
+    ],
+    "id": "well_formed_object_wrong_type",
+    "mutations": [
+      {
+        "op": "set",
+        "path": "/cases/0/well_formed",
+        "value": {
+          "value": 7
+        }
+      }
+    ]
+  },
+  {
+    "baseline": "new.json",
+    "expected_schema_codes": [
+      "schema.wrong_type"
+    ],
+    "id": "well_formed_array_wrong_type",
+    "mutations": [
+      {
+        "op": "set",
+        "path": "/cases/0/well_formed",
+        "value": [
+          7
+        ]
+      }
+    ]
+  },
+  {
+    "baseline": "new.json",
+    "expected_schema_codes": [
+      "schema.wrong_type"
+    ],
+    "id": "binary_sha256_null_wrong_type",
+    "mutations": [
+      {
+        "op": "set",
+        "path": "/product/binary_sha256",
+        "value": null
+      }
+    ]
+  },
+  {
+    "baseline": "new.json",
+    "expected_schema_codes": [
+      "schema.wrong_type"
+    ],
+    "id": "binary_sha256_boolean_wrong_type",
+    "mutations": [
+      {
+        "op": "set",
+        "path": "/product/binary_sha256",
+        "value": false
+      }
+    ]
+  },
+  {
+    "baseline": "new.json",
+    "expected_schema_codes": [
+      "schema.wrong_type"
+    ],
+    "id": "binary_sha256_integer_wrong_type",
+    "mutations": [
+      {
+        "op": "set",
+        "path": "/product/binary_sha256",
+        "value": 7
+      }
+    ]
+  },
+  {
+    "baseline": "new.json",
+    "expected_schema_codes": [
+      "schema.wrong_type"
+    ],
+    "id": "binary_sha256_array_wrong_type",
+    "mutations": [
+      {
+        "op": "set",
+        "path": "/product/binary_sha256",
+        "value": [
+          7
+        ]
+      }
+    ]
+  },
+  {
+    "baseline": "new.json",
+    "expected_schema_codes": [
+      "schema.wrong_type"
+    ],
+    "id": "binary_sha256_object_wrong_type",
+    "mutations": [
+      {
+        "op": "set",
+        "path": "/product/binary_sha256",
+        "value": {
+          "value": 7
+        }
+      }
+    ]
+  },
+  {
+    "baseline": "new.json",
+    "expected_schema_codes": [
+      "schema.unknown_field"
+    ],
+    "id": "unknown_case_neighbor_rejected",
+    "mutations": [
+      {
+        "op": "set",
+        "path": "/cases/0/unknown_neighbor",
+        "value": "rejected"
+      }
+    ]
+  },
+  {
+    "baseline": "new.json",
+    "expected_schema_codes": [
+      "schema.unknown_field"
+    ],
+    "id": "unknown_product_neighbor_rejected",
+    "mutations": [
+      {
+        "op": "set",
+        "path": "/product/unknown_neighbor",
+        "value": "rejected"
+      }
+    ]
+  }
+]

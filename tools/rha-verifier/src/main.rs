@@ -2,8 +2,10 @@
 //! compares each decision with its registered `expected`, and writes an
 //! H5 evidence record (plan W16) naming the checked-out revision.
 
+use std::io::Write;
 use std::path::{Path, PathBuf};
 use std::process::{Command, ExitCode};
+use std::time::{SystemTime, UNIX_EPOCH};
 
 use serde_json::{Value, json};
 use sha2::{Digest as _, Sha256};
@@ -122,15 +124,22 @@ fn run(dir: &Path, out_dir: &Path) -> Result<bool, String> {
     });
     std::fs::create_dir_all(out_dir).map_err(|e| e.to_string())?;
     let short: String = revision.chars().take(12).collect();
+    let timestamp = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .map_err(|e| format!("system time before UNIX epoch: {e}"))?
+        .as_nanos();
     let path = out_dir.join(format!(
-        "{short}{}.json",
-        if dirty == Some(true) { "-dirty" } else { "" }
+        "{short}{}-{timestamp}-{}.json",
+        if dirty == Some(true) { "-dirty" } else { "" },
+        std::process::id()
     ));
-    std::fs::write(
-        &path,
-        serde_json::to_vec_pretty(&record).map_err(|e| e.to_string())?,
-    )
-    .map_err(|e| e.to_string())?;
+    let mut file = std::fs::OpenOptions::new()
+        .write(true)
+        .create_new(true)
+        .open(&path)
+        .map_err(|e| format!("{}: {e}", path.display()))?;
+    file.write_all(&serde_json::to_vec_pretty(&record).map_err(|e| e.to_string())?)
+        .map_err(|e| format!("{}: {e}", path.display()))?;
     println!(
         "H5 conformance: {passed}/{} fixtures decided as registered; evidence {}",
         record["summary"]["fixtures"],
