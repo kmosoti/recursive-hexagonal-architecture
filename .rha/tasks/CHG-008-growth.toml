@@ -463,3 +463,67 @@ answer = "Repair and freeze the four independent packages before production code
 decided_by = "agent:executor under human:kennedy's delegation"
 delegation = "Kennedy, 2026-09-22: Determine a large slice to hand off to gpt-6-astra ultra. Make sure it has a goal to implement its work and fix any and all issue in accordance with rha design. (Let it flag and improve the architecture and tooling if it can justify it no need for my approval). I approve all PRs as long as both an opus 5.5 and gpt-6 agent has reviewed and approved the code. Kennedy, 2026-09-22: Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me."
 date = "2026-09-23"
+
+[[decisions]]
+id = "workspace-test-source-boundary"
+question = "The declared site module check rejects the legitimate shared test helper because its file is outside the crate directory, even though it remains inside the workspace."
+answer = "Permit an explicitly configured canonical workspace read root only for inherited test-only module sources during full-workspace extraction. Keep the existing extraction API and standalone module mode crate-root strict, and keep production module sources crate-root strict. Check canonical targets before reading so symlinks cannot escape; apply the same permitted root to source hashing and bind every traversed helper byte. Preserve logical module ownership and separately reported test edges, including registered M11. Reject hiding the helper in include!, dropping test modules, duplicating the shared grader, or broad unrestricted path access. Add independently registered boundary controls before tooling code; no registered case or grade changes. This repairs checker configuration and provenance, not the RHA structural method."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: Determine a large slice to hand off to gpt-6-astra ultra. Make sure it has a goal to implement its work and fix any and all issue in accordance with rha design. (Let it flag and improve the architecture and tooling if it can justify it no need for my approval). I approve all PRs as long as both an opus 5.5 and gpt-6 agent has reviewed and approved the code. Kennedy, 2026-09-22: Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me."
+date = "2026-09-23"
+
+[[decisions]]
+id = "pure-fixture-inputs"
+question = "Clippy rejects runtime fixture I/O in the core owner graders, including unconditional core library forbids."
+answer = "Keep one pure binding/schema validator and use deterministic compile-time embedded bytes in document, graph and site graders. Place filesystem scanning, byte acquisition and tamper/symlink controls only in the app-cli integration harness, which consumes the same scanned payload map it validates. Generate the 36 embedded file mappings mechanically from the four frozen packages and check drift. Reject lint allows, conditional forbid relaxation, hidden I/O aliases, production API widening and a support crate. Core purity, manifests, dependencies and registered grading remain unchanged by this repair. The separately justified workspace test-source boundary still applies to the shared pure modules."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: Determine a large slice to hand off to gpt-6-astra ultra. Make sure it has a goal to implement its work and fix any and all issue in accordance with rha design. (Let it flag and improve the architecture and tooling if it can justify it no need for my approval). I approve all PRs as long as both an opus 5.5 and gpt-6 agent has reviewed and approved the code. Kennedy, 2026-09-22: Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me."
+date = "2026-09-23"
+
+[[provenance.generations]]
+artifact = "pd-module-test-boundary-generator"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "OpenAI Codex v0.156.1, profile write; independent fixture author restricted to target/m2/module-test-boundary"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-008/pd-module-test-boundary-generator-prompt.md"
+prompt_sha256 = "1f9b4cd218e42e63a9d2485eddd5b83af7b1832dba50bd2bc7fb416d5512ad2d"
+sample = "session 01a0cd91-6f59-7761-acf6-a65d05d22eb3; 12 authored cases, no PRNG"
+separation = "Prompts prohibit extractor implementation and test reads. The boundary package is committed before changes to module extraction or workspace source hashing; a separate read-only review checks semantics."
+edits = "Before freeze, source snapshots/metadata were completed, nested inheritance crossed a real file boundary, non-grant controls were added and isolated inside the permitted workspace, and distinct refusal diagnostics were registered. No target result informed expected outputs."
+
+[[provenance.generations]]
+artifact = "pd-module-test-boundary-correction"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "OpenAI Codex v0.156.1, profile write; independent fixture author restricted to target/m2/module-test-boundary"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-008/pd-module-test-boundary-correction-prompt.md"
+prompt_sha256 = "67421666b71ffb89ecbf515b7ccb89389dae2298ad398afc489c1bc5d3ee6b56"
+sample = "session 01a0cd91-6f59-7761-acf6-a65d05d22eb3; 12 authored cases, no PRNG"
+separation = "Prompts prohibit extractor implementation and test reads. The boundary package is committed before changes to module extraction or workspace source hashing; a separate read-only review checks semantics."
+edits = "Before freeze, source snapshots/metadata were completed, nested inheritance crossed a real file boundary, non-grant controls were added and isolated inside the permitted workspace, and distinct refusal diagnostics were registered. No target result informed expected outputs."
+
+[[provenance.generations]]
+artifact = "pd-module-test-boundary-diagnostics"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "OpenAI Codex v0.156.1, profile write; independent fixture author restricted to target/m2/module-test-boundary"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-008/pd-module-test-boundary-diagnostics-prompt.md"
+prompt_sha256 = "f7524a38998d54b622338aac4038ec3ef8e7699ecbde310cea1abbc36d667b31"
+sample = "session 01a0cd91-6f59-7761-acf6-a65d05d22eb3; 12 authored cases, no PRNG"
+separation = "Prompts prohibit extractor implementation and test reads. The boundary package is committed before changes to module extraction or workspace source hashing; a separate read-only review checks semantics."
+edits = "Before freeze, source snapshots/metadata were completed, nested inheritance crossed a real file boundary, non-grant controls were added and isolated inside the permitted workspace, and distinct refusal diagnostics were registered. No target result informed expected outputs."
+
+[[provenance.generations]]
+artifact = "pd-module-test-boundary-placement"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "OpenAI Codex v0.156.1, profile write; independent fixture author restricted to target/m2/module-test-boundary"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-008/pd-module-test-boundary-placement-prompt.md"
+prompt_sha256 = "acc6ed6e916e52acbc28e2a1113c1c2a8bd5964e10a0f95c02bce91edc108e4f"
+sample = "session 01a0cd91-6f59-7761-acf6-a65d05d22eb3; 12 authored cases, no PRNG"
+separation = "Prompts prohibit extractor implementation and test reads. The boundary package is committed before changes to module extraction or workspace source hashing; a separate read-only review checks semantics."
+edits = "Before freeze, source snapshots/metadata were completed, nested inheritance crossed a real file boundary, non-grant controls were added and isolated inside the permitted workspace, and distinct refusal diagnostics were registered. No target result informed expected outputs."

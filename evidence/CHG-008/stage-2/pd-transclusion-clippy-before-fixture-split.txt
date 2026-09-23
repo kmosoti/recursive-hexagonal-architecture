@@ -1,0 +1,1873 @@
+    Checking document v0.1.0 (/home/kmosoti/projects/rha-m2/crates/document)
+    Checking xtask v0.1.0 (/home/kmosoti/projects/rha-m2/xtask)
+warning: 5 bindings with single-character names in scope
+   --> tools/rha-verifier/src/model.rs:366:17
+    |
+366 | pub fn evaluate(f: &Value) -> Value {
+    |                 ^
+...
+437 |         let x = exception;
+    |             ^
+...
+449 |             matches!((issued, now, expires), (Some(i), Some(n), Some(e)) if i <= n && n < e);
+    |                                                    ^        ^        ^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#many_single_char_names
+    = note: `-W clippy::many-single-char-names` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::many_single_char_names)]`
+
+warning: binding's name is too similar to existing binding
+   --> tools/rha-verifier/src/model.rs:450:13
+    |
+450 |         let issuer = x["issuer"].as_str().unwrap_or_default();
+    |             ^^^^^^
+    |
+note: existing binding defined here
+   --> tools/rha-verifier/src/model.rs:446:13
+    |
+446 |         let issued = x["issued_at"].as_str().and_then(parse_rfc3339);
+    |             ^^^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#similar_names
+    = note: `-W clippy::similar-names` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::similar_names)]`
+
+warning: 6 bindings with single-character names in scope
+  --> tools/rha-verifier/src/time.rs:8:9
+   |
+ 8 |     let b = text.as_bytes();
+   |         ^
+...
+24 |     let (y, mo, d, h, mi, s) = (
+   |          ^      ^  ^      ^
+...
+43 |     let mut i = 19;
+   |             ^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#many_single_char_names
+
+warning: item in documentation is missing backticks
+ --> tools/rha-verifier/src/model.rs:2:5
+  |
+2 | //! MergeAllowed (§1.3).
+  |     ^^^^^^^^^^^^
+  |
+  = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#doc_markdown
+  = note: `-W clippy::doc-markdown` implied by `-W clippy::pedantic`
+  = help: to override `-W clippy::pedantic` add `#[allow(clippy::doc_markdown)]`
+help: try
+  |
+2 - //! MergeAllowed (§1.3).
+2 + //! `MergeAllowed` (§1.3).
+  |
+
+warning: adding items after statements is confusing, since items exist from the start of the scope
+  --> tools/rha-verifier/src/model.rs:82:5
+   |
+82 |     const EXACT: f64 = 9_007_199_254_740_992.0;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#items_after_statements
+   = note: `-W clippy::items-after-statements` implied by `-W clippy::pedantic`
+   = help: to override `-W clippy::pedantic` add `#[allow(clippy::items_after_statements)]`
+
+warning: this function has too many lines (116/100)
+   --> tools/rha-verifier/src/model.rs:239:1
+    |
+239 | pub fn malformed(f: &Value) -> Option<String> {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_lines
+    = note: `-W clippy::too-many-lines` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::too_many_lines)]`
+
+warning: this function has too many lines (124/100)
+   --> tools/rha-verifier/src/model.rs:366:1
+    |
+366 | pub fn evaluate(f: &Value) -> Value {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_lines
+
+warning: `rha-verifier` (lib) generated 7 warnings (run `cargo clippy --fix --lib -p rha-verifier -- ` to apply 1 suggestion)
+warning: use of `format!` to build up a string from an iterator
+  --> tools/rha-verifier/src/main.rs:57:5
+   |
+57 |     bytes.iter().map(|b| format!("{b:02x}")).collect()
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+help: call `fold` instead
+  --> tools/rha-verifier/src/main.rs:57:18
+   |
+57 |     bytes.iter().map(|b| format!("{b:02x}")).collect()
+   |                  ^^^
+help: ... and use the `write!` macro here
+  --> tools/rha-verifier/src/main.rs:57:26
+   |
+57 |     bytes.iter().map(|b| format!("{b:02x}")).collect()
+   |                          ^^^^^^^^^^^^^^^^^^
+   = note: this can be written more efficiently by appending to a `String` directly
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#format_collect
+   = note: `-W clippy::format-collect` implied by `-W clippy::pedantic`
+   = help: to override `-W clippy::pedantic` add `#[allow(clippy::format_collect)]`
+
+warning: `rha-verifier` (bin "rha-verifier") generated 1 warning
+warning: long literal lacking separators
+   --> tools/rha-verifier/tests/reference/mod.rs:383:22
+    |
+383 |     let days = era * 146097 + year_in_era * 365 + year_in_era / 4 - year_in_era / 100 + day_in_year
+    |                      ^^^^^^ help: consider: `146_097`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unreadable_literal
+    = note: `-W clippy::unreadable-literal` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::unreadable_literal)]`
+
+warning: long literal lacking separators
+   --> tools/rha-verifier/tests/reference/mod.rs:384:11
+    |
+384 |         - 719468;
+    |           ^^^^^^ help: consider: `719_468`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unreadable_literal
+
+warning: this boolean expression can be simplified
+   --> tools/rha-verifier/tests/reference/mod.rs:272:17
+    |
+272 | /                 !exception[*key]
+273 | |                     .as_str()
+274 | |                     .is_some_and(|text| !text.is_empty())
+    | |_________________________________________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#nonminimal_bool
+    = note: `-W clippy::nonminimal-bool` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::nonminimal_bool)]`
+help: try
+    |
+272 ~                 exception[*key]
+273 +                     .as_str().is_none_or(|text| text.is_empty())
+    |
+
+warning: assigning the result of `ToOwned::to_owned()` may be inefficient
+   --> tools/rha-verifier/tests/reference/mod.rs:361:9
+    |
+361 |         fraction = text.get(start..position)?.trim_end_matches('0').to_owned();
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: use `clone_into()`: `text.get(start..position)?.trim_end_matches('0').clone_into(&mut fraction)`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#assigning_clones
+    = note: `-W clippy::assigning-clones` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::assigning_clones)]`
+
+warning: consider adding a `;` to the last statement for consistent formatting
+  --> tools/rha-verifier/tests/differential.rs:76:13
+   |
+76 | /             f["now"] = json!(
+77 | |                 [
+78 | |                     "2026-01-01T00:00:00Z",
+79 | |                     "2026-09-22T12:00:00Z",
+80 | |                     "2030-01-01T00:00:00Z"
+81 | |                 ][pick % 3]
+82 | |             )
+   | |_____________^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#semicolon_if_nothing_returned
+   = note: `-W clippy::semicolon-if-nothing-returned` implied by `-W clippy::pedantic`
+   = help: to override `-W clippy::pedantic` add `#[allow(clippy::semicolon_if_nothing_returned)]`
+help: add a `;` here
+   |
+76 |             f["now"] = json!(
+...
+81 |                 ][pick % 3]
+82 ~             );
+   |
+
+warning: used `expect()` on a `Result` value
+  --> crates/library/tests/contract_seeded.rs:19:24
+   |
+19 |         .map(|(p, t)| (RelPath::new(p).expect("valid"), (*t).to_owned()))
+   |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: if this value is an `Err`, it will panic
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#expect_used
+   = note: requested on the command line with `-W clippy::expect-used`
+
+warning: used `expect()` on a `Result` value
+  --> tools/rha-verifier/tests/cli.rs:15:5
+   |
+15 |     std::fs::create_dir_all(&dir).expect("temp");
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: if this value is an `Err`, it will panic
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#expect_used
+   = note: requested on the command line with `-W clippy::expect-used`
+
+warning: used `expect()` on a `Result` value
+  --> tools/rha-verifier/tests/cli.rs:20:18
+   |
+20 |       let status = Command::new(env!("CARGO_BIN_EXE_rha-verifier"))
+   |  __________________^
+21 | |         .args(["corpus"])
+22 | |         .arg(dir)
+23 | |         .arg(out)
+24 | |         .status()
+25 | |         .expect("spawn");
+   | |________________________^
+   |
+   = note: if this value is an `Err`, it will panic
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#expect_used
+
+warning: used `expect()` on a `Result` value
+  --> tools/rha-verifier/tests/cli.rs:31:35
+   |
+31 |       let mut paths: Vec<PathBuf> = std::fs::read_dir(out)
+   |  ___________________________________^
+32 | |         .expect("out")
+   | |______________________^
+   |
+   = note: if this value is an `Err`, it will panic
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#expect_used
+
+warning: used `expect()` on a `Result` value
+  --> tools/rha-verifier/tests/cli.rs:33:22
+   |
+33 |         .map(|entry| entry.expect("entry").path())
+   |                      ^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: if this value is an `Err`, it will panic
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#expect_used
+
+warning: `rha-verifier` (test "differential") generated 5 warnings (run `cargo clippy --fix --test "differential" -p rha-verifier -- ` to apply 2 suggestions)
+warning: `rha-verifier` (lib test) generated 7 warnings (7 duplicates)
+warning: `rha-verifier` (bin "rha-verifier" test) generated 1 warning (1 duplicate)
+warning: `library` (test "contract_seeded") generated 1 warning
+warning: `rha-verifier` (test "cli") generated 4 warnings
+warning: this function has too many lines (144/100)
+   --> crates/document/src/parse.rs:294:5
+    |
+294 |     fn end(&mut self, _end: TagEnd) {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_lines
+    = note: `-W clippy::too-many-lines` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::too_many_lines)]`
+
+warning: possible infinite iteration detected
+   --> crates/document/src/parse.rs:308:21
+    |
+308 | /                     (from..)
+309 | |                         .map(|k| format!("{base}-{k}"))
+310 | |                         .find(|c| !used.contains(c))
+    | |____________________________________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#maybe_infinite_iter
+    = note: `-W clippy::maybe-infinite-iter` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::maybe_infinite_iter)]`
+
+warning: you seem to be trying to use `match` for destructuring a single pattern. Consider using `if let`
+   --> crates/document/src/parse.rs:313:28
+    |
+313 |                   let slug = match self.seen.get_mut(&base) {
+    |  ____________________________^
+314 | |                     Some((count, first_line)) => {
+315 | |                         *count += 1;
+316 | |                         self.diagnostics.push(Diagnostic::DuplicateSlug {
+...   |
+331 | |                 };
+    | |_________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#single_match_else
+    = note: `-W clippy::single-match-else` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::single_match_else)]`
+help: try
+    |
+313 ~                 let slug = if let Some((count, first_line)) = self.seen.get_mut(&base) {
+314 +                     *count += 1;
+315 +                     self.diagnostics.push(Diagnostic::DuplicateSlug {
+316 +                         slug: base.clone(),
+317 +                         first_line: *first_line,
+318 +                         second_line: line,
+319 +                     });
+320 +                     next_free(&self.used, *count)
+321 +                 } else {
+322 +                     self.seen.insert(base.clone(), (1, line));
+323 +                     if self.used.contains(&base) {
+324 +                         next_free(&self.used, 2)
+325 +                     } else {
+326 +                         base.clone()
+327 +                     }
+328 ~                 };
+    |
+
+warning: these match arms have identical bodies
+   --> crates/document/src/parse.rs:469:13
+    |
+469 |             BuildNode::Image { .. } => {}
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+481 |             BuildNode::Node(_) => {}
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: if this is unintentional make the arms return different values
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#match_same_arms
+    = note: `-W clippy::match-same-arms` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::match_same_arms)]`
+help: otherwise merge the patterns into a single arm
+    |
+469 ~             BuildNode::Node(Node::Text(text) | Node::Code(text)) => out.push_str(text),
+470 |             BuildNode::Node(
+...
+479 |             BuildNode::Node(Node::SoftBreak | Node::HardBreak) => out.push(' '),
+480 ~             BuildNode::Image { .. } | BuildNode::Node(_) => {}
+    |
+
+warning: `document` (lib) generated 4 warnings (run `cargo clippy --fix --lib -p document -- ` to apply 1 suggestion)
+    Checking graph v0.1.0 (/home/kmosoti/projects/rha-m2/crates/graph)
+warning: `document` (lib test) generated 4 warnings (4 duplicates)
+warning: used `expect()` on a `Result` value
+ --> crates/document/tests/properties.rs:8:17
+  |
+8 |     Source::new(RelPath::new("p.md").expect("valid"), text.to_owned())
+  |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: if this value is an `Err`, it will panic
+  = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#expect_used
+  = note: requested on the command line with `-W clippy::expect-used`
+
+warning: use of `format!` to build up a string from an iterator
+  --> crates/document/tests/properties.rs:19:28
+   |
+19 |         let text: String = titles.iter().map(|t| format!("## {t}\n\n")).collect();
+   |                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+help: call `fold` instead
+  --> crates/document/tests/properties.rs:19:42
+   |
+19 |         let text: String = titles.iter().map(|t| format!("## {t}\n\n")).collect();
+   |                                          ^^^
+help: ... and use the `write!` macro here
+  --> crates/document/tests/properties.rs:19:50
+   |
+19 |         let text: String = titles.iter().map(|t| format!("## {t}\n\n")).collect();
+   |                                                  ^^^^^^^^^^^^^^^^^^^^^
+   = note: this can be written more efficiently by appending to a `String` directly
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#format_collect
+   = note: `-W clippy::format-collect` implied by `-W clippy::pedantic`
+   = help: to override `-W clippy::pedantic` add `#[allow(clippy::format_collect)]`
+
+warning: use of `format!` to build up a string from an iterator
+  --> crates/document/tests/oracle_slug.rs:82:24
+   |
+82 |           let markdown = headings
+   |  ________________________^
+83 | |             .iter()
+84 | |             .map(|heading| format!("## {heading}\n\n"))
+85 | |             .collect::<String>();
+   | |________________________________^
+   |
+help: call `fold` instead
+  --> crates/document/tests/oracle_slug.rs:84:14
+   |
+84 |             .map(|heading| format!("## {heading}\n\n"))
+   |              ^^^
+help: ... and use the `write!` macro here
+  --> crates/document/tests/oracle_slug.rs:84:28
+   |
+84 |             .map(|heading| format!("## {heading}\n\n"))
+   |                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   = note: this can be written more efficiently by appending to a `String` directly
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#format_collect
+   = note: `-W clippy::format-collect` implied by `-W clippy::pedantic`
+   = help: to override `-W clippy::pedantic` add `#[allow(clippy::format_collect)]`
+
+warning: `document` (test "oracle_slug") generated 1 warning
+warning: `document` (test "properties") generated 2 warnings
+warning: this function has too many lines (179/100)
+   --> crates/graph/src/lib.rs:148:1
+    |
+148 | pub fn resolve(documents: &[Document]) -> SiteGraph {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_lines
+    = note: `-W clippy::too-many-lines` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::too_many_lines)]`
+
+warning: `graph` (lib) generated 1 warning
+    Checking site v0.1.0 (/home/kmosoti/projects/rha-m2/crates/site)
+warning: binding's name is too similar to existing binding
+  --> xtask/src/corpus/module.rs:54:19
+   |
+54 |     let (program, args) = argv
+   |                   ^^^^
+   |
+note: existing binding defined here
+  --> xtask/src/corpus/module.rs:53:29
+   |
+53 | fn run_process(root: &Path, argv: &[String], target_dir: Option<&Path>) -> Result<Process> {
+   |                             ^^^^
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#similar_names
+   = note: `-W clippy::similar-names` implied by `-W clippy::pedantic`
+   = help: to override `-W clippy::pedantic` add `#[allow(clippy::similar_names)]`
+
+warning: binding's name is too similar to existing binding
+   --> xtask/src/corpus/runner.rs:282:17
+    |
+282 |         let mut argv = vec!["cargo".to_owned()];
+    |                 ^^^^
+    |
+note: existing binding defined here
+   --> xtask/src/corpus/runner.rs:267:13
+    |
+267 |         let args = vec![
+    |             ^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#similar_names
+
+warning: binding's name is too similar to existing binding
+   --> xtask/src/corpus/runner.rs:314:13
+    |
+314 |     let mut argv = vec!["cargo".to_owned()];
+    |             ^^^^
+    |
+note: existing binding defined here
+   --> xtask/src/corpus/runner.rs:291:9
+    |
+291 |     let args = vec![
+    |         ^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#similar_names
+
+warning: binding's name is too similar to existing binding
+   --> xtask/src/corpus/runner.rs:805:18
+    |
+805 |             let (argv, output, report, grade) = execute(root, case, &workspace, &expected_tool)?;
+    |                  ^^^^
+    |
+note: existing binding defined here
+   --> xtask/src/corpus/runner.rs:756:25
+    |
+756 | pub fn run(root: &Path, args: &CorpusArgs) -> Result<u8> {
+    |                         ^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#similar_names
+
+warning: used `expect()` on a `Result` value
+  --> crates/graph/tests/properties.rs:12:9
+   |
+12 |         RelPath::new(path).expect("valid"),
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: if this value is an `Err`, it will panic
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#expect_used
+   = note: requested on the command line with `-W clippy::expect-used`
+
+warning: use of `format!` to build up a string from an iterator
+  --> crates/graph/tests/properties.rs:28:36
+   |
+28 |                 let body: String = ts.iter().map(|t| format!("[[{t}]] ")).collect();
+   |                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+help: call `fold` instead
+  --> crates/graph/tests/properties.rs:28:46
+   |
+28 |                 let body: String = ts.iter().map(|t| format!("[[{t}]] ")).collect();
+   |                                              ^^^
+help: ... and use the `write!` macro here
+  --> crates/graph/tests/properties.rs:28:54
+   |
+28 |                 let body: String = ts.iter().map(|t| format!("[[{t}]] ")).collect();
+   |                                                      ^^^^^^^^^^^^^^^^^^^
+   = note: this can be written more efficiently by appending to a `String` directly
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#format_collect
+   = note: `-W clippy::format-collect` implied by `-W clippy::pedantic`
+   = help: to override `-W clippy::pedantic` add `#[allow(clippy::format_collect)]`
+
+warning: 6 bindings with single-character names in scope
+  --> xtask/src/record_lint.rs:28:12
+   |
+28 | fn rfc3339(v: &str) -> bool {
+   |            ^
+29 |     let b = v.as_bytes();
+   |         ^
+...
+45 |     let (Some(y), Some(mo), Some(d), Some(h), Some(mi), Some(se)) = (
+   |               ^                  ^        ^
+...
+66 |     let mut i = 19;
+   |             ^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#many_single_char_names
+   = note: `-W clippy::many-single-char-names` implied by `-W clippy::pedantic`
+   = help: to override `-W clippy::pedantic` add `#[allow(clippy::many_single_char_names)]`
+
+warning: `graph` (test "properties") generated 2 warnings
+warning: these match arms have identical bodies
+   --> crates/graph/tests/oracle_resolve.rs:183:9
+    |
+183 |         0 => destination_id.clone(),                          // Exact whole ID.
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+190 |         _ => destination_id.clone(),
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^ the wildcard arm
+    |
+    = help: if this is unintentional make the arms return different values
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#match_same_arms
+    = note: `-W clippy::match-same-arms` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::match_same_arms)]`
+help: otherwise remove the non-wildcard arm
+    |
+183 -         0 => destination_id.clone(),                          // Exact whole ID.
+183 +         // Exact whole ID.
+    |
+
+error: use of a disallowed method `std::fs::read`
+  --> crates/document/tests/../../../xtask/tests/support/registered_package.rs:60:17
+   |
+60 |     let bytes = std::fs::read(package_root.join("CASES.json"))
+   |                 ^^^^^^^^^^^^^
+   |
+   = note: storage crosses a port
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#disallowed_methods
+   = note: `-D clippy::disallowed-methods` implied by `-D clippy::all`
+   = help: to override `-D clippy::all` add `#[allow(clippy::disallowed_methods)]`
+
+error: use of a disallowed method `std::fs::read`
+   --> crates/document/tests/../../../xtask/tests/support/registered_package.rs:125:5
+    |
+125 |     std::fs::read(path).map_err(|error| format!("{}: {error}", path.display()))
+    |     ^^^^^^^^^^^^^
+    |
+    = note: storage crosses a port
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#disallowed_methods
+
+error: use of a disallowed method `std::fs::symlink_metadata`
+   --> crates/document/tests/../../../xtask/tests/support/registered_package.rs:135:9
+    |
+135 |         std::fs::symlink_metadata(path).map_err(|error| format!("{}: {error}", path.display()))?;
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: storage crosses a port
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#disallowed_methods
+
+error: this `if` statement can be collapsed
+   --> crates/document/tests/../../../xtask/tests/support/registered_package.rs:144:9
+    |
+144 | /         if let Some(relative) = relative {
+145 | |             if !safe_relative_path(relative) {
+146 | |                 return Err(format!("unsafe directory path: {relative}"));
+147 | |             }
+148 | |         }
+    | |_________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#collapsible_if
+    = note: `-D clippy::collapsible-if` implied by `-D clippy::all`
+    = help: to override `-D clippy::all` add `#[allow(clippy::collapsible_if)]`
+help: collapse nested if block
+    |
+144 ~         if let Some(relative) = relative
+145 ~             && !safe_relative_path(relative) {
+146 |                 return Err(format!("unsafe directory path: {relative}"));
+147 ~             }
+    |
+
+error: use of a disallowed method `std::fs::read_dir`
+   --> crates/document/tests/../../../xtask/tests/support/registered_package.rs:150:13
+    |
+150 |             std::fs::read_dir(path).map_err(|error| format!("{}: {error}", path.display()))?;
+    |             ^^^^^^^^^^^^^^^^^
+    |
+    = note: storage crosses a port
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#disallowed_methods
+
+warning: `graph` (test "oracle_resolve") generated 1 warning
+warning: these match arms have identical bodies
+   --> crates/document/tests/../../../xtask/tests/support/registered_package.rs:369:13
+    |
+369 |             "Rule" => exact_keys(object, &["kind"], id)?,
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+370 |             "SoftBreak" | "HardBreak" => exact_keys(object, &["kind"], id)?,
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: if this is unintentional make the arms return different values
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#match_same_arms
+    = note: `-W clippy::match-same-arms` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::match_same_arms)]`
+help: otherwise merge the patterns into a single arm
+    |
+369 ~             "Rule" | "SoftBreak" | "HardBreak" => exact_keys(object, &["kind"], id)?,
+370 ~             "TaskMarker" => exact_keys(object, &["kind", "checked"], id)?,
+    |
+
+error: use of a disallowed method `std::fs::read`
+  --> crates/graph/src/../../../xtask/tests/support/registered_package.rs:60:17
+   |
+60 |     let bytes = std::fs::read(package_root.join("CASES.json"))
+   |                 ^^^^^^^^^^^^^
+   |
+   = note: storage crosses a port
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#disallowed_methods
+note: the lint level is defined here
+  --> crates/graph/src/lib.rs:8:5
+   |
+ 8 |     clippy::disallowed_methods,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error: use of a disallowed method `std::fs::read`
+   --> crates/graph/src/../../../xtask/tests/support/registered_package.rs:125:5
+    |
+125 |     std::fs::read(path).map_err(|error| format!("{}: {error}", path.display()))
+    |     ^^^^^^^^^^^^^
+    |
+    = note: storage crosses a port
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#disallowed_methods
+
+error: use of a disallowed method `std::fs::symlink_metadata`
+   --> crates/graph/src/../../../xtask/tests/support/registered_package.rs:135:9
+    |
+135 |         std::fs::symlink_metadata(path).map_err(|error| format!("{}: {error}", path.display()))?;
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: storage crosses a port
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#disallowed_methods
+
+error: this `if` statement can be collapsed
+   --> crates/graph/src/../../../xtask/tests/support/registered_package.rs:144:9
+    |
+144 | /         if let Some(relative) = relative {
+145 | |             if !safe_relative_path(relative) {
+146 | |                 return Err(format!("unsafe directory path: {relative}"));
+147 | |             }
+148 | |         }
+    | |_________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#collapsible_if
+    = note: `-D clippy::collapsible-if` implied by `-D clippy::all`
+    = help: to override `-D clippy::all` add `#[allow(clippy::collapsible_if)]`
+help: collapse nested if block
+    |
+144 ~         if let Some(relative) = relative
+145 ~             && !safe_relative_path(relative) {
+146 |                 return Err(format!("unsafe directory path: {relative}"));
+147 ~             }
+    |
+
+error: use of a disallowed method `std::fs::read_dir`
+   --> crates/graph/src/../../../xtask/tests/support/registered_package.rs:150:13
+    |
+150 |             std::fs::read_dir(path).map_err(|error| format!("{}: {error}", path.display()))?;
+    |             ^^^^^^^^^^^^^^^^^
+    |
+    = note: storage crosses a port
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#disallowed_methods
+
+warning: these match arms have identical bodies
+   --> crates/document/tests/transclusion.rs:202:13
+    |
+202 |             Node::Text(text) | Node::Code(text) | Node::Html(text) => output.push_str(text),
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+222 |             Node::CodeBlock { text, .. } => output.push_str(text),
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: if this is unintentional make the arms return different values
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#match_same_arms
+help: otherwise merge the patterns into a single arm
+    |
+202 ~             Node::Heading { children, .. }
+203 |             | Node::Paragraph(children)
+...
+220 |             }
+221 ~             Node::Text(text) | Node::Code(text) | Node::Html(text) | Node::CodeBlock { text, .. } => output.push_str(text),
+    |
+
+warning: these match arms have identical bodies
+   --> crates/graph/src/../../../xtask/tests/support/registered_package.rs:369:13
+    |
+369 |             "Rule" => exact_keys(object, &["kind"], id)?,
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+370 |             "SoftBreak" | "HardBreak" => exact_keys(object, &["kind"], id)?,
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: if this is unintentional make the arms return different values
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#match_same_arms
+    = note: `-W clippy::match-same-arms` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::match_same_arms)]`
+help: otherwise merge the patterns into a single arm
+    |
+369 ~             "Rule" | "SoftBreak" | "HardBreak" => exact_keys(object, &["kind"], id)?,
+370 ~             "TaskMarker" => exact_keys(object, &["kind", "checked"], id)?,
+    |
+
+warning: you seem to be trying to use `match` for destructuring a single pattern. Consider using `if let`
+   --> crates/document/tests/transclusion.rs:321:9
+    |
+321 | /         match case["expected"].as_array() {
+322 | |             Some(expected) => {
+323 | |                 let actual = selected.as_ref().expect("expected selected section");
+324 | |                 let expected = expected
+...   |
+348 | |         }
+    | |_________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#single_match_else
+    = note: `-W clippy::single-match-else` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::single_match_else)]`
+help: try
+    |
+321 ~         if let Some(expected) = case["expected"].as_array() {
+322 +             let actual = selected.as_ref().expect("expected selected section");
+323 +             let expected = expected
+324 +                 .iter()
+325 +                 .enumerate()
+326 +                 .map(|(index, value)| node(value, &format!("{id}.expected[{index}]")))
+327 +                 .collect::<Vec<_>>();
+328 +             assert_eq!(actual, &expected, "{id}: selected IR");
+329 +             let actual_descriptors = transclusions(actual)
+330 +                 .into_iter()
+331 +                 .map(descriptor_json)
+332 +                 .collect::<Vec<_>>();
+333 +             assert_eq!(
+334 +                 Value::Array(actual_descriptors),
+335 +                 case["expected_transclusions"],
+336 +                 "{id}: descriptors"
+337 +             );
+338 +         } else {
+339 +             assert!(selected.is_none(), "{id}: missing anchor must return None");
+340 +             assert_eq!(
+341 +                 case["expected_transclusions"],
+342 +                 json!([]),
+343 +                 "{id}: absent descriptors"
+344 +             );
+345 +         }
+    |
+
+error: use of a disallowed method `std::fs::remove_dir_all`
+   --> crates/document/tests/transclusion.rs:581:17
+    |
+581 |         let _ = fs::remove_dir_all(&self.0);
+    |                 ^^^^^^^^^^^^^^^^^^
+    |
+    = note: storage crosses a port
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#disallowed_methods
+
+error: use of a disallowed method `std::env::temp_dir`
+   --> crates/document/tests/transclusion.rs:587:16
+    |
+587 |     let path = std::env::temp_dir().join(format!(
+    |                ^^^^^^^^^^^^^^^^^^
+    |
+    = note: the environment names the directory
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#disallowed_methods
+
+error: use of a disallowed method `std::process::id`
+   --> crates/document/tests/transclusion.rs:589:9
+    |
+589 |         std::process::id(),
+    |         ^^^^^^^^^^^^^^^^
+    |
+    = note: the process id is ambient state
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#disallowed_methods
+
+error: use of a disallowed method `std::fs::create_dir`
+   --> crates/document/tests/transclusion.rs:592:5
+    |
+592 |     fs::create_dir(&path).expect("fresh owned temporary directory");
+    |     ^^^^^^^^^^^^^^
+    |
+    = note: storage crosses a port
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#disallowed_methods
+
+error: use of a disallowed method `std::fs::symlink_metadata`
+   --> crates/document/tests/transclusion.rs:597:20
+    |
+597 |     let metadata = fs::symlink_metadata(source).expect("fixture metadata");
+    |                    ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: storage crosses a port
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#disallowed_methods
+
+error: use of a disallowed method `std::fs::create_dir_all`
+   --> crates/document/tests/transclusion.rs:600:5
+    |
+600 |     fs::create_dir_all(target).expect("fixture target directory");
+    |     ^^^^^^^^^^^^^^^^^^
+    |
+    = note: storage crosses a port
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#disallowed_methods
+
+error: use of a disallowed method `std::fs::read_dir`
+   --> crates/document/tests/transclusion.rs:601:18
+    |
+601 |     for entry in fs::read_dir(source).expect("fixture entries") {
+    |                  ^^^^^^^^^^^^
+    |
+    = note: storage crosses a port
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#disallowed_methods
+
+error: use of a disallowed method `std::fs::symlink_metadata`
+   --> crates/document/tests/transclusion.rs:605:24
+    |
+605 |         let metadata = fs::symlink_metadata(&source_path).expect("fixture child metadata");
+    |                        ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: storage crosses a port
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#disallowed_methods
+
+error: use of a disallowed method `std::fs::copy`
+   --> crates/document/tests/transclusion.rs:611:13
+    |
+611 |             fs::copy(&source_path, &target_path).expect("fixture payload copy");
+    |             ^^^^^^^^
+    |
+    = note: storage crosses a port
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#disallowed_methods
+
+error: use of a disallowed method `std::fs::read`
+   --> crates/document/tests/transclusion.rs:627:21
+    |
+627 |     let mut bytes = fs::read(&cases).expect("copied cases");
+    |                     ^^^^^^^^
+    |
+    = note: storage crosses a port
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#disallowed_methods
+
+error: use of a disallowed method `std::fs::write`
+   --> crates/document/tests/transclusion.rs:629:5
+    |
+629 |     fs::write(&cases, bytes).expect("corrupt copied cases");
+    |     ^^^^^^^^^
+    |
+    = note: storage crosses a port
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#disallowed_methods
+
+error: use of a disallowed method `std::fs::copy`
+   --> crates/document/tests/transclusion.rs:649:5
+    |
+649 |     fs::copy(&payload, &outside).expect("byte-identical outside payload");
+    |     ^^^^^^^^
+    |
+    = note: storage crosses a port
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#disallowed_methods
+
+error: use of a disallowed method `std::fs::remove_file`
+   --> crates/document/tests/transclusion.rs:650:5
+    |
+650 |     fs::remove_file(&payload).expect("replace payload");
+    |     ^^^^^^^^^^^^^^^
+    |
+    = note: storage crosses a port
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#disallowed_methods
+
+error: use of a disallowed method `std::fs::read`
+   --> crates/document/tests/transclusion.rs:663:21
+    |
+663 |     let mut bytes = fs::read(&cases).expect("copied cases");
+    |                     ^^^^^^^^
+    |
+    = note: storage crosses a port
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#disallowed_methods
+
+error: use of a disallowed method `std::fs::write`
+   --> crates/document/tests/transclusion.rs:665:5
+    |
+665 |     fs::write(&cases, bytes).expect("poison copied cases");
+    |     ^^^^^^^^^
+    |
+    = note: storage crosses a port
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#disallowed_methods
+
+warning: `graph` (lib test) generated 2 warnings (1 duplicate)
+error: could not compile `graph` (lib test) due to 5 previous errors; 2 warnings emitted
+warning: build failed, waiting for other jobs to finish...
+warning: `document` (test "transclusion") generated 3 warnings
+error: could not compile `document` (test "transclusion") due to 20 previous errors; 3 warnings emitted
+warning: called `map(<f>).unwrap_or(<a>)` on an `Option` value
+   --> crates/site/src/assembly/mod.rs:367:22
+    |
+367 |           let target = origin
+    |  ______________________^
+368 | |             .links
+369 | |             .get(index)
+370 | |             .and_then(|_| self.graph.resolution(&origin.id, index))
+...   |
+374 | |             })
+375 | |             .unwrap_or(LinkTarget::Unresolved);
+    | |______________________________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#map_unwrap_or
+    = note: `-W clippy::map-unwrap-or` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::map_unwrap_or)]`
+help: use `map_or(<a>, <f>)` instead
+    |
+371 ~             .map_or(LinkTarget::Unresolved, |resolved| LinkTarget::Page {
+372 |                 id: resolved.to.clone(),
+373 |                 anchor: resolved.anchor.clone(),
+374 ~             });
+    |
+
+error: this `if` statement can be collapsed
+   --> crates/site/src/assembly/mod.rs:550:5
+    |
+550 | /     if !is_image && destination.starts_with('#') && path.is_empty() {
+551 | |         if let Some(decoded) = decode_fragment(&suffix[1..])
+552 | |             && let Some(mapped) = anchors.get(&decoded)
+...   |
+556 | |     }
+    | |_____^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#collapsible_if
+    = note: `-D clippy::collapsible-if` implied by `-D clippy::all`
+    = help: to override `-D clippy::all` add `#[allow(clippy::collapsible_if)]`
+help: collapse nested if block
+    |
+550 ~     if !is_image && destination.starts_with('#') && path.is_empty()
+551 ~         && let Some(decoded) = decode_fragment(&suffix[1..])
+552 |             && let Some(mapped) = anchors.get(&decoded)
+553 |         {
+554 |             return format!("#{}", percent_encode(mapped, false));
+555 ~         }
+    |
+
+warning: `format!(..)` appended to existing `String`
+   --> crates/site/src/assembly/mod.rs:588:13
+    |
+588 |             output.push_str(&format!("%{byte:02X}"));
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: you may need to import the `std::fmt::Write` trait
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#format_push_string
+    = note: `-W clippy::format-push-string` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::format_push_string)]`
+help: consider using `write!` to avoid the extra allocation
+    |
+588 -             output.push_str(&format!("%{byte:02X}"));
+588 +             let _ = write!(output, "%{byte:02X}");
+    |
+
+warning: `site` (lib) generated 2 warnings
+error: could not compile `site` (lib) due to 1 previous error; 2 warnings emitted
+error: use of a disallowed method `std::fs::read`
+  --> crates/site/src/assembly/../../../../xtask/tests/support/registered_package.rs:60:17
+   |
+60 |     let bytes = std::fs::read(package_root.join("CASES.json"))
+   |                 ^^^^^^^^^^^^^
+   |
+   = note: storage crosses a port
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#disallowed_methods
+note: the lint level is defined here
+  --> crates/site/src/lib.rs:4:5
+   |
+ 4 |     clippy::disallowed_methods,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error: use of a disallowed method `std::fs::read`
+   --> crates/site/src/assembly/../../../../xtask/tests/support/registered_package.rs:125:5
+    |
+125 |     std::fs::read(path).map_err(|error| format!("{}: {error}", path.display()))
+    |     ^^^^^^^^^^^^^
+    |
+    = note: storage crosses a port
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#disallowed_methods
+
+error: use of a disallowed method `std::fs::symlink_metadata`
+   --> crates/site/src/assembly/../../../../xtask/tests/support/registered_package.rs:135:9
+    |
+135 |         std::fs::symlink_metadata(path).map_err(|error| format!("{}: {error}", path.display()))?;
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: storage crosses a port
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#disallowed_methods
+
+error: this `if` statement can be collapsed
+   --> crates/site/src/assembly/../../../../xtask/tests/support/registered_package.rs:144:9
+    |
+144 | /         if let Some(relative) = relative {
+145 | |             if !safe_relative_path(relative) {
+146 | |                 return Err(format!("unsafe directory path: {relative}"));
+147 | |             }
+148 | |         }
+    | |_________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#collapsible_if
+help: collapse nested if block
+    |
+144 ~         if let Some(relative) = relative
+145 ~             && !safe_relative_path(relative) {
+146 |                 return Err(format!("unsafe directory path: {relative}"));
+147 ~             }
+    |
+
+error: use of a disallowed method `std::fs::read_dir`
+   --> crates/site/src/assembly/../../../../xtask/tests/support/registered_package.rs:150:13
+    |
+150 |             std::fs::read_dir(path).map_err(|error| format!("{}: {error}", path.display()))?;
+    |             ^^^^^^^^^^^^^^^^^
+    |
+    = note: storage crosses a port
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#disallowed_methods
+
+warning: these match arms have identical bodies
+   --> crates/site/src/assembly/../../../../xtask/tests/support/registered_package.rs:369:13
+    |
+369 |             "Rule" => exact_keys(object, &["kind"], id)?,
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+370 |             "SoftBreak" | "HardBreak" => exact_keys(object, &["kind"], id)?,
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: if this is unintentional make the arms return different values
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#match_same_arms
+    = note: `-W clippy::match-same-arms` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::match_same_arms)]`
+help: otherwise merge the patterns into a single arm
+    |
+369 ~             "Rule" | "SoftBreak" | "HardBreak" => exact_keys(object, &["kind"], id)?,
+370 ~             "TaskMarker" => exact_keys(object, &["kind", "checked"], id)?,
+    |
+
+warning: these match arms have identical bodies
+   --> crates/site/src/assembly/transclusion_tests.rs:111:13
+    |
+111 | /             Node::Paragraph(children)
+112 | |             | Node::Emphasis(children)
+113 | |             | Node::Strong(children)
+114 | |             | Node::Strikethrough(children) => {
+115 | |                 collect_page_nodes(children, headings, hrefs, images, text);
+116 | |             }
+    | |_____________^
+...
+123 | /             Node::WikiLink { children, .. } => {
+124 | |                 collect_page_nodes(children, headings, hrefs, images, text);
+125 | |             }
+    | |_____________^
+...
+135 | /             Node::BlockQuote { children, .. } => {
+136 | |                 collect_page_nodes(children, headings, hrefs, images, text);
+137 | |             }
+    | |_____________^
+    |
+    = help: if this is unintentional make the arms return different values
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#match_same_arms
+help: otherwise merge the patterns into a single arm
+    |
+111 |             Node::Paragraph(children)
+112 |             | Node::Emphasis(children)
+113 |             | Node::Strong(children)
+114 ~             | Node::Strikethrough(children) | Node::WikiLink { children, .. } | Node::BlockQuote { children, .. } => {
+115 |                 collect_page_nodes(children, headings, hrefs, images, text);
+...
+122 |             }
+123 ~             Node::Image { src, alt } => {
+124 |                 images.push(src.clone());
+...
+131 |             }
+132 ~             Node::Table { head, rows, .. } => {
+    |
+
+warning: these match arms have identical bodies
+   --> crates/site/src/assembly/transclusion_tests.rs:117:13
+    |
+117 |             Node::Text(value) | Node::Code(value) | Node::Html(value) => text.push(value.clone()),
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+118 |             Node::CodeBlock { text: value, .. } => text.push(value.clone()),
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: if this is unintentional make the arms return different values
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#match_same_arms
+help: otherwise merge the patterns into a single arm
+    |
+117 ~             Node::Text(value) | Node::Code(value) | Node::Html(value) | Node::CodeBlock { text: value, .. } => text.push(value.clone()),
+118 ~             Node::Link { href, children } => {
+    |
+
+warning: redundant closure
+   --> crates/site/src/assembly/transclusion_tests.rs:187:18
+    |
+187 |             .map(|value| value.string())
+    |                  ^^^^^^^^^^^^^^^^^^^^^^ help: replace the closure with the method itself: `JsonValueExt::string`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#redundant_closure_for_method_calls
+    = note: `-W clippy::redundant-closure-for-method-calls` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::redundant_closure_for_method_calls)]`
+
+warning: redundant closure
+   --> crates/site/src/assembly/transclusion_tests.rs:209:18
+    |
+209 |             .map(|value| value.string())
+    |                  ^^^^^^^^^^^^^^^^^^^^^^ help: replace the closure with the method itself: `JsonValueExt::string`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#redundant_closure_for_method_calls
+
+warning: redundant closure
+   --> crates/site/src/assembly/transclusion_tests.rs:219:18
+    |
+219 |             .map(|value| value.string())
+    |                  ^^^^^^^^^^^^^^^^^^^^^^ help: replace the closure with the method itself: `JsonValueExt::string`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#redundant_closure_for_method_calls
+
+warning: redundant closure
+   --> crates/site/src/assembly/transclusion_tests.rs:229:18
+    |
+229 |             .map(|value| value.string())
+    |                  ^^^^^^^^^^^^^^^^^^^^^^ help: replace the closure with the method itself: `JsonValueExt::string`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#redundant_closure_for_method_calls
+
+warning: this function has too many lines (104/100)
+   --> xtask/src/corpus/fixture.rs:171:1
+    |
+171 | pub fn generate(case: &Case, manifest: &Manifest, base: &Path, template: &[u8]) -> Result<PathBuf> {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_lines
+    = note: `-W clippy::too-many-lines` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::too_many_lines)]`
+
+warning: more than 3 bools in a struct
+  --> xtask/src/corpus/grade.rs:9:1
+   |
+ 9 | / pub struct Grade {
+10 | |     pub passed: bool,
+11 | |     pub detected: bool,
+12 | |     pub documented_miss: bool,
+...  |
+18 | |     pub reasons: Vec<String>,
+19 | | }
+   | |_^
+   |
+   = help: consider using a state machine or refactoring bools into two-variant enums
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#struct_excessive_bools
+   = note: `-W clippy::struct-excessive-bools` implied by `-W clippy::pedantic`
+   = help: to override `-W clippy::pedantic` add `#[allow(clippy::struct_excessive_bools)]`
+
+warning: this function has too many lines (103/100)
+  --> xtask/src/corpus/grade.rs:47:1
+   |
+47 | pub fn architecture(case: &Case, exit: Option<i32>, report: &Value) -> Grade {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_lines
+
+warning: `site` (lib test) generated 9 warnings (2 duplicates)
+error: could not compile `site` (lib test) due to 6 previous errors; 9 warnings emitted
+warning: this function has too many lines (131/100)
+   --> xtask/src/corpus/held_out.rs:341:1
+    |
+341 | pub fn execute(root: &Path, args: &HeldOutArgs) -> Result<(Value, u8)> {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_lines
+
+warning: redundant closure
+   --> xtask/src/corpus/markdown.rs:160:145
+    |
+160 | ...erator").map(|g| g.to_string())},
+    |                 ^^^^^^^^^^^^^^^^^ help: replace the closure with the method itself: `std::string::ToString::to_string`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#redundant_closure_for_method_calls
+    = note: `-W clippy::redundant-closure-for-method-calls` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::redundant_closure_for_method_calls)]`
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> xtask/src/corpus/module.rs:152:1
+    |
+152 | pub fn verify_inventory(root: &Path) -> Result<BTreeMap<String, String>> {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_errors_doc
+    = note: `-W clippy::missing-errors-doc` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::missing_errors_doc)]`
+
+warning: casting `usize` to `i64` may wrap around the value on targets with 64-bit wide pointers
+   --> xtask/src/corpus/module.rs:235:59
+    |
+235 |     if registration["content_files"].as_integer() != Some(listed.len() as i64) {
+    |                                                           ^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_wrap
+    = note: `-W clippy::cast-possible-wrap` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::cast_possible_wrap)]`
+
+warning: casting `u64` to `i64` may wrap around the value
+   --> xtask/src/corpus/module.rs:240:59
+    |
+240 |     if registration["content_bytes"].as_integer() != Some(payload_bytes as i64) {
+    |                                                           ^^^^^^^^^^^^^^^^^^^^ help: if this is intentional, use `cast_signed()` instead: `payload_bytes.cast_signed()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_wrap
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> xtask/src/corpus/module.rs:257:1
+    |
+257 | / pub fn verify_registration_contract(
+258 | |     root: &Path,
+259 | |     payloads: &BTreeMap<String, String>,
+260 | | ) -> Result<()> {
+    | |_______________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_errors_doc
+
+warning: use of `format!` to build up a string from an iterator
+   --> xtask/src/corpus/module.rs:303:21
+    |
+303 |           let bytes = entries
+    |  _____________________^
+304 | |             .into_iter()
+305 | |             .map(|(path, digest)| format!("{digest}  {path}\n"))
+306 | |             .collect::<String>();
+    | |________________________________^
+    |
+help: call `fold` instead
+   --> xtask/src/corpus/module.rs:305:14
+    |
+305 |             .map(|(path, digest)| format!("{digest}  {path}\n"))
+    |              ^^^
+help: ... and use the `write!` macro here
+   --> xtask/src/corpus/module.rs:305:35
+    |
+305 |             .map(|(path, digest)| format!("{digest}  {path}\n"))
+    |                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    = note: this can be written more efficiently by appending to a `String` directly
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#format_collect
+    = note: `-W clippy::format-collect` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::format_collect)]`
+
+warning: called `map(<f>).unwrap_or_else(<g>)` on an `Option` value
+   --> xtask/src/corpus/module.rs:498:5
+    |
+498 | /     Path::new(env!("CARGO_MANIFEST_DIR"))
+499 | |         .parent()
+500 | |         .map(Path::to_path_buf)
+501 | |         .unwrap_or_else(|| PathBuf::from("."))
+    | |______________________________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#map_unwrap_or
+    = note: `-W clippy::map-unwrap-or` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::map_unwrap_or)]`
+help: try
+    |
+498 ~     Path::new(env!("CARGO_MANIFEST_DIR"))
+499 +         .parent().map_or_else(|| PathBuf::from("."), Path::to_path_buf)
+    |
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> xtask/src/corpus/module.rs:564:1
+    |
+564 | pub fn validate_headline_reference(fixture: &Path, report: &Value) -> Result<()> {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> xtask/src/corpus/module.rs:684:1
+    |
+684 | pub fn validate_report(_root: &Path, fixture: &Path, report: &Value, tool: &Value) -> Result<()> {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_errors_doc
+
+warning: this function has too many lines (123/100)
+   --> xtask/src/corpus/module.rs:684:1
+    |
+684 | pub fn validate_report(_root: &Path, fixture: &Path, report: &Value, tool: &Value) -> Result<()> {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_lines
+
+warning: this argument is passed by value, but not consumed in the function body
+   --> xtask/src/corpus/module.rs:863:12
+    |
+863 |     grade: grade::Grade,
+    |            ^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#needless_pass_by_value
+    = note: `-W clippy::needless-pass-by-value` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::needless_pass_by_value)]`
+help: consider taking a reference instead
+    |
+863 |     grade: &grade::Grade,
+    |            +
+
+warning: casting `i64` to `u64` may lose the sign of the value
+    --> xtask/src/corpus/module.rs:1047:36
+     |
+1047 |         counts.insert(key.clone(), count as u64);
+     |                                    ^^^^^^^^^^^^ help: if this is intentional, use `cast_unsigned()` instead: `count.cast_unsigned()`
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_sign_loss
+     = note: `-W clippy::cast-sign-loss` implied by `-W clippy::pedantic`
+     = help: to override `-W clippy::pedantic` add `#[allow(clippy::cast_sign_loss)]`
+
+warning: this function has too many lines (123/100)
+    --> xtask/src/corpus/module.rs:1052:1
+     |
+1052 | fn validate_random_report_at(root: &Path, report: &Value) -> Result<()> {
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_lines
+
+warning: docs for function returning `Result` missing `# Errors` section
+    --> xtask/src/corpus/module.rs:1182:1
+     |
+1182 | pub fn validate_random_report(report: &Value) -> Result<()> {
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+    --> xtask/src/corpus/module.rs:1366:1
+     |
+1366 | pub fn run(root: &Path, args: &CorpusArgs) -> Result<u8> {
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_errors_doc
+
+warning: this function has too many lines (183/100)
+    --> xtask/src/corpus/module.rs:1366:1
+     |
+1366 | pub fn run(root: &Path, args: &CorpusArgs) -> Result<u8> {
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_lines
+
+warning: adding items after statements is confusing, since items exist from the start of the scope
+    --> xtask/src/corpus/module.rs:1529:5
+     |
+1529 |     use std::io::Write as _;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#items_after_statements
+     = note: `-W clippy::items-after-statements` implied by `-W clippy::pedantic`
+     = help: to override `-W clippy::pedantic` add `#[allow(clippy::items_after_statements)]`
+
+warning: this `continue` expression is redundant
+  --> xtask/src/corpus/module_random.rs:55:84
+   |
+55 |                 Err(error) if error.kind() == std::io::ErrorKind::AlreadyExists => continue,
+   |                                                                                    ^^^^^^^^
+   |
+   = help: consider dropping the `continue` expression
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#needless_continue
+   = note: `-W clippy::needless-continue` implied by `-W clippy::pedantic`
+   = help: to override `-W clippy::pedantic` add `#[allow(clippy::needless_continue)]`
+
+warning: called `map(<f>).unwrap_or_else(<g>)` on an `Option` value
+   --> xtask/src/corpus/module_random.rs:322:33
+    |
+322 |           Value::String(value) => value
+    |  _________________________________^
+323 | |             .strip_prefix("crate::")
+324 | |             .map(|rest| Value::String(format!("{crate_name}::{rest}")))
+325 | |             .unwrap_or_else(|| value.clone().into()),
+    | |____________________________________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#map_unwrap_or
+help: try
+    |
+322 ~         Value::String(value) => value
+323 ~             .strip_prefix("crate::").map_or_else(|| value.clone().into(), |rest| Value::String(format!("{crate_name}::{rest}"))),
+    |
+
+warning: called `map(<f>).unwrap_or(false)` on an `Option` value
+   --> xtask/src/corpus/module_random.rs:372:9
+    |
+372 | /         actual
+373 | |             .iter()
+374 | |             .enumerate()
+375 | |             .find(|(index, actual)| !used[*index] && matches_expected(actual, expected))
+...   |
+379 | |             })
+380 | |             .unwrap_or(false)
+    | |_____________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#map_unwrap_or
+help: use `is_some_and(<f>)` instead
+    |
+376 ~             .is_some_and(|(index, _)| {
+377 |                 used[index] = true;
+378 |                 true
+379 ~             })
+    |
+
+warning: this function has too many lines (239/100)
+   --> xtask/src/corpus/module_random.rs:388:1
+    |
+388 | / fn case_observation(
+389 | |     id: &str,
+390 | |     source_path: Option<&Path>,
+391 | |     expected_path: Option<&Path>,
+...   |
+394 | |     counts: &mut BTreeMap<String, usize>,
+395 | | ) -> Value {
+    | |__________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_lines
+
+warning: case-sensitive file extension comparison
+   --> xtask/src/corpus/module_random.rs:429:28
+    |
+429 |             .filter(|path| path.ends_with(".rs"))
+    |                            ^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: consider using a case-insensitive comparison instead
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#case_sensitive_file_extension_comparisons
+    = note: `-W clippy::case-sensitive-file-extension-comparisons` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::case_sensitive_file_extension_comparisons)]`
+help: use std::path::Path
+    |
+429 ~             .filter(|path| std::path::Path::new(path)
+430 +                 .extension()
+431 ~                 .is_some_and(|ext| ext.eq_ignore_ascii_case("rs")))
+    |
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> xtask/src/corpus/module_random.rs:651:1
+    |
+651 | pub fn run(root: &Path) -> Result<Value> {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_errors_doc
+
+warning: this function has too many lines (162/100)
+   --> xtask/src/corpus/module_random.rs:651:1
+    |
+651 | pub fn run(root: &Path) -> Result<Value> {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_lines
+
+warning: this function has too many lines (159/100)
+   --> xtask/src/corpus/runner.rs:324:1
+    |
+324 | pub fn validate_report(case: &Case, workspace: &Path, tool: &Value, report: &Value) -> Result<()> {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_lines
+
+warning: this function has too many lines (133/100)
+   --> xtask/src/corpus/runner.rs:756:1
+    |
+756 | pub fn run(root: &Path, args: &CorpusArgs) -> Result<u8> {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_lines
+
+warning: adding items after statements is confusing, since items exist from the start of the scope
+   --> xtask/src/corpus/runner.rs:871:5
+    |
+871 |     use std::io::Write as _;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#items_after_statements
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> xtask/src/metadata.rs:174:1
+    |
+174 | / pub fn load_single_module(
+175 | |     root: &Path,
+176 | |     manifest: &Path,
+177 | |     rules: &Path,
+178 | | ) -> std::result::Result<SingleModule, LoadError> {
+    | |_________________________________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_errors_doc
+
+warning: this function has too many lines (123/100)
+   --> xtask/src/modules/extract.rs:180:5
+    |
+180 | /     fn install_module(
+181 | |         &mut self,
+182 | |         path: Vec<String>,
+183 | |         file: PathBuf,
+...   |
+187 | |         attr_base: PathBuf,
+188 | |     ) -> Result<(), String> {
+    | |___________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_lines
+
+warning: this argument is passed by value, but not consumed in the function body
+   --> xtask/src/modules/extract.rs:182:15
+    |
+182 |         path: Vec<String>,
+    |               ^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#needless_pass_by_value
+help: consider changing the type to
+    |
+182 -         path: Vec<String>,
+182 +         path: &[String],
+    |
+help: change `path.clone()` to
+    |
+224 -                     let mut child = path.clone();
+224 +                     let mut child = path.to_owned();
+    |
+help: change `path.clone()` to
+    |
+245 -                 path: path.clone(),
+245 +                 path: path.to_owned(),
+    |
+
+warning: this argument is passed by value, but not consumed in the function body
+   --> xtask/src/modules/extract.rs:183:15
+    |
+183 |         file: PathBuf,
+    |               ^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#needless_pass_by_value
+help: consider taking a reference instead
+    |
+183 |         file: &PathBuf,
+    |               +
+
+warning: this argument is passed by value, but not consumed in the function body
+   --> xtask/src/modules/extract.rs:186:20
+    |
+186 |         directory: PathBuf,
+    |                    ^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#needless_pass_by_value
+help: consider taking a reference instead
+    |
+186 |         directory: &PathBuf,
+    |                    +
+
+warning: this argument is passed by value, but not consumed in the function body
+   --> xtask/src/modules/extract.rs:187:20
+    |
+187 |         attr_base: PathBuf,
+    |                    ^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#needless_pass_by_value
+help: consider taking a reference instead
+    |
+187 |         attr_base: &PathBuf,
+    |                    +
+
+warning: called `map(<f>).unwrap_or_else(<g>)` on an `Option` value
+   --> xtask/src/modules/extract.rs:215:32
+    |
+215 |                   let external = item
+    |  ________________________________^
+216 | |                     .rename
+217 | |                     .as_ref()
+218 | |                     .map(|(_, ident)| ident.to_string())
+219 | |                     .unwrap_or_else(|| item.ident.to_string());
+    | |______________________________________________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#map_unwrap_or
+help: try
+    |
+215 ~                 let external = item
+216 +                     .rename
+217 ~                     .as_ref().map_or_else(|| item.ident.to_string(), |(_, ident)| ident.to_string());
+    |
+
+warning: this argument is passed by value, but not consumed in the function body
+   --> xtask/src/modules/extract.rs:347:15
+    |
+347 |         path: Vec<String>,
+    |               ^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#needless_pass_by_value
+help: consider changing the type to
+    |
+347 -         path: Vec<String>,
+347 +         path: &[String],
+    |
+help: change `path.clone()` to
+    |
+387 -             path.clone(),
+387 +             path.to_owned(),
+    |
+
+warning: this argument is passed by value, but not consumed in the function body
+   --> xtask/src/modules/extract.rs:348:15
+    |
+348 |         file: PathBuf,
+    |               ^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#needless_pass_by_value
+help: consider taking a reference instead
+    |
+348 |         file: &PathBuf,
+    |               +
+
+warning: called `map(<f>).unwrap_or_else(<g>)` on an `Option` value
+   --> xtask/src/modules/extract.rs:935:17
+    |
+935 | /                 item.ident
+936 | |                     .as_ref()
+937 | |                     .map(ToString::to_string)
+938 | |                     .unwrap_or_else(|| "macro".to_owned()),
+    | |__________________________________________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#map_unwrap_or
+help: try
+    |
+935 ~                 item.ident
+936 ~                     .as_ref().map_or_else(|| "macro".to_owned(), ToString::to_string),
+    |
+
+warning: these match arms have identical bodies
+    --> xtask/src/modules/extract.rs:1189:9
+     |
+1189 |         Item::Verbatim(_) => false,
+     |         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+1190 |         _ => false,
+     |         ^^^^^^^^^^ the wildcard arm
+     |
+     = help: if this is unintentional make the arms return different values
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#match_same_arms
+     = note: `-W clippy::match-same-arms` implied by `-W clippy::pedantic`
+     = help: to override `-W clippy::pedantic` add `#[allow(clippy::match_same_arms)]`
+help: otherwise remove the non-wildcard arm
+     |
+1189 -         Item::Verbatim(_) => false,
+     |
+
+warning: docs for function returning `Result` missing `# Errors` section
+    --> xtask/src/modules/extract.rs:1283:1
+     |
+1283 | / pub fn extract(
+1284 | |     crate_root: &std::path::Path,
+1285 | |     root_file: &std::path::Path,
+1286 | |     crate_name: &str,
+1287 | |     edition: &str,
+1288 | |     externals: &std::collections::BTreeSet<String>,
+1289 | | ) -> Result<Extracted, String> {
+     | |______________________________^
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_errors_doc
+
+warning: called `map(<f>).unwrap_or(false)` on an `Option` value
+    --> xtask/src/modules/extract.rs:1349:20
+     |
+1349 |           let test = engine
+     |  ____________________^
+1350 | |             .modules
+1351 | |             .get(&key)
+1352 | |             .map(|data| data.test)
+1353 | |             .unwrap_or(false);
+     | |_____________________________^
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#map_unwrap_or
+help: use `is_some_and(<f>)` instead
+     |
+1352 -             .map(|data| data.test)
+1353 -             .unwrap_or(false);
+1352 +             .is_some_and(|data| data.test);
+     |
+
+warning: docs for function which may panic missing `# Panics` section
+   --> xtask/src/modules/rules.rs:46:1
+    |
+ 46 | / pub fn check(
+ 47 | |     crate_root: &Path,
+ 48 | |     crate_name: &str,
+ 49 | |     rules_path: &Path,
+ 50 | |     graph: &Extracted,
+ 51 | | ) -> Result<Checked, String> {
+    | |____________________________^
+    |
+note: first possible panic found here
+   --> xtask/src/modules/rules.rs:349:25
+    |
+349 |               let edges = sibling_edges
+    |  _________________________^
+350 | |                 .get(&(pair[0].clone(), pair[1].clone()))
+351 | |                 .expect("cycle adjacency has sibling edge evidence");
+    | |____________________________________________________________________^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_panics_doc
+    = note: `-W clippy::missing-panics-doc` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::missing_panics_doc)]`
+
+warning: docs for function returning `Result` missing `# Errors` section
+  --> xtask/src/modules/rules.rs:46:1
+   |
+46 | / pub fn check(
+47 | |     crate_root: &Path,
+48 | |     crate_name: &str,
+49 | |     rules_path: &Path,
+50 | |     graph: &Extracted,
+51 | | ) -> Result<Checked, String> {
+   | |____________________________^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_errors_doc
+
+warning: this function has too many lines (345/100)
+  --> xtask/src/modules/rules.rs:46:1
+   |
+46 | / pub fn check(
+47 | |     crate_root: &Path,
+48 | |     crate_name: &str,
+49 | |     rules_path: &Path,
+50 | |     graph: &Extracted,
+51 | | ) -> Result<Checked, String> {
+   | |____________________________^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_lines
+
+warning: redundant closure
+   --> xtask/src/modules/rules.rs:121:30
+    |
+121 |     module_edges.sort_by_key(|edge| edge.to_string());
+    |                              ^^^^^^^^^^^^^^^^^^^^^^^ help: replace the closure with the method itself: `std::string::ToString::to_string`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#redundant_closure_for_method_calls
+
+warning: called `map(<f>).unwrap_or_else(<g>)` on an `Option` value
+   --> xtask/src/modules/rules.rs:127:22
+    |
+127 |           let target = component_owner(&target_parts, &components)
+    |  ______________________^
+128 | |             .map(|(alias, _)| alias)
+129 | |             .unwrap_or_else(|| canonical_path(&target_parts, &normalized_crate));
+    | |________________________________________________________________________________^ help: try: `component_owner(&target_parts, &components).map_or_else(|| canonical_path(&target_parts, &normalized_crate), |(alias, _)| alias)`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#map_unwrap_or
+
+warning: used `expect()` on an `Option` value
+   --> xtask/src/modules/rules.rs:349:25
+    |
+349 |               let edges = sibling_edges
+    |  _________________________^
+350 | |                 .get(&(pair[0].clone(), pair[1].clone()))
+351 | |                 .expect("cycle adjacency has sibling edge evidence");
+    | |____________________________________________________________________^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#expect_used
+    = note: requested on the command line with `-W clippy::expect-used`
+
+warning: used `expect()` on an `Option` value
+   --> xtask/src/modules/rules.rs:356:26
+    |
+356 |           let first_edge = path_edges
+    |  __________________________^
+357 | |             .first()
+358 | |             .expect("cycle path has sibling edge evidence");
+    | |___________________________________________________________^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#expect_used
+
+warning: used `expect()` on an `Option` value
+   --> xtask/src/modules/rules.rs:365:25
+    |
+365 |               let edges = sibling_edges
+    |  _________________________^
+366 | |                 .get(&pair)
+367 | |                 .expect("cycle adjacency has sibling edge evidence");
+    | |____________________________________________________________________^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#expect_used
+
+warning: assigning the result of `ToOwned::to_owned()` may be inefficient
+   --> xtask/src/modules/rules.rs:432:9
+    |
+432 |         parts[0] = normalized_crate.to_owned();
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: use `clone_into()`: `normalized_crate.clone_into(&mut parts[0])`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#assigning_clones
+    = note: `-W clippy::assigning-clones` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::assigning_clones)]`
+
+warning: assigning the result of `ToOwned::to_owned()` may be inefficient
+   --> xtask/src/modules/rules.rs:440:9
+    |
+440 |         parts[0] = "crate".to_owned();
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: use `clone_into()`: `"crate".clone_into(&mut parts[0])`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#assigning_clones
+
+warning: called `map(<f>).unwrap_or_else(<g>)` on an `Option` value
+   --> xtask/src/modules/rules.rs:482:5
+    |
+482 | /     components
+483 | |         .values()
+484 | |         .filter(|component| {
+485 | |             component.path.len() < component_path.len()
+...   |
+489 | |         .map(|component| component.path.clone())
+490 | |         .unwrap_or_else(|| vec![normalized_crate.to_owned()])
+    | |_____________________________________________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#map_unwrap_or
+help: try
+    |
+482 ~     components
+483 +         .values()
+484 +         .filter(|component| {
+485 +             component.path.len() < component_path.len()
+486 +                 && is_prefix(&component.path, component_path)
+487 +         })
+488 +         .max_by_key(|component| component.path.len()).map_or_else(|| vec![normalized_crate.to_owned()], |component| component.path.clone())
+    |
+
+warning: used `expect()` on an `Option` value
+   --> xtask/src/modules/rules.rs:565:5
+    |
+565 |     edges.iter().next().expect("an evidence set is non-empty")
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#expect_used
+
+warning: docs for function returning `Result` missing `# Errors` section
+  --> xtask/src/modules/single.rs:45:1
+   |
+45 | pub fn report(root: &Path, manifest: &Path, module_rules: &Path) -> Result<Value, ModuleError> {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_errors_doc
+
+warning: this function has too many lines (147/100)
+  --> xtask/src/modules/single.rs:45:1
+   |
+45 | pub fn report(root: &Path, manifest: &Path, module_rules: &Path) -> Result<Value, ModuleError> {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_lines
+
+warning: docs for function returning `Result` missing `# Errors` section
+  --> xtask/src/modules/workspace.rs:14:1
+   |
+14 | / pub fn source_files(
+15 | |     crate_root: &Path,
+16 | |     extracted: &extract::Extracted,
+17 | | ) -> Result<BTreeMap<String, String>, String> {
+   | |_____________________________________________^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_errors_doc
+
+warning: this function has too many lines (121/100)
+  --> xtask/src/modules/workspace.rs:65:1
+   |
+65 | pub fn apply(graph: &CrateGraph, report: &mut Value) -> Result<(), String> {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_lines
+
+warning: assigning the result of `Clone::clone()` may be inefficient
+   --> xtask/src/record_lint.rs:601:5
+    |
+601 |     report.kind = family.clone();
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: use `clone_from()`: `report.kind.clone_from(&family)`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#assigning_clones
+
+warning: docs for function returning `Result` missing `# Errors` section
+  --> xtask/src/util.rs:42:1
+   |
+42 | pub fn running_executable_path() -> Result<PathBuf> {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+  --> xtask/src/util.rs:58:1
+   |
+58 | pub fn running_executable_sha256() -> Result<String> {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_errors_doc
+
+warning: `xtask` (lib) generated 68 warnings (run `cargo clippy --fix --lib -p xtask -- ` to apply 10 suggestions)
+warning: `xtask` (lib test) generated 68 warnings (68 duplicates)

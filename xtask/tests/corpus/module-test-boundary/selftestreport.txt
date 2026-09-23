@@ -1,0 +1,20 @@
+module-test-boundary self-test report
+
+Result: PASS
+Cases: 12
+Payloads: 7
+Files: 9
+Rows: exact registered shape; refused rows have empty modules, test_edge, and source_files.
+Controls: strict refusal; explicit workspace allowance; production refusal;
+  real out-of-line inherited test context; outside-workspace refusal; canonical
+  symlink inside acceptance; canonical symlink outside refusal; production
+  symlink refusal; inner cfg(test) refusal; non-exact cfg(any(...)) refusal;
+  cfg_attr refusal; narrower workspace-root configuration refusal; omitted-
+  test-root negative hand control.
+Digest: helper comment mutation changes the bound SHA-256 while preserving the
+  hand-derived module list and test edge.
+Metadata: registration measures the seven payload sums, twelve case rows, and
+  all three frozen source snapshots with their original documentary paths.
+Reproduction: reference.py performs a fresh-direct-child, nine-file,
+  byte-identity check from frozen package inputs after read-only validation;
+  it does not read future live contract documents.

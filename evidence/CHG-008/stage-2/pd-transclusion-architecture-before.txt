@@ -1,0 +1,3 @@
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.12s
+     Running `target/debug/xtask architecture`
+xtask architecture: "crate site: extracting declared module source /home/kmosoti/projects/rha-m2/crates/site/src/lib.rs: module file /home/kmosoti/projects/rha-m2/xtask/tests/support/registered_package.rs is outside crate root /home/kmosoti/projects/rha-m2/crates/site"
