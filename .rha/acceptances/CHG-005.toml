@@ -1,0 +1,66 @@
+# Acceptance record for P-A (CHG-005, CHG-006). Written in P-B, the item that
+# merges after P-A (decision concurrent-with-p-a in .rha/tasks/CHG-019-trust.toml).
+# It is late: it should have been P-B's first commit after the merge, and history
+# is not rewritten. The conformance validation of P-B's merge with main found it
+# missing. Creation is pre-approved by [acceptance].
+schema_version = 1
+id = "CHG-005"
+covers = ["CHG-005", "CHG-006"]
+change = "docs/changes/CHG-005-rhawiki-m1.md"
+task = ".rha/tasks/CHG-005-rhawiki-m1.toml"
+
+[acceptor]
+principal = "human:kennedy"
+role = "acceptor"
+date = "2026-09-22"
+authority_profile = "ECC-Solo"
+basis = "Kennedy merged pull request 16 himself (merged by kmosoti at 2026-09-22T23:54:42Z). The decisions recorded before the merge under his delegation of 2026-09-22 (DP-1.5, DP-1.6, DP-5.2, DP-5.4) are part of what he accepted."
+event = "merge of pull request 16"
+
+[subject]
+revision = "dc564ea9dc8ae6d4e7130e4d212b55e7407ba81b"
+tree = "846f00b6ac3730b863452762351f2d4e624dbc89"
+parents = ["72c5cfd2fa96efbb81adb817ae10a93e03c87713", "6f8dffd64a62d0cb4167c6e1639764e5e06707d6"]
+pull_request = "https://github.com/kmosoti/recursive-hexagonal-architecture/pull/16"
+integrator_edits = "none"
+
+[[evidence]]
+path = "evidence/ci/35799644918.json"
+class = "ci"
+subject_revision = "dc564ea9dc8ae6d4e7130e4d212b55e7407ba81b"
+subject_tree = "846f00b6ac3730b863452762351f2d4e624dbc89"
+note = "Run 35799644918 on main at the merge: all eight L0 checks passed, 193 tests."
+
+[[evidence]]
+path = "evidence/CHG-005/20260922T234321Z-f4c0e4ce5f8e.json"
+class = "local"
+subject_revision = "f4c0e4ce5f8ee0c55f2b30f2d36f5f2e7e09dc3c"
+note = "L0 at the validated head before the record commit: all eight passed, 193 tests, clean tree."
+
+[[evidence]]
+path = "https://github.com/kmosoti/recursive-hexagonal-architecture/pull/16"
+class = "review"
+note = "Codex gpt-6-astra extra-high: three review rounds, then two conformance-validation rounds (DP-5.4), the last CONFORMS; four automated threads resolved (one refuted by running it)."
+
+[outcomes]
+passed = ["L0.fmt", "L0.clippy", "L0.nextest", "L0.doctest", "L0.architecture", "L0.deny", "L0.machete", "L0.typos"]
+not_run = ["DP-1.4: private markdown held-out fixtures (Kennedy's, spec §9.14)"]
+failed = []
+not_applicable = []
+inconclusive = []
+
+[disposition]
+decision = "accepted"
+# The policy at the merge labelled this kind controlled_transition; this record
+# is written under the policy of this tree, where DP-5.3 names it.
+kind = "bootstrap_acceptance"
+merge_allowed = false
+eligibility_at_acceptance = "blocked"
+basis = "All L0 checks passed; Authentic false under [acceptance.bootstrap] (DP-4.1). No claim of conformance."
+exception = "none"
+
+[carried_forward]
+open = [
+  "DP-1.4 open for Kennedy; the held-out check runner is at I.",
+  "Maturity accepted per DP-1.6: see docs/maturity.md, Accepted column.",
+]

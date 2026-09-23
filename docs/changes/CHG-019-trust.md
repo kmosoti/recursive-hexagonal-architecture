@@ -75,6 +75,15 @@ Verdict on `8db0531`: does not conform, two findings, two questions.
 
 Questions answered. *Before-repair evidence:* the new tests ran against the unrepaired code in the working tree, before the repair commit, with these results: `rha-verifier --test cli` gave `FAILED. 1 passed; 2 failed` (the two refusal tests failed, and the registered corpus passed), and `xtask --test record_lint_cli` gave `FAILED. 0 passed; 1 failed`. After the repair both passed. The output was observed in the session and not retained as a file, so it is recorded here. *Refuted thread:* none on this pull request; the prompt was generic.
 
+### Conformance validation of the merge with main (Codex as validator), determinations
+
+Verdict on `9c139a6`: does not conform, one finding, one question.
+
+1. **P-A's acceptance record is missing (P1). Confirmed.** Decision `concurrent-with-p-a` assigns it to the item that merges after P-A, which is this one. Repair: `.rha/acceptances/CHG-005.toml` binds the merge `dc564ea` to CI run 35799644918 (`evidence/ci/35799644918.json`, all eight passed, 193 tests), and `docs/maturity.md`'s Accepted column records DP-1.6. It is late. It should have been this packet's first commit after the merge; the record says so, and history is not rewritten. `cargo xtask rha lint` rejected the first draft for an abbreviated `subject_revision`, the same defect as the nine historical ones. It was corrected before commit.
+2. **Question: is the lint limited to L0 evidence envelopes? Yes, by the contract.** Every JSON operand is read as an L0 evidence record (`verifier-contract.md` §2), and no contract is registered for corpus reports such as `evidence/md-corpus/`, so linting one reports `evidence.missing_required_check`. This is a disclosed limit, for the schema-contract follow-on.
+
+Also found at the merge: P-A's scope guard, run here for the first time, flagged `Cargo.toml` missing from this record's `scope_globs` (approved in `protected_scope`); added, decision `scope-cargo-toml`.
+
 ### Not done in this packet, and why
 
 - **JSON Schema files under `.rha/schemas/`** (W15). The generator found that the contract fixes no required fields, types or allowed keys, so the `schema.*` codes have no registered cases. Writing schemas now would be the invented contract §2.4 rule 6 forbids. The schema decision is taken under Kennedy's delegation of 2026-09-22 (task record decision `schema-contract`): required fields, types and allowed keys are derived mechanically from the record shapes committed so far and registered, with their malformed cases, before any schema file exists. That is its own follow-on item, not this packet.
