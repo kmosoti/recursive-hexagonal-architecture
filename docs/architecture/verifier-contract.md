@@ -144,3 +144,41 @@ The first malformed member is reported under `malformed`; `r_eff` is null, `conf
 A cited file that neither the record's directory nor its git subject can resolve is explicitly `citation.unchecked` in output. This is a note, not a rejection code: it does not turn a synthetic unknown subject or historic missing raw log into a new frozen-corpus failure. Such a result is printed as accepted **with unchecked citations**, never bare accepted. It cannot support a claim that every digest was checked.
 
 The supplementary structural corpus uses family labels `task`, `acceptance`, `policy`, `evidence`, `h4`, `markdown_corpus`, and `h5_conformance`. Its structural-only reason sets are separate from the original full semantic R001–R080 reason sets; the originals retain their three kind labels and exact grades. Discriminator and variant diagnostics are fixed in the record schema contract.
+
+
+### 4.1 Malformed diagnostic wire labels (compatibility clarification)
+
+The amendment preserves P-B's grouped diagnostic labels; it does not change its refusal behavior. A nested defect in a check/rule/local-policy/entry array is reported under its containing group, not a newly invented leaf-path spelling. The supplementary corpus also retains the precise offending JSON Pointer in its metadata. This distinction was clarified during independent generation, before registration or a production run of the new cases.
+
+The evaluation-order group labels below are mechanically extracted from the committed `malformed()` shape table. Missing/mistyped leaves use the containing group. An exception absent/wrong container uses `exception`; missing/mistyped exception leaves use the corresponding group of strings, booleans, waiver array or required narrative strings. Direct fields use their own label.
+
+1. `policy.digest`
+2. `policy.profile`
+3. `policy.checks`
+4. `policy.rules`
+5. `policy.default_obligations`
+6. `policy.non_waivable`
+7. `policy.trusted_producers`
+8. `policy.required_inputs`
+9. `policy.exception_authority`
+10. `policy.acceptance_authority`
+11. `policy.cooling_off_hours`
+12. `local_policies`
+13. `base`
+14. `candidate_tree`
+15. `surface`
+16. `evidence.producer`
+17. `evidence.integrity`
+18. `evidence.subject`
+19. `evidence.policy`
+20. `evidence.base`
+21. `evidence.inputs`
+22. `evidence.entries`
+23. `acceptor`
+24. `accountable_change_authority`
+25. `now`
+26. `exception`
+27. `exception.subject, base, policy, issuer, issued_at, expires_at`
+28. `exception.authentic, revoked`
+29. `exception.waived`
+30. `exception.reason, compensating_control, follow_up`
