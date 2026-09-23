@@ -16,6 +16,10 @@ Implementation and stage evidence will be recorded here as each gate runs. No im
 
 DP-2.1 installed `cargo-modules 0.27.0` and `cargo-mutants 27.1.0` with `cargo install --locked`. The inventory records version-probe output and pins reinstall/CI versions; bootstrap observations retain their historical meaning.
 
+### Module registration review (before implementation)
+
+The independent generator's first proposal preserved an M01 ambiguity: the undeclared reverse edge accompanies its cycle. The pre-code module diagnostic contract resolves it by retaining undeclared edges as structured cycle subfacts, without changing the frozen witness or grader. A read-only review found the optional random-rule oracle still emitted those subfacts as separate findings. The generator is revising that proposal before registration; its original output digest and correction prompt are retained in generation provenance. Extraction reference outputs remain unchanged. M05 depth counts canonical path segments including the crate root; M21's legal Rust 2015 case is disclosed alongside Rust 2021 supplementary uniform-binding coverage.
+
 ## Verification
 
 P-B acceptance records linted and generated docs checked before their commit. P-C stage gates and settled-head L0 remain pending.
