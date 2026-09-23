@@ -84,6 +84,26 @@ Verdict on `9c139a6`: does not conform, one finding, one question.
 
 Also found at the merge: P-A's scope guard, run here for the first time, flagged `Cargo.toml` missing from this record's `scope_globs` (approved in `protected_scope`); added, decision `scope-cargo-toml`.
 
+### Approving reviews on `522445f` (Kennedy's rule of 2026-09-22: an Opus 5.5 agent and a GPT-6 agent), determinations
+
+**GPT-6 (`gpt-6-astra`, extra-high, validator role): REQUEST_CHANGES.**
+
+1. **`.rha/acceptances/CHG-005.toml` lacks `[[disposition.predicates]]` (P1). Confirmed.** `[acceptance.bootstrap]` requires the failed predicates with their reasons in that table, as CHG-004 and CHG-004.6 have. The repair adds all four predicates. `.rha/acceptances/PLAN-2.toml` on main has the same gap; it is a historical record and is disclosed here, not rewritten.
+
+**Opus 5.5 (an independent reviewer agent): APPROVE, with four findings and five questions.**
+
+1. **The verifier fails open on malformed fixtures (P2). Confirmed by the reviewer's probe crate.** A missing `revoked` reads as "not revoked". A missing `accountable_change_authority` makes a self-issued exception look independent. Missing binding fields compare `null == null` and make `applicable` true. A missing or non-string `surface` gives an empty `r_eff`, so merge is allowed with no evidence. No registered fixture is malformed, so this has no consequence on the corpus, but the verifier must not fail open before it reads real records. Repair: `evaluate` first checks the fixture against the shape of contract §1. Every member is present with its type, `surface` is non-empty strings, entries and checks are objects with string ids, and the exception object carries every §1.3 member. A fixture that fails is refused: every predicate is `false`, `merge_allowed` is `false`, and the output names the first missing or mistyped member under `malformed`.
+2. **A negative `cooling_off_hours` passes the ECC-Solo check (P3). Confirmed.** Repair: a negative value is malformed policy, and the fixture is refused as in item 1.
+3. **`digest.mismatch` is never checked on repository records (P3). Confirmed.** Cited paths resolve beside the record, while repository records cite paths from the repository root, so the check was skipped silently. The change record's earlier "accepts 62" did not say so. Repair: when the file is not beside the record, the lint reads it from git at the record's own subject, `artifact_identity.revision`, and compares. A revision git does not have (the synthetic corpus) keeps the beside-the-record rule. That is the contract's rule, and no registered outcome changes.
+4. **The differential test is weaker than described (P3). Confirmed.** Mutation arm 9 fell through to the producer arm, and no arm deletes a field. Repair: arm 9 is its own case. The reference is pinned by the registration, so the differential property still covers the contract's domain, well-formed fixtures. A new property deletes or retypes one member at a time and requires the verifier to refuse the result with `merge_allowed = false`. Where the reference also mishandles malformed input (`null == null`), that is out of its domain and recorded here, not repaired in a pinned artifact.
+
+Questions answered:
+1. *Reference independence.* The reference was written by a session told not to read `tools/rha-verifier/src/`; `model.rs` was committed 6.5 minutes earlier. The claim is corrected to "without reading the implementation", not "before it existed".
+2. *A missing or unknown `outcome` in lint evidence.* The contract has no code for it; it belongs to the `schema.*` cases of the schema-contract follow-on (decision `schema-contract`).
+3. *`unknown` revisions, uppercase hex, and bare 64-hex digests.* These are the deliberate choices stated in `record_lint.rs`'s header. The historical records use them, and the schema contract tightens them per field.
+4. *The entry's `kind`.* The verifier judges validity by the policy check's kind, as `Complete` and the contract specify; the kind-equality of `⊑` is carried by the join, which refuses mixed kinds.
+5. *No L0 record at `522445f`.* That commit changed only `scope_globs`. The record for the repaired head follows these repairs.
+
 ### Not done in this packet, and why
 
 - **JSON Schema files under `.rha/schemas/`** (W15). The generator found that the contract fixes no required fields, types or allowed keys, so the `schema.*` codes have no registered cases. Writing schemas now would be the invented contract §2.4 rule 6 forbids. The schema decision is taken under Kennedy's delegation of 2026-09-22 (task record decision `schema-contract`): required fields, types and allowed keys are derived mechanically from the record shapes committed so far and registered, with their malformed cases, before any schema file exists. That is its own follow-on item, not this packet.
