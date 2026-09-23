@@ -201,3 +201,7 @@ The disposition is blocked only on Authentic: local evidence has no trusted prod
 
 
 **Repair attempt 19, projected provenance binding.** Although all eight lane checks passed, [record lint rejected that immutable record](../../evidence/CHG-007/closure/first-l0-record-lint.txt): the embedded first Executor generation omitted its required harness. The active task already named codex-cli 0.156.0 at the parent provenance level; that same observed value is now explicit on the generation. No producer inference or schema relaxation is introduced. The failed record remains unchanged, and a replacement clean-head observation is required after this source-record correction. M5's failed/superseded retention rule applies; the first attempt is not claimed as the valid final packet record.
+
+### Valid final clean-head L0 record
+
+[The replacement packet record](../../evidence/CHG-007/20260923T051643Z-8156828cb14a.json) describes clean revision 8156828cb14ac6d12a06f41154d7894b26fd6762. All eight checks passed, with 269 nextest tests and no failure/error; record lint accepts its schema and explicitly reports unavailable raw-artifact citations. Authentic remains false under DP-4.1; the other stored predicates hold. This is the valid final local observation; the earlier schema-rejected attempt is retained above. The subsequent status/evidence/index commit contains no implementation change.
