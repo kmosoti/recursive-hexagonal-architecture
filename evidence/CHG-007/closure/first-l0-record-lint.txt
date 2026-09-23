@@ -1,0 +1,22 @@
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.09s
+     Running `target/debug/xtask rha lint evidence/CHG-007/20260923T051219Z-d3cffbf96185.json`
+evidence/CHG-007/20260923T051219Z-d3cffbf96185.json: rejected (evidence): schema.missing_field
+  schema /agent_context/provenance/generations/0: "harness" is a required property
+  citation.unchecked: target/nextest/ci/junit.xml (missing at subject)
+  citation.unchecked: target/rha/architecture.json (missing at subject)
+  citation.unchecked: target/rha/logs/L0/L0.architecture.stderr (missing at subject)
+  citation.unchecked: target/rha/logs/L0/L0.architecture.stdout (missing at subject)
+  citation.unchecked: target/rha/logs/L0/L0.clippy.stderr (missing at subject)
+  citation.unchecked: target/rha/logs/L0/L0.clippy.stdout (missing at subject)
+  citation.unchecked: target/rha/logs/L0/L0.deny.stderr (missing at subject)
+  citation.unchecked: target/rha/logs/L0/L0.deny.stdout (missing at subject)
+  citation.unchecked: target/rha/logs/L0/L0.doctest.stderr (missing at subject)
+  citation.unchecked: target/rha/logs/L0/L0.doctest.stdout (missing at subject)
+  citation.unchecked: target/rha/logs/L0/L0.fmt.stderr (missing at subject)
+  citation.unchecked: target/rha/logs/L0/L0.fmt.stdout (missing at subject)
+  citation.unchecked: target/rha/logs/L0/L0.machete.stderr (missing at subject)
+  citation.unchecked: target/rha/logs/L0/L0.machete.stdout (missing at subject)
+  citation.unchecked: target/rha/logs/L0/L0.nextest.stderr (missing at subject)
+  citation.unchecked: target/rha/logs/L0/L0.nextest.stdout (missing at subject)
+  citation.unchecked: target/rha/logs/L0/L0.typos.stderr (missing at subject)
+  citation.unchecked: target/rha/logs/L0/L0.typos.stdout (missing at subject)

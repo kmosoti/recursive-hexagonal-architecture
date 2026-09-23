@@ -84,6 +84,7 @@ span = "M2 Executor, P-C"
 [[provenance.generations]]
 artifact = "Executor implementation, non-oracle tests, records and documentation for P-C"
 generation = "sampled"
+harness = "codex-cli 0.156.0"
 model = "gpt-6-astra (requested in handoff)"
 reasoning_effort = "ultra (requested in handoff)"
 prompt = "Deliver milestone M2: P-C CHG-007, CHG-019.1 and E1; P-D CHG-008 to CHG-014. Implement all required stages, fix every confirmed issue within M2 scope, keep registered grading unchanged absent a disclosed amendment, obtain separate GPT-6 validation, open two green stacked PRs, and never merge."
