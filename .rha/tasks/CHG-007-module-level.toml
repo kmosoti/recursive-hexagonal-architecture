@@ -70,6 +70,21 @@ decided_by = "agent:executor under human:kennedy's delegation"
 delegation = "Kennedy, 2026-09-22: Determine a large slice to hand off to gpt-6-astra ultra. Make sure it has a goal to implement its work and fix any and all issue in accordance with rha design. (Let it flag and improve the architecture and tooling if it can justify it no need for my approval). I approve all PRs as long as both an opus 5.5 and gpt-6 agent has reviewed and approved the code. Kennedy, 2026-09-22: Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me."
 date = "2026-09-22"
 
+
+[[decisions]]
+id = "pr18-writer"
+question = "Who writes on chg/007-module-level after the PR opened, while the Codex Executor works on P-D?"
+answer = "Kennedy, 2026-09-23: 'You address the pr. Let astra do its thing.' The supervising Claude Opus 5.5 session (Claude Code) is the sole writer on chg/007-module-level from CHG-007.2 on; the Codex Executor was told by a queued message not to commit here, and continues P-D on chg/008-growth, merging main after PR 18 merges. The [[work]] claim above describes the branch up to 8e3037b."
+decided_by = "human:kennedy"
+date = "2026-09-23"
+
+[[decisions]]
+id = "pr18-automated-threads"
+question = "The two automated review threads on PR 18 (on 96019ef): match guards (P1), cfg(test) on associated items (P2)."
+answer = "P1 refuted by running it: syn 3 carries the guard in Pat::Guard, which visit_pat walks. P2 confirmed and repaired in visit_impl_item and visit_trait_item. Determinations in the change record, section CHG-007.2."
+decided_by = "agent:supervisor"
+date = "2026-09-23"
+
 [provenance]
 harness = "codex-cli 0.156.0"
 task_scope = "P-C"
