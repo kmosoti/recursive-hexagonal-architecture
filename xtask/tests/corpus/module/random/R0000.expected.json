@@ -1,0 +1,78 @@
+{
+  "edges": [
+    {
+      "extraction": "syntax",
+      "source": "random_0000",
+      "target": "random_0000::c0::Token",
+      "test_only": false
+    },
+    {
+      "extraction": "syntax",
+      "source": "random_0000",
+      "target": "random_0000::c1::Token",
+      "test_only": false
+    },
+    {
+      "extraction": "syntax",
+      "source": "random_0000::c0",
+      "target": "random_0000::c0::inner::Local",
+      "test_only": false
+    },
+    {
+      "extraction": "syntax",
+      "source": "random_0000::c0::inner",
+      "target": "random_0000::c0::Token",
+      "test_only": false
+    },
+    {
+      "extraction": "syntax",
+      "source": "random_0000::c0::tests",
+      "target": "random_0000::c1::Token",
+      "test_only": true
+    },
+    {
+      "extraction": "syntax",
+      "source": "random_0000::c1",
+      "target": "random_0000::c0::score",
+      "test_only": false
+    },
+    {
+      "extraction": "syntax",
+      "source": "random_0000::c1",
+      "target": "random_0000::c1::inner::Local",
+      "test_only": false
+    },
+    {
+      "extraction": "syntax",
+      "source": "random_0000::c1::inner",
+      "target": "random_0000::c1::Token",
+      "test_only": false
+    },
+    {
+      "extraction": "syntax",
+      "source": "random_0000::c1::leaf",
+      "target": "random_0000::c1::Token",
+      "test_only": false
+    },
+    {
+      "extraction": "syntax",
+      "source": "random_0000::c2",
+      "target": "random_0000::c0::score",
+      "test_only": true
+    },
+    {
+      "extraction": "syntax",
+      "source": "random_0000::c2",
+      "target": "random_0000::c2::inner::Local",
+      "test_only": false
+    },
+    {
+      "extraction": "syntax",
+      "source": "random_0000::c2::inner",
+      "target": "random_0000::c2::Token",
+      "test_only": false
+    }
+  ],
+  "limitations": [],
+  "schema_version": 1
+}

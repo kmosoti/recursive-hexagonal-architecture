@@ -1,0 +1,39 @@
+{
+  "check_py_sha256": "361e4c054669595057fad3d10c5f63879f1ffc5dd28bbf3267d8084ef0d85762",
+  "corrected_d4_facts": 128,
+  "exhaustive_directed_graphs": 4096,
+  "first_proposal_content_sha256": "5cd3ff86e179d428c4800bb42a6585b44670248ad7bf5864bb18e41762cfbd29",
+  "frozen_manifest_unchanged": true,
+  "independent_d4_facts": 64,
+  "negative_mutation_checks": 6,
+  "negative_mutations_rejected": [
+    "wrong tied witness",
+    "lost D4 subfact",
+    "missing subsumed rule",
+    "heuristic flag from off-witness edge",
+    "duplicated top-level D4 fact",
+    "lost component edge"
+  ],
+  "oracle_method": "All 4096 loop-free directed graphs over a,b,c,d; Tarjan SCC oracle and exhaustive permutation enumeration of simple closed cycles independently check membership, shortest/lexical path, heuristic flags and complete D4 partition; reversed input edge order also checked.",
+  "original_d4_facts": 128,
+  "preserved_headline_files": 153,
+  "preserved_original_artifacts": 672,
+  "preserved_random_primary_expectations": 256,
+  "preserved_random_source_maps": 256,
+  "random_optional_replays": 256,
+  "raw_reference_sha256": "dd4ce1ce37e619b054860c9428f48b0cdcc3e4672d166cbd7803c41ed85d36fa",
+  "result": "passed",
+  "scope": "Pre-registration artifact self-check only; no implementation was read or graded.",
+  "subsumed_d4_facts": 64,
+  "targeted_checks": 7,
+  "targeted_coverage": [
+    "fully allowed SCC has empty subfacts",
+    "heuristic edge off chosen witness",
+    "shorter return wins over lexically earlier longer return",
+    "multiple SCCs plus undeclared connecting edge",
+    "parallel syntax/heuristic occurrences",
+    "foreign-internal and upward findings remain independent with canonical depth",
+    "test-only edges excluded"
+  ],
+  "unchanged_component_graphs": 256
+}

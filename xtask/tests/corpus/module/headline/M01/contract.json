@@ -1,0 +1,19 @@
+{
+  "cells": [
+    "law6-b3"
+  ],
+  "expected": "detect",
+  "generation": "authored",
+  "id": "M01",
+  "level": "module",
+  "rule": "modules.cycle",
+  "seeded": "constraints uses crate::ordering::Wave while the component rules declare only ordering = [constraints]",
+  "witness": {
+    "path": [
+      "constraints",
+      "ordering",
+      "constraints"
+    ],
+    "rule": "modules.cycle"
+  }
+}

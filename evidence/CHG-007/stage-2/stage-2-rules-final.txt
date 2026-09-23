@@ -1,0 +1,18 @@
+    Blocking waiting for file lock on build directory
+   Compiling xtask v0.1.0 (/home/kmosoti/projects/rha-m2/xtask)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.00s
+     Running tests/module_rules.rs (target/debug/deps/module_rules-64c1145129d06aa8)
+
+running 7 tests
+test nested_child_to_parent_private_edges_ignore_allow_lists ... ok
+test disabling_cycles_does_not_hide_undeclared_dependencies ... ok
+test parallel_raw_cycle_edges_preserve_heuristic_evidence ... ok
+test cycle_witnesses_are_canonical_and_keep_independent_facts_separate ... ok
+test unknown_components_and_missing_rules_are_configuration_errors ... ok
+module headline grading: 25/25 passed
+test every_authored_headline_fixture_is_graded_against_the_registered_case ... ok
+random module oracle: 256 cases, 5229 raw edges, 192 findings, 0 mismatches
+test registered_random_rule_expectations_are_checked_without_rebuilding_them ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.73s
+

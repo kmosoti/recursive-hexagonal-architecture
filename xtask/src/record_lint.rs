@@ -1,37 +1,11 @@
-//! `cargo xtask rha lint`: the record lint of P-B stage 2, graded by the
-//! registered record corpus. Reason codes are exactly those of
-//! `docs/architecture/verifier-contract.md` §2, fixed before this code.
-//!
-//! Field rules (choices the contract leaves open, applied uniformly):
-//! * a **digest** field is a key containing `sha256` or ending in `digest`
-//!   (not `digest_algorithm`); valid values are `sha256:` + 64 lowercase hex
-//!   or a bare 64 lowercase hex. `unknown` is accepted only inside
-//!   `instruction_sources`, whose message entries have no file to hash (spec
-//!   §11.6.5); anywhere else, such as a policy digest, it is malformed
-//!   (corpus R025);
-//! * a **revision** field is `revision`, `tree`, `commit`, `git_rev`, a key
-//!   ending in `_revision`, `_tree` or `_git_rev`, or an item of `parents`;
-//!   valid values are 40 hex, `null`, or `unknown`;
-//! * a **timestamp** field is a key ending in `_at`. In evidence records,
-//!   which tools write, every such field is checked (corpus R038); in
-//!   hand-written task and acceptance records only a value beginning with a
-//!   digit is, because prose such as `found_at = "review, 2026-09-20"` occurs
-//!   there. It must be RFC 3339 with a valid date, time and `Z` or `±HH:MM`
-//!   offset (corpus R037: `+25:00` is not one);
-//! * a **cited file** is an object with `path` and `sha256`; when the file
-//!   exists beside the record, its bytes must hash to the cited digest.
-//!   Otherwise, when git has the record's subject (`snapshot_tree`, else
-//!   `artifact_identity.revision`) and the path in it, the bytes at that
-//!   subject are hashed instead, because repository records cite paths from
-//!   the repository root (Opus 5.5 review of pull request 17, finding 3). A
-//!   subject git does not have, such as the synthetic corpus's, leaves the
-//!   contract's beside-the-record rule as the only check.
+//! `cargo xtask rha lint`: structural and semantic record linting.
 
 use std::collections::BTreeSet;
-use std::path::Path;
+use std::path::{Component, Path, PathBuf};
 
 use serde_json::Value;
 
+use crate::record_schema;
 use crate::util::sha256_hex;
 
 fn is_hex(s: &str, n: usize, lower: bool) -> bool {
@@ -51,8 +25,6 @@ fn digest_ok(v: &str, unknown_allowed: bool) -> bool {
 }
 
 /// RFC 3339 with a real calendar date, a valid time, and `Z` or `±HH:MM`.
-/// Byte-based throughout, so a non-ASCII suffix is malformed rather than a
-/// panic, and 30 February is rejected (review round 1, findings 5 and 6).
 fn rfc3339(v: &str) -> bool {
     let b = v.as_bytes();
     if b.len() < 20
@@ -124,31 +96,214 @@ fn is_revision_key(k: &str) -> bool {
         || k.ends_with("_git_rev")
 }
 
-/// Where a cited file's bytes come from: beside the record, else the
-/// record's subject in git.
 struct Cited<'a> {
-    dir: &'a Path,
+    dir: PathBuf,
+    canonical_dir: Option<PathBuf>,
     repo: Option<&'a Path>,
+    canonical_repo: Option<PathBuf>,
     subject: Option<String>,
 }
 
-impl Cited<'_> {
-    fn bytes(&self, path: &str) -> Option<Vec<u8>> {
-        if path.starts_with('/') || path.contains("..") {
-            return None;
+impl<'a> Cited<'a> {
+    fn new(record: &Path, repo: Option<&'a Path>, subject: Option<String>) -> Self {
+        let dir = record.parent().unwrap_or(Path::new(".")).to_path_buf();
+        let canonical_dir = std::fs::canonicalize(&dir).ok();
+        let canonical_repo = repo.and_then(|path| std::fs::canonicalize(path).ok());
+        Self {
+            dir,
+            canonical_dir,
+            repo,
+            canonical_repo,
+            subject,
         }
-        let beside = self.dir.join(path);
-        if beside.is_file() {
-            return std::fs::read(beside).ok();
+    }
+
+    fn relative_path(candidate: &Path) -> Option<PathBuf> {
+        let mut has_normal = false;
+        for component in candidate.components() {
+            match component {
+                Component::Normal(_) => has_normal = true,
+                Component::CurDir => {}
+                Component::Prefix(_) | Component::RootDir | Component::ParentDir => return None,
+            }
         }
-        let (repo, subject) = (self.repo?, self.subject.as_deref()?);
-        let out = std::process::Command::new("git")
+        has_normal.then(|| candidate.to_path_buf())
+    }
+
+    fn relative(path: &str) -> Option<PathBuf> {
+        Self::relative_path(Path::new(path))
+    }
+
+    fn absolute_relative(&self, path: &Path) -> Result<PathBuf, &'static str> {
+        let Some(repo) = self.repo else {
+            return Err("outside repo root");
+        };
+        let Some(relative) = path.strip_prefix(repo).ok().and_then(Self::relative_path) else {
+            return Err("outside repo root");
+        };
+
+        let Some(base) = self.canonical_repo.as_deref() else {
+            return Err("unsafe path");
+        };
+        let mut existing = path;
+        loop {
+            if std::fs::symlink_metadata(existing).is_ok() {
+                let Ok(canonical) = std::fs::canonicalize(existing) else {
+                    return Err("unsafe path");
+                };
+                if !canonical.starts_with(base) {
+                    return Err("unsafe path");
+                }
+                break;
+            }
+            let Some(parent) = existing.parent() else {
+                return Err("unsafe path");
+            };
+            if parent == existing {
+                return Err("unsafe path");
+            }
+            existing = parent;
+        }
+
+        Ok(relative)
+    }
+
+    fn at_subject(&self, relative: &Path) -> Result<Vec<u8>, &'static str> {
+        let (Some(repo), Some(subject)) = (self.repo, self.subject.as_deref()) else {
+            return Err("no subject");
+        };
+        let output = std::process::Command::new("git")
             .arg("-C")
             .arg(repo)
-            .args(["cat-file", "blob", &format!("{subject}:{path}")])
+            .args(["cat-file", "blob"])
+            .arg(format!("{subject}:{}", relative.display()))
             .output()
-            .ok()?;
-        out.status.success().then_some(out.stdout)
+            .map_err(|_| "missing at subject")?;
+        if output.status.success() {
+            Ok(output.stdout)
+        } else {
+            Err("missing at subject")
+        }
+    }
+
+    fn bytes(&self, path: &str) -> Result<Vec<u8>, &'static str> {
+        let candidate = Path::new(path);
+        if candidate.is_absolute() {
+            let relative = self.absolute_relative(candidate)?;
+            return self.at_subject(&relative);
+        }
+
+        let Some(relative) = Self::relative(path) else {
+            return Err("unsafe path");
+        };
+
+        let beside = self.dir.join(&relative);
+        if beside.is_file() {
+            let Some(base) = self.canonical_dir.as_deref() else {
+                return Err("unsafe path");
+            };
+            let Ok(canonical) = std::fs::canonicalize(&beside) else {
+                return Err("unsafe path");
+            };
+            if !canonical.starts_with(base) {
+                return Err("unsafe path");
+            }
+            if let Ok(bytes) = std::fs::read(canonical) {
+                return Ok(bytes);
+            }
+        }
+
+        self.at_subject(&relative)
+    }
+}
+
+fn subject(v: &Value) -> Option<String> {
+    [
+        v.get("artifact_identity")
+            .and_then(|x| x.get("snapshot_tree")),
+        v.get("artifact_identity").and_then(|x| x.get("revision")),
+        v.get("subject").and_then(|x| x.get("tree")),
+        v.get("subject").and_then(|x| x.get("revision")),
+    ]
+    .into_iter()
+    .flatten()
+    .filter_map(Value::as_str)
+    .find(|s| is_hex(s, 40, false))
+    .map(str::to_owned)
+}
+
+const FILE_DIGEST_MAPS: &[&str] = &[
+    "source_files_sha256",
+    "fixture_inputs_sha256",
+    "generated_inputs_sha256",
+    "inputs_sha256",
+];
+
+fn check_citation(
+    path: &str,
+    digest: &str,
+    cited: &Cited<'_>,
+    out: &mut BTreeSet<&'static str>,
+    notes: &mut Vec<String>,
+) {
+    match cited.bytes(path) {
+        Ok(bytes) if digest.trim_start_matches("sha256:") != sha256_hex(&bytes) => {
+            out.insert("digest.mismatch");
+        }
+        Ok(_) => {}
+        Err(reason) => notes.push(format!("citation.unchecked: {path} ({reason})")),
+    }
+}
+
+fn check_pair(
+    map: &serde_json::Map<String, Value>,
+    path_key: &str,
+    digest_key: &str,
+    cited: &Cited<'_>,
+    out: &mut BTreeSet<&'static str>,
+    notes: &mut Vec<String>,
+) {
+    if let (Some(Value::String(path)), Some(Value::String(digest))) =
+        (map.get(path_key), map.get(digest_key))
+    {
+        check_citation(path, digest, cited, out, notes);
+    }
+}
+
+fn citations(
+    map: &serde_json::Map<String, Value>,
+    cited: &Cited<'_>,
+    out: &mut BTreeSet<&'static str>,
+    notes: &mut Vec<String>,
+) {
+    check_pair(map, "path", "sha256", cited, out, notes);
+    check_pair(map, "source", "source_sha256", cited, out, notes);
+
+    for path_key in map.keys() {
+        let Some(prefix) = path_key.strip_suffix("_path") else {
+            continue;
+        };
+        if prefix.is_empty() {
+            continue;
+        }
+        for suffix in ["_sha256", "_digest"] {
+            let digest_key = format!("{prefix}{suffix}");
+            check_pair(map, path_key, &digest_key, cited, out, notes);
+        }
+    }
+
+    for map_key in FILE_DIGEST_MAPS {
+        let Some(Value::Object(files)) = map.get(*map_key) else {
+            continue;
+        };
+        for (path, digest) in files {
+            if let Value::String(digest) = digest {
+                if !digest_ok(digest, false) {
+                    out.insert("digest.malformed");
+                }
+                check_citation(path, digest, cited, out, notes);
+            }
+        }
     }
 }
 
@@ -158,16 +313,11 @@ fn walk(
     strict_time: bool,
     in_sources: bool,
     out: &mut BTreeSet<&'static str>,
+    notes: &mut Vec<String>,
 ) {
     match v {
         Value::Object(map) => {
-            if let (Some(Value::String(path)), Some(Value::String(digest))) =
-                (map.get("path"), map.get("sha256"))
-                && let Some(bytes) = cited.bytes(path)
-                && digest.trim_start_matches("sha256:") != sha256_hex(&bytes)
-            {
-                out.insert("digest.mismatch");
-            }
+            citations(map, cited, out, notes);
             for (k, x) in map {
                 match x {
                     Value::String(s) if is_digest_key(k) && !digest_ok(s, in_sources) => {
@@ -202,12 +352,13 @@ fn walk(
                     strict_time,
                     in_sources || k == "instruction_sources",
                     out,
+                    notes,
                 );
             }
         }
         Value::Array(items) => {
             for x in items {
-                walk(x, cited, strict_time, in_sources, out);
+                walk(x, cited, strict_time, in_sources, out, notes);
             }
         }
         _ => {}
@@ -267,16 +418,233 @@ fn evidence(v: &Value, l0: &[String], out: &mut BTreeSet<&'static str>) {
     }
 }
 
-/// The reason codes for one record; empty means accepted. `kind` is
-/// `evidence` (JSON), `task` or `acceptance` (TOML); `l0` is the policy's
-/// required L0 check ids.
+#[derive(Debug)]
+pub struct LintReport {
+    pub kind: String,
+    pub reasons: BTreeSet<&'static str>,
+    pub notes: Vec<String>,
+    pub schema_issues: Vec<record_schema::Issue>,
+}
+
+fn issue(code: &'static str, path: &str, message: impl Into<String>) -> record_schema::Issue {
+    record_schema::Issue {
+        code,
+        path: path.to_string(),
+        message: message.into(),
+    }
+}
+
+fn normalize(report: &mut LintReport) {
+    report.notes.sort();
+    report.notes.dedup();
+    report.schema_issues.sort_by(|left, right| {
+        (&left.code, &left.path, &left.message).cmp(&(&right.code, &right.path, &right.message))
+    });
+    report.schema_issues.dedup_by(|left, right| {
+        left.code == right.code && left.path == right.path && left.message == right.message
+    });
+    for schema_issue in &report.schema_issues {
+        report.reasons.insert(schema_issue.code);
+    }
+}
+
+fn is_json_family(kind: &str) -> bool {
+    matches!(
+        kind,
+        "evidence" | "h4" | "markdown_corpus" | "h5_conformance"
+    )
+}
+
+fn parse_record(text: &str, record: &Path, kind: Option<&str>) -> Option<Value> {
+    let extension = record.extension().and_then(|x| x.to_str());
+    let json = match kind {
+        Some(kind) => is_json_family(kind),
+        None if extension == Some("json") => true,
+        None if extension == Some("toml") => false,
+        None => return None,
+    };
+    if json {
+        serde_json::from_str(text).ok()
+    } else {
+        toml::from_str::<toml::Value>(text)
+            .ok()
+            .and_then(|value| serde_json::to_value(value).ok())
+    }
+}
+
+fn infer_json(value: &Value) -> (String, Option<&str>, Vec<record_schema::Issue>) {
+    let Some(object) = value.as_object() else {
+        return (
+            "unknown".to_string(),
+            None,
+            vec![issue(
+                "schema.wrong_type",
+                "",
+                "a record must have an object root",
+            )],
+        );
+    };
+
+    if let Some(record_kind) = object.get("record_kind") {
+        let Some(record_kind) = record_kind.as_str() else {
+            return (
+                "unknown".to_string(),
+                None,
+                vec![issue(
+                    "schema.wrong_type",
+                    "/record_kind",
+                    "record_kind must be a string",
+                )],
+            );
+        };
+        if record_kind != "evidence" {
+            return (
+                record_kind.to_string(),
+                None,
+                vec![issue(
+                    "schema.invalid_value",
+                    "/record_kind",
+                    "record_kind must be evidence",
+                )],
+            );
+        }
+        return ("evidence".to_string(), Some("evidence"), Vec::new());
+    }
+
+    let Some(kind) = object.get("kind") else {
+        return (
+            "unknown".to_string(),
+            None,
+            vec![issue(
+                "schema.missing_field",
+                "",
+                "record discriminator is missing",
+            )],
+        );
+    };
+    let Some(kind) = kind.as_str() else {
+        return (
+            "unknown".to_string(),
+            None,
+            vec![issue("schema.wrong_type", "/kind", "kind must be a string")],
+        );
+    };
+    match kind {
+        "h4" | "markdown_corpus" | "h5_conformance" => (kind.to_string(), Some(kind), Vec::new()),
+        _ => (
+            kind.to_string(),
+            None,
+            vec![issue(
+                "schema.invalid_value",
+                "/kind",
+                "kind is not a supported record family",
+            )],
+        ),
+    }
+}
+
+fn infer_toml(value: &Value) -> String {
+    let Some(object) = value.as_object() else {
+        return "task".to_string();
+    };
+    if object.contains_key("acceptor") {
+        "acceptance".to_string()
+    } else if object.contains_key("authority") || object.contains_key("lanes") {
+        "policy".to_string()
+    } else {
+        "task".to_string()
+    }
+}
+
+fn family_is_corpus(kind: &str) -> bool {
+    matches!(kind, "h4" | "markdown_corpus" | "h5_conformance")
+}
+
+/// Produces the structured lint result for a record.
+#[must_use]
+pub fn report_in(
+    record: &Path,
+    kind: Option<&str>,
+    l0: &[String],
+    repo: Option<&Path>,
+) -> LintReport {
+    let mut report = LintReport {
+        kind: kind.unwrap_or("unknown").to_string(),
+        reasons: BTreeSet::new(),
+        notes: Vec::new(),
+        schema_issues: Vec::new(),
+    };
+
+    let Ok(text) = std::fs::read_to_string(record) else {
+        report
+            .schema_issues
+            .push(issue("schema.wrong_type", "", "record could not be read"));
+        normalize(&mut report);
+        return report;
+    };
+    let Some(value) = parse_record(&text, record, kind) else {
+        report
+            .schema_issues
+            .push(issue("schema.wrong_type", "", "record could not be parsed"));
+        normalize(&mut report);
+        return report;
+    };
+
+    let (family, discriminator_issues) = if let Some(kind) = kind {
+        (kind.to_string(), Vec::new())
+    } else if record.extension().and_then(|x| x.to_str()) == Some("json") {
+        let (kind, family, issues) = infer_json(&value);
+        (family.map_or(kind, str::to_owned), issues)
+    } else {
+        (infer_toml(&value), Vec::new())
+    };
+    report.kind = family.clone();
+    report.schema_issues.extend(discriminator_issues);
+
+    let supported = matches!(
+        family.as_str(),
+        "task" | "acceptance" | "policy" | "evidence" | "h4" | "markdown_corpus" | "h5_conformance"
+    );
+    if supported && report.schema_issues.is_empty() {
+        report
+            .schema_issues
+            .extend(record_schema::validate(&value, &family));
+    } else if !supported && report.schema_issues.is_empty() {
+        report.schema_issues.push(issue(
+            "schema.invalid_value",
+            "",
+            format!("unsupported record schema family {family}"),
+        ));
+    }
+
+    if supported {
+        let subject = subject(&value);
+        let cited = Cited::new(record, repo, subject);
+        let strict_time = family == "evidence" || family_is_corpus(&family);
+        walk(
+            &value,
+            &cited,
+            strict_time,
+            false,
+            &mut report.reasons,
+            &mut report.notes,
+        );
+        if family == "evidence" {
+            evidence(&value, l0, &mut report.reasons);
+        }
+    }
+
+    normalize(&mut report);
+    report
+}
+
+/// The reason codes for one explicitly declared record family.
 #[must_use]
 pub fn lint(record: &Path, kind: &str, l0: &[String]) -> BTreeSet<&'static str> {
     lint_in(record, kind, l0, None)
 }
 
-/// As [`lint`], resolving cited files that are not beside the record in the
-/// git repository at `repo`, at the record's subject.
+/// As [`lint`], resolving cited files at their historical subject when needed.
 #[must_use]
 pub fn lint_in(
     record: &Path,
@@ -284,38 +652,7 @@ pub fn lint_in(
     l0: &[String],
     repo: Option<&Path>,
 ) -> BTreeSet<&'static str> {
-    let mut out = BTreeSet::new();
-    let Ok(text) = std::fs::read_to_string(record) else {
-        out.insert("schema.wrong_type");
-        return out;
-    };
-    let value: Option<Value> = if kind == "evidence" {
-        serde_json::from_str(&text).ok()
-    } else {
-        toml::from_str::<toml::Value>(&text)
-            .ok()
-            .and_then(|t| serde_json::to_value(t).ok())
-    };
-    let Some(value) = value else {
-        out.insert("schema.wrong_type");
-        return out;
-    };
-    let identity = &value["artifact_identity"];
-    let subject = [&identity["snapshot_tree"], &identity["revision"]]
-        .into_iter()
-        .filter_map(Value::as_str)
-        .find(|s| is_hex(s, 40, false))
-        .map(str::to_owned);
-    let cited = Cited {
-        dir: record.parent().unwrap_or(Path::new(".")),
-        repo,
-        subject,
-    };
-    walk(&value, &cited, kind == "evidence", false, &mut out);
-    if kind == "evidence" {
-        evidence(&value, l0, &mut out);
-    }
-    out
+    report_in(record, Some(kind), l0, repo).reasons
 }
 
 /// The L0 check ids of this repository's policy.
@@ -328,39 +665,65 @@ pub fn l0_ids(root: &Path) -> crate::error::Result<Vec<String>> {
         .policy
         .lanes
         .get("L0")
-        .map(|l| l.checks.iter().map(|c| c.id.clone()).collect())
+        .map(|lane| lane.checks.iter().map(|check| check.id.clone()).collect())
         .unwrap_or_default())
 }
 
-/// The command: lints each file, printing its reason codes; exit 1 if any
-/// record is rejected.
+/// Lints each requested file, printing its reason codes; exit 1 if any record
+/// is rejected.
 ///
 /// # Errors
-/// If the policy cannot be loaded.
-pub fn run(root: &Path, files: &[std::path::PathBuf]) -> crate::error::Result<u8> {
+/// If the registered schemas or policy cannot be loaded.
+pub fn run(root: &Path, files: &[PathBuf]) -> crate::error::Result<u8> {
+    if let Some(code) = record_schema::configuration_error() {
+        return Err(crate::error::Error::new(format!(
+            "record schema configuration failed: {code}"
+        )));
+    }
     let l0 = l0_ids(root)?;
-    let mut rejected = 0;
-    for f in files {
-        let kind = if f.extension().is_some_and(|e| e == "json") {
-            "evidence"
-        } else if std::fs::read_to_string(f).is_ok_and(|t| t.contains("[acceptor]")) {
-            "acceptance"
+    let mut rejected = false;
+    for file in files {
+        let report = report_in(file, None, &l0, Some(root));
+        if report.reasons.is_empty() {
+            if report.notes.is_empty() {
+                println!("{}: accepted ({})", file.display(), report.kind);
+            } else {
+                println!(
+                    "{}: accepted with unchecked citations ({})",
+                    file.display(),
+                    report.kind
+                );
+            }
         } else {
-            "task"
-        };
-        let reasons = lint_in(f, kind, &l0, Some(root));
-        if reasons.is_empty() {
-            println!("{}: accepted ({kind})", f.display());
-        } else {
-            rejected += 1;
+            rejected = true;
             println!(
-                "{}: rejected ({kind}): {}",
-                f.display(),
-                reasons.into_iter().collect::<Vec<_>>().join(", ")
+                "{}: rejected ({}): {}",
+                file.display(),
+                report.kind,
+                report
+                    .reasons
+                    .iter()
+                    .copied()
+                    .collect::<Vec<_>>()
+                    .join(", ")
             );
+            for schema_issue in &report.schema_issues {
+                println!(
+                    "  schema {}: {}",
+                    if schema_issue.path.is_empty() {
+                        "/"
+                    } else {
+                        &schema_issue.path
+                    },
+                    schema_issue.message
+                );
+            }
+        }
+        for note in &report.notes {
+            println!("  {note}");
         }
     }
-    Ok(u8::from(rejected > 0))
+    Ok(u8::from(rejected))
 }
 
 #[cfg(test)]
@@ -371,13 +734,10 @@ mod tests {
     fn calendar_offsets_and_bytes() {
         assert!(rfc3339("2026-09-22T12:00:00Z"));
         assert!(rfc3339("2024-02-29T00:00:00.123+05:30"));
-        assert!(!rfc3339("2026-02-30T12:00:00Z"), "30 February");
-        assert!(!rfc3339("2025-02-29T12:00:00Z"), "not a leap year");
+        assert!(!rfc3339("2026-02-30T12:00:00Z"));
+        assert!(!rfc3339("2025-02-29T12:00:00Z"));
         assert!(!rfc3339("2026-09-22T12:00:00+25:00"));
-        assert!(
-            !rfc3339("2026-09-22T12:00:00\u{e9}xxxx"),
-            "a non-ASCII suffix is malformed, not a panic"
-        );
+        assert!(!rfc3339("2026-09-22T12:00:00\u{e9}xxxx"));
         assert!(!rfc3339("not-a-timestamp"));
     }
 }

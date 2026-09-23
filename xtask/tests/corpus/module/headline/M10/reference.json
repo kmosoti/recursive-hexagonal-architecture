@@ -1,0 +1,12 @@
+{
+  "edges": [
+    {
+      "extraction": "syntax",
+      "source": "fixture_m10::part",
+      "target": "fixture_m10::constraints::rules",
+      "test_only": false
+    }
+  ],
+  "limitations": [],
+  "schema_version": 1
+}

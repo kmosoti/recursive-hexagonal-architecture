@@ -1,0 +1,107 @@
+    Checking xtask v0.1.0 (/home/kmosoti/projects/rha-m2/xtask)
+error[E0631]: type mismatch in function arguments
+    --> xtask/src/record_lint.rs:180:17
+     |
+ 180 |     .filter_map(Value::as_str)
+     |      ---------- ^^^^^^^^^^^^^
+     |      |          |
+     |      |          expected due to this
+     |      |          found signature defined here
+     |      required by a bound introduced by this call
+     |
+     = note: expected function signature `fn(std::option::Option<&serde_json::Value>) -> _`
+                found function signature `fn(&serde_json::Value) -> _`
+note: required by a bound in `filter_map`
+    --> /home/kmosoti/.rustup/toolchains/1.98.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/traits/iterator.rs:1000:12
+     |
+ 997 |     fn filter_map<B, F>(self, f: F) -> FilterMap<Self, F>
+     |        ---------- required by a bound in this associated function
+...
+1000 |         F: FnMut(Self::Item) -> Option<B>,
+     |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ required by this bound in `Iterator::filter_map`
+help: consider wrapping the function in a closure
+     |
+ 180 |     .filter_map(|arg0: std::option::Option<&serde_json::Value>| Value::as_str(/* &serde_json::Value */))
+     |                 +++++++++++++++++++++++++++++++++++++++++++++++              ++++++++++++++++++++++++++
+
+error[E0599]: the method `find` exists for struct `FilterMap<IntoIter<Option<&Value>, 4>, fn(&...) -> ... {...::as_str}>`, but its trait bounds were not satisfied
+   --> xtask/src/record_lint.rs:181:6
+    |
+171 | /     [
+172 | |         v.get("artifact_identity")
+173 | |             .and_then(|x| x.get("snapshot_tree")),
+174 | |         v.get("artifact_identity")
+...   |
+180 | |     .filter_map(Value::as_str)
+181 | |     .find(|s| is_hex(s, 40, false))
+    | |     -^^^^ method cannot be called due to unsatisfied trait bounds
+    | |_____|
+    |
+    |
+   ::: /home/kmosoti/.rustup/toolchains/1.98.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/adapters/filter_map.rs:18:1
+    |
+ 18 |   pub struct FilterMap<I, F> {
+    |   -------------------------- doesn't satisfy `_: Iterator`
+    |
+    = note: the following trait bounds were not satisfied:
+            `<for<'a> fn(&'a serde_json::Value) -> std::option::Option<&'a str> {serde_json::Value::as_str} as FnOnce<(std::option::Option<&serde_json::Value>,)>>::Output = std::option::Option<_>`
+            which is required by `FilterMap<std::array::IntoIter<std::option::Option<&serde_json::Value>, 4>, for<'a> fn(&'a serde_json::Value) -> std::option::Option<&'a str> {serde_json::Value::as_str}>: Iterator`
+            `for<'a> fn(&'a serde_json::Value) -> std::option::Option<&'a str> {serde_json::Value::as_str}: FnMut<(std::option::Option<&serde_json::Value>,)>`
+            which is required by `FilterMap<std::array::IntoIter<std::option::Option<&serde_json::Value>, 4>, for<'a> fn(&'a serde_json::Value) -> std::option::Option<&'a str> {serde_json::Value::as_str}>: Iterator`
+    = note: the full name for the type has been written to '/home/kmosoti/projects/rha-m2/target/debug/deps/xtask-7a0cb0e937936c43.long-type-7103256057642802287.txt'
+    = note: consider using `--verbose` to print the full type name to the console
+
+error[E0308]: mismatched types
+    --> xtask/src/record_lint.rs:491:27
+     |
+ 491 |         (family.unwrap_or(kind), issues)
+     |                 --------- ^^^^ expected `&str`, found `String`
+     |                 |
+     |                 arguments to this method are incorrect
+     |
+help: the return type of this call is `std::string::String` due to the type of the argument passed
+    --> xtask/src/record_lint.rs:491:10
+     |
+ 491 |         (family.unwrap_or(kind), issues)
+     |          ^^^^^^^^^^^^^^^^^----^
+     |                           |
+     |                           this argument influences the return type of `unwrap_or`
+note: method defined here
+    --> /home/kmosoti/.rustup/toolchains/1.98.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:1036:18
+     |
+1036 |     pub const fn unwrap_or(self, default: T) -> T
+     |                  ^^^^^^^^^
+help: consider borrowing here
+     |
+ 491 |         (family.unwrap_or(&kind), issues)
+     |                           +
+
+error[E0308]: `if` and `else` have incompatible types
+   --> xtask/src/record_lint.rs:493:9
+    |
+489 |       } else if record.extension().and_then(|x| x.to_str()) == Some("json") {
+    |  ____________-
+490 | |         let (kind, family, issues) = infer_json(&value);
+491 | |         (family.unwrap_or(kind), issues)
+    | |         -------------------------------- expected because of this
+492 | |     } else {
+493 | |         (infer_toml(&value), Vec::new())
+    | |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `(&str, Vec<Issue>)`, found `(String, Vec<_>)`
+494 | |     };
+    | |_____- `if` and `else` have incompatible types
+    |
+    = note: expected tuple `(&str, Vec<Issue>)`
+               found tuple `(std::string::String, Vec<_>)`
+
+error: lifetime may not live long enough
+   --> xtask/src/record_lint.rs:422:13
+    |
+359 | fn infer_json(value: &Value) -> (String, Option<&'static str>, Vec<record_schema::Issue>) {
+    |                      - let's call the lifetime of this reference `'1`
+...
+422 |             (kind.to_string(), Some(kind), Vec::new())
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ returning this value requires that `'1` must outlive `'static`
+
+Some errors have detailed explanations: E0308, E0599, E0631.
+For more information about an error, try `rustc --explain E0308`.
+error: could not compile `xtask` (lib) due to 5 previous errors

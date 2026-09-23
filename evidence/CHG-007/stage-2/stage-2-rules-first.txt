@@ -1,0 +1,300 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.06s
+     Running tests/module_rules.rs (target/debug/deps/module_rules-64c1145129d06aa8)
+
+running 6 tests
+
+thread 'disabling_cycles_does_not_hide_undeclared_dependencies' (2703259) panicked at xtask/tests/module_rules.rs:608:5:
+assertion failed: checked.limitations.iter().any(|limitation|
+        limitation["code"] == "modules.cycle")
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+thread 'nested_child_to_parent_private_edges_ignore_allow_lists' (2703261) panicked at xtask/tests/module_rules.rs:645:79:
+rules: "component child refers to undiscovered module synthetic::parent::child"
+test disabling_cycles_does_not_hide_undeclared_dependencies ... FAILED
+test unknown_components_and_missing_rules_are_configuration_errors ... ok
+test nested_child_to_parent_private_edges_ignore_allow_lists ... FAILED
+test cycle_witnesses_are_canonical_and_keep_independent_facts_separate ... ok
+module headline grading: 25/25 passed
+test every_authored_headline_fixture_is_graded_against_the_registered_case ... ok
+random module oracle: 256 cases, 5229 raw edges, 192 findings, 266 mismatches
+
+thread 'registered_random_rule_expectations_are_checked_without_rebuilding_them' (2703262) panicked at xtask/tests/module_rules.rs:477:5:
+random rule mismatches:
+R0001 component_edges: registered cardinality 5 != observed 8
+R0002 component_edges: registered cardinality 6 != observed 11
+R0003 component_edges: registered cardinality 5 != observed 11
+R0003 violations: no observed diagnostic matched {"extraction":"syntax","from":"c1","rule":"modules.foreign_internal","to":"random_0003::c0::inner::Local"}
+R0004 component_edges: registered cardinality 2 != observed 5
+R0005 component_edges: registered cardinality 5 != observed 10
+R0006 component_edges: registered cardinality 5 != observed 8
+R0007 component_edges: registered cardinality 3 != observed 4
+R0007 violations: no observed diagnostic matched {"depth":2,"extraction":"syntax","from":"c0","rule":"modules.child_to_parent_private","to":"random_0007::root_helper"}
+R0008 component_edges: registered cardinality 6 != observed 7
+R0011 component_edges: registered cardinality 9 != observed 16
+R0011 violations: no observed diagnostic matched {"extraction":"syntax","from":"c1","rule":"modules.foreign_internal","to":"random_0011::c0::inner::Local"}
+R0012 component_edges: registered cardinality 10 != observed 16
+R0013 component_edges: registered cardinality 8 != observed 14
+R0014 component_edges: registered cardinality 6 != observed 12
+R0015 component_edges: registered cardinality 6 != observed 12
+R0015 violations: no observed diagnostic matched {"depth":2,"extraction":"syntax","from":"c0","rule":"modules.child_to_parent_private","to":"random_0015::root_helper"}
+R0016 component_edges: registered cardinality 8 != observed 13
+R0017 component_edges: registered cardinality 7 != observed 10
+R0018 component_edges: registered cardinality 3 != observed 4
+R0019 component_edges: registered cardinality 8 != observed 11
+R0019 violations: no observed diagnostic matched {"extraction":"syntax","from":"c1","rule":"modules.foreign_internal","to":"random_0019::c0::inner::Local"}
+R0020 component_edges: registered cardinality 8 != observed 11
+R0021 component_edges: registered cardinality 7 != observed 10
+R0023 violations: no observed diagnostic matched {"depth":2,"extraction":"syntax","from":"c0","rule":"modules.child_to_parent_private","to":"random_0023::root_helper"}
+R0024 component_edges: registered cardinality 5 != observed 10
+R0025 component_edges: registered cardinality 10 != observed 16
+R0026 component_edges: registered cardinality 4 != observed 9
+R0027 component_edges: registered cardinality 3 != observed 8
+R0027 violations: no observed diagnostic matched {"extraction":"syntax","from":"c1","rule":"modules.foreign_internal","to":"random_0027::c0::inner::Local"}
+R0028 component_edges: registered cardinality 4 != observed 7
+R0029 component_edges: registered cardinality 4 != observed 5
+R0030 component_edges: registered cardinality 4 != observed 5
+R0031 violations: no observed diagnostic matched {"depth":2,"extraction":"syntax","from":"c0","rule":"modules.child_to_parent_private","to":"random_0031::root_helper"}
+R0033 component_edges: registered cardinality 6 != observed 9
+R0034 component_edges: registered cardinality 6 != observed 11
+R0035 component_edges: registered cardinality 9 != observed 16
+R0035 violations: no observed diagnostic matched {"extraction":"syntax","from":"c1","rule":"modules.foreign_internal","to":"random_0035::c0::inner::Local"}
+R0037 component_edges: registered cardinality 6 != observed 12
+R0038 component_edges: registered cardinality 4 != observed 9
+R0039 component_edges: registered cardinality 6 != observed 9
+R0039 violations: no observed diagnostic matched {"depth":2,"extraction":"syntax","from":"c0","rule":"modules.child_to_parent_private","to":"random_0039::root_helper"}
+R0040 component_edges: registered cardinality 4 != observed 5
+R0041 component_edges: registered cardinality 5 != observed 6
+R0043 component_edges: registered cardinality 1 != observed 2
+R0043 violations: no observed diagnostic matched {"extraction":"syntax","from":"c1","rule":"modules.foreign_internal","to":"random_0043::c0::inner::Local"}
+R0047 component_edges: registered cardinality 2 != observed 3
+R0047 violations: no observed diagnostic matched {"depth":2,"extraction":"syntax","from":"c0","rule":"modules.child_to_parent_private","to":"random_0047::root_helper"}
+R0048 component_edges: registered cardinality 6 != observed 12
+R0049 component_edges: registered cardinality 6 != observed 11
+R0050 component_edges: registered cardinality 2 != observed 4
+R0051 component_edges: registered cardinality 5 != observed 7
+R0051 violations: no observed diagnostic matched {"extraction":"syntax","from":"c1","rule":"modules.foreign_internal","to":"random_0051::c0::inner::Local"}
+R0052 component_edges: registered cardinality 3 != observed 4
+R0055 violations: no observed diagnostic matched {"depth":2,"extraction":"syntax","from":"c0","rule":"modules.child_to_parent_private","to":"random_0055::root_helper"}
+R0057 component_edges: registered cardinality 3 != observed 4
+R0058 component_edges: registered cardinality 2 != observed 3
+R0059 component_edges: registered cardinality 8 != observed 15
+R0059 violations: no observed diagnostic matched {"extraction":"syntax","from":"c1","rule":"modules.foreign_internal","to":"random_0059::c0::inner::Local"}
+R0060 component_edges: registered cardinality 8 != observed 13
+R0061 component_edges: registered cardinality 5 != observed 8
+R0062 component_edges: registered cardinality 2 != observed 3
+R0063 component_edges: registered cardinality 6 != observed 7
+R0063 violations: no observed diagnostic matched {"depth":2,"extraction":"syntax","from":"c0","rule":"modules.child_to_parent_private","to":"random_0063::root_helper"}
+R0065 component_edges: registered cardinality 7 != observed 10
+R0067 component_edges: registered cardinality 1 != observed 2
+R0067 violations: no observed diagnostic matched {"extraction":"syntax","from":"c1","rule":"modules.foreign_internal","to":"random_0067::c0::inner::Local"}
+R0069 component_edges: registered cardinality 4 != observed 9
+R0070 component_edges: registered cardinality 6 != observed 12
+R0071 component_edges: registered cardinality 2 != observed 6
+R0071 violations: no observed diagnostic matched {"depth":2,"extraction":"syntax","from":"c0","rule":"modules.child_to_parent_private","to":"random_0071::root_helper"}
+R0072 component_edges: registered cardinality 7 != observed 10
+R0073 component_edges: registered cardinality 9 != observed 11
+R0074 component_edges: registered cardinality 3 != observed 4
+R0075 violations: no observed diagnostic matched {"extraction":"syntax","from":"c1","rule":"modules.foreign_internal","to":"random_0075::c0::inner::Local"}
+R0078 component_edges: registered cardinality 6 != observed 11
+R0079 component_edges: registered cardinality 9 != observed 15
+R0079 violations: no observed diagnostic matched {"depth":2,"extraction":"syntax","from":"c0","rule":"modules.child_to_parent_private","to":"random_0079::root_helper"}
+R0080 component_edges: registered cardinality 3 != observed 6
+R0081 component_edges: registered cardinality 7 != observed 13
+R0082 component_edges: registered cardinality 2 != observed 6
+R0083 component_edges: registered cardinality 1 != observed 4
+R0083 violations: no observed diagnostic matched {"extraction":"syntax","from":"c1","rule":"modules.foreign_internal","to":"random_0083::c0::inner::Local"}
+R0084 component_edges: registered cardinality 4 != observed 5
+R0085 component_edges: registered cardinality 3 != observed 4
+R0087 violations: no observed diagnostic matched {"depth":2,"extraction":"syntax","from":"c0","rule":"modules.child_to_parent_private","to":"random_0087::root_helper"}
+R0088 component_edges: registered cardinality 5 != observed 6
+R0089 component_edges: registered cardinality 9 != observed 15
+R0090 component_edges: registered cardinality 6 != observed 11
+R0091 component_edges: registered cardinality 7 != observed 14
+R0091 violations: no observed diagnostic matched {"extraction":"syntax","from":"c1","rule":"modules.foreign_internal","to":"random_0091::c0::inner::Local"}
+R0092 component_edges: registered cardinality 4 != observed 9
+R0093 component_edges: registered cardinality 5 != observed 10
+R0094 component_edges: registered cardinality 2 != observed 4
+R0095 component_edges: registered cardinality 3 != observed 4
+R0095 violations: no observed diagnostic matched {"depth":2,"extraction":"syntax","from":"c0","rule":"modules.child_to_parent_private","to":"random_0095::root_helper"}
+R0096 component_edges: registered cardinality 3 != observed 4
+R0097 component_edges: registered cardinality 7 != observed 8
+R0099 component_edges: registered cardinality 6 != observed 10
+R0099 violations: no observed diagnostic matched {"extraction":"syntax","from":"c1","rule":"modules.foreign_internal","to":"random_0099::c0::inner::Local"}
+R0100 component_edges: registered cardinality 5 != observed 8
+R0101 component_edges: registered cardinality 9 != observed 15
+R0102 component_edges: registered cardinality 4 != observed 9
+R0103 component_edges: registered cardinality 7 != observed 13
+R0103 violations: no observed diagnostic matched {"depth":2,"extraction":"syntax","from":"c0","rule":"modules.child_to_parent_private","to":"random_0103::root_helper"}
+R0104 component_edges: registered cardinality 2 != observed 6
+R0105 component_edges: registered cardinality 10 != observed 14
+R0106 component_edges: registered cardinality 5 != observed 6
+R0107 component_edges: registered cardinality 5 != observed 7
+R0107 violations: no observed diagnostic matched {"extraction":"syntax","from":"c1","rule":"modules.foreign_internal","to":"random_0107::c0::inner::Local"}
+R0111 violations: no observed diagnostic matched {"depth":2,"extraction":"syntax","from":"c0","rule":"modules.child_to_parent_private","to":"random_0111::root_helper"}
+R0112 component_edges: registered cardinality 5 != observed 10
+R0113 component_edges: registered cardinality 5 != observed 10
+R0114 component_edges: registered cardinality 2 != observed 5
+R0115 component_edges: registered cardinality 2 != observed 7
+R0115 violations: no observed diagnostic matched {"extraction":"syntax","from":"c1","rule":"modules.foreign_internal","to":"random_0115::c0::inner::Local"}
+R0116 component_edges: registered cardinality 2 != observed 4
+R0117 component_edges: registered cardinality 6 != observed 7
+R0118 component_edges: registered cardinality 2 != observed 3
+R0119 violations: no observed diagnostic matched {"depth":2,"extraction":"syntax","from":"c0","rule":"modules.child_to_parent_private","to":"random_0119::root_helper"}
+R0120 component_edges: registered cardinality 7 != observed 10
+R0121 component_edges: registered cardinality 7 != observed 12
+R0123 component_edges: registered cardinality 5 != observed 11
+R0123 violations: no observed diagnostic matched {"extraction":"syntax","from":"c1","rule":"modules.foreign_internal","to":"random_0123::c0::inner::Local"}
+R0124 component_edges: registered cardinality 2 != observed 3
+R0125 component_edges: registered cardinality 3 != observed 8
+R0126 component_edges: registered cardinality 6 != observed 11
+R0127 component_edges: registered cardinality 7 != observed 10
+R0127 violations: no observed diagnostic matched {"depth":2,"extraction":"syntax","from":"c0","rule":"modules.child_to_parent_private","to":"random_0127::root_helper"}
+R0128 component_edges: registered cardinality 3 != observed 4
+R0129 component_edges: registered cardinality 9 != observed 13
+R0131 component_edges: registered cardinality 3 != observed 4
+R0131 violations: no observed diagnostic matched {"extraction":"syntax","from":"c1","rule":"modules.foreign_internal","to":"random_0131::c0::inner::Local"}
+R0135 component_edges: registered cardinality 3 != observed 6
+R0135 violations: no observed diagnostic matched {"depth":2,"extraction":"syntax","from":"c0","rule":"modules.child_to_parent_private","to":"random_0135::root_helper"}
+R0136 component_edges: registered cardinality 3 != observed 8
+R0137 component_edges: registered cardinality 4 != observed 9
+R0138 component_edges: registered cardinality 5 != observed 8
+R0139 component_edges: registered cardinality 7 != observed 9
+R0139 violations: no observed diagnostic matched {"extraction":"syntax","from":"c1","rule":"modules.foreign_internal","to":"random_0139::c0::inner::Local"}
+R0140 component_edges: registered cardinality 3 != observed 4
+R0142 component_edges: registered cardinality 6 != observed 7
+R0143 violations: no observed diagnostic matched {"depth":2,"extraction":"syntax","from":"c0","rule":"modules.child_to_parent_private","to":"random_0143::root_helper"}
+R0144 component_edges: registered cardinality 6 != observed 11
+R0145 component_edges: registered cardinality 3 != observed 4
+R0146 component_edges: registered cardinality 6 != observed 12
+R0147 component_edges: registered cardinality 4 != observed 10
+R0147 violations: no observed diagnostic matched {"extraction":"syntax","from":"c1","rule":"modules.foreign_internal","to":"random_0147::c0::inner::Local"}
+R0148 component_edges: registered cardinality 2 != observed 6
+R0149 component_edges: registered cardinality 4 != observed 7
+R0150 component_edges: registered cardinality 2 != observed 3
+R0151 component_edges: registered cardinality 5 != observed 6
+R0151 violations: no observed diagnostic matched {"depth":2,"extraction":"syntax","from":"c0","rule":"modules.child_to_parent_private","to":"random_0151::root_helper"}
+R0153 component_edges: registered cardinality 6 != observed 7
+R0154 component_edges: registered cardinality 5 != observed 6
+R0155 component_edges: registered cardinality 8 != observed 15
+R0155 violations: no observed diagnostic matched {"extraction":"syntax","from":"c1","rule":"modules.foreign_internal","to":"random_0155::c0::inner::Local"}
+R0156 component_edges: registered cardinality 5 != observed 10
+R0157 component_edges: registered cardinality 6 != observed 12
+R0158 component_edges: registered cardinality 3 != observed 8
+R0159 component_edges: registered cardinality 3 != observed 7
+R0159 violations: no observed diagnostic matched {"depth":2,"extraction":"syntax","from":"c0","rule":"modules.child_to_parent_private","to":"random_0159::root_helper"}
+R0160 component_edges: registered cardinality 5 != observed 8
+R0161 component_edges: registered cardinality 6 != observed 7
+R0162 component_edges: registered cardinality 2 != observed 3
+R0163 violations: no observed diagnostic matched {"extraction":"syntax","from":"c1","rule":"modules.foreign_internal","to":"random_0163::c0::inner::Local"}
+R0165 component_edges: registered cardinality 8 != observed 13
+R0166 component_edges: registered cardinality 6 != observed 11
+R0167 component_edges: registered cardinality 7 != observed 13
+R0167 violations: no observed diagnostic matched {"depth":2,"extraction":"syntax","from":"c0","rule":"modules.child_to_parent_private","to":"random_0167::root_helper"}
+R0168 component_edges: registered cardinality 9 != observed 15
+R0169 component_edges: registered cardinality 9 != observed 15
+R0170 component_edges: registered cardinality 2 != observed 6
+R0171 component_edges: registered cardinality 2 != observed 5
+R0171 violations: no observed diagnostic matched {"extraction":"syntax","from":"c1","rule":"modules.foreign_internal","to":"random_0171::c0::inner::Local"}
+R0172 component_edges: registered cardinality 5 != observed 6
+R0173 component_edges: registered cardinality 3 != observed 4
+R0175 component_edges: registered cardinality 7 != observed 10
+R0175 violations: no observed diagnostic matched {"depth":2,"extraction":"syntax","from":"c0","rule":"modules.child_to_parent_private","to":"random_0175::root_helper"}
+R0177 component_edges: registered cardinality 10 != observed 16
+R0178 component_edges: registered cardinality 4 != observed 7
+R0179 component_edges: registered cardinality 3 != observed 7
+R0179 violations: no observed diagnostic matched {"extraction":"syntax","from":"c1","rule":"modules.foreign_internal","to":"random_0179::c0::inner::Local"}
+R0180 component_edges: registered cardinality 1 != observed 2
+R0181 component_edges: registered cardinality 4 != observed 9
+R0182 component_edges: registered cardinality 6 != observed 9
+R0183 component_edges: registered cardinality 5 != observed 6
+R0183 violations: no observed diagnostic matched {"depth":2,"extraction":"syntax","from":"c0","rule":"modules.child_to_parent_private","to":"random_0183::root_helper"}
+R0184 component_edges: registered cardinality 3 != observed 4
+R0187 component_edges: registered cardinality 5 != observed 7
+R0187 violations: no observed diagnostic matched {"extraction":"syntax","from":"c1","rule":"modules.foreign_internal","to":"random_0187::c0::inner::Local"}
+R0188 component_edges: registered cardinality 8 != observed 14
+R0189 component_edges: registered cardinality 5 != observed 10
+R0190 component_edges: registered cardinality 2 != observed 3
+R0191 component_edges: registered cardinality 4 != observed 9
+R0191 violations: no observed diagnostic matched {"depth":2,"extraction":"syntax","from":"c0","rule":"modules.child_to_parent_private","to":"random_0191::root_helper"}
+R0192 component_edges: registered cardinality 3 != observed 7
+R0193 component_edges: registered cardinality 6 != observed 9
+R0194 component_edges: registered cardinality 4 != observed 5
+R0195 component_edges: registered cardinality 7 != observed 9
+R0195 violations: no observed diagnostic matched {"extraction":"syntax","from":"c1","rule":"modules.foreign_internal","to":"random_0195::c0::inner::Local"}
+R0198 component_edges: registered cardinality 6 != observed 9
+R0199 component_edges: registered cardinality 6 != observed 11
+R0199 violations: no observed diagnostic matched {"depth":2,"extraction":"syntax","from":"c0","rule":"modules.child_to_parent_private","to":"random_0199::root_helper"}
+R0200 component_edges: registered cardinality 5 != observed 10
+R0201 component_edges: registered cardinality 11 != observed 17
+R0202 component_edges: registered cardinality 2 != observed 5
+R0203 component_edges: registered cardinality 5 != observed 11
+R0203 violations: no observed diagnostic matched {"extraction":"syntax","from":"c1","rule":"modules.foreign_internal","to":"random_0203::c0::inner::Local"}
+R0204 component_edges: registered cardinality 8 != observed 11
+R0205 component_edges: registered cardinality 6 != observed 7
+R0206 component_edges: registered cardinality 2 != observed 3
+R0207 component_edges: registered cardinality 7 != observed 8
+R0207 violations: no observed diagnostic matched {"depth":2,"extraction":"syntax","from":"c0","rule":"modules.child_to_parent_private","to":"random_0207::root_helper"}
+R0208 component_edges: registered cardinality 8 != observed 13
+R0209 component_edges: registered cardinality 5 != observed 6
+R0210 component_edges: registered cardinality 4 != observed 5
+R0211 component_edges: registered cardinality 5 != observed 11
+R0211 violations: no observed diagnostic matched {"extraction":"syntax","from":"c1","rule":"modules.foreign_internal","to":"random_0211::c0::inner::Local"}
+R0212 component_edges: registered cardinality 6 != observed 12
+R0213 component_edges: registered cardinality 9 != observed 15
+R0214 component_edges: registered cardinality 6 != observed 11
+R0215 component_edges: registered cardinality 5 != observed 8
+R0215 violations: no observed diagnostic matched {"depth":2,"extraction":"syntax","from":"c0","rule":"modules.child_to_parent_private","to":"random_0215::root_helper"}
+R0216 component_edges: registered cardinality 5 != observed 6
+R0217 component_edges: registered cardinality 4 != observed 5
+R0219 component_edges: registered cardinality 4 != observed 5
+R0219 violations: no observed diagnostic matched {"extraction":"syntax","from":"c1","rule":"modules.foreign_internal","to":"random_0219::c0::inner::Local"}
+R0220 component_edges: registered cardinality 6 != observed 9
+R0221 component_edges: registered cardinality 4 != observed 5
+R0222 component_edges: registered cardinality 4 != observed 7
+R0223 component_edges: registered cardinality 3 != observed 6
+R0223 violations: no observed diagnostic matched {"depth":2,"extraction":"syntax","from":"c0","rule":"modules.child_to_parent_private","to":"random_0223::root_helper"}
+R0224 component_edges: registered cardinality 1 != observed 2
+R0225 component_edges: registered cardinality 5 != observed 10
+R0226 component_edges: registered cardinality 4 != observed 7
+R0227 component_edges: registered cardinality 2 != observed 4
+R0227 violations: no observed diagnostic matched {"extraction":"syntax","from":"c1","rule":"modules.foreign_internal","to":"random_0227::c0::inner::Local"}
+R0228 component_edges: registered cardinality 1 != observed 2
+R0229 component_edges: registered cardinality 7 != observed 8
+R0231 component_edges: registered cardinality 10 != observed 16
+R0231 violations: no observed diagnostic matched {"depth":2,"extraction":"syntax","from":"c0","rule":"modules.child_to_parent_private","to":"random_0231::root_helper"}
+R0233 component_edges: registered cardinality 8 != observed 14
+R0234 component_edges: registered cardinality 2 != observed 3
+R0235 component_edges: registered cardinality 8 != observed 15
+R0235 violations: no observed diagnostic matched {"extraction":"syntax","from":"c1","rule":"modules.foreign_internal","to":"random_0235::c0::inner::Local"}
+R0236 component_edges: registered cardinality 4 != observed 9
+R0237 component_edges: registered cardinality 7 != observed 10
+R0238 component_edges: registered cardinality 4 != observed 5
+R0239 component_edges: registered cardinality 5 != observed 6
+R0239 violations: no observed diagnostic matched {"depth":2,"extraction":"syntax","from":"c0","rule":"modules.child_to_parent_private","to":"random_0239::root_helper"}
+R0241 component_edges: registered cardinality 9 != observed 14
+R0243 component_edges: registered cardinality 3 != observed 4
+R0243 violations: no observed diagnostic matched {"extraction":"syntax","from":"c1","rule":"modules.foreign_internal","to":"random_0243::c0::inner::Local"}
+R0244 component_edges: registered cardinality 5 != observed 10
+R0245 component_edges: registered cardinality 7 != observed 13
+R0246 component_edges: registered cardinality 2 != observed 5
+R0247 component_edges: registered cardinality 4 != observed 9
+R0247 violations: no observed diagnostic matched {"depth":2,"extraction":"syntax","from":"c0","rule":"modules.child_to_parent_private","to":"random_0247::root_helper"}
+R0248 component_edges: registered cardinality 4 != observed 7
+R0249 component_edges: registered cardinality 9 != observed 11
+R0250 component_edges: registered cardinality 2 != observed 3
+R0251 component_edges: registered cardinality 9 != observed 12
+R0251 violations: no observed diagnostic matched {"extraction":"syntax","from":"c1","rule":"modules.foreign_internal","to":"random_0251::c0::inner::Local"}
+R0255 component_edges: registered cardinality 6 != observed 11
+R0255 violations: no observed diagnostic matched {"depth":2,"extraction":"syntax","from":"c0","rule":"modules.child_to_parent_private","to":"random_0255::root_helper"}
+test registered_random_rule_expectations_are_checked_without_rebuilding_them ... FAILED
+
+failures:
+
+failures:
+    disabling_cycles_does_not_hide_undeclared_dependencies
+    nested_child_to_parent_private_edges_ignore_allow_lists
+    registered_random_rule_expectations_are_checked_without_rebuilding_them
+
+test result: FAILED. 3 passed; 3 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.86s
+
+error: test failed, to rerun pass `-p xtask --test module_rules`

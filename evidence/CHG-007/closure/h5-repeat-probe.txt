@@ -1,0 +1,17 @@
+{
+  "argv": [
+    "/home/kmosoti/projects/rha-m2/target/debug/rha-verifier",
+    "corpus",
+    "/home/kmosoti/projects/rha-m2/tools/rha-verifier/tests/corpus",
+    "/home/kmosoti/projects/rha-m2/target/m2/h5-repeat-probe"
+  ],
+  "first_exit": 0,
+  "second_exit": 0,
+  "record_count_after_two_runs": 1,
+  "same_path": true,
+  "mtime_before": 1790138655220910986,
+  "mtime_after": 1790138655280910988,
+  "bytes_unchanged": true,
+  "stdout_first": "H5 conformance: 152/152 fixtures decided as registered; evidence /home/kmosoti/projects/rha-m2/target/m2/h5-repeat-probe/ed79a7a8e0ac.json\n",
+  "stdout_second": "H5 conformance: 152/152 fixtures decided as registered; evidence /home/kmosoti/projects/rha-m2/target/m2/h5-repeat-probe/ed79a7a8e0ac.json\n"
+}

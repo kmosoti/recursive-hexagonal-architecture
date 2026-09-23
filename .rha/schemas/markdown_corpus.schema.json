@@ -1,0 +1,247 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Structural record-shape schema translated from the registered RHA observation inventory; it is not an evaluator.",
+  "properties": {
+    "advisory": {
+      "type": "boolean"
+    },
+    "artifact_identity": {
+      "additionalProperties": false,
+      "properties": {
+        "branch": {
+          "type": "string"
+        },
+        "digest_algorithm": {
+          "type": "string"
+        },
+        "dirty": {
+          "type": "boolean"
+        },
+        "git_object_format": {
+          "type": "string"
+        },
+        "revision": {
+          "type": "string"
+        },
+        "snapshot_tree": {
+          "type": "string"
+        },
+        "tracked_diff_sha256": {
+          "type": "null"
+        },
+        "tree": {
+          "type": "string"
+        },
+        "untracked_inputs": {
+          "items": {},
+          "type": "array"
+        }
+      },
+      "required": [
+        "branch",
+        "digest_algorithm",
+        "dirty",
+        "git_object_format",
+        "revision",
+        "snapshot_tree",
+        "tracked_diff_sha256",
+        "tree",
+        "untracked_inputs"
+      ],
+      "type": "object"
+    },
+    "cases": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "exit_status": {
+            "type": "integer"
+          },
+          "expected_witnesses": {
+            "type": "integer"
+          },
+          "extra": {
+            "items": {},
+            "type": "array"
+          },
+          "missing": {
+            "items": {},
+            "type": "array"
+          },
+          "observed_witnesses": {
+            "type": "integer"
+          },
+          "passed": {
+            "type": "boolean"
+          },
+          "site": {
+            "type": "string"
+          },
+          "well_formed": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "exit_status",
+          "expected_witnesses",
+          "extra",
+          "missing",
+          "observed_witnesses",
+          "passed",
+          "site"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "evidence_class": {
+      "type": "string"
+    },
+    "grading": {
+      "type": "string"
+    },
+    "kind": {
+      "allOf": [
+        {
+          "if": {
+            "type": "string"
+          },
+          "then": {
+            "enum": [
+              "markdown_corpus"
+            ]
+          }
+        }
+      ],
+      "type": "string"
+    },
+    "product": {
+      "additionalProperties": false,
+      "properties": {
+        "binary": {
+          "type": "string"
+        },
+        "binary_sha256": {
+          "type": "string"
+        },
+        "git_dirty": {
+          "type": "boolean"
+        },
+        "git_rev": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "binary",
+        "git_dirty",
+        "git_rev"
+      ],
+      "type": "object"
+    },
+    "registration": {
+      "additionalProperties": false,
+      "properties": {
+        "generator": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "tree_sha256": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "generator",
+        "path",
+        "tree_sha256"
+      ],
+      "type": "object"
+    },
+    "schema_version": {
+      "allOf": [
+        {
+          "if": {
+            "type": "integer"
+          },
+          "then": {
+            "enum": [
+              1
+            ]
+          }
+        }
+      ],
+      "type": "integer"
+    },
+    "summary": {
+      "additionalProperties": false,
+      "properties": {
+        "failed": {
+          "type": "integer"
+        },
+        "outcome": {
+          "allOf": [
+            {
+              "if": {
+                "type": "string"
+              },
+              "then": {
+                "enum": [
+                  "passed",
+                  "failed",
+                  "not_run",
+                  "not_applicable",
+                  "inconclusive"
+                ]
+              }
+            }
+          ],
+          "type": "string"
+        },
+        "passed": {
+          "type": "integer"
+        },
+        "sites": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "failed",
+        "outcome",
+        "passed",
+        "sites"
+      ],
+      "type": "object"
+    }
+  },
+  "required": [
+    "advisory",
+    "artifact_identity",
+    "cases",
+    "created_at",
+    "evidence_class",
+    "grading",
+    "kind",
+    "product",
+    "registration",
+    "schema_version",
+    "summary"
+  ],
+  "title": "RHA Markdown corpus record schema",
+  "type": "object",
+  "x-rha-amendment": {
+    "after_data": true,
+    "content_sha256": "e271498e5619751e3fd8d50eeee26728a7154d3b9cb451f9c75cffa37913b183",
+    "contractpath": "docs/architecture/markdown-record-shape-amendment.md",
+    "ledgerid": "CHG-019.1-markdown-shape-amendment"
+  },
+  "x-rha-contract": "docs/architecture/record-schema-contract.md",
+  "x-rha-family": "markdown_corpus",
+  "x-rha-inventory-format": "rha-observed-shapes-1",
+  "x-rha-inventory-sha256": "8411a2971ed2641fabf2d81f124e53d09396e5262df59dffbeaf23d119061dee",
+  "x-rha-source-revision": "99a74b042842b4d869ef341f58fdfcafb9c96e84"
+}

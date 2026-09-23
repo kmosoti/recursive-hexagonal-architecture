@@ -1,0 +1,18 @@
+{
+  "edges": [
+    {
+      "extraction": "heuristic",
+      "source": "fixture_m20::constraints",
+      "target": "fixture_m20::ordering::score",
+      "test_only": false
+    },
+    {
+      "extraction": "syntax",
+      "source": "fixture_m20::ordering",
+      "target": "fixture_m20::constraints::Rule",
+      "test_only": false
+    }
+  ],
+  "limitations": [],
+  "schema_version": 1
+}

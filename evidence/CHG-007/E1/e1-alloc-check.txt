@@ -1,0 +1,2 @@
+    Checking no-std-graph v0.0.0 (/home/kmosoti/projects/rha-m2/experiments/no-std-graph)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.07s

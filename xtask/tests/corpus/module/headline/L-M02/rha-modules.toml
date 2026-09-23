@@ -1,0 +1,12 @@
+[components]
+constraints = "fixture_l_m02::constraints"
+ordering = "fixture_l_m02::ordering"
+
+[allow]
+constraints = []
+ordering = ["constraints"]
+
+[deny]
+cycles = true
+child_to_parent_private = true
+foreign_internal = true

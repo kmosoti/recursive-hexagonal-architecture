@@ -1,0 +1,3 @@
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.09s
+     Running `target/debug/xtask rha lint target/m2/missing-prompt-citation.toml`
+target/m2/missing-prompt-citation.toml: accepted (task)

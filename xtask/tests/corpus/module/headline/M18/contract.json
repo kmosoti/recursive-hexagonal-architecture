@@ -1,0 +1,19 @@
+{
+  "cells": [
+    "law6-b3"
+  ],
+  "expected": "detect",
+  "generation": "authored",
+  "id": "M18",
+  "level": "module",
+  "rule": "modules.cycle",
+  "seeded": "pub use crate::ordering::Wave; inside constraints: a re-export is still a reference",
+  "witness": {
+    "path": [
+      "constraints",
+      "ordering",
+      "constraints"
+    ],
+    "rule": "modules.cycle"
+  }
+}

@@ -1,0 +1,43 @@
+family = "markdown_corpus"
+after_data = true
+grading_authority_ledger_id = "CHG-019.1-markdown-shape-amendment"
+model_profile = "gpt-5.6-luna high"
+prompt_path = "target/m2/markdown-schema-supplement-prompt.md"
+prompt_sha256 = "5ed732158951998ae26ccf30ec4783f66dcf278fd530c65e4a653684c3af7cf7"
+content_sha256 = "e271498e5619751e3fd8d50eeee26728a7154d3b9cb451f9c75cffa37913b183"
+
+[census]
+old_case_count = 60
+new_case_count = 60
+old_case_site_count = 60
+new_case_site_count = 60
+source_count = 5
+
+[recipes]
+count = 16
+expected_code_vocabulary = ["schema.unknown_field", "schema.wrong_type"]
+
+[content]
+sha256sums_path = "SHA256SUMS"
+registration_excluded_from_sha256sums = true
+sha256sums_excluded_from_sha256sums = true
+
+[[sources]]
+path = "docs/architecture/markdown-record-shape-amendment.md"
+sha256 = "9f596db11401935737b8e97899fd6df33fc1a4579c3823da1090ff10d287da20"
+
+[[sources]]
+path = "docs/architecture/record-schema-contract.md"
+sha256 = "fbe1b3da99424e1b5a87c7ecbedc5a92e57af411b85bff56ef8420a3ecc02796"
+
+[[sources]]
+path = "evidence/md-corpus/20260922T210717Z-58e45f444c9f.json"
+sha256 = "d4886f3755a64bff6f3737c72dfd686b05964ae837a211841f99ffb66d8c6b78"
+
+[[sources]]
+path = "evidence/md-corpus/20260923T044415Z-ed79a7a8e0ac.json"
+sha256 = "67c8a9216be3c651ff7d903df20f3d2e95c84b793a3d19d4f924a85f9ecbf692"
+
+[[sources]]
+path = "target/m2/markdown-schema-supplement-prompt.md"
+sha256 = "5ed732158951998ae26ccf30ec4783f66dcf278fd530c65e4a653684c3af7cf7"

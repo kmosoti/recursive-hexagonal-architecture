@@ -1,0 +1,11 @@
+{
+  "cells": [
+    "d2"
+  ],
+  "expected": "no_alarm",
+  "generation": "authored",
+  "id": "L-M02",
+  "level": "module",
+  "rule": "-",
+  "seeded": "a glue root that references both of its children. Downward is the direction D2 allows."
+}

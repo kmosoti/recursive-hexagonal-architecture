@@ -1,0 +1,19 @@
+{
+  "cells": [
+    "d2"
+  ],
+  "expected": "detect",
+  "generation": "authored",
+  "id": "M19",
+  "level": "module",
+  "rule": "modules.child_to_parent_private",
+  "seeded": "the root re-exports pub use ordering::score; and constraints calls crate::score(). The upward edge is reported; the hidden edge to ordering is not.",
+  "witness": {
+    "from": "constraints",
+    "rule": "modules.child_to_parent_private",
+    "to": "crate::score"
+  },
+  "witness_notes": {
+    "note": "the edge constraints -> ordering behind the re-export is not expected"
+  }
+}

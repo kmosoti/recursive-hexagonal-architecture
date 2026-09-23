@@ -1,0 +1,23 @@
+{
+  "edges": [
+    {
+      "extraction": "syntax",
+      "source": "fixture_em_m01::ordering",
+      "target": "fixture_em_m01::constraints::Rule",
+      "test_only": false
+    }
+  ],
+  "limitations": [
+    {
+      "code": "macro_definition",
+      "detail": "hidden",
+      "source": "fixture_em_m01"
+    },
+    {
+      "code": "macro_expansion",
+      "detail": "hidden",
+      "source": "fixture_em_m01::constraints"
+    }
+  ],
+  "schema_version": 1
+}

@@ -1,13 +1,18 @@
 {
   "schema_version": 1,
-  "about": "Tool inventory for the RHA-Rust baseline (spec §6.16). Owns the required version of every tool a policy check uses. `cargo xtask ci` compares installed versions against `required` before running a check: absent means not_run (tool_missing), different means not_run (version_mismatch). `.github/workflows/ci.yml` builds its install list from the `ci_install` entries. `bootstrap_observed` is what CHG-000 saw on Kennedy's workstation on 2026-09-19, not a live value.",
+  "about": "Tool inventory for the RHA-Rust baseline (spec \u00a76.16). Owns the required version of every tool a policy check uses. `cargo xtask ci` compares installed versions against `required` before running a check: absent means not_run (tool_missing), different means not_run (version_mismatch). `.github/workflows/ci.yml` builds its install list from the `ci_install` entries. `bootstrap_observed` is what CHG-000 saw on Kennedy's workstation on 2026-09-19, not a live value.",
   "toolchain_file": "rust-toolchain.toml",
   "tools": [
     {
       "name": "rustc",
       "status": "required",
-      "used_by": ["L0.doctest"],
-      "version_command": ["rustc", "--version"],
+      "used_by": [
+        "L0.doctest"
+      ],
+      "version_command": [
+        "rustc",
+        "--version"
+      ],
       "required": "1.98.1",
       "install": "rustup toolchain install (reads rust-toolchain.toml)",
       "ci_install": "rustup",
@@ -16,8 +21,14 @@
     {
       "name": "rustfmt",
       "status": "required",
-      "used_by": ["L0.fmt"],
-      "version_command": ["cargo", "fmt", "--version"],
+      "used_by": [
+        "L0.fmt"
+      ],
+      "version_command": [
+        "cargo",
+        "fmt",
+        "--version"
+      ],
       "required": "1.9.0-stable",
       "install": "rustup component (rust-toolchain.toml)",
       "ci_install": "rustup",
@@ -26,8 +37,14 @@
     {
       "name": "clippy",
       "status": "required",
-      "used_by": ["L0.clippy"],
-      "version_command": ["cargo", "clippy", "--version"],
+      "used_by": [
+        "L0.clippy"
+      ],
+      "version_command": [
+        "cargo",
+        "clippy",
+        "--version"
+      ],
       "required": "0.1.98",
       "install": "rustup component (rust-toolchain.toml)",
       "ci_install": "rustup",
@@ -36,8 +53,14 @@
     {
       "name": "cargo-nextest",
       "status": "required",
-      "used_by": ["L0.nextest"],
-      "version_command": ["cargo", "nextest", "--version"],
+      "used_by": [
+        "L0.nextest"
+      ],
+      "version_command": [
+        "cargo",
+        "nextest",
+        "--version"
+      ],
       "required": "0.9.145",
       "install": "cargo install --locked cargo-nextest@0.9.145",
       "ci_install": "install-action:cargo-nextest",
@@ -46,8 +69,14 @@
     {
       "name": "cargo-deny",
       "status": "required",
-      "used_by": ["L0.deny"],
-      "version_command": ["cargo", "deny", "--version"],
+      "used_by": [
+        "L0.deny"
+      ],
+      "version_command": [
+        "cargo",
+        "deny",
+        "--version"
+      ],
       "required": "0.20.2",
       "install": "cargo install --locked cargo-deny@0.20.2",
       "ci_install": "install-action:cargo-deny",
@@ -56,8 +85,14 @@
     {
       "name": "cargo-machete",
       "status": "required",
-      "used_by": ["L0.machete"],
-      "version_command": ["cargo", "machete", "--version"],
+      "used_by": [
+        "L0.machete"
+      ],
+      "version_command": [
+        "cargo",
+        "machete",
+        "--version"
+      ],
       "required": "0.9.2",
       "install": "cargo install --locked cargo-machete@0.9.2",
       "ci_install": "install-action:cargo-machete",
@@ -66,8 +101,13 @@
     {
       "name": "typos-cli",
       "status": "required",
-      "used_by": ["L0.typos"],
-      "version_command": ["typos", "--version"],
+      "used_by": [
+        "L0.typos"
+      ],
+      "version_command": [
+        "typos",
+        "--version"
+      ],
       "required": "1.50.2",
       "install": "cargo install --locked typos-cli@1.50.2",
       "ci_install": "install-action:typos",
@@ -75,23 +115,46 @@
     },
     {
       "name": "cargo-mutants",
-      "status": "deferred",
-      "used_by": [],
-      "version_command": ["cargo", "mutants", "--version"],
-      "required": null,
-      "install": "decided at DP-2.1 (W7/W10)",
-      "ci_install": null,
-      "bootstrap_observed": "not installed"
+      "status": "required",
+      "used_by": [
+        "L1.mutation",
+        "L2.mutation"
+      ],
+      "version_command": [
+        "cargo",
+        "mutants",
+        "--version"
+      ],
+      "required": "27.1.0",
+      "install": "cargo install --locked cargo-mutants@27.1.0",
+      "ci_install": "install-action:cargo-mutants",
+      "bootstrap_observed": "not installed",
+      "installed_observed": {
+        "version_output": "cargo-mutants 27.1.0",
+        "recorded_at": "2026-09-23T00:46:08.274023Z",
+        "decision": "DP-2.1; .rha/tasks/CHG-007-module-level.toml"
+      }
     },
     {
       "name": "cargo-modules",
-      "status": "deferred",
-      "used_by": [],
-      "version_command": ["cargo", "modules", "--version"],
-      "required": null,
-      "install": "decided at DP-2.1 (W7)",
-      "ci_install": null,
-      "bootstrap_observed": "not installed"
+      "status": "required",
+      "used_by": [
+        "H4.X-M01"
+      ],
+      "version_command": [
+        "cargo",
+        "modules",
+        "--version"
+      ],
+      "required": "0.27.0",
+      "install": "cargo install --locked cargo-modules@0.27.0",
+      "ci_install": "install-action:cargo-modules",
+      "bootstrap_observed": "not installed",
+      "installed_observed": {
+        "version_output": "cargo-modules 0.27.0",
+        "recorded_at": "2026-09-23T00:46:08.314424Z",
+        "decision": "DP-2.1; .rha/tasks/CHG-007-module-level.toml"
+      }
     }
   ]
 }

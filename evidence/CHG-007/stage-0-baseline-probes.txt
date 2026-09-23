@@ -1,0 +1,26 @@
+P-C stage 0 baseline probes
+Subject: f7fda998ea9eebf21a5c20c49c9efa3588a3e97a
+The compiled xtask is unchanged from P-B; only records/contracts/tool inventory have changed.
+Construction: copies of evidence/ci/35802502127.json; remove observed_checks[0].outcome or set it to unsupported_value. Valid control is unchanged.
+Command: target/debug/xtask rha lint <record>
+These are observations of known defects, not a graded schema-corpus run.
+
+case: valid
+exit_status: 0
+target/m2/baseline-probes/valid.json: accepted (evidence)
+
+
+case: missing-outcome
+exit_status: 0
+target/m2/baseline-probes/missing-outcome.json: accepted (evidence)
+
+
+case: unknown-outcome
+exit_status: 0
+target/m2/baseline-probes/unknown-outcome.json: accepted (evidence)
+
+
+case: markdown-report
+exit_status: 1
+evidence/md-corpus/20260922T210717Z-58e45f444c9f.json: rejected (evidence): evidence.missing_required_check
+

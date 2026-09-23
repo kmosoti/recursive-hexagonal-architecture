@@ -62,6 +62,8 @@ pub enum CorpusCommand {
     },
     /// Check committed fixtures, grade every case and write H4 evidence.
     Run(CorpusArgs),
+    /// Compare the registered seeded module graphs with their independent oracle.
+    ModuleRandom,
     /// Run the accepted checker on Kennedy's private cases without any agent
     /// reading them (DP-1.1b as amended in CHG-004.6). Prints opaque ids,
     /// exit statuses and counts; grades nothing.
@@ -109,6 +111,14 @@ pub struct ArchitectureArgs {
     /// Check an external workspace instead of this one.
     #[arg(long, value_name = "PATH")]
     pub manifest_path: Option<std::path::PathBuf>,
+    /// Run module-only checks for a single package using this module rules file.
+    #[arg(
+        long = "module-rules",
+        value_name = "PATH",
+        requires = "manifest_path",
+        conflicts_with_all = ["rules", "transitive"]
+    )]
+    pub module_rules_path: Option<std::path::PathBuf>,
     /// Use an external rules file instead of rha-crates.toml at the root.
     #[arg(long, value_name = "PATH")]
     pub rules: Option<std::path::PathBuf>,
@@ -169,5 +179,12 @@ pub enum RhaCommand {
         /// required: an empty run would pass having checked nothing.
         #[arg(required = true)]
         files: Vec<PathBuf>,
+    },
+    /// Translate the registered record-shape inventory and markdown-schema
+    /// supplement into `.rha/schemas/*.schema.json`, or with --check compare.
+    Schemas {
+        /// Compare instead of writing; exit 1 if any schema is missing or differs.
+        #[arg(long)]
+        check: bool,
     },
 }

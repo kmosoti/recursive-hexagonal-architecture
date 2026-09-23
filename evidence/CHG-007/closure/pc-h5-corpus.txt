@@ -1,0 +1,3 @@
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.04s
+     Running `target/debug/rha-verifier corpus tools/rha-verifier/tests/corpus evidence/h5`
+H5 conformance: 152/152 fixtures decided as registered; evidence evidence/h5/ed79a7a8e0ac-dirty-1790138754224832114-2796874.json

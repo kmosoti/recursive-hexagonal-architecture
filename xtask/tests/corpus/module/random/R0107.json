@@ -1,0 +1,37 @@
+{
+  "crate_name": "random_0107",
+  "edition": "2021",
+  "files": {
+    "Cargo.toml": "[package]\nname = \"random_0107\"\nversion = \"0.0.0\"\nedition = \"2021\"\n[workspace]\n[package.metadata.rha]\nrole = \"core\"\n",
+    "rha-modules.toml": "[components]\nc0 = \"random_0107::c0\"\nc1 = \"random_0107::c1\"\nc2 = \"random_0107::c2\"\nc3 = \"random_0107::c3\"\n\n[allow]\nc0 = []\nc1 = [\"c0\"]\nc2 = [\"c0\", \"c1\"]\nc3 = [\"c0\", \"c1\", \"c2\"]\n\n[deny]\ncycles = true\nchild_to_parent_private = true\nforeign_internal = true\n",
+    "src/c1.rs": "pub struct Token; pub trait Port {} pub fn score() -> u8 { 1 }\npub mod inner { pub struct Local; pub fn back(_: super::Token) {} pub fn own(_: self::Local) {} }\npub fn local(_: self::inner::Local) {}\npub fn f0() { use super::c0; use c0::Token as Alias; let _ = Alias; }\npub fn forbidden(_: crate::c0::inner::Local) {}\npub mod leaf;\n",
+    "src/c1/leaf.rs": "pub fn back(_: super::Token) {}\n",
+    "src/c3/mod.rs": "pub struct Token; pub trait Port {} pub fn score() -> u8 { 1 }\npub mod inner { pub struct Local; pub fn back(_: super::Token) {} pub fn own(_: self::Local) {} }\npub fn local(_: self::inner::Local) {}\npub use crate::c0::Token as Reexport2;\npub fn f3() { let _ = crate::c1::score(); }\npub fn f4(_: crate::c2::Token) {}\n#[cfg(test)] pub fn item_test() { let _ = crate::c0::score(); }\n",
+    "src/lib.rs": "#![allow(dead_code, unused_imports)]\n// Decoy: crate::ghost::Missing and /* comments */ are not paths.\npub fn root_helper() { let _ = \"crate::ghost::Missing\"; }\npub mod c0 {\npub struct Token; pub trait Port {} pub fn score() -> u8 { 1 }\npub mod inner { pub struct Local; pub fn back(_: super::Token) {} pub fn own(_: self::Local) {} }\npub fn local(_: self::inner::Local) {}\n#[cfg(test)] mod tests { use crate::c3::Token as TestToken; fn probe(_: TestToken) {} }\n}\npub mod c1;\n#[path = \"mapped_c2.rs\"] pub mod c2;\npub mod c3;\npub fn glue(_: crate::c0::Token, _: crate::c1::Token) {}\n",
+    "src/mapped_c2.rs": "pub struct Token; pub trait Port {} pub fn score() -> u8 { 1 }\npub mod inner { pub struct Local; pub fn back(_: super::Token) {} pub fn own(_: self::Local) {} }\npub fn local(_: self::inner::Local) {}\npub fn f1() { assert_eq!(crate::c0::score(), 1); }\n"
+  },
+  "generation": {
+    "module_layouts": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "regime": "boundary",
+    "sample_index": 107,
+    "syntax_templates": {
+      "0": 1,
+      "1": 1,
+      "10": 1,
+      "2": 0,
+      "3": 0,
+      "4": 0,
+      "5": 0,
+      "6": 0,
+      "7": 0,
+      "8": 1,
+      "9": 1
+    }
+  },
+  "id": "R0107"
+}

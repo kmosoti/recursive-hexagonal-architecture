@@ -1,0 +1,98 @@
+[
+  {
+    "array_observations": 10,
+    "family": "acceptance",
+    "path": "/outcomes/failed",
+    "scope": "pooled"
+  },
+  {
+    "array_observations": 10,
+    "family": "acceptance",
+    "path": "/outcomes/inconclusive",
+    "scope": "pooled"
+  },
+  {
+    "array_observations": 10,
+    "family": "acceptance",
+    "path": "/outcomes/not_applicable",
+    "scope": "pooled"
+  },
+  {
+    "array_observations": 46,
+    "family": "evidence",
+    "path": "/change_claim/affected_components",
+    "scope": "pooled"
+  },
+  {
+    "array_observations": 75,
+    "family": "evidence",
+    "path": "/disposition/predicates/complete/reasons",
+    "scope": "pooled"
+  },
+  {
+    "array_observations": 75,
+    "family": "evidence",
+    "path": "/evidence_inputs/seeds/persisted_regressions",
+    "scope": "pooled"
+  },
+  {
+    "array_observations": 600,
+    "family": "evidence",
+    "path": "/observed_checks/*/limits",
+    "scope": "pooled"
+  },
+  {
+    "array_observations": 46,
+    "family": "evidence",
+    "path": "/change_claim/affected_components",
+    "scope": "/change_claim:sourced"
+  },
+  {
+    "array_observations": 8,
+    "family": "h4",
+    "path": "/fixtures/drift",
+    "scope": "pooled"
+  },
+  {
+    "array_observations": 912,
+    "family": "h5_conformance",
+    "path": "/cases/*/keys_wrong",
+    "scope": "pooled"
+  },
+  {
+    "array_observations": 1,
+    "family": "markdown_corpus",
+    "path": "/artifact_identity/untracked_inputs",
+    "scope": "pooled"
+  },
+  {
+    "array_observations": 60,
+    "family": "markdown_corpus",
+    "path": "/cases/*/extra",
+    "scope": "pooled"
+  },
+  {
+    "array_observations": 60,
+    "family": "markdown_corpus",
+    "path": "/cases/*/missing",
+    "scope": "pooled"
+  },
+  {
+    "array_observations": 1,
+    "family": "policy",
+    "path": "/authority/trusted_producers",
+    "scope": "pooled"
+  },
+  {
+    "array_observations": 11,
+    "family": "policy",
+    "path": "/lanes/L2/checks/*/argv",
+    "scope": "pooled"
+  },
+  {
+    "array_observations": 8,
+    "family": "task",
+    "path": "/claim/affected_components",
+    "scope": "pooled"
+  }
+]

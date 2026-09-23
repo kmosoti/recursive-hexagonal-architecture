@@ -1,0 +1,19 @@
+{
+  "cells": [
+    "law6-b3"
+  ],
+  "expected": "detect",
+  "generation": "authored",
+  "id": "M13",
+  "level": "module",
+  "rule": "modules.cycle",
+  "seeded": "impl crate::ordering::Trait for X inside constraints: the edge is in the impl header",
+  "witness": {
+    "path": [
+      "constraints",
+      "ordering",
+      "constraints"
+    ],
+    "rule": "modules.cycle"
+  }
+}

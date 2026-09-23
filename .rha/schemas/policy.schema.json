@@ -1,0 +1,440 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Structural record-shape schema translated from the registered RHA observation inventory; it is not an evaluator.",
+  "properties": {
+    "acceptance": {
+      "additionalProperties": false,
+      "properties": {
+        "applies_to_merges_after": {
+          "type": "string"
+        },
+        "bootstrap": {
+          "additionalProperties": false,
+          "properties": {
+            "authentic_unsatisfiable_until": {
+              "type": "string"
+            },
+            "every_acceptance_in_this_period": {
+              "type": "string"
+            },
+            "expires": {
+              "type": "string"
+            },
+            "passed_unsatisfiable_until": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "authentic_unsatisfiable_until",
+            "every_acceptance_in_this_period",
+            "expires",
+            "passed_unsatisfiable_until"
+          ],
+          "type": "object"
+        },
+        "by_merge": {
+          "type": "boolean"
+        },
+        "decisions_ledger": {
+          "type": "string"
+        },
+        "defaults_apply_when_unanswered": {
+          "type": "boolean"
+        },
+        "ledger_edits": {
+          "additionalProperties": false,
+          "properties": {
+            "everything_else": {
+              "type": "string"
+            },
+            "preapproved": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "everything_else",
+            "preapproved"
+          ],
+          "type": "object"
+        },
+        "record_creation_preapproved": {
+          "type": "boolean"
+        },
+        "record_deadline": {
+          "type": "string"
+        },
+        "record_written_by": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "applies_to_merges_after",
+        "bootstrap",
+        "by_merge",
+        "decisions_ledger",
+        "defaults_apply_when_unanswered",
+        "ledger_edits",
+        "record_creation_preapproved",
+        "record_deadline",
+        "record_written_by"
+      ],
+      "type": "object"
+    },
+    "authority": {
+      "additionalProperties": false,
+      "properties": {
+        "acceptance_authority": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "cooling_off_hours": {
+          "type": "integer"
+        },
+        "exception_authority": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "exception_log": {
+          "type": "string"
+        },
+        "profile": {
+          "type": "string"
+        },
+        "trusted_producers": {
+          "items": {},
+          "type": "array"
+        }
+      },
+      "required": [
+        "acceptance_authority",
+        "cooling_off_hours",
+        "exception_authority",
+        "exception_log",
+        "profile",
+        "trusted_producers"
+      ],
+      "type": "object"
+    },
+    "evidence": {
+      "additionalProperties": false,
+      "properties": {
+        "digest_algorithm": {
+          "type": "string"
+        },
+        "required_inputs": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "digest_algorithm",
+        "required_inputs"
+      ],
+      "type": "object"
+    },
+    "lanes": {
+      "additionalProperties": false,
+      "properties": {
+        "L0": {
+          "additionalProperties": false,
+          "properties": {
+            "acceptance": {
+              "type": "boolean"
+            },
+            "cadence": {
+              "type": "string"
+            },
+            "checks": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "argv": {
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
+                  },
+                  "id": {
+                    "type": "string"
+                  },
+                  "kind": {
+                    "type": "string"
+                  },
+                  "proptest": {
+                    "type": "string"
+                  },
+                  "report": {
+                    "type": "string"
+                  },
+                  "required": {
+                    "type": "boolean"
+                  },
+                  "timeout_secs": {
+                    "type": "integer"
+                  },
+                  "tool": {
+                    "type": "string"
+                  },
+                  "validity": {
+                    "type": "string"
+                  },
+                  "waivable": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "argv",
+                  "id",
+                  "kind",
+                  "required",
+                  "timeout_secs",
+                  "tool",
+                  "validity",
+                  "waivable"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "source": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "acceptance",
+            "cadence",
+            "checks",
+            "source"
+          ],
+          "type": "object"
+        },
+        "L1": {
+          "additionalProperties": false,
+          "properties": {
+            "acceptance": {
+              "type": "boolean"
+            },
+            "cadence": {
+              "type": "string"
+            },
+            "checks": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "argv": {
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
+                  },
+                  "id": {
+                    "type": "string"
+                  },
+                  "kind": {
+                    "type": "string"
+                  },
+                  "required": {
+                    "type": "boolean"
+                  },
+                  "timeout_secs": {
+                    "type": "integer"
+                  },
+                  "tool": {
+                    "type": "string"
+                  },
+                  "triggers": {
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
+                  },
+                  "validity": {
+                    "type": "string"
+                  },
+                  "waivable": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "argv",
+                  "id",
+                  "kind",
+                  "required",
+                  "timeout_secs",
+                  "tool",
+                  "triggers",
+                  "validity",
+                  "waivable"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "source": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "acceptance",
+            "cadence",
+            "checks",
+            "source"
+          ],
+          "type": "object"
+        },
+        "L2": {
+          "additionalProperties": false,
+          "properties": {
+            "acceptance": {
+              "type": "boolean"
+            },
+            "cadence": {
+              "type": "string"
+            },
+            "checks": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "argv": {
+                    "items": {},
+                    "type": "array"
+                  },
+                  "id": {
+                    "type": "string"
+                  },
+                  "kind": {
+                    "type": "string"
+                  },
+                  "note": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "argv",
+                  "id",
+                  "kind",
+                  "note"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "source": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "acceptance",
+            "cadence",
+            "checks",
+            "source"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "L0",
+        "L1",
+        "L2"
+      ],
+      "type": "object"
+    },
+    "proptest": {
+      "additionalProperties": false,
+      "properties": {
+        "L0": {
+          "type": "integer"
+        },
+        "L1": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "L0",
+        "L1"
+      ],
+      "type": "object"
+    },
+    "repair_loop": {
+      "additionalProperties": false,
+      "properties": {
+        "max_attempts": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "max_attempts"
+      ],
+      "type": "object"
+    },
+    "schema_version": {
+      "allOf": [
+        {
+          "if": {
+            "type": "integer"
+          },
+          "then": {
+            "enum": [
+              1
+            ]
+          }
+        }
+      ],
+      "type": "integer"
+    },
+    "strictness": {
+      "additionalProperties": true,
+      "type": "object"
+    },
+    "surface": {
+      "additionalProperties": false,
+      "properties": {
+        "default_lanes": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "protected": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "default_lanes",
+        "protected"
+      ],
+      "type": "object"
+    }
+  },
+  "required": [
+    "acceptance",
+    "authority",
+    "evidence",
+    "lanes",
+    "proptest",
+    "repair_loop",
+    "schema_version",
+    "strictness",
+    "surface"
+  ],
+  "title": "RHA policy record schema",
+  "type": "object",
+  "x-rha-contract": "docs/architecture/record-schema-contract.md",
+  "x-rha-family": "policy",
+  "x-rha-inventory-format": "rha-observed-shapes-1",
+  "x-rha-inventory-sha256": "8411a2971ed2641fabf2d81f124e53d09396e5262df59dffbeaf23d119061dee",
+  "x-rha-source-revision": "99a74b042842b4d869ef341f58fdfcafb9c96e84"
+}

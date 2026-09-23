@@ -1,0 +1,25 @@
+
+running 1 test
+test random_corpus_matches_registered_reference_outputs ... FAILED
+
+failures:
+
+---- random_corpus_matches_registered_reference_outputs stdout ----
+module extraction corpus: cases=256 normalized_edges=0 test_edges=0 heuristic_edges=0 limitations=0
+
+thread 'random_corpus_matches_registered_reference_outputs' (2685635) panicked at xtask/tests/module_extraction.rs:295:5:
+assertion `left == right` failed: registered random edge count
+  left: 0
+ right: 5229
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    random_corpus_matches_registered_reference_outputs
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 7 filtered out; finished in 0.53s
+
+   Compiling xtask v0.1.0 (/home/kmosoti/projects/rha-m2/xtask)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.68s
+     Running tests/module_extraction.rs (target/debug/deps/module_extraction-8aa3b65bfb5d1976)
+error: test failed, to rerun pass `-p xtask --test module_extraction`

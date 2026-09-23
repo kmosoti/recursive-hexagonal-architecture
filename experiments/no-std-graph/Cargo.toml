@@ -1,0 +1,22 @@
+[workspace]
+
+[package]
+name = "no-std-graph"
+version = "0.0.0"
+publish = false
+edition = "2024"
+rust-version = "1.98.1"
+
+[lib]
+name = "graph"
+
+[dependencies]
+document = { path = "../../crates/document" }
+library = { path = "../../crates/library" }
+
+[dev-dependencies]
+proptest = "1.11.0"
+
+[features]
+negative-std-probe = []
+default = []

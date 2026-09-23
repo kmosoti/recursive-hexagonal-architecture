@@ -1,0 +1,269 @@
+{
+  "census": {
+    "new": {
+      "case_count": 60,
+      "case_key_intersection": [
+        "exit_status",
+        "expected_witnesses",
+        "extra",
+        "missing",
+        "observed_witnesses",
+        "passed",
+        "site",
+        "well_formed"
+      ],
+      "case_key_union": [
+        "exit_status",
+        "expected_witnesses",
+        "extra",
+        "missing",
+        "observed_witnesses",
+        "passed",
+        "site",
+        "well_formed"
+      ],
+      "case_sites": [
+        "MD001",
+        "MD002",
+        "MD003",
+        "MD004",
+        "MD005",
+        "MD006",
+        "MD007",
+        "MD008",
+        "MD009",
+        "MD010",
+        "MD011",
+        "MD012",
+        "MD013",
+        "MD014",
+        "MD015",
+        "MD016",
+        "MD017",
+        "MD018",
+        "MD019",
+        "MD020",
+        "MD021",
+        "MD022",
+        "MD023",
+        "MD024",
+        "MD025",
+        "MD026",
+        "MD027",
+        "MD028",
+        "MD029",
+        "MD030",
+        "MD031",
+        "MD032",
+        "MD033",
+        "MD034",
+        "MD035",
+        "MD036",
+        "MD037",
+        "MD038",
+        "MD039",
+        "MD040",
+        "MD041",
+        "MD042",
+        "MD043",
+        "MD044",
+        "MD045",
+        "MD046",
+        "MD047",
+        "MD048",
+        "MD049",
+        "MD050",
+        "MD051",
+        "MD052",
+        "MD053",
+        "MD054",
+        "MD055",
+        "MD056",
+        "MD057",
+        "MD058",
+        "MD059",
+        "MD060"
+      ],
+      "product_keys": [
+        "binary",
+        "binary_sha256",
+        "git_dirty",
+        "git_rev"
+      ],
+      "product_types": {
+        "binary": "string",
+        "binary_sha256": "string",
+        "git_dirty": "boolean",
+        "git_rev": "string"
+      },
+      "top_level_keys": [
+        "advisory",
+        "artifact_identity",
+        "cases",
+        "created_at",
+        "evidence_class",
+        "grading",
+        "kind",
+        "product",
+        "registration",
+        "schema_version",
+        "summary"
+      ]
+    },
+    "old": {
+      "case_count": 60,
+      "case_key_intersection": [
+        "exit_status",
+        "expected_witnesses",
+        "extra",
+        "missing",
+        "observed_witnesses",
+        "passed",
+        "site"
+      ],
+      "case_key_union": [
+        "exit_status",
+        "expected_witnesses",
+        "extra",
+        "missing",
+        "observed_witnesses",
+        "passed",
+        "site"
+      ],
+      "case_sites": [
+        "MD001",
+        "MD002",
+        "MD003",
+        "MD004",
+        "MD005",
+        "MD006",
+        "MD007",
+        "MD008",
+        "MD009",
+        "MD010",
+        "MD011",
+        "MD012",
+        "MD013",
+        "MD014",
+        "MD015",
+        "MD016",
+        "MD017",
+        "MD018",
+        "MD019",
+        "MD020",
+        "MD021",
+        "MD022",
+        "MD023",
+        "MD024",
+        "MD025",
+        "MD026",
+        "MD027",
+        "MD028",
+        "MD029",
+        "MD030",
+        "MD031",
+        "MD032",
+        "MD033",
+        "MD034",
+        "MD035",
+        "MD036",
+        "MD037",
+        "MD038",
+        "MD039",
+        "MD040",
+        "MD041",
+        "MD042",
+        "MD043",
+        "MD044",
+        "MD045",
+        "MD046",
+        "MD047",
+        "MD048",
+        "MD049",
+        "MD050",
+        "MD051",
+        "MD052",
+        "MD053",
+        "MD054",
+        "MD055",
+        "MD056",
+        "MD057",
+        "MD058",
+        "MD059",
+        "MD060"
+      ],
+      "product_keys": [
+        "binary",
+        "git_dirty",
+        "git_rev"
+      ],
+      "product_types": {
+        "binary": "string",
+        "git_dirty": "boolean",
+        "git_rev": "string"
+      },
+      "top_level_keys": [
+        "advisory",
+        "artifact_identity",
+        "cases",
+        "created_at",
+        "evidence_class",
+        "grading",
+        "kind",
+        "product",
+        "registration",
+        "schema_version",
+        "summary"
+      ]
+    }
+  },
+  "contract": {
+    "after_data": true,
+    "corpus_grading_changed": false,
+    "new_fields_optional": true,
+    "objects_closed": true,
+    "production_validator_used": false
+  },
+  "family": "markdown_corpus",
+  "observed_additions": [
+    {
+      "instance_path": "/cases/*/well_formed",
+      "new_present": true,
+      "observed_types": [
+        "boolean"
+      ],
+      "old_present": false
+    },
+    {
+      "instance_path": "/product/binary_sha256",
+      "new_present": true,
+      "observed_types": [
+        "string"
+      ],
+      "old_present": false
+    }
+  ],
+  "recipe_count": 16,
+  "sources": [
+    {
+      "path": "docs/architecture/markdown-record-shape-amendment.md",
+      "sha256": "9f596db11401935737b8e97899fd6df33fc1a4579c3823da1090ff10d287da20"
+    },
+    {
+      "path": "docs/architecture/record-schema-contract.md",
+      "sha256": "fbe1b3da99424e1b5a87c7ecbedc5a92e57af411b85bff56ef8420a3ecc02796"
+    },
+    {
+      "path": "evidence/md-corpus/20260922T210717Z-58e45f444c9f.json",
+      "sha256": "d4886f3755a64bff6f3737c72dfd686b05964ae837a211841f99ffb66d8c6b78"
+    },
+    {
+      "path": "evidence/md-corpus/20260923T044415Z-ed79a7a8e0ac.json",
+      "sha256": "67c8a9216be3c651ff7d903df20f3d2e95c84b793a3d19d4f924a85f9ecbf692"
+    },
+    {
+      "path": "target/m2/markdown-schema-supplement-prompt.md",
+      "sha256": "5ed732158951998ae26ccf30ec4783f66dcf278fd530c65e4a653684c3af7cf7"
+    }
+  ]
+}

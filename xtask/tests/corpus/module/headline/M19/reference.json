@@ -1,0 +1,18 @@
+{
+  "edges": [
+    {
+      "extraction": "syntax",
+      "source": "fixture_m19",
+      "target": "fixture_m19::ordering::score",
+      "test_only": false
+    },
+    {
+      "extraction": "syntax",
+      "source": "fixture_m19::constraints",
+      "target": "fixture_m19::score",
+      "test_only": false
+    }
+  ],
+  "limitations": [],
+  "schema_version": 1
+}

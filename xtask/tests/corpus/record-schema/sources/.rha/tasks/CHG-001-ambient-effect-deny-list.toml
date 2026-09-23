@@ -1,0 +1,273 @@
+# Task record (spec §11.7.11 shape, stored as TOML).
+schema_version = 1
+id = "CHG-001"
+slug = "ambient-effect-deny-list"
+title = "Ambient-effect deny list and Clippy configuration discovery"
+mode = "agent"
+executor_composition = "agent"
+authority_profile = "ECC-Solo"
+status = "accepted"   # at 44b1e44, 2026-09-19 (CHG-001.4); see .rha/acceptances/CHG-001.toml
+plan_ref = "docs/plan/IMPLEMENTATION-PLAN.md §8 W1"
+branch = "chg/001-ambient-effect-deny-list"
+base_revision = "c55431692b838cdd3763ba2210559aa2b4b1719e"
+intent = "A core-crate clippy.toml deny list that fails the build on a seeded std::time::SystemTime::now(), with the pinned Clippy's configuration discovery and merge behaviour observed and recorded (spec §6.8), and a rule that every role=core crate's clippy.toml equals one template."
+non_goals = [
+  "Product crates (CHG-005)",
+  "Running effect.core_clippy_template in the L0 lane: `cargo xtask architecture` is a stub until CHG-003, which wires the rule in",
+  "The no_std core option (experiment E1)",
+  "Changing .rha/policy.toml, rha-crates.toml, deny.toml, rha-baseline.json, the root clippy.toml, or `xtask ci`",
+]
+
+[[actors]]
+id = "human:kennedy"
+type = "human"
+
+[[actors]]
+# The Executor is model-agnostic (Kennedy, 2026-09-19): this id names the
+# role-holding agent, and [provenance] names the models that acted.
+id = "agent:executor"
+type = "agent"
+accountable_to = "human:kennedy"
+
+[[actors]]
+id = "automation:github-actions"
+type = "automation"
+accountable_to = "human:kennedy"
+
+[roles]
+planner = "human:kennedy"
+executor = ["agent:executor"]
+integrator = "human:kennedy"
+verifier = ["automation:xtask-ci (local, advisory)", "automation:github-actions (class ci, advisory)"]
+acceptor = "human:kennedy"
+
+[[work]]
+id = "W1"
+executor = "agent:executor"
+depends_on = ["CHG-000"]
+output = "Clippy corpus fixtures under xtask/tests/corpus/clippy/, the recorded experiments in evidence/w1-clippy/, ADR-0002, xtask/templates/core-clippy.toml, and the effect.core_clippy_template check function with tests."
+owned_scope = [
+  "xtask/tests/corpus/clippy/**",
+  "xtask/templates/core-clippy.toml (creation pre-approved by Kennedy, 2026-09-19)",
+  "xtask/src/clippy_template.rs, xtask/src/lib.rs",
+  "xtask/tests/clippy_corpus.rs",
+  "evidence/w1-clippy/**, evidence/CHG-001/**",
+  "docs/adr/ADR-0002-clippy-config-discovery.md, docs/changes/CHG-001-ambient-effect-deny-list.md, docs/maturity.md, generated docs",
+  ".gitignore (fixture target directories)",
+]
+
+[[decisions]]
+id = "settings-file"
+question = "The untracked .claude/settings.json makes every local record dirty. Commit it or ignore it?"
+answer = "Ignore it."
+decided_by = "human:kennedy"
+date = "2026-09-19"
+
+[[decisions]]
+id = "fixture-shape"
+question = "The corpus held two committed fixture workspaces, eight Clippy configuration files, and drift tests that keep the copies aligned. Generate the fixtures from the owning files instead?"
+answer = "Generate them (CHG-001.1)."
+decided_by = "human:kennedy"
+date = "2026-09-19"
+
+[[decisions]]
+id = "allow-attribute-experiment"
+question = "A #[allow(clippy::disallowed_methods)] in a core crate switches the deny list off, and Clippy's own help text suggests it. Run an experiment on that escape hatch?"
+answer = "Yes, as part of CHG-001.2."
+decided_by = "human:kennedy"
+date = "2026-09-19"
+
+[[decisions]]
+id = "architecture-check-timing"
+question = "Move a minimal L0.architecture into W1 so the lane has no not_run check, or leave it not_run until CHG-003?"
+answer = "Leave it not_run: a W1 version would pass over zero core crates, it would not change eligibility while Authentic fails, and it would put checker code before the corpus pre-registration of W2."
+decided_by = "human:kennedy"
+date = "2026-09-19"
+
+[[decisions]]
+id = "deny-list-gaps"
+question = "ADR-0002 lists known effectful paths the template does not cover. Extend the template, which is a protected surface?"
+answer = "Yes: address the gaps of ADR-0002 in CHG-001.2. This is the approval to edit xtask/templates/core-clippy.toml for that purpose."
+decided_by = "human:kennedy"
+date = "2026-09-19"
+
+[[decisions]]
+id = "executor-identity"
+question = "Is the Executor one named model?"
+answer = "No: the designation of Claude Opus 5 as the sole executing agent is withdrawn. The Executor is model-agnostic; the model and harness are provenance."
+decided_by = "human:kennedy"
+date = "2026-09-19"
+
+[[decisions]]
+id = "acceptance-records"
+question = "`.rha/acceptances/` is empty although CHG-000 was accepted and tagged. Who writes the record?"
+answer = "The Executor writes it, at Kennedy's instruction of 2026-09-19, which is the approval for that protected surface. CHG-001 gets no acceptance record: it is not merged and not accepted."
+decided_by = "human:kennedy"
+date = "2026-09-19"
+
+[[decisions]]
+id = "close-the-attribute-escape"
+question = "Close the attribute escape by forbidding the three lints in the root Cargo.toml?"
+answer = "Instructed, then refused by the toolchain: clap's derives expand to a group allow, which is E0453 under forbid, so xtask stopped compiling. Closed per core crate instead, with a crate-root #![forbid(...)] that the rule effect.core_clippy_template checks (experiments 7a to 7c)."
+decided_by = "human:kennedy"
+date = "2026-09-19"
+
+[[decisions]]
+id = "protect-cargo-config"
+question = "`--cap-lints=warn` in .cargo/config.toml disables every lint. Should that file be a protected surface?"
+answer = "Yes. It is added to [surface] protected, which changes the policy digest and makes the next record report Applicable false until this change is on main (§11.5 controlled transition)."
+decided_by = "human:kennedy"
+date = "2026-09-19"
+
+[[decisions]]
+id = "spec-research-update"
+question = "Record the Clippy findings in the specification?"
+answer = "Yes, then corrected on the same day. The first edit put an observation table in §6.8, which duplicated ADR-0002 against the one-owner rule of §11.7.1. §6.8 now keeps the normative consequence and a pointer; the proposals are queued in docs/proposals/spec-v0.11.md for the version bump, together with the rule that a work item does not edit the specification. The §1.4 maturity table stays untouched; Kennedy promotes those rows at a version bump."
+decided_by = "human:kennedy"
+date = "2026-09-19"
+
+[[decisions]]
+id = "protected-surface-approval"
+question = "Which protected surfaces may this change touch?"
+answer = "Only the creation of xtask/templates/core-clippy.toml; no other protected surface may change. Extended on the same day by the deny-list-gaps decision above, which approves editing that same file to close the gaps ADR-0002 names; no other protected surface may change."
+decided_by = "human:kennedy"
+date = "2026-09-19"
+
+[[work]]
+id = "W1.1"
+executor = "agent:executor"
+depends_on = ["W1"]
+output = "Rework before merge, requested by Kennedy on the open PR: .claude/settings.json ignored; the Clippy fixtures generated from the root Cargo.toml lint tables, the root clippy.toml, and the template instead of committed copies; the Executor made model-agnostic."
+owned_scope = [
+  ".gitignore",
+  "xtask/tests/corpus/clippy/**, xtask/tests/clippy_corpus.rs, xtask/src/clippy_template.rs",
+  "docs/plan/IMPLEMENTATION-PLAN.md, docs/threat-model.md, xtask/src/cli.rs (executor identity)",
+  ".rha/tasks/CHG-001-ambient-effect-deny-list.toml, docs/changes/CHG-001-ambient-effect-deny-list.md, docs/adr/ADR-0002-clippy-config-discovery.md, docs/maturity.md, generated docs",
+  "evidence/w1-clippy/**, evidence/CHG-001/**",
+]
+
+[[work]]
+id = "W1.2"
+executor = "agent:executor"
+depends_on = ["W1.1"]
+output = "Experiment 6 on the #[allow] escape hatch and its forbid variants, and the ADR-0002 deny-list gaps closed in the template."
+owned_scope = [
+  "xtask/templates/core-clippy.toml (extension approved by Kennedy, 2026-09-19, decision deny-list-gaps)",
+  "xtask/tests/corpus/clippy/**, xtask/tests/clippy_corpus.rs",
+  "docs/adr/ADR-0002-clippy-config-discovery.md, docs/changes/CHG-001-ambient-effect-deny-list.md, docs/maturity.md, generated docs",
+  "evidence/w1-clippy/**, evidence/CHG-001/**",
+]
+
+[[work]]
+id = "W1.3"
+executor = "agent:executor"
+depends_on = ["W1.2"]
+output = "The acceptance record for CHG-000; the attribute escape closed per core crate after the workspace-wide forbid was refused by the toolchain; .cargo/config.toml protected; the Clippy findings recorded in spec §6.8; a README and GitHub description that say what works and what does not."
+owned_scope = [
+  ".rha/acceptances/CHG-000.toml (written at Kennedy's instruction)",
+  ".rha/policy.toml ([surface] protected only), Cargo.toml (a comment recording why these lints are not forbidden there)",
+  "docs/spec/rha-spec-v0.10.md §6.8 (at Kennedy's instruction; §1.4 untouched), docs/proposals/spec-v0.11.md",
+  "xtask/src/clippy_template.rs, xtask/tests/clippy_corpus.rs, xtask/tests/corpus/clippy/**, xtask/templates/core-clippy.toml (header only)",
+  "README.md, the GitHub repository description and topics",
+  "docs/adr/ADR-0002-clippy-config-discovery.md, docs/changes/CHG-001-ambient-effect-deny-list.md, docs/maturity.md, generated docs",
+  "evidence/w1-clippy/**, evidence/CHG-001/**, evidence/ci/**",
+]
+
+[[work]]
+id = "W1.4"
+executor = "agent:executor"
+depends_on = ["W1.3"]
+output = "After the merge and Kennedy's acceptance at 44b1e44: the acceptance record for CHG-001, the SPEC_DIGEST placeholder replaced by the real digest, that placeholder recorded as defect D-001.1, and the CI record covering the accepted tree committed."
+owned_scope = [
+  ".rha/acceptances/CHG-001.toml (written at Kennedy's instruction of 2026-09-19, which is the approval for that protected surface)",
+  ".rha/tasks/CHG-001-ambient-effect-deny-list.toml (the placeholder and this entry)",
+  "evidence/ci/35476379661.json",
+  "docs/changes/CHG-001-ambient-effect-deny-list.md, generated docs",
+]
+
+[[decisions]]
+id = "accepted-at"
+question = "Is CHG-001 accepted, and at which revision?"
+answer = "Accepted at 44b1e44, the merge commit of pull request 2. The Executor writes .rha/acceptances/CHG-001.toml as CHG-001.4; this instruction is the approval for that protected surface."
+decided_by = "human:kennedy"
+date = "2026-09-19"
+
+[expectation]
+# Written before any experiment ran (plan §8 W1). The recorded rule is whatever is observed.
+discovery = "Clippy reads the first clippy.toml found from the crate's CARGO_MANIFEST_DIR upward; a core crate's local file applies to it and not to a sibling adapter."
+merge = "No merge: the nearest file replaces the root file entirely, so a core crate's clippy.toml loses the root test allowances unless it repeats them."
+fallback_if_contradicted = "Record the observed rule; switch to CLIPPY_CONF_DIR per crate set by `xtask ci` (environment, not command, so §12.1 stays intact)."
+
+[claim]
+affected_components = []
+contract_changes = "none: no product component exists"
+architecture_delta = "A new xtask module (clippy_template) and test-only corpus workspaces excluded from the root workspace. No new dependency."
+performance_impact = "none claimed"
+unresolved = [
+  "L0.architecture is still not_run, and it is required and non-waivable (DP-0.5), so this change cannot be Eligible under the current policy (CHG-000 acceptance concern 2).",
+]
+
+[acceptance]
+criteria = [
+  "(1) In xtask/tests/corpus/clippy/core-seeded, `cargo clippy -p core-a` exits nonzero citing clippy::disallowed_methods for the seeded SystemTime::now()",
+  "(2) In xtask/tests/corpus/clippy/discovery, `cargo clippy -p adapter-x` passes with no deny-list finding",
+  "(3) With allow-unwrap-in-tests only in the fixture's root clippy.toml and a test unwrap() in core-a, whether unwrap_used fires is observed and recorded",
+  "Commands and captured stderr are in evidence/w1-clippy/; ADR-0002 states the observed rule and its consequence for per-core clippy.toml files",
+  "(CHG-001.1 restatement, same experiments) The criteria above name the committed fixture workspaces of W1. The fixtures are now generated under target/clippy-corpus/ from the root Cargo.toml lint tables, the root clippy.toml, and the template, and the crates are named core-seeded, core-deny-only, core-clean, core-every and adapter-x. Experiments 1, 2 and 3 keep their meaning and their commands, which each record states in full.",
+  "(CHG-001.2) Experiment 6 records what switches the deny list off, and experiment 4 shows every template entry resolve and fire.",
+]
+replan_when = [
+  "Experiment (2) or (3) contradicts the expected rule",
+  "A deny-list path does not resolve in Clippy 0.1.98",
+]
+
+[provenance]
+# The Executor is model-agnostic; [[provenance.sessions]] names the model
+# exposed in each span of this item's work (spec §11.6.5).
+harness = "Claude Code, VS Code extension; the CLI on PATH reports `2.1.278 (Claude Code)`; the extension build was not observed"
+output_style = "Learning (.claude/settings.local.json)"
+permission_mode = "auto, as reported to the session; project allow-list in the untracked .claude/settings.json (gh pr/run/api, git fetch, one python3 command)"
+task_scope = "CHG-001: docs/plan/IMPLEMENTATION-PLAN.md §8 W1"
+# Corrected in CHG-003.2 (pull request 3 review finding): this line named only
+# the template, and the W1.4 record evidence/CHG-001/20260920T000645Z-da317050b06f.json
+# copied it as it stood. That record is an observation and is not rewritten.
+permissions = "Workspace files, shell, network, and `gh` as kmosoti through the user's account. Protected surfaces: xtask/templates/core-clippy.toml, created in W1 and extended in CHG-001.2, both approved by human:kennedy (see [[decisions]]); and .rha/acceptances/CHG-001.toml, created in CHG-001.4 under the approval recorded in decision W1.4."
+budgets = "unknown"
+reasoning_effort = "unknown"
+advisory_subagents = "Two read-only workflows advised CHG-001.2 and own no artifact, so the mode stays `agent` (§11.6.2). Eleven subagents swept the Rust 1.98.1 standard-library source for effectful APIs, verified each other's lists against that source, and criticized the result; every entry they proposed is checked by experiment 4, which fails if one stops firing. Twenty-eight subagents then reviewed the branch along five dimensions and tried to refute each finding: of 23 findings, 14 survived and were fixed, including the record writer reporting a clean tree when git failed, the experiments that asserted silence without a positive control, and documents asserting a result for a template no committed record covered."
+instruction_sources = [
+  { path = "docs/plan/IMPLEMENTATION-PLAN.md (W1, at a152d94)", sha256 = "4c60073eacdd5f03303f0d7298a95dea35db0a9bb7bd49b9d724bedea0737afb" },
+  { path = "docs/plan/IMPLEMENTATION-PLAN.md (CHG-001.1 revision: model-agnostic Executor)", sha256 = "86298ec9b06f6774752cf85eba8396633ba557d6202b96017099b639adeecfb1" },
+  { path = "docs/spec/rha-spec-v0.10.md (W1 through CHG-001.2)", sha256 = "4c96ded8159c35a6281a6c14183700ae1466c097e009cdc5e722b2d1eacb0907" },
+  { path = "docs/spec/rha-spec-v0.10.md (CHG-001.3: §6.8 records the Clippy findings)", sha256 = "d95218744e2c1acec96081175778e838cfa48e7ca5dd7847e35035e9000ce117" },
+  # Filled in CHG-001.4. It shipped at 44b1e44 as the placeholder SPEC_DIGEST,
+  # recorded as defect D-001.1 in .rha/acceptances/CHG-001.toml.
+  { path = "docs/spec/rha-spec-v0.10.md (CHG-001.3 corrected: the observations move to the decision record and the v0.11 queue)", sha256 = "bd96216829035ade64c43befa5e672c58078f6afa4b04145c6183227e4e1071a" },
+  { path = "user message of 2026-09-19 starting W1 (pre-approval of the template)", sha256 = "unknown" },
+  { path = "user message of 2026-09-19 answering the W1 report (CHG-001.1 and CHG-001.2 decisions above)", sha256 = "unknown" },
+  { path = "user message of 2026-09-19 instructing the acceptance records, the recommended decisions, the spec update, and the README (CHG-001.3)", sha256 = "unknown" },
+  { path = "user message of 2026-09-20 instructing CHG-001.4, the acceptance record and the SPEC_DIGEST repair (added in CHG-003.2)", sha256 = "unknown" },
+  { path = "Claude Code system prompt", sha256 = "unknown" },
+]
+
+# Model exposed to the session in each span, in order (§11.6.5). One session,
+# one accountable principal; a change of model adds neither (§11.6.1).
+[[provenance.sessions]]
+model_id = "claude-opus-5[1m]"
+span = "W1: commits a152d94 through b51047d"
+
+[[provenance.sessions]]
+model_id = "claude-fable-5-1"
+span = "CHG-001.1: commit 5fd26ca, and the report that preceded it"
+
+[[provenance.sessions]]
+model_id = "claude-opus-5"
+span = "CHG-001.1 from commit 3bfb9fd, and CHG-001.2"
+
+[[provenance.sessions]]
+model_id = "claude-opus-5[1m]"
+span = "CHG-001.3"
+
+[[provenance.sessions]]
+model_id = "claude-opus-5[1m]"
+span = "CHG-001.4: commit da31705 (added in CHG-003.2; the commit trailer names the model)"

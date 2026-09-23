@@ -1,0 +1,136 @@
+# Task record (spec §11.7.11 shape, stored as TOML).
+schema_version = 1
+id = "CHG-004.6"
+slug = "c13-registration"
+title = "C13 registration amendment, H4 re-run, and the held-out runner under xtask"
+mode = "agent"
+executor_composition = "agent"
+authority_profile = "ECC-Solo"
+status = "proposed"
+plan_ref = "docs/plan/IMPLEMENTATION-PLAN.md §6 and §8 W4; CHG-004 acceptance concern 1, option (a)"
+branch = "chg/004.6-c13-registration"
+base_revision = "434b7064e3f21db5676aacb92525e4eef9f0ff2a"
+intent = "Apply Kennedy's approved amendment after the observed C13 result: register the one accurate warning C13's fixture necessarily produces as a fact, grade registered facts by the every-key rule, re-run H4, and propose crate-level V only if the amended corpus passes. Put the held-out runner Kennedy asked for under xtask, as `cargo xtask corpus held-out`, so the repository keeps one automation home and the tool baseline stays what it is."
+non_goals = [
+  "Changing checker rules or findings",
+  "Changing any other case, cell, witness or grading value",
+  "Changing the spec, .rha/policy.toml or the CI workflows",
+  "Reading, running on the executor's initiative, or grading the held-out cases (DP-1.1b): the run waits for Kennedy's directory or archive, and the grading is his",
+  "Changing Accepted maturity (DP-1.6)",
+  "Module-level or transitive implementation",
+]
+
+[[actors]]
+id = "human:kennedy"
+type = "human"
+
+[[actors]]
+id = "agent:executor"
+type = "agent"
+accountable_to = "human:kennedy"
+
+[roles]
+planner = "human:kennedy"
+executor = ["agent:executor"]
+integrator = "human:kennedy"
+verifier = ["automation:xtask-ci (local, advisory)", "automation:github-actions (class ci, advisory)"]
+acceptor = "human:kennedy"
+
+[[work]]
+id = "W4-C13-amendment"
+executor = "agent:executor"
+depends_on = ["CHG-004 (accepted at 434b706)", "DP-1.1c amendment", "DP-1.1b amendment"]
+output = "CHG-004 acceptance record; DP-1.1c and DP-1.1b amendment rows; the exact C13 manifest amendment; expected_findings in the corpus model and grading; the amendment chain verified by manifest digests; `cargo xtask corpus held-out`; new H4 and L0 evidence; the regenerated enforcement map; the Proposed maturity row."
+owned_scope = [
+  ".rha/acceptances/CHG-004.toml (creation, pre-approved by [acceptance])",
+  ".rha/decisions.toml (the DP-1.1c and DP-1.1b amendment keys only)",
+  "xtask/tests/corpus/manifest.toml (C13 expected_findings and one extra_findings sentence only)",
+  "xtask/src/corpus.rs, xtask/src/corpus/grade.rs, xtask/src/corpus/runner.rs, xtask/src/corpus/held_out.rs, xtask/src/cli.rs, xtask/src/main.rs",
+  "xtask/tests/corpus_manifest.rs, xtask/tests/corpus_crate.rs, xtask/tests/corpus_harness.rs",
+  "CONTRIBUTING.md (the held-out paragraph)",
+  ".rha/tasks/CHG-004.6-c13-registration.toml, docs/changes/CHG-004.6-c13-registration.md, docs/maturity.md (Proposed column), generated docs",
+  "evidence/CHG-004.6/**, evidence/h4-crate/**, evidence/ci/**",
+]
+claim = "agent:executor is the sole writer of this branch. The executor's own session prepared the acceptance record, the baseline H4 run and drafts of these records in its JJ worktree and did not commit them; a Python runner it drafted under scripts/ was not adopted (decision runner-under-xtask). The supervising session took the item over on Kennedy's instruction and is the writer from commit 1 on."
+
+[[decisions]]
+id = "approved-c13-registration"
+question = "Which protected changes did Kennedy approve, and what is their exact content?"
+answer = "Kennedy stated in the CHG-004.6 kickoff of 2026-09-20: \"C13: I choose (a). I approve the DP-1.1c amendment row and the C13 manifest amendment exactly as the goal states.\" The manifest gains, on C13 only, expected_findings = [{ rule = \"adapter.foreign_core\", crate = \"adapter-x\", to = \"core-b\" }], and [grading] extra_findings gains one sentence: \"A finding matching an entry of a case's expected_findings is a registered fact, neither a detection nor a false alarm.\" The amendment is made after the data and is disclosed on the DP-1.1c row, in every H4 record that grades under it, and in the maturity row. The failed records stay."
+decided_by = "human:kennedy"
+date = "2026-09-20"
+# The first manifest commit, b671fb7, appended the sentence without a full
+# stop (CHG-004.6.1 determination 5); the commit below carries the corrected text.
+commit = "c9fa524b4997475e95852c49c866e0587d76156e"
+parent_manifest_sha256 = "18d4afbfe5a63843d498a109fe4702629548a25ddc730198848983208d3c46a4"
+corrected_manifest_sha256 = "07059dd444a7023552026ea3fa3051b71290b030c0d960f5ca3d1f1509196e03"
+
+[[decisions]]
+id = "delegated-held-out-execution"
+question = "May the executor's process run the held-out checks, and where does the runner live?"
+answer = "Yes, under the DP-1.1b amendment: Kennedy asked the executor to run the checks on his behalf, and asked the supervising session to make that compliant. The runner is `cargo xtask corpus held-out`, in the repository's one automation home; it prints opaque ids, exit statuses, finding counts and the commitment check, keeps raw reports outside the repository, and grades nothing. The executor's Python draft under scripts/ was not adopted: the plan's layout has no scripts/ directory, the tool baseline lists no Python, and the lane's checks do not cover it. The private cases have not been supplied to any agent at the time of this record; the run happens when Kennedy supplies the directory or the original archive, and is recorded as a post-acceptance observation graded by Kennedy."
+decided_by = "human:kennedy (delegation and placement); agent:executor (implementation)"
+date = "2026-09-20"
+
+[[decisions]]
+id = "required-commit-order"
+question = "What must precede the harness change?"
+answer = "First the CHG-004 acceptance record with its CI record; second the two ledger amendments and this task record; third the manifest amendment with the model and validation that accept it, so the protected commit parses on its own; fourth the grading, the amendment chain, the held-out runner and the test-expectation change under §9.14; then the measured re-run and its evidence."
+decided_by = "human:kennedy (order); agent:executor (record preparation)"
+date = "2026-09-20"
+
+[[decisions]]
+id = "review-findings-chg-004.6.1"
+question = "A local Codex review (gpt-5.6-sol, medium, read-only) of PR 14 at 5ef607c requested changes. Which findings name a concrete failure?"
+answer = "All five. (1) P1: `--cases` ran even when the directory's commitment check was mismatched or unverified, so altered cases could be observed and reported with exit 0; for the held_out purpose anything but matched now refuses with exit 2, as the archive path already did. (2) P1: the printed summary carried the absolute path of the private report directory, an invitation to read raw reports; the printed summary drops it and summary.json in that directory keeps it. (3) P1: archive checking inspected member names only, so a symlink or hard-link member could make a later member write outside the extraction directory; members other than regular files and directories are now refused before extraction, from tar's verbose listing. (4) P1: the amendment chain was not anchored, and its first link skipped a real change: the manifest at the pre-registration 15d916a hashes to f4fcef6f..., and CHG-002.2's DP-1.1c grading decision changed it to 9f5c1a93... at 4be4a19 before EM-M03. The chain now starts at the pre-registration digest, records the CHG-002.2 link, and where a link's commit object is present verifies that the manifest at that commit hashes to its corrected digest (`commit_verified`; absent objects in a shallow checkout are reported, not assumed). (5) P2: the approved sentence was appended to extra_findings without ending the previous one, reading 'derived from the other A finding'; a full stop is inserted, which is punctuation inside the approved change, and the corrected digest and pinned commit move with it."
+decided_by = "agent:executor (determinations under the review rules in AGENTS.md); human:kennedy (request of 2026-09-22 to have Codex review and to merge if no real issue remains)"
+date = "2026-09-22"
+
+[expectation]
+# Written before the amended run.
+amended_run = "22/22 detected, 0 unmatched findings, 0 legitimate cases with an alarm, EM-C01 and EM-C02 documented, exit 0; C13's warning appears under registered_facts and nowhere else."
+if_contradicted = "The run is recorded as it is, the amendment is not widened, and no V is proposed."
+
+[claim]
+affected_components = []
+contract_changes = "The corpus grading gains registered facts on detect cases, under the DP-1.1c amendment. The checker's CLI and report are unchanged."
+architecture_delta = "Harness only: expected_findings in the corpus model, registered facts in grading, the amendment chain in the runner's provenance, and a held-out subcommand. No new dependency; the held-out runner shells out to the system tar for the commitment check and extraction."
+performance_impact = "none claimed"
+unresolved = [
+  "DP-1.1b: the held-out run waits for Kennedy's directory or original archive; until then the acceptance record and this item say not run, and no outcome is inferred.",
+  "DP-1.6: the V proposal for the crate level, if the amended run passes, is Kennedy's to accept, with the post-hoc amendment disclosed.",
+]
+
+[provenance]
+harness = "Codex (the executor's session) for the drafts; Claude Code for the item from commit 1"
+task_scope = "CHG-004.6 as specified in Kennedy's kickoff and goal of 2026-09-20, then his instruction to move the runner under xtask"
+permissions = "Workspace files, shell, network, and gh through the user's account. Protected surfaces: .rha/acceptances/CHG-004.toml (creation), the DP-1.1c and DP-1.1b amendment keys, and the C13 row plus one grading sentence; no others."
+budgets = "unknown"
+reasoning_effort = "unknown"
+instruction_sources = [
+  { path = "AGENTS.md (at 434b706)", sha256 = "5c3e2af3bd6c0fc44a8f9bc9a4d51641dc56cdd7a11f768ac0d800eb0ed690fe" },
+  { path = "CONTRIBUTING.md (at 434b706)", sha256 = "9de567ddb7dfa07a6a03e7dc483a93c490357347fa1ac4f98565d00a225ff3b9" },
+  { path = "xtask/AGENTS.md (at 434b706)", sha256 = "4bc74c0bff383fd35e79f44768e92cb774c95b20d73b127c8bcfa5afa9c30e56" },
+  { path = "docs/plan/IMPLEMENTATION-PLAN.md (§6 and §8 W4, at 434b706)", sha256 = "4d9b1c64e8b6c62e37d7db9b26722c330f2fdd6804441d50c45b3ca3a2fbdbdf" },
+  { path = "docs/spec/rha-spec-v0.10.md (§9.14, §17, at 434b706)", sha256 = "bd96216829035ade64c43befa5e672c58078f6afa4b04145c6183227e4e1071a" },
+  { path = "user message of 2026-09-20: the CHG-004.6 kickoff and goal (option (a), approvals)", sha256 = "unknown" },
+  { path = "user message of 2026-09-20 to the executor asking it to run the held-out checks", sha256 = "unknown" },
+  { path = "user message of 2026-09-20 to the supervising session: fix the compliance, the runner belongs under xtask", sha256 = "unknown" },
+]
+
+[[provenance.sessions]]
+model_id = "GPT-6 (session default), as the executor's session reported it"
+span = "CHG-004.6 preparation in the executor's worktree: the acceptance-record draft, the baseline H4 run at 434b706, and the unadopted Python runner"
+
+[[provenance.sessions]]
+model_id = "claude-fable-5-1"
+span = "CHG-004.6 from commit 1: the records, the amendments, the harness, the held-out runner, the evidence"
+
+[[provenance.sessions]]
+model_id = "claude-opus-5-5"
+span = "CHG-004.6.1: the five findings of the local Codex review of PR 14"
+
+[[provenance.reviews]]
+reviewer = "local Codex CLI 0.155.1, model gpt-5.6-sol, reasoning medium, read-only sandbox"
+revision = "5ef607c"
+verdict = "REQUEST_CHANGES: five findings, all confirmed (decision review-findings-chg-004.6.1)"

@@ -1,0 +1,77 @@
+warning[duplicate]: found 2 duplicate entries for crate 'syn'
+    ┌─ /home/kmosoti/projects/rha-m2/Cargo.lock:109:1
+    │  
+109 │ ╭ syn 2.0.119 registry+https://github.com/rust-lang/crates.io-index
+110 │ │ syn 3.0.6 registry+https://github.com/rust-lang/crates.io-index
+    │ ╰───────────────────────────────────────────────────────────────┘ lock entries
+    │  
+    ├ syn v2.0.119
+      └── strum_macros v0.28.0
+          └── strum v0.28.0
+              └── jsonschema v0.57.0
+                  └── xtask v0.1.0
+    ├ syn v3.0.6
+      ├── clap_derive v4.6.7
+      │   └── clap v4.6.7
+      │       ├── app-cli v0.1.0
+      │       └── xtask v0.1.0
+      ├── ref-cast-impl v1.0.27
+      │   └── ref-cast v1.0.27
+      │       └── fluent-uri v0.4.1
+      │           └── referencing v0.57.0
+      │               └── jsonschema v0.57.0
+      │                   └── xtask v0.1.0 (*)
+      ├── serde_derive v1.0.229
+      │   └── serde v1.0.229
+      │       ├── ahash v0.8.12
+      │       │   ├── jsonschema v0.57.0 (*)
+      │       │   ├── jsonschema-value v0.57.0
+      │       │   │   └── jsonschema v0.57.0 (*)
+      │       │   └── referencing v0.57.0 (*)
+      │       ├── email_address v0.2.9
+      │       │   └── jsonschema v0.57.0 (*)
+      │       ├── fluent-uri v0.4.1 (*)
+      │       ├── jsonschema v0.57.0 (*)
+      │       └── xtask v0.1.0 (*)
+      ├── wasm-bindgen-macro-support v0.2.128
+      │   └── wasm-bindgen-macro v0.2.128
+      │       └── wasm-bindgen v0.2.128
+      │           ├── getrandom v0.3.4
+      │           │   ├── ahash v0.8.12 (*)
+      │           │   ├── jsonschema v0.57.0 (*)
+      │           │   ├── jsonschema-value v0.57.0 (*)
+      │           │   ├── rand_core v0.9.5
+      │           │   │   ├── rand v0.9.5
+      │           │   │   │   └── proptest v1.11.0
+      │           │   │   │       ├── (dev) adapter-html v0.1.0
+      │           │   │   │       │   └── app-cli v0.1.0 (*)
+      │           │   │   │       ├── (dev) document v0.1.0
+      │           │   │   │       │   ├── graph v0.1.0
+      │           │   │   │       │   │   └── site v0.1.0
+      │           │   │   │       │   │       ├── adapter-fs v0.1.0
+      │           │   │   │       │   │       │   └── app-cli v0.1.0 (*)
+      │           │   │   │       │   │       ├── adapter-html v0.1.0 (*)
+      │           │   │   │       │   │       ├── adapter-sys v0.1.0
+      │           │   │   │       │   │       │   └── app-cli v0.1.0 (*)
+      │           │   │   │       │   │       └── app-cli v0.1.0 (*)
+      │           │   │   │       │   └── site v0.1.0 (*)
+      │           │   │   │       ├── (dev) graph v0.1.0 (*)
+      │           │   │   │       ├── (dev) library v0.1.0
+      │           │   │   │       │   ├── adapter-fs v0.1.0 (*)
+      │           │   │   │       │   ├── (dev) adapter-html v0.1.0 (*)
+      │           │   │   │       │   ├── app-cli v0.1.0 (*)
+      │           │   │   │       │   ├── document v0.1.0 (*)
+      │           │   │   │       │   ├── graph v0.1.0 (*)
+      │           │   │   │       │   └── site v0.1.0 (*)
+      │           │   │   │       ├── (dev) rha-verifier v0.1.0
+      │           │   │   │       └── (dev) site v0.1.0 (*)
+      │           │   │   ├── rand_chacha v0.9.0
+      │           │   │   │   └── proptest v1.11.0 (*)
+      │           │   │   └── rand_xorshift v0.4.0
+      │           │   │       └── proptest v1.11.0 (*)
+      │           │   └── referencing v0.57.0 (*)
+      │           └── js-sys v0.3.105
+      │               └── getrandom v0.3.4 (*)
+      └── xtask v0.1.0 (*)
+
+advisories ok, bans ok, licenses ok, sources ok

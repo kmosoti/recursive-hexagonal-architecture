@@ -1,0 +1,38 @@
+   Compiling xtask v0.1.0 (/home/kmosoti/projects/rha-m2/xtask)
+warning: unused import: `PathBuf`
+ --> xtask/tests/corpus_trust.rs:5:34
+  |
+5 | use std::path::{Component, Path, PathBuf};
+  |                                  ^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `xtask` (test "corpus_trust") generated 1 warning (run `cargo fix --test "corpus_trust" -p xtask` to apply 1 suggestion)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.06s
+     Running tests/corpus_trust.rs (target/debug/deps/corpus_trust-7b98af8f66f9fce8)
+
+running 7 tests
+
+thread 'the_module_inventory_checker_rejects_changed_and_missing_payloads' (2645425) panicked at xtask/tests/corpus_trust.rs:177:20:
+index not found
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test the_module_inventory_checker_rejects_changed_and_missing_payloads ... FAILED
+test the_module_registration_pins_generator_reference_contract_and_counts ... ok
+
+thread 'the_module_corpus_inventory_is_complete_and_pinned' (2645424) panicked at xtask/tests/corpus_trust.rs:215:59:
+SHA256SUMS is not strictly sorted at headline-contract.json
+test the_module_corpus_inventory_is_complete_and_pinned ... FAILED
+test the_verifier_corpus_is_exactly_what_was_registered ... ok
+test the_record_corpus_is_exactly_what_was_registered ... ok
+test the_verifier_shape_corpus_is_exactly_what_was_registered ... ok
+test the_record_schema_corpus_is_exactly_what_was_registered ... ok
+
+failures:
+
+failures:
+    the_module_corpus_inventory_is_complete_and_pinned
+    the_module_inventory_checker_rejects_changed_and_missing_payloads
+
+test result: FAILED. 5 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.37s
+
+error: test failed, to rerun pass `-p xtask --test corpus_trust`

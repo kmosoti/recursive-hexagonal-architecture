@@ -1,0 +1,3 @@
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.10s
+     Running `target/debug/xtask rha lint evidence/md-corpus/20260923T044415Z-ed79a7a8e0ac.json`
+evidence/md-corpus/20260923T044415Z-ed79a7a8e0ac.json: accepted (markdown_corpus)

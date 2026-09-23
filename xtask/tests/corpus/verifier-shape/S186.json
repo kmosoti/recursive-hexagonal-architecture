@@ -1,0 +1,127 @@
+{
+  "acceptor": "human:kennedy",
+  "accountable_change_authority": "human:kennedy",
+  "base": "1111111111111111111111111111111111111111",
+  "candidate_tree": "2222222222222222222222222222222222222222",
+  "evidence": {
+    "base": "1111111111111111111111111111111111111111",
+    "entries": [
+      {
+        "id": "L1.performance",
+        "kind": "comparison",
+        "outcome": "failed",
+        "params": {
+          "delta": 0.03,
+          "executions": 5,
+          "n": 30
+        },
+        "performed": true
+      }
+    ],
+    "inputs": {
+      "lockfile": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "toolchain": "1.98.1"
+    },
+    "integrity": "valid",
+    "policy": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "producer": "automation:ci",
+    "subject": "2222222222222222222222222222222222222222"
+  },
+  "exception": {
+    "authentic": true,
+    "base": "1111111111111111111111111111111111111111",
+    "compensating_control": "Keep the previous implementation available for rollback.",
+    "expires_at": "2026-09-23T12:00:00Z",
+    "follow_up": "Repeat the comparison on the next maintenance change.",
+    "issued_at": "2026-09-20T12:00:00Z",
+    "issuer": "human:kennedy",
+    "logged_at": null,
+    "policy": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "reason": "Benchmark exceeds the approved tolerance.",
+    "revoked": false,
+    "subject": "2222222222222222222222222222222222222222",
+    "waived": [
+      "L1.performance"
+    ]
+  },
+  "expected": {
+    "applicable": true,
+    "authentic": true,
+    "complete": true,
+    "conflict": false,
+    "eligible": false,
+    "merge_allowed": false,
+    "passed": false,
+    "r_eff": [
+      {
+        "id": "L1.performance",
+        "kind": "comparison",
+        "params": {
+          "delta": 0.03,
+          "executions": 5,
+          "n": 30
+        }
+      }
+    ],
+    "valid_exception": false
+  },
+  "id": "S186",
+  "local_policies": [],
+  "now": "2026-09-22T12:00:00Z",
+  "policy": {
+    "acceptance_authority": [
+      "human:kennedy"
+    ],
+    "checks": [
+      {
+        "id": "L1.performance",
+        "kind": "comparison",
+        "params": {
+          "delta": 0.03,
+          "executions": 5,
+          "n": 30
+        }
+      },
+      {
+        "id": "L0.fmt",
+        "kind": "format",
+        "params": {}
+      }
+    ],
+    "cooling_off_hours": 24,
+    "default_obligations": [
+      "L0.fmt"
+    ],
+    "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "exception_authority": [
+      "human:reviewer",
+      "human:kennedy"
+    ],
+    "non_waivable": [
+      "L0.fmt",
+      "L0.nextest"
+    ],
+    "profile": "ECC-Solo",
+    "required_inputs": [
+      "toolchain",
+      "lockfile"
+    ],
+    "rules": [
+      {
+        "id": "core.change",
+        "requires": [
+          "L1.performance"
+        ],
+        "scope": "crates/core/**"
+      }
+    ],
+    "trusted_producers": [
+      "automation:ci"
+    ]
+  },
+  "purpose": "logged_at cannot parse on the Solo self-issued path; invalid exception, not malformed fixture.",
+  "row": "CHG-019.1 verifier-contract §3",
+  "surface": [
+    "crates/core/src/lib.rs"
+  ]
+}

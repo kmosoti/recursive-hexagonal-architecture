@@ -1,0 +1,40 @@
+{
+  "after_data": true,
+  "family": "markdown_corpus",
+  "optional": [
+    {
+      "instance_path": "/cases/*/well_formed",
+      "types": [
+        "boolean"
+      ]
+    },
+    {
+      "instance_path": "/product/binary_sha256",
+      "types": [
+        "string"
+      ]
+    }
+  ],
+  "source_paths": [
+    {
+      "path": "docs/architecture/markdown-record-shape-amendment.md",
+      "sha256": "9f596db11401935737b8e97899fd6df33fc1a4579c3823da1090ff10d287da20"
+    },
+    {
+      "path": "docs/architecture/record-schema-contract.md",
+      "sha256": "fbe1b3da99424e1b5a87c7ecbedc5a92e57af411b85bff56ef8420a3ecc02796"
+    },
+    {
+      "path": "evidence/md-corpus/20260922T210717Z-58e45f444c9f.json",
+      "sha256": "d4886f3755a64bff6f3737c72dfd686b05964ae837a211841f99ffb66d8c6b78"
+    },
+    {
+      "path": "evidence/md-corpus/20260923T044415Z-ed79a7a8e0ac.json",
+      "sha256": "67c8a9216be3c651ff7d903df20f3d2e95c84b793a3d19d4f924a85f9ecbf692"
+    },
+    {
+      "path": "target/m2/markdown-schema-supplement-prompt.md",
+      "sha256": "5ed732158951998ae26ccf30ec4783f66dcf278fd530c65e4a653684c3af7cf7"
+    }
+  ]
+}

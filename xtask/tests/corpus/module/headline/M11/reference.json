@@ -1,0 +1,12 @@
+{
+  "edges": [
+    {
+      "extraction": "syntax",
+      "source": "fixture_m11::constraints::tests",
+      "target": "fixture_m11::ordering",
+      "test_only": true
+    }
+  ],
+  "limitations": [],
+  "schema_version": 1
+}

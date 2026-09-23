@@ -1,0 +1,16 @@
+{
+  "cells": [
+    "law3-d1"
+  ],
+  "expected": "detect",
+  "generation": "authored",
+  "id": "M02",
+  "level": "module",
+  "rule": "modules.undeclared_dependency",
+  "seeded": "a third component model exists; constraints depends on it and the rules do not declare the edge",
+  "witness": {
+    "from": "constraints",
+    "rule": "modules.undeclared_dependency",
+    "to": "model"
+  }
+}

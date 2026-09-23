@@ -1,0 +1,16 @@
+{
+  "cells": [
+    "d2"
+  ],
+  "expected": "detect",
+  "generation": "authored",
+  "id": "M04",
+  "level": "module",
+  "rule": "modules.child_to_parent_private",
+  "seeded": "ordering calls crate::plan(), a public function of the glue root. D2 is never upward, public or not.",
+  "witness": {
+    "from": "ordering",
+    "rule": "modules.child_to_parent_private",
+    "to": "crate::plan"
+  }
+}

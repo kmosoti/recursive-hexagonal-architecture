@@ -1,0 +1,14 @@
+{
+  "cells": [
+    "law3-d1",
+    "law6-b3"
+  ],
+  "expected": "expected_miss",
+  "generation": "authored",
+  "hole": "\u00a74.1, Law 3/D1 row: resolving the method to its trait needs type inference, which the extractor does not perform.",
+  "id": "EM-M03",
+  "level": "module",
+  "partial": "Only the edge to model is expected to be missed. The edge the glob import itself declares is a visible path and is expected to be found.",
+  "rule": "-",
+  "seeded": "a trait method called through a glob-imported trait, on a type from the model component"
+}

@@ -1,0 +1,4 @@
+   Compiling xtask v0.1.0 (/home/kmosoti/projects/rha-m2/xtask)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.84s
+  Executable tests/module_rules.rs (target/debug/deps/module_rules-64c1145129d06aa8)
+  Executable tests/modules_cli.rs (target/debug/deps/modules_cli-f62898d24578ee7b)

@@ -1,0 +1,18 @@
+{
+  "edges": [
+    {
+      "extraction": "syntax",
+      "source": "fixture_em_m02::ordering",
+      "target": "fixture_em_m02::constraints::Rule",
+      "test_only": false
+    }
+  ],
+  "limitations": [
+    {
+      "code": "include_expansion",
+      "detail": "include! contents are not read",
+      "source": "fixture_em_m02::constraints"
+    }
+  ],
+  "schema_version": 1
+}

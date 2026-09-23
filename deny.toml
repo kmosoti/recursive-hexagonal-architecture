@@ -15,7 +15,12 @@ ignore = []
 # reviewed change to this file.
 allow = ["Apache-2.0", "MIT", "Unicode-3.0"]
 confidence-threshold = 0.8
-exceptions = []
+# CHG-007 schema-dependency-licenses: offline JSON Schema transitive packages.
+# Exact versions require another review when they change.
+exceptions = [
+    { crate = "borrow-or-share@0.2.4", allow = ["MIT-0"] },
+    { crate = "foldhash@0.2.0", allow = ["Zlib"] },
+]
 
 [licenses.private]
 # Workspace crates are unpublished (publish = false) and carry no licence yet.

@@ -18,6 +18,8 @@ pub mod fixture;
 pub mod grade;
 pub mod held_out;
 pub mod markdown;
+pub mod module;
+pub mod module_random;
 pub mod runner;
 
 /// Where the manifest lives, relative to the workspace root.

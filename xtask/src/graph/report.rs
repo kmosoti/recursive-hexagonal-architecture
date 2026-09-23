@@ -29,9 +29,9 @@ pub fn tool_identity(root: &Path) -> Value {
     })
 }
 
-/// What the report says about the module-level checks, which do not exist
-/// until CHG-007. `not_run` with a reason, never an empty list of findings
-/// that reads like a pass (§11.4).
+/// Low-level placeholder data for callers constructing a crate-only report.
+/// The architecture command replaces this array by applying declared
+/// composite checks before writing or rendering the completed report.
 #[must_use]
 pub fn module_checks(graph: &CrateGraph) -> Value {
     graph
@@ -40,10 +40,13 @@ pub fn module_checks(graph: &CrateGraph) -> Value {
         .map(|c| {
             json!({
                 "crate": c.name,
-                "rules_path": c.manifest_path.parent()
-                    .map(|d| d.join("rha-modules.toml").display().to_string()),
+                "required": c.composite.is_some(),
+                "rules_path": c.composite.as_ref().and_then(|composite| {
+                    c.manifest_path.parent().map(|d| d.join(&composite.rules).display().to_string())
+                }),
+                "rules_digest": null,
                 "outcome": "not_run",
-                "reason": "not_implemented: the module-graph check arrives in CHG-007 (W7)",
+                "reason": "not_evaluated: crate-only report construction; architecture applies declared module checks",
             })
         })
         .collect()
@@ -87,6 +90,8 @@ pub fn json(
         "findings": outcome.findings.iter().map(finding_json).collect::<Vec<_>>(),
         "harness_edges": outcome.harness_edges.iter().map(finding_json).collect::<Vec<_>>(),
         "module_checks": module_checks(graph),
+        "test_edges": [],
+        "module_edges": [],
         "limitations": outcome.limitations,
         "summary": {
             "crates": graph.crates.len(),
@@ -97,11 +102,211 @@ pub fn json(
     })
 }
 
+/// Computes the exit code from the final report, after all crate and module
+/// findings have been combined.
+#[must_use]
+pub fn exit_code_from_report(report: &Value) -> i32 {
+    let errors = report["summary"]["errors"]
+        .as_u64()
+        .and_then(|count| usize::try_from(count).ok())
+        .unwrap_or(usize::MAX);
+    exit_code(errors)
+}
+
 fn finding_json(finding: &crate::graph::check::Finding) -> Value {
     let mut value = json!(finding);
     // `from` names the subject of both edge and per-crate diagnostics.
     value["crate"] = json!(finding.from);
     value
+}
+
+/// Renders a completed JSON report as text.
+#[must_use]
+pub fn text_report(report: &Value) -> String {
+    use std::fmt::Write as _;
+
+    let mut out = String::new();
+    let classification = report["classification"].as_array();
+    let crate_count = report["summary"]["crates"]
+        .as_u64()
+        .unwrap_or_else(|| classification.map_or(0, Vec::len) as u64);
+    let crates = classification
+        .into_iter()
+        .flatten()
+        .map(|c| {
+            let role = c["role"].as_str().unwrap_or("unclassified");
+            let source = c["role_source"].as_str().unwrap_or("-");
+            format!("{} ({role}, {source})", c["name"].as_str().unwrap_or("?"))
+        })
+        .collect::<Vec<_>>();
+    let _ = writeln!(out, "crates: {crate_count} ({})", crates.join(", "));
+
+    let edges = &report["edges_examined"];
+    let _ = writeln!(
+        out,
+        "edges examined: {} normal, {} dev, {} build",
+        edges["normal"].as_u64().unwrap_or(0),
+        edges["dev"].as_u64().unwrap_or(0),
+        edges["build"].as_u64().unwrap_or(0)
+    );
+
+    for finding in report["findings"].as_array().into_iter().flatten() {
+        let _ = writeln!(out, "{}", finding_line(finding, "finding"));
+    }
+    for edge in report["harness_edges"].as_array().into_iter().flatten() {
+        let _ = writeln!(out, "{}", finding_line(edge, "harness_edges"));
+    }
+    for edge in report["test_edges"].as_array().into_iter().flatten() {
+        let _ = writeln!(out, "{}", finding_line(edge, "test_edges"));
+    }
+    for edge in report["module_edges"].as_array().into_iter().flatten() {
+        let _ = writeln!(out, "module_edges: {}", compact_json(edge));
+    }
+
+    for check in report["module_checks"].as_array().into_iter().flatten() {
+        let required = check["required"].as_bool().unwrap_or(false);
+        let outcome = check["outcome"].as_str().unwrap_or("unknown");
+        let reason = check["reason"]
+            .as_str()
+            .map_or_else(String::new, |reason| format!(": {reason}"));
+        let _ = writeln!(
+            out,
+            "module_checks[{}]: {outcome} (required={required}){reason}",
+            check["crate"].as_str().unwrap_or("?")
+        );
+    }
+    for limitation in report["limitations"].as_array().into_iter().flatten() {
+        let _ = writeln!(out, "limitation: {}", compact_json(limitation));
+    }
+
+    let _ = writeln!(
+        out,
+        "summary: {} error(s), {} warning(s), {}",
+        report["summary"]["errors"].as_u64().unwrap_or(0),
+        report["summary"]["warnings"].as_u64().unwrap_or(0),
+        report["summary"]["outcome"].as_str().unwrap_or("unknown")
+    );
+    out
+}
+
+/// Renders a completed JSON report as Markdown.
+#[must_use]
+pub fn markdown_report(report: &Value) -> String {
+    use std::fmt::Write as _;
+
+    let mut out = String::from("# Architecture report\n\n## Classification\n\n");
+    let _ = writeln!(out, "| Crate | Role | Source |\n| --- | --- | --- |");
+    for c in report["classification"].as_array().into_iter().flatten() {
+        let _ = writeln!(
+            out,
+            "| `{}` | {} | {} |",
+            c["name"].as_str().unwrap_or("?"),
+            c["role"].as_str().unwrap_or("**unclassified**"),
+            c["role_source"].as_str().unwrap_or("-")
+        );
+    }
+
+    let _ = writeln!(out, "\n## Findings\n");
+    if report["findings"].as_array().is_none_or(Vec::is_empty) {
+        let _ = writeln!(out, "None.\n");
+    } else {
+        let _ = writeln!(
+            out,
+            "| Severity | Rule | Subject | Message |\n| --- | --- | --- | --- |"
+        );
+        for finding in report["findings"].as_array().into_iter().flatten() {
+            let severity = finding["severity"].as_str().unwrap_or("finding");
+            let rule = finding["rule"].as_str().unwrap_or("unknown");
+            let subject = subject(finding);
+            let message = finding["message"]
+                .as_str()
+                .map_or_else(|| compact_json(finding), ToOwned::to_owned);
+            let _ = writeln!(out, "| {severity} | `{rule}` | {subject} | {message} |");
+        }
+    }
+
+    let _ = writeln!(out, "\n## Harness edges\n");
+    for edge in report["harness_edges"].as_array().into_iter().flatten() {
+        let _ = writeln!(out, "- {}", finding_line(edge, "harness_edges"));
+    }
+    let _ = writeln!(out, "\n## Test edges\n");
+    for edge in report["test_edges"].as_array().into_iter().flatten() {
+        let _ = writeln!(out, "- {}", finding_line(edge, "test_edges"));
+    }
+    let _ = writeln!(out, "\n## Module edges\n");
+    for edge in report["module_edges"].as_array().into_iter().flatten() {
+        let _ = writeln!(out, "- `{}`", compact_json(edge));
+    }
+
+    let _ = writeln!(out, "\n## Module checks\n");
+    let _ = writeln!(
+        out,
+        "| Crate | Required | Outcome | Rules | Reason |\n| --- | --- | --- | --- | --- |"
+    );
+    for check in report["module_checks"].as_array().into_iter().flatten() {
+        let _ = writeln!(
+            out,
+            "| `{}` | {} | {} | `{}` | {} |",
+            check["crate"].as_str().unwrap_or("?"),
+            check["required"].as_bool().unwrap_or(false),
+            check["outcome"].as_str().unwrap_or("unknown"),
+            check["rules_path"].as_str().unwrap_or("-"),
+            check["reason"].as_str().unwrap_or("-")
+        );
+    }
+
+    if report["limitations"]
+        .as_array()
+        .is_some_and(|limitations| !limitations.is_empty())
+    {
+        let _ = writeln!(out, "\n## Limitations\n");
+        for limitation in report["limitations"].as_array().into_iter().flatten() {
+            let _ = writeln!(out, "- {}", compact_json(limitation));
+        }
+    }
+
+    let _ = writeln!(
+        out,
+        "\n**Summary:** {} crate(s), {} error(s), {} warning(s), {}.",
+        report["summary"]["crates"].as_u64().unwrap_or(0),
+        report["summary"]["errors"].as_u64().unwrap_or(0),
+        report["summary"]["warnings"].as_u64().unwrap_or(0),
+        report["summary"]["outcome"].as_str().unwrap_or("unknown")
+    );
+    out
+}
+
+fn finding_line(value: &Value, default_level: &str) -> String {
+    let level = value["severity"].as_str().unwrap_or(default_level);
+    let rule = value["rule"].as_str().unwrap_or("unknown");
+    let message = value["message"]
+        .as_str()
+        .or_else(|| value["detail"].as_str())
+        .map_or_else(|| compact_json(value), ToOwned::to_owned);
+    let location = value
+        .get("location")
+        .or_else(|| value.get("path"))
+        .or_else(|| value.get("manifest_path"))
+        .map_or_else(String::new, |location| {
+            format!(" at {}", compact_json(location))
+        });
+    format!("{level}[{rule}]: {}{location}: {message}", subject(value))
+}
+
+fn subject(value: &Value) -> String {
+    let from = value
+        .get("from")
+        .or_else(|| value.get("crate"))
+        .or_else(|| value.get("package"))
+        .map_or_else(|| "module".to_owned(), compact_json);
+    match value.get("to") {
+        Some(to) if !to.is_null() => format!("{from} -> {}", compact_json(to)),
+        _ => from,
+    }
+}
+
+fn compact_json(value: &Value) -> String {
+    serde_json::to_string(value).unwrap_or_else(|_| "<unserializable>".to_owned())
 }
 
 /// The text report, in the shape plan §5 gives:
@@ -174,7 +379,7 @@ pub fn text(graph: &CrateGraph, outcome: &Outcome) -> String {
     }
     let _ = writeln!(
         out,
-        "module_checks: not_run (not_implemented: CHG-007)\nsummary: {} error(s), {} warning(s)",
+        "module_checks: not_run (crate-only report; module evaluator not called)\nsummary: {} error(s), {} warning(s)",
         outcome.errors(),
         outcome.warnings()
     );
@@ -218,7 +423,7 @@ pub fn markdown(graph: &CrateGraph, outcome: &Outcome) -> String {
     }
     let _ = writeln!(
         out,
-        "\n## Module checks\n\n`not_run`: not_implemented, the module-graph check arrives in CHG-007 (W7).\n"
+        "\n## Module checks\n\n`not_run`: crate-only report; the module evaluator was not called.\n"
     );
     if !outcome.limitations.is_empty() {
         let _ = writeln!(out, "## Limitations\n");
@@ -248,6 +453,8 @@ mod tests {
             crates: vec![CrateNode {
                 name: "xtask".to_owned(),
                 manifest_path: PathBuf::from("/w/xtask/Cargo.toml"),
+                source_roots: Vec::new(),
+                composite: None,
                 role: Some(Role::Tool),
                 role_source: Some(RoleSource::List),
                 declared_role: None,
@@ -275,7 +482,7 @@ mod tests {
             checks[0]["reason"]
                 .as_str()
                 .expect("a reason")
-                .contains("CHG-007")
+                .contains("not_evaluated: crate-only report")
         );
     }
 

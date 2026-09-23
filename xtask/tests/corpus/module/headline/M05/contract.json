@@ -1,0 +1,17 @@
+{
+  "cells": [
+    "d2"
+  ],
+  "expected": "detect",
+  "generation": "authored",
+  "id": "M05",
+  "level": "module",
+  "rule": "modules.child_to_parent_private",
+  "seeded": "a nested component scoring = \"x::ordering::scoring\" references crate::constraints, three levels up",
+  "witness": {
+    "depth": 3,
+    "from": "scoring",
+    "rule": "modules.child_to_parent_private",
+    "to": "crate::constraints"
+  }
+}

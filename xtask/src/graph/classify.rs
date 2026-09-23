@@ -133,6 +133,8 @@ mod tests {
         CrateNode {
             name: name.to_owned(),
             manifest_path: PathBuf::from(format!("/w/{name}/Cargo.toml")),
+            source_roots: Vec::new(),
+            composite: None,
             role: None,
             role_source: None,
             declared_role: declared_role.map(ToOwned::to_owned),

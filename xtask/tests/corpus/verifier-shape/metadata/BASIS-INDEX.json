@@ -1,0 +1,60 @@
+{
+  "inputs": [
+    {
+      "bytes": 5050,
+      "revision": null,
+      "role": "initial generation instruction",
+      "sha256": "b8628c625ebafa9fd932ecd34739d0ade2eea4c7e7962f975ef337c0aec7abfe",
+      "snapshot": "GENERATOR-PROMPT.md",
+      "source_path": "target/m2/schema-generator-prompt.md"
+    },
+    {
+      "bytes": 1477,
+      "revision": null,
+      "role": "correction instruction",
+      "sha256": "a9bff3007f6bd301d6ac25558c2490912bcf21b67ed6094da00b609c64e8aa0e",
+      "snapshot": "GENERATOR-CORRECTION.md",
+      "source_path": "target/m2/schema-generator-correction.md"
+    },
+    {
+      "bytes": 8365,
+      "revision": null,
+      "role": "governing amended contract",
+      "sha256": "fbe1b3da99424e1b5a87c7ecbedc5a92e57af411b85bff56ef8420a3ecc02796",
+      "snapshot": "inputs/record-schema-contract.md",
+      "source_path": "docs/architecture/record-schema-contract.md"
+    },
+    {
+      "bytes": 13258,
+      "revision": null,
+      "role": "governing amended contract, including §4.1 wire-format clarification",
+      "sha256": "495a895312ad942a10eecd8a58f6bbbae987a2ca3f7e768250d647ffef65fdc8",
+      "snapshot": "inputs/verifier-contract.md",
+      "source_path": "docs/architecture/verifier-contract.md"
+    },
+    {
+      "bytes": 85376,
+      "revision": "99a74b042842b4d869ef341f58fdfcafb9c96e84",
+      "role": "reference: §2.4 and P-C",
+      "sha256": "d97ab57fcb80c4f1ddfb6199435b590cfc1d9e84775aa0d47da9f351ced7d508",
+      "snapshot": "inputs/IMPLEMENTATION-PLAN.md",
+      "source_path": "docs/plan/IMPLEMENTATION-PLAN.md"
+    },
+    {
+      "bytes": 335625,
+      "revision": "99a74b042842b4d869ef341f58fdfcafb9c96e84",
+      "role": "reference: §11.4 and §11.7",
+      "sha256": "bd96216829035ade64c43befa5e672c58078f6afa4b04145c6183227e4e1071a",
+      "snapshot": "inputs/rha-spec-v0.10.md",
+      "source_path": "docs/spec/rha-spec-v0.10.md"
+    },
+    {
+      "bytes": 1455,
+      "revision": null,
+      "role": "pre-registration wire-format clarification instruction",
+      "sha256": "42e821db08125a551fa28e704058cab2933cfcbaa0681967be7add67c87b4ac9",
+      "snapshot": "GENERATOR-WIRE-CLARIFICATION.md",
+      "source_path": "target/m2/schema-generator-wire-clarification.md"
+    }
+  ]
+}

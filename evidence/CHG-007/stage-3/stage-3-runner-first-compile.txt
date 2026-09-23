@@ -1,0 +1,211 @@
+    Checking xtask v0.1.0 (/home/kmosoti/projects/rha-m2/xtask)
+error[E0308]: mismatched types
+   --> xtask/src/corpus/module.rs:267:56
+    |
+267 |         || registration["headline_manifest_sha256"] != HEADLINE_MANIFEST_SHA256
+    |            ----------------------------------------    ^^^^^^^^^^^^^^^^^^^^^^^^ expected `Value`, found `&str`
+    |            |
+    |            expected because this is `toml::Value`
+    |
+help: call `Into::into` on this expression to convert `&'static str` into `toml::Value`
+    |
+267 |         || registration["headline_manifest_sha256"] != HEADLINE_MANIFEST_SHA256.into()
+    |                                                                                +++++++
+
+error[E0308]: mismatched types
+   --> xtask/src/corpus/module.rs:274:48
+    |
+274 |         || registration["reference_sha256"] != REFERENCE_SHA256
+    |            --------------------------------    ^^^^^^^^^^^^^^^^ expected `Value`, found `&str`
+    |            |
+    |            expected because this is `toml::Value`
+    |
+help: call `Into::into` on this expression to convert `&'static str` into `toml::Value`
+    |
+274 |         || registration["reference_sha256"] != REFERENCE_SHA256.into()
+    |                                                                +++++++
+
+error[E0308]: mismatched types
+   --> xtask/src/corpus/module.rs:300:63
+    |
+300 |     if registration["random_content_sha256"].as_str() != Some(section_digest("random/"))
+    |                                                          ---- ^^^^^^^^^^^^^^^^^^^^^^^^^ expected `&str`, found `String`
+    |                                                          |
+    |                                                          arguments to this enum variant are incorrect
+    |
+help: the type constructed contains `std::string::String` due to the type of the argument passed
+   --> xtask/src/corpus/module.rs:300:58
+    |
+300 |     if registration["random_content_sha256"].as_str() != Some(section_digest("random/"))
+    |                                                          ^^^^^-------------------------^
+    |                                                               |
+    |                                                               this argument influences the type of `Some`
+note: tuple variant defined here
+   --> /home/kmosoti/.rustup/toolchains/1.98.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:606:5
+    |
+606 |     Some(#[stable(feature = "rust1", since = "1.0.0")] T),
+    |     ^^^^
+help: consider borrowing here
+    |
+300 |     if registration["random_content_sha256"].as_str() != Some(&section_digest("random/"))
+    |                                                               +
+
+error[E0308]: mismatched types
+   --> xtask/src/corpus/module.rs:301:69
+    |
+301 |         || registration["headline_content_sha256"].as_str() != Some(section_digest("headline/"))
+    |                                                                ---- ^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `&str`, found `String`
+    |                                                                |
+    |                                                                arguments to this enum variant are incorrect
+    |
+help: the type constructed contains `std::string::String` due to the type of the argument passed
+   --> xtask/src/corpus/module.rs:301:64
+    |
+301 |         || registration["headline_content_sha256"].as_str() != Some(section_digest("headline/"))
+    |                                                                ^^^^^---------------------------^
+    |                                                                     |
+    |                                                                     this argument influences the type of `Some`
+note: tuple variant defined here
+   --> /home/kmosoti/.rustup/toolchains/1.98.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:606:5
+    |
+606 |     Some(#[stable(feature = "rust1", since = "1.0.0")] T),
+    |     ^^^^
+help: consider borrowing here
+    |
+301 |         || registration["headline_content_sha256"].as_str() != Some(&section_digest("headline/"))
+    |                                                                     +
+
+error[E0277]: the trait bound `std::path::Display<'_>: serde::Serialize` is not satisfied
+   --> xtask/src/corpus/module.rs:598:39
+    |
+598 |             || check["rules_path"] != json!(rules.display())
+    |                                       ^^^^^^^^^^^^^^^^^^^^^^
+    |                                       |
+    |                                       the trait `Serialize` is not implemented for `std::path::Display<'_>`
+    |                                       required by a bound introduced by this call
+    |
+    = note: for local types consider adding `#[derive(serde::Serialize)]` to your `std::path::Display<'_>` type
+    = note: for types from other crates check whether the crate offers a `serde` feature flag
+    = help: the following other types implement trait `Serialize`:
+              &'a T
+              &'a mut T
+              ()
+              (T,)
+              (T0, T1)
+              (T0, T1, T2)
+              (T0, T1, T2, T3)
+              (T0, T1, T2, T3, T4)
+            and 180 others
+    = note: required for `&std::path::Display<'_>` to implement `Serialize`
+note: required by a bound in `serde_json::to_value`
+   --> /home/kmosoti/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde_json-1.0.151/src/value/mod.rs:997:8
+    |
+995 | pub fn to_value<T>(value: T) -> Result<Value, Error>
+    |        -------- required by a bound in this function
+996 | where
+997 |     T: Serialize,
+    |        ^^^^^^^^^ required by this bound in `to_value`
+    = note: this error originates in the macro `$crate::json_internal` which comes from the expansion of the macro `json` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `std::path::Display<'_>: serde::Serialize` is not satisfied
+   --> xtask/src/corpus/module.rs:623:40
+    |
+623 |         if finding["manifest_path"] != json!(manifest.display()) {
+    |                                        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    |                                        |
+    |                                        the trait `Serialize` is not implemented for `std::path::Display<'_>`
+    |                                        required by a bound introduced by this call
+    |
+    = note: for local types consider adding `#[derive(serde::Serialize)]` to your `std::path::Display<'_>` type
+    = note: for types from other crates check whether the crate offers a `serde` feature flag
+    = help: the following other types implement trait `Serialize`:
+              &'a T
+              &'a mut T
+              ()
+              (T,)
+              (T0, T1)
+              (T0, T1, T2)
+              (T0, T1, T2, T3)
+              (T0, T1, T2, T3, T4)
+            and 180 others
+    = note: required for `&std::path::Display<'_>` to implement `Serialize`
+note: required by a bound in `serde_json::to_value`
+   --> /home/kmosoti/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde_json-1.0.151/src/value/mod.rs:997:8
+    |
+995 | pub fn to_value<T>(value: T) -> Result<Value, Error>
+    |        -------- required by a bound in this function
+996 | where
+997 |     T: Serialize,
+    |        ^^^^^^^^^ required by this bound in `to_value`
+    = note: this error originates in the macro `$crate::json_internal` which comes from the expansion of the macro `json` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: `?` couldn't convert the error to `error::Error`
+   --> xtask/src/corpus/module.rs:658:78
+    |
+657 | fn validate_full_site_report(root: &Path, report: &Value, tool: &Value) -> Result<()> {
+    |                                                                            ---------- expected `error::Error` because of this
+658 |     let manifest = std::fs::canonicalize(root.join("crates/site/Cargo.toml"))?;
+    |                    ----------------------------------------------------------^ the trait `From<std::io::Error>` is not implemented for `error::Error`
+    |                    |
+    |                    this can't be annotated with `?` because it has type `Result<_, std::io::Error>`
+    |
+note: `error::Error` needs to implement `From<std::io::Error>`
+   --> xtask/src/error.rs:7:1
+    |
+  7 | pub struct Error(String);
+    | ^^^^^^^^^^^^^^^^
+    = note: the question mark operation (`?`) implicitly performs a conversion on the error value using the `From` trait
+
+error[E0277]: `?` couldn't convert the error to `error::Error`
+   --> xtask/src/corpus/module.rs:659:76
+    |
+657 | fn validate_full_site_report(root: &Path, report: &Value, tool: &Value) -> Result<()> {
+    |                                                                            ---------- expected `error::Error` because of this
+658 |     let manifest = std::fs::canonicalize(root.join("crates/site/Cargo.toml"))?;
+659 |     let source = std::fs::canonicalize(root.join("crates/site/src/lib.rs"))?;
+    |                  ----------------------------------------------------------^ the trait `From<std::io::Error>` is not implemented for `error::Error`
+    |                  |
+    |                  this can't be annotated with `?` because it has type `Result<_, std::io::Error>`
+    |
+note: `error::Error` needs to implement `From<std::io::Error>`
+   --> xtask/src/error.rs:7:1
+    |
+  7 | pub struct Error(String);
+    | ^^^^^^^^^^^^^^^^
+    = note: the question mark operation (`?`) implicitly performs a conversion on the error value using the `From` trait
+
+error[E0277]: `?` couldn't convert the error to `error::Error`
+   --> xtask/src/corpus/module.rs:660:81
+    |
+657 | fn validate_full_site_report(root: &Path, report: &Value, tool: &Value) -> Result<()> {
+    |                                                                            ---------- expected `error::Error` because of this
+...
+660 |     let rules = std::fs::canonicalize(root.join("crates/site/rha-modules.toml"))?;
+    |                 ----------------------------------------------------------------^ the trait `From<std::io::Error>` is not implemented for `error::Error`
+    |                 |
+    |                 this can't be annotated with `?` because it has type `Result<_, std::io::Error>`
+    |
+note: `error::Error` needs to implement `From<std::io::Error>`
+   --> xtask/src/error.rs:7:1
+    |
+  7 | pub struct Error(String);
+    | ^^^^^^^^^^^^^^^^
+    = note: the question mark operation (`?`) implicitly performs a conversion on the error value using the `From` trait
+
+error[E0618]: expected function, found `BTreeSet<std::string::String>`
+   --> xtask/src/corpus/module_random.rs:676:22
+    |
+225 | fn expected_ids() -> BTreeSet<String> {
+    | ------------------------------------- this function of the same name is available here, but it's shadowed by the local binding
+...
+674 |     let expected_ids = files.expected.keys().cloned().collect::<BTreeSet<_>>();
+    |         ------------ `expected_ids` has type `BTreeSet<std::string::String>`
+675 |     let all_ids = source_ids.union(&expected_ids).cloned().collect::<BTreeSet<_>>();
+676 |     let pinned_ids = expected_ids();
+    |                      ^^^^^^^^^^^^--
+    |                      |
+    |                      call expression requires function
+
+Some errors have detailed explanations: E0277, E0308, E0618.
+For more information about an error, try `rustc --explain E0277`.
+error: could not compile `xtask` (lib) due to 10 previous errors

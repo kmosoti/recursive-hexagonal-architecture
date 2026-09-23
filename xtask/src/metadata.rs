@@ -14,12 +14,16 @@
 //! workspace-inherited dependency appears as an ordinary entry, and a renamed
 //! one reports the package in `name` with the key in `rename`.
 
+use std::collections::BTreeSet;
+use std::fs;
 use std::path::{Path, PathBuf};
 
 use serde::Deserialize;
 
 use crate::error::{Context as _, Error, Result};
-use crate::graph::model::{CrateGraph, CrateNode, DepKind, Edge, MetadataMode, PortRef, Target};
+use crate::graph::model::{
+    CompositeSource, CrateGraph, CrateNode, DepKind, Edge, MetadataMode, PortRef, Target,
+};
 
 /// The subset of `cargo metadata --format-version 1` that a rule needs.
 #[derive(Debug, Deserialize)]
@@ -35,6 +39,8 @@ struct Package {
     name: String,
     manifest_path: PathBuf,
     #[serde(default)]
+    edition: String,
+    #[serde(default)]
     dependencies: Vec<Dependency>,
     /// `[package.metadata]`, where `rha.role` and `rha.implements` live.
     #[serde(default)]
@@ -46,6 +52,10 @@ struct Package {
 
 #[derive(Debug, Deserialize)]
 struct PackageTarget {
+    #[serde(default)]
+    name: String,
+    #[serde(default)]
+    src_path: PathBuf,
     #[serde(default)]
     kind: Vec<String>,
 }
@@ -81,11 +91,10 @@ struct RhaMetadata {
     role: Option<String>,
     #[serde(default)]
     implements: Vec<String>,
-    /// Reserved for the module-level rules file introduced by W5. It is
-    /// validated here so a valid metadata declaration is not rejected before
-    /// module checking exists.
-    #[serde(default, rename = "composite")]
-    _composite: Option<String>,
+    /// The module-level rules file checked by the declared composite module
+    /// check.
+    #[serde(default)]
+    composite: Option<String>,
 }
 
 /// Why loading the graph failed. Configuration errors come from the checked
@@ -107,6 +116,13 @@ impl std::fmt::Display for LoadError {
 
 impl std::error::Error for LoadError {}
 
+#[derive(Debug, Clone)]
+pub struct SingleModule {
+    pub package: String,
+    pub manifest_path: PathBuf,
+    pub source: CompositeSource,
+}
+
 /// Runs `cargo metadata` and builds the graph.
 ///
 /// # Errors
@@ -117,6 +133,14 @@ pub fn load(
     root: &Path,
     manifest_path: Option<&Path>,
 ) -> std::result::Result<CrateGraph, LoadError> {
+    let metadata = load_metadata(root, manifest_path)?;
+    build(&metadata).map_err(LoadError::Configuration)
+}
+
+fn load_metadata(
+    root: &Path,
+    manifest_path: Option<&Path>,
+) -> std::result::Result<Metadata, LoadError> {
     let mut command = crate::util::command("cargo");
     command
         .current_dir(root)
@@ -144,7 +168,64 @@ pub fn load(
             "parsing `cargo metadata` output: {error}"
         )))
     })?;
-    build(&metadata).map_err(LoadError::Configuration)
+    Ok(metadata)
+}
+
+pub fn load_single_module(
+    root: &Path,
+    manifest: &Path,
+    rules: &Path,
+) -> std::result::Result<SingleModule, LoadError> {
+    let supplied_manifest = fs::canonicalize(manifest).map_err(|error| {
+        LoadError::Configuration(Error::new(format!(
+            "failed to canonicalize manifest {}: {error}",
+            manifest.display()
+        )))
+    })?;
+    let metadata = load_metadata(root, Some(&supplied_manifest))?;
+    let members: Vec<&Package> = metadata
+        .packages
+        .iter()
+        .filter(|package| metadata.workspace_members.contains(&package.id))
+        .collect();
+    if members.len() != 1 {
+        return Err(LoadError::Configuration(Error::new(format!(
+            "module-only mode requires exactly one workspace package; found {}",
+            members.len()
+        ))));
+    }
+    let package = members[0];
+    let package_manifest = fs::canonicalize(&package.manifest_path).map_err(|error| {
+        LoadError::Configuration(Error::new(format!(
+            "failed to canonicalize selected package manifest {}: {error}",
+            package.manifest_path.display()
+        )))
+    })?;
+    if package_manifest != supplied_manifest {
+        return Err(LoadError::Configuration(Error::new(format!(
+            "module-only mode does not accept a virtual workspace manifest {}; selected package manifest is {}",
+            supplied_manifest.display(),
+            package_manifest.display()
+        ))));
+    }
+
+    let rha = RhaMetadata {
+        composite: Some(rules.display().to_string()),
+        ..RhaMetadata::default()
+    };
+    let source = composite_source(package, &rha, &members)
+        .map_err(LoadError::Configuration)?
+        .ok_or_else(|| {
+            LoadError::Configuration(Error::new(
+                "module-only source metadata was not constructed",
+            ))
+        })?;
+
+    Ok(SingleModule {
+        package: package.name.clone(),
+        manifest_path: package_manifest,
+        source,
+    })
 }
 
 /// Builds the graph from parsed metadata. Split out so tests can drive it
@@ -163,11 +244,6 @@ fn build(metadata: &Metadata) -> Result<CrateGraph> {
     // reach a registry crate that shares a member's name without the edge
     // appearing in [core] allow, because the effect rules skip member targets
     // (review finding on pull request 6, CHG-003.1).
-    let member_dirs: Vec<(&str, &Path)> = members
-        .iter()
-        .filter_map(|p| p.manifest_path.parent().map(|dir| (p.name.as_str(), dir)))
-        .collect();
-
     let mut crates = Vec::with_capacity(members.len());
     let mut edges = Vec::new();
     for package in &members {
@@ -175,6 +251,8 @@ fn build(metadata: &Metadata) -> Result<CrateGraph> {
         crates.push(CrateNode {
             name: package.name.clone(),
             manifest_path: package.manifest_path.clone(),
+            source_roots: production_source_roots(package),
+            composite: composite_source(package, &rha, &members)?,
             // Classification happens in graph::classify; the graph only
             // carries what was declared.
             role: None,
@@ -187,14 +265,10 @@ fn build(metadata: &Metadata) -> Result<CrateGraph> {
                 .any(|t| t.kind.iter().any(|k| k == "custom-build")),
         });
         for dep in &package.dependencies {
-            let member = dep
-                .path
-                .as_deref()
-                .filter(|_| dep.source.is_none())
-                .and_then(|dir| member_dirs.iter().find(|(_, d)| *d == dir));
+            let member = workspace_member(dep, &members);
             let to = match member {
-                Some((name, _)) => Target::Member {
-                    name: (*name).to_owned(),
+                Some(member) => Target::Member {
+                    name: member.name.clone(),
                 },
                 None => Target::External {
                     name: dep.name.clone(),
@@ -216,6 +290,123 @@ fn build(metadata: &Metadata) -> Result<CrateGraph> {
         edges,
         mode: MetadataMode::NoDeps,
     })
+}
+
+fn workspace_member<'a>(dependency: &Dependency, members: &'a [&Package]) -> Option<&'a Package> {
+    let directory = dependency.path.as_deref()?;
+    if dependency.source.is_some() {
+        return None;
+    }
+    members
+        .iter()
+        .copied()
+        .find(|member| member.manifest_path.parent() == Some(directory))
+}
+
+fn is_library_target(target: &PackageTarget) -> bool {
+    target.kind.iter().any(|kind| {
+        matches!(
+            kind.as_str(),
+            "lib" | "rlib" | "dylib" | "cdylib" | "staticlib" | "proc-macro"
+        )
+    })
+}
+
+fn production_source_roots(package: &Package) -> Vec<PathBuf> {
+    let mut roots: Vec<PathBuf> = package
+        .targets
+        .iter()
+        .filter(|target| is_library_target(target) || target.kind.iter().any(|kind| kind == "bin"))
+        .filter(|target| !target.src_path.as_os_str().is_empty())
+        .map(|target| target.src_path.clone())
+        .collect();
+    roots.sort();
+    roots.dedup();
+    roots
+}
+
+fn library_target_name(package: &Package) -> Option<&str> {
+    package
+        .targets
+        .iter()
+        .filter(|target| is_library_target(target))
+        .find(|target| !target.name.trim().is_empty())
+        .map(|target| target.name.as_str())
+}
+
+fn normalize_rust_identifier(name: &str) -> String {
+    name.replace('-', "_")
+}
+
+fn composite_source(
+    package: &Package,
+    rha: &RhaMetadata,
+    members: &[&Package],
+) -> Result<Option<CompositeSource>> {
+    let Some(rules) = rha.composite.as_ref() else {
+        return Ok(None);
+    };
+
+    if rules.trim().is_empty() {
+        return Err(Error::new(format!(
+            "crate {} manifest {} has invalid package.metadata.rha.composite: rules name must not be blank",
+            package.name,
+            package.manifest_path.display()
+        )));
+    }
+
+    if !matches!(package.edition.as_str(), "2015" | "2018" | "2021" | "2024") {
+        return Err(Error::new(format!(
+            "crate {} manifest {} has invalid package.metadata.rha.composite: unsupported edition {:?}",
+            package.name,
+            package.manifest_path.display(),
+            package.edition
+        )));
+    }
+
+    let has_library_target = package.targets.iter().any(is_library_target);
+    let target = package.targets.iter().find(|target| {
+        is_library_target(target)
+            && !target.name.trim().is_empty()
+            && !target.src_path.as_os_str().is_empty()
+    });
+    let Some(target) = target else {
+        let reason = if has_library_target {
+            "a library/proc-macro target must have a nonblank name and source"
+        } else {
+            "a library/proc-macro target is required"
+        };
+        return Err(Error::new(format!(
+            "crate {} manifest {} has invalid package.metadata.rha.composite: {reason}",
+            package.name,
+            package.manifest_path.display()
+        )));
+    };
+
+    let mut externals = BTreeSet::new();
+    for dependency in &package.dependencies {
+        if dependency.kind.as_deref() == Some("build") {
+            continue;
+        }
+        let member = workspace_member(dependency, members);
+        let name = dependency
+            .rename
+            .as_deref()
+            .or_else(|| member.and_then(library_target_name))
+            .unwrap_or(dependency.name.as_str());
+        let name = normalize_rust_identifier(name);
+        if !matches!(name.as_str(), "std" | "core" | "alloc") {
+            externals.insert(name);
+        }
+    }
+
+    Ok(Some(CompositeSource {
+        rules: rules.clone(),
+        source: target.src_path.clone(),
+        crate_name: target.name.clone(),
+        edition: package.edition.clone(),
+        externals,
+    }))
 }
 
 /// Reads `[package.metadata.rha]`, tolerating its absence. When the table is
@@ -448,6 +639,14 @@ mod tests {
         package.metadata = Some(serde_json::json!({
             "rha": { "role": "core", "composite": "rha-modules.toml" }
         }));
+        // W7 now consumes source identity, so this fixture supplies the
+        // target and edition that cargo metadata provides.
+        package.edition = "2021".to_owned();
+        package.targets = vec![PackageTarget {
+            name: "core_a".to_owned(),
+            src_path: PathBuf::from("/w/core-a/src/lib.rs"),
+            kind: vec!["lib".to_owned()],
+        }];
         assert_eq!(
             rha_metadata(&package)
                 .expect("valid metadata")

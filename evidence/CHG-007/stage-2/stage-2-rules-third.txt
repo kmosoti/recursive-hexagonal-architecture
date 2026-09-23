@@ -1,0 +1,36 @@
+   Compiling xtask v0.1.0 (/home/kmosoti/projects/rha-m2/xtask)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.75s
+     Running tests/module_rules.rs (target/debug/deps/module_rules-64c1145129d06aa8)
+
+running 6 tests
+test disabling_cycles_does_not_hide_undeclared_dependencies ... ok
+test nested_child_to_parent_private_edges_ignore_allow_lists ... ok
+test unknown_components_and_missing_rules_are_configuration_errors ... ok
+test cycle_witnesses_are_canonical_and_keep_independent_facts_separate ... ok
+module headline grading: 25/25 passed
+test every_authored_headline_fixture_is_graded_against_the_registered_case ... ok
+random module oracle: 256 cases, 5229 raw edges, 192 findings, 0 mismatches
+test registered_random_rule_expectations_are_checked_without_rebuilding_them ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.84s
+
+     Running tests/modules_cli.rs (target/debug/deps/modules_cli-f62898d24578ee7b)
+
+running 2 tests
+
+thread 'standalone_metadata_and_cli_cover_identity_aliases_and_module_failures' (2704250) panicked at xtask/tests/modules_cli.rs:262:5:
+assertion `left == right` failed: stderr=
+  left: Some(1)
+ right: Some(0)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test standalone_metadata_and_cli_cover_identity_aliases_and_module_failures ... FAILED
+test architecture_cli_checks_live_site_and_preserves_report_contract ... ok
+
+failures:
+
+failures:
+    standalone_metadata_and_cli_cover_identity_aliases_and_module_failures
+
+test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+
+error: test failed, to rerun pass `-p xtask --test modules_cli`

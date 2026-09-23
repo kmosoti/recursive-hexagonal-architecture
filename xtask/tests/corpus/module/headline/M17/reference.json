@@ -1,0 +1,24 @@
+{
+  "edges": [
+    {
+      "extraction": "syntax",
+      "source": "fixture_m17::constraints::extra",
+      "target": "fixture_m17::constraints::Rule",
+      "test_only": false
+    },
+    {
+      "extraction": "syntax",
+      "source": "fixture_m17::constraints::extra",
+      "target": "fixture_m17::ordering::Wave",
+      "test_only": false
+    },
+    {
+      "extraction": "syntax",
+      "source": "fixture_m17::ordering",
+      "target": "fixture_m17::constraints::Rule",
+      "test_only": false
+    }
+  ],
+  "limitations": [],
+  "schema_version": 1
+}

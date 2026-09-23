@@ -1,0 +1,384 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Structural record-shape schema translated from the registered RHA observation inventory; it is not an evaluator.",
+  "properties": {
+    "acceptor": {
+      "additionalProperties": false,
+      "properties": {
+        "authority_profile": {
+          "type": "string"
+        },
+        "basis": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string"
+        },
+        "event": {
+          "type": "string"
+        },
+        "principal": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "authority_profile",
+        "date",
+        "principal",
+        "role"
+      ],
+      "type": "object"
+    },
+    "carried_forward": {
+      "additionalProperties": false,
+      "properties": {
+        "open": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "open"
+      ],
+      "type": "object"
+    },
+    "change": {
+      "type": "string"
+    },
+    "covers": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "defects": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "follow_up": {
+            "type": "string"
+          },
+          "found_at": {
+            "type": "string"
+          },
+          "found_by": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "record": {
+            "type": "string"
+          },
+          "repair": {
+            "type": "string"
+          },
+          "severity": {
+            "type": "string"
+          },
+          "statement": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "why_it_matters": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "repair",
+          "statement"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "disposition": {
+      "additionalProperties": false,
+      "properties": {
+        "basis": {
+          "type": "string"
+        },
+        "decision": {
+          "type": "string"
+        },
+        "eligibility_at_acceptance": {
+          "type": "string"
+        },
+        "exception": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "merge_allowed": {
+          "type": "boolean"
+        },
+        "predicates": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "holds": {
+                "type": "boolean"
+              },
+              "name": {
+                "type": "string"
+              },
+              "reason": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "holds",
+              "name",
+              "reason"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "basis",
+        "decision",
+        "eligibility_at_acceptance",
+        "exception",
+        "kind"
+      ],
+      "type": "object"
+    },
+    "evidence": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "class": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string"
+          },
+          "subject_revision": {
+            "type": "string"
+          },
+          "subject_tree": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "class",
+          "note",
+          "path"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "h4": {
+      "additionalProperties": false,
+      "properties": {
+        "detect_cases": {
+          "type": "integer"
+        },
+        "detected": {
+          "type": "integer"
+        },
+        "documented_holes": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "failed_cases": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "legitimate_cases": {
+          "type": "integer"
+        },
+        "legitimate_cases_with_alarms": {
+          "type": "integer"
+        },
+        "outcome": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "registration": {
+          "type": "string"
+        },
+        "unmatched_findings": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "outcome"
+      ],
+      "type": "object"
+    },
+    "held_out": {
+      "additionalProperties": false,
+      "properties": {
+        "decision": {
+          "type": "string"
+        },
+        "executor_read_cases": {
+          "type": "boolean"
+        },
+        "outcome": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "decision",
+        "outcome",
+        "reason"
+      ],
+      "type": "object"
+    },
+    "id": {
+      "type": "string"
+    },
+    "outcomes": {
+      "additionalProperties": false,
+      "properties": {
+        "failed": {
+          "items": {},
+          "type": "array"
+        },
+        "inconclusive": {
+          "items": {},
+          "type": "array"
+        },
+        "not_applicable": {
+          "items": {},
+          "type": "array"
+        },
+        "not_run": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "passed": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "failed",
+        "inconclusive",
+        "not_applicable",
+        "not_run",
+        "passed"
+      ],
+      "type": "object"
+    },
+    "schema_version": {
+      "allOf": [
+        {
+          "if": {
+            "type": "integer"
+          },
+          "then": {
+            "enum": [
+              1
+            ]
+          }
+        }
+      ],
+      "type": "integer"
+    },
+    "subject": {
+      "additionalProperties": false,
+      "properties": {
+        "integrator_edits": {
+          "type": "string"
+        },
+        "merged_at": {
+          "type": "string"
+        },
+        "milestone": {
+          "type": "string"
+        },
+        "parents": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "pre_registration_identity": {
+          "type": "string"
+        },
+        "pull_request": {
+          "type": "string"
+        },
+        "revision": {
+          "type": "string"
+        },
+        "tag": {
+          "type": "string"
+        },
+        "tag_message": {
+          "type": "string"
+        },
+        "tag_object": {
+          "type": "string"
+        },
+        "tree": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "parents",
+        "pull_request",
+        "revision",
+        "tree"
+      ],
+      "type": "object"
+    },
+    "task": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "acceptor",
+    "carried_forward",
+    "change",
+    "disposition",
+    "evidence",
+    "id",
+    "outcomes",
+    "schema_version",
+    "subject",
+    "task"
+  ],
+  "title": "RHA acceptance record schema",
+  "type": "object",
+  "x-rha-contract": "docs/architecture/record-schema-contract.md",
+  "x-rha-family": "acceptance",
+  "x-rha-inventory-format": "rha-observed-shapes-1",
+  "x-rha-inventory-sha256": "8411a2971ed2641fabf2d81f124e53d09396e5262df59dffbeaf23d119061dee",
+  "x-rha-source-revision": "99a74b042842b4d869ef341f58fdfcafb9c96e84"
+}

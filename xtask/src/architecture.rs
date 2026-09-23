@@ -1,9 +1,7 @@
 //! `cargo xtask architecture`: the crate-graph check (plan §5; spec §6.13).
 //!
-//! The crate level is implemented from CHG-003. The module level arrives in
-//! CHG-007 and until then every crate's `module_checks` entry reports
-//! `not_run` with a reason, never an empty findings list that would read like
-//! a pass (§11.4).
+//! Crate-level and declared composite module checks are combined into one
+//! canonical report before it is written or rendered.
 //!
 //! Exit codes are fixed by plan §5 and are the contract the lane relies on:
 //!
@@ -25,6 +23,7 @@ use crate::graph::check;
 use crate::graph::report;
 use crate::graph::rules::{RULES_PATH, Rules};
 use crate::lanes::RUN_DIR;
+use crate::modules::{single, workspace};
 use crate::{clippy_template, metadata};
 
 /// Exit status meaning "the check did not run; see the report".
@@ -64,6 +63,8 @@ impl Format {
 pub struct Options {
     /// An external workspace's `Cargo.toml`.
     pub manifest_path: Option<PathBuf>,
+    /// A module-only rules file for a single selected package.
+    pub module_rules_path: Option<PathBuf>,
     /// An external rules file. Defaults to `rha-crates.toml` at the root.
     pub rules_path: Option<PathBuf>,
     pub format: Format,
@@ -80,6 +81,52 @@ pub struct Options {
 /// Returns an error only for a failure that is neither a finding nor an
 /// environment problem; both of those map to an exit code instead.
 pub fn run(root: &Path, options: &Options) -> Result<i32> {
+    if let Some(module_rules_path) = options.module_rules_path.as_deref() {
+        let Some(manifest_path) = options.manifest_path.as_deref() else {
+            return failure(
+                root,
+                options,
+                module_rules_path,
+                "config_error",
+                "--module-rules requires --manifest-path",
+            );
+        };
+        if options.rules_path.is_some() {
+            return failure(
+                root,
+                options,
+                module_rules_path,
+                "config_error",
+                "--module-rules conflicts with --rules",
+            );
+        }
+        if options.transitive {
+            return failure(
+                root,
+                options,
+                module_rules_path,
+                "config_error",
+                "--module-rules conflicts with --transitive",
+            );
+        }
+
+        let json = match single::report(root, manifest_path, module_rules_path) {
+            Ok(json) => json,
+            Err(error) => {
+                return failure(
+                    root,
+                    options,
+                    module_rules_path,
+                    error.class,
+                    &error.message,
+                );
+            }
+        };
+        write_report(root, &json)?;
+        render(options.format, &json)?;
+        return Ok(report::exit_code_from_report(&json));
+    }
+
     let rules_path = options
         .rules_path
         .clone()
@@ -127,13 +174,13 @@ pub fn run(root: &Path, options: &Options) -> Result<i32> {
     };
 
     let mut outcome = check::check(&graph, &rules);
-    clippy_template_rule(root, &mut outcome);
+    clippy_template_rule(root, &graph, &mut outcome);
 
     let manifest = options
         .manifest_path
         .as_ref()
         .map(|p| p.display().to_string());
-    let json = report::json(
+    let mut json = report::json(
         &graph,
         &outcome,
         &report::tool_identity(root),
@@ -141,11 +188,19 @@ pub fn run(root: &Path, options: &Options) -> Result<i32> {
         &rules_digest,
         manifest.as_deref(),
     );
+    if let Err(error) = workspace::apply(&graph, &mut json) {
+        return failure(root, options, &rules_path, "config_error", &error);
+    }
     write_report(root, &json)?;
 
-    match options.format {
-        Format::Text => print!("{}", report::text(&graph, &outcome)),
-        Format::Markdown => print!("{}", report::markdown(&graph, &outcome)),
+    render(options.format, &json)?;
+    Ok(report::exit_code_from_report(&json))
+}
+
+fn render(format: Format, json: &serde_json::Value) -> Result<()> {
+    match format {
+        Format::Text => print!("{}", report::text_report(json)),
+        Format::Markdown => print!("{}", report::markdown_report(json)),
         Format::Json => {
             let mut text = serde_json::to_string_pretty(&json)
                 .context(|| "serializing the report".to_owned())?;
@@ -153,7 +208,7 @@ pub fn run(root: &Path, options: &Options) -> Result<i32> {
             print!("{text}");
         }
     }
-    Ok(report::exit_code(outcome.errors()))
+    Ok(())
 }
 
 /// `effect.core_clippy_template` (CHG-001), evaluated here because this is
@@ -162,22 +217,25 @@ pub fn run(root: &Path, options: &Options) -> Result<i32> {
 /// Until CHG-005 there is no core crate, so this rule examines nothing. That
 /// is not the same as it passing over a core crate, and the limitation says
 /// which it is.
-fn clippy_template_rule(root: &Path, outcome: &mut check::Outcome) {
-    // The cores come from the classification the check recorded, not from
-    // the graph as loaded: `metadata::build` leaves every role `None` and
-    // `check::check` classifies a clone, so reading the loaded graph here
-    // found no core in any workspace and the rule never examined a crate
-    // (review finding on 920cca6, CHG-003.3).
+fn clippy_template_rule(
+    root: &Path,
+    graph: &crate::graph::model::CrateGraph,
+    outcome: &mut check::Outcome,
+) {
     let cores: Vec<clippy_template::CoreCrate> = outcome
         .classification
         .iter()
         .filter(|c| c.role == Some(crate::graph::model::Role::Core))
         .filter_map(|c| {
-            Path::new(&c.manifest_path)
+            let node = graph.crates.iter().find(|node| {
+                node.name == c.name && node.manifest_path.as_path() == Path::new(&c.manifest_path)
+            })?;
+            node.manifest_path
                 .parent()
                 .map(|dir| clippy_template::CoreCrate {
                     name: c.name.clone(),
                     dir: dir.to_path_buf(),
+                    roots: node.source_roots.clone(),
                 })
         })
         .collect();
@@ -246,14 +304,25 @@ fn failure(
     error_class: &str,
     reason: &str,
 ) -> Result<i32> {
-    let json = serde_json::json!({
-        "schema_version": 1,
-        "tool": report::tool_identity(root),
-        "subject": {
+    let subject = if options.module_rules_path.is_some() {
+        serde_json::json!({
+            "mode": "module_only",
+            "workspace_root": null,
+            "manifest_path": options.manifest_path.as_ref().map(|p| p.display().to_string()),
+            "rules_path": rules_path.display().to_string(),
+            "metadata_mode": "no_deps",
+        })
+    } else {
+        serde_json::json!({
             "workspace_root": options.manifest_path.is_none().then(|| root.display().to_string()),
             "manifest_path": options.manifest_path.as_ref().map(|p| p.display().to_string()),
             "rules_path": rules_path.display().to_string(),
-        },
+        })
+    };
+    let json = serde_json::json!({
+        "schema_version": 1,
+        "tool": report::tool_identity(root),
+        "subject": subject,
         "summary": {
             "errors": null,
             "warnings": null,

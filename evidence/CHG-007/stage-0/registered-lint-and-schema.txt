@@ -1,0 +1,54 @@
+   Compiling xtask v0.1.0 (/home/kmosoti/projects/rha-m2/xtask)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.44s
+     Running tests/corpus_trust.rs (target/debug/deps/corpus_trust-7b98af8f66f9fce8)
+
+running 7 tests
+test the_module_inventory_checker_rejects_changed_and_missing_payloads ... ok
+test the_module_registration_pins_generator_reference_contract_and_counts ... ok
+test the_verifier_corpus_is_exactly_what_was_registered ... ok
+test the_record_corpus_is_exactly_what_was_registered ... ok
+test the_verifier_shape_corpus_is_exactly_what_was_registered ... ok
+test the_module_corpus_inventory_is_complete_and_pinned ... ok
+test the_record_schema_corpus_is_exactly_what_was_registered ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.33s
+
+     Running tests/record_lint.rs (target/debug/deps/record_lint-fe69ecc3ac5ff2d1)
+
+running 1 test
+test every_registered_record_is_linted_as_registered ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+
+     Running tests/record_lint_cli.rs (target/debug/deps/record_lint_cli-5363b76381e04962)
+
+running 2 tests
+test a_lint_run_without_records_is_a_usage_error ... ok
+test a_cited_digest_is_checked_at_the_records_subject ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+     Running tests/record_schema.rs (target/debug/deps/record_schema-79a40b92cd6426ba)
+
+running 1 test
+record-schema acceptance: 155
+record-schema evidence: 479
+record-schema h4: 285
+record-schema h5_conformance: 68
+record-schema markdown_corpus: 95
+record-schema policy: 184
+record-schema task: 231
+record-schema total: 1497
+test every_registered_record_schema_recipe_matches_exactly ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.95s
+
+     Running tests/record_schema_cli.rs (target/debug/deps/record_schema_cli-d7e5d74fc2d474df)
+
+running 3 tests
+test cli_reports_unchecked_and_checked_citations_without_following_escape_symlinks ... ok
+test cli_classifies_report_inputs_and_commented_tasks_correctly ... ok
+test cli_schema_controls_are_rejected_or_accepted_as_registered ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.23s
+

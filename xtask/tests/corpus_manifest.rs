@@ -427,25 +427,58 @@ fn the_grading_rules_state_what_a_disagreement_does() {
     assert_eq!(grading.decided_in.as_deref(), Some("CHG-002.2 (DP-1.1c)"));
 }
 
-/// No fixture workspace is committed. Generating them is CHG-004's job at the
-/// crate level and CHG-007's at the module level, and a committed fixture is a
-/// copy of the manifest that owns it (the CHG-001.1 decision).
-///
-/// **Narrowed in CHG-003, and deliberately (§9.14).** Until then this test
-/// also asserted that `xtask/src/graph` did not exist and that
-/// `xtask/src/architecture.rs` still contained `EXIT_NOT_RUN` — CHG-002's way
-/// of proving it had not smuggled the checker into the pre-registration. Both
-/// assertions became false when CHG-003 implemented the checker, which is the
-/// approved requirement changing, not the test becoming inconvenient. The
-/// ordering they protected is now a historical fact: the corpus merged at
-/// 15d916a and every line of the checker is newer. What is still ahead —
-/// module fixtures — is what this test still guards. W4 now explicitly requires
-/// committed crate fixtures, guarded by corpus_crate.rs and the drift check.
+/// CHG-007 replaces the historical absence guard with registered fixture
+/// completeness. The old assertion failed after the pre-implementation corpus
+/// commit; this is the approved requirement advancing, not a grading change
+/// (§9.14). Corpus identities and every original expectation remain pinned.
 #[test]
-fn module_fixtures_wait_for_chg_007() {
+fn module_fixtures_are_complete_and_match_the_frozen_manifest() {
     let root = root();
+    let raw: toml::Value =
+        toml::from_str(&std::fs::read_to_string(root.join(MANIFEST_PATH)).expect("manifest"))
+            .expect("manifest TOML");
+    let mut expected = BTreeSet::new();
+    for case in raw["case"].as_array().expect("cases") {
+        if case["level"].as_str() != Some("module") {
+            continue;
+        }
+        let id = case["id"].as_str().expect("case id");
+        if matches!(id, "L-M01" | "X-M01") {
+            continue;
+        }
+        expected.insert(id.to_owned());
+        let dir = root.join("xtask/tests/corpus/module/headline").join(id);
+        for file in [
+            "Cargo.toml",
+            "rha-modules.toml",
+            "src/lib.rs",
+            "contract.json",
+        ] {
+            assert!(dir.join(file).is_file(), "{id}: missing {file}");
+        }
+        let projection: serde_json::Value = serde_json::from_slice(
+            &std::fs::read(dir.join("contract.json")).expect("case projection"),
+        )
+        .expect("case JSON");
+        assert_eq!(
+            projection,
+            serde_json::to_value(case).expect("case value"),
+            "{id}"
+        );
+    }
+    let actual: BTreeSet<String> =
+        std::fs::read_dir(root.join("xtask/tests/corpus/module/headline"))
+            .expect("headline fixtures")
+            .map(|entry| {
+                let entry = entry.expect("entry");
+                assert!(entry.path().is_dir());
+                entry.file_name().into_string().expect("case name")
+            })
+            .collect();
+    assert_eq!(actual, expected);
+    assert_eq!(actual.len(), 25);
     assert!(
-        !root.join("xtask/tests/corpus/module").exists(),
-        "module fixtures are authored in CHG-007"
+        root.join("crates/site/rha-modules.toml").is_file(),
+        "L-M01 is the live site"
     );
 }

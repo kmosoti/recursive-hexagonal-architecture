@@ -1,0 +1,29 @@
+   Compiling xtask v0.1.0 (/home/kmosoti/projects/rha-m2/xtask)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.66s
+     Running `target/debug/xtask corpus run --level module`
+M01: passed
+M02: passed
+M03: passed
+M04: passed
+M05: passed
+M06: passed
+M07: passed
+M08: passed
+M09: passed
+M10: passed
+M11: passed
+M12: passed
+M13: passed
+M14: passed
+M15: passed
+M16: passed
+M17: passed
+M18: passed
+M19: passed
+M20: passed
+M21: passed
+L-M02: passed
+EM-M01: passed
+EM-M02: passed
+EM-M03: passed
+module H4: outcome=passed, evidence=evidence/h4-module/20260923T040716Z-f915daaf8dc1.json, cases=28, passed=28, failed=0, live=true, reference=true, supplementary=true

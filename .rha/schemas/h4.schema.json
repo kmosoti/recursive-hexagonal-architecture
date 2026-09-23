@@ -1,0 +1,680 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Structural record-shape schema translated from the registered RHA observation inventory; it is not an evaluator.",
+  "properties": {
+    "advisory": {
+      "type": "boolean"
+    },
+    "artifact_identity": {
+      "additionalProperties": false,
+      "properties": {
+        "branch": {
+          "type": "string"
+        },
+        "digest_algorithm": {
+          "type": "string"
+        },
+        "dirty": {
+          "type": "boolean"
+        },
+        "git_object_format": {
+          "type": "string"
+        },
+        "revision": {
+          "type": "string"
+        },
+        "snapshot_tree": {
+          "type": "string"
+        },
+        "tracked_diff_sha256": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "tree": {
+          "type": "string"
+        },
+        "untracked_inputs": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "path": {
+                "type": "string"
+              },
+              "sha256": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "path",
+              "sha256"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "branch",
+        "digest_algorithm",
+        "dirty",
+        "git_object_format",
+        "revision",
+        "snapshot_tree",
+        "tracked_diff_sha256",
+        "tree",
+        "untracked_inputs"
+      ],
+      "type": "object"
+    },
+    "cases": {
+      "items": {
+        "additionalProperties": false,
+        "allOf": [
+          {
+            "if": {
+              "not": {
+                "anyOf": [
+                  {
+                    "required": [
+                      "fixture_path"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "fixture_inputs_sha256"
+                    ]
+                  }
+                ]
+              },
+              "type": "object"
+            },
+            "then": {
+              "required": [
+                "fixture_path"
+              ]
+            }
+          },
+          {
+            "if": {
+              "required": [
+                "fixture_path",
+                "fixture_inputs_sha256"
+              ],
+              "type": "object"
+            },
+            "then": {
+              "not": {}
+            }
+          }
+        ],
+        "properties": {
+          "argv": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "cells": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "detected_when": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "detector": {
+            "type": "string"
+          },
+          "exit_status": {
+            "type": "integer"
+          },
+          "expected": {
+            "type": "string"
+          },
+          "fixture_inputs_sha256": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object"
+          },
+          "fixture_path": {
+            "type": "string"
+          },
+          "grade": {
+            "additionalProperties": false,
+            "properties": {
+              "detected": {
+                "type": "boolean"
+              },
+              "documented_miss": {
+                "type": "boolean"
+              },
+              "false_alarms": {
+                "items": {
+                  "additionalProperties": true,
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "passed": {
+                "type": "boolean"
+              },
+              "reasons": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "registered_facts": {
+                "items": {
+                  "additionalProperties": true,
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "unexpected_detection": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "detected",
+              "documented_miss",
+              "false_alarms",
+              "passed",
+              "reasons",
+              "unexpected_detection"
+            ],
+            "type": "object"
+          },
+          "hole": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "id": {
+            "type": "string"
+          },
+          "report": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "stderr": {
+            "type": "string"
+          },
+          "stdout": {
+            "type": "string"
+          },
+          "witness": {
+            "additionalProperties": true,
+            "type": "object"
+          }
+        },
+        "required": [
+          "argv",
+          "cells",
+          "detected_when",
+          "detector",
+          "exit_status",
+          "expected",
+          "grade",
+          "hole",
+          "id",
+          "report",
+          "stderr",
+          "stdout",
+          "witness"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "downgraded_cells": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "environment": {
+      "additionalProperties": false,
+      "properties": {
+        "arch": {
+          "type": "string"
+        },
+        "cargo": {
+          "type": "string"
+        },
+        "os": {
+          "type": "string"
+        },
+        "rustc": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "arch",
+        "cargo",
+        "os",
+        "rustc"
+      ],
+      "type": "object"
+    },
+    "evidence_class": {
+      "type": "string"
+    },
+    "fixtures": {
+      "additionalProperties": false,
+      "properties": {
+        "drift": {
+          "items": {},
+          "type": "array"
+        },
+        "generated_inputs_sha256": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        "inputs_sha256": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        "root": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "drift",
+        "root"
+      ],
+      "type": "object"
+    },
+    "grading": {
+      "additionalProperties": false,
+      "properties": {
+        "decision": {
+          "type": "string"
+        },
+        "detection_requires": {
+          "type": "string"
+        },
+        "expected_miss_surprise": {
+          "type": "string"
+        },
+        "extra_findings": {
+          "type": "string"
+        },
+        "no_alarm_scope": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "decision",
+        "detection_requires",
+        "expected_miss_surprise",
+        "extra_findings",
+        "no_alarm_scope"
+      ],
+      "type": "object"
+    },
+    "held_out": {
+      "additionalProperties": false,
+      "properties": {
+        "outcome": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "outcome",
+        "reason"
+      ],
+      "type": "object"
+    },
+    "kind": {
+      "allOf": [
+        {
+          "if": {
+            "type": "string"
+          },
+          "then": {
+            "enum": [
+              "h4"
+            ]
+          }
+        }
+      ],
+      "type": "string"
+    },
+    "level": {
+      "type": "string"
+    },
+    "manifest": {
+      "additionalProperties": false,
+      "properties": {
+        "amendments": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "anchor_commit": {
+                "type": "string"
+              },
+              "anchor_verified": {
+                "type": "boolean"
+              },
+              "change": {
+                "type": "string"
+              },
+              "commit": {
+                "type": "string"
+              },
+              "commit_verified": {
+                "type": "boolean"
+              },
+              "corrected_manifest_sha256": {
+                "type": "string"
+              },
+              "date": {
+                "type": "string"
+              },
+              "decided_by": {
+                "type": "string"
+              },
+              "decision": {
+                "type": "string"
+              },
+              "parent_manifest_sha256": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "change",
+              "commit",
+              "corrected_manifest_sha256",
+              "date",
+              "decided_by",
+              "decision",
+              "parent_manifest_sha256"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "approved_amendment": {
+          "type": "string"
+        },
+        "correction_commit": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "sha256": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "pre_registration": {
+      "additionalProperties": false,
+      "properties": {
+        "change": {
+          "type": "string"
+        },
+        "identity": {
+          "type": "string"
+        },
+        "record": {
+          "type": "string"
+        },
+        "revision": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "change",
+        "revision"
+      ],
+      "type": "object"
+    },
+    "producer": {
+      "additionalProperties": false,
+      "properties": {
+        "checker": {
+          "additionalProperties": false,
+          "properties": {
+            "git_dirty": {
+              "type": "boolean"
+            },
+            "git_rev": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "version": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "git_dirty",
+            "git_rev",
+            "name",
+            "version"
+          ],
+          "type": "object"
+        },
+        "executable_sha256": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "executable_sha256",
+        "name",
+        "version"
+      ],
+      "type": "object"
+    },
+    "schema_version": {
+      "allOf": [
+        {
+          "if": {
+            "type": "integer"
+          },
+          "then": {
+            "enum": [
+              1,
+              2
+            ]
+          }
+        }
+      ],
+      "type": "integer"
+    },
+    "summary": {
+      "additionalProperties": false,
+      "properties": {
+        "checker": {
+          "additionalProperties": false,
+          "properties": {
+            "cases": {
+              "type": "integer"
+            },
+            "detected": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "cases",
+            "detected"
+          ],
+          "type": "object"
+        },
+        "compiler": {
+          "additionalProperties": false,
+          "properties": {
+            "cases": {
+              "type": "integer"
+            },
+            "detected": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "cases",
+            "detected"
+          ],
+          "type": "object"
+        },
+        "detection": {
+          "additionalProperties": false,
+          "properties": {
+            "detected": {
+              "type": "integer"
+            },
+            "violations": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "detected",
+            "violations"
+          ],
+          "type": "object"
+        },
+        "expected_miss": {
+          "additionalProperties": false,
+          "properties": {
+            "cases": {
+              "type": "integer"
+            },
+            "documented": {
+              "type": "integer"
+            },
+            "surprises": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "cases",
+            "documented",
+            "surprises"
+          ],
+          "type": "object"
+        },
+        "failed_cases": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "false_alarm": {
+          "additionalProperties": false,
+          "properties": {
+            "alarms": {
+              "type": "integer"
+            },
+            "legitimate": {
+              "type": "integer"
+            },
+            "legitimate_cases_with_alarms": {
+              "type": "integer"
+            },
+            "unmatched_findings_total": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "alarms",
+            "legitimate"
+          ],
+          "type": "object"
+        },
+        "outcome": {
+          "allOf": [
+            {
+              "if": {
+                "type": "string"
+              },
+              "then": {
+                "enum": [
+                  "passed",
+                  "failed",
+                  "not_run",
+                  "not_applicable",
+                  "inconclusive"
+                ]
+              }
+            }
+          ],
+          "type": "string"
+        },
+        "registered_facts": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "compiler",
+        "detection",
+        "expected_miss",
+        "failed_cases",
+        "false_alarm",
+        "outcome"
+      ],
+      "type": "object"
+    },
+    "template_sha256": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "advisory",
+    "artifact_identity",
+    "cases",
+    "created_at",
+    "downgraded_cells",
+    "environment",
+    "evidence_class",
+    "grading",
+    "held_out",
+    "kind",
+    "level",
+    "manifest",
+    "pre_registration",
+    "producer",
+    "schema_version",
+    "summary",
+    "template_sha256"
+  ],
+  "title": "RHA H4 record schema",
+  "type": "object",
+  "x-rha-contract": "docs/architecture/record-schema-contract.md",
+  "x-rha-family": "h4",
+  "x-rha-inventory-format": "rha-observed-shapes-1",
+  "x-rha-inventory-sha256": "8411a2971ed2641fabf2d81f124e53d09396e5262df59dffbeaf23d119061dee",
+  "x-rha-source-revision": "99a74b042842b4d869ef341f58fdfcafb9c96e84"
+}

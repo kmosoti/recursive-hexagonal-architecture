@@ -1,0 +1,17 @@
+   Compiling xtask v0.1.0 (/home/kmosoti/projects/rha-m2/xtask)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.39s
+     Running tests/module_extraction.rs (target/debug/deps/module_extraction-8aa3b65bfb5d1976)
+
+running 8 tests
+test glob_reexports_preserve_the_facade_and_visibility_is_not_a_dependency ... ok
+test macro_argument_groups_and_trailing_tokens_are_heuristic_only ... ok
+test symlinked_module_source_cannot_escape_crate_root ... ok
+test cfg_and_path_controls_preserve_source_level_semantics ... ok
+test source_boundaries_and_recursive_sources_are_safe ... ok
+test lexical_pattern_bindings_are_not_module_references ... ok
+test path_attributes_follow_measured_rust_source_directories ... ok
+module extraction corpus: cases=256 normalized_edges=5229 test_edges=512 heuristic_edges=116 limitations=0
+test random_corpus_matches_registered_reference_outputs ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.55s
+

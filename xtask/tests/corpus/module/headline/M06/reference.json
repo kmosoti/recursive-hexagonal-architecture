@@ -1,0 +1,12 @@
+{
+  "edges": [
+    {
+      "extraction": "syntax",
+      "source": "fixture_m06::ordering",
+      "target": "fixture_m06::constraints::rules::Rule",
+      "test_only": false
+    }
+  ],
+  "limitations": [],
+  "schema_version": 1
+}

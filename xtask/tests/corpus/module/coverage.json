@@ -1,0 +1,58 @@
+{
+  "counts": {
+    "headline_edges": 41,
+    "headline_fixtures": 25,
+    "headline_include_fragments": 1,
+    "headline_limitations": 4,
+    "headline_rust_files": 27,
+    "optional_cycles": 64,
+    "optional_subsumed_undeclared_edges": 64,
+    "optional_top_level_findings": 192,
+    "optional_top_level_undeclared_edges": 64,
+    "optional_total_undeclared_edge_facts": 128,
+    "preserved_original_artifacts": 672,
+    "random_cases": 256,
+    "random_edges": 5229,
+    "random_heuristic_edges": 116,
+    "random_limitations": 0,
+    "random_rust_files": 1228,
+    "random_source_map_files": 1740,
+    "random_test_edges": 512,
+    "rule_exhaustive_graph_checks": 4096,
+    "rule_negative_mutation_checks": 6,
+    "rule_targeted_checks": 7,
+    "unique_flat_component_topologies": 117
+  },
+  "module_layout_instances": {
+    "0": 309,
+    "1": 322,
+    "2": 322,
+    "3": 72
+  },
+  "rule_summary": {
+    "finding_counts": {
+      "modules.child_to_parent_private": 32,
+      "modules.cycle": 64,
+      "modules.foreign_internal": 32,
+      "modules.undeclared_dependency": 64
+    },
+    "legal_cases": 64,
+    "subsumed_undeclared_edges": 64,
+    "top_level_findings": 192,
+    "total_undeclared_edge_facts": 128,
+    "violating_cases": 192
+  },
+  "syntax_template_instances": {
+    "0": 103,
+    "1": 103,
+    "10": 113,
+    "2": 99,
+    "3": 102,
+    "4": 110,
+    "5": 109,
+    "6": 109,
+    "7": 105,
+    "8": 110,
+    "9": 116
+  }
+}

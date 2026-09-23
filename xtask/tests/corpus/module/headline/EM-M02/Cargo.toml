@@ -1,0 +1,7 @@
+[package]
+name = "fixture_em_m02"
+version = "0.0.0"
+edition = "2021"
+[workspace]
+[package.metadata.rha]
+role = "core"

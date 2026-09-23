@@ -1,0 +1,19 @@
+{
+  "cells": [
+    "law6-b3"
+  ],
+  "expected": "detect",
+  "generation": "authored",
+  "id": "M17",
+  "level": "module",
+  "rule": "modules.cycle",
+  "seeded": "a nested use tree, use crate::{ordering::Wave, constraints::Rule}",
+  "witness": {
+    "path": [
+      "constraints",
+      "ordering",
+      "constraints"
+    ],
+    "rule": "modules.cycle"
+  }
+}

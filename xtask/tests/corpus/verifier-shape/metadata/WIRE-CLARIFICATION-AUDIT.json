@@ -1,0 +1,783 @@
+{
+  "after_corpus_except_malformed_sha256": "bb6cdbdde771284a7effa000ecf687e90dc01a5ec7ba23c0af7992e0c5354398",
+  "after_malformed_labels": {
+    "S008": "policy.digest",
+    "S009": "policy.digest",
+    "S010": "policy.digest",
+    "S011": "policy.digest",
+    "S012": "policy.profile",
+    "S013": "policy.profile",
+    "S014": "policy.checks",
+    "S015": "policy.checks",
+    "S016": "policy.rules",
+    "S017": "policy.rules",
+    "S018": "policy.default_obligations",
+    "S019": "policy.default_obligations",
+    "S020": "policy.default_obligations",
+    "S021": "policy.non_waivable",
+    "S022": "policy.non_waivable",
+    "S023": "policy.non_waivable",
+    "S024": "policy.trusted_producers",
+    "S025": "policy.trusted_producers",
+    "S026": "policy.trusted_producers",
+    "S027": "policy.required_inputs",
+    "S028": "policy.required_inputs",
+    "S029": "policy.required_inputs",
+    "S030": "policy.exception_authority",
+    "S031": "policy.exception_authority",
+    "S032": "policy.exception_authority",
+    "S033": "policy.acceptance_authority",
+    "S034": "policy.acceptance_authority",
+    "S035": "policy.acceptance_authority",
+    "S036": "policy.cooling_off_hours",
+    "S037": "policy.cooling_off_hours",
+    "S038": "policy.cooling_off_hours",
+    "S039": "policy.cooling_off_hours",
+    "S040": "policy.cooling_off_hours",
+    "S041": "policy.cooling_off_hours",
+    "S042": "policy.cooling_off_hours",
+    "S045": "policy.checks",
+    "S046": "policy.checks",
+    "S047": "policy.checks",
+    "S048": "policy.checks",
+    "S049": "policy.checks",
+    "S050": "policy.checks",
+    "S051": "policy.checks",
+    "S052": "policy.rules",
+    "S053": "policy.rules",
+    "S054": "policy.rules",
+    "S055": "policy.rules",
+    "S056": "policy.rules",
+    "S057": "policy.rules",
+    "S058": "policy.rules",
+    "S059": "policy.rules",
+    "S060": "local_policies",
+    "S061": "local_policies",
+    "S062": "local_policies",
+    "S063": "local_policies",
+    "S064": "local_policies",
+    "S065": "local_policies",
+    "S066": "local_policies",
+    "S067": "local_policies",
+    "S068": "local_policies",
+    "S069": "local_policies",
+    "S070": "local_policies",
+    "S071": "local_policies",
+    "S072": "local_policies",
+    "S073": "local_policies",
+    "S074": "local_policies",
+    "S075": "local_policies",
+    "S076": "local_policies",
+    "S077": "local_policies",
+    "S078": "local_policies",
+    "S079": "local_policies",
+    "S080": "local_policies",
+    "S081": "local_policies",
+    "S082": "local_policies",
+    "S083": "local_policies",
+    "S084": "base",
+    "S085": "base",
+    "S086": "candidate_tree",
+    "S087": "candidate_tree",
+    "S088": "acceptor",
+    "S089": "acceptor",
+    "S090": "accountable_change_authority",
+    "S091": "accountable_change_authority",
+    "S092": "now",
+    "S093": "now",
+    "S094": "surface",
+    "S095": "surface",
+    "S096": "surface",
+    "S097": "surface",
+    "S098": "evidence.producer",
+    "S099": "evidence.producer",
+    "S100": "evidence.producer",
+    "S101": "evidence.producer",
+    "S102": "evidence.integrity",
+    "S103": "evidence.integrity",
+    "S104": "evidence.subject",
+    "S105": "evidence.subject",
+    "S106": "evidence.policy",
+    "S107": "evidence.policy",
+    "S108": "evidence.base",
+    "S109": "evidence.base",
+    "S110": "evidence.inputs",
+    "S111": "evidence.inputs",
+    "S112": "evidence.entries",
+    "S113": "evidence.entries",
+    "S114": "evidence.entries",
+    "S115": "evidence.entries",
+    "S116": "evidence.entries",
+    "S117": "evidence.entries",
+    "S118": "evidence.entries",
+    "S119": "evidence.entries",
+    "S120": "evidence.entries",
+    "S121": "evidence.entries",
+    "S122": "evidence.entries",
+    "S123": "evidence.entries",
+    "S124": "evidence.entries",
+    "S125": "evidence.entries",
+    "S126": "evidence.entries",
+    "S127": "evidence.entries",
+    "S128": "evidence.entries",
+    "S129": "evidence.entries",
+    "S130": "evidence.entries",
+    "S131": "evidence.entries",
+    "S132": "evidence.entries",
+    "S133": "evidence.entries",
+    "S151": "exception",
+    "S152": "exception",
+    "S153": "exception",
+    "S154": "exception",
+    "S155": "exception.subject, base, policy, issuer, issued_at, expires_at",
+    "S156": "exception.subject, base, policy, issuer, issued_at, expires_at",
+    "S157": "exception.subject, base, policy, issuer, issued_at, expires_at",
+    "S158": "exception.subject, base, policy, issuer, issued_at, expires_at",
+    "S159": "exception.subject, base, policy, issuer, issued_at, expires_at",
+    "S160": "exception.subject, base, policy, issuer, issued_at, expires_at",
+    "S161": "exception.subject, base, policy, issuer, issued_at, expires_at",
+    "S162": "exception.subject, base, policy, issuer, issued_at, expires_at",
+    "S163": "exception.subject, base, policy, issuer, issued_at, expires_at",
+    "S164": "exception.subject, base, policy, issuer, issued_at, expires_at",
+    "S165": "exception.subject, base, policy, issuer, issued_at, expires_at",
+    "S166": "exception.subject, base, policy, issuer, issued_at, expires_at",
+    "S167": "exception.reason, compensating_control, follow_up",
+    "S168": "exception.reason, compensating_control, follow_up",
+    "S169": "exception.reason, compensating_control, follow_up",
+    "S170": "exception.reason, compensating_control, follow_up",
+    "S171": "exception.reason, compensating_control, follow_up",
+    "S172": "exception.reason, compensating_control, follow_up",
+    "S173": "exception.authentic, revoked",
+    "S174": "exception.authentic, revoked",
+    "S175": "exception.authentic, revoked",
+    "S176": "exception.authentic, revoked",
+    "S177": "exception.waived",
+    "S178": "exception.waived",
+    "S179": "exception.waived"
+  },
+  "case_count": 188,
+  "changed_label_count": 91,
+  "changes": [
+    {
+      "after": "policy.digest",
+      "before": "policy",
+      "id": "S008"
+    },
+    {
+      "after": "policy.digest",
+      "before": "policy",
+      "id": "S009"
+    },
+    {
+      "after": "policy.default_obligations",
+      "before": "policy.default_obligations[0]",
+      "id": "S020"
+    },
+    {
+      "after": "policy.non_waivable",
+      "before": "policy.non_waivable[0]",
+      "id": "S023"
+    },
+    {
+      "after": "policy.trusted_producers",
+      "before": "policy.trusted_producers[0]",
+      "id": "S026"
+    },
+    {
+      "after": "policy.required_inputs",
+      "before": "policy.required_inputs[0]",
+      "id": "S029"
+    },
+    {
+      "after": "policy.exception_authority",
+      "before": "policy.exception_authority[0]",
+      "id": "S032"
+    },
+    {
+      "after": "policy.acceptance_authority",
+      "before": "policy.acceptance_authority[0]",
+      "id": "S035"
+    },
+    {
+      "after": "policy.checks",
+      "before": "policy.checks[0]",
+      "id": "S045"
+    },
+    {
+      "after": "policy.checks",
+      "before": "policy.checks[0].id",
+      "id": "S046"
+    },
+    {
+      "after": "policy.checks",
+      "before": "policy.checks[0].id",
+      "id": "S047"
+    },
+    {
+      "after": "policy.checks",
+      "before": "policy.checks[0].kind",
+      "id": "S048"
+    },
+    {
+      "after": "policy.checks",
+      "before": "policy.checks[0].kind",
+      "id": "S049"
+    },
+    {
+      "after": "policy.checks",
+      "before": "policy.checks[0].params",
+      "id": "S050"
+    },
+    {
+      "after": "policy.checks",
+      "before": "policy.checks[0].params",
+      "id": "S051"
+    },
+    {
+      "after": "policy.rules",
+      "before": "policy.rules[0]",
+      "id": "S052"
+    },
+    {
+      "after": "policy.rules",
+      "before": "policy.rules[0].id",
+      "id": "S053"
+    },
+    {
+      "after": "policy.rules",
+      "before": "policy.rules[0].id",
+      "id": "S054"
+    },
+    {
+      "after": "policy.rules",
+      "before": "policy.rules[0].scope",
+      "id": "S055"
+    },
+    {
+      "after": "policy.rules",
+      "before": "policy.rules[0].scope",
+      "id": "S056"
+    },
+    {
+      "after": "policy.rules",
+      "before": "policy.rules[0].requires",
+      "id": "S057"
+    },
+    {
+      "after": "policy.rules",
+      "before": "policy.rules[0].requires",
+      "id": "S058"
+    },
+    {
+      "after": "policy.rules",
+      "before": "policy.rules[0].requires[0]",
+      "id": "S059"
+    },
+    {
+      "after": "local_policies",
+      "before": "local_policies[0]",
+      "id": "S062"
+    },
+    {
+      "after": "local_policies",
+      "before": "local_policies[0].scope",
+      "id": "S063"
+    },
+    {
+      "after": "local_policies",
+      "before": "local_policies[0].scope",
+      "id": "S064"
+    },
+    {
+      "after": "local_policies",
+      "before": "local_policies[0].checks",
+      "id": "S065"
+    },
+    {
+      "after": "local_policies",
+      "before": "local_policies[0].checks",
+      "id": "S066"
+    },
+    {
+      "after": "local_policies",
+      "before": "local_policies[0].rules",
+      "id": "S067"
+    },
+    {
+      "after": "local_policies",
+      "before": "local_policies[0].rules",
+      "id": "S068"
+    },
+    {
+      "after": "local_policies",
+      "before": "local_policies[0].checks[0]",
+      "id": "S069"
+    },
+    {
+      "after": "local_policies",
+      "before": "local_policies[0].checks[0].id",
+      "id": "S070"
+    },
+    {
+      "after": "local_policies",
+      "before": "local_policies[0].checks[0].id",
+      "id": "S071"
+    },
+    {
+      "after": "local_policies",
+      "before": "local_policies[0].checks[0].kind",
+      "id": "S072"
+    },
+    {
+      "after": "local_policies",
+      "before": "local_policies[0].checks[0].kind",
+      "id": "S073"
+    },
+    {
+      "after": "local_policies",
+      "before": "local_policies[0].checks[0].params",
+      "id": "S074"
+    },
+    {
+      "after": "local_policies",
+      "before": "local_policies[0].checks[0].params",
+      "id": "S075"
+    },
+    {
+      "after": "local_policies",
+      "before": "local_policies[0].rules[0]",
+      "id": "S076"
+    },
+    {
+      "after": "local_policies",
+      "before": "local_policies[0].rules[0].id",
+      "id": "S077"
+    },
+    {
+      "after": "local_policies",
+      "before": "local_policies[0].rules[0].id",
+      "id": "S078"
+    },
+    {
+      "after": "local_policies",
+      "before": "local_policies[0].rules[0].scope",
+      "id": "S079"
+    },
+    {
+      "after": "local_policies",
+      "before": "local_policies[0].rules[0].scope",
+      "id": "S080"
+    },
+    {
+      "after": "local_policies",
+      "before": "local_policies[0].rules[0].requires",
+      "id": "S081"
+    },
+    {
+      "after": "local_policies",
+      "before": "local_policies[0].rules[0].requires",
+      "id": "S082"
+    },
+    {
+      "after": "local_policies",
+      "before": "local_policies[0].rules[0].requires[0]",
+      "id": "S083"
+    },
+    {
+      "after": "surface",
+      "before": "surface[0]",
+      "id": "S097"
+    },
+    {
+      "after": "evidence.producer",
+      "before": "evidence",
+      "id": "S098"
+    },
+    {
+      "after": "evidence.producer",
+      "before": "evidence",
+      "id": "S099"
+    },
+    {
+      "after": "evidence.entries",
+      "before": "evidence.entries[0]",
+      "id": "S114"
+    },
+    {
+      "after": "evidence.entries",
+      "before": "evidence.entries[0].id",
+      "id": "S115"
+    },
+    {
+      "after": "evidence.entries",
+      "before": "evidence.entries[0].id",
+      "id": "S116"
+    },
+    {
+      "after": "evidence.entries",
+      "before": "evidence.entries[0].kind",
+      "id": "S117"
+    },
+    {
+      "after": "evidence.entries",
+      "before": "evidence.entries[0].kind",
+      "id": "S118"
+    },
+    {
+      "after": "evidence.entries",
+      "before": "evidence.entries[0].params",
+      "id": "S119"
+    },
+    {
+      "after": "evidence.entries",
+      "before": "evidence.entries[0].params",
+      "id": "S120"
+    },
+    {
+      "after": "evidence.entries",
+      "before": "evidence.entries[0].outcome",
+      "id": "S121"
+    },
+    {
+      "after": "evidence.entries",
+      "before": "evidence.entries[0].outcome",
+      "id": "S122"
+    },
+    {
+      "after": "evidence.entries",
+      "before": "evidence.entries[0].selected_tests",
+      "id": "S123"
+    },
+    {
+      "after": "evidence.entries",
+      "before": "evidence.entries[0].selected_tests",
+      "id": "S124"
+    },
+    {
+      "after": "evidence.entries",
+      "before": "evidence.entries[0].selected_tests",
+      "id": "S125"
+    },
+    {
+      "after": "evidence.entries",
+      "before": "evidence.entries[0].selected_tests",
+      "id": "S126"
+    },
+    {
+      "after": "evidence.entries",
+      "before": "evidence.entries[0].selected_tests",
+      "id": "S127"
+    },
+    {
+      "after": "evidence.entries",
+      "before": "evidence.entries[0].performed",
+      "id": "S128"
+    },
+    {
+      "after": "evidence.entries",
+      "before": "evidence.entries[0].performed",
+      "id": "S129"
+    },
+    {
+      "after": "evidence.entries",
+      "before": "evidence.entries[0].performed",
+      "id": "S130"
+    },
+    {
+      "after": "evidence.entries",
+      "before": "evidence.entries[0].corpus_digest",
+      "id": "S131"
+    },
+    {
+      "after": "evidence.entries",
+      "before": "evidence.entries[0].corpus_digest",
+      "id": "S132"
+    },
+    {
+      "after": "evidence.entries",
+      "before": "evidence.entries[0].corpus_digest",
+      "id": "S133"
+    },
+    {
+      "after": "exception.subject, base, policy, issuer, issued_at, expires_at",
+      "before": "exception.subject",
+      "id": "S155"
+    },
+    {
+      "after": "exception.subject, base, policy, issuer, issued_at, expires_at",
+      "before": "exception.subject",
+      "id": "S156"
+    },
+    {
+      "after": "exception.subject, base, policy, issuer, issued_at, expires_at",
+      "before": "exception.base",
+      "id": "S157"
+    },
+    {
+      "after": "exception.subject, base, policy, issuer, issued_at, expires_at",
+      "before": "exception.base",
+      "id": "S158"
+    },
+    {
+      "after": "exception.subject, base, policy, issuer, issued_at, expires_at",
+      "before": "exception.policy",
+      "id": "S159"
+    },
+    {
+      "after": "exception.subject, base, policy, issuer, issued_at, expires_at",
+      "before": "exception.policy",
+      "id": "S160"
+    },
+    {
+      "after": "exception.subject, base, policy, issuer, issued_at, expires_at",
+      "before": "exception.issuer",
+      "id": "S161"
+    },
+    {
+      "after": "exception.subject, base, policy, issuer, issued_at, expires_at",
+      "before": "exception.issuer",
+      "id": "S162"
+    },
+    {
+      "after": "exception.subject, base, policy, issuer, issued_at, expires_at",
+      "before": "exception.issued_at",
+      "id": "S163"
+    },
+    {
+      "after": "exception.subject, base, policy, issuer, issued_at, expires_at",
+      "before": "exception.issued_at",
+      "id": "S164"
+    },
+    {
+      "after": "exception.subject, base, policy, issuer, issued_at, expires_at",
+      "before": "exception.expires_at",
+      "id": "S165"
+    },
+    {
+      "after": "exception.subject, base, policy, issuer, issued_at, expires_at",
+      "before": "exception.expires_at",
+      "id": "S166"
+    },
+    {
+      "after": "exception.reason, compensating_control, follow_up",
+      "before": "exception.reason",
+      "id": "S167"
+    },
+    {
+      "after": "exception.reason, compensating_control, follow_up",
+      "before": "exception.reason",
+      "id": "S168"
+    },
+    {
+      "after": "exception.reason, compensating_control, follow_up",
+      "before": "exception.compensating_control",
+      "id": "S169"
+    },
+    {
+      "after": "exception.reason, compensating_control, follow_up",
+      "before": "exception.compensating_control",
+      "id": "S170"
+    },
+    {
+      "after": "exception.reason, compensating_control, follow_up",
+      "before": "exception.follow_up",
+      "id": "S171"
+    },
+    {
+      "after": "exception.reason, compensating_control, follow_up",
+      "before": "exception.follow_up",
+      "id": "S172"
+    },
+    {
+      "after": "exception.authentic, revoked",
+      "before": "exception.authentic",
+      "id": "S173"
+    },
+    {
+      "after": "exception.authentic, revoked",
+      "before": "exception.authentic",
+      "id": "S174"
+    },
+    {
+      "after": "exception.authentic, revoked",
+      "before": "exception.revoked",
+      "id": "S175"
+    },
+    {
+      "after": "exception.authentic, revoked",
+      "before": "exception.revoked",
+      "id": "S176"
+    },
+    {
+      "after": "exception.waived",
+      "before": "exception.waived[0]",
+      "id": "S179"
+    }
+  ],
+  "checks": "Artifact comparison, pointer preservation and published label membership only; no production evaluator or shape validator.",
+  "contract_wire_labels_sha256": "8377633ac2b8b81e753cde7668b2f0a4a3fde45dcf9858bc8866c7b9a6d590c6",
+  "corpus_except_malformed_sha256": "bb6cdbdde771284a7effa000ecf687e90dc01a5ec7ba23c0af7992e0c5354398",
+  "malformed_count": 153,
+  "phase": "completed pre-registration wire-format clarification",
+  "previous_malformed_labels": {
+    "S008": "policy",
+    "S009": "policy",
+    "S010": "policy.digest",
+    "S011": "policy.digest",
+    "S012": "policy.profile",
+    "S013": "policy.profile",
+    "S014": "policy.checks",
+    "S015": "policy.checks",
+    "S016": "policy.rules",
+    "S017": "policy.rules",
+    "S018": "policy.default_obligations",
+    "S019": "policy.default_obligations",
+    "S020": "policy.default_obligations[0]",
+    "S021": "policy.non_waivable",
+    "S022": "policy.non_waivable",
+    "S023": "policy.non_waivable[0]",
+    "S024": "policy.trusted_producers",
+    "S025": "policy.trusted_producers",
+    "S026": "policy.trusted_producers[0]",
+    "S027": "policy.required_inputs",
+    "S028": "policy.required_inputs",
+    "S029": "policy.required_inputs[0]",
+    "S030": "policy.exception_authority",
+    "S031": "policy.exception_authority",
+    "S032": "policy.exception_authority[0]",
+    "S033": "policy.acceptance_authority",
+    "S034": "policy.acceptance_authority",
+    "S035": "policy.acceptance_authority[0]",
+    "S036": "policy.cooling_off_hours",
+    "S037": "policy.cooling_off_hours",
+    "S038": "policy.cooling_off_hours",
+    "S039": "policy.cooling_off_hours",
+    "S040": "policy.cooling_off_hours",
+    "S041": "policy.cooling_off_hours",
+    "S042": "policy.cooling_off_hours",
+    "S045": "policy.checks[0]",
+    "S046": "policy.checks[0].id",
+    "S047": "policy.checks[0].id",
+    "S048": "policy.checks[0].kind",
+    "S049": "policy.checks[0].kind",
+    "S050": "policy.checks[0].params",
+    "S051": "policy.checks[0].params",
+    "S052": "policy.rules[0]",
+    "S053": "policy.rules[0].id",
+    "S054": "policy.rules[0].id",
+    "S055": "policy.rules[0].scope",
+    "S056": "policy.rules[0].scope",
+    "S057": "policy.rules[0].requires",
+    "S058": "policy.rules[0].requires",
+    "S059": "policy.rules[0].requires[0]",
+    "S060": "local_policies",
+    "S061": "local_policies",
+    "S062": "local_policies[0]",
+    "S063": "local_policies[0].scope",
+    "S064": "local_policies[0].scope",
+    "S065": "local_policies[0].checks",
+    "S066": "local_policies[0].checks",
+    "S067": "local_policies[0].rules",
+    "S068": "local_policies[0].rules",
+    "S069": "local_policies[0].checks[0]",
+    "S070": "local_policies[0].checks[0].id",
+    "S071": "local_policies[0].checks[0].id",
+    "S072": "local_policies[0].checks[0].kind",
+    "S073": "local_policies[0].checks[0].kind",
+    "S074": "local_policies[0].checks[0].params",
+    "S075": "local_policies[0].checks[0].params",
+    "S076": "local_policies[0].rules[0]",
+    "S077": "local_policies[0].rules[0].id",
+    "S078": "local_policies[0].rules[0].id",
+    "S079": "local_policies[0].rules[0].scope",
+    "S080": "local_policies[0].rules[0].scope",
+    "S081": "local_policies[0].rules[0].requires",
+    "S082": "local_policies[0].rules[0].requires",
+    "S083": "local_policies[0].rules[0].requires[0]",
+    "S084": "base",
+    "S085": "base",
+    "S086": "candidate_tree",
+    "S087": "candidate_tree",
+    "S088": "acceptor",
+    "S089": "acceptor",
+    "S090": "accountable_change_authority",
+    "S091": "accountable_change_authority",
+    "S092": "now",
+    "S093": "now",
+    "S094": "surface",
+    "S095": "surface",
+    "S096": "surface",
+    "S097": "surface[0]",
+    "S098": "evidence",
+    "S099": "evidence",
+    "S100": "evidence.producer",
+    "S101": "evidence.producer",
+    "S102": "evidence.integrity",
+    "S103": "evidence.integrity",
+    "S104": "evidence.subject",
+    "S105": "evidence.subject",
+    "S106": "evidence.policy",
+    "S107": "evidence.policy",
+    "S108": "evidence.base",
+    "S109": "evidence.base",
+    "S110": "evidence.inputs",
+    "S111": "evidence.inputs",
+    "S112": "evidence.entries",
+    "S113": "evidence.entries",
+    "S114": "evidence.entries[0]",
+    "S115": "evidence.entries[0].id",
+    "S116": "evidence.entries[0].id",
+    "S117": "evidence.entries[0].kind",
+    "S118": "evidence.entries[0].kind",
+    "S119": "evidence.entries[0].params",
+    "S120": "evidence.entries[0].params",
+    "S121": "evidence.entries[0].outcome",
+    "S122": "evidence.entries[0].outcome",
+    "S123": "evidence.entries[0].selected_tests",
+    "S124": "evidence.entries[0].selected_tests",
+    "S125": "evidence.entries[0].selected_tests",
+    "S126": "evidence.entries[0].selected_tests",
+    "S127": "evidence.entries[0].selected_tests",
+    "S128": "evidence.entries[0].performed",
+    "S129": "evidence.entries[0].performed",
+    "S130": "evidence.entries[0].performed",
+    "S131": "evidence.entries[0].corpus_digest",
+    "S132": "evidence.entries[0].corpus_digest",
+    "S133": "evidence.entries[0].corpus_digest",
+    "S151": "exception",
+    "S152": "exception",
+    "S153": "exception",
+    "S154": "exception",
+    "S155": "exception.subject",
+    "S156": "exception.subject",
+    "S157": "exception.base",
+    "S158": "exception.base",
+    "S159": "exception.policy",
+    "S160": "exception.policy",
+    "S161": "exception.issuer",
+    "S162": "exception.issuer",
+    "S163": "exception.issued_at",
+    "S164": "exception.issued_at",
+    "S165": "exception.expires_at",
+    "S166": "exception.expires_at",
+    "S167": "exception.reason",
+    "S168": "exception.reason",
+    "S169": "exception.compensating_control",
+    "S170": "exception.compensating_control",
+    "S171": "exception.follow_up",
+    "S172": "exception.follow_up",
+    "S173": "exception.authentic",
+    "S174": "exception.authentic",
+    "S175": "exception.revoked",
+    "S176": "exception.revoked",
+    "S177": "exception.waived",
+    "S178": "exception.waived",
+    "S179": "exception.waived[0]"
+  },
+  "recipes_sha256": "937429d572181b0d289b5f965ead41fd7cf93ddb16e7702b4b1e3861b23c4143",
+  "record_cases_sha256": "e5d1cb905b2d0421b86ba18ea2273ba45d5284c28466b5b7edc7d5711a205949",
+  "record_inventory_sha256": "8411a2971ed2641fabf2d81f124e53d09396e5262df59dffbeaf23d119061dee",
+  "unchanged_recipes": true,
+  "unchanged_record_cases": true,
+  "unchanged_record_inventory": true
+}

@@ -1,0 +1,61 @@
+# Independent pre-implementation registration. No schema or evaluator generated.
+schema_version = 1
+registered_in = "CHG-019.1 (P-C stage 0)"
+registration = "record-schema"
+generation = "sampled"
+sample = 1
+interrupted_pre_payload_attempts = 1
+failed_deterministic_self_checks = 0
+interrupted_deterministic_self_checks = 0
+failed_inspection_commands = 2
+incomplete_section_extractions = 2
+generation_history_sha256 = "0c724efcc9c1a0ee3ee2cd7dd720d792898a77f7981ed8b41356d9eeed248dd2"
+attempt_note = "Same independent session and sample 1. One pre-payload SIGINT; two failed inspection commands and two incomplete section extractions retained in history. Completed deterministic self-checks passed. Wire labels clarified before registration/commit or production grading. No random generator or seed was used."
+source_revision = "99a74b042842b4d869ef341f58fdfcafb9c96e84"
+source_count = 119
+source_tree_sha256 = "8489d78eb0af61ade63e5353b17b962986e7e1addcc536047b2a93953ca5ede8"
+source_index_sha256 = "100d88e402c4d3a35c6275080ed4256c898bb9f24f92bafb4eb8932dc6511e91"
+basis_file_count = 7
+basis_index_sha256 = "39242ea3468b44bdd44e8aea912a0b2021aecc9ffae05cd03b4898a256ab0f4e"
+prompt_path = "GENERATOR-PROMPT.md"
+prompt_sha256 = "b8628c625ebafa9fd932ecd34739d0ade2eea4c7e7962f975ef337c0aec7abfe"
+correction_prompt_path = "GENERATOR-CORRECTION.md"
+correction_prompt_sha256 = "a9bff3007f6bd301d6ac25558c2490912bcf21b67ed6094da00b609c64e8aa0e"
+wire_clarification_prompt_path = "GENERATOR-WIRE-CLARIFICATION.md"
+wire_clarification_prompt_sha256 = "42e821db08125a551fa28e704058cab2933cfcbaa0681967be7add67c87b4ac9"
+record_contract_sha256 = "fbe1b3da99424e1b5a87c7ecbedc5a92e57af411b85bff56ef8420a3ecc02796"
+verifier_contract_sha256 = "495a895312ad942a10eecd8a58f6bbbae987a2ca3f7e768250d647ffef65fdc8"
+tree_sha256 = "30cb7fd937712e1dfd96d7fc8a6eb2e3abac4acbe6535528e4e90524164b9179"
+payload_file_count = 136
+payload_bytes = 7939518
+tree_algorithm = "sha256 of sorted UTF-8 '<relative path> <sha256>\\n' lines; exclude only registration.toml and GENERATOR-PROMPT.md; include README, correction and wire-clarification prompts"
+validation = "JSON/TOML parsing, hashes and deterministic derivation/construction only; no production schema/lint/verifier execution"
+case_count = 1497
+baseline_count = 117
+unmodified_source_controls = 116
+structurally_clean_case_count = 182
+structurally_rejected_case_count = 1315
+supported_source_count = 116
+excluded_source_count = 3
+inventory_sha256 = "8411a2971ed2641fabf2d81f124e53d09396e5262df59dffbeaf23d119061dee"
+cases_sha256 = "e5d1cb905b2d0421b86ba18ea2273ba45d5284c28466b5b7edc7d5711a205949"
+generator = { model = "gpt-6-astra", reasoning_effort = "xhigh" }
+
+[case_counts_by_family]
+acceptance = 155
+evidence = 479
+h4 = 285
+h5_conformance = 68
+markdown_corpus = 95
+policy = 184
+task = 231
+
+[source_counts_by_family]
+acceptance = 10
+evidence = 75
+excluded = 3
+h4 = 12
+h5_conformance = 6
+markdown_corpus = 1
+policy = 1
+task = 11

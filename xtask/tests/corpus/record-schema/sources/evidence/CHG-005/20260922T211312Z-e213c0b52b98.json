@@ -1,0 +1,541 @@
+{
+  "schema_version": 1,
+  "record_kind": "evidence",
+  "evidence_class": "local",
+  "lane": "L0",
+  "started_at": "2026-09-22T21:13:12.226Z",
+  "finished_at": "2026-09-22T21:13:25.297Z",
+  "producer": {
+    "principal": "agent:executor",
+    "accountable_to": [
+      "human:kennedy"
+    ],
+    "tool": "xtask ci --lane L0",
+    "tool_version": "0.1.0",
+    "tool_git_rev": "e213c0b52b98cd688ebff832f0f28a7200957020",
+    "tool_from_dirty_tree": false
+  },
+  "change_claim": {
+    "affected_components": null,
+    "architecture_delta": null,
+    "contract_changes": null,
+    "intent": "Build the guards revision 2 names, then the rhawiki product (W5) and the M1 close (W6), in gated stages: 0 guards; 1 boundary decisions and markdown-corpus registration; 2 cores; 3 adapters and CLI; 4 corpus run; 5 CI and self-assessment.",
+    "non_goals": [
+      "Module-level checks (P-C)",
+      "The verifier (P-B)",
+      "Reading Kennedy's held-out material (DP-1.1b, DP-1.4)",
+      "Editing the spec"
+    ],
+    "performance_impact": null,
+    "source": {
+      "path": ".rha/tasks/CHG-005-rhawiki-m1.toml",
+      "sha256": "9835e9475675f9f6925bec2860b45fc52bb24a4bc5b6b21cc452e06dcc26673b"
+    },
+    "task": "CHG-005",
+    "unresolved": null
+  },
+  "artifact_identity": {
+    "revision": "e213c0b52b98cd688ebff832f0f28a7200957020",
+    "tree": "84f458d5870b8d0176168b2395542fea9244f886",
+    "snapshot_tree": "84f458d5870b8d0176168b2395542fea9244f886",
+    "branch": "chg/005-rhawiki-m1",
+    "dirty": false,
+    "tracked_diff_sha256": null,
+    "untracked_inputs": [],
+    "git_object_format": "sha1",
+    "digest_algorithm": "sha256"
+  },
+  "verification_identity": {
+    "policy_path": ".rha/policy.toml",
+    "policy_digest": "sha256:72bf2e5218b241b1dbf4ee4b96935fa89d45bd0a22fbe65c9c5a94b79bb314b3",
+    "policy_read_from": "candidate_worktree",
+    "base_revision": "72c5cfd2fa96efbb81adb817ae10a93e03c87713",
+    "base_revision_source": "git merge-base HEAD origin/main",
+    "base_policy_digest": "sha256:72bf2e5218b241b1dbf4ee4b96935fa89d45bd0a22fbe65c9c5a94b79bb314b3",
+    "toolchain": {
+      "cargo": "cargo 1.98.1 (797e8a9bc 2026-08-05)",
+      "clippy": "clippy 0.1.98 (48a229ceae 2026-09-01)",
+      "rustc": "rustc 1.98.1 (48a229cea 2026-09-01)",
+      "rustfmt": "rustfmt 1.9.0-stable (48a229ceae 2026-09-01)"
+    },
+    "target": "x86_64-unknown-linux-gnu",
+    "features": "--all-features",
+    "profiles": "dev (clippy, doctest), test (nextest)",
+    "lockfile_sha256": "ac102c2a755bca1b78a91e5ab32575c18c6336cea88f0d887a02cf72c6c561a9",
+    "configuration": [
+      {
+        "path": "rust-toolchain.toml",
+        "sha256": "6722199c2892b79fc5bb2e70ff4c636b06e24cc1ee773b2d3d88d9ba7ad78714"
+      },
+      {
+        "path": "Cargo.toml",
+        "sha256": "ffc472aeb53e8b29e39aa123f8d213277828a69d55e25fbbba643ff7bc947f34"
+      },
+      {
+        "path": ".cargo/config.toml",
+        "sha256": "c185a2b859850d94af015a9672c1568e1ef73b12612d820f596ef967b835f637"
+      },
+      {
+        "path": "clippy.toml",
+        "sha256": "13db505e12577c7d6606282e57e5d991efd8fb67059b3938412ad0382b91c592"
+      },
+      {
+        "path": ".config/nextest.toml",
+        "sha256": "67d6ba7c883e2d25826938efe51699532865fb3c1044f4fee7f06c3aad9fd078"
+      },
+      {
+        "path": "deny.toml",
+        "sha256": "69ce278dc68a8ce15abf62f15505911e3843d62dc3205a1bc29bf07489617581"
+      },
+      {
+        "path": "_typos.toml",
+        "sha256": "331e6698960ab2176fe2d28a618361126a259300089ba0fd157ec5d7ddd1ea70"
+      },
+      {
+        "path": "rha-baseline.json",
+        "sha256": "bcf8223b7b475fdbf3b9bf2cc08d4cd06d7021aa7d9e1255ffc8f189d7c910d4"
+      },
+      {
+        "path": "rha-crates.toml",
+        "sha256": "b5c7f1fe08998ed4efbb23f40f3af2f92cf149b8b75e38881323ca8f3b50d97d"
+      }
+    ],
+    "instruction_sources": [
+      {
+        "path": "AGENTS.md",
+        "sha256": "5c3e2af3bd6c0fc44a8f9bc9a4d51641dc56cdd7a11f768ac0d800eb0ed690fe"
+      },
+      {
+        "path": "CONTRIBUTING.md",
+        "sha256": "22cdbb1f9882ca1ae4bfcca5a23a22adb98cefc6d85a6a5375d11a3293c314dd"
+      },
+      {
+        "path": ".github/pull_request_template.md",
+        "sha256": "973ee7dc93e88583cd72d223d0795e221a6c937290050dc436c45c083159be85"
+      },
+      {
+        "path": "crates/site/AGENTS.md",
+        "sha256": "05752f92b96adcec5649b07f50bed54870d20f531f8fb1e96181fafe15d51e10"
+      },
+      {
+        "path": ".rha/tasks/CHG-005-rhawiki-m1.toml",
+        "sha256": "9835e9475675f9f6925bec2860b45fc52bb24a4bc5b6b21cc452e06dcc26673b"
+      }
+    ]
+  },
+  "observed_checks": [
+    {
+      "id": "L0.fmt",
+      "kind": "format",
+      "argv": [
+        "cargo",
+        "fmt",
+        "--all",
+        "--",
+        "--check"
+      ],
+      "required": true,
+      "waivable": false,
+      "params": {
+        "timeout_secs": 300
+      },
+      "tool": {
+        "name": "rustfmt",
+        "probe": {
+          "state": "ready",
+          "version": "1.9.0-stable"
+        }
+      },
+      "outcome": "passed",
+      "exit_status": 0,
+      "error_class": null,
+      "reason": null,
+      "started_at": "2026-09-22T21:13:12.340Z",
+      "duration_ms": 251,
+      "selection_counts": null,
+      "artifacts": [
+        {
+          "path": "target/rha/logs/L0/L0.fmt.stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "target/rha/logs/L0/L0.fmt.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "limits": []
+    },
+    {
+      "id": "L0.clippy",
+      "kind": "lint",
+      "argv": [
+        "cargo",
+        "clippy",
+        "--workspace",
+        "--all-targets",
+        "--all-features"
+      ],
+      "required": true,
+      "waivable": false,
+      "params": {
+        "timeout_secs": 1800
+      },
+      "tool": {
+        "name": "clippy",
+        "probe": {
+          "state": "ready",
+          "version": "0.1.98"
+        }
+      },
+      "outcome": "passed",
+      "exit_status": 0,
+      "error_class": null,
+      "reason": null,
+      "started_at": "2026-09-22T21:13:12.619Z",
+      "duration_ms": 602,
+      "selection_counts": null,
+      "artifacts": [
+        {
+          "path": "target/rha/logs/L0/L0.clippy.stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "target/rha/logs/L0/L0.clippy.stderr",
+          "sha256": "18321d31c6a6cc502492cb6bd871c2883d0f5fcc76a3028cadbf39e178d9df92"
+        }
+      ],
+      "limits": []
+    },
+    {
+      "id": "L0.nextest",
+      "kind": "test",
+      "argv": [
+        "cargo",
+        "nextest",
+        "run",
+        "--workspace",
+        "--all-features",
+        "--profile",
+        "ci"
+      ],
+      "required": true,
+      "waivable": false,
+      "params": {
+        "proptest_cases": 256,
+        "timeout_secs": 1800
+      },
+      "tool": {
+        "name": "cargo-nextest",
+        "probe": {
+          "state": "ready",
+          "version": "0.9.145"
+        }
+      },
+      "outcome": "passed",
+      "exit_status": 0,
+      "error_class": null,
+      "reason": null,
+      "started_at": "2026-09-22T21:13:13.244Z",
+      "duration_ms": 10147,
+      "selection_counts": {
+        "errors": 0,
+        "failures": 0,
+        "tests": 188
+      },
+      "artifacts": [
+        {
+          "path": "target/rha/logs/L0/L0.nextest.stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "target/rha/logs/L0/L0.nextest.stderr",
+          "sha256": "b6beb703ee328a912dcd64e4de52da79eb1cf212d473eb0e6730b98a1d5eeee1"
+        },
+        {
+          "path": "target/nextest/ci/junit.xml",
+          "sha256": "0769a6cf955524fb0a7db158385e3284a0640128e7187432037bb6a825cfb07c"
+        }
+      ],
+      "limits": []
+    },
+    {
+      "id": "L0.doctest",
+      "kind": "doctest",
+      "argv": [
+        "cargo",
+        "test",
+        "--workspace",
+        "--doc"
+      ],
+      "required": true,
+      "waivable": false,
+      "params": {
+        "proptest_cases": 256,
+        "timeout_secs": 1800
+      },
+      "tool": {
+        "name": "rustc",
+        "probe": {
+          "state": "ready",
+          "version": "1.98.1"
+        }
+      },
+      "outcome": "passed",
+      "exit_status": 0,
+      "error_class": null,
+      "reason": null,
+      "started_at": "2026-09-22T21:13:23.406Z",
+      "duration_ms": 802,
+      "selection_counts": {
+        "failed": 0,
+        "harness_runs": 8,
+        "ignored": 0,
+        "passed": 1
+      },
+      "artifacts": [
+        {
+          "path": "target/rha/logs/L0/L0.doctest.stdout",
+          "sha256": "5f11414e05ff1e783778a51e771804bcdf49d7bbb03b2ae515257907141c8fbb"
+        },
+        {
+          "path": "target/rha/logs/L0/L0.doctest.stderr",
+          "sha256": "4325c4fa23c09d685a1169aad2b55ac8e419afb32b07a51926cb445b1849434b"
+        }
+      ],
+      "limits": []
+    },
+    {
+      "id": "L0.architecture",
+      "kind": "architecture",
+      "argv": [
+        "cargo",
+        "xtask",
+        "architecture"
+      ],
+      "required": true,
+      "waivable": false,
+      "params": {
+        "timeout_secs": 600
+      },
+      "tool": {
+        "name": "xtask",
+        "probe": null
+      },
+      "outcome": "passed",
+      "exit_status": 0,
+      "error_class": null,
+      "reason": null,
+      "started_at": "2026-09-22T21:13:24.209Z",
+      "duration_ms": 150,
+      "selection_counts": {
+        "crates": 9,
+        "errors": 0,
+        "warnings": 0
+      },
+      "artifacts": [
+        {
+          "path": "target/rha/logs/L0/L0.architecture.stdout",
+          "sha256": "3d6fc66a46084b978d7043a94c610747f3d23fabd8767eba44a5bd4d3a33463a"
+        },
+        {
+          "path": "target/rha/logs/L0/L0.architecture.stderr",
+          "sha256": "ae65bb7cc92a02149efa18f471e7f450218408d62990af47f528a8b80dc52168"
+        },
+        {
+          "path": "target/rha/architecture.json",
+          "sha256": "7dd469eb95f8750eba55fb20c9ea21a326e0f5fcc96d9ed9f088fd7d75048fb5"
+        }
+      ],
+      "limits": []
+    },
+    {
+      "id": "L0.deny",
+      "kind": "dependency",
+      "argv": [
+        "cargo",
+        "deny",
+        "check"
+      ],
+      "required": true,
+      "waivable": false,
+      "params": {
+        "timeout_secs": 900
+      },
+      "tool": {
+        "name": "cargo-deny",
+        "probe": {
+          "state": "ready",
+          "version": "0.20.2"
+        }
+      },
+      "outcome": "passed",
+      "exit_status": 0,
+      "error_class": null,
+      "reason": null,
+      "started_at": "2026-09-22T21:13:24.380Z",
+      "duration_ms": 602,
+      "selection_counts": null,
+      "artifacts": [
+        {
+          "path": "target/rha/logs/L0/L0.deny.stdout",
+          "sha256": "f1a0fca39d4280363937aabd77783990ea6480bd9ca257816de3b68fc8efa845"
+        },
+        {
+          "path": "target/rha/logs/L0/L0.deny.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "limits": []
+    },
+    {
+      "id": "L0.machete",
+      "kind": "dependency",
+      "argv": [
+        "cargo",
+        "machete"
+      ],
+      "required": true,
+      "waivable": false,
+      "params": {
+        "timeout_secs": 600
+      },
+      "tool": {
+        "name": "cargo-machete",
+        "probe": {
+          "state": "ready",
+          "version": "0.9.2"
+        }
+      },
+      "outcome": "passed",
+      "exit_status": 0,
+      "error_class": null,
+      "reason": null,
+      "started_at": "2026-09-22T21:13:25.003Z",
+      "duration_ms": 103,
+      "selection_counts": null,
+      "artifacts": [
+        {
+          "path": "target/rha/logs/L0/L0.machete.stdout",
+          "sha256": "609a16d6d9b02ee55be21ac732381d9080802acfda3330f14ba7c102b6859fa9"
+        },
+        {
+          "path": "target/rha/logs/L0/L0.machete.stderr",
+          "sha256": "9c6fea1ba9841d830a983d90afe526389fb31233f7d2431372194c493f57920b"
+        }
+      ],
+      "limits": []
+    },
+    {
+      "id": "L0.typos",
+      "kind": "spelling",
+      "argv": [
+        "typos"
+      ],
+      "required": true,
+      "waivable": false,
+      "params": {
+        "timeout_secs": 300
+      },
+      "tool": {
+        "name": "typos-cli",
+        "probe": {
+          "state": "ready",
+          "version": "1.50.2"
+        }
+      },
+      "outcome": "passed",
+      "exit_status": 0,
+      "error_class": null,
+      "reason": null,
+      "started_at": "2026-09-22T21:13:25.112Z",
+      "duration_ms": 101,
+      "selection_counts": null,
+      "artifacts": [
+        {
+          "path": "target/rha/logs/L0/L0.typos.stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "target/rha/logs/L0/L0.typos.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "limits": []
+    }
+  ],
+  "evidence_inputs": {
+    "fixtures": [
+      {
+        "path": "docs/spec/rha-spec-v0.10.md",
+        "sha256": "bd96216829035ade64c43befa5e672c58078f6afa4b04145c6183227e4e1071a"
+      },
+      {
+        "path": "xtask/tests/corpus/manifest.toml",
+        "sha256": "07059dd444a7023552026ea3fa3051b71290b030c0d960f5ca3d1f1509196e03"
+      }
+    ],
+    "seeds": {
+      "persisted_regressions": [],
+      "proptest_cases": 256
+    },
+    "environment": {
+      "ci": null,
+      "os": "Linux 6.18.33.2-microsoft-standard-WSL2 x86_64",
+      "runner": "local"
+    }
+  },
+  "performance": null,
+  "agent_context": {
+    "provenance": {
+      "budgets": "unknown",
+      "harness": "Claude Code",
+      "permissions": "Workspace files, shell, git and gh through the user's account; protected paths as listed in protected_scope, each with its decision.",
+      "reasoning_effort": "unknown",
+      "sessions": [
+        {
+          "model_id": "claude-opus-5-5",
+          "span": "P-A"
+        }
+      ],
+      "task_scope": "P-A"
+    },
+    "source": {
+      "path": ".rha/tasks/CHG-005-rhawiki-m1.toml",
+      "sha256": "9835e9475675f9f6925bec2860b45fc52bb24a4bc5b6b21cc452e06dcc26673b"
+    }
+  },
+  "limits": [
+    "policy read from the candidate working tree; Policy(b) selection from the base revision is not implemented (§11.7.6)",
+    "the producing xtask is candidate code; this record is advisory, not protected evidence (§11.5)",
+    "a timeout kills only the direct child process of a check"
+  ],
+  "disposition": {
+    "eligibility": "blocked",
+    "predicates": {
+      "authentic": {
+        "holds": false,
+        "reasons": [
+          "no trusted producers in policy: this local record is unauthenticated"
+        ]
+      },
+      "applicable": {
+        "holds": true,
+        "reasons": []
+      },
+      "complete": {
+        "holds": true,
+        "reasons": []
+      },
+      "passed": {
+        "holds": true,
+        "reasons": []
+      }
+    },
+    "blocking": [
+      "Authentic: no trusted producers in policy: this local record is unauthenticated"
+    ],
+    "acceptance": "pending",
+    "exception": null,
+    "acceptor": null
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "cells": [
+    "law2-d3"
+  ],
+  "expected": "no_alarm",
+  "generation": "authored",
+  "id": "M07",
+  "level": "module",
+  "rule": "-",
+  "seeded": "use crate::constraints::* at the facade: a declared edge to the public surface"
+}

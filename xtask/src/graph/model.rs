@@ -78,6 +78,15 @@ pub struct PortRef {
     pub owner: String,
 }
 
+#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
+pub struct CompositeSource {
+    pub rules: String,
+    pub source: PathBuf,
+    pub crate_name: String,
+    pub edition: String,
+    pub externals: std::collections::BTreeSet<String>,
+}
+
 impl PortRef {
     /// Splits `owner::Port`. A string with no `::` names an owner and no port,
     /// which `meta.unknown_port_owner` will report unless a member matches.
@@ -96,6 +105,9 @@ impl PortRef {
 pub struct CrateNode {
     pub name: String,
     pub manifest_path: PathBuf,
+    /// Production library and binary roots reported by `cargo metadata`.
+    pub source_roots: Vec<PathBuf>,
+    pub composite: Option<CompositeSource>,
     /// `None` when nothing classified it, which is `class.unclassified`.
     pub role: Option<Role>,
     pub role_source: Option<RoleSource>,

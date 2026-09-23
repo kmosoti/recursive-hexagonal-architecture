@@ -1,0 +1,570 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Structural record-shape schema translated from the registered RHA observation inventory; it is not an evaluator.",
+  "properties": {
+    "acceptance": {
+      "additionalProperties": false,
+      "properties": {
+        "criteria": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "replan_when": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "criteria"
+      ],
+      "type": "object"
+    },
+    "actors": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "accountable_to": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "authority_profile": {
+      "type": "string"
+    },
+    "base_revision": {
+      "type": "string"
+    },
+    "branch": {
+      "type": "string"
+    },
+    "claim": {
+      "additionalProperties": false,
+      "properties": {
+        "affected_components": {
+          "items": {},
+          "type": "array"
+        },
+        "architecture_delta": {
+          "type": "string"
+        },
+        "contract_changes": {
+          "type": "string"
+        },
+        "performance_impact": {
+          "type": "string"
+        },
+        "unresolved": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "affected_components",
+        "architecture_delta",
+        "contract_changes",
+        "performance_impact",
+        "unresolved"
+      ],
+      "type": "object"
+    },
+    "compatibility": {
+      "additionalProperties": false,
+      "properties": {
+        "api": {
+          "type": "string"
+        },
+        "dependencies": {
+          "type": "string"
+        },
+        "resources": {
+          "type": "string"
+        },
+        "schema": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "api",
+        "dependencies",
+        "resources",
+        "schema"
+      ],
+      "type": "object"
+    },
+    "covers": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "decisions": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "answer": {
+            "type": "string"
+          },
+          "commit": {
+            "type": "string"
+          },
+          "corrected_manifest_sha256": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          },
+          "decided_by": {
+            "type": "string"
+          },
+          "delegation": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          },
+          "parent_manifest_sha256": {
+            "type": "string"
+          },
+          "question": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "answer",
+          "date",
+          "decided_by",
+          "id",
+          "question"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "executor_composition": {
+      "type": "string"
+    },
+    "expectation": {
+      "additionalProperties": false,
+      "properties": {
+        "amended_run": {
+          "type": "string"
+        },
+        "detection": {
+          "type": "string"
+        },
+        "detection_target": {
+          "type": "string"
+        },
+        "discovery": {
+          "type": "string"
+        },
+        "expected_miss_discipline": {
+          "type": "string"
+        },
+        "fallback_if_contradicted": {
+          "type": "string"
+        },
+        "if_contradicted": {
+          "type": "string"
+        },
+        "l0_architecture": {
+          "type": "string"
+        },
+        "merge": {
+          "type": "string"
+        },
+        "on_this_repository": {
+          "type": "string"
+        },
+        "pre_registration_identity": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "id": {
+      "type": "string"
+    },
+    "intent": {
+      "type": "string"
+    },
+    "mode": {
+      "type": "string"
+    },
+    "non_goals": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "plan_ref": {
+      "type": "string"
+    },
+    "protected_scope": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "provenance": {
+      "additionalProperties": false,
+      "properties": {
+        "advisory_subagents": {
+          "type": "string"
+        },
+        "budgets": {
+          "type": "string"
+        },
+        "generations": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "artifact": {
+                "type": "string"
+              },
+              "edits": {
+                "type": "string"
+              },
+              "first_committed_sha256": {
+                "type": "string"
+              },
+              "generation": {
+                "type": "string"
+              },
+              "harness": {
+                "type": "string"
+              },
+              "model": {
+                "type": "string"
+              },
+              "note": {
+                "type": "string"
+              },
+              "omissions": {
+                "type": "string"
+              },
+              "oracles": {
+                "type": "string"
+              },
+              "prompt": {
+                "type": "string"
+              },
+              "prompt_path": {
+                "type": "string"
+              },
+              "prompt_sha256": {
+                "type": "string"
+              },
+              "reasoning_effort": {
+                "type": "string"
+              },
+              "sample": {
+                "type": "string"
+              },
+              "separation": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "artifact",
+              "generation",
+              "model",
+              "sample"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "harness": {
+          "type": "string"
+        },
+        "instruction_sources": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "path": {
+                "type": "string"
+              },
+              "sha256": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "path",
+              "sha256"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "model_id": {
+          "type": "string"
+        },
+        "output_style": {
+          "type": "string"
+        },
+        "permission_mode": {
+          "type": "string"
+        },
+        "permissions": {
+          "type": "string"
+        },
+        "reasoning_effort": {
+          "type": "string"
+        },
+        "reviews": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "reviewer": {
+                "type": "string"
+              },
+              "revision": {
+                "type": "string"
+              },
+              "verdict": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "reviewer",
+              "revision",
+              "verdict"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "sessions": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "advisory_verifier": {
+                "type": "string"
+              },
+              "harness": {
+                "type": "string"
+              },
+              "model_id": {
+                "type": "string"
+              },
+              "permissions": {
+                "type": "string"
+              },
+              "span": {
+                "type": "string"
+              },
+              "write_workers": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "model_id",
+              "span"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "task_scope": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "budgets",
+        "harness",
+        "permissions",
+        "reasoning_effort",
+        "task_scope"
+      ],
+      "type": "object"
+    },
+    "repairs": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "change": {
+            "type": "string"
+          },
+          "discriminating_check": {
+            "type": "string"
+          },
+          "hypothesis": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "scope": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "change",
+          "discriminating_check",
+          "hypothesis",
+          "id",
+          "scope"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "roles": {
+      "additionalProperties": false,
+      "properties": {
+        "acceptor": {
+          "type": "string"
+        },
+        "executor": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "integrator": {
+          "type": "string"
+        },
+        "planner": {
+          "type": "string"
+        },
+        "verifier": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "acceptor",
+        "executor",
+        "integrator",
+        "planner",
+        "verifier"
+      ],
+      "type": "object"
+    },
+    "schema_version": {
+      "allOf": [
+        {
+          "if": {
+            "type": "integer"
+          },
+          "then": {
+            "enum": [
+              1
+            ]
+          }
+        }
+      ],
+      "type": "integer"
+    },
+    "scope_globs": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "slug": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "work": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "claim": {
+            "type": "string"
+          },
+          "depends_on": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "executor": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "output": {
+            "type": "string"
+          },
+          "owned_scope": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "depends_on",
+          "executor",
+          "id",
+          "output"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "actors",
+    "authority_profile",
+    "base_revision",
+    "branch",
+    "decisions",
+    "executor_composition",
+    "id",
+    "intent",
+    "mode",
+    "non_goals",
+    "plan_ref",
+    "provenance",
+    "roles",
+    "schema_version",
+    "slug",
+    "status",
+    "title",
+    "work"
+  ],
+  "title": "RHA task record schema",
+  "type": "object",
+  "x-rha-contract": "docs/architecture/record-schema-contract.md",
+  "x-rha-family": "task",
+  "x-rha-inventory-format": "rha-observed-shapes-1",
+  "x-rha-inventory-sha256": "8411a2971ed2641fabf2d81f124e53d09396e5262df59dffbeaf23d119061dee",
+  "x-rha-source-revision": "99a74b042842b4d869ef341f58fdfcafb9c96e84"
+}

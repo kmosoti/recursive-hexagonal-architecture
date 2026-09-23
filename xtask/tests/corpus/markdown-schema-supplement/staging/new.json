@@ -1,0 +1,638 @@
+{
+  "advisory": true,
+  "artifact_identity": {
+    "branch": "chg/007-module-level",
+    "digest_algorithm": "sha256",
+    "dirty": false,
+    "git_object_format": "sha1",
+    "revision": "ed79a7a8e0ace5caed196fae8858b242c761e330",
+    "snapshot_tree": "6761a1f8ac983dcceb92edd58496009d5557178a",
+    "tracked_diff_sha256": null,
+    "tree": "6761a1f8ac983dcceb92edd58496009d5557178a",
+    "untracked_inputs": []
+  },
+  "cases": [
+    {
+      "exit_status": 0,
+      "expected_witnesses": 0,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 0,
+      "passed": true,
+      "site": "MD001",
+      "well_formed": true
+    },
+    {
+      "exit_status": 0,
+      "expected_witnesses": 0,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 0,
+      "passed": true,
+      "site": "MD002",
+      "well_formed": true
+    },
+    {
+      "exit_status": 0,
+      "expected_witnesses": 0,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 0,
+      "passed": true,
+      "site": "MD003",
+      "well_formed": true
+    },
+    {
+      "exit_status": 0,
+      "expected_witnesses": 0,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 0,
+      "passed": true,
+      "site": "MD004",
+      "well_formed": true
+    },
+    {
+      "exit_status": 0,
+      "expected_witnesses": 0,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 0,
+      "passed": true,
+      "site": "MD005",
+      "well_formed": true
+    },
+    {
+      "exit_status": 0,
+      "expected_witnesses": 0,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 0,
+      "passed": true,
+      "site": "MD006",
+      "well_formed": true
+    },
+    {
+      "exit_status": 0,
+      "expected_witnesses": 0,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 0,
+      "passed": true,
+      "site": "MD007",
+      "well_formed": true
+    },
+    {
+      "exit_status": 0,
+      "expected_witnesses": 0,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 0,
+      "passed": true,
+      "site": "MD008",
+      "well_formed": true
+    },
+    {
+      "exit_status": 0,
+      "expected_witnesses": 0,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 0,
+      "passed": true,
+      "site": "MD009",
+      "well_formed": true
+    },
+    {
+      "exit_status": 0,
+      "expected_witnesses": 0,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 0,
+      "passed": true,
+      "site": "MD010",
+      "well_formed": true
+    },
+    {
+      "exit_status": 0,
+      "expected_witnesses": 0,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 0,
+      "passed": true,
+      "site": "MD011",
+      "well_formed": true
+    },
+    {
+      "exit_status": 0,
+      "expected_witnesses": 0,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 0,
+      "passed": true,
+      "site": "MD012",
+      "well_formed": true
+    },
+    {
+      "exit_status": 0,
+      "expected_witnesses": 0,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 0,
+      "passed": true,
+      "site": "MD013",
+      "well_formed": true
+    },
+    {
+      "exit_status": 0,
+      "expected_witnesses": 0,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 0,
+      "passed": true,
+      "site": "MD014",
+      "well_formed": true
+    },
+    {
+      "exit_status": 0,
+      "expected_witnesses": 0,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 0,
+      "passed": true,
+      "site": "MD015",
+      "well_formed": true
+    },
+    {
+      "exit_status": 0,
+      "expected_witnesses": 0,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 0,
+      "passed": true,
+      "site": "MD016",
+      "well_formed": true
+    },
+    {
+      "exit_status": 0,
+      "expected_witnesses": 0,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 0,
+      "passed": true,
+      "site": "MD017",
+      "well_formed": true
+    },
+    {
+      "exit_status": 0,
+      "expected_witnesses": 0,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 0,
+      "passed": true,
+      "site": "MD018",
+      "well_formed": true
+    },
+    {
+      "exit_status": 0,
+      "expected_witnesses": 0,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 0,
+      "passed": true,
+      "site": "MD019",
+      "well_formed": true
+    },
+    {
+      "exit_status": 0,
+      "expected_witnesses": 0,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 0,
+      "passed": true,
+      "site": "MD020",
+      "well_formed": true
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 1,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 1,
+      "passed": true,
+      "site": "MD021",
+      "well_formed": true
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 3,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 3,
+      "passed": true,
+      "site": "MD022",
+      "well_formed": true
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 3,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 3,
+      "passed": true,
+      "site": "MD023",
+      "well_formed": true
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 4,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 4,
+      "passed": true,
+      "site": "MD024",
+      "well_formed": true
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 2,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 2,
+      "passed": true,
+      "site": "MD025",
+      "well_formed": true
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 2,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 2,
+      "passed": true,
+      "site": "MD026",
+      "well_formed": true
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 1,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 1,
+      "passed": true,
+      "site": "MD027",
+      "well_formed": true
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 2,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 2,
+      "passed": true,
+      "site": "MD028",
+      "well_formed": true
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 2,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 2,
+      "passed": true,
+      "site": "MD029",
+      "well_formed": true
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 3,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 3,
+      "passed": true,
+      "site": "MD030",
+      "well_formed": true
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 3,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 3,
+      "passed": true,
+      "site": "MD031",
+      "well_formed": true
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 2,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 2,
+      "passed": true,
+      "site": "MD032",
+      "well_formed": true
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 5,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 5,
+      "passed": true,
+      "site": "MD033",
+      "well_formed": true
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 2,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 2,
+      "passed": true,
+      "site": "MD034",
+      "well_formed": true
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 2,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 2,
+      "passed": true,
+      "site": "MD035",
+      "well_formed": true
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 1,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 1,
+      "passed": true,
+      "site": "MD036",
+      "well_formed": true
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 1,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 1,
+      "passed": true,
+      "site": "MD037",
+      "well_formed": true
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 3,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 3,
+      "passed": true,
+      "site": "MD038",
+      "well_formed": true
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 4,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 4,
+      "passed": true,
+      "site": "MD039",
+      "well_formed": true
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 6,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 6,
+      "passed": true,
+      "site": "MD040",
+      "well_formed": true
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 1,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 1,
+      "passed": true,
+      "site": "MD041",
+      "well_formed": true
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 4,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 4,
+      "passed": true,
+      "site": "MD042",
+      "well_formed": true
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 2,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 2,
+      "passed": true,
+      "site": "MD043",
+      "well_formed": true
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 2,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 2,
+      "passed": true,
+      "site": "MD044",
+      "well_formed": true
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 3,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 3,
+      "passed": true,
+      "site": "MD045",
+      "well_formed": true
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 2,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 2,
+      "passed": true,
+      "site": "MD046",
+      "well_formed": true
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 2,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 2,
+      "passed": true,
+      "site": "MD047",
+      "well_formed": true
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 5,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 5,
+      "passed": true,
+      "site": "MD048",
+      "well_formed": true
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 2,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 2,
+      "passed": true,
+      "site": "MD049",
+      "well_formed": true
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 3,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 3,
+      "passed": true,
+      "site": "MD050",
+      "well_formed": true
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 2,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 2,
+      "passed": true,
+      "site": "MD051",
+      "well_formed": true
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 2,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 2,
+      "passed": true,
+      "site": "MD052",
+      "well_formed": true
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 2,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 2,
+      "passed": true,
+      "site": "MD053",
+      "well_formed": true
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 8,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 8,
+      "passed": true,
+      "site": "MD054",
+      "well_formed": true
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 1,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 1,
+      "passed": true,
+      "site": "MD055",
+      "well_formed": true
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 1,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 1,
+      "passed": true,
+      "site": "MD056",
+      "well_formed": true
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 1,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 1,
+      "passed": true,
+      "site": "MD057",
+      "well_formed": true
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 1,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 1,
+      "passed": true,
+      "site": "MD058",
+      "well_formed": true
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 2,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 2,
+      "passed": true,
+      "site": "MD059",
+      "well_formed": true
+    },
+    {
+      "exit_status": 1,
+      "expected_witnesses": 1,
+      "extra": [],
+      "missing": [],
+      "observed_witnesses": 1,
+      "passed": true,
+      "site": "MD060",
+      "well_formed": true
+    }
+  ],
+  "created_at": "2026-09-23T04:44:15.613Z",
+  "evidence_class": "local",
+  "grading": "exact multiset of witnesses, every key equal, no extras; exit 1 iff any witness",
+  "kind": "markdown_corpus",
+  "product": {
+    "binary": "/home/kmosoti/projects/rha-m2/target/debug/rhawiki",
+    "binary_sha256": "7af435133d70326329c4092615d766ede2e31d6ab56b5421cc46ecc690ad8764",
+    "git_dirty": false,
+    "git_rev": "ed79a7a8e0ace5caed196fae8858b242c761e330"
+  },
+  "registration": {
+    "generator": "{ harness = \"codex-cli 0.155.1\", model = \"gpt-6-astra\", reasoning_effort = \"xhigh\", sandbox = \"workspace-write, limited by prompt to this directory\" }",
+    "path": "xtask/tests/corpus/markdown/registration.toml",
+    "tree_sha256": "f7a33823e66ad231553403c1321374c4ce0ed2cd7b39ec0d7fdbe55f80813315"
+  },
+  "schema_version": 1,
+  "summary": {
+    "failed": 0,
+    "outcome": "passed",
+    "passed": 60,
+    "sites": 60
+  }
+}

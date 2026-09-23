@@ -1,0 +1,39 @@
+   Compiling xtask v0.1.0 (/home/kmosoti/projects/rha-m2/xtask)
+error[E0277]: `?` couldn't convert the error to `LoadError`
+   --> xtask/src/metadata.rs:216:59
+    |
+178 | ) -> std::result::Result<SingleModule, LoadError> {
+    |      -------------------------------------------- expected `LoadError` because of this
+...
+216 |     let source = composite_source(package, &rha, &members)?
+    |                  -----------------------------------------^ the trait `From<error::Error>` is not implemented for `LoadError`
+    |                  |
+    |                  this can't be annotated with `?` because it has type `Result<_, error::Error>`
+    |
+note: `LoadError` needs to implement `From<error::Error>`
+   --> xtask/src/metadata.rs:104:1
+    |
+104 | pub enum LoadError {
+    | ^^^^^^^^^^^^^^^^^^
+    = note: the question mark operation (`?`) implicitly performs a conversion on the error value using the `From` trait
+
+error[E0277]: `?` couldn't convert the error to `LoadError`
+   --> xtask/src/metadata.rs:217:86
+    |
+178 | ) -> std::result::Result<SingleModule, LoadError> {
+    |      -------------------------------------------- expected `LoadError` because of this
+...
+217 |         .ok_or_else(|| Error::new("module-only source metadata was not constructed"))?;
+    |          ----------------------------------------------------------------------------^ the trait `From<error::Error>` is not implemented for `LoadError`
+    |          |
+    |          this can't be annotated with `?` because it has type `Result<_, error::Error>`
+    |
+note: `LoadError` needs to implement `From<error::Error>`
+   --> xtask/src/metadata.rs:104:1
+    |
+104 | pub enum LoadError {
+    | ^^^^^^^^^^^^^^^^^^
+    = note: the question mark operation (`?`) implicitly performs a conversion on the error value using the `From` trait
+
+For more information about this error, try `rustc --explain E0277`.
+error: could not compile `xtask` (lib) due to 2 previous errors

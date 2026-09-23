@@ -1,0 +1,24 @@
+{
+  "cells": [
+    "law6-b3"
+  ],
+  "expected": "detect",
+  "extraction": "heuristic",
+  "generation": "authored",
+  "id": "M20",
+  "level": "module",
+  "rule": "modules.cycle",
+  "seeded": "a path inside macro arguments, assert_eq!(crate::ordering::score(), 1)",
+  "witness": {
+    "extraction": "heuristic",
+    "path": [
+      "constraints",
+      "ordering",
+      "constraints"
+    ],
+    "rule": "modules.cycle"
+  },
+  "witness_notes": {
+    "note": "the finding must carry the heuristic flag; a run that reports it as exact fails the case"
+  }
+}

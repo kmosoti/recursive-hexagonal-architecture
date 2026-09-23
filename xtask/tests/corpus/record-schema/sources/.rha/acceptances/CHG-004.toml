@@ -1,0 +1,147 @@
+# First commit of CHG-004.6; acceptance-record creation is pre-approved.
+schema_version = 1
+id = "CHG-004"
+change = "docs/changes/CHG-004-h4-crate-harness.md"
+task = ".rha/tasks/CHG-004-h4-crate-harness.toml"
+
+[acceptor]
+principal = "human:kennedy"
+role = "acceptor"
+date = "2026-09-20"
+authority_profile = "ECC-Solo"
+basis = 'The merge is the acceptance under .rha/policy.toml [acceptance]. Kennedy confirmed: "CHG-004 is accepted at 434b706 (merge of PR 13)."'
+event = "merge of pull request 13"
+
+[subject]
+revision = "434b7064e3f21db5676aacb92525e4eef9f0ff2a"
+tree = "cca36173d152a45e5b088db36526b6729fbdded1"
+parents = ["140fdfb92d62d3481d95f3e2efc1d24a0206fcc4", "ee0bf64483b24883b2e8744fdc17f65f93b0c1bf"]
+pull_request = "https://github.com/kmosoti/recursive-hexagonal-architecture/pull/13"
+milestone = "M1 (in progress; W4 accepted with C13 grading failure)"
+tag = "none"
+integrator_edits = "none: merge tree equals second parent tree"
+
+[[evidence]]
+path = "evidence/ci/35530722005.json"
+class = "ci"
+subject_revision = "434b7064e3f21db5676aacb92525e4eef9f0ff2a"
+subject_tree = "cca36173d152a45e5b088db36526b6729fbdded1"
+note = "GitHub Actions run 35530722005 on main at the accepted merge, downloaded unchanged. All eight L0 checks passed; nextest selected 143 tests."
+
+[[evidence]]
+path = "evidence/h4-crate/20260920T122638Z-eec489c71f25.json"
+class = "local"
+subject_revision = "eec489c71f259423bb4cc75a5650ecaa8c10c0c3"
+subject_tree = "db74df0f16b542b7bb65605dbb99b58a19e024f4"
+note = "Archived delivery H4 observation at its own earlier clean subject, not the merge. The accepted CI corpus test pins the same outcome: 22/22 detected, C13 alone failed because of its unmatched adapter.foreign_core warning."
+
+[[evidence]]
+path = "evidence/h4-crate/20260920T191132Z-434b7064e3f2.json"
+class = "local"
+subject_revision = "434b7064e3f21db5676aacb92525e4eef9f0ff2a"
+subject_tree = "cca36173d152a45e5b088db36526b6729fbdded1"
+note = "Public H4 baseline reproduced on the exact accepted merge in a clean checkout before any CHG-004.6 edit: 22/22 detected, C13 alone failed, one unmatched finding, two documented holes. Held-out cases were not read or run."
+
+[outcomes]
+passed = ["L0.fmt", "L0.clippy", "L0.nextest", "L0.doctest", "L0.architecture", "L0.deny", "L0.machete", "L0.typos"]
+not_run = []
+failed = []
+not_applicable = []
+inconclusive = []
+
+[h4]
+outcome = "failed"
+detected = 22
+detect_cases = 22
+unmatched_findings = 1
+legitimate_cases_with_alarms = 0
+legitimate_cases = 11
+documented_holes = ["EM-C01", "EM-C02"]
+failed_cases = ["C13"]
+reason = "C13's required violation was detected, and its accurate adapter.foreign_core warning was unmatched under the grading registered at acceptance (DP-1.1c)."
+
+[held_out]
+decision = "DP-1.1b"
+outcome = "not_run_at_acceptance"
+reason = "Kennedy merged without running the private cases and supplied no per-case outcomes. Under the DP-1.1b amendment recorded in CHG-004.6, the executor's process runs the accepted checker on them through `cargo xtask corpus held-out` once Kennedy supplies the directory or the original archive; that observation is recorded as post-acceptance evidence, dated, and graded by Kennedy against his expectations. No agent has read the cases."
+executor_read_cases = false
+
+[disposition]
+decision = "accepted"
+kind = "controlled_transition"
+merge_allowed = false
+eligibility_at_acceptance = "blocked"
+basis = "All required L0 checks passed. Authentic remains false under .rha/policy.toml [acceptance.bootstrap]; records remain advisory. The separately recorded H4 failure is preserved and is the registration decision applied by CHG-004.6."
+exception = "none"
+
+[[disposition.predicates]]
+name = "Authentic"
+holds = false
+reason = "No trusted producers; this CI record is unauthenticated."
+
+[[disposition.predicates]]
+name = "Applicable"
+holds = true
+reason = "Required subject and verification identities are present and candidate/base policy digests match."
+
+[[disposition.predicates]]
+name = "Complete"
+holds = true
+reason = "Every required L0 check is recorded with a unique id."
+
+[[disposition.predicates]]
+name = "Passed"
+holds = true
+reason = "All eight required L0 checks passed; nextest selected 143 tests. H4 is separately recorded as failed."
+
+[[defects]]
+id = "D-004.1"
+status = "repaired_before_acceptance"
+record = "docs/changes/CHG-004-h4-crate-harness.md: CHG-004.1 determinations"
+statement = "Checker findings omitted structured fields required by the fixed witnesses, so the initial committed corpus scored 13/22 rather than 22/22."
+repair = "Structured crate, cycle members, matched selector, role-conflict, port and owner facts were added in f1c2c55 after determination 512c67c; rules and grading remained unchanged."
+
+[[defects]]
+id = "D-004.3"
+status = "repaired_before_acceptance"
+record = "docs/changes/CHG-004-h4-crate-harness.md: CHG-004.3 determinations"
+statement = "The provenance writer and full-corpus test required older Git objects absent from the workflow depth-2 checkout; CI 35510429218 failed one of 141 tests."
+repair = "Read historical identities from their owning records and compare fixed before/after manifest byte digests. eec489c repaired the shallow-checkout failure without changing the workflow."
+
+[[defects]]
+id = "D-004.4"
+status = "repaired_before_acceptance"
+record = "docs/changes/CHG-004-h4-crate-harness.md: CHG-004.4 determinations"
+statement = "The draft reintroduced internal journals removed by the earlier consolidation, duplicated unresolved-work ownership, and used an inconsistent task provenance shape."
+repair = "The make-ready review removed the two journals, moved unresolved items into the task record, reshaped provenance and added acceptance concerns and CI evidence. No checker, case, grading or protected surface was changed."
+
+[[defects]]
+id = "D-004.4-message"
+status = "disclosed_history"
+record = "docs/changes/CHG-004-h4-crate-harness.md: d13ff10 determinations"
+statement = "Commit d13ff10 is titled Commit the L0 record for CHG-004.4 but contains journal removals and record restructuring, with no evidence record, due to a shell error."
+repair = "The actual contents and mismatch are disclosed in the change record. The task/index/CI additions followed in 921970a. History was left unchanged."
+
+[[defects]]
+id = "D-004.5-generator"
+status = "repaired_before_acceptance"
+record = "docs/changes/CHG-004-h4-crate-harness.md: CHG-004.5 determinations"
+statement = "The fixture generator did not remove input files no longer produced by the registration, so drift persisted after a manifest change."
+repair = "fixture::materialize writes and prunes declared inputs, preserves Cargo outputs, removes emptied case directories, and has an idempotent regression test."
+
+[[defects]]
+id = "D-004.5-errors"
+status = "repaired_before_acceptance"
+record = "docs/changes/CHG-004-h4-crate-harness.md: CHG-004.5 determinations"
+statement = "Failures before a detector observation lost the config_error versus tool_error classification in one untyped error string."
+repair = "runner::ExecutionError preserves the class into H4 evidence; tests distinguish an unsupported detector from a process that cannot spawn."
+
+[carried_forward]
+open = [
+  "C13 decision (a), approved in the CHG-004.6 kickoff: amend DP-1.1c first, then register the exact expected adapter.foreign_core finding on C13 and append the approved grading sentence. This is a disclosed amendment after observing the data; the failed record is retained.",
+  "Acceptance concern 2: four archived records name revisions absent from the published branch history; retain them as observations and do not use them as evidence for this accepted candidate.",
+  "Acceptance concern 3: corpus_crate currently pins failed_cases = [C13]; CHG-004.6 changes that assertion with the approved manifest amendment and records the prior expectation under section 9.14.",
+  "Acceptance concern 4: DP-1.1b held-out outcomes await Kennedy's report; DP-1.6 maturity acceptance remains Kennedy's decision. Neither is inferred from public corpus results.",
+  "Acceptance concern 5: the internal journals removed by CHG-004.4 remain outside docs/; the task record owns unresolved work.",
+  "DP-1.6: Proposed maturity was I at this acceptance. CHG-004.6 may propose V only with a passing amended H4 run and disclosure of the amendment; Accepted maturity is not changed by the Executor.",
+]
