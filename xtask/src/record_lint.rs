@@ -163,12 +163,10 @@ fn walk(
         Value::Object(map) => {
             if let (Some(Value::String(path)), Some(Value::String(digest))) =
                 (map.get("path"), map.get("sha256"))
+                && let Some(bytes) = cited.bytes(path)
+                && digest.trim_start_matches("sha256:") != sha256_hex(&bytes)
             {
-                if let Some(bytes) = cited.bytes(path)
-                    && digest.trim_start_matches("sha256:") != sha256_hex(&bytes)
-                {
-                    out.insert("digest.mismatch");
-                }
+                out.insert("digest.mismatch");
             }
             for (k, x) in map {
                 match x {

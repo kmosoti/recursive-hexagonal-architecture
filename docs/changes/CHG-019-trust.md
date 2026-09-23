@@ -104,6 +104,10 @@ Questions answered:
 4. *The entry's `kind`.* The verifier judges validity by the policy check's kind, as `Complete` and the contract specify; the kind-equality of `⊑` is carried by the join, which refuses mixed kinds.
 5. *No L0 record at `522445f`.* That commit changed only `scope_globs`. The record for the repaired head follows these repairs.
 
+### Repair attempts after the approving reviews (§11.7.10)
+
+1. **`L0.clippy` failed on `7f9b4af`'s record (`evidence/CHG-019/20260923T001604Z-0a6b83370559.json`), and that head was pushed.** Hypothesis: the lint repair left a collapsible nested `if`. Discriminating check: `cargo clippy` reported `collapsible_if` at `record_lint.rs:164`, an error under the workspace lints. Change: the conditions are one `let` chain. Result: clippy is clean. The failed record is kept. The method lesson is the same as P-A's: run clippy before the commit, and never let a push follow a failed lane in one command chain.
+
 ### Not done in this packet, and why
 
 - **JSON Schema files under `.rha/schemas/`** (W15). The generator found that the contract fixes no required fields, types or allowed keys, so the `schema.*` codes have no registered cases. Writing schemas now would be the invented contract §2.4 rule 6 forbids. The schema decision is taken under Kennedy's delegation of 2026-09-22 (task record decision `schema-contract`): required fields, types and allowed keys are derived mechanically from the record shapes committed so far and registered, with their malformed cases, before any schema file exists. That is its own follow-on item, not this packet.
