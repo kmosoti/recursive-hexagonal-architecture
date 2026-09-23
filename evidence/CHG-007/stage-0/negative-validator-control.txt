@@ -1,0 +1,55 @@
+
+running 1 test
+test cli_schema_controls_are_rejected_or_accepted_as_registered ... FAILED
+
+failures:
+
+---- cli_schema_controls_are_rejected_or_accepted_as_registered stdout ----
+
+thread 'cli_schema_controls_are_rejected_or_accepted_as_registered' (2648526) panicked at xtask/tests/record_schema_cli.rs:215:5:
+assertion `left == right` failed: /tmp/rha-record-schema-schema-controls-2648525-0/record.json: accepted (evidence)
+
+  left: Some(0)
+ right: Some(1)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    cli_schema_controls_are_rejected_or_accepted_as_registered
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.10s
+
+   Compiling xtask v0.1.0 (/home/kmosoti/projects/rha-m2/xtask)
+warning: unreachable statement
+  --> xtask/src/record_schema.rs:83:5
+   |
+82 |       return Vec::new(); // deliberate negative-control defect, never committed
+   |       ----------------- any code following this expression is unreachable
+83 | /     let all = match validators() {
+84 | |         Ok(all) => all,
+85 | |         Err(message) => {
+86 | |             return vec![Issue {
+...  |
+92 | |     };
+   | |______^ unreachable statement
+   |
+   = note: `#[warn(unreachable_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `value`
+  --> xtask/src/record_schema.rs:81:17
+   |
+81 | pub fn validate(value: &Value, family: &str) -> Vec<Issue> {
+   |                 ^^^^^ help: if this is intentional, prefix it with an underscore: `_value`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `family`
+  --> xtask/src/record_schema.rs:81:32
+   |
+81 | pub fn validate(value: &Value, family: &str) -> Vec<Issue> {
+   |                                ^^^^^^ help: if this is intentional, prefix it with an underscore: `_family`
+
+warning: `xtask` (lib) generated 3 warnings (run `cargo fix --lib -p xtask` to apply 2 suggestions)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.13s
+     Running tests/record_schema_cli.rs (target/debug/deps/record_schema_cli-d7e5d74fc2d474df)
+error: test failed, to rerun pass `-p xtask --test record_schema_cli`

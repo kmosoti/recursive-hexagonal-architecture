@@ -16,6 +16,7 @@ pub mod lanes;
 pub mod metadata;
 pub mod policy;
 pub mod record_lint;
+pub mod record_schema;
 pub mod scope;
 pub mod tools;
 pub mod util;

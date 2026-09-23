@@ -13,7 +13,7 @@ base_revision = "ec493b794040ede8878705132c89f9a4855f2dbe"
 intent = "Deliver milestone M2: P-C CHG-007, CHG-019.1 and E1; P-D CHG-008 to CHG-014. Implement all required stages, fix every confirmed issue within M2 scope, keep registered grading unchanged absent a disclosed amendment, obtain separate GPT-6 validation, open two green stacked PRs, and never merge."
 non_goals = ["Editing docs/spec/**", "Reading or writing held-out material", "Merge or tag", "Rewriting pushed history", "P-D product growth before the P-C head"]
 scope_globs = [".rha/tasks/CHG-007-module-level.toml", ".rha/acceptances/CHG-019.toml", ".rha/decisions.toml", ".rha/schemas/**", "docs/**", "evidence/**", "xtask/**", "tools/rha-verifier/**", "experiments/no-std-graph/**", "Cargo.lock", "rha-baseline.json", "CONTRIBUTING.md"]
-protected_scope = [".rha/acceptances/CHG-019.toml", ".rha/decisions.toml", "rha-baseline.json", "CONTRIBUTING.md"]
+protected_scope = [".rha/acceptances/CHG-019.toml", ".rha/decisions.toml", "rha-baseline.json", "CONTRIBUTING.md", ".rha/schemas/**", "xtask/Cargo.toml", "xtask/src/record_lint.rs", "xtask/src/record_schema.rs", "xtask/schema_codegen.py", "xtask/src/lib.rs"]
 
 [[actors]]
 id = "human:kennedy"
@@ -146,3 +146,47 @@ sample = "sample 1; deterministic construction, no PRNG or random seed"
 separation = "Separate codex exec session forbidden to read schemas, lint or verifier implementation; new structural data registered before JSON schemas/new lint code. Verifier shape amendment is explicitly after P-B data/code."
 edits = "Pre-registration contract/variant and diagnostic-wire clarifications in three hashed prompts; no production grading before commit. Generation history records the interrupted pre-payload attempt and inspection errors."
 note = "188 cases; payload tree SHA-256 57501119f82f15f50f5471331aeac61941c5e6549892299e7609c70ae4e70981; registration retains source snapshots and governing contracts. A read-only Sol max audit matched all 1497 structural recipes and reviewed the 188 shape fixtures; it did not read or run production validation code."
+
+[[decisions]]
+id = "schema-implementation"
+question = "Which schema engine and verification-tool changes implement the registered structural contract?"
+answer = "Use jsonschema 0.57.0 (cargo info observed) with default features disabled and offline construction, Draft 2020-12. Translate the pinned independent INVENTORY.json deterministically into seven schema files, then apply them before accumulating existing semantic lint codes. Keep data derivation separate from schema production. Alternatives rejected: a handwritten partial JSON Schema evaluator, which adds unnecessary conformance risk; Python as a runtime dependency for the Rust CLI. Explicit citation notes preserve unresolved references without claiming them checked. These verifier changes are advisory candidate tooling; no trusted producer or acceptance-policy cut-over is implied."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: Determine a large slice to hand off to gpt-6-astra ultra. Make sure it has a goal to implement its work and fix any and all issue in accordance with rha design. (Let it flag and improve the architecture and tooling if it can justify it no need for my approval). I approve all PRs as long as both an opus 5.5 and gpt-6 agent has reviewed and approved the code. Kennedy, 2026-09-22: Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me."
+date = "2026-09-22"
+
+[[provenance.generations]]
+artifact = "xtask/schema_codegen.py and generated .rha/schemas/*.schema.json"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "codex-cli 0.156.0, profile write, read-only proposal"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-007/SCHEMA-CODEGEN.md"
+prompt_sha256 = "93a1afcad0e7f6eefaa149464ee34a962b59355e05a8b6809f19f8d23dba8ffd"
+sample = "sample 1; no PRNG seed"
+separation = "Registered corpus committed in f7b5c62 before implementation proposals. Writer produced a patch only; root Executor applied, compiled and verified it. Writer did not run tests or mutate branch files."
+edits = "Executor repaired proposal compile/type errors and harness construction mistakes; determinations in the change record. No registered expectations changed."
+
+[[provenance.generations]]
+artifact = "xtask/src/record_schema.rs and record_lint.rs"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "codex-cli 0.156.0, profile write, read-only proposal"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-007/RECORD-LINT.md"
+prompt_sha256 = "a6442682f3ccfff9a745a98eb5286939522ba5c5f2d5b739bcf8396b0708e05d"
+sample = "sample 1; no PRNG seed"
+separation = "Registered corpus committed in f7b5c62 before implementation proposals. Writer produced a patch only; root Executor applied, compiled and verified it. Writer did not run tests or mutate branch files."
+edits = "Executor repaired proposal compile/type errors and harness construction mistakes; determinations in the change record. No registered expectations changed."
+
+[[provenance.generations]]
+artifact = "Registered structural/shape graders, CLI regression tests and corpus identity checks"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "codex-cli 0.156.0, profile write, read-only proposal"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-007/SCHEMA-TESTS.md"
+prompt_sha256 = "2361c3bee703231fe19fc8cb7cb2e37bbafd02d7e045ba3a6c4e4420257e6915"
+sample = "sample 1; no PRNG seed"
+separation = "Registered corpus committed in f7b5c62 before implementation proposals. Writer produced a patch only; root Executor applied, compiled and verified it. Writer did not run tests or mutate branch files."
+edits = "Executor repaired proposal compile/type errors and harness construction mistakes; determinations in the change record. No registered expectations changed."

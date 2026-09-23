@@ -1,0 +1,44 @@
+   Compiling serde_core v1.0.229
+   Compiling getrandom v0.3.4
+   Compiling rustix v1.1.5
+   Compiling getrandom v0.4.3
+   Compiling linux-raw-sys v0.12.1
+   Compiling bitflags v2.13.2
+   Compiling num-traits v0.2.19
+   Compiling once_cell v1.21.4
+   Compiling fastrand v2.5.0
+   Compiling ppv-lite86 v0.2.21
+   Compiling wait-timeout v0.2.1
+   Compiling fnv v1.0.7
+   Compiling quick-error v1.2.3
+   Compiling bit-vec v0.8.0
+   Compiling unarray v0.1.4
+   Compiling bit-set v0.8.0
+   Compiling rand_core v0.9.5
+   Compiling rand v0.9.5
+   Compiling rand_chacha v0.9.0
+   Compiling rand_xorshift v0.4.0
+   Compiling tempfile v3.27.0
+   Compiling rusty-fork v0.3.1
+   Compiling proptest v1.11.0
+   Compiling serde_spanned v1.1.1
+   Compiling toml_datetime v1.1.1+spec-1.1.0
+   Compiling serde_json v1.0.151
+   Compiling toml v1.1.6+spec-1.1.0
+   Compiling rha-verifier v0.1.0 (/home/kmosoti/projects/rha-m2/tools/rha-verifier)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 5.61s
+     Running tests/corpus.rs (target/debug/deps/corpus-28e266c0ec215db7)
+
+running 1 test
+test every_registered_fixture_is_decided_as_registered ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/shape_corpus.rs (target/debug/deps/shape_corpus-5a04cda2fbc4dfde)
+
+running 1 test
+verifier-shape observed malformed=153 well_formed=35
+test every_supplementary_shape_fixture_has_exactly_its_registered_decision ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+

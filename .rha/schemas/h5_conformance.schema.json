@@ -1,0 +1,170 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Structural record-shape schema translated from the registered RHA observation inventory; it is not an evaluator.",
+  "properties": {
+    "advisory": {
+      "type": "boolean"
+    },
+    "cases": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "keys_wrong": {
+            "items": {},
+            "type": "array"
+          },
+          "merge_allowed": {
+            "type": "boolean"
+          },
+          "passed": {
+            "type": "boolean"
+          },
+          "row": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "keys_wrong",
+          "merge_allowed",
+          "passed",
+          "row"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "corpus": {
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "tree_sha256": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "tree_sha256"
+      ],
+      "type": [
+        "object",
+        "string"
+      ]
+    },
+    "evidence_class": {
+      "type": "string"
+    },
+    "kind": {
+      "allOf": [
+        {
+          "if": {
+            "type": "string"
+          },
+          "then": {
+            "enum": [
+              "h5_conformance"
+            ]
+          }
+        }
+      ],
+      "type": "string"
+    },
+    "not_run": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "schema_version": {
+      "allOf": [
+        {
+          "if": {
+            "type": "integer"
+          },
+          "then": {
+            "enum": [
+              1
+            ]
+          }
+        }
+      ],
+      "type": "integer"
+    },
+    "subject": {
+      "additionalProperties": false,
+      "properties": {
+        "dirty": {
+          "type": "boolean"
+        },
+        "revision": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "dirty",
+        "revision"
+      ],
+      "type": "object"
+    },
+    "summary": {
+      "additionalProperties": false,
+      "properties": {
+        "decided_as_registered": {
+          "type": "integer"
+        },
+        "fixtures": {
+          "type": "integer"
+        },
+        "outcome": {
+          "allOf": [
+            {
+              "if": {
+                "type": "string"
+              },
+              "then": {
+                "enum": [
+                  "passed",
+                  "failed",
+                  "not_run",
+                  "not_applicable",
+                  "inconclusive"
+                ]
+              }
+            }
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "decided_as_registered",
+        "fixtures",
+        "outcome"
+      ],
+      "type": "object"
+    }
+  },
+  "required": [
+    "advisory",
+    "cases",
+    "corpus",
+    "evidence_class",
+    "kind",
+    "not_run",
+    "schema_version",
+    "subject",
+    "summary"
+  ],
+  "title": "RHA H5 conformance record schema",
+  "type": "object",
+  "x-rha-contract": "docs/architecture/record-schema-contract.md",
+  "x-rha-family": "h5_conformance",
+  "x-rha-inventory-format": "rha-observed-shapes-1",
+  "x-rha-inventory-sha256": "8411a2971ed2641fabf2d81f124e53d09396e5262df59dffbeaf23d119061dee",
+  "x-rha-source-revision": "99a74b042842b4d869ef341f58fdfcafb9c96e84"
+}

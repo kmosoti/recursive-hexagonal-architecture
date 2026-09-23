@@ -1,0 +1,18 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.06s
+     Running tests/record_schema.rs (target/debug/deps/record_schema-79a40b92cd6426ba)
+
+running 1 test
+
+thread 'every_registered_record_schema_recipe_matches_exactly' (2645653) panicked at xtask/tests/record_schema.rs:92:28:
+set requires a value
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test every_registered_record_schema_recipe_matches_exactly ... FAILED
+
+failures:
+
+failures:
+    every_registered_record_schema_recipe_matches_exactly
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.91s
+
+error: test failed, to rerun pass `-p xtask --test record_schema`
