@@ -1,0 +1,133 @@
+   Compiling xtask v0.1.0 (/home/kmosoti/projects/rha-m2/xtask)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.51s
+     Running tests/modules_cli.rs (target/debug/deps/modules_cli-f62898d24578ee7b)
+
+running 1 test
+
+thread 'standalone_metadata_and_cli_cover_identity_aliases_and_module_failures' (2704454) panicked at xtask/tests/modules_cli.rs:262:5:
+assertion `left == right` failed: stderr= stdout={
+  "classification": [
+    {
+      "manifest_path": "/tmp/rha-modules-cli-standalone-2704453-1790132735902213645/core/Cargo.toml",
+      "name": "core-pkg",
+      "role": "core",
+      "role_source": "metadata"
+    },
+    {
+      "manifest_path": "/tmp/rha-modules-cli-standalone-2704453-1790132735902213645/helper/Cargo.toml",
+      "name": "helper",
+      "role": "app",
+      "role_source": "metadata"
+    }
+  ],
+  "edges_examined": {
+    "build": 0,
+    "dev": 0,
+    "normal": 1
+  },
+  "findings": [
+    {
+      "crate": "core-pkg",
+      "from": "core-pkg",
+      "manifest_path": "/tmp/rha-modules-cli-standalone-2704453-1790132735902213645/core/src/lib.rs",
+      "message": "core-pkg: the core crate's Clippy configuration does not match the template: not forbidden at the crate root: clippy::disallowed_methods, clippy::disallowed_types, clippy::disallowed_macros",
+      "rule": "effect.core_clippy_template",
+      "severity": "error",
+      "witness": {
+        "declared_in": "/tmp/rha-modules-cli-standalone-2704453-1790132735902213645/core/src/lib.rs",
+        "edge": "expected sha256:a1f0aadb38b0503b6f1e843e39a36f7a292d6bc23b70f9cc63ce73fe365008b3 at /tmp/rha-modules-cli-standalone-2704453-1790132735902213645/core/src/lib.rs",
+        "optional": false
+      }
+    }
+  ],
+  "harness_edges": [],
+  "limitations": [
+    "transitive.core_disallowed_dependency: not evaluated. The graph is read with `cargo metadata --no-deps`, which shows direct declared edges only (spec §4.1, Law 5 row). No version yet honours [transitive] enabled = true.",
+    {
+      "code": "source_approximation",
+      "crate": "core_custom",
+      "detail": "module extraction is source-based; heuristic paths and unexpanded macros or include! remain limitations",
+      "package": "core-pkg"
+    }
+  ],
+  "module_checks": [
+    {
+      "crate": "core-pkg",
+      "extraction": {
+        "counts": {
+          "edges": 1,
+          "modules": 3,
+          "test_edges": 0
+        },
+        "limits": [
+          {
+            "code": "source_approximation",
+            "crate": "core_custom",
+            "detail": "module extraction is source-based; heuristic paths and unexpanded macros or include! remain limitations",
+            "package": "core-pkg"
+          }
+        ],
+        "scope": "rules configured by the declared rules file; source-based extraction is approximate"
+      },
+      "outcome": "passed",
+      "reason": null,
+      "required": true,
+      "rules_digest": "91664e29d7b641e3332b7b48959d63e3e5f3aebae0caad1253ac25dc953949c6",
+      "rules_path": "/tmp/rha-modules-cli-standalone-2704453-1790132735902213645/core/rules.toml",
+      "source": "/tmp/rha-modules-cli-standalone-2704453-1790132735902213645/core/src/custom.rs"
+    },
+    {
+      "crate": "helper",
+      "outcome": "not_run",
+      "reason": "not_declared_composite: no module rules obligation",
+      "required": false,
+      "rules_digest": null,
+      "rules_path": null
+    }
+  ],
+  "module_edges": [
+    {
+      "crate": "core_custom",
+      "extraction": "syntax",
+      "package": "core-pkg",
+      "source": "core_custom::ordering",
+      "target": "core_custom::constraints::Rule",
+      "test_only": false
+    }
+  ],
+  "schema_version": 1,
+  "subject": {
+    "manifest_path": "/tmp/rha-modules-cli-standalone-2704453-1790132735902213645/Cargo.toml",
+    "metadata_mode": "no_deps",
+    "rules_digest": "sha256:f2e82878dcd244b99e5540cb70d6a06feff73c670ca0e73d358a6ffcfaaa03b6",
+    "rules_path": "/tmp/rha-modules-cli-standalone-2704453-1790132735902213645/rha-crates.toml",
+    "workspace_root": "/tmp/rha-modules-cli-standalone-2704453-1790132735902213645"
+  },
+  "summary": {
+    "crates": 2,
+    "errors": 1,
+    "outcome": "failed",
+    "warnings": 0
+  },
+  "test_edges": [],
+  "tool": {
+    "git_dirty": true,
+    "git_rev": "bbf0cf282fd966830fd49c546ba95cfb918e73b5",
+    "name": "xtask architecture",
+    "version": "0.1.0"
+  }
+}
+
+  left: Some(1)
+ right: Some(0)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test standalone_metadata_and_cli_cover_identity_aliases_and_module_failures ... FAILED
+
+failures:
+
+failures:
+    standalone_metadata_and_cli_cover_identity_aliases_and_module_failures
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.04s
+
+error: test failed, to rerun pass `-p xtask --test modules_cli`

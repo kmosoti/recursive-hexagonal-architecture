@@ -1,0 +1,41 @@
+   Compiling xtask v0.1.0 (/home/kmosoti/projects/rha-m2/xtask)
+error[E0277]: the trait bound `std::string::String: Borrow<&std::string::String>` is not satisfied
+   --> xtask/src/modules/rules.rs:331:18
+    |
+331 |             .get(&from)
+    |              --- ^^^^^ the trait `Borrow<&std::string::String>` is not implemented for `std::string::String`
+    |              |
+    |              required by a bound introduced by this call
+    |
+help: the trait `Borrow<&std::string::String>` is not implemented for `std::string::String`
+      but trait `Borrow<str>` is implemented for it
+   --> /home/kmosoti/.rustup/toolchains/1.98.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/str.rs:229:1
+    |
+229 | impl Borrow<str> for String {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    = help: for that trait implementation, expected `str`, found `&std::string::String`
+note: required by a bound in `BTreeMap::<K, V, A>::get`
+   --> /home/kmosoti/.rustup/toolchains/1.98.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/collections/btree/map.rs:719:12
+    |
+717 |     pub fn get<Q: ?Sized>(&self, key: &Q) -> Option<&V>
+    |            --- required by a bound in this associated function
+718 |     where
+719 |         K: Borrow<Q> + Ord,
+    |            ^^^^^^^^^ required by this bound in `BTreeMap::<K, V, A>::get`
+
+error[E0277]: can't compare `std::string::String` with `&std::string::String`
+   --> xtask/src/modules/rules.rs:332:77
+    |
+332 |             .is_some_and(|allowed| allowed.iter().any(|candidate| candidate == &to))
+    |                                                                             ^^ no implementation for `std::string::String == &std::string::String`
+    |
+    = help: the trait `PartialEq<&std::string::String>` is not implemented for `std::string::String`
+    = note: required for `&std::string::String` to implement `PartialEq<&&std::string::String>`
+help: consider removing the borrow
+    |
+332 -             .is_some_and(|allowed| allowed.iter().any(|candidate| candidate == &to))
+332 +             .is_some_and(|allowed| allowed.iter().any(|candidate| candidate == to))
+    |
+
+For more information about this error, try `rustc --explain E0277`.
+error: could not compile `xtask` (lib) due to 2 previous errors

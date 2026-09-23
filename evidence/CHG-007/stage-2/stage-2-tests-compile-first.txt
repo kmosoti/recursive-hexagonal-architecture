@@ -1,0 +1,14 @@
+   Compiling xtask v0.1.0 (/home/kmosoti/projects/rha-m2/xtask)
+error: missing `fn` for function definition
+   --> xtask/tests/module_rules.rs:615:1
+    |
+615 | fn_nested_child_to_parent_private_edges_ignore_allow_lists() {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+help: add `fn` here to parse `fn_nested_child_to_parent_private_edges_ignore_allow_lists` as a function
+    |
+615 | fn fn_nested_child_to_parent_private_edges_ignore_allow_lists() {
+    | ++
+
+error: could not compile `xtask` (test "module_rules") due to 1 previous error
+warning: build failed, waiting for other jobs to finish...

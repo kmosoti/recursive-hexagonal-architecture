@@ -35,6 +35,8 @@ pub struct CoreCrate {
     pub name: String,
     /// The directory holding the crate's `Cargo.toml`.
     pub dir: PathBuf,
+    /// Production library and binary roots reported by `cargo metadata`.
+    pub roots: Vec<PathBuf>,
 }
 
 /// What is wrong with a core crate's Clippy configuration.
@@ -66,19 +68,51 @@ pub const FORBIDDEN_LINTS: [&str; 3] = [
 /// lower a lint the root forbids, which is the property being checked.
 #[must_use]
 pub fn unforbidden(source: &str) -> Vec<&'static str> {
-    let mut forbidden = String::new();
-    let mut rest = source;
-    while let Some(start) = rest.find("#![forbid(") {
-        rest = &rest[start + "#![forbid(".len()..];
-        let Some(end) = rest.find(")]") else { break };
-        forbidden.push_str(&rest[..end]);
-        forbidden.push(' ');
-        rest = &rest[end..];
+    let Ok(file) = syn::parse_file(source) else {
+        return FORBIDDEN_LINTS.into_iter().collect();
+    };
+
+    let mut forbidden = [false; FORBIDDEN_LINTS.len()];
+    for attr in &file.attrs {
+        if !matches!(&attr.style, syn::AttrStyle::Inner(_)) || !attr.path().is_ident("forbid") {
+            continue;
+        }
+        let syn::Meta::List(list) = &attr.meta else {
+            continue;
+        };
+        let Ok(arguments) = list.parse_args_with(
+            syn::punctuated::Punctuated::<syn::Meta, syn::Token![,]>::parse_terminated,
+        ) else {
+            continue;
+        };
+        for argument in arguments {
+            let syn::Meta::Path(path) = argument else {
+                continue;
+            };
+            if path.leading_colon.is_some()
+                || path.segments.len() != 2
+                || !matches!(path.segments[0].arguments, syn::PathArguments::None)
+                || !matches!(path.segments[1].arguments, syn::PathArguments::None)
+                || path.segments[0].ident != "clippy"
+            {
+                continue;
+            }
+            let Some(index) = (match path.segments[1].ident.to_string().as_str() {
+                "disallowed_methods" => Some(0),
+                "disallowed_types" => Some(1),
+                "disallowed_macros" => Some(2),
+                _ => None,
+            }) else {
+                continue;
+            };
+            forbidden[index] = true;
+        }
     }
-    let forbidden: String = forbidden.split_whitespace().collect();
+
     FORBIDDEN_LINTS
         .into_iter()
-        .filter(|lint| !forbidden.contains(lint))
+        .enumerate()
+        .filter_map(|(index, lint)| (!forbidden[index]).then_some(lint))
         .collect()
 }
 
@@ -131,22 +165,28 @@ pub fn check(template: &[u8], cores: &[CoreCrate]) -> Vec<Finding> {
             }
         }
 
-        let root = core.dir.join("src/lib.rs");
-        let source = std::fs::read_to_string(&root).unwrap_or_default();
-        let missing = unforbidden(&source);
-        if !missing.is_empty() {
-            findings.push(Finding {
-                rule: RULE_ID,
-                krate: core.name.clone(),
-                problem: Problem::Unforbidden,
-                path: root.display().to_string(),
-                expected_sha256: expected.clone(),
-                actual_sha256: None,
-                detail: Some(format!(
-                    "not forbidden at the crate root: {}",
-                    missing.join(", ")
-                )),
-            });
+        let roots = if core.roots.is_empty() {
+            vec![core.dir.clone()]
+        } else {
+            core.roots.clone()
+        };
+        for root in roots {
+            let source = std::fs::read_to_string(&root).unwrap_or_default();
+            let missing = unforbidden(&source);
+            if !missing.is_empty() {
+                findings.push(Finding {
+                    rule: RULE_ID,
+                    krate: core.name.clone(),
+                    problem: Problem::Unforbidden,
+                    path: root.display().to_string(),
+                    expected_sha256: expected.clone(),
+                    actual_sha256: None,
+                    detail: Some(format!(
+                        "not forbidden at the crate root: {}",
+                        missing.join(", ")
+                    )),
+                });
+            }
         }
     }
     findings
@@ -178,6 +218,7 @@ mod tests {
         }
         CoreCrate {
             name: test.to_owned(),
+            roots: vec![dir.join("src/lib.rs")],
             dir,
         }
     }
@@ -246,6 +287,42 @@ mod tests {
         );
         let deny_not_forbid = "#![deny(clippy::disallowed_methods)]\n";
         assert_eq!(unforbidden(deny_not_forbid).len(), 3);
+    }
+
+    #[test]
+    fn only_exact_unconditional_crate_root_forbids_count() {
+        assert_eq!(
+            unforbidden(std::str::from_utf8(FORBIDDING_ROOT).unwrap()),
+            Vec::<&str>::new()
+        );
+
+        for source in [
+            "// #![forbid(clippy::disallowed_methods, clippy::disallowed_types, clippy::disallowed_macros)]\n",
+            r##"const TEXT: &str = "#![forbid(clippy::disallowed_methods, clippy::disallowed_types, clippy::disallowed_macros)]";"##,
+            "#![allow(unused)]\nmod nested {\n    #![forbid(clippy::disallowed_methods, clippy::disallowed_types, clippy::disallowed_macros)]\n}\n",
+            "#![cfg_attr(false, forbid(clippy::disallowed_methods, clippy::disallowed_types, clippy::disallowed_macros))]\n",
+            "#![forbid(clippy::disallowed_methods_extra, clippy::disallowed_types_extra, clippy::disallowed_macros_extra)]\n",
+        ] {
+            assert_eq!(unforbidden(source), FORBIDDEN_LINTS.to_vec());
+        }
+
+        let mixed = "#![forbid(clippy::disallowed_methods)]\nmod nested {\n    #![forbid(clippy::disallowed_types, clippy::disallowed_macros)]\n}\n";
+        assert_eq!(
+            unforbidden(mixed),
+            vec!["clippy::disallowed_types", "clippy::disallowed_macros"]
+        );
+
+        assert_eq!(
+            unforbidden("#![forbid(clippy::disallowed_methods\n"),
+            FORBIDDEN_LINTS.to_vec()
+        );
+        let with_reason = r#"#![forbid(
+            clippy::disallowed_methods,
+            reason = "keep these restrictions at the crate root",
+            clippy::disallowed_types,
+            clippy::disallowed_macros
+        )]"#;
+        assert_eq!(unforbidden(with_reason), Vec::<&str>::new());
     }
 
     #[test]

@@ -42,6 +42,8 @@ fn node(name: &str, role: Option<&str>) -> CrateNode {
     CrateNode {
         name: name.to_owned(),
         manifest_path: PathBuf::from(format!("/w/{name}/Cargo.toml")),
+        source_roots: Vec::new(),
+        composite: None,
         role: None,
         role_source: None,
         declared_role: role.map(ToOwned::to_owned),

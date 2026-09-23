@@ -13,3 +13,9 @@
 - Next rule: keep write packets narrow and interfaces explicit; run registered comparisons early, then add concrete regression controls. Scope searches to source directories after corpus snapshots exist.
 
 - Applied correction: inspect a returned exit status before queuing a dependent gate; an explicit approved layout entry needs both a positive control and the retained generic negative example.
+
+## Atom #3 — P-C stage 2 (rules and integration)
+- Tiers: Luna high for bounded patches; Sol max for independent rule review; root for integration and verification. The distribution fit the work.
+- Reasoning that did not change the outcome: debating source identity before exercising a custom Cargo target; the concrete CLI control settled it.
+- Mistakes caught: cycle evidence recomputation dropped parallel heuristic paths; the test harness forgot observed-edge deduplication; the Clippy guard assumed a conventional root and scanned comments as attributes. Reuse the observed edge map, derive roots from metadata, and parse syntax.
+- Next rule: run the frozen corpus early; normalize only documented representation differences, never expected facts. An explicit module-only CLI avoids mutating registered fixtures to satisfy unrelated crate checks.

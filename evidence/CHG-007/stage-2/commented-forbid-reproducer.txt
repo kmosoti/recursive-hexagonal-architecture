@@ -1,0 +1,21 @@
+   Compiling xtask v0.1.0 (/home/kmosoti/projects/rha-m2/xtask)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.58s
+     Running tests/clippy_syntax_probe.rs (target/debug/deps/clippy_syntax_probe-78c5c4d798f4bf3d)
+
+running 1 test
+
+thread 'commented_forbid_is_not_crate_enforcement' (2720738) panicked at xtask/tests/clippy_syntax_probe.rs:4:5:
+assertion `left == right` failed
+  left: 0
+ right: 3
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test commented_forbid_is_not_crate_enforcement ... FAILED
+
+failures:
+
+failures:
+    commented_forbid_is_not_crate_enforcement
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p xtask --test clippy_syntax_probe`

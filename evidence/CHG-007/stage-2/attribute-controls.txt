@@ -1,0 +1,15 @@
+   Compiling xtask v0.1.0 (/home/kmosoti/projects/rha-m2/xtask)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.87s
+     Running unittests src/lib.rs (target/debug/deps/xtask-05780c931aeee373)
+
+running 7 tests
+test clippy_template::tests::forbidding_only_some_of_the_lints_names_the_rest ... ok
+test clippy_template::tests::a_copy_of_the_template_conforms ... ok
+test clippy_template::tests::a_missing_file_is_a_finding ... ok
+test clippy_template::tests::a_crate_root_that_does_not_forbid_the_lints_is_a_finding ... ok
+test clippy_template::tests::only_exact_unconditional_crate_root_forbids_count ... ok
+test clippy_template::tests::a_dotfile_beside_a_correct_copy_is_a_finding ... ok
+test clippy_template::tests::a_copy_that_differs_is_a_finding_with_both_digests ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 71 filtered out; finished in 0.00s
+

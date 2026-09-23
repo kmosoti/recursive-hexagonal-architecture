@@ -1,0 +1,44 @@
+    Checking xtask v0.1.0 (/home/kmosoti/projects/rha-m2/xtask)
+error[E0599]: no method named `len` found for reference `&PathBuf` in the current scope
+    --> xtask/src/modules/rules.rs:197:54
+     |
+ 197 |                         .is_some_and(|prefix| prefix.len() > facade.len())
+     |                                                      ^^^
+     |
+help: there is a method `le` with a similar name, but with different arguments
+    --> /home/kmosoti/.rustup/toolchains/1.98.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1428:5
+     |
+1428 |     fn le(&self, other: &Rhs) -> bool {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `len` found for reference `&PathBuf` in the current scope
+    --> xtask/src/modules/rules.rs:269:50
+     |
+ 269 |                     .is_some_and(|prefix| prefix.len() > facade.len())
+     |                                                  ^^^
+     |
+help: there is a method `le` with a similar name, but with different arguments
+    --> /home/kmosoti/.rustup/toolchains/1.98.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1428:5
+     |
+1428 |     fn le(&self, other: &Rhs) -> bool {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0308]: `if` and `else` have incompatible types
+   --> xtask/src/modules/rules.rs:405:13
+    |
+402 |           let subsumed_rules = if undeclared_edges.is_empty() {
+    |  ______________________________-
+403 | |             Vec::<String>::new()
+    | |             -------------------- expected because of this
+404 | |         } else {
+405 | |             vec!["modules.undeclared_dependency"]
+    | |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `Vec<String>`, found `Vec<&str>`
+406 | |         };
+    | |_________- `if` and `else` have incompatible types
+    |
+    = note: expected struct `Vec<std::string::String>`
+               found struct `Vec<&str>`
+
+Some errors have detailed explanations: E0308, E0599.
+For more information about an error, try `rustc --explain E0308`.
+error: could not compile `xtask` (lib) due to 3 previous errors
