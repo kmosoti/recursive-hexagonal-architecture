@@ -1,0 +1,63 @@
+{
+  "summary": {
+    "crates": 10,
+    "errors": 0,
+    "outcome": "passed",
+    "warnings": 0
+  },
+  "site": {
+    "crate": "site",
+    "extraction": {
+      "counts": {
+        "edges": 26,
+        "modules": 6,
+        "test_edges": 0
+      },
+      "limits": [
+        {
+          "code": "source_approximation",
+          "crate": "site",
+          "detail": "module extraction is source-based; heuristic paths and unexpanded macros or include! remain limitations",
+          "package": "site"
+        },
+        {
+          "code": "macro_expansion",
+          "crate": "site",
+          "detail": "matches",
+          "package": "site",
+          "source": "site"
+        },
+        {
+          "code": "macro_expansion",
+          "crate": "site",
+          "detail": "format",
+          "package": "site",
+          "source": "site::build"
+        },
+        {
+          "code": "macro_expansion",
+          "crate": "site",
+          "detail": "format",
+          "package": "site",
+          "source": "site::testing"
+        }
+      ],
+      "scope": "rules configured by the declared rules file; source-based extraction is approximate"
+    },
+    "outcome": "passed",
+    "reason": null,
+    "required": true,
+    "rules_digest": "sha256:48a10faa69c24504067ad23fb3aa997f27bb4bac26aab1ab0aae814cce5040c1",
+    "rules_path": "/home/kmosoti/projects/rha-m2/crates/site/rha-modules.toml",
+    "source": "/home/kmosoti/projects/rha-m2/crates/site/src/lib.rs",
+    "source_files_sha256": {
+      "/home/kmosoti/projects/rha-m2/crates/site/src/assembly/mod.rs": "e65c9567dffa3b25bf63f83795b73ed64aa815c410b76a8544158af42db26a2f",
+      "/home/kmosoti/projects/rha-m2/crates/site/src/build/mod.rs": "fe2bedc08cc1bc64164a4ac45427b059fb0f3a8154bd1bc52c7d90065fd29ed4",
+      "/home/kmosoti/projects/rha-m2/crates/site/src/contract.rs": "ea4aec8b7a1fa2250729ae31610b9f39c5c3e41256a19a8639151836d0873ef3",
+      "/home/kmosoti/projects/rha-m2/crates/site/src/lib.rs": "d87c4f510457256765ea2fe4c0014e73bb065356593d114d5fa23967d1f656a5",
+      "/home/kmosoti/projects/rha-m2/crates/site/src/port.rs": "2c511170298e7025078f7703b2f5d922bcfa7d9dd507e0e75ffcf8c6b3761146",
+      "/home/kmosoti/projects/rha-m2/crates/site/src/testing.rs": "9889ce02f2a60d43afaf538d6522dd9fa560f9ea30fa73724bd37007f328263a"
+    }
+  },
+  "report_sha256": "9c5f48de0c7822fba582a58df07db13a0fdb110a68623555ee949a303df9436e"
+}

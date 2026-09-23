@@ -25,3 +25,9 @@
 - Reasoning that did not change the outcome: speculative interface and provenance discussion before comparing one real producer report with its consumer; both paths and digest prefixes were directly observable.
 - Mistakes caught: unordered witness arrays, a missing-oracle fallback, a filename-length bug, incomplete per-case hashes, a stale notice removed from a projection, and hashing a replaced executable pathname. Real positive controls and deliberate negative mutations caught each.
 - Next rule: normalize a producer/consumer contract from one actual report before expanding a harness; preserve registered finding scores and place stronger extraction checks in their separate registered assurance measure. Record the observed CLI version per generation rather than assuming it remains fixed during a long run.
+
+## Atom #5 — P-C stage 4 (site and maturity)
+- Tiers: Luna high for decided documentation, root for exact observed-report checks. This was the appropriate split.
+- Reasoning that did not change the outcome: considering broader maturity claims where the existing evidence only supports a scoped proposal.
+- Mistakes caught: a BDR draft described acceptance too broadly; its status now explicitly accepts only the delegated experiment refutation criterion. A mechanical comparison preserves every Accepted maturity cell.
+- Next rule: keep actual enforcement, proposed maturity, and acceptance status distinct; record the experiment hypothesis and boundary before creating its package.

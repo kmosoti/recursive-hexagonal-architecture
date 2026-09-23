@@ -1,0 +1,460 @@
+{
+  "classification": [
+    {
+      "manifest_path": "/home/kmosoti/projects/rha-m2/crates/adapter-fs/Cargo.toml",
+      "name": "adapter-fs",
+      "role": "adapter",
+      "role_source": "prefix"
+    },
+    {
+      "manifest_path": "/home/kmosoti/projects/rha-m2/crates/library/Cargo.toml",
+      "name": "library",
+      "role": "core",
+      "role_source": "metadata"
+    },
+    {
+      "manifest_path": "/home/kmosoti/projects/rha-m2/crates/site/Cargo.toml",
+      "name": "site",
+      "role": "core",
+      "role_source": "metadata"
+    },
+    {
+      "manifest_path": "/home/kmosoti/projects/rha-m2/crates/document/Cargo.toml",
+      "name": "document",
+      "role": "core",
+      "role_source": "metadata"
+    },
+    {
+      "manifest_path": "/home/kmosoti/projects/rha-m2/crates/graph/Cargo.toml",
+      "name": "graph",
+      "role": "core",
+      "role_source": "metadata"
+    },
+    {
+      "manifest_path": "/home/kmosoti/projects/rha-m2/crates/adapter-html/Cargo.toml",
+      "name": "adapter-html",
+      "role": "adapter",
+      "role_source": "prefix"
+    },
+    {
+      "manifest_path": "/home/kmosoti/projects/rha-m2/crates/adapter-sys/Cargo.toml",
+      "name": "adapter-sys",
+      "role": "adapter",
+      "role_source": "prefix"
+    },
+    {
+      "manifest_path": "/home/kmosoti/projects/rha-m2/crates/app-cli/Cargo.toml",
+      "name": "app-cli",
+      "role": "app",
+      "role_source": "prefix"
+    },
+    {
+      "manifest_path": "/home/kmosoti/projects/rha-m2/xtask/Cargo.toml",
+      "name": "xtask",
+      "role": "tool",
+      "role_source": "list"
+    },
+    {
+      "manifest_path": "/home/kmosoti/projects/rha-m2/tools/rha-verifier/Cargo.toml",
+      "name": "rha-verifier",
+      "role": "tool",
+      "role_source": "metadata"
+    }
+  ],
+  "edges_examined": {
+    "build": 0,
+    "dev": 7,
+    "normal": 31
+  },
+  "findings": [],
+  "harness_edges": [],
+  "limitations": [
+    "transitive.core_disallowed_dependency: not evaluated. The graph is read with `cargo metadata --no-deps`, which shows direct declared edges only (spec §4.1, Law 5 row). No version yet honours [transitive] enabled = true.",
+    {
+      "code": "source_approximation",
+      "crate": "site",
+      "detail": "module extraction is source-based; heuristic paths and unexpanded macros or include! remain limitations",
+      "package": "site"
+    },
+    {
+      "code": "macro_expansion",
+      "crate": "site",
+      "detail": "matches",
+      "package": "site",
+      "source": "site"
+    },
+    {
+      "code": "macro_expansion",
+      "crate": "site",
+      "detail": "format",
+      "package": "site",
+      "source": "site::build"
+    },
+    {
+      "code": "macro_expansion",
+      "crate": "site",
+      "detail": "format",
+      "package": "site",
+      "source": "site::testing"
+    }
+  ],
+  "module_checks": [
+    {
+      "crate": "adapter-fs",
+      "outcome": "not_run",
+      "reason": "not_declared_composite: no module rules obligation",
+      "required": false,
+      "rules_digest": null,
+      "rules_path": null
+    },
+    {
+      "crate": "library",
+      "outcome": "not_run",
+      "reason": "not_declared_composite: no module rules obligation",
+      "required": false,
+      "rules_digest": null,
+      "rules_path": null
+    },
+    {
+      "crate": "site",
+      "extraction": {
+        "counts": {
+          "edges": 26,
+          "modules": 6,
+          "test_edges": 0
+        },
+        "limits": [
+          {
+            "code": "source_approximation",
+            "crate": "site",
+            "detail": "module extraction is source-based; heuristic paths and unexpanded macros or include! remain limitations",
+            "package": "site"
+          },
+          {
+            "code": "macro_expansion",
+            "crate": "site",
+            "detail": "matches",
+            "package": "site",
+            "source": "site"
+          },
+          {
+            "code": "macro_expansion",
+            "crate": "site",
+            "detail": "format",
+            "package": "site",
+            "source": "site::build"
+          },
+          {
+            "code": "macro_expansion",
+            "crate": "site",
+            "detail": "format",
+            "package": "site",
+            "source": "site::testing"
+          }
+        ],
+        "scope": "rules configured by the declared rules file; source-based extraction is approximate"
+      },
+      "outcome": "passed",
+      "reason": null,
+      "required": true,
+      "rules_digest": "sha256:48a10faa69c24504067ad23fb3aa997f27bb4bac26aab1ab0aae814cce5040c1",
+      "rules_path": "/home/kmosoti/projects/rha-m2/crates/site/rha-modules.toml",
+      "source": "/home/kmosoti/projects/rha-m2/crates/site/src/lib.rs",
+      "source_files_sha256": {
+        "/home/kmosoti/projects/rha-m2/crates/site/src/assembly/mod.rs": "e65c9567dffa3b25bf63f83795b73ed64aa815c410b76a8544158af42db26a2f",
+        "/home/kmosoti/projects/rha-m2/crates/site/src/build/mod.rs": "fe2bedc08cc1bc64164a4ac45427b059fb0f3a8154bd1bc52c7d90065fd29ed4",
+        "/home/kmosoti/projects/rha-m2/crates/site/src/contract.rs": "ea4aec8b7a1fa2250729ae31610b9f39c5c3e41256a19a8639151836d0873ef3",
+        "/home/kmosoti/projects/rha-m2/crates/site/src/lib.rs": "d87c4f510457256765ea2fe4c0014e73bb065356593d114d5fa23967d1f656a5",
+        "/home/kmosoti/projects/rha-m2/crates/site/src/port.rs": "2c511170298e7025078f7703b2f5d922bcfa7d9dd507e0e75ffcf8c6b3761146",
+        "/home/kmosoti/projects/rha-m2/crates/site/src/testing.rs": "9889ce02f2a60d43afaf538d6522dd9fa560f9ea30fa73724bd37007f328263a"
+      }
+    },
+    {
+      "crate": "document",
+      "outcome": "not_run",
+      "reason": "not_declared_composite: no module rules obligation",
+      "required": false,
+      "rules_digest": null,
+      "rules_path": null
+    },
+    {
+      "crate": "graph",
+      "outcome": "not_run",
+      "reason": "not_declared_composite: no module rules obligation",
+      "required": false,
+      "rules_digest": null,
+      "rules_path": null
+    },
+    {
+      "crate": "adapter-html",
+      "outcome": "not_run",
+      "reason": "not_declared_composite: no module rules obligation",
+      "required": false,
+      "rules_digest": null,
+      "rules_path": null
+    },
+    {
+      "crate": "adapter-sys",
+      "outcome": "not_run",
+      "reason": "not_declared_composite: no module rules obligation",
+      "required": false,
+      "rules_digest": null,
+      "rules_path": null
+    },
+    {
+      "crate": "app-cli",
+      "outcome": "not_run",
+      "reason": "not_declared_composite: no module rules obligation",
+      "required": false,
+      "rules_digest": null,
+      "rules_path": null
+    },
+    {
+      "crate": "xtask",
+      "outcome": "not_run",
+      "reason": "not_declared_composite: no module rules obligation",
+      "required": false,
+      "rules_digest": null,
+      "rules_path": null
+    },
+    {
+      "crate": "rha-verifier",
+      "outcome": "not_run",
+      "reason": "not_declared_composite: no module rules obligation",
+      "required": false,
+      "rules_digest": null,
+      "rules_path": null
+    }
+  ],
+  "module_edges": [
+    {
+      "crate": "site",
+      "extraction": "heuristic",
+      "package": "site",
+      "source": "site",
+      "target": "site::build::Command::Write",
+      "test_only": false
+    },
+    {
+      "crate": "site",
+      "extraction": "syntax",
+      "package": "site",
+      "source": "site",
+      "target": "site::assembly::AssembleContext",
+      "test_only": false
+    },
+    {
+      "crate": "site",
+      "extraction": "syntax",
+      "package": "site",
+      "source": "site",
+      "target": "site::assembly::DefaultAssembler",
+      "test_only": false
+    },
+    {
+      "crate": "site",
+      "extraction": "syntax",
+      "package": "site",
+      "source": "site",
+      "target": "site::build::BuildInputs",
+      "test_only": false
+    },
+    {
+      "crate": "site",
+      "extraction": "syntax",
+      "package": "site",
+      "source": "site",
+      "target": "site::build::Command::Delete",
+      "test_only": false
+    },
+    {
+      "crate": "site",
+      "extraction": "syntax",
+      "package": "site",
+      "source": "site",
+      "target": "site::build::Command::Write",
+      "test_only": false
+    },
+    {
+      "crate": "site",
+      "extraction": "syntax",
+      "package": "site",
+      "source": "site",
+      "target": "site::build::Observation",
+      "test_only": false
+    },
+    {
+      "crate": "site",
+      "extraction": "syntax",
+      "package": "site",
+      "source": "site",
+      "target": "site::build::PageRenderer",
+      "test_only": false
+    },
+    {
+      "crate": "site",
+      "extraction": "syntax",
+      "package": "site",
+      "source": "site",
+      "target": "site::build::Rendered",
+      "test_only": false
+    },
+    {
+      "crate": "site",
+      "extraction": "syntax",
+      "package": "site",
+      "source": "site",
+      "target": "site::build::SiteState::default",
+      "test_only": false
+    },
+    {
+      "crate": "site",
+      "extraction": "syntax",
+      "package": "site",
+      "source": "site",
+      "target": "site::build::step",
+      "test_only": false
+    },
+    {
+      "crate": "site",
+      "extraction": "syntax",
+      "package": "site",
+      "source": "site",
+      "target": "site::port::Clock",
+      "test_only": false
+    },
+    {
+      "crate": "site",
+      "extraction": "syntax",
+      "package": "site",
+      "source": "site",
+      "target": "site::port::OutputSink",
+      "test_only": false
+    },
+    {
+      "crate": "site",
+      "extraction": "syntax",
+      "package": "site",
+      "source": "site",
+      "target": "site::port::SinkError",
+      "test_only": false
+    },
+    {
+      "crate": "site",
+      "extraction": "syntax",
+      "package": "site",
+      "source": "site::build",
+      "target": "site::assembly::Assemble",
+      "test_only": false
+    },
+    {
+      "crate": "site",
+      "extraction": "syntax",
+      "package": "site",
+      "source": "site::build",
+      "target": "site::assembly::AssembleContext",
+      "test_only": false
+    },
+    {
+      "crate": "site",
+      "extraction": "syntax",
+      "package": "site",
+      "source": "site::build",
+      "target": "site::assembly::PageModel",
+      "test_only": false
+    },
+    {
+      "crate": "site",
+      "extraction": "syntax",
+      "package": "site",
+      "source": "site::contract",
+      "target": "site::OutputSink",
+      "test_only": false
+    },
+    {
+      "crate": "site",
+      "extraction": "syntax",
+      "package": "site",
+      "source": "site::contract",
+      "target": "site::PageRenderer",
+      "test_only": false
+    },
+    {
+      "crate": "site",
+      "extraction": "syntax",
+      "package": "site",
+      "source": "site::contract",
+      "target": "site::assembly::PageModel",
+      "test_only": false
+    },
+    {
+      "crate": "site",
+      "extraction": "syntax",
+      "package": "site",
+      "source": "site::testing",
+      "target": "site::Clock",
+      "test_only": false
+    },
+    {
+      "crate": "site",
+      "extraction": "syntax",
+      "package": "site",
+      "source": "site::testing",
+      "target": "site::OutputSink",
+      "test_only": false
+    },
+    {
+      "crate": "site",
+      "extraction": "syntax",
+      "package": "site",
+      "source": "site::testing",
+      "target": "site::PageRenderer",
+      "test_only": false
+    },
+    {
+      "crate": "site",
+      "extraction": "syntax",
+      "package": "site",
+      "source": "site::testing",
+      "target": "site::Rendered",
+      "test_only": false
+    },
+    {
+      "crate": "site",
+      "extraction": "syntax",
+      "package": "site",
+      "source": "site::testing",
+      "target": "site::SinkError",
+      "test_only": false
+    },
+    {
+      "crate": "site",
+      "extraction": "syntax",
+      "package": "site",
+      "source": "site::testing",
+      "target": "site::assembly::PageModel",
+      "test_only": false
+    }
+  ],
+  "schema_version": 1,
+  "subject": {
+    "manifest_path": null,
+    "metadata_mode": "no_deps",
+    "rules_digest": "sha256:b5c7f1fe08998ed4efbb23f40f3af2f92cf149b8b75e38881323ca8f3b50d97d",
+    "rules_path": "/home/kmosoti/projects/rha-m2/rha-crates.toml",
+    "workspace_root": "/home/kmosoti/projects/rha-m2"
+  },
+  "summary": {
+    "crates": 10,
+    "errors": 0,
+    "outcome": "passed",
+    "warnings": 0
+  },
+  "test_edges": [],
+  "tool": {
+    "git_dirty": true,
+    "git_rev": "ae2f918590169f2950cf1b4686bf61f471c61dc5",
+    "name": "xtask architecture",
+    "version": "0.1.0"
+  }
+}

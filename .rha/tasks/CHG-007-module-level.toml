@@ -12,8 +12,8 @@ branch = "chg/007-module-level"
 base_revision = "ec493b794040ede8878705132c89f9a4855f2dbe"
 intent = "Deliver milestone M2: P-C CHG-007, CHG-019.1 and E1; P-D CHG-008 to CHG-014. Implement all required stages, fix every confirmed issue within M2 scope, keep registered grading unchanged absent a disclosed amendment, obtain separate GPT-6 validation, open two green stacked PRs, and never merge."
 non_goals = ["Editing docs/spec/**", "Reading or writing held-out material", "Merge or tag", "Rewriting pushed history", "P-D product growth before the P-C head"]
-scope_globs = [".rha/tasks/CHG-007-module-level.toml", ".rha/acceptances/CHG-019.toml", ".rha/decisions.toml", ".rha/schemas/**", "docs/**", "evidence/**", "xtask/**", "tools/rha-verifier/**", "experiments/no-std-graph/**", "Cargo.lock", "rha-baseline.json", "CONTRIBUTING.md", "deny.toml"]
-protected_scope = [".rha/acceptances/CHG-019.toml", ".rha/decisions.toml", "rha-baseline.json", "CONTRIBUTING.md", ".rha/schemas/**", "xtask/Cargo.toml", "xtask/src/record_lint.rs", "xtask/src/record_schema.rs", "xtask/schema_codegen.py", "xtask/src/lib.rs", "xtask/src/modules/**", "xtask/src/metadata.rs", "xtask/src/graph/**", "xtask/src/architecture.rs", "xtask/src/corpus/**", "xtask/src/corpus.rs", "xtask/src/docs.rs", "xtask/src/scope.rs", "xtask/src/clippy_template.rs", "xtask/src/cli.rs", "xtask/src/main.rs", "xtask/src/util.rs", "deny.toml"]
+scope_globs = [".rha/tasks/CHG-007-module-level.toml", ".rha/acceptances/CHG-019.toml", ".rha/decisions.toml", ".rha/schemas/**", "docs/**", "evidence/**", "xtask/**", "tools/rha-verifier/**", "experiments/no-std-graph/**", "Cargo.lock", "rha-baseline.json", "CONTRIBUTING.md", "deny.toml", "crates/site/AGENTS.md"]
+protected_scope = [".rha/acceptances/CHG-019.toml", ".rha/decisions.toml", "rha-baseline.json", "CONTRIBUTING.md", ".rha/schemas/**", "xtask/Cargo.toml", "xtask/src/record_lint.rs", "xtask/src/record_schema.rs", "xtask/schema_codegen.py", "xtask/src/lib.rs", "xtask/src/modules/**", "xtask/src/metadata.rs", "xtask/src/graph/**", "xtask/src/architecture.rs", "xtask/src/corpus/**", "xtask/src/corpus.rs", "xtask/src/docs.rs", "xtask/src/scope.rs", "xtask/src/clippy_template.rs", "xtask/src/cli.rs", "xtask/src/main.rs", "xtask/src/util.rs", "deny.toml", "crates/site/AGENTS.md", "experiments/no-std-graph/Cargo.toml"]
 
 [[actors]]
 id = "human:kennedy"
@@ -503,3 +503,55 @@ prompt_sha256 = "07d805d489a78d0f07899f443630d828f3b4a5a40152d4ee3dd99b76b14511b
 sample = "sample 1"
 separation = "Root reproduced the defect, applied the proposal and independently ran positive/negative checks."
 edits = "Root corrected optional TOML field access and an owned stdout lifetime in new tests; added replacement-path and malformed digest-map controls. Previously recorded child sessions used 0.156.0; these two process headers show 0.156.1. No historical provenance was rewritten."
+
+[[decisions]]
+id = "site-enforcement-status"
+question = "Contributor and site guidance still describe module checking as unavailable or review-only after the registered checker passes."
+answer = "Update the contributor table, scoped site guide and Proposed maturity descriptions to the implemented and observed scope. The actual site check passes with explicit source-approximation limits, and the registered module H4 result supports proposed V. Preserve every Accepted maturity cell. The record/schema/model mechanisms are implemented within their stated slice; authentication and protected envelope claims remain limited by DP-4.1. Reject retaining misleading unavailable/review-only statements."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: Determine a large slice to hand off to gpt-6-astra ultra. Make sure it has a goal to implement its work and fix any and all issue in accordance with rha design. (Let it flag and improve the architecture and tooling if it can justify it no need for my approval). I approve all PRs as long as both an opus 5.5 and gpt-6 agent has reviewed and approved the code. Kennedy, 2026-09-22: Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me."
+date = "2026-09-22"
+
+[[decisions]]
+id = "e1-boundary"
+question = "Choose and accept the refutation criterion for the isolated no_std graph experiment before creating its Cargo package."
+answer = "Accept BDR-0005 for an isolated snapshot using the actual document/library types and unchanged graph tests. Qualitative scores out of 25 across fidelity, transitive isolation, scope fit, effort and oracle reuse: real-type snapshot 21; minimal projected types 18; production dependency-closure conversion 17. Refute the chosen hypothesis if import-only alloc adaptation does not compile, unchanged behavioral controls fail, or the direct std negative probe compiles. This accepts the experiment criterion under the delegation, not P-C or any Accepted maturity status. Production remains unchanged; transitive std and allocation are disclosed."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: Determine a large slice to hand off to gpt-6-astra ultra. Make sure it has a goal to implement its work and fix any and all issue in accordance with rha design. (Let it flag and improve the architecture and tooling if it can justify it no need for my approval). I approve all PRs as long as both an opus 5.5 and gpt-6 agent has reviewed and approved the code. Kennedy, 2026-09-22: Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me."
+date = "2026-09-22"
+
+[[provenance.generations]]
+artifact = "Site enforcement guide and scoped maturity proposal"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "OpenAI Codex v0.156.1, profile write, read-only patch proposal"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-007/site-maturity-docs-prompt.md"
+prompt_sha256 = "edf66efdf8e84da20e156f4d912c4600658a06ef4411b0e1e9a8ab8d0381470b"
+sample = "sample 1"
+separation = "Root applies and validates proposals. E1 boundary and hypothesis precede creation of its Cargo package and any experiment execution."
+edits = "Root preserved Accepted maturity cells mechanically and clarified the BDR status/link. The boundary writer attempted apply_patch despite its read-only instruction; sandbox rejected it, so root alone created the file."
+
+[[provenance.generations]]
+artifact = "E1 boundary/refutation record"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "OpenAI Codex v0.156.1, profile write, read-only patch proposal"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-007/e1-boundary-prompt.md"
+prompt_sha256 = "29612872be2023dcb6fa7b8990b54ae775f2691d257c02ab7acec2b4f1ecd6e6"
+sample = "sample 1"
+separation = "Root applies and validates proposals. E1 boundary and hypothesis precede creation of its Cargo package and any experiment execution."
+edits = "Root preserved Accepted maturity cells mechanically and clarified the BDR status/link. The boundary writer attempted apply_patch despite its read-only instruction; sandbox rejected it, so root alone created the file."
+
+[[provenance.generations]]
+artifact = "E1 hypothesis and queued standalone experiment proposal"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "OpenAI Codex v0.156.0, profile write, read-only patch proposal"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-007/e1-proposal-prompt.md"
+prompt_sha256 = "c91ee943c3b8e28dc69312a53969bc9aad20bcfb79bef56c165070e6979a08f9"
+sample = "sample 1"
+separation = "Root applies and validates proposals. E1 boundary and hypothesis precede creation of its Cargo package and any experiment execution."
+edits = "Root preserved Accepted maturity cells mechanically and clarified the BDR status/link. The boundary writer attempted apply_patch despite its read-only instruction; sandbox rejected it, so root alone created the file."

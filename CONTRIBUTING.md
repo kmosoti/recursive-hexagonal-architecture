@@ -21,10 +21,12 @@ The shared workflow for human and agent contributors (spec §11.7.4). The machin
   | --- | --- |
   | `cargo xtask ci` (a lane from the policy, evidence record) | implemented (CHG-000) |
   | `cargo xtask docs [--check]` (generated docs) | implemented (CHG-000) |
-  | `cargo xtask architecture` | crate level implemented and H4-graded (CHG-003 to CHG-004.6); module checks (CHG-007) and transitive analysis unavailable at this stage |
+  | `cargo xtask architecture` | crate level and declared composite-module checks implemented and H4-graded (CHG-003 to CHG-004.6; CHG-007); transitive analysis unavailable at this stage |
   | `cargo xtask l1` (risk-triggered lane) | not implemented; L1 checks do not run |
   | Record schemas, `cargo xtask rha lint <files>` | implemented (CHG-019, CHG-019.1): task, acceptance, policy, L0 evidence and H4/markdown/H5 corpus-report shapes; registered semantic checks |
   | Acceptance model, `tools/rha-verifier` | fixture predicates implemented and graded (CHG-020); producer authentication and execution isolation remain `not_run` (DP-4.1); records remain advisory |
+
+For a module-only run, use `cargo xtask architecture --manifest-path <crate>/Cargo.toml --module-rules <rha-modules.toml>`; it evaluates declared source-based module directions only, not transitive analysis. See the [enforcement map](docs/enforcement-map.md) for the check-to-contract mapping.
 
 Record lint reports unresolved file citations as `citation.unchecked`; an accepted record with such notes has not had every cited digest checked. Structural acceptance does not rerun a corpus or authenticate evidence. Schema projections are checked with `python3 xtask/schema_codegen.py --check`. Other ledger/registration formats use their own registered checks.
 
