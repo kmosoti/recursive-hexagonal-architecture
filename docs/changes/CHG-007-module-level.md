@@ -11,9 +11,9 @@ Complete the P-B schema follow-on before module extraction, then the registered 
 P-C implements the schema follow-on, module extraction/rules, registered corpus execution, real site enforcement and E1. The detailed stage observations and repair history follow.
 
 - Architecture/API: explicit module-only CLI, shared Cargo source identity, canonical component witnesses and complete source/executable bindings; production site code and its component policy are unchanged.
-- Schema/dependencies: seven Draft 2020-12 record schemas generated from the prior registration; offline jsonschema 0.57.0, syn 3.0.6 and proc-macro2 1.0.107; exact transitive license approvals in deny.toml.
+- Schema/dependencies: seven Draft 2020-12 record schemas generated from the base registration plus the disclosed after-data markdown supplement; offline jsonschema 0.57.0, syn 3.0.6 and proc-macro2 1.0.107; exact transitive license approvals in deny.toml.
 - Effects/concurrency/authority: tooling performs file/process/Git operations; cores gain no effects. Linux executable identity survives concurrent pathname replacement. No unsafe Rust is added. The delegation approves the named protected edits; no acceptance exception or merge is performed.
-- Tests: obsolete not-implemented/layout assertions were updated only where the authorized requirement advanced, with determinations in repairs 3, 6 and 9. Registered corpus bytes and grades are unchanged. All strengthened extraction checks remain a separate supplementary measure.
+- Tests: obsolete not-implemented/layout assertions were updated only where the authorized requirement advanced, with determinations in repairs 3, 6 and 9. Original registered corpus bytes and grades are unchanged; the additive 16-case markdown shape supplement was registered before its support code. All strengthened extraction checks remain a separate supplementary measure.
 - Performance: this packet changes tooling and an isolated experiment, not a production hot path; no performance comparison is claimed. Full dependency resolution/transitive module behavior and benchmark work remain outside this packet.
 
 ### Stage 0 baseline confirmation
@@ -24,24 +24,32 @@ DP-2.1 installed `cargo-modules 0.27.0` and `cargo-mutants 27.1.0` with `cargo i
 
 ### Module registration review (before implementation)
 
-The independent generator's first proposal preserved an M01 ambiguity: the undeclared reverse edge accompanies its cycle. The pre-code module diagnostic contract resolves it by retaining undeclared edges as structured cycle subfacts, without changing the frozen witness or grader. A read-only review found the optional random-rule oracle still emitted those subfacts as separate findings. The generator is revising that proposal before registration; its original output digest and correction prompt are retained in generation provenance. Extraction reference outputs remain unchanged. M05 depth counts canonical path segments including the crate root; M21's legal Rust 2015 case is disclosed alongside Rust 2021 supplementary uniform-binding coverage.
+The independent generator's first proposal preserved an M01 ambiguity: the undeclared reverse edge accompanies its cycle. The pre-code module diagnostic contract resolves it by retaining undeclared edges as structured cycle subfacts, without changing the frozen witness or grader. A read-only review found the optional random-rule oracle still emitted those subfacts as separate findings. At this checkpoint the generator was revising that proposal before registration; its original output digest and correction prompt are retained in generation provenance. Extraction reference outputs remain unchanged. M05 depth counts canonical path segments including the crate root; M21's legal Rust 2015 case is disclosed alongside Rust 2021 supplementary uniform-binding coverage.
 
 ## Evidence
 
-P-B acceptance records were linted and bound in the first commit. Stages 0–4 and E1 have passed their recorded gates; the single settled-head local L0 and separate final GPT-6 validation follow below.
+P-B acceptance records were linted and bound in the first commit. Base: ec493b794040ede8878705132c89f9a4855f2dbe. Settled implementation candidate: de11219f7a6767dd7dc88325b0581e63dd240860, tree 4fa4385c5e34de478e949978d1a8c2c9b4a88dea; subsequent record-only updates do not alter that implementation. The exact clean-head L0 subject is recorded below when that run completes. Verification policy: [policy](../../.rha/policy.toml), L0, local/advisory under ECC-Solo.
+
+- [Implementation gate](../../evidence/CHG-007/closure/pc-final-stage-gate.txt): 269/269; [docs](../../evidence/CHG-007/closure/pc-final-docs-check.txt) current; [scope](../../evidence/CHG-007/closure/pc-final-scope.txt) zero findings.
+- [Module H4](../../evidence/h4-module/20260923T040716Z-f915daaf8dc1.json), [crate H4](../../evidence/h4-crate/20260923T040735Z-f915daaf8dc1-dirty.json), [markdown](../../evidence/md-corpus/20260923T044415Z-ed79a7a8e0ac.json), and [H5](../../evidence/h5/ed79a7a8e0ac-dirty-1790138754224832114-2796874.json) provide the corpus observations; their own candidate/dirty identities remain authoritative.
+- [Original and supplemental shape checks](../../evidence/CHG-007/closure/markdown-schema-controls.txt), [verifier shape checks](../../evidence/CHG-007/closure/h5-repaired-controls.txt), and [E1](../../experiments/no-std-graph/result.md) state their exact scope.
+- Held-out runs and authenticated/protected producer verification are not_run as stated below. No performance result is claimed. The single clean-head local L0 and separate final GPT-6 review remain the pre-PR steps.
 
 ## Decisions
 
-`delegation-m2`, `stage-0-schema`, `dp-2.1`, and `contributing-status` in the task record quote Kennedy's authorization and state the alternatives rejected. Status lives in the decision ledger.
+The [task record](../../.rha/tasks/CHG-007-module-level.toml) quotes Kennedy's authorization and rejected alternatives. [Ledger](../../.rha/decisions.toml) status owns DP-2.1 and the after-data rows CHG-019.1-contract-amendment and CHG-019.1-markdown-shape-amendment.
+
+Material task decisions: delegation-m2/stage-0-schema; module-diagnostics/module-extractor-implementation/module-corpus-execution; metadata-root-clippy/clippy-root-attribute-syntax; schema-dependency-licenses; running-executable-identity/h5-immutable-observations; headline-reference-controls; site-enforcement-status/contributing-status/orchestration-log-layout; e1-boundary; and markdown-shape-amendment.
 
 ## Repair attempts
 
-1. **Registration contract ambiguity, found before schemas or lint code.** Hypothesis: pooling historic record variants could accept empty provenance or reject a legitimate documentary outcome. Discriminating check: the read-only record census found compact string-source provenance, H4 fixture identity variants, and `not_part_of_this_run` in a documentary held-out field. Change: specify branches, the fixture identity exclusive choice, exact discriminator codes and outcome scope. The in-progress generator was interrupted before it wrote corpus payloads and is resumed with the corrected contract; its first log is retained. Result: contract corrected before any registration commit or implementation grading; generator validation remains pending.
+1. **Registration contract ambiguity, found before schemas or lint code.** Hypothesis: pooling historic record variants could accept empty provenance or reject a legitimate documentary outcome. Discriminating check: the read-only record census found compact string-source provenance, H4 fixture identity variants, and `not_part_of_this_run` in a documentary held-out field. Change: specify branches, the fixture identity exclusive choice, exact discriminator codes and outcome scope. The in-progress generator was interrupted before it wrote corpus payloads and is resumed with the corrected contract; its first log is retained. Result: contract corrected before any registration commit or implementation grading; generator validation was pending at that checkpoint and completed in the registration described below.
 
 ## Acceptance concerns
 
 - Held-out checks are `not_run`: Kennedy's material and runs, spec §9.14.
 - Authentic remains unsatisfiable under DP-4.1; no protected-producer claim is made.
+- CHG-019.1-contract-amendment and CHG-019.1-markdown-shape-amendment are explicitly after-data extensions. Their original corpora stay immutable; the new shape controls and scope are separately registered.
 - P-C is not accepted while its PR is unmerged. P-D will stack on this head; no fictional P-C acceptance is written.
 
 
@@ -168,19 +176,19 @@ The unchanged [markdown corpus](../../evidence/md-corpus/20260923T044415Z-ed79a7
 
 **Repair attempt 17, H5 record preservation.** A [scratch-directory probe](../../evidence/CHG-007/closure/h5-repeat-probe.txt) runs the original corpus twice at one subject: both exit 0 but leave one pathname with a replaced modification time. The [new regression fails on old code](../../evidence/CHG-007/closure/h5-repeat-negative.txt), expecting two retained observations. Under decision h5-immutable-observations, the filename now includes measured time and PID, and create_new refuses collisions. The H5 body schema and fixture grades do not change. The [repaired controls pass](../../evidence/CHG-007/closure/h5-repaired-controls.txt); archived records were never modified by this probe.
 
-**Repair attempt 18, producer/schema shape gap.** The [refresh lint](../../evidence/CHG-007/closure/markdown-shape-mismatch.txt) rejects two fields the current markdown producer already emits: cases[*].well_formed and product.binary_sha256. The original committed-record census predates those observations. Ledger CHG-019.1-markdown-shape-amendment discloses the extension after data; a separate generator is registering observed types and malformed controls before their schema projection changes. Both fields remain optional for historical compatibility, enclosing objects remain closed, and the original structural recipes and markdown case grading are unchanged.
+**Repair attempt 18, producer/schema shape gap.** The [refresh lint](../../evidence/CHG-007/closure/markdown-shape-mismatch.txt) rejects two fields the current markdown producer already emits: cases[*].well_formed and product.binary_sha256. The original committed-record census predates those observations. Ledger CHG-019.1-markdown-shape-amendment discloses the extension after data; a separate generator then registered observed types and malformed controls before their schema projection changes. Both fields remain optional for historical compatibility, enclosing objects remain closed, and the original structural recipes and markdown case grading are unchanged.
 
-The [16-case supplement](../../xtask/tests/corpus/markdown-schema-supplement/registration.toml) was committed at d8ee895 before support code. Its mechanical projection adds only the two optional properties and amendment provenance to the markdown schema; the other six schemas are byte-identical. [All 16 new cases, 1,497 original recipes and 80 lint cases pass unchanged](../../evidence/CHG-007/closure/markdown-schema-controls.txt). A [changed-payload negative control](../../evidence/CHG-007/closure/markdown-supplement-negative.txt) is refused. The [real report now lints](../../evidence/CHG-007/closure/markdown-schema-report-lint.txt). The proposal initially called a nonexistent Python stat_result method; [the failed projection](../../evidence/CHG-007/closure/markdown-schema-generate.txt) is retained, and the implementation now uses the standard stat predicates.
+The [16-case supplement](../../xtask/tests/corpus/markdown-schema-supplement/registration.toml) was committed at d8ee895db692 before support code. Its mechanical projection adds only the two optional properties and amendment provenance to the markdown schema; the other six schemas are byte-identical. [All 16 new cases, 1,497 original recipes and 80 lint cases pass unchanged](../../evidence/CHG-007/closure/markdown-schema-controls.txt). A [changed-payload negative control](../../evidence/CHG-007/closure/markdown-supplement-negative.txt) is refused. The [real report now lints](../../evidence/CHG-007/closure/markdown-schema-report-lint.txt). The proposal initially called a nonexistent Python stat_result method; [the failed projection](../../evidence/CHG-007/closure/markdown-schema-generate.txt) is retained, and the implementation now uses the standard stat predicates.
 
 **Packet implementation gate:** [all 269 tests passed](../../evidence/CHG-007/closure/pc-final-stage-gate.txt), none skipped, after the immutable-H5 and optional-shape repairs. [Generated docs](../../evidence/CHG-007/closure/pc-final-docs-check.txt) are current and [scope has zero findings](../../evidence/CHG-007/closure/pc-final-scope.txt). The clean-head L0 record and independent review remain the pre-PR steps.
 
 | Stage | Implementation range | Primary evidence |
 | --- | --- | --- |
-| Previous acceptance / registration | dd20db4–f7b5c62 | CHG-019 acceptance and registered module/schema packages |
-| Stage 0 | f7b5c62–2961dd6 | evidence/CHG-007/stage-0 |
-| Stage 1 | 2961dd6–bbf0cf2 | evidence/CHG-007/stage-1 |
-| Stage 2 | bbf0cf2–f915daa | evidence/CHG-007/stage-2 |
-| Stage 3 | f915daa–ae2f918 | evidence/CHG-007/stage-3 and H4 records |
-| Stage 4 | ae2f918–90c29fb | evidence/CHG-007/stage-4 |
-| E1 | 90c29fb–ed79a7a | experiments/no-std-graph/result.md |
-| Closure repairs | ed79a7a onward | evidence/CHG-007/closure; after-data supplement registered in d8ee895 |
+| Previous acceptance / registration | dd20db4cbc87–f7b5c62c8856 | CHG-019 acceptance and registered module/schema packages |
+| Stage 0 | f7b5c62c8856–2961dd6ddf94 | evidence/CHG-007/stage-0 |
+| Stage 1 | 2961dd6ddf94–bbf0cf282fd9 | evidence/CHG-007/stage-1 |
+| Stage 2 | bbf0cf282fd9–f915daaf8dc1 | evidence/CHG-007/stage-2 |
+| Stage 3 | f915daaf8dc1–ae2f91859016 | evidence/CHG-007/stage-3 and H4 records |
+| Stage 4 | ae2f91859016–90c29fbb07e7 | evidence/CHG-007/stage-4 |
+| E1 | 90c29fbb07e7–ed79a7a8e0ac | experiments/no-std-graph/result.md |
+| Closure repairs | ed79a7a8e0ac onward | evidence/CHG-007/closure; after-data supplement registered in d8ee895db692 |
