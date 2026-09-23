@@ -322,7 +322,12 @@ pub fn malformed(f: &Value) -> Option<String> {
             is_str(&f["accountable_change_authority"]),
         ),
         ("now", is_str(&f["now"])),
-        ("exception", x.is_null() || x.is_object()),
+        // Present, as null or an object: an absent key is not "no exception"
+        // (GPT-6 re-review of pull request 17).
+        (
+            "exception",
+            f.get("exception").is_some() && (x.is_null() || x.is_object()),
+        ),
         (
             "exception.subject, base, policy, issuer, issued_at, expires_at",
             x.is_null()

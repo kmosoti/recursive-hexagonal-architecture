@@ -203,6 +203,7 @@ const MEMBERS: &[(&str, &str)] = &[
     ("evidence", "base"),
     ("evidence", "inputs"),
     ("evidence", "entries"),
+    ("", "exception"),
     ("", "acceptor"),
     ("", "accountable_change_authority"),
     ("", "now"),
@@ -246,6 +247,10 @@ fn the_review_probes_are_refused() {
     let mut f = base();
     f["policy"]["cooling_off_hours"] = json!(-48);
     cases.push(("negative cooling-off", f));
+    // An absent `exception` key is not an explicit `null` (GPT-6 re-review).
+    let mut f = corpus().into_iter().find(|f| f["id"] == "V001").unwrap();
+    f.as_object_mut().unwrap().remove("exception");
+    cases.push(("exception absent", f));
     for (name, f) in cases {
         let d = rha_verifier::evaluate(&f);
         assert!(

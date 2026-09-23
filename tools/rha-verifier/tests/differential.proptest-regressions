@@ -5,3 +5,4 @@
 # It is recommended to check this file in to source control so that
 # everyone who runs the test benefits from these saved cases.
 cc 634bd6a6693345b0f449b2a29fd0cdcb5e387157a9561d5e508aad9bff0c262a # shrinks to index = 62, member = 0, retype = false
+cc b7614775e68144022645af42ec11022cf8bc3fa8e568f091472babf733298e0e # shrinks to index = 0, member = 22, retype = false
