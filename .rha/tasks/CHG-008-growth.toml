@@ -315,3 +315,11 @@ prompt_sha256 = "36274c15885d9806a414b4bd3a54d38e2c7ec3fb169aa337e368b71eab7f3d8
 sample = "sample 1; session 01a0cd42-8016-7fe2-a804-8e44f48cd7f9"
 separation = "Root measured existing parser behavior; a separate design review scored three page-tree alternatives and a separate policy audit checked frozen H4 rule ownership. No W9 code or expected data exists yet."
 edits = "Root fixed patch formatting, made exact public names and absent-anchor behavior explicit, scoped unmatched fragment rewriting correctly, and chose an explicit candidate list for the new ambiguity kind. Existing witness shapes remain unchanged."
+
+[[decisions]]
+id = "transclusion-pre-registration-review"
+question = "Independent draft review found illegal mixed-paragraph semantic nodes and missing URI discrimination before the new corpus was registered."
+answer = "Normalize recognized transclusions to direct block nodes; repair the independent section generator and add a legality self-check before freeze. Add URI controls for preserved destination escapes, encoded Unicode anchors and self-imports. Clarify uppercase newly generated escapes to match the existing HTML encoder, preserving supplied escapes. The proposed NFD byte expectation is refuted by the actual PageId constructor, which normalizes NFC; retain the canonical PageId domain. These are disclosed pre-registration refinements: no target code exists or has informed expectations, and no registered corpus is changed."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: Determine a large slice to hand off to gpt-6-astra ultra. Make sure it has a goal to implement its work and fix any and all issue in accordance with rha design. (Let it flag and improve the architecture and tooling if it can justify it no need for my approval). I approve all PRs as long as both an opus 5.5 and gpt-6 agent has reviewed and approved the code. Kennedy, 2026-09-22: Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me."
+date = "2026-09-23"

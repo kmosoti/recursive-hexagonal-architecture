@@ -1,0 +1,1 @@
+fn main(){let id=library::PageId::new("docs/E\u{301}lan/Start");println!("PageId normalized: {:?}",id.as_str());println!("existing HTML encoding: {}",adapter_html::encode(id.as_str(),true));assert_eq!(id.as_str(),"docs/Élan/Start");assert_eq!(adapter_html::encode("é",false),"%C3%A9");}

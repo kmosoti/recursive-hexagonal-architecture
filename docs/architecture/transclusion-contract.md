@@ -30,6 +30,11 @@ item; surrounding spaces and tabs are permitted. Recognition is recursive
 through quotes and list items. Code blocks and code spans are never candidates.
 Candidates with other content remain `Image`; aliases remain `Image`.
 
+The returned document tree contains a recognized transclusion as a direct
+block node. Its sole-image paragraph is replaced by that node; a tight item's
+sole candidate likewise becomes a direct item child. A Transclusion never
+remains inside a Paragraph or another inline container.
+
 The measured exclusions are normative: escaped bangs and spaced bangs retain
 their literal-bang plus navigation behavior; inline and aliased `![[...]]` are
 images, not navigation links; two images separated by a soft break are not
@@ -181,6 +186,11 @@ A scheme prefix is ASCII alphabetic followed by zero or more ASCII letters,
 digits, `+`, `-` or `.`, then `:`, before a path separator. Local heading-anchor
 remapping applies only to ordinary links; image sources use origin rebasing
 without that remapping.
+
+PageId values are NFC-normalized by their library constructor; host and origin
+inputs use that canonical domain. Newly generated percent escapes use uppercase
+hex digits, matching the existing HTML encoding convention. Existing escapes in
+supplied destinations retain their original spelling and case.
 
 Expansion and cloning allocate memory, and repeated embeds may multiply output.
 No linear bound or measured performance result is claimed.
