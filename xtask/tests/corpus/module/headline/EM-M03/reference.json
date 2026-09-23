@@ -1,0 +1,30 @@
+{
+  "edges": [
+    {
+      "extraction": "syntax",
+      "source": "fixture_em_m03::constraints",
+      "target": "fixture_em_m03::ordering",
+      "test_only": false
+    },
+    {
+      "extraction": "syntax",
+      "source": "fixture_em_m03::constraints",
+      "target": "fixture_em_m03::ordering::make",
+      "test_only": false
+    },
+    {
+      "extraction": "syntax",
+      "source": "fixture_em_m03::ordering",
+      "target": "fixture_em_m03::model::Value",
+      "test_only": false
+    }
+  ],
+  "limitations": [
+    {
+      "code": "method_type_inference",
+      "detail": "touch",
+      "source": "fixture_em_m03::constraints"
+    }
+  ],
+  "schema_version": 1
+}

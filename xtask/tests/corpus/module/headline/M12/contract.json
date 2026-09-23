@@ -1,0 +1,19 @@
+{
+  "cells": [
+    "law6-b3"
+  ],
+  "expected": "detect",
+  "generation": "authored",
+  "id": "M12",
+  "level": "module",
+  "rule": "modules.cycle",
+  "seeded": "an inline mod extra {} inside constraints references crate::ordering",
+  "witness": {
+    "path": [
+      "constraints",
+      "ordering",
+      "constraints"
+    ],
+    "rule": "modules.cycle"
+  }
+}

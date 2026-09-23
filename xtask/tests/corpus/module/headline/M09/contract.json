@@ -1,0 +1,11 @@
+{
+  "cells": [
+    "law6-b3"
+  ],
+  "expected": "no_alarm",
+  "generation": "authored",
+  "id": "M09",
+  "level": "module",
+  "rule": "-",
+  "seeded": "std::, core:: and external crate paths, which are not module edges at all"
+}

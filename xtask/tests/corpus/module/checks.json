@@ -1,0 +1,161 @@
+{
+  "compile_commands": [
+    "rustc --edition=2021 --crate-name <crate> --crate-type=lib --emit=metadata src/lib.rs -o legality.rmeta",
+    "rustc --edition=2021 --crate-name <crate> --crate-type=lib --emit=metadata src/lib.rs -o legality.rmeta --cfg test",
+    "cargo check --offline --all-targets --target-dir <staging>/.check-work/cargo-target"
+  ],
+  "headline_cargo_checks": [
+    {
+      "cargo_check_offline_all_targets": "passed",
+      "exit_status": 0,
+      "id": "EM-M01"
+    },
+    {
+      "cargo_check_offline_all_targets": "passed",
+      "exit_status": 0,
+      "id": "EM-M02"
+    },
+    {
+      "cargo_check_offline_all_targets": "passed",
+      "exit_status": 0,
+      "id": "EM-M03"
+    },
+    {
+      "cargo_check_offline_all_targets": "passed",
+      "exit_status": 0,
+      "id": "L-M02"
+    },
+    {
+      "cargo_check_offline_all_targets": "passed",
+      "exit_status": 0,
+      "id": "M01"
+    },
+    {
+      "cargo_check_offline_all_targets": "passed",
+      "exit_status": 0,
+      "id": "M02"
+    },
+    {
+      "cargo_check_offline_all_targets": "passed",
+      "exit_status": 0,
+      "id": "M03"
+    },
+    {
+      "cargo_check_offline_all_targets": "passed",
+      "exit_status": 0,
+      "id": "M04"
+    },
+    {
+      "cargo_check_offline_all_targets": "passed",
+      "exit_status": 0,
+      "id": "M05"
+    },
+    {
+      "cargo_check_offline_all_targets": "passed",
+      "exit_status": 0,
+      "id": "M06"
+    },
+    {
+      "cargo_check_offline_all_targets": "passed",
+      "exit_status": 0,
+      "id": "M07"
+    },
+    {
+      "cargo_check_offline_all_targets": "passed",
+      "exit_status": 0,
+      "id": "M08"
+    },
+    {
+      "cargo_check_offline_all_targets": "passed",
+      "exit_status": 0,
+      "id": "M09"
+    },
+    {
+      "cargo_check_offline_all_targets": "passed",
+      "exit_status": 0,
+      "id": "M10"
+    },
+    {
+      "cargo_check_offline_all_targets": "passed",
+      "exit_status": 0,
+      "id": "M11"
+    },
+    {
+      "cargo_check_offline_all_targets": "passed",
+      "exit_status": 0,
+      "id": "M12"
+    },
+    {
+      "cargo_check_offline_all_targets": "passed",
+      "exit_status": 0,
+      "id": "M13"
+    },
+    {
+      "cargo_check_offline_all_targets": "passed",
+      "exit_status": 0,
+      "id": "M14"
+    },
+    {
+      "cargo_check_offline_all_targets": "passed",
+      "exit_status": 0,
+      "id": "M15"
+    },
+    {
+      "cargo_check_offline_all_targets": "passed",
+      "exit_status": 0,
+      "id": "M16"
+    },
+    {
+      "cargo_check_offline_all_targets": "passed",
+      "exit_status": 0,
+      "id": "M17"
+    },
+    {
+      "cargo_check_offline_all_targets": "passed",
+      "exit_status": 0,
+      "id": "M18"
+    },
+    {
+      "cargo_check_offline_all_targets": "passed",
+      "exit_status": 0,
+      "id": "M19"
+    },
+    {
+      "cargo_check_offline_all_targets": "passed",
+      "exit_status": 0,
+      "id": "M20"
+    },
+    {
+      "cargo_check_offline_all_targets": "passed",
+      "exit_status": 0,
+      "id": "M21"
+    }
+  ],
+  "random_cases": 256,
+  "random_rule_summary": {
+    "finding_counts": {
+      "modules.child_to_parent_private": 32,
+      "modules.cycle": 64,
+      "modules.foreign_internal": 32,
+      "modules.undeclared_dependency": 64
+    },
+    "legal_cases": 64,
+    "subsumed_undeclared_edges": 64,
+    "top_level_findings": 192,
+    "total_undeclared_edge_facts": 128,
+    "violating_cases": 192
+  },
+  "reference_hand_tests": 14,
+  "reference_replays": 281,
+  "rustc_checks": 512,
+  "rustc_modes": [
+    "production",
+    "--cfg test"
+  ],
+  "scope": "Artifact legality and reference consistency only; no production grading.",
+  "tools": {
+    "cargo": "cargo 1.98.1 (797e8a9bc 2026-08-05)",
+    "python3": "Python 3.13.5",
+    "rustc": "rustc 1.98.1 (48a229cea 2026-09-01)"
+  }
+}

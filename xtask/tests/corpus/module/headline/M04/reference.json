@@ -1,0 +1,12 @@
+{
+  "edges": [
+    {
+      "extraction": "syntax",
+      "source": "fixture_m04::ordering",
+      "target": "fixture_m04::plan",
+      "test_only": false
+    }
+  ],
+  "limitations": [],
+  "schema_version": 1
+}

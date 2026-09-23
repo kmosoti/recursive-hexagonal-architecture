@@ -1,0 +1,19 @@
+{
+  "cells": [
+    "law6-b3"
+  ],
+  "expected": "detect",
+  "generation": "authored",
+  "id": "M21",
+  "level": "module",
+  "rule": "modules.cycle",
+  "seeded": "use ordering::Wave;, a uniform path to a sibling with no crate:: prefix",
+  "witness": {
+    "path": [
+      "constraints",
+      "ordering",
+      "constraints"
+    ],
+    "rule": "modules.cycle"
+  }
+}

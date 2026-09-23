@@ -1,0 +1,10 @@
+{
+  "compared_files": 641,
+  "exclusions": [
+    "headline Cargo.lock files: produced by cargo check, not by source generator"
+  ],
+  "generator_sha256": "f215411fd95a3c712af71f1ddcf331489fa8852c6b3eda210012523111bab3ae",
+  "headline_author_sha256": "b6d7b02ec6f28e9084c6fa440cc83753147790807c365c7aaad412e0dea49a3e",
+  "reference_sha256": "dd4ce1ce37e619b054860c9428f48b0cdcc3e4672d166cbd7803c41ed85d36fa",
+  "result": "byte_identical"
+}

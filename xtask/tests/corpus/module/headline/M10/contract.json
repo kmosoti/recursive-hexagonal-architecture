@@ -1,0 +1,17 @@
+{
+  "cells": [
+    "law2-d3"
+  ],
+  "expected": "detect",
+  "generation": "authored",
+  "id": "M10",
+  "level": "module",
+  "re_register_if": "the extractor does not follow #[path]. It is then re-registered as expected_miss citing \u00a74.1's \"Extraction is approximate\" hole, in CHG-007's change record, before the run.",
+  "rule": "modules.foreign_internal",
+  "seeded": "#[path = \"elsewhere.rs\"] mod part; whose file references crate::constraints::rules",
+  "witness": {
+    "from": "part",
+    "rule": "modules.foreign_internal",
+    "to": "crate::constraints::rules"
+  }
+}

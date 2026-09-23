@@ -1,0 +1,16 @@
+{
+  "cells": [
+    "d2"
+  ],
+  "expected": "detect",
+  "generation": "authored",
+  "id": "M03",
+  "level": "module",
+  "rule": "modules.child_to_parent_private",
+  "seeded": "ordering calls super::helper(), a private function of the glue root",
+  "witness": {
+    "from": "ordering",
+    "rule": "modules.child_to_parent_private",
+    "to": "crate::helper"
+  }
+}

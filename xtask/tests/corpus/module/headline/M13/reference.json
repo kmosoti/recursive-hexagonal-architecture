@@ -1,0 +1,18 @@
+{
+  "edges": [
+    {
+      "extraction": "syntax",
+      "source": "fixture_m13::constraints",
+      "target": "fixture_m13::ordering::Trait",
+      "test_only": false
+    },
+    {
+      "extraction": "syntax",
+      "source": "fixture_m13::ordering",
+      "target": "fixture_m13::constraints::Rule",
+      "test_only": false
+    }
+  ],
+  "limitations": [],
+  "schema_version": 1
+}

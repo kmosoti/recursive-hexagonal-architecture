@@ -1,0 +1,19 @@
+{
+  "cells": [
+    "law6-b3"
+  ],
+  "expected": "no_alarm",
+  "generation": "authored",
+  "id": "M11",
+  "level": "module",
+  "rule": "-",
+  "seeded": "#[cfg(test)] mod tests referencing crate::ordering. Test edges are excluded by default and listed, not raised.",
+  "witness": {
+    "from": "constraints::tests",
+    "listed_as": "test_edges",
+    "to": "ordering"
+  },
+  "witness_notes": {
+    "note": "listed, not an alarm"
+  }
+}

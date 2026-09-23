@@ -1,0 +1,12 @@
+{
+  "cells": [
+    "law6-b3"
+  ],
+  "expected": "expected_miss",
+  "generation": "authored",
+  "hole": "\u00a74.1, Law 3/D1 row, Known hole: extraction is approximate. include! is resolved by the compiler, not by the syn parse of the visible source.",
+  "id": "EM-M02",
+  "level": "module",
+  "rule": "-",
+  "seeded": "include!(\"../fragments/uses_ordering.in\") pulling in a file with the edge"
+}

@@ -1,0 +1,16 @@
+{
+  "cells": [
+    "law2-d3"
+  ],
+  "expected": "detect",
+  "generation": "authored",
+  "id": "M06",
+  "level": "module",
+  "rule": "modules.foreign_internal",
+  "seeded": "ordering uses crate::constraints::rules::Rule, a path below the constraints facade",
+  "witness": {
+    "from": "ordering",
+    "rule": "modules.foreign_internal",
+    "to": "crate::constraints::rules::Rule"
+  }
+}

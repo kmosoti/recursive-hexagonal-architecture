@@ -1,0 +1,11 @@
+{
+  "cells": [
+    "d2"
+  ],
+  "expected": "no_alarm",
+  "generation": "authored",
+  "id": "M08",
+  "level": "module",
+  "rule": "-",
+  "seeded": "self:: and super:: paths inside ordering::inner, which stay within one component"
+}

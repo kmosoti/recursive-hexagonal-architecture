@@ -1,0 +1,458 @@
+{
+  "cases": [
+    {
+      "cells": [
+        "law6-b3"
+      ],
+      "expected": "detect",
+      "generation": "authored",
+      "id": "M01",
+      "level": "module",
+      "rule": "modules.cycle",
+      "seeded": "constraints uses crate::ordering::Wave while the component rules declare only ordering = [constraints]",
+      "witness": {
+        "path": [
+          "constraints",
+          "ordering",
+          "constraints"
+        ],
+        "rule": "modules.cycle"
+      }
+    },
+    {
+      "cells": [
+        "law3-d1"
+      ],
+      "expected": "detect",
+      "generation": "authored",
+      "id": "M02",
+      "level": "module",
+      "rule": "modules.undeclared_dependency",
+      "seeded": "a third component model exists; constraints depends on it and the rules do not declare the edge",
+      "witness": {
+        "from": "constraints",
+        "rule": "modules.undeclared_dependency",
+        "to": "model"
+      }
+    },
+    {
+      "cells": [
+        "d2"
+      ],
+      "expected": "detect",
+      "generation": "authored",
+      "id": "M03",
+      "level": "module",
+      "rule": "modules.child_to_parent_private",
+      "seeded": "ordering calls super::helper(), a private function of the glue root",
+      "witness": {
+        "from": "ordering",
+        "rule": "modules.child_to_parent_private",
+        "to": "crate::helper"
+      }
+    },
+    {
+      "cells": [
+        "d2"
+      ],
+      "expected": "detect",
+      "generation": "authored",
+      "id": "M04",
+      "level": "module",
+      "rule": "modules.child_to_parent_private",
+      "seeded": "ordering calls crate::plan(), a public function of the glue root. D2 is never upward, public or not.",
+      "witness": {
+        "from": "ordering",
+        "rule": "modules.child_to_parent_private",
+        "to": "crate::plan"
+      }
+    },
+    {
+      "cells": [
+        "d2"
+      ],
+      "expected": "detect",
+      "generation": "authored",
+      "id": "M05",
+      "level": "module",
+      "rule": "modules.child_to_parent_private",
+      "seeded": "a nested component scoring = \"x::ordering::scoring\" references crate::constraints, three levels up",
+      "witness": {
+        "depth": 3,
+        "from": "scoring",
+        "rule": "modules.child_to_parent_private",
+        "to": "crate::constraints"
+      }
+    },
+    {
+      "cells": [
+        "law2-d3"
+      ],
+      "expected": "detect",
+      "generation": "authored",
+      "id": "M06",
+      "level": "module",
+      "rule": "modules.foreign_internal",
+      "seeded": "ordering uses crate::constraints::rules::Rule, a path below the constraints facade",
+      "witness": {
+        "from": "ordering",
+        "rule": "modules.foreign_internal",
+        "to": "crate::constraints::rules::Rule"
+      }
+    },
+    {
+      "cells": [
+        "law2-d3"
+      ],
+      "expected": "no_alarm",
+      "generation": "authored",
+      "id": "M07",
+      "level": "module",
+      "rule": "-",
+      "seeded": "use crate::constraints::* at the facade: a declared edge to the public surface"
+    },
+    {
+      "cells": [
+        "d2"
+      ],
+      "expected": "no_alarm",
+      "generation": "authored",
+      "id": "M08",
+      "level": "module",
+      "rule": "-",
+      "seeded": "self:: and super:: paths inside ordering::inner, which stay within one component"
+    },
+    {
+      "cells": [
+        "law6-b3"
+      ],
+      "expected": "no_alarm",
+      "generation": "authored",
+      "id": "M09",
+      "level": "module",
+      "rule": "-",
+      "seeded": "std::, core:: and external crate paths, which are not module edges at all"
+    },
+    {
+      "cells": [
+        "law2-d3"
+      ],
+      "expected": "detect",
+      "generation": "authored",
+      "id": "M10",
+      "level": "module",
+      "re_register_if": "the extractor does not follow #[path]. It is then re-registered as expected_miss citing \u00a74.1's \"Extraction is approximate\" hole, in CHG-007's change record, before the run.",
+      "rule": "modules.foreign_internal",
+      "seeded": "#[path = \"elsewhere.rs\"] mod part; whose file references crate::constraints::rules",
+      "witness": {
+        "from": "part",
+        "rule": "modules.foreign_internal",
+        "to": "crate::constraints::rules"
+      }
+    },
+    {
+      "cells": [
+        "law6-b3"
+      ],
+      "expected": "no_alarm",
+      "generation": "authored",
+      "id": "M11",
+      "level": "module",
+      "rule": "-",
+      "seeded": "#[cfg(test)] mod tests referencing crate::ordering. Test edges are excluded by default and listed, not raised.",
+      "witness": {
+        "from": "constraints::tests",
+        "listed_as": "test_edges",
+        "to": "ordering"
+      },
+      "witness_notes": {
+        "note": "listed, not an alarm"
+      }
+    },
+    {
+      "cells": [
+        "law6-b3"
+      ],
+      "expected": "detect",
+      "generation": "authored",
+      "id": "M12",
+      "level": "module",
+      "rule": "modules.cycle",
+      "seeded": "an inline mod extra {} inside constraints references crate::ordering",
+      "witness": {
+        "path": [
+          "constraints",
+          "ordering",
+          "constraints"
+        ],
+        "rule": "modules.cycle"
+      }
+    },
+    {
+      "cells": [
+        "law6-b3"
+      ],
+      "expected": "detect",
+      "generation": "authored",
+      "id": "M13",
+      "level": "module",
+      "rule": "modules.cycle",
+      "seeded": "impl crate::ordering::Trait for X inside constraints: the edge is in the impl header",
+      "witness": {
+        "path": [
+          "constraints",
+          "ordering",
+          "constraints"
+        ],
+        "rule": "modules.cycle"
+      }
+    },
+    {
+      "cells": [
+        "law6-b3"
+      ],
+      "expected": "detect",
+      "generation": "authored",
+      "id": "M14",
+      "level": "module",
+      "rule": "modules.cycle",
+      "seeded": "an expression path crate::ordering::score(x) in a function body",
+      "witness": {
+        "path": [
+          "constraints",
+          "ordering",
+          "constraints"
+        ],
+        "rule": "modules.cycle"
+      }
+    },
+    {
+      "cells": [
+        "law6-b3"
+      ],
+      "expected": "detect",
+      "generation": "authored",
+      "id": "M15",
+      "level": "module",
+      "rule": "modules.cycle",
+      "seeded": "a type position, fn f(w: crate::ordering::Wave)",
+      "witness": {
+        "path": [
+          "constraints",
+          "ordering",
+          "constraints"
+        ],
+        "rule": "modules.cycle"
+      }
+    },
+    {
+      "cells": [
+        "law6-b3"
+      ],
+      "expected": "detect",
+      "generation": "authored",
+      "id": "M16",
+      "level": "module",
+      "rule": "modules.cycle",
+      "seeded": "a use declaration inside a function body, where a scope-blind walker would not look",
+      "witness": {
+        "path": [
+          "constraints",
+          "ordering",
+          "constraints"
+        ],
+        "rule": "modules.cycle"
+      }
+    },
+    {
+      "cells": [
+        "law6-b3"
+      ],
+      "expected": "detect",
+      "generation": "authored",
+      "id": "M17",
+      "level": "module",
+      "rule": "modules.cycle",
+      "seeded": "a nested use tree, use crate::{ordering::Wave, constraints::Rule}",
+      "witness": {
+        "path": [
+          "constraints",
+          "ordering",
+          "constraints"
+        ],
+        "rule": "modules.cycle"
+      }
+    },
+    {
+      "cells": [
+        "law6-b3"
+      ],
+      "expected": "detect",
+      "generation": "authored",
+      "id": "M18",
+      "level": "module",
+      "rule": "modules.cycle",
+      "seeded": "pub use crate::ordering::Wave; inside constraints: a re-export is still a reference",
+      "witness": {
+        "path": [
+          "constraints",
+          "ordering",
+          "constraints"
+        ],
+        "rule": "modules.cycle"
+      }
+    },
+    {
+      "cells": [
+        "d2"
+      ],
+      "expected": "detect",
+      "generation": "authored",
+      "id": "M19",
+      "level": "module",
+      "rule": "modules.child_to_parent_private",
+      "seeded": "the root re-exports pub use ordering::score; and constraints calls crate::score(). The upward edge is reported; the hidden edge to ordering is not.",
+      "witness": {
+        "from": "constraints",
+        "rule": "modules.child_to_parent_private",
+        "to": "crate::score"
+      },
+      "witness_notes": {
+        "note": "the edge constraints -> ordering behind the re-export is not expected"
+      }
+    },
+    {
+      "cells": [
+        "law6-b3"
+      ],
+      "expected": "detect",
+      "extraction": "heuristic",
+      "generation": "authored",
+      "id": "M20",
+      "level": "module",
+      "rule": "modules.cycle",
+      "seeded": "a path inside macro arguments, assert_eq!(crate::ordering::score(), 1)",
+      "witness": {
+        "extraction": "heuristic",
+        "path": [
+          "constraints",
+          "ordering",
+          "constraints"
+        ],
+        "rule": "modules.cycle"
+      },
+      "witness_notes": {
+        "note": "the finding must carry the heuristic flag; a run that reports it as exact fails the case"
+      }
+    },
+    {
+      "cells": [
+        "law6-b3"
+      ],
+      "expected": "detect",
+      "generation": "authored",
+      "id": "M21",
+      "level": "module",
+      "rule": "modules.cycle",
+      "seeded": "use ordering::Wave;, a uniform path to a sibling with no crate:: prefix",
+      "witness": {
+        "path": [
+          "constraints",
+          "ordering",
+          "constraints"
+        ],
+        "rule": "modules.cycle"
+      }
+    },
+    {
+      "cells": [
+        "law6-b3"
+      ],
+      "depends_on": "CHG-005",
+      "expected": "no_alarm",
+      "generation": "authored",
+      "id": "L-M01",
+      "level": "module",
+      "rule": "-",
+      "seeded": "the real product crate site, with its own rha-modules.toml rules, once CHG-005 has built it"
+    },
+    {
+      "cells": [
+        "d2"
+      ],
+      "expected": "no_alarm",
+      "generation": "authored",
+      "id": "L-M02",
+      "level": "module",
+      "rule": "-",
+      "seeded": "a glue root that references both of its children. Downward is the direction D2 allows."
+    },
+    {
+      "cells": [
+        "law6-b3"
+      ],
+      "expected": "expected_miss",
+      "generation": "authored",
+      "hole": "\u00a74.1, Law 3/D1 and D2 rows, Known hole: \"Extraction is approximate for macro-generated paths.\" The path exists only after expansion, and the extractor reads unexpanded source.",
+      "id": "EM-M01",
+      "level": "module",
+      "rule": "-",
+      "seeded": "a macro_rules! at the root expanding to crate::ordering::score(), invoked from constraints",
+      "witness": {},
+      "witness_notes": {
+        "note": "no finding expected; a run that reports one is expanding macros, which the extractor does not claim to do"
+      }
+    },
+    {
+      "cells": [
+        "law6-b3"
+      ],
+      "expected": "expected_miss",
+      "generation": "authored",
+      "hole": "\u00a74.1, Law 3/D1 row, Known hole: extraction is approximate. include! is resolved by the compiler, not by the syn parse of the visible source.",
+      "id": "EM-M02",
+      "level": "module",
+      "rule": "-",
+      "seeded": "include!(\"../fragments/uses_ordering.in\") pulling in a file with the edge"
+    },
+    {
+      "cells": [
+        "law3-d1",
+        "law6-b3"
+      ],
+      "expected": "expected_miss",
+      "generation": "authored",
+      "hole": "\u00a74.1, Law 3/D1 row: resolving the method to its trait needs type inference, which the extractor does not perform.",
+      "id": "EM-M03",
+      "level": "module",
+      "partial": "Only the edge to model is expected to be missed. The edge the glob import itself declares is a visible path and is expected to be found.",
+      "rule": "-",
+      "seeded": "a trait method called through a glob-imported trait, on a type from the model component"
+    },
+    {
+      "cells": [
+        "law6-b3"
+      ],
+      "depends_on": "DP-2.1",
+      "expected": "reference",
+      "generation": "authored",
+      "id": "X-M01",
+      "level": "module",
+      "outcome_until_installed": "not_run",
+      "reason_until_installed": "tool_absent: cargo-modules is not in rha-baseline.json until DP-2.1",
+      "rule": "-",
+      "seeded": "cargo modules dependencies --acyclic run on M01 and on L-M01, as a second opinion from a tool this program did not write"
+    }
+  ],
+  "grading": {
+    "decided_by": "human:kennedy",
+    "decided_in": "CHG-002.2 (DP-1.1c)",
+    "detection_requires": "every key of the case's witness table must equal the finding's corresponding field; witness holds no prose, so there is no list of exempt keys, and a key added to a witness later is matched by construction",
+    "expected_miss_surprise": "An `expected_miss` case that IS detected is recorded as a finding in the change record and raised with the acceptance authority. It is not silently re-registered as a detection.",
+    "extra_findings": "the case counts as detected, and every unmatched finding on that fixture is counted in the run's false_alarm total with the fixture id; neither number is derived from the other. A finding matching an entry of a case's expected_findings is a registered fact, neither a detection nor a false alarm.",
+    "miss_is_terminal": "A `detect` case that is not detected fails the harness run, and CHG-004 downgrades that \u00a74.1 cell in docs/enforcement-map.md. It never edits this file.",
+    "no_alarm_scope": "any finding on the fixture fails the case, whatever its rule; a report carrying a witness `listed_as` key is a listed fact, not a finding, and a run that raises it as a finding fails the case instead",
+    "proposed_by": "agent:executor"
+  },
+  "notice": "Read-only projection; frozen manifest remains the headline grading authority. No production implementation was run."
+}

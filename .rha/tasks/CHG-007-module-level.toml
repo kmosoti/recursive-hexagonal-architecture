@@ -106,3 +106,17 @@ answer = "Before extractor code, fix diagnostic precedence: containment/D2 first
 decided_by = "agent:executor under human:kennedy's delegation"
 delegation = "Kennedy, 2026-09-22: Determine a large slice to hand off to gpt-6-astra ultra. Make sure it has a goal to implement its work and fix any and all issue in accordance with rha design. (Let it flag and improve the architecture and tooling if it can justify it no need for my approval). I approve all PRs as long as both an opus 5.5 and gpt-6 agent has reviewed and approved the code. Kennedy, 2026-09-22: Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me."
 date = "2026-09-22"
+
+[[provenance.generations]]
+artifact = "xtask/tests/corpus/module: seeded source maps, independent reference extractor, expected outputs and headline fixtures"
+generation = "sampled"
+model = "gpt-6-astra"
+reasoning_effort = "xhigh"
+harness = "codex-cli 0.156.0, workspace-write restricted by prompt to target/m2/module-generation"
+prompt_path = "xtask/tests/corpus/module-prompts/GENERATOR-PROMPT.md"
+prompt_sha256 = "6c9af342e6dedf1383c5ee0aabb9f3b3217a771a1476370d16511e42c2eef112"
+first_committed_sha256 = "dd4ce1ce37e619b054860c9428f48b0cdcc3e4672d166cbd7803c41ed85d36fa"
+sample = "sample 1; seed 20260922, SplitMix64"
+separation = "Separate codex exec session forbidden to read xtask/src, tools/**/src, or product source; no real module extractor exists at this commit. Parent alone copies and commits staged artifacts."
+edits = "Pre-registration diagnostic-contract correction to the optional rule oracle only; extraction reference, expected edges and headline sources unchanged. First proposal and correction audit are retained under the corpus provenance directory."
+note = "Content SHA-256 2091eb8990f95c9736e0eecf2ff877ddcdee75df51aa28ed74c916bfbb797f8a; correction prompt xtask/tests/corpus/module-prompts/CORRECTION-PROMPT.md SHA-256 98bfc6941a6c973ee9e98941914f3ee93f0bde103b03a1e2a4cff2f3f568c23a; registration binds docs/architecture/module-check-contract.md. Counts/digests are computed by the generator and rechecked by the parent."

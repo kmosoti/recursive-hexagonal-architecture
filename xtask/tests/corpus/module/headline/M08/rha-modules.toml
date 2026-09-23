@@ -1,0 +1,12 @@
+[components]
+constraints = "fixture_m08::constraints"
+ordering = "fixture_m08::ordering"
+
+[allow]
+constraints = []
+ordering = ["constraints"]
+
+[deny]
+cycles = true
+child_to_parent_private = true
+foreign_internal = true

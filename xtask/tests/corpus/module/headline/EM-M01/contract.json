@@ -1,0 +1,16 @@
+{
+  "cells": [
+    "law6-b3"
+  ],
+  "expected": "expected_miss",
+  "generation": "authored",
+  "hole": "\u00a74.1, Law 3/D1 and D2 rows, Known hole: \"Extraction is approximate for macro-generated paths.\" The path exists only after expansion, and the extractor reads unexpanded source.",
+  "id": "EM-M01",
+  "level": "module",
+  "rule": "-",
+  "seeded": "a macro_rules! at the root expanding to crate::ordering::score(), invoked from constraints",
+  "witness": {},
+  "witness_notes": {
+    "note": "no finding expected; a run that reports one is expanding macros, which the extractor does not claim to do"
+  }
+}

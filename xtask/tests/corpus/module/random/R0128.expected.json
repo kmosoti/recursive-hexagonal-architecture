@@ -1,0 +1,96 @@
+{
+  "edges": [
+    {
+      "extraction": "syntax",
+      "source": "random_0128",
+      "target": "random_0128::c0::Token",
+      "test_only": false
+    },
+    {
+      "extraction": "syntax",
+      "source": "random_0128",
+      "target": "random_0128::c1::Token",
+      "test_only": false
+    },
+    {
+      "extraction": "syntax",
+      "source": "random_0128::c0",
+      "target": "random_0128::c0::inner::Local",
+      "test_only": false
+    },
+    {
+      "extraction": "syntax",
+      "source": "random_0128::c0::inner",
+      "target": "random_0128::c0::Token",
+      "test_only": false
+    },
+    {
+      "extraction": "syntax",
+      "source": "random_0128::c0::tests",
+      "target": "random_0128::c1::Token",
+      "test_only": true
+    },
+    {
+      "extraction": "syntax",
+      "source": "random_0128::c1",
+      "target": "random_0128::c1::inner::Local",
+      "test_only": false
+    },
+    {
+      "extraction": "syntax",
+      "source": "random_0128::c1::edge_0",
+      "target": "random_0128::c0::Token",
+      "test_only": false
+    },
+    {
+      "extraction": "syntax",
+      "source": "random_0128::c1::inner",
+      "target": "random_0128::c1::Token",
+      "test_only": false
+    },
+    {
+      "extraction": "syntax",
+      "source": "random_0128::c1::leaf",
+      "target": "random_0128::c1::Token",
+      "test_only": false
+    },
+    {
+      "extraction": "syntax",
+      "source": "random_0128::c2",
+      "target": "random_0128::c0",
+      "test_only": false
+    },
+    {
+      "extraction": "syntax",
+      "source": "random_0128::c2",
+      "target": "random_0128::c0::Token",
+      "test_only": false
+    },
+    {
+      "extraction": "syntax",
+      "source": "random_0128::c2",
+      "target": "random_0128::c0::score",
+      "test_only": true
+    },
+    {
+      "extraction": "heuristic",
+      "source": "random_0128::c2",
+      "target": "random_0128::c1::score",
+      "test_only": false
+    },
+    {
+      "extraction": "syntax",
+      "source": "random_0128::c2",
+      "target": "random_0128::c2::inner::Local",
+      "test_only": false
+    },
+    {
+      "extraction": "syntax",
+      "source": "random_0128::c2::inner",
+      "target": "random_0128::c2::Token",
+      "test_only": false
+    }
+  ],
+  "limitations": [],
+  "schema_version": 1
+}

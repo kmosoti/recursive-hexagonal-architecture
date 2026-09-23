@@ -1,0 +1,12 @@
+{
+  "edges": [
+    {
+      "extraction": "syntax",
+      "source": "x::ordering::scoring",
+      "target": "x::constraints",
+      "test_only": false
+    }
+  ],
+  "limitations": [],
+  "schema_version": 1
+}

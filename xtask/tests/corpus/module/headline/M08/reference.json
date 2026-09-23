@@ -1,0 +1,18 @@
+{
+  "edges": [
+    {
+      "extraction": "syntax",
+      "source": "fixture_m08::ordering",
+      "target": "fixture_m08::ordering::inner::Local",
+      "test_only": false
+    },
+    {
+      "extraction": "syntax",
+      "source": "fixture_m08::ordering::inner",
+      "target": "fixture_m08::ordering::Wave",
+      "test_only": false
+    }
+  ],
+  "limitations": [],
+  "schema_version": 1
+}

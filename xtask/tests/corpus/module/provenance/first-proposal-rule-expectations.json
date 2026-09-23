@@ -1,0 +1,8792 @@
+{
+  "R0000": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      }
+    ],
+    "violations": []
+  },
+  "R0001": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0002": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c4"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c4"
+      }
+    ]
+  },
+  "R0003": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.foreign_internal",
+        "source": "c1",
+        "target": "random_0003::c0::inner::Local"
+      }
+    ]
+  },
+  "R0004": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      }
+    ],
+    "violations": []
+  },
+  "R0005": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0006": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c4"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c4"
+      }
+    ]
+  },
+  "R0007": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c2",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.child_to_parent_private",
+        "source": "c0",
+        "target": "random_0007::root_helper"
+      }
+    ]
+  },
+  "R0008": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": []
+  },
+  "R0009": {
+    "component_edges": [
+      {
+        "extraction": "heuristic",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0010": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c2"
+      }
+    ]
+  },
+  "R0011": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c3"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.foreign_internal",
+        "source": "c1",
+        "target": "random_0011::c0::inner::Local"
+      }
+    ]
+  },
+  "R0012": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c1"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c4",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c3"
+      }
+    ],
+    "violations": []
+  },
+  "R0013": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c0"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c4",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0014": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c4"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c4"
+      }
+    ]
+  },
+  "R0015": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c0"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c4",
+        "target": "c2"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.child_to_parent_private",
+        "source": "c0",
+        "target": "random_0015::root_helper"
+      }
+    ]
+  },
+  "R0016": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c3",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c3"
+      }
+    ],
+    "violations": []
+  },
+  "R0017": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0018": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c3"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c2",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c3"
+      }
+    ]
+  },
+  "R0019": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c3"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.foreign_internal",
+        "source": "c1",
+        "target": "random_0019::c0::inner::Local"
+      }
+    ]
+  },
+  "R0020": {
+    "component_edges": [
+      {
+        "extraction": "heuristic",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c3"
+      }
+    ],
+    "violations": []
+  },
+  "R0021": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c3"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0022": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c4"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c4"
+      }
+    ]
+  },
+  "R0023": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.child_to_parent_private",
+        "source": "c0",
+        "target": "random_0023::root_helper"
+      }
+    ]
+  },
+  "R0024": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": []
+  },
+  "R0025": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c4",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c3"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0026": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c3"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c3"
+      }
+    ]
+  },
+  "R0027": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.foreign_internal",
+        "source": "c1",
+        "target": "random_0027::c0::inner::Local"
+      }
+    ]
+  },
+  "R0028": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c4",
+        "target": "c1"
+      }
+    ],
+    "violations": []
+  },
+  "R0029": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0030": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c4"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c4"
+      }
+    ]
+  },
+  "R0031": {
+    "component_edges": [
+      {
+        "extraction": "heuristic",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.child_to_parent_private",
+        "source": "c0",
+        "target": "random_0031::root_helper"
+      }
+    ]
+  },
+  "R0032": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      }
+    ],
+    "violations": []
+  },
+  "R0033": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0034": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c4"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c4"
+      }
+    ]
+  },
+  "R0035": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c1"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c4",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c3"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.foreign_internal",
+        "source": "c1",
+        "target": "random_0035::c0::inner::Local"
+      }
+    ]
+  },
+  "R0036": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      }
+    ],
+    "violations": []
+  },
+  "R0037": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c3",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0038": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c4"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c4"
+      }
+    ]
+  },
+  "R0039": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c4",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c3"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.child_to_parent_private",
+        "source": "c0",
+        "target": "random_0039::root_helper"
+      }
+    ]
+  },
+  "R0040": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      }
+    ],
+    "violations": []
+  },
+  "R0041": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0042": {
+    "component_edges": [
+      {
+        "extraction": "heuristic",
+        "source": "c0",
+        "target": "c4"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c4"
+      }
+    ]
+  },
+  "R0043": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.foreign_internal",
+        "source": "c1",
+        "target": "random_0043::c0::inner::Local"
+      }
+    ]
+  },
+  "R0044": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      }
+    ],
+    "violations": []
+  },
+  "R0045": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0046": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c2"
+      }
+    ]
+  },
+  "R0047": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.child_to_parent_private",
+        "source": "c0",
+        "target": "random_0047::root_helper"
+      }
+    ]
+  },
+  "R0048": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c0"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c4",
+        "target": "c1"
+      }
+    ],
+    "violations": []
+  },
+  "R0049": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0050": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c4"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c4"
+      }
+    ]
+  },
+  "R0051": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.foreign_internal",
+        "source": "c1",
+        "target": "random_0051::c0::inner::Local"
+      }
+    ]
+  },
+  "R0052": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      }
+    ],
+    "violations": []
+  },
+  "R0053": {
+    "component_edges": [
+      {
+        "extraction": "heuristic",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0054": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c3"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c3"
+      }
+    ]
+  },
+  "R0055": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.child_to_parent_private",
+        "source": "c0",
+        "target": "random_0055::root_helper"
+      }
+    ]
+  },
+  "R0056": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      }
+    ],
+    "violations": []
+  },
+  "R0057": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0058": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c3"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c3"
+      }
+    ]
+  },
+  "R0059": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c0"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c4",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c3"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.foreign_internal",
+        "source": "c1",
+        "target": "random_0059::c0::inner::Local"
+      }
+    ]
+  },
+  "R0060": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c3",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c3"
+      }
+    ],
+    "violations": []
+  },
+  "R0061": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0062": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c2"
+      }
+    ]
+  },
+  "R0063": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c2"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.child_to_parent_private",
+        "source": "c0",
+        "target": "random_0063::root_helper"
+      }
+    ]
+  },
+  "R0064": {
+    "component_edges": [
+      {
+        "extraction": "heuristic",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      }
+    ],
+    "violations": []
+  },
+  "R0065": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c2"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0066": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c2"
+      }
+    ]
+  },
+  "R0067": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.foreign_internal",
+        "source": "c1",
+        "target": "random_0067::c0::inner::Local"
+      }
+    ]
+  },
+  "R0068": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      }
+    ],
+    "violations": []
+  },
+  "R0069": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0070": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c4"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c4"
+      }
+    ]
+  },
+  "R0071": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.child_to_parent_private",
+        "source": "c0",
+        "target": "random_0071::root_helper"
+      }
+    ]
+  },
+  "R0072": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c3",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c2"
+      }
+    ],
+    "violations": []
+  },
+  "R0073": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c2"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0074": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c3"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c3"
+      }
+    ]
+  },
+  "R0075": {
+    "component_edges": [
+      {
+        "extraction": "heuristic",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.foreign_internal",
+        "source": "c1",
+        "target": "random_0075::c0::inner::Local"
+      }
+    ]
+  },
+  "R0076": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": []
+  },
+  "R0077": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0078": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c4"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c4"
+      }
+    ]
+  },
+  "R0079": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c0"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c4",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c3"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.child_to_parent_private",
+        "source": "c0",
+        "target": "random_0079::root_helper"
+      }
+    ]
+  },
+  "R0080": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      }
+    ],
+    "violations": []
+  },
+  "R0081": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c4",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c3"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0082": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c2"
+      }
+    ]
+  },
+  "R0083": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.foreign_internal",
+        "source": "c1",
+        "target": "random_0083::c0::inner::Local"
+      }
+    ]
+  },
+  "R0084": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      }
+    ],
+    "violations": []
+  },
+  "R0085": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0086": {
+    "component_edges": [
+      {
+        "extraction": "heuristic",
+        "source": "c0",
+        "target": "c4"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c4"
+      }
+    ]
+  },
+  "R0087": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.child_to_parent_private",
+        "source": "c0",
+        "target": "random_0087::root_helper"
+      }
+    ]
+  },
+  "R0088": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": []
+  },
+  "R0089": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c2"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c4",
+        "target": "c3"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0090": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c4"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c4"
+      }
+    ]
+  },
+  "R0091": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c0"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c4",
+        "target": "c3"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.foreign_internal",
+        "source": "c1",
+        "target": "random_0091::c0::inner::Local"
+      }
+    ]
+  },
+  "R0092": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": []
+  },
+  "R0093": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0094": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c2"
+      }
+    ]
+  },
+  "R0095": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c3",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.child_to_parent_private",
+        "source": "c0",
+        "target": "random_0095::root_helper"
+      }
+    ]
+  },
+  "R0096": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      }
+    ],
+    "violations": []
+  },
+  "R0097": {
+    "component_edges": [
+      {
+        "extraction": "heuristic",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0098": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c2"
+      }
+    ]
+  },
+  "R0099": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.foreign_internal",
+        "source": "c1",
+        "target": "random_0099::c0::inner::Local"
+      }
+    ]
+  },
+  "R0100": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": []
+  },
+  "R0101": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c0"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c4",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c3"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0102": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c4"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c4"
+      }
+    ]
+  },
+  "R0103": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c4",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.child_to_parent_private",
+        "source": "c0",
+        "target": "random_0103::root_helper"
+      }
+    ]
+  },
+  "R0104": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      }
+    ],
+    "violations": []
+  },
+  "R0105": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c3"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0106": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c4"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c4"
+      }
+    ]
+  },
+  "R0107": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.foreign_internal",
+        "source": "c1",
+        "target": "random_0107::c0::inner::Local"
+      }
+    ]
+  },
+  "R0108": {
+    "component_edges": [
+      {
+        "extraction": "heuristic",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      }
+    ],
+    "violations": []
+  },
+  "R0109": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0110": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c2"
+      }
+    ]
+  },
+  "R0111": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.child_to_parent_private",
+        "source": "c0",
+        "target": "random_0111::root_helper"
+      }
+    ]
+  },
+  "R0112": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      }
+    ],
+    "violations": []
+  },
+  "R0113": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0114": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c2"
+      }
+    ]
+  },
+  "R0115": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.foreign_internal",
+        "source": "c1",
+        "target": "random_0115::c0::inner::Local"
+      }
+    ]
+  },
+  "R0116": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      }
+    ],
+    "violations": []
+  },
+  "R0117": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0118": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c2"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c1",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c2"
+      }
+    ]
+  },
+  "R0119": {
+    "component_edges": [
+      {
+        "extraction": "heuristic",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.child_to_parent_private",
+        "source": "c0",
+        "target": "random_0119::root_helper"
+      }
+    ]
+  },
+  "R0120": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c2"
+      }
+    ],
+    "violations": []
+  },
+  "R0121": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0122": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c2"
+      }
+    ]
+  },
+  "R0123": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c3"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.foreign_internal",
+        "source": "c1",
+        "target": "random_0123::c0::inner::Local"
+      }
+    ]
+  },
+  "R0124": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      }
+    ],
+    "violations": []
+  },
+  "R0125": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0126": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c4"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c4"
+      }
+    ]
+  },
+  "R0127": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c3"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.child_to_parent_private",
+        "source": "c0",
+        "target": "random_0127::root_helper"
+      }
+    ]
+  },
+  "R0128": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c2",
+        "target": "c1"
+      }
+    ],
+    "violations": []
+  },
+  "R0129": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c3"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0130": {
+    "component_edges": [
+      {
+        "extraction": "heuristic",
+        "source": "c0",
+        "target": "c3"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c3"
+      }
+    ]
+  },
+  "R0131": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.foreign_internal",
+        "source": "c1",
+        "target": "random_0131::c0::inner::Local"
+      }
+    ]
+  },
+  "R0132": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      }
+    ],
+    "violations": []
+  },
+  "R0133": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0134": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c2"
+      }
+    ]
+  },
+  "R0135": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.child_to_parent_private",
+        "source": "c0",
+        "target": "random_0135::root_helper"
+      }
+    ]
+  },
+  "R0136": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      }
+    ],
+    "violations": []
+  },
+  "R0137": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0138": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c4"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c4"
+      }
+    ]
+  },
+  "R0139": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c3",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c3"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.foreign_internal",
+        "source": "c1",
+        "target": "random_0139::c0::inner::Local"
+      }
+    ]
+  },
+  "R0140": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      }
+    ],
+    "violations": []
+  },
+  "R0141": {
+    "component_edges": [
+      {
+        "extraction": "heuristic",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0142": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c4"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c4"
+      }
+    ]
+  },
+  "R0143": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.child_to_parent_private",
+        "source": "c0",
+        "target": "random_0143::root_helper"
+      }
+    ]
+  },
+  "R0144": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c2"
+      }
+    ],
+    "violations": []
+  },
+  "R0145": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0146": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c4"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c4"
+      }
+    ]
+  },
+  "R0147": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.foreign_internal",
+        "source": "c1",
+        "target": "random_0147::c0::inner::Local"
+      }
+    ]
+  },
+  "R0148": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      }
+    ],
+    "violations": []
+  },
+  "R0149": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c2",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0150": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c2"
+      }
+    ]
+  },
+  "R0151": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c3"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.child_to_parent_private",
+        "source": "c0",
+        "target": "random_0151::root_helper"
+      }
+    ]
+  },
+  "R0152": {
+    "component_edges": [
+      {
+        "extraction": "heuristic",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      }
+    ],
+    "violations": []
+  },
+  "R0153": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0154": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c4"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c4"
+      }
+    ]
+  },
+  "R0155": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c3"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.foreign_internal",
+        "source": "c1",
+        "target": "random_0155::c0::inner::Local"
+      }
+    ]
+  },
+  "R0156": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": []
+  },
+  "R0157": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0158": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c3"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c3"
+      }
+    ]
+  },
+  "R0159": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.child_to_parent_private",
+        "source": "c0",
+        "target": "random_0159::root_helper"
+      }
+    ]
+  },
+  "R0160": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": []
+  },
+  "R0161": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0162": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c2"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c1",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c2"
+      }
+    ]
+  },
+  "R0163": {
+    "component_edges": [
+      {
+        "extraction": "heuristic",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.foreign_internal",
+        "source": "c1",
+        "target": "random_0163::c0::inner::Local"
+      }
+    ]
+  },
+  "R0164": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      }
+    ],
+    "violations": []
+  },
+  "R0165": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c3"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0166": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c4"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c4"
+      }
+    ]
+  },
+  "R0167": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c3"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.child_to_parent_private",
+        "source": "c0",
+        "target": "random_0167::root_helper"
+      }
+    ]
+  },
+  "R0168": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c4",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c3"
+      }
+    ],
+    "violations": []
+  },
+  "R0169": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c3"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0170": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c2"
+      }
+    ]
+  },
+  "R0171": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.foreign_internal",
+        "source": "c1",
+        "target": "random_0171::c0::inner::Local"
+      }
+    ]
+  },
+  "R0172": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": []
+  },
+  "R0173": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0174": {
+    "component_edges": [
+      {
+        "extraction": "heuristic",
+        "source": "c0",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c2"
+      }
+    ]
+  },
+  "R0175": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c3"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.child_to_parent_private",
+        "source": "c0",
+        "target": "random_0175::root_helper"
+      }
+    ]
+  },
+  "R0176": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      }
+    ],
+    "violations": []
+  },
+  "R0177": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c1"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c4",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c3"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0178": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c3"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c3"
+      }
+    ]
+  },
+  "R0179": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.foreign_internal",
+        "source": "c1",
+        "target": "random_0179::c0::inner::Local"
+      }
+    ]
+  },
+  "R0180": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      }
+    ],
+    "violations": []
+  },
+  "R0181": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0182": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c4"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c4"
+      }
+    ]
+  },
+  "R0183": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.child_to_parent_private",
+        "source": "c0",
+        "target": "random_0183::root_helper"
+      }
+    ]
+  },
+  "R0184": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      }
+    ],
+    "violations": []
+  },
+  "R0185": {
+    "component_edges": [
+      {
+        "extraction": "heuristic",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0186": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c3"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c3"
+      }
+    ]
+  },
+  "R0187": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.foreign_internal",
+        "source": "c1",
+        "target": "random_0187::c0::inner::Local"
+      }
+    ]
+  },
+  "R0188": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c3"
+      }
+    ],
+    "violations": []
+  },
+  "R0189": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0190": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c2"
+      }
+    ]
+  },
+  "R0191": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.child_to_parent_private",
+        "source": "c0",
+        "target": "random_0191::root_helper"
+      }
+    ]
+  },
+  "R0192": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": []
+  },
+  "R0193": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c4",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c3"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0194": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c3"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c3"
+      }
+    ]
+  },
+  "R0195": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c2"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.foreign_internal",
+        "source": "c1",
+        "target": "random_0195::c0::inner::Local"
+      }
+    ]
+  },
+  "R0196": {
+    "component_edges": [
+      {
+        "extraction": "heuristic",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      }
+    ],
+    "violations": []
+  },
+  "R0197": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0198": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c4"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c4"
+      }
+    ]
+  },
+  "R0199": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.child_to_parent_private",
+        "source": "c0",
+        "target": "random_0199::root_helper"
+      }
+    ]
+  },
+  "R0200": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": []
+  },
+  "R0201": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c3",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c3"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0202": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c2"
+      }
+    ]
+  },
+  "R0203": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.foreign_internal",
+        "source": "c1",
+        "target": "random_0203::c0::inner::Local"
+      }
+    ]
+  },
+  "R0204": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c3",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c3"
+      }
+    ],
+    "violations": []
+  },
+  "R0205": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0206": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c3"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c1",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c3"
+      }
+    ]
+  },
+  "R0207": {
+    "component_edges": [
+      {
+        "extraction": "heuristic",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c2"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.child_to_parent_private",
+        "source": "c0",
+        "target": "random_0207::root_helper"
+      }
+    ]
+  },
+  "R0208": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c2"
+      }
+    ],
+    "violations": []
+  },
+  "R0209": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0210": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c3"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c3"
+      }
+    ]
+  },
+  "R0211": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.foreign_internal",
+        "source": "c1",
+        "target": "random_0211::c0::inner::Local"
+      }
+    ]
+  },
+  "R0212": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c1"
+      }
+    ],
+    "violations": []
+  },
+  "R0213": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c4",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c3"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0214": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c4"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c4"
+      }
+    ]
+  },
+  "R0215": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.child_to_parent_private",
+        "source": "c0",
+        "target": "random_0215::root_helper"
+      }
+    ]
+  },
+  "R0216": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      }
+    ],
+    "violations": []
+  },
+  "R0217": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0218": {
+    "component_edges": [
+      {
+        "extraction": "heuristic",
+        "source": "c0",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c2"
+      }
+    ]
+  },
+  "R0219": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.foreign_internal",
+        "source": "c1",
+        "target": "random_0219::c0::inner::Local"
+      }
+    ]
+  },
+  "R0220": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c3"
+      }
+    ],
+    "violations": []
+  },
+  "R0221": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0222": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c4"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c4"
+      }
+    ]
+  },
+  "R0223": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.child_to_parent_private",
+        "source": "c0",
+        "target": "random_0223::root_helper"
+      }
+    ]
+  },
+  "R0224": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      }
+    ],
+    "violations": []
+  },
+  "R0225": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c3",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0226": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c3"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c2",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c3"
+      }
+    ]
+  },
+  "R0227": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.foreign_internal",
+        "source": "c1",
+        "target": "random_0227::c0::inner::Local"
+      }
+    ]
+  },
+  "R0228": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      }
+    ],
+    "violations": []
+  },
+  "R0229": {
+    "component_edges": [
+      {
+        "extraction": "heuristic",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0230": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c3"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c3"
+      }
+    ]
+  },
+  "R0231": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c2"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c4",
+        "target": "c3"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.child_to_parent_private",
+        "source": "c0",
+        "target": "random_0231::root_helper"
+      }
+    ]
+  },
+  "R0232": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": []
+  },
+  "R0233": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c1"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c4",
+        "target": "c3"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0234": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c2"
+      }
+    ]
+  },
+  "R0235": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c0"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c4",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c3"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.foreign_internal",
+        "source": "c1",
+        "target": "random_0235::c0::inner::Local"
+      }
+    ]
+  },
+  "R0236": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": []
+  },
+  "R0237": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c3",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c3"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0238": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c3"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c3"
+      }
+    ]
+  },
+  "R0239": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.child_to_parent_private",
+        "source": "c0",
+        "target": "random_0239::root_helper"
+      }
+    ]
+  },
+  "R0240": {
+    "component_edges": [
+      {
+        "extraction": "heuristic",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c2"
+      }
+    ],
+    "violations": []
+  },
+  "R0241": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c2"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0242": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c2"
+      }
+    ]
+  },
+  "R0243": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.foreign_internal",
+        "source": "c1",
+        "target": "random_0243::c0::inner::Local"
+      }
+    ]
+  },
+  "R0244": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      }
+    ],
+    "violations": []
+  },
+  "R0245": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c4",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0246": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c2"
+      }
+    ]
+  },
+  "R0247": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.child_to_parent_private",
+        "source": "c0",
+        "target": "random_0247::root_helper"
+      }
+    ]
+  },
+  "R0248": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": []
+  },
+  "R0249": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c3"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0250": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c2"
+      },
+      {
+        "extraction": "heuristic",
+        "source": "c1",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c2"
+      }
+    ]
+  },
+  "R0251": {
+    "component_edges": [
+      {
+        "extraction": "heuristic",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c2"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.foreign_internal",
+        "source": "c1",
+        "target": "random_0251::c0::inner::Local"
+      }
+    ]
+  },
+  "R0252": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c2"
+      }
+    ],
+    "violations": []
+  },
+  "R0253": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c1"
+      },
+      {
+        "members": [
+          "c0",
+          "c1"
+        ],
+        "rule": "modules.cycle"
+      }
+    ]
+  },
+  "R0254": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c0",
+        "target": "c2"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.undeclared_dependency",
+        "source": "c0",
+        "target": "c2"
+      }
+    ]
+  },
+  "R0255": {
+    "component_edges": [
+      {
+        "extraction": "syntax",
+        "source": "c1",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c2",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c3",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c0"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c1"
+      },
+      {
+        "extraction": "syntax",
+        "source": "c4",
+        "target": "c3"
+      }
+    ],
+    "violations": [
+      {
+        "rule": "modules.child_to_parent_private",
+        "source": "c0",
+        "target": "random_0255::root_helper"
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+[components]
+constraints = "x::constraints"
+ordering = "x::ordering"
+scoring = "x::ordering::scoring"
+
+[allow]
+constraints = []
+ordering = ["constraints"]
+scoring = ["constraints"]
+
+[deny]
+cycles = true
+child_to_parent_private = true
+foreign_internal = true

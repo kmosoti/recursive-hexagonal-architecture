@@ -20,7 +20,7 @@ DP-2.1 installed `cargo-modules 0.27.0` and `cargo-mutants 27.1.0` with `cargo i
 
 The independent generator's first proposal preserved an M01 ambiguity: the undeclared reverse edge accompanies its cycle. The pre-code module diagnostic contract resolves it by retaining undeclared edges as structured cycle subfacts, without changing the frozen witness or grader. A read-only review found the optional random-rule oracle still emitted those subfacts as separate findings. The generator is revising that proposal before registration; its original output digest and correction prompt are retained in generation provenance. Extraction reference outputs remain unchanged. M05 depth counts canonical path segments including the crate root; M21's legal Rust 2015 case is disclosed alongside Rust 2021 supplementary uniform-binding coverage.
 
-## Verification
+## Evidence
 
 P-B acceptance records linted and generated docs checked before their commit. P-C stage gates and settled-head L0 remain pending.
 
@@ -37,3 +37,12 @@ P-B acceptance records linted and generated docs checked before their commit. P-
 - Held-out checks are `not_run`: Kennedy's material and runs, spec §9.14.
 - Authentic remains unsatisfiable under DP-4.1; no protected-producer claim is made.
 - P-C is not accepted while its PR is unmerged. P-D will stack on this head; no fictional P-C acceptance is written.
+
+
+### Independent module corpus registered before extraction
+
+The separate `codex exec` generator supplied 256 seeded legal source maps and an independent lexical reference extractor with their expected edges, plus 25 compiling headline fixtures. The parent checked every payload hash and the diagnostic-contract hash before committing [the registration](../../xtask/tests/corpus/module/registration.toml). Seed, model, effort and both prompt digests are in the task's generation record. The first proposal remains identifiable in the corpus provenance; the correction preserves all 128 D4 facts (64 independent findings, 64 cycle subfacts). No real extractor was written or run before this registration.
+
+The artifact self-checks record 512 rustc legality checks, 25 offline Cargo checks, 14 hand-derived reference checks, 4,096 supplementary graph checks and 641 byte-identical regeneration comparisons. These validate corpus construction, not a production checker. The frozen M/L-M/EM-M manifest remains the headline oracle.
+
+Reproduction of the immutable generation package uses its original staging layout: copy `xtask/tests/corpus/module` to `target/m2/module-generation`, and the two committed module prompts to `target/m2/module-generator-prompt.md` and `target/m2/module-generator-correction.md`, then run its README commands. The scripts never rewrite the committed registration in that workflow.
