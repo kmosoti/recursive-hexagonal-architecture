@@ -177,6 +177,11 @@ operation is not complete URI validation. It:
 - prefixes `./` when the computed first relative segment could be interpreted
   as a scheme, such as `a:b.md`.
 
+A scheme prefix is ASCII alphabetic followed by zero or more ASCII letters,
+digits, `+`, `-` or `.`, then `:`, before a path separator. Local heading-anchor
+remapping applies only to ordinary links; image sources use origin rebasing
+without that remapping.
+
 Expansion and cloning allocate memory, and repeated embeds may multiply output.
 No linear bound or measured performance result is claimed.
 
