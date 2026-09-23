@@ -8,7 +8,13 @@ Complete the P-B schema follow-on before module extraction, then the registered 
 
 ## Deltas
 
-Implementation and stage evidence will be recorded here as each gate runs. No implementation stage has passed yet.
+P-C implements the schema follow-on, module extraction/rules, registered corpus execution, real site enforcement and E1. The detailed stage observations and repair history follow.
+
+- Architecture/API: explicit module-only CLI, shared Cargo source identity, canonical component witnesses and complete source/executable bindings; production site code and its component policy are unchanged.
+- Schema/dependencies: seven Draft 2020-12 record schemas generated from the prior registration; offline jsonschema 0.57.0, syn 3.0.6 and proc-macro2 1.0.107; exact transitive license approvals in deny.toml.
+- Effects/concurrency/authority: tooling performs file/process/Git operations; cores gain no effects. Linux executable identity survives concurrent pathname replacement. No unsafe Rust is added. The delegation approves the named protected edits; no acceptance exception or merge is performed.
+- Tests: obsolete not-implemented/layout assertions were updated only where the authorized requirement advanced, with determinations in repairs 3, 6 and 9. Registered corpus bytes and grades are unchanged. All strengthened extraction checks remain a separate supplementary measure.
+- Performance: this packet changes tooling and an isolated experiment, not a production hot path; no performance comparison is claimed. Full dependency resolution/transitive module behavior and benchmark work remain outside this packet.
 
 ### Stage 0 baseline confirmation
 
@@ -22,7 +28,7 @@ The independent generator's first proposal preserved an M01 ambiguity: the undec
 
 ## Evidence
 
-P-B acceptance records linted and generated docs checked before their commit. P-C stage gates and settled-head L0 remain pending.
+P-B acceptance records were linted and bound in the first commit. Stages 0–4 and E1 have passed their recorded gates; the single settled-head local L0 and separate final GPT-6 validation follow below.
 
 ## Decisions
 
@@ -145,3 +151,13 @@ The module maturity row now proposes V only for the registered source-based chec
 [BDR-0005](../adr/BDR-0005-no-std-graph-experiment.md) and [E1's hypothesis](../../experiments/no-std-graph/hypothesis.md) are recorded before creating its Cargo package. Decision e1-boundary accepts only the experiment's refutation criterion under Kennedy's delegation. E1 has not run at this preparation point.
 
 **Stage 4 gate:** [all 266 tests passed](../../evidence/CHG-007/stage-4/stage-4-gate.txt), none skipped. [Docs](../../evidence/CHG-007/stage-4/stage-4-docs-check.txt), [scope](../../evidence/CHG-007/stage-4/stage-4-scope.txt) and spelling checks pass. The E1 package does not yet exist in this commit.
+
+### E1: isolated no_std graph experiment
+
+[The result](../../experiments/no-std-graph/result.md) binds the prior hypothesis/BDR, source identities and actual commands. The naive attribute-only attempt fails on std/prelude coupling; alloc adaptation compiles; the copied oracle plus three property test functions pass; the direct-std feature fails with exit 101. A deterministic byte checker reconstructs the original resolver and verifies both copied tests. Its negative drift control fails, and the injected change is restored. Allocation and std-bearing dependencies remain explicit limits; no production source or workspace membership changes.
+
+**Process determination.** The read-only snapshot-verifier proposal worker attempted jj status under the older global VCS guidance, despite this handoff's Git-only constraint. [The command failed](../../evidence/CHG-007/E1/worker-process-deviation.txt) because there is no JJ repository, and made no repository change. No JJ initialization or bookmark occurred. Subsequent worker prompts explicitly prohibit JJ, including status; all root version-control operations remain Git. The deviation is disclosed rather than hidden.
+
+E1's source/test identity checks, compiler failures and passes are observations within its stated scope, not a new RHA law or a change to Accepted maturity.
+
+**E1 stage gate:** [all 266 repository tests passed](../../evidence/CHG-007/E1/e1-stage-gate.txt), none skipped; [docs](../../evidence/CHG-007/E1/e1-docs-check.txt), [scope](../../evidence/CHG-007/E1/e1-scope.txt), standalone formatting, spelling and [dependency-use checks](../../evidence/CHG-007/E1/e1-machete.txt) pass. All Accepted maturity values are retained.

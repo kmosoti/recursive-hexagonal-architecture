@@ -1,0 +1,37 @@
+    Checking no-std-graph v0.0.0 (/home/kmosoti/projects/rha-m2/experiments/no-std-graph)
+error[E0433]: cannot find module or crate `std` in this scope
+  --> src/lib.rs:23:12
+   |
+23 |     let _: std::collections::BTreeMap<(), ()> = std::collections::BTreeMap::new();
+   |            ^^^ use of unresolved module or unlinked crate `std`
+   |
+   = help: if you wanted to use a crate named `std`, use `cargo add std` to add it to your `Cargo.toml`
+help: consider importing this module
+   |
+15 + use alloc::collections;
+   |
+help: if you import `collections`, refer to it directly
+   |
+23 -     let _: std::collections::BTreeMap<(), ()> = std::collections::BTreeMap::new();
+23 +     let _: collections::BTreeMap<(), ()> = std::collections::BTreeMap::new();
+   |
+
+error[E0433]: cannot find module or crate `std` in this scope
+  --> src/lib.rs:23:49
+   |
+23 |     let _: std::collections::BTreeMap<(), ()> = std::collections::BTreeMap::new();
+   |                                                 ^^^ use of unresolved module or unlinked crate `std`
+   |
+   = help: if you wanted to use a crate named `std`, use `cargo add std` to add it to your `Cargo.toml`
+help: consider importing this struct
+   |
+15 + use alloc::collections::BTreeMap;
+   |
+help: if you import `BTreeMap`, refer to it directly
+   |
+23 -     let _: std::collections::BTreeMap<(), ()> = std::collections::BTreeMap::new();
+23 +     let _: std::collections::BTreeMap<(), ()> = BTreeMap::new();
+   |
+
+For more information about this error, try `rustc --explain E0433`.
+error: could not compile `no-std-graph` (lib) due to 2 previous errors

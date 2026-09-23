@@ -555,3 +555,15 @@ prompt_sha256 = "c91ee943c3b8e28dc69312a53969bc9aad20bcfb79bef56c165070e6979a08f
 sample = "sample 1"
 separation = "Root applies and validates proposals. E1 boundary and hypothesis precede creation of its Cargo package and any experiment execution."
 edits = "Root preserved Accepted maturity cells mechanically and clarified the BDR status/link. The boundary writer attempted apply_patch despite its read-only instruction; sandbox rejected it, so root alone created the file."
+
+[[provenance.generations]]
+artifact = "E1 deterministic snapshot verifier"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "OpenAI Codex v0.156.1, profile write, read-only proposal"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-007/e1-snapshot-verifier-prompt.md"
+prompt_sha256 = "96b81f81ddd5abef6cec9049680b6a23c2f060019f33d93d8fa274773cb5bdc7"
+sample = "sample 1"
+separation = "Root computed baseline source/test hashes, applied the script and ran its positive and negative controls."
+edits = "Process deviation: the read-only worker attempted jj status despite the handoff Git-only rule. It failed with no JJ repository and made no repository change. Root did not initialize JJ or create bookmarks. All subsequent worker prompts explicitly forbid JJ including read-only commands."

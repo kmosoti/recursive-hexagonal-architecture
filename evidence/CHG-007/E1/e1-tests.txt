@@ -1,0 +1,72 @@
+   Compiling cfg-if v1.0.5
+   Compiling libc v0.2.189
+   Compiling typenum v1.20.1
+   Compiling bitflags v2.13.2
+   Compiling getrandom v0.3.4
+   Compiling const-oid v0.10.2
+   Compiling getrandom v0.4.3
+   Compiling zerocopy v0.8.57
+   Compiling rustix v1.1.5
+   Compiling autocfg v1.5.1
+   Compiling tinyvec v1.13.3
+   Compiling cpufeatures v0.3.1
+   Compiling linux-raw-sys v0.12.1
+   Compiling fastrand v2.5.0
+   Compiling once_cell v1.21.4
+   Compiling unicase v2.9.0
+   Compiling memchr v2.8.3
+   Compiling fnv v1.0.7
+   Compiling bit-vec v0.8.0
+   Compiling quick-error v1.2.3
+   Compiling unarray v0.1.4
+   Compiling regex-syntax v0.8.11
+   Compiling num-traits v0.2.19
+   Compiling unicode-normalization v0.1.25
+   Compiling bit-set v0.8.0
+   Compiling pulldown-cmark v0.13.4
+   Compiling hybrid-array v0.4.15
+   Compiling wait-timeout v0.2.1
+   Compiling block-buffer v0.12.1
+   Compiling crypto-common v0.2.2
+   Compiling rand_core v0.9.5
+   Compiling rand_xorshift v0.4.0
+   Compiling rand v0.9.5
+   Compiling tempfile v3.27.0
+   Compiling digest v0.11.3
+   Compiling rusty-fork v0.3.1
+   Compiling sha2 v0.11.0
+   Compiling library v0.1.0 (/home/kmosoti/projects/rha-m2/crates/library)
+   Compiling document v0.1.0 (/home/kmosoti/projects/rha-m2/crates/document)
+   Compiling no-std-graph v0.0.0 (/home/kmosoti/projects/rha-m2/experiments/no-std-graph)
+   Compiling ppv-lite86 v0.2.21
+   Compiling rand_chacha v0.9.0
+   Compiling proptest v1.11.0
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 7.89s
+     Running unittests src/lib.rs (experiments/no-std-graph/target/debug/deps/graph-0710deb29b1ee11a)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/oracle_resolve.rs (experiments/no-std-graph/target/debug/deps/oracle_resolve-a71e806c54b743b3)
+
+running 1 test
+test resolver_witnesses_match_independent_reference ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.25s
+
+     Running tests/properties.rs (experiments/no-std-graph/target/debug/deps/properties-2e68278b59d774d8)
+
+running 3 tests
+test exact_then_unique_basename_then_broken_or_ambiguous ... ok
+test every_link_resolves_or_is_witnessed_and_backlinks_are_symmetric ... ok
+test resolution_is_independent_of_order ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+   Doc-tests graph
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

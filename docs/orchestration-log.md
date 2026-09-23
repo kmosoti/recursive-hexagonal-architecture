@@ -31,3 +31,9 @@
 - Reasoning that did not change the outcome: considering broader maturity claims where the existing evidence only supports a scoped proposal.
 - Mistakes caught: a BDR draft described acceptance too broadly; its status now explicitly accepts only the delegated experiment refutation criterion. A mechanical comparison preserves every Accepted maturity cell.
 - Next rule: keep actual enforcement, proposed maturity, and acceptance status distinct; record the experiment hypothesis and boundary before creating its package.
+
+## Atom #6 — P-C E1
+- Tiers: Luna high for the fixed snapshot/verifier proposal; root for measured compiler and byte-identity checks. The experiment needed measurement, not more design expansion.
+- Reasoning that did not change the outcome: repeatedly considering future P-D implementations while this small experiment was already decided.
+- Mistakes caught: a proposal worker used jj status under old global guidance; it failed without a repository change and is disclosed. Future prompts explicitly forbid JJ, including status. Shell-script transport also tripped on Markdown backticks before execution; use patch files or unambiguous quoting.
+- Next rule: inspect and close the current gate before reasoning about a future stage. Keep the actual-type snapshot, direct-std check and transitive-std limitation together in the result.

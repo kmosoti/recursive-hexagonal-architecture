@@ -1,0 +1,122 @@
+    Checking typenum v1.20.1
+    Checking const-oid v0.10.2
+    Checking tinyvec v1.13.3
+   Compiling pulldown-cmark v0.13.4
+    Checking cpufeatures v0.3.1
+    Checking cfg-if v1.0.5
+    Checking memchr v2.8.3
+    Checking unicase v2.9.0
+    Checking bitflags v2.13.2
+    Checking unicode-normalization v0.1.25
+    Checking hybrid-array v0.4.15
+    Checking block-buffer v0.12.1
+    Checking crypto-common v0.2.2
+    Checking digest v0.11.3
+    Checking sha2 v0.11.0
+    Checking library v0.1.0 (/home/kmosoti/projects/rha-m2/crates/library)
+    Checking document v0.1.0 (/home/kmosoti/projects/rha-m2/crates/document)
+    Checking no-std-graph v0.0.0 (/home/kmosoti/projects/rha-m2/experiments/no-std-graph)
+error[E0433]: cannot find module or crate `std` in this scope
+  --> src/lib.rs:14:5
+   |
+14 | use std::collections::{BTreeMap, BTreeSet};
+   |     ^^^ use of unresolved module or unlinked crate `std`
+   |
+   = help: if you wanted to use a crate named `std`, use `cargo add std` to add it to your `Cargo.toml`
+
+error[E0425]: cannot find type `String` in this scope
+  --> src/lib.rs:26:24
+   |
+26 |     pub anchor: Option<String>,
+   |                        ^^^^^^ not found in this scope
+   |
+help: you might be missing a type parameter
+   |
+21 | pub struct Resolved<String> {
+   |                    ++++++++
+
+error[E0425]: cannot find type `String` in this scope
+  --> src/lib.rs:34:17
+   |
+34 |         target: String,
+   |                 ^^^^^^ not found in this scope
+
+error[E0425]: cannot find type `String` in this scope
+  --> src/lib.rs:39:17
+   |
+39 |         target: String,
+   |                 ^^^^^^ not found in this scope
+
+error[E0425]: cannot find type `Vec` in this scope
+  --> src/lib.rs:40:21
+   |
+40 |         candidates: Vec<PageId>,
+   |                     ^^^ not found in this scope
+
+error[E0425]: cannot find type `String` in this scope
+  --> src/lib.rs:45:17
+   |
+45 |         target: String,
+   |                 ^^^^^^ not found in this scope
+
+error[E0425]: cannot find type `String` in this scope
+  --> src/lib.rs:46:18
+   |
+46 |         heading: String,
+   |                  ^^^^^^ not found in this scope
+
+error[E0425]: cannot find type `String` in this scope
+  --> src/lib.rs:34:17
+   |
+34 |         target: String,
+   |                 ^^^^^^ not found in this scope
+   |
+help: you might be missing a type parameter
+   |
+31 | pub enum Witness<String> {
+   |                 ++++++++
+
+error[E0425]: cannot find type `Vec` in this scope
+  --> src/lib.rs:54:19
+   |
+54 |     pub resolved: Vec<Resolved>,
+   |                   ^^^ not found in this scope
+
+error[E0425]: cannot find type `Vec` in this scope
+  --> src/lib.rs:57:20
+   |
+57 |     pub witnesses: Vec<Witness>,
+   |                    ^^^ not found in this scope
+
+error[E0425]: cannot find type `String` in this scope
+  --> src/lib.rs:70:21
+   |
+70 | fn fold(s: &str) -> String {
+   |                     ^^^^^^ not found in this scope
+
+error[E0425]: cannot find type `String` in this scope
+  --> src/lib.rs:79:35
+   |
+79 |     let mut by_basename: BTreeMap<String, Vec<&PageId>> = BTreeMap::new();
+   |                                   ^^^^^^ not found in this scope
+   |
+help: you might be missing a type parameter
+   |
+77 | pub fn resolve<String>(documents: &[Document]) -> SiteGraph {
+   |               ++++++++
+
+error[E0425]: cannot find type `Vec` in this scope
+  --> src/lib.rs:79:43
+   |
+79 |     let mut by_basename: BTreeMap<String, Vec<&PageId>> = BTreeMap::new();
+   |                                           ^^^ not found in this scope
+
+error[E0433]: cannot find type `Vec` in this scope
+  --> src/lib.rs:91:64
+   |
+91 |                 match by_basename.get(&fold(&link.target)).map(Vec::as_slice) {
+   |                                                                ^^^ use of undeclared type `Vec`
+
+Some errors have detailed explanations: E0425, E0433.
+For more information about an error, try `rustc --explain E0425`.
+error: could not compile `no-std-graph` (lib) due to 15 previous errors

@@ -1,0 +1,3 @@
+d30bbf45ce97f7916cf197046973487677e0868d2e3905d1947cfc8205124818  crates/graph/src/lib.rs
+2b15f66c947269786cc65024ef3585ac4c93bb60668608ef2a8b0b66aff4a16a  crates/graph/tests/oracle_resolve.rs
+a0890d0db5010c20aa6335522ff4fe86c95357db00178e0348f22a7f88d00840  crates/graph/tests/properties.rs
