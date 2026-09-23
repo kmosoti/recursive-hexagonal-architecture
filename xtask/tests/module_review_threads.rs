@@ -122,6 +122,15 @@ foreign_internal = true
 
 /// Extracts and checks a crate; returns the rules findings.
 fn check_crate(label: &str, edition: &str, files: &[(&str, &str)]) -> Vec<serde_json::Value> {
+    check_crate_with(label, edition, files, RULES)
+}
+
+fn check_crate_with(
+    label: &str,
+    edition: &str,
+    files: &[(&str, &str)],
+    rules: &str,
+) -> Vec<serde_json::Value> {
     let root =
         std::env::temp_dir().join(format!("rha-module-review-{label}-{}", std::process::id()));
     let _ = std::fs::remove_dir_all(&root);
@@ -130,7 +139,7 @@ fn check_crate(label: &str, edition: &str, files: &[(&str, &str)]) -> Vec<serde_
         std::fs::create_dir_all(file.parent().expect("parent")).expect("dir");
         std::fs::write(file, text).expect("write");
     }
-    std::fs::write(root.join("rha-modules.toml"), RULES).expect("rules");
+    std::fs::write(root.join("rha-modules.toml"), rules).expect("rules");
     let extracted = extract(
         &root,
         &root.join("src/lib.rs"),
@@ -265,4 +274,73 @@ fn a_test_function_outside_cfg_test_is_a_test_edge() {
     );
     let findings = check_crate("p8", "2021", &[("src/lib.rs", &lib)]);
     assert!(!undeclared(&findings), "p8: {findings:?}");
+}
+
+// --- The GPT-6 re-review of CHG-007.3 (CHG-007.4): each repair above must not
+// raise a false alarm on legal code.
+
+#[test]
+fn super_inside_a_function_of_a_block_module_is_the_enclosing_module() {
+    let lib = format!(
+        "pub mod constraints {{ fn helper() -> u8 {{ 1 }} pub fn f() -> u8 {{ mod inner {{ pub fn g() -> u8 {{ super::helper() }} }} inner::g() }} }}\n{ORDERING}"
+    );
+    let findings = check_crate("r1", "2021", &[("src/lib.rs", &lib)]);
+    assert!(findings.is_empty(), "r1: {findings:?}");
+}
+
+#[test]
+fn an_absolute_external_path_in_edition_2015_is_external() {
+    let lib = format!(
+        "pub mod constraints {{ pub fn f() -> usize {{ ::std::mem::size_of::<u8>() }} }}\n{ORDERING}"
+    );
+    let findings = check_crate("r2", "2015", &[("src/lib.rs", &lib)]);
+    assert!(findings.is_empty(), "r2: {findings:?}");
+}
+
+#[test]
+fn a_local_module_shadows_a_crate_alias() {
+    let lib = format!(
+        "extern crate self as me;\npub mod constraints {{ mod me {{ pub fn score() -> u8 {{ 1 }} }} pub fn f() -> u8 {{ me::score() }} }}\n{ORDERING}"
+    );
+    let findings = check_crate("r3", "2021", &[("src/lib.rs", &lib)]);
+    assert!(findings.is_empty(), "r3: {findings:?}");
+}
+
+#[test]
+fn a_raw_import_alias_still_reports_a_foreign_internal_reference() {
+    let allowing = RULES.replace("constraints = []", "constraints = [\"ordering\"]");
+    let lib = "pub mod constraints { use crate::ordering as r#o; pub fn f() -> u8 { r#o::internal::score() } }\npub mod ordering { pub mod internal { pub fn score() -> u8 { 1 } } }\n";
+    let findings = check_crate_with("r4", "2021", &[("src/lib.rs", lib)], &allowing);
+    assert!(
+        findings
+            .iter()
+            .any(|f| f.to_string().contains("modules.foreign_internal")),
+        "r4: {findings:?}"
+    );
+}
+
+#[test]
+fn a_raw_identifier_inside_a_macro_is_normalized() {
+    let lib = format!(
+        "pub mod constraints {{ pub fn f() {{ assert!(crate::r#ordering::score() == 1); }} }}\n{ORDERING}"
+    );
+    let findings = check_crate("r5", "2021", &[("src/lib.rs", &lib)]);
+    assert!(undeclared(&findings), "r5: {findings:?}");
+    assert!(
+        !findings
+            .iter()
+            .any(|f| f.to_string().contains("child_to_parent_private")),
+        "r5: {findings:?}"
+    );
+}
+
+#[test]
+fn super_super_from_a_block_module_function_reaches_the_sibling() {
+    let lib = format!(
+        "pub mod constraints {{ pub fn f() -> u8 {{ mod inner {{ pub fn g() -> u8 {{ super::super::ordering::score() }} }} inner::g() }} }}\n{ORDERING}"
+    );
+    assert!(
+        undeclared(&check_crate("q3", "2021", &[("src/lib.rs", &lib)])),
+        "q3"
+    );
 }

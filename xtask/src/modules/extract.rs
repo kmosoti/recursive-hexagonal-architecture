@@ -454,7 +454,7 @@ fn flatten_use(tree: &UseTree, prefix: &[String]) -> Vec<(Vec<String>, String, b
             if ident != "self" {
                 path.push(ident);
             }
-            vec![(path, rename.rename.to_string(), false)]
+            vec![(path, rename.rename.unraw().to_string(), false)]
         }
         UseTree::Glob(_) => vec![(prefix.to_vec(), "*".to_owned(), true)],
         UseTree::Group(group) => group
@@ -546,7 +546,12 @@ impl<'a> Walker<'a> {
         // A leading `::` is the crate root in edition 2015 and an external
         // crate from 2018 on (CHG-007.3, review finding 5).
         if head == LEADING_COLON {
-            return if self.engine.edition == "2015" {
+            // In 2015 the crate root holds the extern crates too, so
+            // `::std::..` stays external (CHG-007.4, GPT-6 re-review 2).
+            let external = tail
+                .first()
+                .is_some_and(|first| self.engine.externals.contains(first));
+            return if self.engine.edition == "2015" && !external {
                 Resolution::Target(with_suffix(vec![self.engine.crate_name.clone()], tail))
             } else {
                 Resolution::External
@@ -555,10 +560,7 @@ impl<'a> Walker<'a> {
         if self.engine.externals.contains(head) {
             return Resolution::External;
         }
-        if head == "crate"
-            || head == &self.engine.crate_name
-            || self.engine.crate_aliases.contains(head)
-        {
+        if head == "crate" || head == &self.engine.crate_name {
             return Resolution::Target(with_suffix(vec![self.engine.crate_name.clone()], tail));
         }
         if head == "self" {
@@ -644,6 +646,12 @@ impl<'a> Walker<'a> {
                 1 => return Resolution::Target(candidates.into_iter().next().unwrap_or_default()),
                 _ => return Resolution::Ambiguous,
             }
+        }
+        // An `extern crate self as <alias>;` name is in the extern prelude:
+        // local names shadow it, so it is tried last (CHG-007.4, GPT-6
+        // re-review 3).
+        if self.engine.crate_aliases.contains(head) {
+            return Resolution::Target(with_suffix(vec![self.engine.crate_name.clone()], tail));
         }
         Resolution::Unknown
     }
@@ -784,6 +792,13 @@ impl<'a> Walker<'a> {
             return;
         }
 
+        // A block module is not installed; a path into it from inside it is
+        // local, not an edge to its enclosing module.
+        if !self.engine.modules.contains_key(&module_name(&self.module))
+            && target.starts_with(&self.module)
+        {
+            return;
+        }
         let mut owner = target.clone();
         while !owner.is_empty() && !self.engine.modules.contains_key(&module_name(&owner)) {
             owner.pop();
@@ -881,7 +896,7 @@ impl<'a> Walker<'a> {
                         && is_colon(&tokens[end + 1])
                     {
                         if let TokenTree::Ident(next) = &tokens[end + 2] {
-                            path.push(next.to_string());
+                            path.push(next.unraw().to_string());
                             end += 3;
                         } else {
                             break;
@@ -939,6 +954,11 @@ impl<'ast> Visit<'ast> for Walker<'_> {
             .last()
             .map_or_else(|| self.module.clone(), |f| f.module.clone());
         path.push(name);
+        // The block module is the current module while it is walked, so the
+        // frames of functions inside it resolve `self::` and `super::` from
+        // it; the edge source maps to the enclosing component by prefix
+        // (CHG-007.4, both re-reviews).
+        let enclosing = std::mem::replace(&mut self.module, path.clone());
         let mut frame = Frame::block(path);
         for inner in items {
             if !matches!(inner, Item::Use(_))
@@ -952,6 +972,7 @@ impl<'ast> Visit<'ast> for Walker<'_> {
             self.walk_item(inner);
         }
         self.frames.pop();
+        self.module = enclosing;
     }
 
     fn visit_item_use(&mut self, item: &'ast ItemUse) {
