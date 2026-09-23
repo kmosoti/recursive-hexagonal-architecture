@@ -118,3 +118,27 @@ A fixture is `xtask/tests/corpus/records/<id>/`, holding one record file and an 
 | `revision.malformed` | Not 40 hex |
 | `timestamp.malformed` | Not RFC 3339 with an offset |
 | `digest.mismatch` | A cited file digest differs from the file's bytes, which the fixture supplies beside the record |
+
+
+## 3. CHG-019.1 amendment: fixture shape (after the data)
+
+**Disclosure:** ledger `CHG-019.1-contract-amendment`, task decision `verifier-contract-amendment`. This section is written after the original 152 fixtures and P-B's review repairs. It records the shape those repairs enforce, including choices the original contract did not fix. V001–V152 and their grading remain unchanged. Separate malformed cases register this amendment; no claim is made that these rules preceded P-B's data.
+
+Before evaluating predicates, a fixture must have these types:
+
+- `policy`: string `digest` and `profile`; arrays `checks`, `rules`, `default_obligations`, `non_waivable`, `trusted_producers`, `required_inputs`, `exception_authority`, `acceptance_authority`; `cooling_off_hours` an unsigned JSON integer representable as u64.
+- Each check in root/local `checks` has string `id`, string `kind`, object `params`. Each rule has string `id`, string `scope`, and string-array `requires`. All policy identity/obligation arrays above contain strings.
+- `local_policies` is an array; each item has string `scope`, arrays `checks` and `rules` with the shapes above.
+- `base`, `candidate_tree`, `acceptor`, `accountable_change_authority`, and `now` are strings. `surface` is a **non-empty array of strings**. Non-empty string content is not imposed by this shape rule.
+- `evidence` has string `producer`, `integrity`, `subject`, `policy`, `base`; object `inputs`; and array `entries`. Every entry has string `id`, `kind`, `outcome`, and object `params`. If present, `selected_tests` is a JSON number, `performed` is boolean, and `corpus_digest` is string.
+- The `exception` key is required, either null or an object. An object requires strings `subject`, `base`, `policy`, `issuer`, `issued_at`, `expires_at`, `reason`, `compensating_control`, `follow_up`; booleans `authentic` and `revoked`; and string-array `waived`. `logged_at` is optional at the shape layer, but must parse as a timestamp when the self-issued Solo exception path needs it. An absent exception key is not an explicit null.
+
+The first malformed member is reported under `malformed`; `r_eff` is null, `conflict` false, and all predicates and `merge_allowed` false. `valid_exception` is null when the supplied exception is absent/null, otherwise false. The member-order diagnostic precedence follows the order listed above, except that policy fields are checked in their order in §1's example, evidence entry fields precede the acceptor/accountable/now fields, and exception fields come last. Corpus cases isolate one defect each so no precedence ambiguity grades a case.
+
+**Whole test counts:** the `test` validity row in §1.2 means an unsigned JSON integer representable as u64 and greater than zero. Negative and fractional numeric counts are well-formed fixture input but fail `passed`; V031 remains well formed. They are not rounded. This discloses P-B's already-recorded divergence from its pinned reference for a fractional count.
+
+## 4. CHG-019.1 amendment: record schemas and citation notes
+
+[Record schema contract](record-schema-contract.md) fixes the previously unregistered required fields/types/allowed keys by mechanical derivation, with malformed cases before schema or new lint code. It adds `schema.invalid_value` for unsupported enumerations/versions; extends `schema.unknown_field` to closed policy objects; and registers H4, markdown and H5 corpus-report shapes separately from L0 evidence. Existing semantic codes and R001–R080's exact expected sets remain unchanged.
+
+A cited file that neither the record's directory nor its git subject can resolve is explicitly `citation.unchecked` in output. This is a note, not a rejection code: it does not turn a synthetic unknown subject or historic missing raw log into a new frozen-corpus failure. Such a result is printed as accepted **with unchecked citations**, never bare accepted. It cannot support a claim that every digest was checked.

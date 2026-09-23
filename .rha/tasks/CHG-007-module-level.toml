@@ -90,3 +90,11 @@ prompt = "Deliver milestone M2: P-C CHG-007, CHG-019.1 and E1; P-D CHG-008 to CH
 prompt_sha256 = "de0e5c09ea6f785b512e24f53cae1d15ee51d6518034f2034a6353133ed4b085"
 sample = "one ongoing M2 Executor session, with repairs recorded in the change record"
 oracles = "Registered corpora, independent module reference extractor, compilation, targeted tests, stage gates, full L0, scope/docs and separate validator"
+
+[[decisions]]
+id = "verifier-contract-amendment"
+question = "How to reconcile P-B implementation-only malformed fixture rules with its registered contract?"
+answer = "Append a disclosed after-data contract amendment enumerating the observed fixture shape and whole test-count validity, retain V001–V152 and their expected objects byte-for-byte, and register a separate malformed-shape corpus before any further verifier change. Alternatives rejected: rewriting the historic corpus or representing the shape as pre-registered. The ledger row CHG-019.1-contract-amendment owns this amendment; the lint schema reason codes and citation notes are additive, without changing R001–R080 grading."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: Determine a large slice to hand off to gpt-6-astra ultra. Make sure it has a goal to implement its work and fix any and all issue in accordance with rha design. (Let it flag and improve the architecture and tooling if it can justify it no need for my approval). I approve all PRs as long as both an opus 5.5 and gpt-6 agent has reviewed and approved the code. Kennedy, 2026-09-22: Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me."
+date = "2026-09-22"

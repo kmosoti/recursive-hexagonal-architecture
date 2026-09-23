@@ -1,0 +1,29 @@
+# Record schema contract (CHG-019.1, P-C stage 0)
+
+This fixes structural grading before JSON schemas or new lint implementation. It supplements [the P-B contract](verifier-contract.md); it does not regrade R001–R080 or rewrite historic records. Structural acceptance is not authenticity, eligibility, or acceptance.
+
+## Mechanical derivation
+
+The source snapshot is `99a74b042842b4d869ef341f58fdfcafb9c96e84`. Read committed `.rha/tasks/*.toml`, `.rha/acceptances/*.toml`, `.rha/policy.toml`, and `evidence/**/*.json` from that revision. JSON families are distinguished by `record_kind = evidence` or `kind = h4`, `markdown_corpus`, `h5_conformance`. Other report kinds are outside this registration. The derivation inventory records every source path and SHA-256 and every observed object path, required key intersection, allowed key union and JSON type union. TOML converts to JSON first. Booleans are not integers. Integer and number are distinct observations; null is a type.
+
+For each family and object path, keys present in every observed object are required; the union of observed keys is allowed. Pool array elements at a `*` path. Empty arrays supply no item observation; entirely unobserved items remain unconstrained and are disclosed, never guessed. Pool only objects at a path when null is another permitted type. Preserve discriminated variants: legacy direct `agent_context` versus sourced `{source, provenance}`, and unsourced null `change_claim.task/source` versus a sourced claim with its declared intent fields. Record the variant rule in the inventory; do not accept a hybrid merely by unioning its keys. H5 corpus citations retain their historical string-or-object variants. Schema versions are the exact observed versions per family (H4 historical versions included). Every outcome is one of the five states in spec §11.4. Other strings are not enumerated from finite historical samples.
+
+Known documentary extension tables are retained by that union. The allowed-key rule is closed at task and acceptance top levels and throughout policy; nested task/acceptance documentary objects and evidence payload objects keep their derived fields/types/requiredness but permit extensions. This is the existing `schema.unknown_field` top-level task/acceptance contract extended explicitly to policy. Arbitrary semantic maps (`params`, subject/input keyed dictionaries, policy strictness parameter names, and corpus embedded checker reports) cannot have requiredness inferred from their incidental map keys; inventory them, but validate them as typed objects with unconstrained keys. Array lists of checks, actors, work, decisions, evidence entries and corpus cases are records, not arbitrary maps.
+
+An empty-object intersection must not erase the known element shape of a list: list elements are pooled records. The inventory is a conservative compatibility contract, not a claim that all historically optional fields are semantically optional. Future tightening needs an explicit contract revision and new registration before evaluation.
+
+## Explicit extensions and diagnostics
+
+- `observed_checks[*].outcome` is required and has exactly `passed`, `failed`, `not_run`, `not_applicable`, `inconclusive`; missing yields `schema.missing_field`, unsupported value `schema.invalid_value`, wrong type `schema.wrong_type`.
+- All JSON Schema required/type/additional-property/enum or const failures map respectively to `schema.missing_field`, `schema.wrong_type`, `schema.unknown_field`, `schema.invalid_value`. Parse errors are `schema.wrong_type`. Reasons are a deduplicated set.
+- Structural and existing semantic reasons accumulate. No new schema digest/timestamp/revision regex is added: the P-B semantic codes own those checks, preserving the frozen corpus's exact expected reason sets.
+- L0 evidence permits optional `policy_rule_id` and `rationale` strings on an observed check, as already specified for `not_applicable`. Nullable historic metadata stays nullable. A `schema_version` outside observed family versions is `schema.invalid_value`.
+- Corpus reports have their own three registered families. They are never treated as L0 evidence requiring eight observed checks. Their required shape, summary outcome and per-case types are derived above. This shape check does not authenticate or rerun the corpus and must say so in its documentation.
+- Record kind is identified from structured discriminators, not a substring in a comment: JSON `record_kind=evidence` / supported `kind`, TOML task `id` with `mode`, acceptance `acceptor`, policy `authority` with `lanes`. Unknown/missing discriminator is a structural failure, not an accepted empty record.
+- A cited `{path, sha256}` resolves beside the record first, then from git at its own snapshot/revision (acceptance `subject.revision` and corpus `subject.revision` included). An unresolved citation produces an explicit `citation.unchecked` note with the path and reason. Notes are not rejection codes and do not change R001–R080. Output with any unchecked citation must say `accepted with unchecked citations`, never bare `accepted`.
+
+## Pre-registration corpus
+
+A separate generator, forbidden to read the lint/schema implementation, derives the inventory and creates legitimate controls plus missing required fields, wrong types, unknown closed keys, unsupported versions/outcomes, absent/unknown evidence outcomes, policy malformed values, and all three corpus-report shapes. Expectations are fixed by these rules before the implementation exists. The registration pins sources, prompt, payload digest and exact case count. Existing 80 record fixtures remain unchanged and run alongside it.
+
+The contract does not introduce an in-toto attestation channel, a trusted producer, or protected acceptance. Those remain DP-4.1's disclosed limit.
