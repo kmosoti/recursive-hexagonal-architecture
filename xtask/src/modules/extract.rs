@@ -1093,6 +1093,37 @@ impl<'ast> Visit<'ast> for Walker<'_> {
         }
     }
 
+    // `#[cfg(test)]` applies to every associated item, not only functions:
+    // a test-only associated const or type is a test edge (CHG-007.2, the
+    // automated review thread on pull request 18).
+    fn visit_trait_item(&mut self, item: &'ast syn::TraitItem) {
+        let attrs: &[syn::Attribute] = match item {
+            syn::TraitItem::Const(item) => &item.attrs,
+            syn::TraitItem::Fn(item) => &item.attrs,
+            syn::TraitItem::Type(item) => &item.attrs,
+            syn::TraitItem::Macro(item) => &item.attrs,
+            _ => &[],
+        };
+        let old_test = self.test;
+        self.test = old_test || attrs_cfg_test(attrs);
+        syn::visit::visit_trait_item(self, item);
+        self.test = old_test;
+    }
+
+    fn visit_impl_item(&mut self, item: &'ast syn::ImplItem) {
+        let attrs: &[syn::Attribute] = match item {
+            syn::ImplItem::Const(item) => &item.attrs,
+            syn::ImplItem::Fn(item) => &item.attrs,
+            syn::ImplItem::Type(item) => &item.attrs,
+            syn::ImplItem::Macro(item) => &item.attrs,
+            _ => &[],
+        };
+        let old_test = self.test;
+        self.test = old_test || attrs_cfg_test(attrs);
+        syn::visit::visit_impl_item(self, item);
+        self.test = old_test;
+    }
+
     fn visit_trait_item_fn(&mut self, item: &'ast syn::TraitItemFn) {
         let old_test = self.test;
         self.test = old_test || attrs_cfg_test(&item.attrs);
