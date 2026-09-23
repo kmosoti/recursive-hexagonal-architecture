@@ -104,9 +104,20 @@ Questions answered:
 4. *The entry's `kind`.* The verifier judges validity by the policy check's kind, as `Complete` and the contract specify; the kind-equality of `⊑` is carried by the join, which refuses mixed kinds.
 5. *No L0 record at `522445f`.* That commit changed only `scope_globs`. The record for the repaired head follows these repairs.
 
+### Re-reviews of the repair range `522445f..2dfc616`, determinations
+
+**Opus 5.5: APPROVE.** It re-ran its probes: every fail-open case is refused, 0 of 152 registered fixtures are refused, V031 is as registered, and the lint catches the tampered records with no false mismatch across 76 L0 records. It left one P3 and two questions:
+- *P3, the contract lags the code.* The fixture shape `malformed()` enforces (non-empty `surface`, `kind` and `params` on every entry, an unsigned `cooling_off_hours`, the exception's members, a whole test count for `passed`) is written only in `model.rs` and this record. **Confirmed.** A registered contract is not edited after its corpus exists. The amendment is carried to the schema-contract follow-on, which registers these rules with their malformed cases (acceptance concern 4).
+- *Question, an unchecked citation is silent.* When git lacks a record's subject, the lint skips the digest check without saying so. **Kept as disclosed**; the follow-on adds a note to the lint's output.
+- *Nit.* The failed clippy record belongs to `0a6b833`, not to `7f9b4af`, the commit that added it. Corrected above.
+
+**GPT-6: REQUEST_CHANGES, one P1 and one question.**
+1. **An absent `exception` key still allowed a merge (P1). Confirmed.** `f["exception"]` reads an absent key as `null`, so V001 without the key merged, and `MEMBERS` omitted the top-level `exception`. Repair: the key must be present, as `null` or an object. It is added to `MEMBERS` and to the review probes. With the new check disabled, the property fails; with it, all pass.
+2. *Question: where is the non-empty `surface` registered?* **Nowhere; it is a choice beyond the contract.** The contract gives `surface` no minimum. An empty surface triggers no obligation, so a fixture with no evidence would be eligible. Refusing it fails closed, and no registered fixture has an empty surface. The earlier claim is narrowed accordingly: no *registered* fixture is newly refused, while an empty surface is refused by choice. It is registered with the other shape rules in the follow-on.
+
 ### Repair attempts after the approving reviews (§11.7.10)
 
-1. **`L0.clippy` failed on `7f9b4af`'s record (`evidence/CHG-019/20260923T001604Z-0a6b83370559.json`), and that head was pushed.** Hypothesis: the lint repair left a collapsible nested `if`. Discriminating check: `cargo clippy` reported `collapsible_if` at `record_lint.rs:164`, an error under the workspace lints. Change: the conditions are one `let` chain. Result: clippy is clean. The failed record is kept. The method lesson is the same as P-A's: run clippy before the commit, and never let a push follow a failed lane in one command chain.
+1. **`L0.clippy` failed in the record of `0a6b833` (`evidence/CHG-019/20260923T001604Z-0a6b83370559.json`, committed in `7f9b4af`), and that head was pushed.** Hypothesis: the lint repair left a collapsible nested `if`. Discriminating check: `cargo clippy` reported `collapsible_if` at `record_lint.rs:164`, an error under the workspace lints. Change: the conditions are one `let` chain. Result: clippy is clean. The failed record is kept. The method lesson is the same as P-A's: run clippy before the commit, and never let a push follow a failed lane in one command chain.
 
 ### Not done in this packet, and why
 
@@ -118,3 +129,4 @@ Questions answered:
 1. **`Authentic` cannot hold, by decision.** DP-4.1 creates no key (above). Every acceptance stays `bootstrap_acceptance` with `merge_allowed = false` until a producer isolated from the candidate exists. The spec's §11.7.6 model is implemented and graded at predicate level; the authentication channel stays in plan §10's deferred list.
 2. **The schema files are a follow-on item** (above). Until they exist, Codex validates against `docs/architecture/verifier-contract.md` and the two corpus registrations (DP-5.4).
 3. **This PR edits `.rha/policy.toml`, so `Applicable` is false for its records** (the candidate policy digest differs from the base; `evidence/CHG-019/20260922T233629Z-5a768afbe364.json`). That is the model working as specified: the edit is judged under the policy it replaces. Its acceptance is a controlled transition in the §11.5 sense, the first one this repository has had. The acceptance record says so and names the cause.
+4. **The verifier contract lags the enforced fixture shape** (re-reviews above): non-empty `surface`, required `exception` key, entry `kind` and `params`, unsigned `cooling_off_hours`, a whole test count. They fail closed and change no registered decision. They are registered in the schema-contract follow-on through the amendment procedure, and the lint's note for unchecked citations arrives with them.
