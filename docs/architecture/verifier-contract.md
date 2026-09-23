@@ -139,6 +139,6 @@ The first malformed member is reported under `malformed`; `r_eff` is null, `conf
 
 ## 4. CHG-019.1 amendment: record schemas and citation notes
 
-[Record schema contract](record-schema-contract.md) fixes the previously unregistered required fields/types/allowed keys by mechanical derivation, with malformed cases before schema or new lint code. It adds `schema.invalid_value` for unsupported enumerations/versions; extends `schema.unknown_field` to closed policy objects; and registers H4, markdown and H5 corpus-report shapes separately from L0 evidence. Existing semantic codes and R001–R080's exact expected sets remain unchanged.
+[Record schema contract](record-schema-contract.md) fixes the previously unregistered required fields/types/allowed keys by mechanical derivation, with malformed cases before schema or new lint code. It adds `schema.invalid_value` for unsupported enumerations/versions; extends `schema.unknown_field` to closed record objects at every depth; and registers H4, markdown and H5 corpus-report shapes separately from L0 evidence. Existing semantic codes and R001–R080's exact expected sets remain unchanged.
 
 A cited file that neither the record's directory nor its git subject can resolve is explicitly `citation.unchecked` in output. This is a note, not a rejection code: it does not turn a synthetic unknown subject or historic missing raw log into a new frozen-corpus failure. Such a result is printed as accepted **with unchecked citations**, never bare accepted. It cannot support a claim that every digest was checked.
