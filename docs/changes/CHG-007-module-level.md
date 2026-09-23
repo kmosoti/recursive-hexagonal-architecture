@@ -20,7 +20,7 @@ P-B acceptance records linted and generated docs checked before their commit. P-
 
 ## Repair attempts
 
-None yet.
+1. **Registration contract ambiguity, found before schemas or lint code.** Hypothesis: pooling historic record variants could accept empty provenance or reject a legitimate documentary outcome. Discriminating check: the read-only record census found compact string-source provenance, H4 fixture identity variants, and `not_part_of_this_run` in a documentary held-out field. Change: specify branches, the fixture identity exclusive choice, exact discriminator codes and outcome scope. The in-progress generator was interrupted before it wrote corpus payloads and is resumed with the corrected contract; its first log is retained. Result: contract corrected before any registration commit or implementation grading; generator validation remains pending.
 
 ## Acceptance concerns
 
