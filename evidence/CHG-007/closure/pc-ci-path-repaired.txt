@@ -1,0 +1,11 @@
+   Compiling xtask v0.1.0 (/home/kmosoti/projects/rha-m2/xtask)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.74s
+     Running tests/markdown_record_shape.rs (target/debug/deps/markdown_record_shape-a8595308fba74d07)
+
+running 3 tests
+test frozen_markdown_shape_supplement_matches_all_registered_recipes ... ok
+test schema_codegen_check_matches_projected_schemas ... ok
+test schema_codegen_check_uses_archived_generated_source_in_fresh_checkout ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+

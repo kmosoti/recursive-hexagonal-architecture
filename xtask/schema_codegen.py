@@ -29,6 +29,11 @@ SUPPLEMENT_CONTENT_SHA256 = (
 SUPPLEMENT_AMENDMENT_PATH = (
     "docs/architecture/markdown-record-shape-amendment.md"
 )
+REGISTERED_GENERATED_SOURCE_PATH = "target/m2/markdown-schema-supplement-prompt.md"
+ARCHIVED_GENERATED_SOURCE_PATH = (
+    "xtask/tests/corpus/write-prompts/CHG-007/"
+    "markdown-schema-supplement-prompt.md"
+)
 
 FAMILIES = {
     "acceptance",
@@ -144,6 +149,14 @@ def _sha256_digest(value, context):
     if not isinstance(value, str) or re.fullmatch(r"[0-9a-f]{64}", value) is None:
         fail(f"{context}: expected a lowercase SHA-256 digest")
     return value
+
+
+def _registered_source_path(relative):
+    # The registration preserves the original generation location; this
+    # durable archive is the committed source used by fresh checkouts.
+    if relative == REGISTERED_GENERATED_SOURCE_PATH:
+        return ROOT / ARCHIVED_GENERATED_SOURCE_PATH
+    return ROOT / relative
 
 
 def _supplement_payload_paths():
@@ -299,7 +312,7 @@ def _load_supplement():
             fail(f"{context}: malformed source entry")
         relative = _safe_relative_path(source["path"], f"{context}.path")
         digest = _sha256_digest(source["sha256"], f"{context}.sha256")
-        path = ROOT / relative
+        path = _registered_source_path(relative)
         if path.is_symlink() or not path.is_file():
             fail(f"{context}: source is not a durable file")
         if hashlib.sha256(path.read_bytes()).hexdigest() != digest:

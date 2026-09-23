@@ -28,18 +28,18 @@ The independent generator's first proposal preserved an M01 ambiguity: the undec
 
 ## Evidence
 
-P-B acceptance records were linted and bound in the first commit. Base: ec493b794040ede8878705132c89f9a4855f2dbe. Settled implementation candidate: de11219f7a6767dd7dc88325b0581e63dd240860, tree 4fa4385c5e34de478e949978d1a8c2c9b4a88dea; subsequent record-only updates do not alter that implementation. The exact clean-head L0 subject and all eight outcomes are recorded below. Verification policy: [policy](../../.rha/policy.toml), L0, local/advisory under ECC-Solo.
+P-B acceptance records were linted and bound in the first commit. Base: ec493b794040ede8878705132c89f9a4855f2dbe. Settled implementation candidate after CI repair: 9c10298df36868a10de1f48ff97bf84ad884c60b, tree 256c8bc081455ecd79c2f4142ac2b94636590208; subsequent record-only updates do not alter that implementation. The exact clean-head L0 subject and all eight outcomes are recorded below. Verification policy: [policy](../../.rha/policy.toml), L0, local/advisory under ECC-Solo.
 
-- [Implementation gate](../../evidence/CHG-007/closure/pc-final-stage-gate.txt): 269/269; [docs](../../evidence/CHG-007/closure/pc-final-docs-check.txt) current; [scope](../../evidence/CHG-007/closure/pc-final-scope.txt) zero findings.
+- [Clean-head L0 after CI repair](../../evidence/CHG-007/20260923T054356Z-9c10298df368.json): all eight checks passed, 270/270 tests; [docs](../../evidence/CHG-007/closure/pc-ci-repair-docs-check.txt) current; [scope](../../evidence/CHG-007/closure/pc-ci-repair-scope.txt) zero findings.
 - [Module H4](../../evidence/h4-module/20260923T040716Z-f915daaf8dc1.json), [crate H4](../../evidence/h4-crate/20260923T040735Z-f915daaf8dc1-dirty.json), [markdown](../../evidence/md-corpus/20260923T044415Z-ed79a7a8e0ac.json), and [H5](../../evidence/h5/ed79a7a8e0ac-dirty-1790138754224832114-2796874.json) provide the corpus observations; their own candidate/dirty identities remain authoritative.
 - [Original and supplemental shape checks](../../evidence/CHG-007/closure/markdown-schema-controls.txt), [verifier shape checks](../../evidence/CHG-007/closure/h5-repaired-controls.txt), and [E1](../../experiments/no-std-graph/result.md) state their exact scope.
-- Held-out runs and authenticated/protected producer verification are not_run as stated below. No performance result is claimed. The clean-head local L0 is recorded below; the separate final GPT-6 review is the remaining pre-PR validation.
+- Held-out runs and authenticated/protected producer verification are not_run as stated below. No performance result is claimed. The clean-head local L0 and separate GPT-6 approvals are recorded below. PR18 remains unmerged for supervising Opus review and Kennedy integration.
 
 ## Decisions
 
 The [task record](../../.rha/tasks/CHG-007-module-level.toml) quotes Kennedy's authorization and rejected alternatives. [Ledger](../../.rha/decisions.toml) status owns DP-2.1 and the after-data rows CHG-019.1-contract-amendment and CHG-019.1-markdown-shape-amendment.
 
-Material task decisions: delegation-m2/stage-0-schema; module-diagnostics/module-extractor-implementation/module-corpus-execution; metadata-root-clippy/clippy-root-attribute-syntax; schema-dependency-licenses; running-executable-identity/h5-immutable-observations; headline-reference-controls; site-enforcement-status/contributing-status/orchestration-log-layout; e1-boundary; and markdown-shape-amendment.
+Material task decisions: delegation-m2/stage-0-schema; module-diagnostics/module-extractor-implementation/module-corpus-execution; metadata-root-clippy/clippy-root-attribute-syntax; schema-dependency-licenses; running-executable-identity/h5-immutable-observations; headline-reference-controls; site-enforcement-status/contributing-status/orchestration-log-layout; e1-boundary; markdown-shape-amendment; and registered-prompt-archive-resolution.
 
 ## Repair attempts
 
@@ -211,3 +211,17 @@ The disposition is blocked only on Authentic: local evidence has no trusted prod
 A separate gpt-6-astra session at xhigh effort reviewed 766a2521c0c93f5f69df794627581ddf410e2b5d in read-only validator mode. [Round 1 verdict](../../evidence/CHG-007/review/gpt6-round1.md): VERDICT: APPROVE, no blocking findings. The [prompt](../../evidence/CHG-007/review/gpt6-round1-prompt.md) fixes the registered-contract/RHA checklist and hard limits. The reviewer reports checking docs, scope, projections, registered fixtures and identities with existing binaries and committed evidence; it did not rebuild or rerun Cargo. This is the required separate advisory GPT-6 review. The supervising Opus 5.5 review and Kennedy's integration remain outside this Executor's authority; no merge occurs here.
 
 The following archive/status/index updates contain no implementation changes. The PR links this review and its reviewed revision; CI covers the pushed head.
+
+### PR CI portability repair
+
+**Repair attempt 20.** [PR18 CI run 35822624704](https://github.com/kmosoti/recursive-hexagonal-architecture/actions/runs/35822624704/job/107057540423) failed two nextest tests because the frozen markdown supplement cites its original generator prompt under target/m2. A fresh checkout has only the committed byte-identical prompt archive. All seven other L0 checks passed; this failed run is not claimed as green.
+
+Hypothesis: resolving the exact historical staging path to its committed archive, with the original digest still required, removes the checkout dependency without weakening the registration. [Removing the local staging prompt reproduced both failures](../../evidence/CHG-007/closure/pc-ci-path-reproducer.txt). Decision registered-prompt-archive-resolution authorizes this narrow mapping in the schema compiler and corpus source check. Every other source path stays exact. No frozen registration, data, expected grade or generated schema changes.
+
+[The repaired three-test suite passes without the staging prompt](../../evidence/CHG-007/closure/pc-ci-path-repaired.txt). Its new regression copies only committed inputs into a fresh repository layout and runs the real schema projection check. [Restoring the old compiler makes that regression fail](../../evidence/CHG-007/closure/pc-ci-fresh-negative.txt), proving it detects the original defect. This implementation repair requires a replacement clean-head lane record and a repair-diff GPT-6 re-review before pushing.
+
+**Repair gate:** all eight L0 checks passed, including 270 nextest tests; [lane summary](../../evidence/CHG-007/closure/pc-ci-repair-l0.txt), [docs check](../../evidence/CHG-007/closure/pc-ci-repair-docs-check.txt) and [zero-finding scope check](../../evidence/CHG-007/closure/pc-ci-repair-scope.txt). The original schema bytes and frozen supplemental data have zero diff.
+
+**Replacement clean-head record after CI repair:** [local L0](../../evidence/CHG-007/20260923T054356Z-9c10298df368.json) binds clean revision 9c10298df36868a10de1f48ff97bf84ad884c60b. All eight checks pass, including 270 tests. Record lint accepts with explicit unchecked artifact citations. Authentic remains false under DP-4.1. This supersedes the prior implementation observation for the repaired head; earlier evidence remains unchanged.
+
+**Independent repair review, round 2:** [VERDICT: APPROVE](../../evidence/CHG-007/review/gpt6-round2.md) on dbfb3e68d28f84a5e6b36dfc517fefe2021bd965, restricted to the repair diff and determinations. The reviewer independently observed old/fixed behavior with staging masked, verified archive missing/symlink/digest-negative controls and an unrelated-source corruption control, and checked subject identities, docs and scope. It inspected the 270-test record without rerunning Cargo. No blocking finding remains from either review round.

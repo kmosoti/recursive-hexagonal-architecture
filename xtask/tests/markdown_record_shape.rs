@@ -1,6 +1,7 @@
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::{Component, Path, PathBuf};
 use std::process::Command;
+use std::time::{SystemTime, UNIX_EPOCH};
 
 use serde::Deserialize;
 use serde_json::Value;
@@ -41,6 +42,20 @@ fn repository_root() -> PathBuf {
 
 fn supplement_root() -> PathBuf {
     repository_root().join("xtask/tests/corpus/markdown-schema-supplement")
+}
+
+const REGISTERED_GENERATED_SOURCE_PATH: &str = "target/m2/markdown-schema-supplement-prompt.md";
+const ARCHIVED_GENERATED_SOURCE_PATH: &str =
+    "xtask/tests/corpus/write-prompts/CHG-007/markdown-schema-supplement-prompt.md";
+
+fn registered_source_path(relative: &str) -> PathBuf {
+    // The registration preserves the original generation location; this
+    // durable archive is the committed source used by fresh checkouts.
+    if relative == REGISTERED_GENERATED_SOURCE_PATH {
+        repository_root().join(ARCHIVED_GENERATED_SOURCE_PATH)
+    } else {
+        repository_root().join(relative)
+    }
 }
 
 fn safe_relative_path(path: &str) -> bool {
@@ -170,7 +185,7 @@ fn verify_frozen_supplement(root: &Path) -> toml::Value {
         let digest = source["sha256"].as_str().expect("source digest");
         assert!(safe_relative_path(relative));
         assert!(lower_sha256(digest));
-        let path = repository_root().join(relative);
+        let path = registered_source_path(relative);
         let metadata = std::fs::symlink_metadata(&path).expect("registered source");
         assert!(metadata.is_file() && !metadata.file_type().is_symlink());
         assert_eq!(
@@ -180,6 +195,65 @@ fn verify_frozen_supplement(root: &Path) -> toml::Value {
     }
 
     registration
+}
+
+struct OwnedTempDir(PathBuf);
+
+impl Drop for OwnedTempDir {
+    fn drop(&mut self) {
+        let _ = std::fs::remove_dir_all(&self.0);
+    }
+}
+
+fn fresh_temp_dir() -> OwnedTempDir {
+    let nonce = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .expect("system clock")
+        .as_nanos();
+    let path = std::env::temp_dir().join(format!(
+        "rha-markdown-schema-codegen-{}-{nonce}",
+        std::process::id()
+    ));
+    std::fs::create_dir(&path).expect("fresh temporary repository");
+    OwnedTempDir(path)
+}
+
+fn copy_file(source: &Path, destination: &Path) {
+    std::fs::create_dir_all(destination.parent().expect("destination parent"))
+        .expect("destination directories");
+    std::fs::copy(source, destination).expect("copy fixture file");
+}
+
+fn copy_tree(source: &Path, destination: &Path) {
+    let metadata = std::fs::symlink_metadata(source).expect("source tree metadata");
+    assert!(metadata.is_dir(), "fixture tree is not a directory");
+    std::fs::create_dir_all(destination).expect("fixture tree destination");
+
+    let mut entries: Vec<PathBuf> = std::fs::read_dir(source)
+        .expect("fixture tree entries")
+        .map(|entry| entry.expect("fixture tree entry").path())
+        .collect();
+    entries.sort();
+    for entry in entries {
+        let metadata = std::fs::symlink_metadata(&entry).expect("fixture entry metadata");
+        assert!(
+            !metadata.file_type().is_symlink(),
+            "fixture tree contains symlink: {}",
+            entry.display()
+        );
+        let relative = entry.strip_prefix(source).expect("fixture relative path");
+        let target = destination.join(relative);
+        if metadata.is_dir() {
+            copy_tree(&entry, &target);
+        } else {
+            assert!(
+                metadata.is_file(),
+                "fixture tree contains non-file: {}",
+                entry.display()
+            );
+            copy_file(&entry, &target);
+        }
+    }
 }
 
 fn decode_pointer(path: &str) -> Vec<String> {
@@ -351,6 +425,64 @@ fn schema_codegen_check_matches_projected_schemas() {
     assert!(
         output.status.success(),
         "schema codegen --check failed: {}{}",
+        String::from_utf8_lossy(&output.stdout),
+        String::from_utf8_lossy(&output.stderr)
+    );
+}
+
+#[test]
+fn schema_codegen_check_uses_archived_generated_source_in_fresh_checkout() {
+    let repository = repository_root();
+    let temporary = fresh_temp_dir();
+    let root = &temporary.0;
+
+    copy_file(
+        &repository.join("xtask/schema_codegen.py"),
+        &root.join("xtask/schema_codegen.py"),
+    );
+    copy_file(
+        &repository.join("xtask/tests/corpus/record-schema/INVENTORY.json"),
+        &root.join("xtask/tests/corpus/record-schema/INVENTORY.json"),
+    );
+    copy_tree(
+        &repository.join("xtask/tests/corpus/markdown-schema-supplement"),
+        &root.join("xtask/tests/corpus/markdown-schema-supplement"),
+    );
+    copy_file(
+        &repository.join(ARCHIVED_GENERATED_SOURCE_PATH),
+        &root.join(ARCHIVED_GENERATED_SOURCE_PATH),
+    );
+
+    for relative in [
+        "docs/architecture/record-schema-contract.md",
+        "docs/architecture/markdown-record-shape-amendment.md",
+        "evidence/md-corpus/20260922T210717Z-58e45f444c9f.json",
+        "evidence/md-corpus/20260923T044415Z-ed79a7a8e0ac.json",
+    ] {
+        copy_file(&repository.join(relative), &root.join(relative));
+    }
+    for family in [
+        "acceptance",
+        "evidence",
+        "h4",
+        "h5_conformance",
+        "markdown_corpus",
+        "policy",
+        "task",
+    ] {
+        let relative = format!(".rha/schemas/{family}.schema.json");
+        copy_file(&repository.join(&relative), &root.join(&relative));
+    }
+
+    assert!(!root.join("target/m2").exists());
+    let output = Command::new("python3")
+        .args(["xtask/schema_codegen.py", "--check"])
+        .current_dir(root)
+        .output()
+        .expect("spawn schema codegen in fresh checkout");
+    assert!(
+        output.status.success(),
+        "fresh checkout schema codegen --check failed: {}{}",
         String::from_utf8_lossy(&output.stdout),
         String::from_utf8_lossy(&output.stderr)
     );

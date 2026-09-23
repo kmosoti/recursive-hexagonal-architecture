@@ -1,0 +1,30 @@
+   Compiling xtask v0.1.0 (/home/kmosoti/projects/rha-m2/xtask)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.94s
+     Running tests/markdown_record_shape.rs (target/debug/deps/markdown_record_shape-a8595308fba74d07)
+
+running 2 tests
+test frozen_markdown_shape_supplement_matches_all_registered_recipes ... FAILED
+test schema_codegen_check_matches_projected_schemas ... FAILED
+
+failures:
+
+---- frozen_markdown_shape_supplement_matches_all_registered_recipes stdout ----
+
+thread 'frozen_markdown_shape_supplement_matches_all_registered_recipes' (2834959) panicked at xtask/tests/markdown_record_shape.rs:174:57:
+registered source: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- schema_codegen_check_matches_projected_schemas stdout ----
+
+thread 'schema_codegen_check_matches_projected_schemas' (2834960) panicked at xtask/tests/markdown_record_shape.rs:351:5:
+schema codegen --check failed: schema_codegen.py: error: registration.sources[4]: source is not a durable file
+
+
+
+failures:
+    frozen_markdown_shape_supplement_matches_all_registered_recipes
+    schema_codegen_check_matches_projected_schemas
+
+test result: FAILED. 0 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+
+error: test failed, to rerun pass `-p xtask --test markdown_record_shape`
