@@ -2,4 +2,5 @@
 
 pub mod extract;
 pub mod rules;
+pub mod single;
 pub mod workspace;

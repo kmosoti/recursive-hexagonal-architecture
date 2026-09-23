@@ -1,0 +1,21 @@
+   Compiling xtask v0.1.0 (/home/kmosoti/projects/rha-m2/xtask)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.66s
+     Running tests/module_only_cli.rs (target/debug/deps/module_only_cli-fa79686b0ee94d9c)
+
+running 5 tests
+test module_only_rejects_a_single_member_virtual_workspace_manifest ... ok
+test module_only_rejects_multi_package_workspaces_and_invalid_cli_combinations ... ok
+test module_only_rejects_missing_rules_and_malformed_source ... ok
+test module_only_uses_library_identity_and_external_dependency_aliases ... ok
+test frozen_module_fixtures_use_module_only_reports ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+     Running tests/modules_cli.rs (target/debug/deps/modules_cli-f62898d24578ee7b)
+
+running 2 tests
+test architecture_cli_checks_live_site_and_preserves_report_contract ... ok
+test standalone_metadata_and_cli_cover_identity_aliases_and_module_failures ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.26s
+

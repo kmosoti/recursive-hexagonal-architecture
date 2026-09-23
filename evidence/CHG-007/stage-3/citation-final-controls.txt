@@ -1,0 +1,11 @@
+   Compiling xtask v0.1.0 (/home/kmosoti/projects/rha-m2/xtask)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.67s
+     Running tests/citation_pairs.rs (target/debug/deps/citation_pairs-57f83876bcbe9af0)
+
+running 3 tests
+test declared_pairs_and_registered_digest_maps_are_citations_but_inline_prompt_is_not ... ok
+test absolute_citations_use_the_subject_git_object_and_refuse_escape ... ok
+test task_citations_are_unchecked_without_a_subject_but_not_bare_accepted ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+

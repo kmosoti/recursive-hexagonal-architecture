@@ -1,0 +1,12 @@
+   Compiling xtask v0.1.0 (/home/kmosoti/projects/rha-m2/xtask)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.66s
+     Running tests/module_report_controls.rs (target/debug/deps/module_report_controls-d41f56fb2c4cca5f)
+
+running 3 tests
+test random_report_controls_reject_registered_count_drift ... ok
+test headline_reference_controls_reject_missing_registered_facts ... ok
+supplementary headline extraction: 25 fixtures, 41 edges, 4 limitations; exact reference match
+test all_registered_headline_extractions_match_the_supplementary_reference ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.18s
+

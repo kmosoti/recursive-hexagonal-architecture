@@ -32,6 +32,19 @@ fn dispatch(root: &Path, command: &Command) -> Result<u8> {
             command: CorpusCommand::Run(args),
         } => xtask::corpus::runner::run(root, args),
         Command::Corpus {
+            command: CorpusCommand::ModuleRandom,
+        } => {
+            let report = xtask::corpus::module_random::run(root)?;
+            let failed = report["outcome"] != "passed";
+            println!(
+                "{}",
+                serde_json::to_string_pretty(&report).map_err(|error| xtask::error::Error::new(
+                    format!("serializing random module report: {error}")
+                ))?
+            );
+            Ok(u8::from(failed))
+        }
+        Command::Corpus {
             command: CorpusCommand::Generate { check },
         } => xtask::corpus::fixture::sync(root, *check),
         Command::Corpus {
@@ -40,6 +53,7 @@ fn dispatch(root: &Path, command: &Command) -> Result<u8> {
         Command::Architecture(args) => {
             let options = architecture::Options {
                 manifest_path: args.manifest_path.clone(),
+                module_rules_path: args.module_rules_path.clone(),
                 rules_path: args.rules.clone(),
                 format: architecture::Format::parse(&args.format).unwrap_or_default(),
                 transitive: args.transitive,

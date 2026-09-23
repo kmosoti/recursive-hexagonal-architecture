@@ -15,6 +15,7 @@
 //! one reports the package in `name` with the key in `rename`.
 
 use std::collections::BTreeSet;
+use std::fs;
 use std::path::{Path, PathBuf};
 
 use serde::Deserialize;
@@ -115,6 +116,13 @@ impl std::fmt::Display for LoadError {
 
 impl std::error::Error for LoadError {}
 
+#[derive(Debug, Clone)]
+pub struct SingleModule {
+    pub package: String,
+    pub manifest_path: PathBuf,
+    pub source: CompositeSource,
+}
+
 /// Runs `cargo metadata` and builds the graph.
 ///
 /// # Errors
@@ -125,6 +133,14 @@ pub fn load(
     root: &Path,
     manifest_path: Option<&Path>,
 ) -> std::result::Result<CrateGraph, LoadError> {
+    let metadata = load_metadata(root, manifest_path)?;
+    build(&metadata).map_err(LoadError::Configuration)
+}
+
+fn load_metadata(
+    root: &Path,
+    manifest_path: Option<&Path>,
+) -> std::result::Result<Metadata, LoadError> {
     let mut command = crate::util::command("cargo");
     command
         .current_dir(root)
@@ -152,7 +168,64 @@ pub fn load(
             "parsing `cargo metadata` output: {error}"
         )))
     })?;
-    build(&metadata).map_err(LoadError::Configuration)
+    Ok(metadata)
+}
+
+pub fn load_single_module(
+    root: &Path,
+    manifest: &Path,
+    rules: &Path,
+) -> std::result::Result<SingleModule, LoadError> {
+    let supplied_manifest = fs::canonicalize(manifest).map_err(|error| {
+        LoadError::Configuration(Error::new(format!(
+            "failed to canonicalize manifest {}: {error}",
+            manifest.display()
+        )))
+    })?;
+    let metadata = load_metadata(root, Some(&supplied_manifest))?;
+    let members: Vec<&Package> = metadata
+        .packages
+        .iter()
+        .filter(|package| metadata.workspace_members.contains(&package.id))
+        .collect();
+    if members.len() != 1 {
+        return Err(LoadError::Configuration(Error::new(format!(
+            "module-only mode requires exactly one workspace package; found {}",
+            members.len()
+        ))));
+    }
+    let package = members[0];
+    let package_manifest = fs::canonicalize(&package.manifest_path).map_err(|error| {
+        LoadError::Configuration(Error::new(format!(
+            "failed to canonicalize selected package manifest {}: {error}",
+            package.manifest_path.display()
+        )))
+    })?;
+    if package_manifest != supplied_manifest {
+        return Err(LoadError::Configuration(Error::new(format!(
+            "module-only mode does not accept a virtual workspace manifest {}; selected package manifest is {}",
+            supplied_manifest.display(),
+            package_manifest.display()
+        ))));
+    }
+
+    let rha = RhaMetadata {
+        composite: Some(rules.display().to_string()),
+        ..RhaMetadata::default()
+    };
+    let source = composite_source(package, &rha, &members)
+        .map_err(LoadError::Configuration)?
+        .ok_or_else(|| {
+            LoadError::Configuration(Error::new(
+                "module-only source metadata was not constructed",
+            ))
+        })?;
+
+    Ok(SingleModule {
+        package: package.name.clone(),
+        manifest_path: package_manifest,
+        source,
+    })
 }
 
 /// Builds the graph from parsed metadata. Split out so tests can drive it

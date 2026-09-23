@@ -19,3 +19,9 @@
 - Reasoning that did not change the outcome: debating source identity before exercising a custom Cargo target; the concrete CLI control settled it.
 - Mistakes caught: cycle evidence recomputation dropped parallel heuristic paths; the test harness forgot observed-edge deduplication; the Clippy guard assumed a conventional root and scanned comments as attributes. Reuse the observed edge map, derive roots from metadata, and parse syntax.
 - Next rule: run the frozen corpus early; normalize only documented representation differences, never expected facts. An explicit module-only CLI avoids mutating registered fixtures to satisfy unrelated crate checks.
+
+## Atom #4 — P-C stage 3 (corpus and evidence)
+- Tiers: Luna high for decided harness patches, Sol max for independent review, root for tool-backed verification. The same split should be retained.
+- Reasoning that did not change the outcome: speculative interface and provenance discussion before comparing one real producer report with its consumer; both paths and digest prefixes were directly observable.
+- Mistakes caught: unordered witness arrays, a missing-oracle fallback, a filename-length bug, incomplete per-case hashes, a stale notice removed from a projection, and hashing a replaced executable pathname. Real positive controls and deliberate negative mutations caught each.
+- Next rule: normalize a producer/consumer contract from one actual report before expanding a harness; preserve registered finding scores and place stronger extraction checks in their separate registered assurance measure. Record the observed CLI version per generation rather than assuming it remains fixed during a long run.

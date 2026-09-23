@@ -1,0 +1,13 @@
+    Checking xtask v0.1.0 (/home/kmosoti/projects/rha-m2/xtask)
+warning: `#[must_use]` attribute cannot be used on statements
+   --> xtask/src/corpus/runner.rs:583:5
+    |
+583 |     #[must_use]
+    |     ^^^^^^^^^^^
+    |
+    = help: `#[must_use]` can be applied to data types, functions, and traits
+    = warning: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+    = note: `#[warn(unused_attributes)]` (part of `#[warn(unused)]`) on by default
+
+warning: `xtask` (lib) generated 1 warning (run `cargo fix --lib -p xtask` to apply 1 suggestion)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 2.19s

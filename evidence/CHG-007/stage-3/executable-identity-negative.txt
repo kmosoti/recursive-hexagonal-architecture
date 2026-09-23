@@ -1,0 +1,23 @@
+   Compiling xtask v0.1.0 (/home/kmosoti/projects/rha-m2/xtask)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.68s
+     Running tests/executable_identity.rs (target/debug/deps/executable_identity-cba6bbeeac0561f6)
+
+running 1 test
+
+thread 'executable_identity_survives_unlink_and_replacement' (2764272) panicked at xtask/tests/executable_identity.rs:41:63:
+running executable hash: Error("reading /home/kmosoti/projects/rha-m2/target/rha/exe-identity-unique/2764255-0/executable_identity (deleted): No such file or directory (os error 2)")
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+thread 'executable_identity_survives_unlink_and_replacement' (2764256) panicked at xtask/tests/executable_identity.rs:77:5:
+copied integration test failed: 
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test executable_identity_survives_unlink_and_replacement ... FAILED
+
+failures:
+
+failures:
+    executable_identity_survives_unlink_and_replacement
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.12s
+
+error: test failed, to rerun pass `-p xtask --test executable_identity`

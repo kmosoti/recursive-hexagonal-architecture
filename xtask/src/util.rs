@@ -1,7 +1,7 @@
 //! Digests, UTC timestamps, version-token parsing, and command helpers.
 
 use std::fmt::Write as _;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use std::process::Command;
 use std::time::{SystemTime, UNIX_EPOCH};
 
@@ -32,6 +32,38 @@ pub fn sha256_hex(bytes: &[u8]) -> String {
 pub fn sha256_file(path: &Path) -> Result<String> {
     let bytes = std::fs::read(path).context(|| format!("reading {}", path.display()))?;
     Ok(sha256_hex(&bytes))
+}
+
+/// Path to the executable image active in this process.
+///
+/// Linux uses `/proc/self/exe`, which resolves to the mapped executable inode
+/// even after its directory entry is unlinked or replaced. Other platforms
+/// use `current_exe`; callers must fail closed when that path cannot be read.
+pub fn running_executable_path() -> Result<PathBuf> {
+    #[cfg(target_os = "linux")]
+    {
+        Ok(PathBuf::from("/proc/self/exe"))
+    }
+    #[cfg(not(target_os = "linux"))]
+    {
+        std::env::current_exe().context(|| "locating running executable".to_owned())
+    }
+}
+
+/// SHA-256 of the executable image active in this process.
+///
+/// On Linux, hashing `/proc/self/exe` opens the inode mapped into this
+/// process, not a replacement found at the old filesystem path. Other
+/// platforms hash `current_exe` and fail closed if it cannot be read.
+pub fn running_executable_sha256() -> Result<String> {
+    #[cfg(target_os = "linux")]
+    {
+        sha256_file(Path::new("/proc/self/exe"))
+    }
+    #[cfg(not(target_os = "linux"))]
+    {
+        sha256_file(&running_executable_path()?)
+    }
 }
 
 /// A UTC instant with second precision plus milliseconds.

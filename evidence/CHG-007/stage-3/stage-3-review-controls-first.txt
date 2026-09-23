@@ -1,0 +1,10 @@
+   Compiling xtask v0.1.0 (/home/kmosoti/projects/rha-m2/xtask)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.11s
+     Running tests/module_report_controls.rs (target/debug/deps/module_report_controls-d41f56fb2c4cca5f)
+
+running 2 tests
+test random_report_controls_reject_registered_count_drift ... ok
+test headline_reference_controls_reject_missing_registered_facts ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+

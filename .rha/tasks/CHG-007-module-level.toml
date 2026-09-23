@@ -12,8 +12,8 @@ branch = "chg/007-module-level"
 base_revision = "ec493b794040ede8878705132c89f9a4855f2dbe"
 intent = "Deliver milestone M2: P-C CHG-007, CHG-019.1 and E1; P-D CHG-008 to CHG-014. Implement all required stages, fix every confirmed issue within M2 scope, keep registered grading unchanged absent a disclosed amendment, obtain separate GPT-6 validation, open two green stacked PRs, and never merge."
 non_goals = ["Editing docs/spec/**", "Reading or writing held-out material", "Merge or tag", "Rewriting pushed history", "P-D product growth before the P-C head"]
-scope_globs = [".rha/tasks/CHG-007-module-level.toml", ".rha/acceptances/CHG-019.toml", ".rha/decisions.toml", ".rha/schemas/**", "docs/**", "evidence/**", "xtask/**", "tools/rha-verifier/**", "experiments/no-std-graph/**", "Cargo.lock", "rha-baseline.json", "CONTRIBUTING.md"]
-protected_scope = [".rha/acceptances/CHG-019.toml", ".rha/decisions.toml", "rha-baseline.json", "CONTRIBUTING.md", ".rha/schemas/**", "xtask/Cargo.toml", "xtask/src/record_lint.rs", "xtask/src/record_schema.rs", "xtask/schema_codegen.py", "xtask/src/lib.rs", "xtask/src/modules/**", "xtask/src/metadata.rs", "xtask/src/graph/**", "xtask/src/architecture.rs", "xtask/src/corpus/**", "xtask/src/corpus.rs", "xtask/src/docs.rs", "xtask/src/scope.rs", "xtask/src/clippy_template.rs"]
+scope_globs = [".rha/tasks/CHG-007-module-level.toml", ".rha/acceptances/CHG-019.toml", ".rha/decisions.toml", ".rha/schemas/**", "docs/**", "evidence/**", "xtask/**", "tools/rha-verifier/**", "experiments/no-std-graph/**", "Cargo.lock", "rha-baseline.json", "CONTRIBUTING.md", "deny.toml"]
+protected_scope = [".rha/acceptances/CHG-019.toml", ".rha/decisions.toml", "rha-baseline.json", "CONTRIBUTING.md", ".rha/schemas/**", "xtask/Cargo.toml", "xtask/src/record_lint.rs", "xtask/src/record_schema.rs", "xtask/schema_codegen.py", "xtask/src/lib.rs", "xtask/src/modules/**", "xtask/src/metadata.rs", "xtask/src/graph/**", "xtask/src/architecture.rs", "xtask/src/corpus/**", "xtask/src/corpus.rs", "xtask/src/docs.rs", "xtask/src/scope.rs", "xtask/src/clippy_template.rs", "xtask/src/cli.rs", "xtask/src/main.rs", "xtask/src/util.rs", "deny.toml"]
 
 [[actors]]
 id = "human:kennedy"
@@ -363,3 +363,143 @@ prompt_sha256 = "1b5f68794ba86f81dda6c3af695f1c9e959e060a34f3b6745072c2bb1030ee7
 sample = "sample 1"
 separation = "Root reproduced the existing bypass independently and applied the proposed parser repair."
 edits = "Parenthesized a let-else match expression before compilation; registered corpora unchanged."
+
+[[decisions]]
+id = "module-corpus-execution"
+question = "How can the frozen module fixtures be executed without adding unrelated crate enforcement failures or rewriting registered data?"
+answer = "Add explicit architecture --module-rules with one manifest/package/library and module_only subject scope; reuse production extraction/rules and Cargo metadata identities. Reject conflicting crate options. Run each authored fixture through that subprocess and compile its immutable sources first. Record live site, installed cargo-modules reference observations and the mandatory seeded differential separately within the existing H4 schema; exclude reference/supplementary cases from headline denominators. Verify the frozen inventory before every public grading entry point and compare nested witness arrays in order. Extend docs to project crate and module evidence independently, with no accepted maturity change. Alternatives rejected: change frozen fixtures or expectations, fabricate process statuses, allow absent registered oracles, or hide stale/failing evidence from one level behind the other."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: Determine a large slice to hand off to gpt-6-astra ultra. Make sure it has a goal to implement its work and fix any and all issue in accordance with rha design. (Let it flag and improve the architecture and tooling if it can justify it no need for my approval). I approve all PRs as long as both an opus 5.5 and gpt-6 agent has reviewed and approved the code. Kennedy, 2026-09-22: Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me."
+date = "2026-09-22"
+
+[[decisions]]
+id = "schema-dependency-licenses"
+question = "The dependency preflight rejects MIT-0 on borrow-or-share 0.2.4 and Zlib on foldhash 0.2.0, introduced by the offline JSON Schema validator."
+answer = "Permit these two SPDX licenses only for those exact crate versions in cargo-deny license exceptions, keeping the default allowlist and every L0 check active. Compared on compatibility, scope and implementation cost: exact-package additions 19/20; global license additions 16/20; replacing a validated standards library solely to avoid these declarations 8/20. SPDX documents MIT-0 without the attribution paragraph and Zlib redistribution conditions; the dependencies remain unmodified Cargo packages. cargo-deny calls this setting exceptions, but this is an approved dependency-policy update, not an RHA acceptance exception or waived check. Source references: https://spdx.org/licenses/MIT-0.html ; https://spdx.org/licenses/Zlib.html ; https://embarkstudios.github.io/cargo-deny/checks/licenses/cfg.html ; exact package syntax https://embarkstudios.github.io/cargo-deny/checks/cfg.html ."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: Determine a large slice to hand off to gpt-6-astra ultra. Make sure it has a goal to implement its work and fix any and all issue in accordance with rha design. (Let it flag and improve the architecture and tooling if it can justify it no need for my approval). I approve all PRs as long as both an opus 5.5 and gpt-6 agent has reviewed and approved the code. Kennedy, 2026-09-22: Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me."
+date = "2026-09-22"
+
+[[decisions]]
+id = "headline-reference-controls"
+question = "Review observed that a no-alarm fixture cannot by itself prove retention of every legitimate edge or expected extraction limitation."
+answer = "Preserve the immutable manifest finding grades exactly. Validate all 25 authored extraction reports against the independently registered reference.json files in a separate L0 supplementary test, with positive and dropped-edge/limitation negative controls. The parent H4 headline Grade remains the original no-alarm/detect/expected-miss contract; its totals are not redefined after data. Reject attaching this stronger reference predicate to the frozen headline score. The independently committed extraction reference is an additional assurance measure, not a re-registration of M01\u2013M21/L-M/EM-M. Also enforce complete random report totals and exact case IDs, and bind source hashes for random and external reference observations; these repair record completeness without changing finding expectations."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: Determine a large slice to hand off to gpt-6-astra ultra. Make sure it has a goal to implement its work and fix any and all issue in accordance with rha design. (Let it flag and improve the architecture and tooling if it can justify it no need for my approval). I approve all PRs as long as both an opus 5.5 and gpt-6 agent has reviewed and approved the code. Kennedy, 2026-09-22: Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me."
+date = "2026-09-22"
+
+[[provenance.generations]]
+artifact = "Explicit module-only architecture CLI"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "codex-cli 0.156.0, profile write, read-only patch proposal"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-007/module-only-mode-prompt.md"
+prompt_sha256 = "156d1edfdab11efb14a1f0595a8b43a3a9cfbc5ce12c84a3b89c2e54cbf69cec"
+sample = "sample 1 with compiler and independent review repairs"
+separation = "Root alone applied proposals and ran tools. Frozen registration and every original headline grade remain unchanged."
+edits = "Repair details and determinations in the change record. The proposed extra headline grading predicate was rejected; all 25 reference extractions are checked separately in L0."
+
+[[provenance.generations]]
+artifact = "Registered random extraction/rule evidence harness"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "codex-cli 0.156.0, profile write, read-only patch proposal"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-007/module-random-harness-prompt.md"
+prompt_sha256 = "ccb34027d4b48b8fc6dbb654bcfa9493eb4f3f66928700de3002c13694f92cfe"
+sample = "sample 1 with compiler and independent review repairs"
+separation = "Root alone applied proposals and ran tools. Frozen registration and every original headline grade remain unchanged."
+edits = "Repair details and determinations in the change record. The proposed extra headline grading predicate was rejected; all 25 reference extractions are checked separately in L0."
+
+[[provenance.generations]]
+artifact = "Module H4 corpus execution and immutable evidence"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "codex-cli 0.156.0, profile write, read-only patch proposal"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-007/module-corpus-runner-prompt.md"
+prompt_sha256 = "fdb0f35d150840c72117905cea0f3fc867ac40b86bc63bbac0dd5067cbd52b9f"
+sample = "sample 1 with compiler and independent review repairs"
+separation = "Root alone applied proposals and ran tools. Frozen registration and every original headline grade remain unchanged."
+edits = "Repair details and determinations in the change record. The proposed extra headline grading predicate was rejected; all 25 reference extractions are checked separately in L0."
+
+[[provenance.generations]]
+artifact = "Independent crate/module enforcement projections"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "codex-cli 0.156.0, profile write, read-only patch proposal"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-007/module-enforcement-docs-prompt.md"
+prompt_sha256 = "9a12c6b264014e10e150324cdfce42dc01e47fca2cb038a95c027b0ea52a3996"
+sample = "sample 1 with compiler and independent review repairs"
+separation = "Root alone applied proposals and ran tools. Frozen registration and every original headline grade remain unchanged."
+edits = "Repair details and determinations in the change record. The proposed extra headline grading predicate was rejected; all 25 reference extractions are checked separately in L0."
+
+[[provenance.generations]]
+artifact = "Shared Cargo module identity and full source bindings"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "codex-cli 0.156.0, profile write, read-only patch proposal"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-007/module-mode-identity-repair-prompt.md"
+prompt_sha256 = "79c016d4b9f43d564f3491165b62cc96a53ce83e5037c6e3d84e157e6740a91f"
+sample = "sample 1 with compiler and independent review repairs"
+separation = "Root alone applied proposals and ran tools. Frozen registration and every original headline grade remain unchanged."
+edits = "Repair details and determinations in the change record. The proposed extra headline grading predicate was rejected; all 25 reference extractions are checked separately in L0."
+
+[[provenance.generations]]
+artifact = "Inventory, report and reference negative controls"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "codex-cli 0.156.0, profile write, read-only patch proposal"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-007/module-harness-controls-prompt.md"
+prompt_sha256 = "6ca7750320474742aa01664e73c66dedbc376f8390beb7a7828366797ebb147f"
+sample = "sample 1 with compiler and independent review repairs"
+separation = "Root alone applied proposals and ran tools. Frozen registration and every original headline grade remain unchanged."
+edits = "Repair details and determinations in the change record. The proposed extra headline grading predicate was rejected; all 25 reference extractions are checked separately in L0."
+
+[[provenance.generations]]
+artifact = "Complete corpus input maps and outer report validation"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "codex-cli 0.156.0, profile write, read-only patch proposal"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-007/module-runner-review-repair-prompt.md"
+prompt_sha256 = "92e63b314aec5719f2af9db7963c9b433e6f40bb59e20b69bd969b7a3649dad5"
+sample = "sample 1 with compiler and independent review repairs"
+separation = "Root alone applied proposals and ran tools. Frozen registration and every original headline grade remain unchanged."
+edits = "Repair details and determinations in the change record. The proposed extra headline grading predicate was rejected; all 25 reference extractions are checked separately in L0."
+
+[[decisions]]
+id = "running-executable-identity"
+question = "The full stage gate failed when a concurrently rebuilt xtask executable was unlinked while its corpus producer was still running."
+answer = "Hash the running executable through /proc/self/exe on Linux, which identifies the mapped inode even after unlink; other platforms use the existing current_exe path and fail on inaccessible identity. Use that helper for H4 producer digests rather than hashing a pathname that can name a different rebuild. Add an owned copied-executable unlink regression. Reject stripping the deleted suffix and hashing a replacement file, which would give false producer provenance. This repairs a concrete M8 identity failure without changing corpus grading or check membership."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: Determine a large slice to hand off to gpt-6-astra ultra. Make sure it has a goal to implement its work and fix any and all issue in accordance with rha design. (Let it flag and improve the architecture and tooling if it can justify it no need for my approval). I approve all PRs as long as both an opus 5.5 and gpt-6 agent has reviewed and approved the code. Kennedy, 2026-09-22: Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me."
+date = "2026-09-22"
+
+[[provenance.generations]]
+artifact = "Complete structured file citation checks"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "OpenAI Codex v0.156.1, profile write, read-only patch proposal"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-007/citation-pairs-repair-prompt.md"
+prompt_sha256 = "558e5b3630578f76549036c0e474bf3fdd9380131bb0136c92b2b4d599f9463c"
+sample = "sample 1"
+separation = "Root reproduced the defect, applied the proposal and independently ran positive/negative checks."
+edits = "Root corrected optional TOML field access and an owned stdout lifetime in new tests; added replacement-path and malformed digest-map controls. Previously recorded child sessions used 0.156.0; these two process headers show 0.156.1. No historical provenance was rewritten."
+
+[[provenance.generations]]
+artifact = "Running executable identity across unlink/rebuild"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "OpenAI Codex v0.156.1, profile write, read-only patch proposal"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-007/executable-identity-repair-prompt.md"
+prompt_sha256 = "07d805d489a78d0f07899f443630d828f3b4a5a40152d4ee3dd99b76b14511be"
+sample = "sample 1"
+separation = "Root reproduced the defect, applied the proposal and independently ran positive/negative checks."
+edits = "Root corrected optional TOML field access and an owned stdout lifetime in new tests; added replacement-path and malformed digest-map controls. Previously recorded child sessions used 0.156.0; these two process headers show 0.156.1. No historical provenance was rewritten."

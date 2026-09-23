@@ -1,0 +1,2 @@
+    Checking xtask v0.1.0 (/home/kmosoti/projects/rha-m2/xtask)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.83s

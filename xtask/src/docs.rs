@@ -61,22 +61,28 @@ pub fn generate(root: &Path) -> Result<Vec<(String, String)>> {
     ])
 }
 
-/// Project the latest archived H4 record; never execute a check from docs.
-fn enforcement_map(root: &Path) -> Result<String> {
-    let manifest_path = crate::corpus::MANIFEST_PATH;
-    let manifest_text = std::fs::read_to_string(root.join(manifest_path))
-        .context(|| "reading public manifest for enforcement map".to_owned())?;
-    let manifest = crate::corpus::Manifest::parse(&manifest_text)
-        .context(|| "parsing public manifest for enforcement map".to_owned())?;
+struct SelectedEvidence {
+    cases: Vec<Value>,
+    evidence: String,
+    stale: Option<String>,
+    source: Option<(String, String)>,
+}
+
+fn latest_h4_record(
+    root: &Path,
+    directory: &str,
+    level: &str,
+    manifest_digest: &str,
+) -> Result<SelectedEvidence> {
     let mut files = Vec::new();
-    json_files(&root.join("evidence/h4-crate"), &mut files);
+    json_files(&root.join(directory), &mut files);
     let mut records = Vec::new();
     for path in files {
         let record: Value = serde_json::from_slice(
             &std::fs::read(&path).context(|| "reading H4 record".to_owned())?,
         )
         .context(|| format!("parsing H4 record {}", path.display()))?;
-        if record["kind"] == "h4" && record["level"] == "crate" {
+        if record["kind"] == "h4" && record["level"] == level {
             let created = record["created_at"]
                 .as_str()
                 .ok_or_else(|| crate::error::Error::new("H4 record lacks creation time"))?
@@ -85,30 +91,66 @@ fn enforcement_map(root: &Path) -> Result<String> {
         }
     }
     records.sort_by(|a, b| (&a.0, &a.1).cmp(&(&b.0, &b.1)));
-    let current = sha256_file(&root.join(manifest_path))?;
-    let mut stale = None;
-    let (evidence, cases, mut inputs) = if let Some((_, path, record)) = records.pop() {
-        let graded = record["manifest"]["sha256"].as_str().unwrap_or_default();
-        if graded != current {
-            stale = Some(graded.to_owned());
-        }
-        let cases = record["cases"]
-            .as_array()
-            .ok_or_else(|| crate::error::Error::new("H4 record lacks case outcomes"))?
-            .clone();
-        let rel = relative(root, &path);
-        (rel.clone(), cases, vec![(rel, sha256_file(&path)?)])
-    } else {
-        ("no H4 record yet".to_owned(), Vec::new(), Vec::new())
+    let Some((_, path, record)) = records.pop() else {
+        return Ok(SelectedEvidence {
+            cases: Vec::new(),
+            evidence: format!("no H4 {level} record yet"),
+            stale: None,
+            source: None,
+        });
     };
-    inputs.push((
-        manifest_path.to_owned(),
-        sha256_file(&root.join(manifest_path))?,
-    ));
+    let graded = record["manifest"]["sha256"].as_str().unwrap_or_default();
+    let stale = (graded != manifest_digest).then(|| graded.to_owned());
+    let cases = record["cases"]
+        .as_array()
+        .ok_or_else(|| crate::error::Error::new("H4 record lacks case outcomes"))?
+        .clone();
+    let evidence = relative(root, &path);
+    let source = Some((evidence.clone(), sha256_file(&path)?));
+    Ok(SelectedEvidence {
+        cases,
+        evidence,
+        stale,
+        source,
+    })
+}
+
+/// Project the latest archived H4 records; never execute a check from docs.
+fn enforcement_map(root: &Path) -> Result<String> {
+    let manifest_path = crate::corpus::MANIFEST_PATH;
+    let manifest_text = std::fs::read_to_string(root.join(manifest_path))
+        .context(|| "reading public manifest for enforcement map".to_owned())?;
+    let manifest = crate::corpus::Manifest::parse(&manifest_text)
+        .context(|| "parsing public manifest for enforcement map".to_owned())?;
+    let manifest_digest = sha256_file(&root.join(manifest_path))?;
+    let crate_level = latest_h4_record(root, "evidence/h4-crate", "crate", &manifest_digest)?;
+    let module_level = latest_h4_record(root, "evidence/h4-module", "module", &manifest_digest)?;
+    let mut inputs = Vec::new();
+    if let Some(source) = crate_level.source {
+        inputs.push(source);
+    }
+    if let Some(source) = module_level.source {
+        inputs.push(source);
+    }
+    inputs.push((manifest_path.to_owned(), manifest_digest));
+    inputs.sort_by(|a, b| a.0.cmp(&b.0));
+    let rendered = crate::corpus::runner::levels(
+        &manifest,
+        crate::corpus::runner::LevelEvidence {
+            cases: &crate_level.cases,
+            evidence: &crate_level.evidence,
+            stale: crate_level.stale.as_deref(),
+        },
+        crate::corpus::runner::LevelEvidence {
+            cases: &module_level.cases,
+            evidence: &module_level.evidence,
+            stale: module_level.stale.as_deref(),
+        },
+    );
     Ok(header(
-        "latest evidence/h4-crate record and corpus manifest",
+        "latest evidence/h4-crate and evidence/h4-module records and corpus manifest",
         &inputs,
-    ) + &crate::corpus::runner::enforcement_map(&manifest, &cases, &evidence, stale.as_deref()))
+    ) + &rendered)
 }
 
 fn header(sources: &str, inputs: &[(String, String)]) -> String {

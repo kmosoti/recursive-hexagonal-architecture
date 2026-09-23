@@ -1,0 +1,9 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.06s
+     Running tests/module_corpus.rs (target/debug/deps/module_corpus-74e6a8c5214a79f1)
+
+running 2 tests
+test module_report_validation_binds_the_real_invocation ... ok
+test copied_module_inventory_controls_reject_frozen_input_mutations ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.35s
+

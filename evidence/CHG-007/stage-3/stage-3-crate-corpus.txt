@@ -1,0 +1,38 @@
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.09s
+     Running `target/debug/xtask corpus run --level crate`
+C01: passed
+C02: passed
+C03: passed
+C04: passed
+C05: passed
+C06: passed
+C07: passed
+C08: passed
+C09: passed
+C10: passed
+C11: passed
+C12: passed
+C13: passed
+C14: passed
+C15: passed
+C16: passed
+C17: passed
+C18: passed
+C19: passed
+C20: passed
+C21: passed
+L01: passed
+L02: passed
+L03: passed
+L04: passed
+L05: passed
+L06: passed
+L07: passed
+L08: passed
+L09: passed
+L10: passed
+L11: passed
+EM-C01: passed (documented hole)
+EM-C02: passed (documented hole)
+R01: passed
+detection 22/22, false_alarm 0/11 (legitimate cases with alarms: 0); evidence evidence/h4-crate/20260923T033857Z-f915daaf8dc1-dirty.json

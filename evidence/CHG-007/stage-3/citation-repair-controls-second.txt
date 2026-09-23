@@ -1,0 +1,42 @@
+   Compiling xtask v0.1.0 (/home/kmosoti/projects/rha-m2/xtask)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.61s
+     Running tests/citation_pairs.rs (target/debug/deps/citation_pairs-57f83876bcbe9af0)
+
+running 3 tests
+test declared_pairs_and_registered_digest_maps_are_citations_but_inline_prompt_is_not ... ok
+test absolute_citations_use_the_subject_git_object_and_refuse_escape ... ok
+test task_citations_are_unchecked_without_a_subject_but_not_bare_accepted ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+     Running tests/record_lint.rs (target/debug/deps/record_lint-1e46ccaffdc70f99)
+
+running 1 test
+test every_registered_record_is_linted_as_registered ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+
+     Running tests/record_schema.rs (target/debug/deps/record_schema-aa65c824664341ed)
+
+running 1 test
+record-schema acceptance: 155
+record-schema evidence: 479
+record-schema h4: 285
+record-schema h5_conformance: 68
+record-schema markdown_corpus: 95
+record-schema policy: 184
+record-schema task: 231
+record-schema total: 1497
+test every_registered_record_schema_recipe_matches_exactly ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.97s
+
+     Running tests/record_schema_cli.rs (target/debug/deps/record_schema_cli-4ac1d668ba4418c6)
+
+running 3 tests
+test cli_reports_unchecked_and_checked_citations_without_following_escape_symlinks ... ok
+test cli_schema_controls_are_rejected_or_accepted_as_registered ... ok
+test cli_classifies_report_inputs_and_commented_tasks_correctly ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.83s
+

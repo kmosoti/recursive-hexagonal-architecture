@@ -1,12 +1,59 @@
 //! Applies declared module checks to a completed crate-graph report.
 
+use std::collections::{BTreeMap, BTreeSet};
+use std::fs;
 use std::path::{Path, PathBuf};
 
 use serde_json::{Value, json};
 
 use crate::graph::model::CrateGraph;
+use crate::util;
 
 use super::{extract, rules};
+
+pub fn source_files(
+    crate_root: &Path,
+    extracted: &extract::Extracted,
+) -> Result<BTreeMap<String, String>, String> {
+    let crate_root = fs::canonicalize(crate_root).map_err(|error| {
+        format!(
+            "failed to canonicalize crate root {}: {error}",
+            crate_root.display()
+        )
+    })?;
+    let mut paths = BTreeSet::new();
+    for path in extracted.modules.values() {
+        let path = if path.is_absolute() {
+            path.clone()
+        } else {
+            crate_root.join(path)
+        };
+        let path = fs::canonicalize(&path).map_err(|error| {
+            format!(
+                "failed to canonicalize source file {}: {error}",
+                path.display()
+            )
+        })?;
+        if !path.starts_with(&crate_root) {
+            return Err(format!(
+                "source file {} is outside crate root {}",
+                path.display(),
+                crate_root.display()
+            ));
+        }
+        paths.insert(path);
+    }
+
+    paths
+        .into_iter()
+        .map(|path| {
+            let bytes = fs::read(&path).map_err(|error| {
+                format!("failed to read source file {}: {error}", path.display())
+            })?;
+            Ok((path.display().to_string(), util::sha256_hex(&bytes)))
+        })
+        .collect()
+}
 
 /// Applies every declared composite check and combines its observations with
 /// the crate-level report.
@@ -57,6 +104,12 @@ pub fn apply(graph: &CrateGraph, report: &mut Value) -> Result<(), String> {
                 "crate {}: extracting declared module source {}: {error}",
                 node.name,
                 source_path.display()
+            )
+        })?;
+        let source_files = source_files(&crate_root, &extracted).map_err(|error| {
+            format!(
+                "crate {}: hashing declared module source files: {error}",
+                node.name
             )
         })?;
 
@@ -120,10 +173,11 @@ pub fn apply(graph: &CrateGraph, report: &mut Value) -> Result<(), String> {
             "crate": node.name,
             "required": true,
             "rules_path": checked.rules_path,
-            "rules_digest": checked.rules_digest,
+            "rules_digest": format!("sha256:{}", checked.rules_digest),
             "outcome": if module_errors { "failed" } else { "passed" },
             "reason": null,
             "source": source_path,
+            "source_files_sha256": source_files,
             "extraction": {
                 "scope": "rules configured by the declared rules file; source-based extraction is approximate",
                 "limits": limitations,

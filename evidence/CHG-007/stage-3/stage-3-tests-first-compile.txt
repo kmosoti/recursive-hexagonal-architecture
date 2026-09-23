@@ -1,0 +1,5 @@
+    Blocking waiting for file lock on build directory
+   Compiling xtask v0.1.0 (/home/kmosoti/projects/rha-m2/xtask)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 6.94s
+  Executable tests/module_enforcement_docs.rs (target/debug/deps/module_enforcement_docs-9fef05bb28dd2dc4)
+  Executable tests/module_only_cli.rs (target/debug/deps/module_only_cli-fa79686b0ee94d9c)

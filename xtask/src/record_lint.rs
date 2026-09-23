@@ -100,6 +100,7 @@ struct Cited<'a> {
     dir: PathBuf,
     canonical_dir: Option<PathBuf>,
     repo: Option<&'a Path>,
+    canonical_repo: Option<PathBuf>,
     subject: Option<String>,
 }
 
@@ -107,16 +108,17 @@ impl<'a> Cited<'a> {
     fn new(record: &Path, repo: Option<&'a Path>, subject: Option<String>) -> Self {
         let dir = record.parent().unwrap_or(Path::new(".")).to_path_buf();
         let canonical_dir = std::fs::canonicalize(&dir).ok();
+        let canonical_repo = repo.and_then(|path| std::fs::canonicalize(path).ok());
         Self {
             dir,
             canonical_dir,
             repo,
+            canonical_repo,
             subject,
         }
     }
 
-    fn relative(path: &str) -> Option<PathBuf> {
-        let candidate = Path::new(path);
+    fn relative_path(candidate: &Path) -> Option<PathBuf> {
         let mut has_normal = false;
         for component in candidate.components() {
             match component {
@@ -128,7 +130,69 @@ impl<'a> Cited<'a> {
         has_normal.then(|| candidate.to_path_buf())
     }
 
+    fn relative(path: &str) -> Option<PathBuf> {
+        Self::relative_path(Path::new(path))
+    }
+
+    fn absolute_relative(&self, path: &Path) -> Result<PathBuf, &'static str> {
+        let Some(repo) = self.repo else {
+            return Err("outside repo root");
+        };
+        let Some(relative) = path.strip_prefix(repo).ok().and_then(Self::relative_path) else {
+            return Err("outside repo root");
+        };
+
+        let Some(base) = self.canonical_repo.as_deref() else {
+            return Err("unsafe path");
+        };
+        let mut existing = path;
+        loop {
+            if std::fs::symlink_metadata(existing).is_ok() {
+                let Ok(canonical) = std::fs::canonicalize(existing) else {
+                    return Err("unsafe path");
+                };
+                if !canonical.starts_with(base) {
+                    return Err("unsafe path");
+                }
+                break;
+            }
+            let Some(parent) = existing.parent() else {
+                return Err("unsafe path");
+            };
+            if parent == existing {
+                return Err("unsafe path");
+            }
+            existing = parent;
+        }
+
+        Ok(relative)
+    }
+
+    fn at_subject(&self, relative: &Path) -> Result<Vec<u8>, &'static str> {
+        let (Some(repo), Some(subject)) = (self.repo, self.subject.as_deref()) else {
+            return Err("no subject");
+        };
+        let output = std::process::Command::new("git")
+            .arg("-C")
+            .arg(repo)
+            .args(["cat-file", "blob"])
+            .arg(format!("{subject}:{}", relative.display()))
+            .output()
+            .map_err(|_| "missing at subject")?;
+        if output.status.success() {
+            Ok(output.stdout)
+        } else {
+            Err("missing at subject")
+        }
+    }
+
     fn bytes(&self, path: &str) -> Result<Vec<u8>, &'static str> {
+        let candidate = Path::new(path);
+        if candidate.is_absolute() {
+            let relative = self.absolute_relative(candidate)?;
+            return self.at_subject(&relative);
+        }
+
         let Some(relative) = Self::relative(path) else {
             return Err("unsafe path");
         };
@@ -149,21 +213,7 @@ impl<'a> Cited<'a> {
             }
         }
 
-        let (Some(repo), Some(subject)) = (self.repo, self.subject.as_deref()) else {
-            return Err("no subject");
-        };
-        let output = std::process::Command::new("git")
-            .arg("-C")
-            .arg(repo)
-            .args(["cat-file", "blob"])
-            .arg(format!("{subject}:{}", relative.display()))
-            .output()
-            .map_err(|_| "missing at subject")?;
-        if output.status.success() {
-            Ok(output.stdout)
-        } else {
-            Err("missing at subject")
-        }
+        self.at_subject(&relative)
     }
 }
 
@@ -182,6 +232,81 @@ fn subject(v: &Value) -> Option<String> {
     .map(str::to_owned)
 }
 
+const FILE_DIGEST_MAPS: &[&str] = &[
+    "source_files_sha256",
+    "fixture_inputs_sha256",
+    "generated_inputs_sha256",
+    "inputs_sha256",
+];
+
+fn check_citation(
+    path: &str,
+    digest: &str,
+    cited: &Cited<'_>,
+    out: &mut BTreeSet<&'static str>,
+    notes: &mut Vec<String>,
+) {
+    match cited.bytes(path) {
+        Ok(bytes) if digest.trim_start_matches("sha256:") != sha256_hex(&bytes) => {
+            out.insert("digest.mismatch");
+        }
+        Ok(_) => {}
+        Err(reason) => notes.push(format!("citation.unchecked: {path} ({reason})")),
+    }
+}
+
+fn check_pair(
+    map: &serde_json::Map<String, Value>,
+    path_key: &str,
+    digest_key: &str,
+    cited: &Cited<'_>,
+    out: &mut BTreeSet<&'static str>,
+    notes: &mut Vec<String>,
+) {
+    if let (Some(Value::String(path)), Some(Value::String(digest))) =
+        (map.get(path_key), map.get(digest_key))
+    {
+        check_citation(path, digest, cited, out, notes);
+    }
+}
+
+fn citations(
+    map: &serde_json::Map<String, Value>,
+    cited: &Cited<'_>,
+    out: &mut BTreeSet<&'static str>,
+    notes: &mut Vec<String>,
+) {
+    check_pair(map, "path", "sha256", cited, out, notes);
+    check_pair(map, "source", "source_sha256", cited, out, notes);
+
+    for path_key in map.keys() {
+        let Some(prefix) = path_key.strip_suffix("_path") else {
+            continue;
+        };
+        if prefix.is_empty() {
+            continue;
+        }
+        for suffix in ["_sha256", "_digest"] {
+            let digest_key = format!("{prefix}{suffix}");
+            check_pair(map, path_key, &digest_key, cited, out, notes);
+        }
+    }
+
+    for map_key in FILE_DIGEST_MAPS {
+        let Some(Value::Object(files)) = map.get(*map_key) else {
+            continue;
+        };
+        for (path, digest) in files {
+            if let Value::String(digest) = digest {
+                if !digest_ok(digest, false) {
+                    out.insert("digest.malformed");
+                }
+                check_citation(path, digest, cited, out, notes);
+            }
+        }
+    }
+}
+
 fn walk(
     v: &Value,
     cited: &Cited<'_>,
@@ -192,17 +317,7 @@ fn walk(
 ) {
     match v {
         Value::Object(map) => {
-            if let (Some(Value::String(path)), Some(Value::String(digest))) =
-                (map.get("path"), map.get("sha256"))
-            {
-                match cited.bytes(path) {
-                    Ok(bytes) if digest.trim_start_matches("sha256:") != sha256_hex(&bytes) => {
-                        out.insert("digest.mismatch");
-                    }
-                    Ok(_) => {}
-                    Err(reason) => notes.push(format!("citation.unchecked: {path} ({reason})")),
-                }
-            }
+            citations(map, cited, out, notes);
             for (k, x) in map {
                 match x {
                     Value::String(s) if is_digest_key(k) && !digest_ok(s, in_sources) => {
