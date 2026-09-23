@@ -44,9 +44,9 @@ state = "current"
 id = "site.build.renderer_deterministic_total"
 consumer = "site::build"
 port = "site::PageRenderer"
-statement = "render never panics and is deterministic"
-support = ["crates/site/tests/build_properties.rs", "crates/adapter-html/tests/escaping.rs"]
-support_kind = "site::contract::page_renderer per implementation (StubRenderer, HtmlRenderer); sampled"
+statement = "render and assets do not panic and are deterministic; page and asset paths are unique; rendered bytes observe the TOC"
+support = ["crates/site/tests/build_properties.rs", "crates/site/tests/assurance_controls.rs", "crates/adapter-html/tests/escaping.rs", "crates/adapter-json/tests/registered.rs", "crates/app-cli/tests/json_renderer.rs"]
+support_kind = "site::contract::page_renderer for StubRenderer, HtmlRenderer and JsonRenderer; sampled, with exact registered JSON projection and lifecycle controls"
 state = "current"
 
 [[assumptions]]
@@ -64,7 +64,7 @@ consumer = "site"
 port = "site::Clock"
 statement = "now() affects displayed text only"
 support = []
-support_kind = "asserted by construction: the clock's value reaches only AssembleContext.built_at, rendered in the footer"
+support_kind = "asserted by construction: the clock's value reaches only AssembleContext.built_at, displayed in the HTML footer or JSON built_at field; the JSON search index excludes it"
 state = "current"
 
 [[assumptions]]

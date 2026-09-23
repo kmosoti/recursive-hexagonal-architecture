@@ -1,0 +1,28 @@
+target/debug/deps/liblibrary-a65e12dfc45466dc.rlib: sha256 72350725c8868b224355c79d36822953ff1989c9edbe5f17f62a4228e04bcc01
+target/debug/deps/libsite-ecc574ecf4035492.rlib: sha256 7d7ffda3bac12ec40c51356156986898c6930e3dfc0cadc9d0e8d06f02b5afd4
+target/debug/deps/libadapter_html-2a60d81895cd6d6d.rlib: sha256 326173bf8eda43a0bd8f95bce77a5d5a34d4b9de3393dc7c5f4f868cb6daf005
+target/debug/deps/libadapter_json-ca249fc1cb08b59f.rlib: sha256 1f840fffdd1e669e2c5475fca5446ddac06f8f1b25b719435c41461e1bba815b
+
+nondeterministic renderer: [NonDeterministic { page: "a" }, NonDeterministic { page: "b" }]
+panicking renderer: [Panicked { page: "a" }, Panicked { page: "b" }]
+TOC-dropping renderer: [TocNotObserved { page: "a" }, TocNotObserved { page: "b" }]
+StubRenderer: []
+HtmlRenderer: []
+JsonRenderer: []
+
+Seeded panic stderr (caught by contract):
+
+thread 'main' (2876678) panicked at target/m2/pd-h3-detection-probe.rs:98:9:
+render panic
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+thread 'main' (2876678) panicked at target/m2/pd-h3-detection-probe.rs:98:9:
+render panic
+
+thread 'main' (2876678) panicked at target/m2/pd-h3-detection-probe.rs:98:9:
+render panic
+
+thread 'main' (2876678) panicked at target/m2/pd-h3-detection-probe.rs:98:9:
+render panic
+
+exit: 0

@@ -1,0 +1,23 @@
+.rha/assumptions.toml: rejected (task): schema.missing_field, schema.unknown_field
+  schema /: "actors" is a required property
+  schema /: "authority_profile" is a required property
+  schema /: "base_revision" is a required property
+  schema /: "branch" is a required property
+  schema /: "decisions" is a required property
+  schema /: "executor_composition" is a required property
+  schema /: "id" is a required property
+  schema /: "intent" is a required property
+  schema /: "mode" is a required property
+  schema /: "non_goals" is a required property
+  schema /: "plan_ref" is a required property
+  schema /: "provenance" is a required property
+  schema /: "roles" is a required property
+  schema /: "slug" is a required property
+  schema /: "status" is a required property
+  schema /: "title" is a required property
+  schema /: "work" is a required property
+  schema /: Additional properties are not allowed ('assumptions' was unexpected)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.09s
+     Running `target/debug/xtask rha lint .rha/assumptions.toml`
+
+exit: 1

@@ -20,6 +20,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "adapter-json"
+version = "0.1.0"
+dependencies = [
+ "library",
+ "serde_json",
+ "site",
+]
+
+[[package]]
 name = "adapter-sys"
 version = "0.1.0"
 dependencies = [
@@ -111,6 +120,7 @@ version = "0.1.0"
 dependencies = [
  "adapter-fs",
  "adapter-html",
+ "adapter-json",
  "adapter-sys",
  "clap",
  "library",

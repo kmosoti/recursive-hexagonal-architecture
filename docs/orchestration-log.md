@@ -55,3 +55,9 @@
 - Reasoning that did not change the outcome: considering later feature internals while the prerequisite gate was pending.
 - Mistakes caught: source inspection suggested five failures; actual execution confirmed all five and preserved three valid controls. A patch-fence extraction error was rejected before any file changed.
 - Next rule: run staged probes against existing built crates when a read-only review holds the branch, then apply the tested controls after the review closes; keep adapter and prerequisite measurements distinct.
+
+## Atom #10 — JSON adapter and H3
+- Tiers: Luna high wrote the frozen independent reference/cases and disjoint implementation proposals; separate verification reviewed the grader; root ran all measurements and controls.
+- Reasoning that did not change the outcome: repeatedly expanding future feature designs while this stage was awaiting a bounded repair. The parser characterization was useful and changed the later transclusion design.
+- Mistakes caught: an invented prompt filename, copied hash typos, guessed type exports, and a stale deliberately faulty library after source restoration. Source reads, compiler output and paired controls caught them before a push.
+- Next rule: derive inventories from their digest-bound file instead of copying them; give exact paths on separate lines; rebuild restored source before linking any standalone probe. Keep source-based API characterization ahead of corpus registration.

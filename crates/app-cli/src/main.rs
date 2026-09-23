@@ -1,11 +1,13 @@
 //! `rhawiki`: the composition root. Adapters are constructed here and only
 //! here (AGENTS.md).
 
+use std::collections::BTreeMap;
 use std::path::PathBuf;
 use std::process::ExitCode;
 
-use clap::{Parser, Subcommand};
+use clap::{Parser, Subcommand, ValueEnum};
 use site::CheckWitness;
+use site::assembly::{Assemble, AssembleContext, DefaultAssembler};
 
 #[derive(Debug, Parser)]
 #[command(
@@ -17,14 +19,22 @@ struct Cli {
     command: Command,
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, ValueEnum)]
+enum BuildFormat {
+    Html,
+    Json,
+}
+
 #[derive(Debug, Subcommand)]
 enum Command {
-    /// Render every page under --root to HTML under --out.
+    /// Render every page under --root to the selected format under --out.
     Build {
         #[arg(long)]
         root: PathBuf,
         #[arg(long)]
         out: PathBuf,
+        #[arg(long, value_enum, default_value = "html")]
+        format: BuildFormat,
     },
     /// Report witnesses; exit 1 if there are any.
     Check {
@@ -65,16 +75,39 @@ fn json(w: &CheckWitness) -> serde_json::Value {
 
 fn run(cli: Cli) -> Result<u8, String> {
     match cli.command {
-        Command::Build { root, out } => {
+        Command::Build { root, out, format } => {
             let (corpus, _) = load(root)?;
             let mut sink = adapter_fs::FsSink::new(out);
-            let report = site::build_all(
-                &corpus,
-                &adapter_sys::SystemClock,
-                &mut sink,
-                &adapter_html::HtmlRenderer,
-            )
-            .map_err(|e| format!("build failed: {e:?}"))?;
+            let report = match format {
+                BuildFormat::Html => site::build_all(
+                    &corpus,
+                    &adapter_sys::SystemClock,
+                    &mut sink,
+                    &adapter_html::HtmlRenderer,
+                )
+                .map_err(|e| format!("build failed: {e:?}")),
+                BuildFormat::Json => {
+                    let (documents, graph) = site::analyse(&corpus);
+                    let titles: BTreeMap<&library::PageId, &str> = documents
+                        .iter()
+                        .map(|document| (&document.id, document.title.as_str()))
+                        .collect();
+                    let lookup =
+                        |id: &library::PageId| titles.get(id).map(|title| (*title).to_owned());
+                    let context = AssembleContext::default();
+                    let models = documents
+                        .iter()
+                        .map(|document| {
+                            DefaultAssembler.assemble(document, &graph, &lookup, &context)
+                        })
+                        .collect::<Vec<_>>();
+                    let renderer = adapter_json::JsonRenderer::new(&models).map_err(|e| {
+                        format!("build failed: JSON renderer construction failed: {e:?}")
+                    })?;
+                    site::build_all(&corpus, &adapter_sys::SystemClock, &mut sink, &renderer)
+                        .map_err(|e| format!("build failed: {e:?}"))
+                }
+            }?;
             println!(
                 "built {} page(s): {} written, {} deleted, {} unchanged, {} link witness(es)",
                 corpus.len(),
