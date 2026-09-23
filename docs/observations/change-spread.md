@@ -5,3 +5,5 @@ Each expected set is committed before its stage. Observed sets come from git dif
 | Stage | Original plan prediction | Predeclared product set | Start | End | Observed |
 | --- | --- | --- | --- | --- | --- |
 | Assurance prerequisites | Not a W9 feature; repairs before H3 | site::contract, site::testing, site glue, graph API documentation/tests, only if a concrete failure is reproduced | task/prediction commit | pending | pending |
+
+Pre-implementation addendum after probes, before the assurance repair: include site::build port documentation so the owner trait states the strengthened observable-TOC/assets contract. The original row remains the initial prediction; this addendum is committed before any production edit. Stage start remains the original prediction commit 25c75c6.

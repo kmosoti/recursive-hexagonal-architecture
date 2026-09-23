@@ -21,3 +21,13 @@ Task decisions delegation-m2, assurance-prerequisites and protected-growth-scope
 ## Acceptance concerns
 
 Held-out material remains not_run and Kennedy-owned. Both PRs remain unmerged. Authentic/protected producer limits remain DP-4.1. No inherited corpus grade will be silently changed.
+
+### Stage 0: assurance prerequisites, before H3
+
+P-C's forward CI repair was merged into this local stacked branch at 2fa29ae93ea71020113301f8e7deee3abf09a935. The only merge conflict was its generated task index, resolved by cargo xtask docs. Both remote PRs remain subject to review; no PR was merged.
+
+**Repair attempt 1.** Hypothesis: the owner contract can pass a TOC-dropping renderer, lets asset panics escape, misses page/asset collisions and discards a post-delete listing error; build_all also subtracts asset writes from its source-page unchanged count. The [control source](../../evidence/CHG-008/stage-0/pd-assurance-controls.rs) was compiled against the unchanged built crates. [Observed result](../../evidence/CHG-008/stage-0/pd-assurance-negative.txt): three positive controls pass and five discriminating tests fail. In the concrete two-page asset-only update, unchanged is 1 instead of 2. Decision confirmed-assurance-repairs fixes those consequences before adding the JSON adapter. Implementation and repaired results follow in the next stage commit.
+
+**Graph API determination.** [A separate executable probe](../../evidence/CHG-008/stage-0/pd-graph-precondition.txt) observes permutation-sensitive resolution for duplicate PageIds and confirms Corpus rejects the same duplicate sources. The product input domain is protected. The repair documents the uniqueness precondition on graph::resolve; it does not invent resolution semantics for invalid duplicate-ID slices.
+
+The stage prediction was committed first in 25c75c6. Before production edits, it is refined to include site::build port documentation in addition to site::contract, site::testing, site glue and graph API documentation. The original prediction remains visible. Both the full P-C-to-H3 core diff and the isolated adapter-stage diff will be retained.

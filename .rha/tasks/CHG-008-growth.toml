@@ -83,3 +83,35 @@ prompt = "Deliver P-D, CHG-008 through CHG-014: adapter-json and H3, five indivi
 prompt_sha256 = "391f5a82067a1e9b0f5cc338ea427759807f6b0fd16b9d33e84716f97ff934b3"
 sample = "one ongoing M2 Executor session; repairs recorded"
 oracles = "Registered contracts/corpora, stage gates, full L0, scope/docs, independent GPT-6 validator"
+
+[[decisions]]
+id = "confirmed-assurance-repairs"
+question = "Five assurance failures and an overstated graph API claim were reproduced before H3."
+answer = "Strengthen PageRenderer checks with a TOC-only counterfactual, caught asset panics/determinism and page/asset path uniqueness; the counterfactual is sampled sensitivity, not a semantic proof. Make the fake preserve TOC. Report post-delete listing errors. Count only source-page writes when reporting unchanged pages. Document unique PageId as graph::resolve input precondition, already enforced by Corpus; reject changing duplicate-input resolver behavior solely to broaden an undocumented domain. Extend the pre-implementation touched prediction to site::build port documentation. Reject claiming H3 against known incomplete assurance or subtracting assets from a source-page count."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: Determine a large slice to hand off to gpt-6-astra ultra. Make sure it has a goal to implement its work and fix any and all issue in accordance with rha design. (Let it flag and improve the architecture and tooling if it can justify it no need for my approval). I approve all PRs as long as both an opus 5.5 and gpt-6 agent has reviewed and approved the code. Kennedy, 2026-09-22: Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me."
+date = "2026-09-23"
+
+[[provenance.generations]]
+artifact = "Assurance prerequisite controls"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "OpenAI Codex v0.156.1, profile write, read-only patch proposal"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-008/pd-assurance-controls-prompt.md"
+prompt_sha256 = "c58a79411e7e7e1284ebb384fc7d89d5741afb3aad51f3d5d8327abb84c9398a"
+sample = "sample 1, session 01a0ccc5-5bd6-7eb0-a875-a1f4d1f6f3e0"
+separation = "Root compiled the standalone control source against existing built crates and observed failures before any production repair; all branch writes and validation remain with root."
+edits = "Root adds the separately reproduced graph uniqueness precondition and clarifies the sampled TOC check. No registered corpus grade changes."
+
+[[provenance.generations]]
+artifact = "Decided owner-contract and unchanged-count repair"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "OpenAI Codex v0.156.1, profile write, read-only patch proposal"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-008/pd-assurance-repair-prompt.md"
+prompt_sha256 = "24a5aea9dbe6e4a30570876df792bc738a6e77edde0d0fa61cd404dbb4398bda"
+sample = "sample 1, session 01a0ccce-7fbb-7a51-896a-5350dde1d07c"
+separation = "Root compiled the standalone control source against existing built crates and observed failures before any production repair; all branch writes and validation remain with root."
+edits = "Root adds the separately reproduced graph uniqueness precondition and clarifies the sampled TOC check. No registered corpus grade changes."

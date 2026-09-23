@@ -1,0 +1,12 @@
+WRITE-tier TEST-ONLY proposal for P-D assurance prerequisite stage, whose task/prediction is COMMITTED on chg/008-growth at25c75c6. Root temporarilychecksoutP-C forCIrepair; NO SOURCE FILES maychange. READONLY /home/kmosoti/projects/rha-m2. NEVER RUN JJ inclstatus/init; no writes/apply_patch/tests/agents/historychanges/heldout/siblings/specedits. Returnapply_patch adding ONLY crates/site/tests/assurance_controls.rs. RootappliesonP-DandrunsBEFOREproductionrepair.
+ActualAPIs read site/{contract,testing,lib,assembly,build}. No inventedhelpers:
+PageRenderer renderPageModel -> Rendered, assets VecRendered. Ownercontract page_renderer returnsRendererViolation currentvariantsPanicked,NonDeterministic,AssetsNonDeterministic,DuplicatePath. PageModel literalmakevalidid/toc/backlinks/links/body/built_at. library types mayneedsite reexports or existingtestdevdeps; siteCargo normaldepslibrary/document/graph availabletests.
+Tests with independentdecidedexpectedcontract:
+1 goodEchoRenderer stablebytesformatDebugwholePageModel, validpath perid, assetsstableunique ->contractempty.
+2 nondet Cellcounter render ->NonDeterministic; panicking render ->Panicked. Positiveexistingcontrolsnotregress.
+3 TocDropping renderer clonepage clearsTOC thenGoodEcho; ownercontract MUSTdetectviolation onnonemptyTOC. Assertnonempty currentlyfails. Don'tnamefutureenum.
+4 assets panic: outercatch_unwind(page_renderer) shouldreturnOk NONEMPTYviolations, notescape; currentlyfails.
+5 assetcollideswithpage path and duplicateassetpaths separately shouldreturnDuplicatePath (variantalreadyexists); currentlyfails.
+6 unchangedpagecount: build_all two-sourceCorpus withFixedClock, customrenderer pagebytesstable, assetbytesparameter; firstbuild2pages+asset, secondsamepagesbutchangedasset; second.writtenonlyasset and unchanged==2. Rootexpectsconfirmedbug currentlycount1. UseexistingCorpus::from_sources /Source::new actualAPIsread beforecoding, inspectbuild_properties.
+7 OutputSink contract postdelete listfailure: customwrapper RecordingSink delegateswrite/listuntildelete, aftersuccessfuldelete listreturnsSinkError; contract::output_sink MUSTreturnFailed notempty. Confirmdefectcurrentlyfalls throughis_ok_and. OptionalifclearAPI; itiswithinsamecontractfileandrecordscope.
+No registeredcorpus edits orimplementationexpectedcoupling. No testsforinvalidPageModelIDs outsidedeclaredSource-deriveddomain. Alltestsroot-run; returnpatchonly,noclaimspass.
