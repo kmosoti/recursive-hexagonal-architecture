@@ -10,6 +10,12 @@ Complete the P-B schema follow-on before module extraction, then the registered 
 
 Implementation and stage evidence will be recorded here as each gate runs. No implementation stage has passed yet.
 
+### Stage 0 baseline confirmation
+
+[Baseline probes](../../evidence/CHG-007/stage-0-baseline-probes.txt) reproduce missing and unknown L0 evidence outcomes accepted with exit 0, alongside a valid control. The same command rejects the committed markdown corpus report as `evidence.missing_required_check`. Its accepted control also prints no unchecked-citation note despite archived raw-log paths not resolving beside this copied record or in git. No production lint/schema change existed at these observations.
+
+DP-2.1 installed `cargo-modules 0.27.0` and `cargo-mutants 27.1.0` with `cargo install --locked`. The inventory records version-probe output and pins reinstall/CI versions; bootstrap observations retain their historical meaning.
+
 ## Verification
 
 P-B acceptance records linted and generated docs checked before their commit. P-C stage gates and settled-head L0 remain pending.
