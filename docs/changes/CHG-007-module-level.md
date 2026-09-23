@@ -28,18 +28,18 @@ The independent generator's first proposal preserved an M01 ambiguity: the undec
 
 ## Evidence
 
-P-B acceptance records were linted and bound in the first commit. Base: ec493b794040ede8878705132c89f9a4855f2dbe. Settled implementation candidate: de11219f7a6767dd7dc88325b0581e63dd240860, tree 4fa4385c5e34de478e949978d1a8c2c9b4a88dea; subsequent record-only updates do not alter that implementation. The exact clean-head L0 subject and all eight outcomes are recorded below. Verification policy: [policy](../../.rha/policy.toml), L0, local/advisory under ECC-Solo.
+P-B acceptance records were linted and bound in the first commit. Base: ec493b794040ede8878705132c89f9a4855f2dbe. Settled implementation candidate after CI repair: 9c10298df36868a10de1f48ff97bf84ad884c60b, tree 256c8bc081455ecd79c2f4142ac2b94636590208; subsequent record-only updates do not alter that implementation. The exact clean-head L0 subject and all eight outcomes are recorded below. Verification policy: [policy](../../.rha/policy.toml), L0, local/advisory under ECC-Solo.
 
-- [Implementation gate](../../evidence/CHG-007/closure/pc-final-stage-gate.txt): 269/269; [docs](../../evidence/CHG-007/closure/pc-final-docs-check.txt) current; [scope](../../evidence/CHG-007/closure/pc-final-scope.txt) zero findings.
+- [Clean-head L0 after CI repair](../../evidence/CHG-007/20260923T054356Z-9c10298df368.json): all eight checks passed, 270/270 tests; [docs](../../evidence/CHG-007/closure/pc-ci-repair-docs-check.txt) current; [scope](../../evidence/CHG-007/closure/pc-ci-repair-scope.txt) zero findings.
 - [Module H4](../../evidence/h4-module/20260923T040716Z-f915daaf8dc1.json), [crate H4](../../evidence/h4-crate/20260923T040735Z-f915daaf8dc1-dirty.json), [markdown](../../evidence/md-corpus/20260923T044415Z-ed79a7a8e0ac.json), and [H5](../../evidence/h5/ed79a7a8e0ac-dirty-1790138754224832114-2796874.json) provide the corpus observations; their own candidate/dirty identities remain authoritative.
 - [Original and supplemental shape checks](../../evidence/CHG-007/closure/markdown-schema-controls.txt), [verifier shape checks](../../evidence/CHG-007/closure/h5-repaired-controls.txt), and [E1](../../experiments/no-std-graph/result.md) state their exact scope.
-- Held-out runs and authenticated/protected producer verification are not_run as stated below. No performance result is claimed. The clean-head local L0 is recorded below; the separate final GPT-6 review is the remaining pre-PR validation.
+- Held-out runs and authenticated/protected producer verification are not_run as stated below. No performance result is claimed. The clean-head local L0 and separate GPT-6 approvals are recorded below. PR18 remains unmerged for supervising Opus review and Kennedy integration.
 
 ## Decisions
 
 The [task record](../../.rha/tasks/CHG-007-module-level.toml) quotes Kennedy's authorization and rejected alternatives. [Ledger](../../.rha/decisions.toml) status owns DP-2.1 and the after-data rows CHG-019.1-contract-amendment and CHG-019.1-markdown-shape-amendment.
 
-Material task decisions: delegation-m2/stage-0-schema; module-diagnostics/module-extractor-implementation/module-corpus-execution; metadata-root-clippy/clippy-root-attribute-syntax; schema-dependency-licenses; running-executable-identity/h5-immutable-observations; headline-reference-controls; site-enforcement-status/contributing-status/orchestration-log-layout; e1-boundary; and markdown-shape-amendment.
+Material task decisions: delegation-m2/stage-0-schema; module-diagnostics/module-extractor-implementation/module-corpus-execution; metadata-root-clippy/clippy-root-attribute-syntax; schema-dependency-licenses; running-executable-identity/h5-immutable-observations; headline-reference-controls; site-enforcement-status/contributing-status/orchestration-log-layout; e1-boundary; markdown-shape-amendment; and registered-prompt-archive-resolution.
 
 ## Repair attempts
 
@@ -223,3 +223,5 @@ Hypothesis: resolving the exact historical staging path to its committed archive
 **Repair gate:** all eight L0 checks passed, including 270 nextest tests; [lane summary](../../evidence/CHG-007/closure/pc-ci-repair-l0.txt), [docs check](../../evidence/CHG-007/closure/pc-ci-repair-docs-check.txt) and [zero-finding scope check](../../evidence/CHG-007/closure/pc-ci-repair-scope.txt). The original schema bytes and frozen supplemental data have zero diff.
 
 **Replacement clean-head record after CI repair:** [local L0](../../evidence/CHG-007/20260923T054356Z-9c10298df368.json) binds clean revision 9c10298df36868a10de1f48ff97bf84ad884c60b. All eight checks pass, including 270 tests. Record lint accepts with explicit unchecked artifact citations. Authentic remains false under DP-4.1. This supersedes the prior implementation observation for the repaired head; earlier evidence remains unchanged.
+
+**Independent repair review, round 2:** [VERDICT: APPROVE](../../evidence/CHG-007/review/gpt6-round2.md) on dbfb3e68d28f84a5e6b36dfc517fefe2021bd965, restricted to the repair diff and determinations. The reviewer independently observed old/fixed behavior with staging masked, verified archive missing/symlink/digest-negative controls and an unrelated-source corruption control, and checked subject identities, docs and scope. It inspected the 270-test record without rerunning Cargo. No blocking finding remains from either review round.
