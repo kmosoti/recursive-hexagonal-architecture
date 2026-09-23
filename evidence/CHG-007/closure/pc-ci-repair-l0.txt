@@ -1,0 +1,15 @@
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.09s
+     Running `target/debug/xtask ci`
+
+lane L0 (local):
+  L0.fmt             passed            0.5s  
+  L0.clippy          passed            0.8s  
+  L0.nextest         passed           17.6s  
+  L0.doctest         passed            1.1s  
+  L0.architecture    passed            0.2s  
+  L0.deny            passed            1.0s  
+  L0.machete         passed            0.2s  
+  L0.typos           passed            0.1s  
+eligibility: blocked
+  - Authentic: no trusted producers in policy: this local record is unauthenticated
+record: /home/kmosoti/projects/rha-m2/target/rha/evidence.json

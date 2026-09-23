@@ -1,0 +1,23 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.06s
+     Running tests/markdown_record_shape.rs (target/debug/deps/markdown_record_shape-a8595308fba74d07)
+
+running 1 test
+test schema_codegen_check_uses_archived_generated_source_in_fresh_checkout ... FAILED
+
+failures:
+
+---- schema_codegen_check_uses_archived_generated_source_in_fresh_checkout stdout ----
+
+thread 'schema_codegen_check_uses_archived_generated_source_in_fresh_checkout' (2837122) panicked at xtask/tests/markdown_record_shape.rs:483:5:
+fresh checkout schema codegen --check failed: schema_codegen.py: error: registration.sources[4]: source is not a durable file
+
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    schema_codegen_check_uses_archived_generated_source_in_fresh_checkout
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.06s
+
+error: test failed, to rerun pass `-p xtask --test markdown_record_shape`
+negative control exit: 101

@@ -43,3 +43,9 @@
 - Reasoning that did not change the outcome: discussing general schema evolution before comparing the actual producer's two new fields.
 - Mistakes caught: an H5 filename overwrote a prior observation; the original census could not describe newer producer fields; a proposal invented Python stat_result methods. Repeated real CLI runs and immediate projection execution distinguished all three.
 - Next rule: lint a freshly produced record from every supported producer before declaring schema closure; preserve original corpus grades and register additive shape controls before code.
+
+## Atom #8 — P-C CI portability repair
+- Tiers: Luna high for the decided path mapping; root for CI diagnosis and positive/negative execution; separate validator reviews the repair diff.
+- Reasoning that did not change the outcome: none beyond locating the missing registered input.
+- Mistake caught: locally present generation staging hid a clean-checkout dependency. The CI artifact named the exact missing source.
+- Next rule: when a registration cites generated inputs, verify its committed archive from a filesystem layout without staging artifacts before the first push.

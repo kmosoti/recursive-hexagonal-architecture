@@ -636,3 +636,23 @@ prompt_sha256 = "a850beec6d4cfe85a32034c3363b9a2968e7c0470b6a2515ed507a8001136f5
 sample = "round 1, session 01a0ccb3-c2b3-7ad0-8ebf-42d1b62ca0dd"
 separation = "A separate session reviewed the Executor output against registered contracts and RHA guidance; no code or corpus generation."
 edits = "None. Exact verdict archived at evidence/CHG-007/review/gpt6-round1.md; sha256 d9413ea791539417d69b86f8ed926713386a4cadba900f96899eb3252925380f"
+
+[[decisions]]
+id = "registered-prompt-archive-resolution"
+question = "PR18 CI lacks the original target/m2 staging prompt referenced by the immutable markdown supplement registration."
+answer = "Resolve that exact registered staging path to its committed write-prompts/CHG-007 archive, and still compare bytes to the original registered digest. Keep the original registration and all grades unchanged. Add a fresh filesystem-layout projection test with no staging directory. Reject committing target artifacts, editing the frozen registration, or skipping source verification. This is a portability repair of the existing registered-source check, not a contract weakening."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: Determine a large slice to hand off to gpt-6-astra ultra. Make sure it has a goal to implement its work and fix any and all issue in accordance with rha design. (Let it flag and improve the architecture and tooling if it can justify it no need for my approval). I approve all PRs as long as both an opus 5.5 and gpt-6 agent has reviewed and approved the code. Kennedy, 2026-09-22: Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me."
+date = "2026-09-23"
+
+[[provenance.generations]]
+artifact = "Committed-source resolution and fresh-checkout regression"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "OpenAI Codex v0.156.1, profile write, read-only patch proposal"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-007/pc-ci-prompt-path-repair-prompt.md"
+prompt_sha256 = "1bfe0f1de8e2b3d4c51076f098db1e7e8708d0b81369225d7af6b4fae4981cfe"
+sample = "sample 1, session 01a0ccc3-16c9-75f3-99dd-faf013775237"
+separation = "Root reproduced the two CI failures with the staging prompt removed before applying the proposal, then negatively tested the fresh-checkout regression against the previous compiler."
+edits = "Formatting only. Registered payloads, source digests, schemas and grades remain unchanged."
