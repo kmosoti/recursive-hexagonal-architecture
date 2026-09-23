@@ -85,6 +85,14 @@ answer = "P1 refuted by running it: syn 3 carries the guard in Pat::Guard, which
 decided_by = "agent:supervisor"
 date = "2026-09-23"
 
+
+[[decisions]]
+id = "opus-review-pr18"
+question = "The independent Opus 5.5 review of PR 18 at 8e3037b: seven findings (block modules, dropped edges to unfound items, Python in L0, extern crate self, 2015 leading ::, raw identifiers, #[test] outside cfg(test))."
+answer = "All seven confirmed by running them and repaired in CHG-007.3. The schema generator moves from xtask/schema_codegen.py to Rust (cargo xtask rha schemas), with the committed schemas as the byte-exact oracle. Determinations in the change record."
+decided_by = "agent:supervisor"
+date = "2026-09-23"
+
 [provenance]
 harness = "codex-cli 0.156.0"
 task_scope = "P-C"
