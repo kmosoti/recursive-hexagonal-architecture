@@ -74,6 +74,9 @@ fn dispatch(root: &Path, command: &Command) -> Result<u8> {
         Command::Rha {
             command: RhaCommand::Lint { files },
         } => xtask::record_lint::run(root, files),
+        Command::Rha {
+            command: RhaCommand::Schemas { check },
+        } => xtask::schema_codegen::run(root, *check),
         Command::Scope { task, base } => xtask::scope::run(root, task, base),
     }
 }

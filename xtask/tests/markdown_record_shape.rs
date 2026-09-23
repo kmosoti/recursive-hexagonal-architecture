@@ -417,29 +417,26 @@ fn frozen_markdown_shape_supplement_matches_all_registered_recipes() {
 
 #[test]
 fn schema_codegen_check_matches_projected_schemas() {
-    let output = Command::new("python3")
-        .args(["xtask/schema_codegen.py", "--check"])
+    let output = Command::new(env!("CARGO_BIN_EXE_xtask"))
+        .args(["rha", "schemas", "--check"])
         .current_dir(repository_root())
         .output()
-        .expect("spawn schema codegen");
+        .expect("spawn xtask rha schemas");
     assert!(
         output.status.success(),
-        "schema codegen --check failed: {}{}",
+        "rha schemas --check failed: {}{}",
         String::from_utf8_lossy(&output.stdout),
         String::from_utf8_lossy(&output.stderr)
     );
 }
 
-#[test]
-fn schema_codegen_check_uses_archived_generated_source_in_fresh_checkout() {
+/// Copies only committed inputs of the schema projection, and the committed
+/// schemas, into a fresh repository layout without `target/m2`.
+fn fresh_schema_checkout() -> OwnedTempDir {
     let repository = repository_root();
     let temporary = fresh_temp_dir();
     let root = &temporary.0;
 
-    copy_file(
-        &repository.join("xtask/schema_codegen.py"),
-        &root.join("xtask/schema_codegen.py"),
-    );
     copy_file(
         &repository.join("xtask/tests/corpus/record-schema/INVENTORY.json"),
         &root.join("xtask/tests/corpus/record-schema/INVENTORY.json"),
@@ -461,29 +458,50 @@ fn schema_codegen_check_uses_archived_generated_source_in_fresh_checkout() {
     ] {
         copy_file(&repository.join(relative), &root.join(relative));
     }
-    for family in [
-        "acceptance",
-        "evidence",
-        "h4",
-        "h5_conformance",
-        "markdown_corpus",
-        "policy",
-        "task",
-    ] {
+    for family in xtask::schema_codegen::FAMILIES {
         let relative = format!(".rha/schemas/{family}.schema.json");
         copy_file(&repository.join(&relative), &root.join(&relative));
     }
 
     assert!(!root.join("target/m2").exists());
-    let output = Command::new("python3")
-        .args(["xtask/schema_codegen.py", "--check"])
-        .current_dir(root)
-        .output()
-        .expect("spawn schema codegen in fresh checkout");
+    temporary
+}
+
+#[test]
+fn schema_codegen_check_uses_archived_generated_source_in_fresh_checkout() {
+    let temporary = fresh_schema_checkout();
+    let root = &temporary.0;
+
+    let failures = xtask::schema_codegen::check(root)
+        .unwrap_or_else(|error| panic!("fresh checkout rha schemas --check refused: {error}"));
     assert!(
-        output.status.success(),
-        "fresh checkout schema codegen --check failed: {}{}",
-        String::from_utf8_lossy(&output.stdout),
-        String::from_utf8_lossy(&output.stderr)
+        failures.is_empty(),
+        "fresh checkout rha schemas --check failed: {failures:?}"
     );
+    assert_eq!(xtask::schema_codegen::run(root, true).ok(), Some(0));
+}
+
+#[test]
+fn schema_codegen_check_fails_on_one_corrupted_schema_byte() {
+    let temporary = fresh_schema_checkout();
+    let root = &temporary.0;
+    let path = xtask::schema_codegen::output_path(root, "h4");
+    let mut bytes = std::fs::read(&path).expect("copied h4 schema");
+    let index = bytes.len() / 2;
+    bytes[index] ^= 0x01;
+    std::fs::write(&path, &bytes).expect("corrupt copied h4 schema");
+
+    let failures = xtask::schema_codegen::check(root)
+        .unwrap_or_else(|error| panic!("rha schemas --check refused: {error}"));
+    assert_eq!(failures, vec![format!("different {}", path.display())]);
+    assert_eq!(xtask::schema_codegen::run(root, true).ok(), Some(1));
+
+    // Writing restores the committed bytes, and the check passes again.
+    assert_eq!(xtask::schema_codegen::run(root, false).ok(), Some(0));
+    assert_eq!(
+        std::fs::read(&path).expect("regenerated h4 schema"),
+        std::fs::read(repository_root().join(".rha/schemas/h4.schema.json"))
+            .expect("committed h4 schema")
+    );
+    assert_eq!(xtask::schema_codegen::run(root, true).ok(), Some(0));
 }

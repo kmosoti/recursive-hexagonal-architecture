@@ -13,7 +13,7 @@ base_revision = "ec493b794040ede8878705132c89f9a4855f2dbe"
 intent = "Deliver milestone M2: P-C CHG-007, CHG-019.1 and E1; P-D CHG-008 to CHG-014. Implement all required stages, fix every confirmed issue within M2 scope, keep registered grading unchanged absent a disclosed amendment, obtain separate GPT-6 validation, open two green stacked PRs, and never merge."
 non_goals = ["Editing docs/spec/**", "Reading or writing held-out material", "Merge or tag", "Rewriting pushed history", "P-D product growth before the P-C head"]
 scope_globs = [".rha/tasks/CHG-007-module-level.toml", ".rha/acceptances/CHG-019.toml", ".rha/decisions.toml", ".rha/schemas/**", "docs/**", "evidence/**", "xtask/**", "tools/rha-verifier/**", "experiments/no-std-graph/**", "Cargo.lock", "rha-baseline.json", "CONTRIBUTING.md", "deny.toml", "crates/site/AGENTS.md"]
-protected_scope = [".rha/acceptances/CHG-019.toml", ".rha/decisions.toml", "rha-baseline.json", "CONTRIBUTING.md", ".rha/schemas/**", "xtask/Cargo.toml", "xtask/src/record_lint.rs", "xtask/src/record_schema.rs", "xtask/schema_codegen.py", "xtask/src/lib.rs", "xtask/src/modules/**", "xtask/src/metadata.rs", "xtask/src/graph/**", "xtask/src/architecture.rs", "xtask/src/corpus/**", "xtask/src/corpus.rs", "xtask/src/docs.rs", "xtask/src/scope.rs", "xtask/src/clippy_template.rs", "xtask/src/cli.rs", "xtask/src/main.rs", "xtask/src/util.rs", "deny.toml", "crates/site/AGENTS.md", "experiments/no-std-graph/Cargo.toml", "tools/rha-verifier/src/main.rs"]
+protected_scope = [".rha/acceptances/CHG-019.toml", ".rha/decisions.toml", "rha-baseline.json", "CONTRIBUTING.md", ".rha/schemas/**", "xtask/Cargo.toml", "xtask/src/record_lint.rs", "xtask/src/record_schema.rs", "xtask/src/schema_codegen.rs", "xtask/src/lib.rs", "xtask/src/modules/**", "xtask/src/metadata.rs", "xtask/src/graph/**", "xtask/src/architecture.rs", "xtask/src/corpus/**", "xtask/src/corpus.rs", "xtask/src/docs.rs", "xtask/src/scope.rs", "xtask/src/clippy_template.rs", "xtask/src/cli.rs", "xtask/src/main.rs", "xtask/src/util.rs", "deny.toml", "crates/site/AGENTS.md", "experiments/no-std-graph/Cargo.toml", "tools/rha-verifier/src/main.rs"]
 
 [[actors]]
 id = "human:kennedy"
@@ -103,6 +103,16 @@ reasoning_effort = "ultra (requested in handoff)"
 [[provenance.sessions]]
 model_id = "gpt-6-astra (requested in handoff)"
 span = "M2 Executor, P-C"
+
+[[provenance.generations]]
+artifact = "CHG-007.3: xtask/src/schema_codegen.rs (the Rust port of xtask/schema_codegen.py), its CLI wiring and the rewritten schema tests"
+generation = "sampled"
+harness = "Claude Code agent, spawned by the supervising session, isolated worktree, no commit rights"
+model = "claude-opus-5-5"
+reasoning_effort = "unknown"
+prompt = "Port xtask/schema_codegen.py to Rust as cargo xtask rha schemas [--check]; the committed .rha/schemas/*.json are the byte-exact oracle; replace the python3 calls in the tests; add a corrupted-byte negative; delete the script."
+sample = "run 1 of 1, 2026-09-23"
+oracles = "The committed schemas byte for byte (write run and --check); 30 mutated-input side-by-side runs against the script before its deletion (agent-reported); the supervisor's own reruns: --check, git diff --exit-code .rha/schemas, and the test binary under env -i PATH=/nonexistent (4 passed)"
 
 [[provenance.generations]]
 artifact = "Executor implementation, non-oracle tests, records and documentation for P-C"
