@@ -14,6 +14,7 @@ pub mod evidence;
 pub mod graph;
 pub mod lanes;
 pub mod metadata;
+pub mod modules;
 pub mod policy;
 pub mod record_lint;
 pub mod record_schema;

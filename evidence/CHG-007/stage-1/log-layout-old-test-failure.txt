@@ -1,0 +1,25 @@
+   Compiling xtask v0.1.0 (/home/kmosoti/projects/rha-m2/xtask)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 7.36s
+     Running unittests src/lib.rs (target/debug/deps/xtask-05780c931aeee373)
+
+running 4 tests
+test scope::tests::globs_match_segments_and_double_stars ... ok
+test scope::tests::a_path_outside_the_task_scope_is_reported_and_an_approved_protected_one_is_not ... ok
+test scope::tests::the_improvisations_of_lesson_l4_are_caught ... FAILED
+test scope::tests::the_current_repository_fits_its_own_layout ... ok
+
+failures:
+
+---- scope::tests::the_improvisations_of_lesson_l4_are_caught stdout ----
+
+thread 'scope::tests::the_improvisations_of_lesson_l4_are_caught' (2688445) panicked at xtask/src/scope.rs:324:9:
+assertion failed: rules.contains(&("docs/orchestration-log.md", "scope.layout"))
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    scope::tests::the_improvisations_of_lesson_l4_are_caught
+
+test result: FAILED. 3 passed; 1 failed; 0 ignored; 0 measured; 73 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p xtask --lib`

@@ -43,7 +43,7 @@ pub const TOP_LEVEL: [&str; 22] = [
 ];
 
 /// Entries of `docs/` (plan §3.4, and the plan and proposal files).
-pub const DOCS: [&str; 16] = [
+pub const DOCS: [&str; 17] = [
     "adr",
     "architecture",
     "changes",
@@ -53,6 +53,7 @@ pub const DOCS: [&str; 16] = [
     "index.md",
     "maturity.md",
     "observations",
+    "orchestration-log.md",
     "plan",
     "proposals",
     "spec",
@@ -303,7 +304,7 @@ mod tests {
         let found = check(
             &set(&[
                 "scripts/run_held_out.py",
-                "docs/orchestration-log.md",
+                "docs/unapproved-journal.md",
                 ".github/pull_request_template.md",
             ]),
             &scope,
@@ -320,7 +321,8 @@ mod tests {
             })
             .collect();
         assert!(rules.contains(&("scripts/run_held_out.py", "scope.layout")));
-        assert!(rules.contains(&("docs/orchestration-log.md", "scope.layout")));
+        assert!(rules.contains(&("docs/unapproved-journal.md", "scope.layout")));
+        assert!(layout_problem("docs/orchestration-log.md").is_none());
         assert!(rules.contains(&(
             ".github/pull_request_template.md",
             "scope.protected_unapproved"

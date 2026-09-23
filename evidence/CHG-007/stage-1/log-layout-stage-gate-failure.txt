@@ -1,0 +1,151 @@
+   Compiling xtask v0.1.0 (/home/kmosoti/projects/rha-m2/xtask)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.77s
+────────────
+ Nextest run ID 965c4405-23fe-48cd-b24a-5fad77815699 with nextest profile: default
+    Starting 231 tests across 41 binaries
+        PASS [   0.008s] (  1/231) document slug::tests::the_contract_examples_hold
+        PASS [   0.008s] (  2/231) adapter-sys tests::known_instants_format_correctly
+        PASS [   0.010s] (  3/231) adapter-fs::contract fs_sink_meets_the_output_sink_contract
+        PASS [   0.009s] (  4/231) adapter-html::escaping the_renderer_meets_the_site_contract_and_escapes_page_text
+        PASS [   0.011s] (  5/231) adapter-fs::contract a_symlinked_output_root_is_refused_before_listing_writing_or_deleting
+        PASS [   0.011s] (  6/231) adapter-html::escaping hrefs_are_encoded_and_md_links_point_at_the_produced_page
+        PASS [   0.014s] (  7/231) adapter-fs::contract nothing_is_written_through_a_symlinked_directory_or_a_planted_temporary
+        PASS [   0.016s] (  8/231) adapter-fs::contract fs_sources_meet_the_source_repository_contract
+        PASS [   0.009s] (  9/231) document::properties heading_text_keeps_code_and_link_text
+        PASS [   0.010s] ( 10/231) document::properties a_generated_suffix_never_collides_with_a_natural_slug
+        PASS [   0.012s] ( 11/231) document::properties wikilinks_split_target_anchor_and_alias_and_ignore_code
+        PASS [   0.027s] ( 12/231) graph::properties exact_then_unique_basename_then_broken_or_ambiguous
+        PASS [   0.058s] ( 13/231) document::properties final_slugs_are_unique_and_every_repeat_is_witnessed
+        PASS [   0.018s] ( 14/231) library id::tests::bad_paths_are_rejected
+        PASS [   0.018s] ( 15/231) library id::tests::ids_are_nfc_and_keep_case
+        PASS [   0.118s] ( 16/231) adapter-html::escaping escaping_round_trips_and_leaves_no_markup
+        PASS [   0.019s] ( 17/231) library::contract_seeded every_seeded_violator_is_reported
+        PASS [   0.011s] ( 18/231) library::contract_seeded the_memory_fake_meets_the_contract
+        PASS [   0.110s] ( 19/231) graph::properties every_link_resolves_or_is_witnessed_and_backlinks_are_symmetric
+        PASS [   0.134s] ( 20/231) document::oracle_slug slugify_matches_independent_reference_for_arbitrary_strings
+        PASS [   0.014s] ( 21/231) rha-verifier glob::tests::globs
+        PASS [   0.016s] ( 22/231) library::properties one_unreadable_page_fails_the_whole_load
+        PASS [   0.098s] ( 23/231) graph::properties resolution_is_independent_of_order
+        PASS [   0.015s] ( 24/231) rha-verifier time::tests::timestamps
+        PASS [   0.018s] ( 25/231) rha-verifier::cli an_empty_directory_is_refused_and_writes_no_record
+        PASS [   0.156s] ( 26/231) document::properties parsing_is_total
+        PASS [   0.190s] ( 27/231) app-cli::cli this_repository_has_no_witnesses
+        PASS [   0.072s] ( 28/231) library::properties ids_are_unique_or_every_duplicate_is_witnessed
+        PASS [   0.063s] ( 29/231) rha-verifier::corpus every_registered_fixture_is_decided_as_registered
+        PASS [   0.089s] ( 30/231) rha-verifier::cli a_corpus_with_a_deleted_fixture_is_refused
+        PASS [   0.089s] ( 31/231) rha-verifier::differential both_implementations_decide_every_registered_fixture_alike
+        PASS [   0.048s] ( 32/231) rha-verifier::differential mixed_numbers_at_the_limit_are_incomparable_not_equal
+        PASS [   0.317s] ( 33/231) app-cli::cli the_registered_markdown_corpus_passes_as_registered
+        PASS [   0.187s] ( 34/231) rha-verifier::cli the_registered_corpus_is_decided_as_registered
+        PASS [   0.333s] ( 35/231) document::oracle_slug parsed_heading_slugs_match_reference_and_occurrence_suffixes
+        PASS [   0.009s] ( 36/231) site::build_properties build_writes_then_converges_and_deletes_stale_outputs
+        PASS [   0.014s] ( 37/231) site::build_properties assembly_is_deterministic
+        PASS [   0.009s] ( 38/231) site::build_properties inv_k_rejects_a_write_for_no_page_and_a_delete_of_nothing
+        PASS [   0.009s] ( 39/231) site::build_properties the_renderer_and_sink_contracts_catch_seeded_violators_and_pass_the_fakes
+        PASS [   0.009s] ( 40/231) xtask architecture::tests::the_exit_codes_are_the_ones_the_lane_relies_on
+        PASS [   0.008s] ( 41/231) xtask architecture::tests::the_format_flag_accepts_what_plan_section_5_lists
+        PASS [   0.064s] ( 42/231) rha-verifier::shape_corpus every_supplementary_shape_fixture_has_exactly_its_registered_decision
+        PASS [   0.017s] ( 43/231) xtask architecture::tests::transitive_enabled_is_refused_before_anything_runs
+        PASS [   0.020s] ( 44/231) xtask clippy_template::tests::a_copy_of_the_template_conforms
+        PASS [   0.013s] ( 45/231) xtask clippy_template::tests::a_copy_that_differs_is_a_finding_with_both_digests
+        PASS [   0.013s] ( 46/231) xtask clippy_template::tests::a_crate_root_that_does_not_forbid_the_lints_is_a_finding
+        PASS [   0.401s] ( 47/231) app-cli::cli the_spec_renders_with_every_heading_and_both_mermaid_blocks
+        PASS [   0.009s] ( 48/231) xtask clippy_template::tests::a_missing_file_is_a_finding
+        PASS [   0.015s] ( 49/231) xtask clippy_template::tests::a_dotfile_beside_a_correct_copy_is_a_finding
+        PASS [   0.008s] ( 50/231) xtask clippy_template::tests::forbidding_only_some_of_the_lints_names_the_rest
+        PASS [   0.011s] ( 51/231) xtask corpus::runner::tests::diagnostic_path_is_taken_from_the_highlighted_token_only
+        PASS [   0.009s] ( 52/231) xtask corpus::tests::a_case_naming_no_cell_is_a_defect
+        PASS [   0.011s] ( 53/231) xtask corpus::tests::a_declared_case_without_crates_cannot_be_generated
+        PASS [   0.009s] ( 54/231) xtask corpus::tests::a_dependency_on_a_crate_the_generator_would_not_write_is_a_defect
+        PASS [   0.009s] ( 55/231) xtask corpus::tests::a_detection_without_a_rule_or_a_witness_is_a_defect
+        PASS [   0.016s] ( 56/231) xtask corpus::tests::a_prose_key_left_in_witness_is_a_defect
+        PASS [   0.010s] ( 57/231) xtask corpus::tests::a_repeated_id_is_a_defect
+        PASS [   0.010s] ( 58/231) xtask corpus::tests::a_well_formed_manifest_has_no_defects
+        PASS [   0.012s] ( 59/231) xtask corpus::tests::an_expected_miss_without_a_hole_is_a_defect
+        PASS [   0.009s] ( 60/231) xtask corpus::tests::an_unknown_cell_is_a_defect
+        PASS [   0.009s] ( 61/231) xtask corpus::tests::an_outside_crates_dependencies_are_validated_too
+        PASS [   0.012s] ( 62/231) xtask evidence::tests::task_comes_from_flag_then_record_dir_then_branch
+        PASS [   0.015s] ( 63/231) xtask corpus::tests::an_unknown_field_is_rejected_rather_than_ignored
+        PASS [   0.010s] ( 64/231) xtask graph::classify::tests::a_member_that_nothing_classifies_is_reported_not_defaulted
+        PASS [   0.010s] ( 65/231) xtask graph::classify::tests::a_list_classifies_when_no_prefix_matches
+        PASS [   0.008s] ( 66/231) xtask graph::classify::tests::a_prefix_classifies_when_no_metadata_is_declared
+        PASS [   0.009s] ( 67/231) xtask graph::classify::tests::a_role_outside_the_five_does_not_classify
+        PASS [   0.008s] ( 68/231) xtask graph::classify::tests::metadata_agreeing_with_the_prefix_is_not_a_conflict
+        PASS [   0.011s] ( 69/231) xtask graph::classify::tests::an_empty_prefix_matches_nothing_rather_than_everything
+        PASS [   0.008s] ( 70/231) xtask graph::classify::tests::the_prefix_is_a_prefix_and_not_a_substring
+        PASS [   0.012s] ( 71/231) xtask graph::classify::tests::metadata_wins_over_a_prefix_and_the_disagreement_is_still_reported
+        PASS [   0.012s] ( 72/231) xtask graph::model::tests::a_normal_dependency_is_the_null_kind
+        PASS [   0.009s] ( 73/231) xtask graph::model::tests::a_port_reference_names_its_owner
+        PASS [   0.010s] ( 74/231) xtask graph::model::tests::a_witness_names_the_section_the_edge_is_declared_in
+        PASS [   0.011s] ( 75/231) xtask graph::report::tests::a_clean_run_exits_zero_and_a_finding_exits_one
+        PASS [   0.012s] ( 76/231) xtask graph::report::tests::module_checks_report_not_run_with_a_reason_never_an_empty_pass
+        PASS [   0.015s] ( 77/231) xtask graph::model::tests::only_roots_and_harnesses_may_depend_on_an_adapter
+        PASS [   0.008s] ( 78/231) xtask graph::report::tests::the_text_report_names_the_crate_and_its_classification
+        PASS [   0.017s] ( 79/231) xtask graph::rules::tests::a_forbidden_selector_with_an_unknown_role_is_a_parse_error
+        PASS [   0.011s] ( 80/231) xtask graph::rules::tests::a_role_selector_matches_by_role_and_a_name_selector_by_name
+        PASS [   0.021s] ( 81/231) xtask graph::rules::tests::a_foreign_core_severity_outside_the_closed_set_is_a_parse_error
+        PASS [   0.008s] ( 82/231) xtask graph::rules::tests::only_schema_version_one_is_accepted
+        PASS [   0.021s] ( 83/231) xtask graph::rules::tests::a_trailing_wildcard_matches_a_prefix_and_an_exact_name_matches_itself
+        PASS [   0.009s] ( 84/231) xtask graph::rules::tests::the_defaults_are_the_strict_ones
+        PASS [   0.021s] ( 85/231) xtask graph::rules::tests::an_unknown_key_is_an_error_not_a_rule_that_does_nothing
+        PASS [   0.017s] ( 86/231) xtask graph::rules::tests::the_rules_file_of_this_repository_parses
+        PASS [   0.018s] ( 87/231) xtask lanes::tests::architecture_report_and_exit_status_must_agree
+        PASS [   0.018s] ( 88/231) xtask lanes::tests::dependency_network_failures_are_named
+        PASS [   0.012s] ( 89/231) xtask lanes::tests::doctest_counts_every_harness_run
+        PASS [   0.012s] ( 90/231) xtask lanes::tests::exit_code_reports_failures_and_ci_environment_gaps_only
+        PASS [   0.021s] ( 91/231) xtask lanes::tests::exit_zero_passes_only_under_exit_zero_validity
+        PASS [   0.014s] ( 92/231) xtask lanes::tests::failing_command_is_failed_with_its_exit_status
+        PASS [   0.015s] ( 93/231) xtask lanes::tests::gate_skips_unapproved_unselected_and_unavailable_checks
+        PASS [   0.094s] ( 94/231) xtask graph::report::tests::the_json_report_carries_the_plan_section_5_fields
+        PASS [   0.014s] ( 95/231) xtask lanes::tests::junit_needs_a_fresh_report_with_selected_tests
+        PASS [   0.014s] ( 96/231) xtask lanes::tests::missing_tool_and_timeout_are_never_passed
+        PASS [   0.015s] ( 97/231) xtask metadata::tests::a_dependency_outside_the_workspace_is_external
+        PASS [   0.303s] ( 98/231) rha-verifier::differential the_review_probes_are_refused
+        PASS [   0.012s] ( 99/231) xtask metadata::tests::a_package_is_a_member_by_where_it_lives_not_by_its_name
+        PASS [   0.017s] (100/231) xtask metadata::tests::a_missing_rha_table_is_absent_not_a_default_role
+        PASS [   0.013s] (101/231) xtask metadata::tests::declared_metadata_is_carried_without_being_interpreted
+        PASS [   0.018s] (102/231) xtask metadata::tests::a_renamed_optional_target_dependency_keeps_every_field
+        PASS [   0.013s] (103/231) xtask metadata::tests::only_workspace_members_become_crates
+        PASS [   0.017s] (104/231) xtask metadata::tests::malformed_rha_table_is_a_configuration_error_with_context
+        PASS [   0.010s] (105/231) xtask policy::tests::drift_reports_a_changed_argument_and_a_length_change
+        PASS [   0.022s] (106/231) xtask metadata::tests::the_declared_composite_rules_file_is_accepted_for_later_module_checks
+        PASS [   0.013s] (107/231) xtask policy::tests::extracts_commands_and_strips_comments
+        PASS [   0.010s] (108/231) xtask policy::tests::missing_marker_or_fence_is_an_error
+        PASS [   0.014s] (109/231) xtask record_lint::tests::calendar_offsets_and_bytes
+        PASS [   0.014s] (110/231) xtask scope::tests::a_path_outside_the_task_scope_is_reported_and_an_approved_protected_one_is_not
+        PASS [   0.007s] (111/231) xtask tools::tests::exact_version_is_ready_and_anything_else_is_not
+        PASS [   0.016s] (112/231) xtask scope::tests::globs_match_segments_and_double_stars
+        FAIL [   0.017s] (113/231) xtask scope::tests::the_improvisations_of_lesson_l4_are_caught
+  stdout ───
+
+    running 1 test
+    test scope::tests::the_improvisations_of_lesson_l4_are_caught ... FAILED
+
+    failures:
+
+    failures:
+        scope::tests::the_improvisations_of_lesson_l4_are_caught
+
+    test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 76 filtered out; finished in 0.00s
+
+  stderr ───
+
+    thread 'scope::tests::the_improvisations_of_lesson_l4_are_caught' (2690806) panicked at xtask/src/scope.rs:324:9:
+    assertion failed: rules.contains(&("docs/orchestration-log.md", "scope.layout"))
+    note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+  Cancelling due to test failure: 9 tests still running
+        PASS [   0.032s] (114/231) xtask scope::tests::the_current_repository_fits_its_own_layout
+        PASS [   0.043s] (115/231) xtask util::git_identity_tests::a_checkout_names_its_head_and_a_plain_directory_names_nothing
+        PASS [   0.706s] (116/231) graph::oracle_resolve resolver_witnesses_match_independent_reference
+        PASS [   1.242s] (117/231) document::oracle_slug slugify_matches_independent_reference_for_unicode_edges
+        PASS [  10.509s] (118/231) rha-verifier::differential lemma_1_obligations_only_grow
+        PASS [  10.507s] (119/231) rha-verifier::differential proposition_2_no_silent_pass
+        PASS [  10.735s] (120/231) rha-verifier::differential lemma_3_evidence_cannot_choose_the_obligations
+        PASS [  10.872s] (121/231) rha-verifier::differential both_implementations_agree_on_mutated_fixtures
+        PASS [  12.868s] (122/231) rha-verifier::differential a_fixture_missing_or_mistyping_a_member_is_refused
+────────────
+     Summary [  13.034s] 122/231 tests run: 121 passed, 1 failed, 0 skipped
+        FAIL [   0.017s] (113/231) xtask scope::tests::the_improvisations_of_lesson_l4_are_caught
+warning: 109/231 tests were not run due to test failure (run with --no-fail-fast to run all tests, or run with --max-fail)
+error: test run failed

@@ -1245,9 +1245,11 @@ version = "0.1.0"
 dependencies = [
  "clap",
  "jsonschema",
+ "proc-macro2",
  "serde",
  "serde_json",
  "sha2",
+ "syn 3.0.6",
  "toml",
 ]
 

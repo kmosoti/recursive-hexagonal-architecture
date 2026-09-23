@@ -13,7 +13,7 @@ base_revision = "ec493b794040ede8878705132c89f9a4855f2dbe"
 intent = "Deliver milestone M2: P-C CHG-007, CHG-019.1 and E1; P-D CHG-008 to CHG-014. Implement all required stages, fix every confirmed issue within M2 scope, keep registered grading unchanged absent a disclosed amendment, obtain separate GPT-6 validation, open two green stacked PRs, and never merge."
 non_goals = ["Editing docs/spec/**", "Reading or writing held-out material", "Merge or tag", "Rewriting pushed history", "P-D product growth before the P-C head"]
 scope_globs = [".rha/tasks/CHG-007-module-level.toml", ".rha/acceptances/CHG-019.toml", ".rha/decisions.toml", ".rha/schemas/**", "docs/**", "evidence/**", "xtask/**", "tools/rha-verifier/**", "experiments/no-std-graph/**", "Cargo.lock", "rha-baseline.json", "CONTRIBUTING.md"]
-protected_scope = [".rha/acceptances/CHG-019.toml", ".rha/decisions.toml", "rha-baseline.json", "CONTRIBUTING.md", ".rha/schemas/**", "xtask/Cargo.toml", "xtask/src/record_lint.rs", "xtask/src/record_schema.rs", "xtask/schema_codegen.py", "xtask/src/lib.rs"]
+protected_scope = [".rha/acceptances/CHG-019.toml", ".rha/decisions.toml", "rha-baseline.json", "CONTRIBUTING.md", ".rha/schemas/**", "xtask/Cargo.toml", "xtask/src/record_lint.rs", "xtask/src/record_schema.rs", "xtask/schema_codegen.py", "xtask/src/lib.rs", "xtask/src/modules/**", "xtask/src/metadata.rs", "xtask/src/graph/**", "xtask/src/architecture.rs", "xtask/src/corpus/**", "xtask/src/corpus.rs", "xtask/src/docs.rs", "xtask/src/scope.rs"]
 
 [[actors]]
 id = "human:kennedy"
@@ -190,3 +190,76 @@ prompt_sha256 = "2361c3bee703231fe19fc8cb7cb2e37bbafd02d7e045ba3a6c4e4420257e691
 sample = "sample 1; no PRNG seed"
 separation = "Registered corpus committed in f7b5c62 before implementation proposals. Writer produced a patch only; root Executor applied, compiled and verified it. Writer did not run tests or mutate branch files."
 edits = "Executor repaired proposal compile/type errors and harness construction mistakes; determinations in the change record. No registered expectations changed."
+
+[[decisions]]
+id = "module-extractor-implementation"
+question = "Which extraction and integration design implements W7 without changing registered grading?"
+answer = "Use syn 3.0.6 (already resolved in Cargo.lock) with full/visit/extra-traits and proc-macro2 token traversal; preserve a logical module tree, lexical import scopes, test-only edges and explicit approximation limits. Retain composite declarations and source/edition identities from Cargo metadata, then apply component rules and aggregate real module outcomes into architecture and H4 reports. Alternatives scored by read-only design review on contract fit/precision/witness quality/cost: syn 18/20, rustc/rustdoc 12/20, cargo-modules primary 11/20; cargo-modules remains the stricter independent X-M01 reference. Root owns integration, registered data is immutable, and metadata/config/tool errors cannot become a pass."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: Determine a large slice to hand off to gpt-6-astra ultra. Make sure it has a goal to implement its work and fix any and all issue in accordance with rha design. (Let it flag and improve the architecture and tooling if it can justify it no need for my approval). I approve all PRs as long as both an opus 5.5 and gpt-6 agent has reviewed and approved the code. Kennedy, 2026-09-22: Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me."
+date = "2026-09-22"
+
+[[decisions]]
+id = "orchestration-log-layout"
+question = "The supplied global working agreement requires docs/orchestration-log.md, but the existing layout guard rejects that exact path."
+answer = "Admit only that named file in the docs layout and keep the requested running log. The instruction is: Keep a running log at docs/orchestration-log.md in the project. Alternative rejected: allowing arbitrary docs-root journals or silently placing the log elsewhere. This is a narrow repository-layout reconciliation, not a change to RHA laws, corpus grading or acceptance policy."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: Determine a large slice to hand off to gpt-6-astra ultra. Make sure it has a goal to implement its work and fix any and all issue in accordance with rha design. (Let it flag and improve the architecture and tooling if it can justify it no need for my approval). I approve all PRs as long as both an opus 5.5 and gpt-6 agent has reviewed and approved the code. Kennedy, 2026-09-22: Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me."
+date = "2026-09-22"
+
+[[provenance.generations]]
+artifact = "xtask/src/modules/extract.rs"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "codex-cli 0.156.0, profile write, read-only patch proposal"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-007/MODULE-EXTRACTOR.md"
+prompt_sha256 = "133832d2f3fce1c97f8afe62a34338521734fe33a713591315c0fb5822dc1a1c"
+sample = "sample 1, iterated under compiler/differential checks and read-only design review"
+separation = "Independent source/reference corpus committed at 08e560d before this implementation proposal; the writer did not run tests or modify branch files."
+edits = "Executor integrated proposals and repaired compilation, traversal, path lookup and lexical scopes; no registered corpus byte or expectation changed."
+
+[[provenance.generations]]
+artifact = "xtask/tests/module_extraction.rs"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "codex-cli 0.156.0, profile write, read-only patch proposal"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-007/MODULE-EXTRACTION-TESTS.md"
+prompt_sha256 = "b1e9f737b2a0bc83807f0bbe8faed59663d2e05937b350482b5d162bec9b7c6a"
+sample = "sample 1, iterated under compiler/differential checks and read-only design review"
+separation = "Independent source/reference corpus committed at 08e560d before this implementation proposal; the writer did not run tests or modify branch files."
+edits = "Executor integrated proposals and repaired compilation, traversal, path lookup and lexical scopes; no registered corpus byte or expectation changed."
+
+[[provenance.generations]]
+artifact = "Extractor repair proposal"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "codex-cli 0.156.0, read-only resumed write session"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-007/extractor-repair-1-prompt.md"
+prompt_sha256 = "ab01d03c6a2b42ec59480141dddb1fda2549a80b54dfd5aaa5dcbe24b6033a67"
+sample = "extractor-repair-1-prompt.md"
+separation = "Repair of implementation only against unchanged registered data; root independently ran checks."
+
+[[provenance.generations]]
+artifact = "Extractor repair proposal"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "codex-cli 0.156.0, read-only resumed write session"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-007/extractor-repair-2-prompt.md"
+prompt_sha256 = "cb34efd5666498cd61c20c1adb0114c38028a8df4a0a23d224f7badfb085ec3e"
+sample = "extractor-repair-2-prompt.md"
+separation = "Repair of implementation only against unchanged registered data; root independently ran checks."
+
+[[provenance.generations]]
+artifact = "Extractor repair proposal"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "codex-cli 0.156.0, read-only resumed write session"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-007/extractor-scope-repair-prompt.md"
+prompt_sha256 = "a3b2281bc5de8b7290c3d9adbe3f7bb78d28dbf6e48643b2e0ef081719e39594"
+sample = "extractor-scope-repair-prompt.md"
+separation = "Repair of implementation only against unchanged registered data; root independently ran checks."
