@@ -146,3 +146,9 @@ action:
 The criterion is a boundary-design measurement, not a requirement that a PR
 or implementation artifact already exist.
 
+
+## Implementation observation and cost qualification, 2026-09-23
+
+W8 is implemented through bd708fd3277afcb80a3898b6a498ea3c010e0e4c; the earlier statement that no crate existed records the pre-creation decision point. [The H3 observation](../observations/h3-json.md) records the stage result and its separate prerequisite repairs.
+
+The earlier O(n+e) description was an unsupported bound. [Source inspection](../../evidence/CHG-008/stage-1/analysis-cost-inspection.txt) shows that assembly performs a vector scan for each link resolution, so a linear total-runtime claim is not warranted. The observed design cost is one additional pure analysis/assembly pass under the existing implementation, plus retained index memory. No performance benchmark or linear bound is claimed. Decision json-analysis-cost-qualification corrects this description; it does not change the accepted refutation criterion or any registered grade.

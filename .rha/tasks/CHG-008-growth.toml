@@ -263,3 +263,19 @@ prompt_sha256 = "0c169a9e2ace10bcef5d4109c43820348b29287889a32556a0e666d2c4836db
 sample = "one proposal; session 01a0cd00-1871-7a62-b232-26e4131241ed"
 separation = "Frozen corpus committed before code; root is sole branch writer and runs compilation, registered grading and negative controls. A separate read-only verifier checked grading coverage."
 edits = "Root supplied the missing collection type, reconciled patch context from actual files instead of copied hashes, moved the Html arm, corrected the OutputSink::list return type, and formatted. Tests preserve all registered expectations; source fault injections were restored and rebuilt."
+
+[[decisions]]
+id = "json-analysis-cost-qualification"
+question = "The BDR draft called the extra analysis/assembly pass O(n+e), but the current assembly performs a linear resolution lookup per link."
+answer = "Append an explicit cost qualification to the BDR and observation without rewriting the historical prediction. Retain the measured claim of one additional pure pipeline pass and index memory; withdraw the unsupported linear-time bound. Reject optimizing core lookup solely to rescue a presentation-adapter cost claim. The W8 zero-core-change criterion and all corpus grades remain unchanged."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: Determine a large slice to hand off to gpt-6-astra ultra. Make sure it has a goal to implement its work and fix any and all issue in accordance with rha design. (Let it flag and improve the architecture and tooling if it can justify it no need for my approval). I approve all PRs as long as both an opus 5.5 and gpt-6 agent has reviewed and approved the code. Kennedy, 2026-09-22: Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me."
+date = "2026-09-23"
+
+[[decisions]]
+id = "backlog-layout"
+question = "The global working agreement requires docs/backlog.md for deferred low-impact work, but the local scope allow-list omits it."
+answer = "Add the required backlog file and permit that exact basename in the existing docs layout check. Record lookup-scaling work there and stop pursuing it in M2. Reject an untracked note or a broad relaxation of allowed docs paths. This is a local guide/layout reconciliation, not a spec or corpus-grade change."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: Determine a large slice to hand off to gpt-6-astra ultra. Make sure it has a goal to implement its work and fix any and all issue in accordance with rha design. (Let it flag and improve the architecture and tooling if it can justify it no need for my approval). I approve all PRs as long as both an opus 5.5 and gpt-6 agent has reviewed and approved the code. Kennedy, 2026-09-22: Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me."
+date = "2026-09-23"

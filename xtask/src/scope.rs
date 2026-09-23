@@ -43,9 +43,10 @@ pub const TOP_LEVEL: [&str; 22] = [
 ];
 
 /// Entries of `docs/` (plan §3.4, and the plan and proposal files).
-pub const DOCS: [&str; 17] = [
+pub const DOCS: [&str; 18] = [
     "adr",
     "architecture",
+    "backlog.md",
     "changes",
     "conformance",
     "enforcement-map.md",

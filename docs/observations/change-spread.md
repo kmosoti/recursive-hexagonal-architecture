@@ -10,6 +10,8 @@ Pre-implementation addendum after probes, before the assurance repair: include s
 
 | Stage | Original plan prediction | Predeclared product set | Start | End | Observed |
 | --- | --- | --- | --- | --- | --- |
-| adapter-json / H3 | adapter-json + app-cli; core diff empty | adapter-json + app-cli; no core production or test edits | BDR/contract/prediction commit, followed by frozen-case registration before code | pending | pending |
+| adapter-json / H3 | adapter-json + app-cli; core diff empty | adapter-json + app-cli; no core production or test edits | d2cc1cd793bbd820a130c9df1e120cc1c9f71e7f | bd708fd3277afcb80a3898b6a498ea3c010e0e4c | adapter-json + app-cli; [core diff empty](../../evidence/CHG-008/stage-1/h3-adapter-core-numstat.txt), [product numstat](../../evidence/CHG-008/stage-1/h3-product-numstat.txt) |
 
 Adapter measurement includes all core paths (including tests). The complete P-C-to-H3 core diff will also be retained so the preceding assurance repairs remain visible. Protected metadata: adapter/app manifests, Cargo.lock and assumption-ledger support; no new core allow-list or module direction is planned.
+
+[H3 observation](h3-json.md) records both measurements, the seeded detection list and the limits of the claim.

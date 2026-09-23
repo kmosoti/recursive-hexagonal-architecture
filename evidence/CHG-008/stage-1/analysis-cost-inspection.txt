@@ -1,0 +1,26 @@
+crates/graph/src/lib.rs
+62:     pub fn resolution(&self, from: &PageId, index: usize) -> Option<&Resolved> {
+63:         self.resolved
+64:             .iter()
+65:             .find(|r| &r.from == from && r.index == index)
+66:     }
+67: }
+68: 
+69: fn fold(s: &str) -> String {
+
+crates/site/src/assembly/mod.rs
+79:         let links = (0..doc.links.len())
+80:             .map(|i| match graph.resolution(&doc.id, i) {
+81:                 Some(r) => LinkTarget::Page {
+82:                     id: r.to.clone(),
+83:                     anchor: r.anchor.clone(),
+84:                 },
+85:                 None => LinkTarget::Unresolved,
+86:             })
+87:             .collect();
+88:         let backlinks = graph
+89:             .backlinks
+90:             .get(&doc.id)
+91:             .map(|set| {
+
+Observation: resolution scans a vector, and assembly calls it per link. No linear total-runtime bound is established by the H3 measurement.
