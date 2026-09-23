@@ -13,8 +13,8 @@ branch = "chg/019-trust"
 base_revision = "72c5cfd2fa96efbb81adb817ae10a93e03c87713"
 intent = "Stage 1: fix the verifier and lint contract and register both corpora from a separate generator session before any code. Stage 2: schemas and `cargo xtask rha lint`. Stage 3: `tools/rha-verifier` with a differential second implementation, graded on the stage 1 corpus. Stage 4: keys and the cut-over (gate DP-4.1, DP-5.3)."
 non_goals = ["Product crates (P-A)", "The isolation exercise, which stays not_run (no protected runner exists)", "Editing .rha/policy.toml before gate DP-5.3"]
-scope_globs = [".rha/tasks/CHG-019-trust.toml", ".rha/policy.toml", ".rha/decisions.toml", "Cargo.toml", "docs/**", "evidence/**", "xtask/**", "tools/**", "Cargo.lock", ".rha/schemas/**"]
-protected_scope = ["Cargo.toml", ".rha/policy.toml", ".rha/decisions.toml"]
+scope_globs = [".rha/tasks/CHG-019-trust.toml", ".rha/policy.toml", ".rha/decisions.toml", "Cargo.toml", ".rha/acceptances/CHG-005.toml", "docs/**", "evidence/**", "xtask/**", "tools/**", "Cargo.lock", ".rha/schemas/**"]
+protected_scope = ["Cargo.toml", ".rha/policy.toml", ".rha/decisions.toml", ".rha/acceptances/CHG-005.toml"]
 
 [[actors]]
 id = "human:kennedy"
@@ -127,6 +127,14 @@ date = "2026-09-22"
 id = "scope-cargo-toml"
 question = "After the merge with main, P-A's scope guard reported Cargo.toml outside this record's scope_globs, although protected_scope names it with the approval of decisions workspace-tools-member and protected-edits-quoted."
 answer = "An omission in scope_globs; Cargo.toml is added. The Executor's earlier hand check had listed Cargo.toml as allowed, which masked it; the guard is the check from here on."
+decided_by = "agent:executor"
+date = "2026-09-22"
+
+
+[[decisions]]
+id = "p-a-acceptance-record"
+question = "Writing .rha/acceptances/CHG-005.toml, P-A's acceptance record, in this item (decision concurrent-with-p-a)."
+answer = "Creating the previous item's acceptance record is pre-approved by .rha/policy.toml [acceptance]; the path is named in scope_globs and protected_scope accordingly. It was pushed once before being named here, and the scope guard caught that."
 decided_by = "agent:executor"
 date = "2026-09-22"
 
