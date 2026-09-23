@@ -620,3 +620,19 @@ prompt_sha256 = "9c05b90b2207ca921dc5df7b4e10103d3d1ae3930de951297ff817cea8dbec1
 sample = "sample 1"
 separation = "Supplement committed at d8ee895db6922da1e321f0552495ef1cf5d02fe3 before code. Root independently generated schemas and ran all old/new recipes."
 edits = "Corrected an invented Python stat_result method to stat.S_ISLNK/S_ISREG before projection; removed an unused mutable test binding. No corpus byte or expectation changed."
+
+[[provenance.sessions]]
+model_id = "gpt-6-astra"
+span = "Separate validator, xhigh, read-only; session 01a0ccb3-c2b3-7ad0-8ebf-42d1b62ca0dd; reviewed 766a2521c0c93f5f69df794627581ddf410e2b5d; VERDICT: APPROVE"
+
+[[provenance.generations]]
+artifact = "Independent GPT-6 advisory validation of P-C"
+generation = "sampled"
+model = "gpt-6-astra"
+reasoning_effort = "xhigh"
+harness = "OpenAI Codex v0.156.1, separate read-only validator"
+prompt_path = "evidence/CHG-007/review/gpt6-round1-prompt.md"
+prompt_sha256 = "a850beec6d4cfe85a32034c3363b9a2968e7c0470b6a2515ed507a8001136f50"
+sample = "round 1, session 01a0ccb3-c2b3-7ad0-8ebf-42d1b62ca0dd"
+separation = "A separate session reviewed the Executor output against registered contracts and RHA guidance; no code or corpus generation."
+edits = "None. Exact verdict archived at evidence/CHG-007/review/gpt6-round1.md; sha256 d9413ea791539417d69b86f8ed926713386a4cadba900f96899eb3252925380f"
