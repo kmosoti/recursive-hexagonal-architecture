@@ -12,8 +12,8 @@ branch = "chg/008-growth"
 base_revision = "96019efceb8dc094ef4c323b8836a2e9c873a599"
 intent = "Deliver P-D, CHG-008 through CHG-014: adapter-json and H3, five individually measured W9 features, mutation diagnosis, green lanes and an open stacked PR; fix confirmed defects under RHA and never merge."
 non_goals = ["Spec edits", "Held-out material", "Merge/tag", "History rewriting", "Undisclosed changes to registered corpus grading"]
-scope_globs = [".rha/tasks/CHG-008-growth.toml", ".rha/decisions.toml", ".rha/policy.toml", "crates/**", "Cargo.toml", "Cargo.lock", ".cargo/**", ".github/**", "rha-crates.toml", "docs/**", "evidence/**", "xtask/**", "CONTRIBUTING.md", "rha-baseline.json"]
-protected_scope = [".rha/decisions.toml", ".rha/policy.toml", "Cargo.toml", "crates/*/Cargo.toml", "crates/*/rha-modules.toml", ".cargo/**", ".github/**", "rha-crates.toml", "xtask/**", "CONTRIBUTING.md", "crates/*/AGENTS.md", "rha-baseline.json"]
+scope_globs = [".rha/tasks/CHG-008-growth.toml", ".rha/assumptions.toml", ".rha/decisions.toml", ".rha/policy.toml", "crates/**", "Cargo.toml", "Cargo.lock", ".cargo/**", ".github/**", "rha-crates.toml", "docs/**", "evidence/**", "xtask/**", "CONTRIBUTING.md", "rha-baseline.json"]
+protected_scope = [".rha/assumptions.toml", ".rha/decisions.toml", ".rha/policy.toml", "Cargo.toml", "crates/*/Cargo.toml", "crates/*/rha-modules.toml", ".cargo/**", ".github/**", "rha-crates.toml", "xtask/**", "CONTRIBUTING.md", "crates/*/AGENTS.md", "rha-baseline.json"]
 
 [[actors]]
 id = "human:kennedy"
@@ -115,3 +115,23 @@ prompt_sha256 = "24a5aea9dbe6e4a30570876df792bc738a6e77edde0d0fa61cd404dbb4398bd
 sample = "sample 1, session 01a0ccce-7fbb-7a51-896a-5350dde1d07c"
 separation = "Root compiled the standalone control source against existing built crates and observed failures before any production repair; all branch writes and validation remain with root."
 edits = "Root adds the separately reproduced graph uniqueness precondition and clarifies the sampled TOC check. No registered corpus grade changes."
+
+[[decisions]]
+id = "json-adapter-boundary"
+question = "Add a third renderer and a whole-site search index without presentation decisions entering the cores."
+answer = "Accept BDR-0006 refutation criterion before creating adapter-json. Choose an immutable constructor-built search index emitted through existing PageRenderer::assets, normal dependencies site and serde_json only, with composition in app-cli. Score 18/20 versus 16/20 for a batch/finalize port and 8/20 for stateful accumulation. Disclose a second pure analysis/assembly pass and require fresh configuration for each corpus. Reject hidden render-call state and speculative core port expansion. Authorize adapter/app manifests and Cargo.lock, plus the assumption-ledger third-adapter discharge only after tests pass. Scope includes that ledger explicitly. Exact JSON/search contract and cases precede implementation. Preserve both full P-C-to-H3 and isolated adapter-stage core measurements."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: Determine a large slice to hand off to gpt-6-astra ultra. Make sure it has a goal to implement its work and fix any and all issue in accordance with rha design. (Let it flag and improve the architecture and tooling if it can justify it no need for my approval). I approve all PRs as long as both an opus 5.5 and gpt-6 agent has reviewed and approved the code. Kennedy, 2026-09-22: Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me."
+date = "2026-09-23"
+
+[[provenance.generations]]
+artifact = "JSON adapter boundary and fixed output contract"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "OpenAI Codex v0.156.1, profile write, read-only documentation proposal"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-008/pd-json-contract-prompt.md"
+prompt_sha256 = "2787cd1617ec9715d093bf246082aef3572cd4fc2894eef1142c572429c197fe"
+sample = "sample 1, session 01a0ccd4-795f-71e0-a89e-2d708d4c6ad9"
+separation = "Separate advisory design scored three alternatives; root selected the immutable constructor before documentation and source implementation."
+edits = "Corrected the decision date, task id, change-record ownership and refutation wording; removed an unrequested object-member ordering constraint before any corpus generation. JSON members/types/values remain exact."
