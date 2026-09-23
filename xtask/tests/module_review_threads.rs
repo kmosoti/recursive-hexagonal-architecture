@@ -99,3 +99,170 @@ pub mod constraints {
         extracted.edges
     );
 }
+
+// --- The Opus 5.5 review of pull request 18 (CHG-007.3) ---
+//
+// Each probe is the reviewer's input: a legal crate whose rules allow
+// `constraints` no dependency. A cross-component path must be a finding, or
+// at least a named limitation, never a silent pass.
+
+const RULES: &str = r#"[components]
+constraints = "control_crate::constraints"
+ordering = "control_crate::ordering"
+
+[allow]
+constraints = []
+ordering = []
+
+[deny]
+cycles = true
+child_to_parent_private = true
+foreign_internal = true
+"#;
+
+/// Extracts and checks a crate; returns the rules findings.
+fn check_crate(label: &str, edition: &str, files: &[(&str, &str)]) -> Vec<serde_json::Value> {
+    let root =
+        std::env::temp_dir().join(format!("rha-module-review-{label}-{}", std::process::id()));
+    let _ = std::fs::remove_dir_all(&root);
+    for (path, text) in files {
+        let file = root.join(path);
+        std::fs::create_dir_all(file.parent().expect("parent")).expect("dir");
+        std::fs::write(file, text).expect("write");
+    }
+    std::fs::write(root.join("rha-modules.toml"), RULES).expect("rules");
+    let extracted = extract(
+        &root,
+        &root.join("src/lib.rs"),
+        "control_crate",
+        edition,
+        &BTreeSet::new(),
+    )
+    .unwrap_or_else(|e| panic!("{label}: extraction failed: {e}"));
+    let checked = xtask::modules::rules::check(
+        &root,
+        "control_crate",
+        &root.join("rha-modules.toml"),
+        &extracted,
+    )
+    .unwrap_or_else(|e| panic!("{label}: check failed: {e}"));
+    let _ = std::fs::remove_dir_all(&root);
+    checked.findings
+}
+
+fn undeclared(findings: &[serde_json::Value]) -> bool {
+    findings
+        .iter()
+        .any(|f| f.to_string().contains("modules.undeclared_dependency"))
+}
+
+const ORDERING: &str = "pub mod ordering { pub fn score() -> u8 { 1 } pub const S: u8 = 1; }\n";
+
+#[test]
+fn the_control_case_is_a_finding() {
+    let lib = format!(
+        "pub mod constraints {{ pub fn f() -> u8 {{ crate::ordering::score() }} }}\n{ORDERING}"
+    );
+    assert!(undeclared(&check_crate(
+        "c0",
+        "2021",
+        &[("src/lib.rs", &lib)]
+    )));
+}
+
+#[test]
+fn a_module_declared_in_a_function_body_or_const_block_is_walked() {
+    let in_fn = format!(
+        "pub mod constraints {{ pub fn f() -> u8 {{ mod inner {{ pub fn g() -> u8 {{ crate::ordering::score() }} }} inner::g() }} }}\n{ORDERING}"
+    );
+    assert!(
+        undeclared(&check_crate("p1", "2021", &[("src/lib.rs", &in_fn)])),
+        "p1"
+    );
+    let in_const = format!(
+        "pub mod constraints {{ pub const X: u8 = {{ mod k {{ pub const Y: u8 = crate::ordering::S; }} k::Y }}; }}\n{ORDERING}"
+    );
+    assert!(
+        undeclared(&check_crate("p7", "2021", &[("src/lib.rs", &in_const)])),
+        "p7"
+    );
+}
+
+#[test]
+fn a_path_into_a_known_module_is_an_edge_even_when_the_item_is_not_found() {
+    let cases = [
+        (
+            "p3",
+            "pub mod ordering { macro_rules! make { () => { pub fn score() -> u8 { 1 } } } make!(); }",
+            "crate::ordering::score()",
+        ),
+        (
+            "p5",
+            "pub mod ordering { extern \"C\" { pub fn ext_score() -> u8; } }",
+            "unsafe { crate::ordering::ext_score() }",
+        ),
+        (
+            "p6",
+            "pub mod ordering { thread_local! { pub static COUNTER: u8 = 1; } }",
+            "crate::ordering::COUNTER.with(|c| *c)",
+        ),
+    ];
+    for (label, ordering, call) in cases {
+        let lib = format!("pub mod constraints {{ pub fn f() -> u8 {{ {call} }} }}\n{ordering}\n");
+        assert!(
+            undeclared(&check_crate(label, "2021", &[("src/lib.rs", &lib)])),
+            "{label}"
+        );
+    }
+}
+
+#[test]
+fn extern_crate_self_aliases_the_crate_root() {
+    let lib = format!(
+        "extern crate self as me;\npub mod constraints {{ pub fn f() -> u8 {{ me::ordering::score() }} }}\n{ORDERING}"
+    );
+    assert!(undeclared(&check_crate(
+        "p2",
+        "2021",
+        &[("src/lib.rs", &lib)]
+    )));
+}
+
+#[test]
+fn a_leading_double_colon_is_the_crate_root_in_edition_2015() {
+    let lib =
+        format!("pub mod constraints {{ pub fn f() -> u8 {{ ::ordering::score() }} }}\n{ORDERING}");
+    assert!(undeclared(&check_crate(
+        "p29",
+        "2015",
+        &[("src/lib.rs", &lib)]
+    )));
+}
+
+#[test]
+fn raw_identifiers_are_normalized() {
+    let lib = format!(
+        "pub mod constraints {{ pub fn f() -> u8 {{ crate::r#ordering::score() }} }}\n{ORDERING}"
+    );
+    assert!(
+        undeclared(&check_crate("p38", "2021", &[("src/lib.rs", &lib)])),
+        "p38"
+    );
+    let lib =
+        format!("pub mod constraints {{ pub fn f() -> u8 {{ 1 }} }}\n{ORDERING}mod r#type;\n");
+    let findings = check_crate(
+        "p39",
+        "2021",
+        &[("src/lib.rs", &lib), ("src/type.rs", "pub fn t() {}\n")],
+    );
+    assert!(findings.is_empty(), "p39: {findings:?}");
+}
+
+#[test]
+fn a_test_function_outside_cfg_test_is_a_test_edge() {
+    let lib = format!(
+        "pub mod constraints {{ #[test] fn t() {{ assert!(crate::ordering::score() == 1); }} }}\n{ORDERING}"
+    );
+    let findings = check_crate("p8", "2021", &[("src/lib.rs", &lib)]);
+    assert!(!undeclared(&findings), "p8: {findings:?}");
+}
