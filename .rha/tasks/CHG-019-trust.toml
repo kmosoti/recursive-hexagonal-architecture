@@ -172,7 +172,7 @@ prompt_sha256 = "ba3f1d48b19c19ea37dffcd7e580e5db35424b9e3ac659fd6fc731329840ea8
 sample = "run 1 of 1, 2026-09-22"
 first_committed_sha256 = "924570934352601661b44f5375b09facdc78a9fa3f3bcdf1d89423a200a698a8"
 edits = "none"
-separation = "written from the contract before the implementation existed; told not to read the corpus or tools/rha-verifier/src"
+separation = "written from the contract by a session told not to read the corpus or tools/rha-verifier/src; model.rs was committed 6.5 minutes before it, so independence rests on the instruction, not on order (corrected after the Opus 5.5 review)"
 
 [[provenance.generations]]
 artifact = "the Executor's own work in this packet: tools/rha-verifier/src/**, the non-reference tests, xtask/src/record_lint.rs, the records and documents"

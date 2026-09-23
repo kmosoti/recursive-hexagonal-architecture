@@ -20,6 +20,12 @@
 //!   offset (corpus R037: `+25:00` is not one);
 //! * a **cited file** is an object with `path` and `sha256`; when the file
 //!   exists beside the record, its bytes must hash to the cited digest.
+//!   Otherwise, when git has the record's subject (`snapshot_tree`, else
+//!   `artifact_identity.revision`) and the path in it, the bytes at that
+//!   subject are hashed instead, because repository records cite paths from
+//!   the repository root (Opus 5.5 review of pull request 17, finding 3). A
+//!   subject git does not have, such as the synthetic corpus's, leaves the
+//!   contract's beside-the-record rule as the only check.
 
 use std::collections::BTreeSet;
 use std::path::Path;
@@ -118,26 +124,50 @@ fn is_revision_key(k: &str) -> bool {
         || k.ends_with("_git_rev")
 }
 
+/// Where a cited file's bytes come from: beside the record, else the
+/// record's subject in git.
+struct Cited<'a> {
+    dir: &'a Path,
+    repo: Option<&'a Path>,
+    subject: Option<String>,
+}
+
+impl Cited<'_> {
+    fn bytes(&self, path: &str) -> Option<Vec<u8>> {
+        if path.starts_with('/') || path.contains("..") {
+            return None;
+        }
+        let beside = self.dir.join(path);
+        if beside.is_file() {
+            return std::fs::read(beside).ok();
+        }
+        let (repo, subject) = (self.repo?, self.subject.as_deref()?);
+        let out = std::process::Command::new("git")
+            .arg("-C")
+            .arg(repo)
+            .args(["cat-file", "blob", &format!("{subject}:{path}")])
+            .output()
+            .ok()?;
+        out.status.success().then_some(out.stdout)
+    }
+}
+
 fn walk(
     v: &Value,
-    dir: &Path,
+    cited: &Cited<'_>,
     strict_time: bool,
     in_sources: bool,
     out: &mut BTreeSet<&'static str>,
 ) {
     match v {
         Value::Object(map) => {
-            if let (Some(Value::String(path)), Some(Value::String(cited))) =
+            if let (Some(Value::String(path)), Some(Value::String(digest))) =
                 (map.get("path"), map.get("sha256"))
             {
-                let file = dir.join(path);
-                if !path.starts_with('/') && !path.contains("..") && file.is_file() {
-                    let actual = std::fs::read(&file)
-                        .map(|b| sha256_hex(&b))
-                        .unwrap_or_default();
-                    if cited.trim_start_matches("sha256:") != actual {
-                        out.insert("digest.mismatch");
-                    }
+                if let Some(bytes) = cited.bytes(path)
+                    && digest.trim_start_matches("sha256:") != sha256_hex(&bytes)
+                {
+                    out.insert("digest.mismatch");
                 }
             }
             for (k, x) in map {
@@ -170,7 +200,7 @@ fn walk(
                 }
                 walk(
                     x,
-                    dir,
+                    cited,
                     strict_time,
                     in_sources || k == "instruction_sources",
                     out,
@@ -179,7 +209,7 @@ fn walk(
         }
         Value::Array(items) => {
             for x in items {
-                walk(x, dir, strict_time, in_sources, out);
+                walk(x, cited, strict_time, in_sources, out);
             }
         }
         _ => {}
@@ -244,6 +274,18 @@ fn evidence(v: &Value, l0: &[String], out: &mut BTreeSet<&'static str>) {
 /// required L0 check ids.
 #[must_use]
 pub fn lint(record: &Path, kind: &str, l0: &[String]) -> BTreeSet<&'static str> {
+    lint_in(record, kind, l0, None)
+}
+
+/// As [`lint`], resolving cited files that are not beside the record in the
+/// git repository at `repo`, at the record's subject.
+#[must_use]
+pub fn lint_in(
+    record: &Path,
+    kind: &str,
+    l0: &[String],
+    repo: Option<&Path>,
+) -> BTreeSet<&'static str> {
     let mut out = BTreeSet::new();
     let Ok(text) = std::fs::read_to_string(record) else {
         out.insert("schema.wrong_type");
@@ -260,8 +302,18 @@ pub fn lint(record: &Path, kind: &str, l0: &[String]) -> BTreeSet<&'static str> 
         out.insert("schema.wrong_type");
         return out;
     };
-    let dir = record.parent().unwrap_or(Path::new("."));
-    walk(&value, dir, kind == "evidence", false, &mut out);
+    let identity = &value["artifact_identity"];
+    let subject = [&identity["snapshot_tree"], &identity["revision"]]
+        .into_iter()
+        .filter_map(Value::as_str)
+        .find(|s| is_hex(s, 40, false))
+        .map(str::to_owned);
+    let cited = Cited {
+        dir: record.parent().unwrap_or(Path::new(".")),
+        repo,
+        subject,
+    };
+    walk(&value, &cited, kind == "evidence", false, &mut out);
     if kind == "evidence" {
         evidence(&value, l0, &mut out);
     }
@@ -298,7 +350,7 @@ pub fn run(root: &Path, files: &[std::path::PathBuf]) -> crate::error::Result<u8
         } else {
             "task"
         };
-        let reasons = lint(f, kind, &l0);
+        let reasons = lint_in(f, kind, &l0, Some(root));
         if reasons.is_empty() {
             println!("{}: accepted ({kind})", f.display());
         } else {

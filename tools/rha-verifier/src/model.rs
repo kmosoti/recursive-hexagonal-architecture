@@ -230,9 +230,144 @@ fn non_empty(v: &Value) -> bool {
     v.as_str().is_some_and(|s| !s.trim().is_empty())
 }
 
+/// The first member of `f` that breaks the fixture shape of contract §1,
+/// or `None` when the fixture is well formed. A malformed fixture is refused,
+/// never defaulted: a missing `revoked` must not read as "not revoked", and a
+/// missing binding must not compare `null == null` (Opus 5.5 review of
+/// pull request 17, finding 1).
+#[must_use]
+pub fn malformed(f: &Value) -> Option<String> {
+    fn is_str(v: &Value) -> bool {
+        v.is_string()
+    }
+    fn strings(v: &Value) -> bool {
+        v.as_array().is_some_and(|a| a.iter().all(Value::is_string))
+    }
+    fn checks(v: &Value) -> bool {
+        v.as_array().is_some_and(|a| {
+            a.iter()
+                .all(|c| is_str(&c["id"]) && is_str(&c["kind"]) && c["params"].is_object())
+        })
+    }
+    fn rules(v: &Value) -> bool {
+        v.as_array().is_some_and(|a| {
+            a.iter()
+                .all(|r| is_str(&r["id"]) && is_str(&r["scope"]) && strings(&r["requires"]))
+        })
+    }
+    let p = &f["policy"];
+    let e = &f["evidence"];
+    let x = &f["exception"];
+    let shape: [(&str, bool); 30] = [
+        ("policy.digest", is_str(&p["digest"])),
+        ("policy.profile", is_str(&p["profile"])),
+        ("policy.checks", checks(&p["checks"])),
+        ("policy.rules", rules(&p["rules"])),
+        (
+            "policy.default_obligations",
+            strings(&p["default_obligations"]),
+        ),
+        ("policy.non_waivable", strings(&p["non_waivable"])),
+        ("policy.trusted_producers", strings(&p["trusted_producers"])),
+        ("policy.required_inputs", strings(&p["required_inputs"])),
+        (
+            "policy.exception_authority",
+            strings(&p["exception_authority"]),
+        ),
+        (
+            "policy.acceptance_authority",
+            strings(&p["acceptance_authority"]),
+        ),
+        // A negative cooling-off is malformed policy (review finding 2).
+        ("policy.cooling_off_hours", p["cooling_off_hours"].is_u64()),
+        (
+            "local_policies",
+            f["local_policies"].as_array().is_some_and(|a| {
+                a.iter()
+                    .all(|l| is_str(&l["scope"]) && checks(&l["checks"]) && rules(&l["rules"]))
+            }),
+        ),
+        ("base", is_str(&f["base"])),
+        ("candidate_tree", is_str(&f["candidate_tree"])),
+        (
+            "surface",
+            strings(&f["surface"]) && f["surface"].as_array().is_some_and(|a| !a.is_empty()),
+        ),
+        ("evidence.producer", is_str(&e["producer"])),
+        ("evidence.integrity", is_str(&e["integrity"])),
+        ("evidence.subject", is_str(&e["subject"])),
+        ("evidence.policy", is_str(&e["policy"])),
+        ("evidence.base", is_str(&e["base"])),
+        ("evidence.inputs", e["inputs"].is_object()),
+        (
+            "evidence.entries",
+            e["entries"].as_array().is_some_and(|a| {
+                a.iter().all(|n| {
+                    is_str(&n["id"])
+                        && is_str(&n["kind"])
+                        && n["params"].is_object()
+                        && is_str(&n["outcome"])
+                        // Kind-specific members, when present, have their type.
+                        // A count that is negative or fractional is well formed
+                        // and fails `passed` (registered fixture V031).
+                        && (n.get("selected_tests").is_none() || n["selected_tests"].is_number())
+                        && (n.get("performed").is_none() || n["performed"].is_boolean())
+                        && (n.get("corpus_digest").is_none() || is_str(&n["corpus_digest"]))
+                })
+            }),
+        ),
+        ("acceptor", is_str(&f["acceptor"])),
+        (
+            "accountable_change_authority",
+            is_str(&f["accountable_change_authority"]),
+        ),
+        ("now", is_str(&f["now"])),
+        ("exception", x.is_null() || x.is_object()),
+        (
+            "exception.subject, base, policy, issuer, issued_at, expires_at",
+            x.is_null()
+                || [
+                    "subject",
+                    "base",
+                    "policy",
+                    "issuer",
+                    "issued_at",
+                    "expires_at",
+                ]
+                .iter()
+                .all(|k| is_str(&x[*k])),
+        ),
+        (
+            "exception.authentic, revoked",
+            x.is_null() || (x["authentic"].is_boolean() && x["revoked"].is_boolean()),
+        ),
+        ("exception.waived", x.is_null() || strings(&x["waived"])),
+        (
+            "exception.reason, compensating_control, follow_up",
+            x.is_null()
+                || ["reason", "compensating_control", "follow_up"]
+                    .iter()
+                    .all(|k| is_str(&x[*k])),
+        ),
+    ];
+    shape
+        .into_iter()
+        .find(|(_, ok)| !ok)
+        .map(|(member, _)| member.to_owned())
+}
+
 /// The decision for one fixture.
 #[must_use]
 pub fn evaluate(f: &Value) -> Value {
+    if let Some(member) = malformed(f) {
+        let has_exception = !f["exception"].is_null();
+        return json!({
+            "r_eff": Value::Null, "conflict": false, "malformed": member,
+            "authentic": false, "applicable": false, "complete": false, "passed": false,
+            "eligible": false, "valid_exception": if has_exception { json!(false) } else { Value::Null },
+            "merge_allowed": false,
+        });
+    }
     let policy = &f["policy"];
     let evidence = &f["evidence"];
     let exception = &f["exception"];

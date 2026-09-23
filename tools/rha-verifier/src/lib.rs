@@ -10,5 +10,5 @@ mod model;
 mod time;
 
 pub use glob::glob;
-pub use model::evaluate;
+pub use model::{evaluate, malformed};
 pub use time::parse_rfc3339;

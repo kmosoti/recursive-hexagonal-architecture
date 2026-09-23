@@ -92,6 +92,21 @@ fn mutate(mut f: Value, which: u8, pick: usize) -> Value {
             }
         }
         8 => f["acceptor"] = json!(["human:kennedy", "agent:executor"][pick % 2]),
+        // The ECC-Solo cooling-off window, within the contract's domain. This
+        // arm was missing and fell through to the producer arm (Opus 5.5
+        // review of pull request 17, finding 4).
+        9 => {
+            f["policy"]["cooling_off_hours"] = json!([0, 24, 48][pick % 3]);
+            if f["exception"].is_object() {
+                f["exception"]["logged_at"] = json!(
+                    [
+                        "2026-09-20T12:00:00Z",
+                        "2026-09-21T12:00:00Z",
+                        "2026-09-22T11:00:00Z"
+                    ][pick % 3]
+                );
+            }
+        }
         // Fractional times on the exception and at the decision instant
         // (review round 1, finding 1).
         10 if f["exception"].is_object() => {
@@ -133,8 +148,122 @@ proptest! {
         if twice {
             f = mutate(f, which2, pick / 2);
         }
+        // The reference is pinned by the registration and covers the
+        // contract's domain; outside it the verifier refuses (the property
+        // below), so only well-formed mutations are compared.
+        prop_assume!(rha_verifier::malformed(&f).is_none());
         prop_assert_eq!(rha_verifier::evaluate(&f), reference::evaluate(&f), "fixture {} mutation {} {}", index, which % 12, which2 % 12);
     }
+
+    /// Fail closed: deleting or retyping any one member the contract requires
+    /// is refused, with `merge_allowed = false` and the member named (Opus 5.5
+    /// review of pull request 17, finding 1).
+    #[test]
+    fn a_fixture_missing_or_mistyping_a_member_is_refused(index in 0usize..152, member in 0usize..MEMBERS.len(), retype in any::<bool>()) {
+        let mut f = corpus()[index].clone();
+        let (parent, key) = MEMBERS[member];
+        let target = match parent {
+            "" => &mut f,
+            p => &mut f[p],
+        };
+        prop_assume!(target.is_object() && target.get(key).is_some());
+        if retype {
+            target[key] = json!(-1.5);
+        } else {
+            target.as_object_mut().unwrap().remove(key);
+        }
+        let d = rha_verifier::evaluate(&f);
+        prop_assert!(d["malformed"].is_string(), "{parent}.{key}: {d}");
+        prop_assert_eq!(&d["merge_allowed"], &json!(false));
+        prop_assert!(d["valid_exception"] != json!(true));
+    }
+}
+
+/// Every member of contract §1's fixture shape, by parent.
+const MEMBERS: &[(&str, &str)] = &[
+    ("policy", "digest"),
+    ("policy", "profile"),
+    ("policy", "checks"),
+    ("policy", "rules"),
+    ("policy", "default_obligations"),
+    ("policy", "non_waivable"),
+    ("policy", "trusted_producers"),
+    ("policy", "required_inputs"),
+    ("policy", "exception_authority"),
+    ("policy", "acceptance_authority"),
+    ("policy", "cooling_off_hours"),
+    ("", "local_policies"),
+    ("", "base"),
+    ("", "candidate_tree"),
+    ("", "surface"),
+    ("evidence", "producer"),
+    ("evidence", "integrity"),
+    ("evidence", "subject"),
+    ("evidence", "policy"),
+    ("evidence", "base"),
+    ("evidence", "inputs"),
+    ("evidence", "entries"),
+    ("", "acceptor"),
+    ("", "accountable_change_authority"),
+    ("", "now"),
+    ("exception", "issuer"),
+    ("exception", "authentic"),
+    ("exception", "subject"),
+    ("exception", "base"),
+    ("exception", "policy"),
+    ("exception", "waived"),
+    ("exception", "issued_at"),
+    ("exception", "expires_at"),
+    ("exception", "revoked"),
+    ("exception", "reason"),
+    ("exception", "compensating_control"),
+    ("exception", "follow_up"),
+];
+
+#[test]
+fn the_review_probes_are_refused() {
+    let base = || {
+        corpus()
+            .into_iter()
+            .find(|f| f["exception"].is_object())
+            .unwrap()
+    };
+    let mut cases = Vec::new();
+    let mut f = base();
+    f["exception"].as_object_mut().unwrap().remove("revoked");
+    cases.push(("revoked absent", f));
+    let mut f = base();
+    f.as_object_mut()
+        .unwrap()
+        .remove("accountable_change_authority");
+    cases.push(("accountable_change_authority absent", f));
+    let mut f = base();
+    f["surface"] = json!([1]);
+    cases.push(("surface not strings", f));
+    let mut f = base();
+    f["surface"] = json!([]);
+    cases.push(("surface empty", f));
+    let mut f = base();
+    f["policy"]["cooling_off_hours"] = json!(-48);
+    cases.push(("negative cooling-off", f));
+    for (name, f) in cases {
+        let d = rha_verifier::evaluate(&f);
+        assert!(
+            d["malformed"].is_string() && d["merge_allowed"] == json!(false),
+            "{name}: {d}"
+        );
+    }
+    // A fractional count is well formed, as V031's negative one is, and is
+    // not a pass: a test count is whole. The pinned reference passes it; that
+    // disagreement is recorded in the change record.
+    let mut f = corpus().into_iter().find(|f| f["id"] == "V001").unwrap();
+    f["evidence"]["entries"][0]["selected_tests"] = json!(0.5);
+    let d = rha_verifier::evaluate(&f);
+    assert!(d["malformed"].is_null(), "{d}");
+    assert_eq!(
+        (&d["passed"], &d["merge_allowed"]),
+        (&json!(false), &json!(false))
+    );
 }
 
 /// Independent: the root checks the policy triggers on the surface, by the

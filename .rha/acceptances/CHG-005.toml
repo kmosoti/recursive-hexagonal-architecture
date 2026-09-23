@@ -59,6 +59,26 @@ eligibility_at_acceptance = "blocked"
 basis = "All L0 checks passed; Authentic false under [acceptance.bootstrap] (DP-4.1). No claim of conformance."
 exception = "none"
 
+[[disposition.predicates]]
+name = "Authentic"
+holds = false
+reason = "No trusted producers (DP-4.1); this CI record is unauthenticated."
+
+[[disposition.predicates]]
+name = "Applicable"
+holds = true
+reason = "P-A edited no policy; candidate and base policy digests agree."
+
+[[disposition.predicates]]
+name = "Complete"
+holds = true
+reason = "Every required L0 check is recorded with a unique id."
+
+[[disposition.predicates]]
+name = "Passed"
+holds = true
+reason = "All eight L0 checks passed, 193 tests."
+
 [carried_forward]
 open = [
   "DP-1.4 open for Kennedy; the held-out check runner is at I.",
