@@ -1,0 +1,92 @@
+schema_version = 1
+id = "CHG-007"
+covers = ["CHG-007", "CHG-019.1", "E1"]
+slug = "module-level"
+title = "P-C: schema follow-on, module graph and no_std experiment"
+mode = "agent"
+executor_composition = "agent"
+authority_profile = "ECC-Solo"
+status = "in_progress"
+plan_ref = "docs/plan/IMPLEMENTATION-PLAN.md §8.1 P-C, §8.2 W7 and E1; Kennedy M2 handoff, 2026-09-22"
+branch = "chg/007-module-level"
+base_revision = "ec493b794040ede8878705132c89f9a4855f2dbe"
+intent = "Deliver milestone M2: P-C CHG-007, CHG-019.1 and E1; P-D CHG-008 to CHG-014. Implement all required stages, fix every confirmed issue within M2 scope, keep registered grading unchanged absent a disclosed amendment, obtain separate GPT-6 validation, open two green stacked PRs, and never merge."
+non_goals = ["Editing docs/spec/**", "Reading or writing held-out material", "Merge or tag", "Rewriting pushed history", "P-D product growth before the P-C head"]
+scope_globs = [".rha/tasks/CHG-007-module-level.toml", ".rha/acceptances/CHG-019.toml", ".rha/decisions.toml", ".rha/schemas/**", "docs/**", "evidence/**", "xtask/**", "tools/rha-verifier/**", "experiments/no-std-graph/**", "Cargo.lock", "rha-baseline.json", "CONTRIBUTING.md"]
+protected_scope = [".rha/acceptances/CHG-019.toml", ".rha/decisions.toml", "rha-baseline.json", "CONTRIBUTING.md"]
+
+[[actors]]
+id = "human:kennedy"
+type = "human"
+
+[[actors]]
+id = "agent:executor"
+type = "agent"
+accountable_to = "human:kennedy"
+
+[roles]
+planner = "human:kennedy"
+executor = ["agent:executor"]
+integrator = "human:kennedy"
+verifier = ["automation:xtask-ci (local, advisory)", "automation:github-actions (ci, advisory)", "separate Codex GPT-6 validator (DP-5.4)", "supervising Opus 5.5 session"]
+acceptor = "human:kennedy"
+
+[[work]]
+id = "P-C"
+executor = "agent:executor"
+depends_on = ["P-B accepted in PR 17; acceptance recorded in first P-C commit"]
+output = "Stage 0 schema/verifier-contract follow-on; stages 1 extraction, 2 rules, 3 registered corpora and random graphs, 4 site passes; E1; green ready-for-review PR."
+claim = "This Codex Executor session in /home/kmosoti/projects/rha-m2 is the sole writer on chg/007-module-level. Read-only analysis delegates cannot mutate the branch. Independent generators write only staging artifacts under target/m2, which the Executor checks and commits before implementation. Plain git and gh, no jj, no sibling projects (Kennedy M2 handoff supersedes global JJ habits)."
+
+[[decisions]]
+id = "delegation-m2"
+question = "Authority, scope and review roles"
+answer = "The two quoted Kennedy instructions govern M2. Recommended decisions are taken and recorded without a new approval. Architecture/tooling changes require a specific justification and protected_scope before the edit. The separate generator required explicitly by this handoff is distinct from the DP-5.4 validator, who only validates. Both PRs remain unmerged; the supervising session obtains Opus 5.5 approval."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: Determine a large slice to hand off to gpt-6-astra ultra. Make sure it has a goal to implement its work and fix any and all issue in accordance with rha design. (Let it flag and improve the architecture and tooling if it can justify it no need for my approval). I approve all PRs as long as both an opus 5.5 and gpt-6 agent has reviewed and approved the code. Kennedy, 2026-09-22: Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me."
+date = "2026-09-22"
+
+[[decisions]]
+id = "stage-0-schema"
+question = "Carry CHG-019.1 in P-C"
+answer = "Derive schema shapes mechanically from committed records, register malformed cases and expected codes before schema/lint implementation. Add corpus-report schemas and explicit unresolved-citation output. Amend the verifier fixture contract through a disclosed after-data ledger entry, retaining old corpus grading. Alternative rejected: inventing schemas from the lint or changing historic records to pass."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: Determine a large slice to hand off to gpt-6-astra ultra. Make sure it has a goal to implement its work and fix any and all issue in accordance with rha design. (Let it flag and improve the architecture and tooling if it can justify it no need for my approval). I approve all PRs as long as both an opus 5.5 and gpt-6 agent has reviewed and approved the code. Kennedy, 2026-09-22: Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me."
+date = "2026-09-22"
+
+[[decisions]]
+id = "dp-2.1"
+question = "Install cargo-modules and cargo-mutants"
+answer = "Choose install (DP-2.1 default); cargo install --locked for both, record measured versions in rha-baseline.json. The baseline and generated toolchain docs change to make X-M01 and mutation runs reproducible. Alternative rejected: retaining not_run for tools that can be installed. Module held-out checks remain not_run: Kennedy alone can run them."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: Determine a large slice to hand off to gpt-6-astra ultra. Make sure it has a goal to implement its work and fix any and all issue in accordance with rha design. (Let it flag and improve the architecture and tooling if it can justify it no need for my approval). I approve all PRs as long as both an opus 5.5 and gpt-6 agent has reviewed and approved the code. Kennedy, 2026-09-22: Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me."
+date = "2026-09-22"
+
+[[decisions]]
+id = "contributing-status"
+question = "Correct stale tooling status in CONTRIBUTING.md after stage 0 and W7 pass"
+answer = "The current status table says lint and the verifier do not exist and H4 is pending, contradicting P-B and P-A evidence. Update the table to observed capabilities and limits after validation. Alternative rejected: preserving misleading contributor instructions."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: Determine a large slice to hand off to gpt-6-astra ultra. Make sure it has a goal to implement its work and fix any and all issue in accordance with rha design. (Let it flag and improve the architecture and tooling if it can justify it no need for my approval). I approve all PRs as long as both an opus 5.5 and gpt-6 agent has reviewed and approved the code. Kennedy, 2026-09-22: Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me."
+date = "2026-09-22"
+
+[provenance]
+harness = "codex-cli 0.156.0"
+task_scope = "P-C"
+permissions = "Repository files and cargo/git/gh; no spec edits, held-out material, sibling projects, history rewrites, or merges"
+budgets = "unknown"
+reasoning_effort = "ultra (requested in handoff)"
+
+[[provenance.sessions]]
+model_id = "gpt-6-astra (requested in handoff)"
+span = "M2 Executor, P-C"
+
+[[provenance.generations]]
+artifact = "Executor implementation, non-oracle tests, records and documentation for P-C"
+generation = "sampled"
+model = "gpt-6-astra (requested in handoff)"
+reasoning_effort = "ultra (requested in handoff)"
+prompt = "Deliver milestone M2: P-C CHG-007, CHG-019.1 and E1; P-D CHG-008 to CHG-014. Implement all required stages, fix every confirmed issue within M2 scope, keep registered grading unchanged absent a disclosed amendment, obtain separate GPT-6 validation, open two green stacked PRs, and never merge."
+prompt_sha256 = "de0e5c09ea6f785b512e24f53cae1d15ee51d6518034f2034a6353133ed4b085"
+sample = "one ongoing M2 Executor session, with repairs recorded in the change record"
+oracles = "Registered corpora, independent module reference extractor, compilation, targeted tests, stage gates, full L0, scope/docs and separate validator"

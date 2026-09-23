@@ -1,0 +1,104 @@
+{
+  "acceptor": "human:kennedy",
+  "accountable_change_authority": "human:kennedy",
+  "base": "1111111111111111111111111111111111111111",
+  "candidate_tree": "2222222222222222222222222222222222222222",
+  "evidence": {
+    "base": "1111111111111111111111111111111111111111",
+    "entries": [
+      {
+        "id": "L1.corpus",
+        "kind": "corpus",
+        "outcome": "passed",
+        "params": {
+          "corpus_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        }
+      }
+    ],
+    "inputs": {
+      "lockfile": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "toolchain": "1.98.1"
+    },
+    "integrity": "valid",
+    "policy": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "producer": "automation:ci",
+    "subject": "2222222222222222222222222222222222222222"
+  },
+  "exception": null,
+  "expected": {
+    "applicable": true,
+    "authentic": true,
+    "complete": true,
+    "conflict": false,
+    "eligible": false,
+    "merge_allowed": false,
+    "passed": false,
+    "r_eff": [
+      {
+        "id": "L1.corpus",
+        "kind": "corpus",
+        "params": {
+          "corpus_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        }
+      }
+    ],
+    "valid_exception": null
+  },
+  "id": "S145",
+  "local_policies": [],
+  "now": "2026-09-22T12:00:00Z",
+  "policy": {
+    "acceptance_authority": [
+      "human:kennedy"
+    ],
+    "checks": [
+      {
+        "id": "L1.corpus",
+        "kind": "corpus",
+        "params": {
+          "corpus_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        }
+      },
+      {
+        "id": "L0.fmt",
+        "kind": "format",
+        "params": {}
+      }
+    ],
+    "cooling_off_hours": 24,
+    "default_obligations": [
+      "L0.fmt"
+    ],
+    "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "exception_authority": [
+      "human:reviewer",
+      "human:kennedy"
+    ],
+    "non_waivable": [
+      "L0.fmt",
+      "L0.nextest"
+    ],
+    "profile": "ECC-Solo",
+    "required_inputs": [
+      "toolchain",
+      "lockfile"
+    ],
+    "rules": [
+      {
+        "id": "core.change",
+        "requires": [
+          "L1.corpus"
+        ],
+        "scope": "crates/core/**"
+      }
+    ],
+    "trusted_producers": [
+      "automation:ci"
+    ]
+  },
+  "purpose": "Kind-specific member is optional for shape, but its absence fails Passed.",
+  "row": "CHG-019.1 verifier-contract §3",
+  "surface": [
+    "crates/core/src/lib.rs"
+  ]
+}

@@ -1,0 +1,60 @@
+# Acceptance record; first commit of P-A (CHG-005, CHG-006). Creation pre-approved by [acceptance].
+schema_version = 1
+id = "PLAN-2"
+change = "docs/changes/PLAN-2-plan-revision.md"
+task = ".rha/tasks/PLAN-2-plan-revision.toml"
+
+[acceptor]
+principal = "human:kennedy"
+role = "acceptor"
+date = "2026-09-22"
+authority_profile = "ECC-Solo"
+basis = "Kennedy, 2026-09-22: \"Can you implement each packet\", read as approval of revision 2 (DP-5.1); the supervising session merged pull request 15 on that instruction and said so on the PR."
+event = "merge of pull request 15"
+
+[subject]
+revision = "72c5cfd2fa96efbb81adb817ae10a93e03c87713"
+tree = "cf4f8d33fb00ba0dfcd87531e5f6df4740db0f6e"
+parents = ["bb1ee4e1ec3a6a45b4d50d85bff35e91fe3ecec4", "4fadfbeb9e1d8c288e7204a794c98c8daa6b6ac4"]
+pull_request = "https://github.com/kmosoti/recursive-hexagonal-architecture/pull/15"
+integrator_edits = "none"
+
+[[evidence]]
+path = "evidence/ci/35781193848.json"
+class = "ci"
+subject_revision = "72c5cfd2fa96efbb81adb817ae10a93e03c87713"
+subject_tree = "cf4f8d33fb00ba0dfcd87531e5f6df4740db0f6e"
+note = "Run 35781193848 on main at the merge: all eight L0 checks passed, 151 tests."
+
+[[evidence]]
+path = "https://github.com/kmosoti/recursive-hexagonal-architecture/pull/15#issuecomment-5783494413"
+class = "review"
+note = "Local Codex review, gpt-5.6-sol medium: REQUEST_CHANGES twice, APPROVE at 4fadfbe."
+
+[outcomes]
+passed = ["L0.fmt", "L0.clippy", "L0.nextest", "L0.doctest", "L0.architecture", "L0.deny", "L0.machete", "L0.typos"]
+not_run = []
+failed = []
+not_applicable = []
+inconclusive = []
+
+[disposition]
+decision = "accepted"
+kind = "controlled_transition"
+merge_allowed = false
+eligibility_at_acceptance = "blocked"
+basis = "All L0 checks passed; Authentic false under [acceptance.bootstrap]."
+exception = "none"
+
+[[defects]]
+id = "D-PLAN-2.1"
+status = "repaired_before_acceptance"
+statement = "The review found a stale plan digest in the task record (lesson L6 recurring), an unreproducible record count, the held-out route in §6, three triggers for DP-1.2, DP-2.1 missing from P-D, and graded corpora generated after the code they grade."
+repair = "All repaired in 87d53f3 and 74d542f; one finding declined (the reviewer's global JJ rules)."
+
+[carried_forward]
+open = [
+  "DP-5.1 decided by this merge; its ledger row and DP-5.2, DP-5.3 are added in P-A stage 0.",
+  "Kennedy changed the reviewer on 2026-09-22: Codex CLI with gpt-6-astra at extra-high effort, for review and for adversarial generation when confidence is low. P-A stage 0 updates the plan's M6.",
+  "DP-1.6, DP-1.1b, DP-1.3 unchanged.",
+]

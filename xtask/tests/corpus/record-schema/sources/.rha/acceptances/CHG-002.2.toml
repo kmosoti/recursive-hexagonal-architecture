@@ -1,0 +1,146 @@
+# Acceptance record (spec §11.4, §11.7.6; §11.7.11 shape, stored as TOML).
+#
+# The first record written under .rha/policy.toml [acceptance] as that section
+# intends it: the merge IS the acceptance, and this record is the first commit
+# of the next work item. CHG-002's record was written in the same item it
+# describes, because the rule did not exist until that item created it.
+#
+# Creating an acceptance record is pre-approved by [acceptance]
+# (record_creation_preapproved = true). Editing an existing one is not.
+schema_version = 1
+id = "CHG-002.2"
+change = "docs/changes/CHG-002.2-acceptance-protocol.md"
+task = ".rha/tasks/CHG-002.2-acceptance-protocol.toml"
+
+[acceptor]
+principal = "human:kennedy"
+role = "acceptor"
+date = "2026-09-20"
+authority_profile = "ECC-Solo"
+basis = ".rha/policy.toml [acceptance] by_merge = true. Kennedy merged pull request 5 into main; that merge is the acceptance decision, and he confirmed it in the working conversation (\"CHG-002.2 is accepted at 4be4a19\")."
+event = "merge of pull request 5"
+
+[subject]
+revision = "4be4a199422d1e119d0dddc5483636b7a2052779"
+tree = "2b89897a5380a2610fdb3a4b5a4b27c611ddc1e3"
+parents = [
+  "15d916a16e2323612893ade5b68de792c6a47989",
+  "aa0ae0ea85618a1a4b783b77a94d8e14009514dc",
+]
+pull_request = "https://github.com/kmosoti/recursive-hexagonal-architecture/pull/5"
+milestone = "M1 (in progress; between W2 and W3)"
+tag = "none: M1 is tagged after W6"
+# The merge commit's tree equals its second parent's, so the integrator added
+# nothing of its own: `git diff aa0ae0e 4be4a19` is empty.
+integrator_edits = "none"
+
+[[evidence]]
+path = "evidence/ci/35501551020.json"
+class = "ci"
+subject_revision = "4be4a199422d1e119d0dddc5483636b7a2052779"
+subject_tree = "2b89897a5380a2610fdb3a4b5a4b27c611ddc1e3"
+note = "GitHub Actions run 35501551020, on main at the accepted revision itself, not on an ephemeral pull-request merge commit. Downloaded from the run's rha-evidence artifact and committed in this commit, as [acceptance] requires. Seven passed, L0.architecture not_run, 54 tests selected."
+
+[[evidence]]
+path = "evidence/CHG-002.2/20260920T090804Z-b2c5ee1e8111.json"
+class = "local"
+subject_revision = "b2c5ee1e811166e95a220ddf811a9b332b06243f"
+subject_tree = "edb67a4e34a96b357afa37abb6a9656f3f09648f"
+note = "The last local run on the candidate branch, on a clean working tree. Two commits followed it, so it is not the accepted tree; the CI record above is."
+
+[outcomes]
+# As recorded, not as hoped (§11.4). Both records agree.
+passed = [
+  "L0.fmt",
+  "L0.clippy",
+  "L0.nextest",
+  "L0.doctest",
+  "L0.deny",
+  "L0.machete",
+  "L0.typos",
+]
+not_run = ["L0.architecture"]
+failed = []
+not_applicable = []
+inconclusive = []
+
+[disposition]
+decision = "accepted"
+kind = "controlled_transition"
+merge_allowed = false
+basis = "spec §11.5 controlled transition, bounded by .rha/policy.toml [acceptance.bootstrap]. Authentic cannot hold until CHG-019 and CHG-020; Passed cannot hold until CHG-003 implements the checker. Applicable additionally fails because this subject edits the policy it is measured against."
+eligibility_at_acceptance = "blocked"
+exception = "none, and none possible: the failing check is non-waivable"
+
+[[disposition.predicates]]
+name = "Authentic"
+holds = false
+reason = "No trusted producers in .rha/policy.toml until CHG-019 and CHG-020; every record is advisory."
+
+[[disposition.predicates]]
+name = "Applicable"
+holds = false
+reason = """
+The cited CI record reports policy_digest sha256:72bf2e52… against \
+base_policy_digest sha256:5497c29e…, because this subject adds [acceptance] \
+and protects .rha/decisions.toml. CI resolves base_revision from \
+RHA_BASE_SHA, which on a merge commit is its FIRST parent, 15d916a — so a \
+merge that changes the policy is always measured against the policy it \
+replaced, and Applicable is false on the merge commit by construction. The \
+transition closes one commit later: the first record whose base is 4be4a19 \
+reports both digests as sha256:72bf2e52…. That is the record this work item \
+will produce, and it is cited in CHG-003's own acceptance, not here. The same \
+pattern holds for CHG-001 and CHG-002; it is a property of where the base is \
+read, not a defect in any of the three changes.\
+"""
+
+[[disposition.predicates]]
+name = "Complete"
+holds = true
+reason = "Every check of lane L0 appears in each record with a unique id."
+
+[[disposition.predicates]]
+name = "Passed"
+holds = false
+reason = "L0.architecture is not_run (not_implemented until CHG-003) and DP-0.5 makes every L0 check required and non-waivable."
+
+[[defects]]
+# None was known at acceptance. This entry was added in CHG-003.1 with
+# Kennedy's approval of 2026-09-20 (his "proceed" on the supervising session's
+# assessment), because [acceptance] pre-approves creating a record and not
+# editing one. The item's own purpose was to repair D-002.2, the process
+# defect recorded against CHG-002; that repair is this record's existence and
+# is not restated as a defect of CHG-002.2.
+id = "D-002.2.1"
+severity = "record inconsistency; no check outcome affected"
+found_by = "automated review (Codex) on pull request 5, thread r4056593889, in the pass that completed at 09:11 UTC, two minutes after the 09:09 merge; confirmed by Codex's independent audit of the review history, 2026-09-20"
+found_at = "after acceptance, 2026-09-20"
+statement = """
+.rha/tasks/CHG-002.2-acceptance-protocol.toml listed the plan under \
+instruction_sources as "after this change" with sha256 42e6e00e06c1d3da…, which \
+is the plan as of e7a60b1, the item's first commit to touch it. b2c5ee1 edited \
+the plan again (the DP-1.1b block) and the line was not updated, so at the \
+accepted revision 4be4a19 the plan hashes to 4d9b1c64e8b6c62e…. The five \
+evidence records under evidence/CHG-002.2/ carry the same stale value: \
+agent_context.provenance is copied from the task record, not hashed from the \
+tree, so a record echoes the claim rather than checking it.\
+"""
+repair = """
+The task record is corrected in CHG-003.1 to the digest at 4be4a19, with the \
+first value noted beside it. The evidence records are left exactly as \
+recorded: an evidence record is an observation and is not rewritten to \
+describe a tree it did not see.\
+"""
+follow_up = "The general remedy, a record lint that compares each cited digest with the file at the subject revision and a producer that hashes tracked instruction sources itself, is CHG-019's scope and is queued as docs/proposals/spec-v0.11.md row 9."
+
+[carried_forward]
+# The acceptance closes the work item, not these. Each has a row in
+# .rha/decisions.toml or is queued in docs/proposals/spec-v0.11.md; reports
+# cite the id rather than restating the question ([acceptance] rule).
+open = [
+  "DP-1.1b: closed in the second commit of CHG-003, not here. Kennedy supplied the commitment digest in the working conversation; an acceptance record is not the ledger, and editing this record later to say so is not permitted by [acceptance].",
+  "L0.architecture is required and non-waivable, so no change can be Eligible until CHG-003's checker runs. DP-0.5 unchanged.",
+  "A registered corpus case is not a working fixture until CHG-004 generates it.",
+  "cell = \"classification\" is not a §4.1 row; queued for v0.11.",
+  "The lane-then-docs ordering defect is queued for v0.11; until a mechanism exists, run `cargo xtask docs` before the lane, never after.",
+]

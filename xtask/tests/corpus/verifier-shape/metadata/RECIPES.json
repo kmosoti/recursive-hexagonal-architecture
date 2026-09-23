@@ -1,0 +1,2534 @@
+{
+  "cases": [
+    {
+      "baseline": "V127",
+      "expectation_derivation": "Original registered expected object unchanged",
+      "id": "S001",
+      "malformed_member": null,
+      "mutations": [],
+      "purpose": "Valid null-exception test control; retain the original expected object exactly."
+    },
+    {
+      "baseline": "V148",
+      "expectation_derivation": "Original registered expected object unchanged",
+      "id": "S002",
+      "malformed_member": null,
+      "mutations": [],
+      "purpose": "Valid independent object-exception control, no logged_at required; retain the original expected object exactly."
+    },
+    {
+      "baseline": "V147",
+      "expectation_derivation": "Original registered expected object unchanged",
+      "id": "S003",
+      "malformed_member": null,
+      "mutations": [],
+      "purpose": "Valid Solo object-exception control with logged_at; retain the original expected object exactly."
+    },
+    {
+      "baseline": "V015",
+      "expectation_derivation": "Original registered expected object unchanged",
+      "id": "S004",
+      "malformed_member": null,
+      "mutations": [],
+      "purpose": "Valid local check/rule and comparison control; retain the original expected object exactly."
+    },
+    {
+      "baseline": "V129",
+      "expectation_derivation": "Original registered expected object unchanged",
+      "id": "S005",
+      "malformed_member": null,
+      "mutations": [],
+      "purpose": "Valid performed comparison control; retain the original expected object exactly."
+    },
+    {
+      "baseline": "V130",
+      "expectation_derivation": "Original registered expected object unchanged",
+      "id": "S006",
+      "malformed_member": null,
+      "mutations": [],
+      "purpose": "Valid matching corpus digest control; retain the original expected object exactly."
+    },
+    {
+      "baseline": "V031",
+      "expectation_derivation": "Original registered expected object unchanged",
+      "id": "S007",
+      "malformed_member": null,
+      "mutations": [],
+      "purpose": "Original negative selected_tests is well formed and fails Passed; retain the original expected object exactly."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S008",
+      "malformed_member": "/policy",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/policy"
+        }
+      ],
+      "purpose": "Missing required member /policy."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S009",
+      "malformed_member": "/policy",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/policy",
+          "value": []
+        }
+      ],
+      "purpose": "Wrong type for required member /policy."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S010",
+      "malformed_member": "/policy/digest",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/policy/digest"
+        }
+      ],
+      "purpose": "Missing required member /policy/digest."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S011",
+      "malformed_member": "/policy/digest",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/policy/digest",
+          "value": 3
+        }
+      ],
+      "purpose": "Wrong type for required member /policy/digest."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S012",
+      "malformed_member": "/policy/profile",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/policy/profile"
+        }
+      ],
+      "purpose": "Missing required member /policy/profile."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S013",
+      "malformed_member": "/policy/profile",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/policy/profile",
+          "value": 3
+        }
+      ],
+      "purpose": "Wrong type for required member /policy/profile."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S014",
+      "malformed_member": "/policy/checks",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/policy/checks"
+        }
+      ],
+      "purpose": "Missing required member /policy/checks."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S015",
+      "malformed_member": "/policy/checks",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/policy/checks",
+          "value": {}
+        }
+      ],
+      "purpose": "Wrong type for required member /policy/checks."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S016",
+      "malformed_member": "/policy/rules",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/policy/rules"
+        }
+      ],
+      "purpose": "Missing required member /policy/rules."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S017",
+      "malformed_member": "/policy/rules",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/policy/rules",
+          "value": {}
+        }
+      ],
+      "purpose": "Wrong type for required member /policy/rules."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S018",
+      "malformed_member": "/policy/default_obligations",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/policy/default_obligations"
+        }
+      ],
+      "purpose": "Missing required member /policy/default_obligations."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S019",
+      "malformed_member": "/policy/default_obligations",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/policy/default_obligations",
+          "value": {}
+        }
+      ],
+      "purpose": "Wrong type for required member /policy/default_obligations."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S020",
+      "malformed_member": "/policy/default_obligations/0",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/policy/default_obligations/0",
+          "value": 7
+        }
+      ],
+      "purpose": "Policy string-array item has wrong type: default_obligations."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S021",
+      "malformed_member": "/policy/non_waivable",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/policy/non_waivable"
+        }
+      ],
+      "purpose": "Missing required member /policy/non_waivable."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S022",
+      "malformed_member": "/policy/non_waivable",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/policy/non_waivable",
+          "value": {}
+        }
+      ],
+      "purpose": "Wrong type for required member /policy/non_waivable."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S023",
+      "malformed_member": "/policy/non_waivable/0",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/policy/non_waivable/0",
+          "value": 7
+        }
+      ],
+      "purpose": "Policy string-array item has wrong type: non_waivable."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S024",
+      "malformed_member": "/policy/trusted_producers",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/policy/trusted_producers"
+        }
+      ],
+      "purpose": "Missing required member /policy/trusted_producers."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S025",
+      "malformed_member": "/policy/trusted_producers",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/policy/trusted_producers",
+          "value": {}
+        }
+      ],
+      "purpose": "Wrong type for required member /policy/trusted_producers."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S026",
+      "malformed_member": "/policy/trusted_producers/0",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/policy/trusted_producers/0",
+          "value": 7
+        }
+      ],
+      "purpose": "Policy string-array item has wrong type: trusted_producers."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S027",
+      "malformed_member": "/policy/required_inputs",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/policy/required_inputs"
+        }
+      ],
+      "purpose": "Missing required member /policy/required_inputs."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S028",
+      "malformed_member": "/policy/required_inputs",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/policy/required_inputs",
+          "value": {}
+        }
+      ],
+      "purpose": "Wrong type for required member /policy/required_inputs."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S029",
+      "malformed_member": "/policy/required_inputs/0",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/policy/required_inputs/0",
+          "value": 7
+        }
+      ],
+      "purpose": "Policy string-array item has wrong type: required_inputs."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S030",
+      "malformed_member": "/policy/exception_authority",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/policy/exception_authority"
+        }
+      ],
+      "purpose": "Missing required member /policy/exception_authority."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S031",
+      "malformed_member": "/policy/exception_authority",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/policy/exception_authority",
+          "value": {}
+        }
+      ],
+      "purpose": "Wrong type for required member /policy/exception_authority."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S032",
+      "malformed_member": "/policy/exception_authority/0",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/policy/exception_authority/0",
+          "value": 7
+        }
+      ],
+      "purpose": "Policy string-array item has wrong type: exception_authority."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S033",
+      "malformed_member": "/policy/acceptance_authority",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/policy/acceptance_authority"
+        }
+      ],
+      "purpose": "Missing required member /policy/acceptance_authority."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S034",
+      "malformed_member": "/policy/acceptance_authority",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/policy/acceptance_authority",
+          "value": {}
+        }
+      ],
+      "purpose": "Wrong type for required member /policy/acceptance_authority."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S035",
+      "malformed_member": "/policy/acceptance_authority/0",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/policy/acceptance_authority/0",
+          "value": 7
+        }
+      ],
+      "purpose": "Policy string-array item has wrong type: acceptance_authority."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S036",
+      "malformed_member": "/policy/cooling_off_hours",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/policy/cooling_off_hours"
+        }
+      ],
+      "purpose": "Missing required member /policy/cooling_off_hours."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S037",
+      "malformed_member": "/policy/cooling_off_hours",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/policy/cooling_off_hours",
+          "value": "24"
+        }
+      ],
+      "purpose": "Wrong type for required member /policy/cooling_off_hours."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S038",
+      "malformed_member": "/policy/cooling_off_hours",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/policy/cooling_off_hours",
+          "value": -1
+        }
+      ],
+      "purpose": "Cooling-off must be an unsigned JSON integer representable as u64: negative."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S039",
+      "malformed_member": "/policy/cooling_off_hours",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/policy/cooling_off_hours",
+          "value": 0.5
+        }
+      ],
+      "purpose": "Cooling-off must be an unsigned JSON integer representable as u64: fractional."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S040",
+      "malformed_member": "/policy/cooling_off_hours",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/policy/cooling_off_hours",
+          "value": 18446744073709551616
+        }
+      ],
+      "purpose": "Cooling-off must be an unsigned JSON integer representable as u64: u64 overflow."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S041",
+      "malformed_member": "/policy/cooling_off_hours",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/policy/cooling_off_hours",
+          "value": true
+        }
+      ],
+      "purpose": "Cooling-off must be an unsigned JSON integer representable as u64: boolean."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S042",
+      "malformed_member": "/policy/cooling_off_hours",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/policy/cooling_off_hours",
+          "value": null
+        }
+      ],
+      "purpose": "Cooling-off must be an unsigned JSON integer representable as u64: null."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "Original registered expected object unchanged",
+      "id": "S043",
+      "malformed_member": null,
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/policy/cooling_off_hours",
+          "value": 0
+        }
+      ],
+      "purpose": "Valid u64 cooling-off boundary; null exception makes the delay irrelevant."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "Original registered expected object unchanged",
+      "id": "S044",
+      "malformed_member": null,
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/policy/cooling_off_hours",
+          "value": 18446744073709551615
+        }
+      ],
+      "purpose": "Valid u64 cooling-off boundary; null exception makes the delay irrelevant."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S045",
+      "malformed_member": "/policy/checks/0",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/policy/checks/0",
+          "value": "not-an-object"
+        }
+      ],
+      "purpose": "Each check must be an object."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S046",
+      "malformed_member": "/policy/checks/0/id",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/policy/checks/0/id"
+        }
+      ],
+      "purpose": "Missing required member /policy/checks/0/id."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S047",
+      "malformed_member": "/policy/checks/0/id",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/policy/checks/0/id",
+          "value": 3
+        }
+      ],
+      "purpose": "Wrong type for required member /policy/checks/0/id."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S048",
+      "malformed_member": "/policy/checks/0/kind",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/policy/checks/0/kind"
+        }
+      ],
+      "purpose": "Missing required member /policy/checks/0/kind."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S049",
+      "malformed_member": "/policy/checks/0/kind",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/policy/checks/0/kind",
+          "value": false
+        }
+      ],
+      "purpose": "Wrong type for required member /policy/checks/0/kind."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S050",
+      "malformed_member": "/policy/checks/0/params",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/policy/checks/0/params"
+        }
+      ],
+      "purpose": "Missing required member /policy/checks/0/params."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S051",
+      "malformed_member": "/policy/checks/0/params",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/policy/checks/0/params",
+          "value": []
+        }
+      ],
+      "purpose": "Wrong type for required member /policy/checks/0/params."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S052",
+      "malformed_member": "/policy/rules/0",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/policy/rules/0",
+          "value": "not-an-object"
+        }
+      ],
+      "purpose": "Each rule must be an object."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S053",
+      "malformed_member": "/policy/rules/0/id",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/policy/rules/0/id"
+        }
+      ],
+      "purpose": "Missing required member /policy/rules/0/id."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S054",
+      "malformed_member": "/policy/rules/0/id",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/policy/rules/0/id",
+          "value": 3
+        }
+      ],
+      "purpose": "Wrong type for required member /policy/rules/0/id."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S055",
+      "malformed_member": "/policy/rules/0/scope",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/policy/rules/0/scope"
+        }
+      ],
+      "purpose": "Missing required member /policy/rules/0/scope."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S056",
+      "malformed_member": "/policy/rules/0/scope",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/policy/rules/0/scope",
+          "value": false
+        }
+      ],
+      "purpose": "Wrong type for required member /policy/rules/0/scope."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S057",
+      "malformed_member": "/policy/rules/0/requires",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/policy/rules/0/requires"
+        }
+      ],
+      "purpose": "Missing required member /policy/rules/0/requires."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S058",
+      "malformed_member": "/policy/rules/0/requires",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/policy/rules/0/requires",
+          "value": {}
+        }
+      ],
+      "purpose": "Wrong type for required member /policy/rules/0/requires."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S059",
+      "malformed_member": "/policy/rules/0/requires/0",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/policy/rules/0/requires/0",
+          "value": null
+        }
+      ],
+      "purpose": "Rule requires must contain only strings."
+    },
+    {
+      "baseline": "V015",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S060",
+      "malformed_member": "/local_policies",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/local_policies"
+        }
+      ],
+      "purpose": "Missing required member /local_policies."
+    },
+    {
+      "baseline": "V015",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S061",
+      "malformed_member": "/local_policies",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/local_policies",
+          "value": {}
+        }
+      ],
+      "purpose": "Wrong type for required member /local_policies."
+    },
+    {
+      "baseline": "V015",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S062",
+      "malformed_member": "/local_policies/0",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/local_policies/0",
+          "value": false
+        }
+      ],
+      "purpose": "A local policy item must be an object."
+    },
+    {
+      "baseline": "V015",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S063",
+      "malformed_member": "/local_policies/0/scope",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/local_policies/0/scope"
+        }
+      ],
+      "purpose": "Missing required member /local_policies/0/scope."
+    },
+    {
+      "baseline": "V015",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S064",
+      "malformed_member": "/local_policies/0/scope",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/local_policies/0/scope",
+          "value": []
+        }
+      ],
+      "purpose": "Wrong type for required member /local_policies/0/scope."
+    },
+    {
+      "baseline": "V015",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S065",
+      "malformed_member": "/local_policies/0/checks",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/local_policies/0/checks"
+        }
+      ],
+      "purpose": "Missing required member /local_policies/0/checks."
+    },
+    {
+      "baseline": "V015",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S066",
+      "malformed_member": "/local_policies/0/checks",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/local_policies/0/checks",
+          "value": {}
+        }
+      ],
+      "purpose": "Wrong type for required member /local_policies/0/checks."
+    },
+    {
+      "baseline": "V015",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S067",
+      "malformed_member": "/local_policies/0/rules",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/local_policies/0/rules"
+        }
+      ],
+      "purpose": "Missing required member /local_policies/0/rules."
+    },
+    {
+      "baseline": "V015",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S068",
+      "malformed_member": "/local_policies/0/rules",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/local_policies/0/rules",
+          "value": {}
+        }
+      ],
+      "purpose": "Wrong type for required member /local_policies/0/rules."
+    },
+    {
+      "baseline": "V015",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S069",
+      "malformed_member": "/local_policies/0/checks/0",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/local_policies/0/checks/0",
+          "value": "not-an-object"
+        }
+      ],
+      "purpose": "Each check must be an object."
+    },
+    {
+      "baseline": "V015",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S070",
+      "malformed_member": "/local_policies/0/checks/0/id",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/local_policies/0/checks/0/id"
+        }
+      ],
+      "purpose": "Missing required member /local_policies/0/checks/0/id."
+    },
+    {
+      "baseline": "V015",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S071",
+      "malformed_member": "/local_policies/0/checks/0/id",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/local_policies/0/checks/0/id",
+          "value": 3
+        }
+      ],
+      "purpose": "Wrong type for required member /local_policies/0/checks/0/id."
+    },
+    {
+      "baseline": "V015",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S072",
+      "malformed_member": "/local_policies/0/checks/0/kind",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/local_policies/0/checks/0/kind"
+        }
+      ],
+      "purpose": "Missing required member /local_policies/0/checks/0/kind."
+    },
+    {
+      "baseline": "V015",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S073",
+      "malformed_member": "/local_policies/0/checks/0/kind",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/local_policies/0/checks/0/kind",
+          "value": false
+        }
+      ],
+      "purpose": "Wrong type for required member /local_policies/0/checks/0/kind."
+    },
+    {
+      "baseline": "V015",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S074",
+      "malformed_member": "/local_policies/0/checks/0/params",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/local_policies/0/checks/0/params"
+        }
+      ],
+      "purpose": "Missing required member /local_policies/0/checks/0/params."
+    },
+    {
+      "baseline": "V015",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S075",
+      "malformed_member": "/local_policies/0/checks/0/params",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/local_policies/0/checks/0/params",
+          "value": []
+        }
+      ],
+      "purpose": "Wrong type for required member /local_policies/0/checks/0/params."
+    },
+    {
+      "baseline": "V015",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S076",
+      "malformed_member": "/local_policies/0/rules/0",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/local_policies/0/rules/0",
+          "value": "not-an-object"
+        }
+      ],
+      "purpose": "Each rule must be an object."
+    },
+    {
+      "baseline": "V015",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S077",
+      "malformed_member": "/local_policies/0/rules/0/id",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/local_policies/0/rules/0/id"
+        }
+      ],
+      "purpose": "Missing required member /local_policies/0/rules/0/id."
+    },
+    {
+      "baseline": "V015",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S078",
+      "malformed_member": "/local_policies/0/rules/0/id",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/local_policies/0/rules/0/id",
+          "value": 3
+        }
+      ],
+      "purpose": "Wrong type for required member /local_policies/0/rules/0/id."
+    },
+    {
+      "baseline": "V015",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S079",
+      "malformed_member": "/local_policies/0/rules/0/scope",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/local_policies/0/rules/0/scope"
+        }
+      ],
+      "purpose": "Missing required member /local_policies/0/rules/0/scope."
+    },
+    {
+      "baseline": "V015",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S080",
+      "malformed_member": "/local_policies/0/rules/0/scope",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/local_policies/0/rules/0/scope",
+          "value": false
+        }
+      ],
+      "purpose": "Wrong type for required member /local_policies/0/rules/0/scope."
+    },
+    {
+      "baseline": "V015",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S081",
+      "malformed_member": "/local_policies/0/rules/0/requires",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/local_policies/0/rules/0/requires"
+        }
+      ],
+      "purpose": "Missing required member /local_policies/0/rules/0/requires."
+    },
+    {
+      "baseline": "V015",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S082",
+      "malformed_member": "/local_policies/0/rules/0/requires",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/local_policies/0/rules/0/requires",
+          "value": {}
+        }
+      ],
+      "purpose": "Wrong type for required member /local_policies/0/rules/0/requires."
+    },
+    {
+      "baseline": "V015",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S083",
+      "malformed_member": "/local_policies/0/rules/0/requires/0",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/local_policies/0/rules/0/requires/0",
+          "value": null
+        }
+      ],
+      "purpose": "Rule requires must contain only strings."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S084",
+      "malformed_member": "/base",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/base"
+        }
+      ],
+      "purpose": "Missing required member /base."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S085",
+      "malformed_member": "/base",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/base",
+          "value": 12
+        }
+      ],
+      "purpose": "Wrong type for required member /base."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S086",
+      "malformed_member": "/candidate_tree",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/candidate_tree"
+        }
+      ],
+      "purpose": "Missing required member /candidate_tree."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S087",
+      "malformed_member": "/candidate_tree",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/candidate_tree",
+          "value": 12
+        }
+      ],
+      "purpose": "Wrong type for required member /candidate_tree."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S088",
+      "malformed_member": "/acceptor",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/acceptor"
+        }
+      ],
+      "purpose": "Missing required member /acceptor."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S089",
+      "malformed_member": "/acceptor",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/acceptor",
+          "value": 12
+        }
+      ],
+      "purpose": "Wrong type for required member /acceptor."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S090",
+      "malformed_member": "/accountable_change_authority",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/accountable_change_authority"
+        }
+      ],
+      "purpose": "Missing required member /accountable_change_authority."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S091",
+      "malformed_member": "/accountable_change_authority",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/accountable_change_authority",
+          "value": 12
+        }
+      ],
+      "purpose": "Wrong type for required member /accountable_change_authority."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S092",
+      "malformed_member": "/now",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/now"
+        }
+      ],
+      "purpose": "Missing required member /now."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S093",
+      "malformed_member": "/now",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/now",
+          "value": 12
+        }
+      ],
+      "purpose": "Wrong type for required member /now."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S094",
+      "malformed_member": "/surface",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/surface"
+        }
+      ],
+      "purpose": "Missing required member /surface."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S095",
+      "malformed_member": "/surface",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/surface",
+          "value": "crates/core/src/lib.rs"
+        }
+      ],
+      "purpose": "Wrong type for required member /surface."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S096",
+      "malformed_member": "/surface",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/surface",
+          "value": []
+        }
+      ],
+      "purpose": "Surface must be non-empty, even though an empty array has no non-string items."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S097",
+      "malformed_member": "/surface/0",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/surface/0",
+          "value": 7
+        }
+      ],
+      "purpose": "Surface item must be a string."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S098",
+      "malformed_member": "/evidence",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/evidence"
+        }
+      ],
+      "purpose": "Missing required member /evidence."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S099",
+      "malformed_member": "/evidence",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/evidence",
+          "value": []
+        }
+      ],
+      "purpose": "Wrong type for required member /evidence."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S100",
+      "malformed_member": "/evidence/producer",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/evidence/producer"
+        }
+      ],
+      "purpose": "Missing required member /evidence/producer."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S101",
+      "malformed_member": "/evidence/producer",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/evidence/producer",
+          "value": 12
+        }
+      ],
+      "purpose": "Wrong type for required member /evidence/producer."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S102",
+      "malformed_member": "/evidence/integrity",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/evidence/integrity"
+        }
+      ],
+      "purpose": "Missing required member /evidence/integrity."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S103",
+      "malformed_member": "/evidence/integrity",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/evidence/integrity",
+          "value": 12
+        }
+      ],
+      "purpose": "Wrong type for required member /evidence/integrity."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S104",
+      "malformed_member": "/evidence/subject",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/evidence/subject"
+        }
+      ],
+      "purpose": "Missing required member /evidence/subject."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S105",
+      "malformed_member": "/evidence/subject",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/evidence/subject",
+          "value": 12
+        }
+      ],
+      "purpose": "Wrong type for required member /evidence/subject."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S106",
+      "malformed_member": "/evidence/policy",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/evidence/policy"
+        }
+      ],
+      "purpose": "Missing required member /evidence/policy."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S107",
+      "malformed_member": "/evidence/policy",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/evidence/policy",
+          "value": 12
+        }
+      ],
+      "purpose": "Wrong type for required member /evidence/policy."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S108",
+      "malformed_member": "/evidence/base",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/evidence/base"
+        }
+      ],
+      "purpose": "Missing required member /evidence/base."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S109",
+      "malformed_member": "/evidence/base",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/evidence/base",
+          "value": 12
+        }
+      ],
+      "purpose": "Wrong type for required member /evidence/base."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S110",
+      "malformed_member": "/evidence/inputs",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/evidence/inputs"
+        }
+      ],
+      "purpose": "Missing required member /evidence/inputs."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S111",
+      "malformed_member": "/evidence/inputs",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/evidence/inputs",
+          "value": []
+        }
+      ],
+      "purpose": "Wrong type for required member /evidence/inputs."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S112",
+      "malformed_member": "/evidence/entries",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/evidence/entries"
+        }
+      ],
+      "purpose": "Missing required member /evidence/entries."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S113",
+      "malformed_member": "/evidence/entries",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/evidence/entries",
+          "value": {}
+        }
+      ],
+      "purpose": "Wrong type for required member /evidence/entries."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S114",
+      "malformed_member": "/evidence/entries/0",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/evidence/entries/0",
+          "value": null
+        }
+      ],
+      "purpose": "An evidence entry must be an object."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S115",
+      "malformed_member": "/evidence/entries/0/id",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/evidence/entries/0/id"
+        }
+      ],
+      "purpose": "Missing required member /evidence/entries/0/id."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S116",
+      "malformed_member": "/evidence/entries/0/id",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/evidence/entries/0/id",
+          "value": 3
+        }
+      ],
+      "purpose": "Wrong type for required member /evidence/entries/0/id."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S117",
+      "malformed_member": "/evidence/entries/0/kind",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/evidence/entries/0/kind"
+        }
+      ],
+      "purpose": "Missing required member /evidence/entries/0/kind."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S118",
+      "malformed_member": "/evidence/entries/0/kind",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/evidence/entries/0/kind",
+          "value": 3
+        }
+      ],
+      "purpose": "Wrong type for required member /evidence/entries/0/kind."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S119",
+      "malformed_member": "/evidence/entries/0/params",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/evidence/entries/0/params"
+        }
+      ],
+      "purpose": "Missing required member /evidence/entries/0/params."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S120",
+      "malformed_member": "/evidence/entries/0/params",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/evidence/entries/0/params",
+          "value": []
+        }
+      ],
+      "purpose": "Wrong type for required member /evidence/entries/0/params."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S121",
+      "malformed_member": "/evidence/entries/0/outcome",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/evidence/entries/0/outcome"
+        }
+      ],
+      "purpose": "Missing required member /evidence/entries/0/outcome."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S122",
+      "malformed_member": "/evidence/entries/0/outcome",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/evidence/entries/0/outcome",
+          "value": 3
+        }
+      ],
+      "purpose": "Wrong type for required member /evidence/entries/0/outcome."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S123",
+      "malformed_member": "/evidence/entries/0/selected_tests",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/evidence/entries/0/selected_tests",
+          "value": "12"
+        }
+      ],
+      "purpose": "If present, selected_tests must be a JSON number; booleans are not numbers."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S124",
+      "malformed_member": "/evidence/entries/0/selected_tests",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/evidence/entries/0/selected_tests",
+          "value": true
+        }
+      ],
+      "purpose": "If present, selected_tests must be a JSON number; booleans are not numbers."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S125",
+      "malformed_member": "/evidence/entries/0/selected_tests",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/evidence/entries/0/selected_tests",
+          "value": null
+        }
+      ],
+      "purpose": "If present, selected_tests must be a JSON number; booleans are not numbers."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S126",
+      "malformed_member": "/evidence/entries/0/selected_tests",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/evidence/entries/0/selected_tests",
+          "value": []
+        }
+      ],
+      "purpose": "If present, selected_tests must be a JSON number; booleans are not numbers."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S127",
+      "malformed_member": "/evidence/entries/0/selected_tests",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/evidence/entries/0/selected_tests",
+          "value": {}
+        }
+      ],
+      "purpose": "If present, selected_tests must be a JSON number; booleans are not numbers."
+    },
+    {
+      "baseline": "V129",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S128",
+      "malformed_member": "/evidence/entries/0/performed",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/evidence/entries/0/performed",
+          "value": 1
+        }
+      ],
+      "purpose": "If present, performed must be boolean."
+    },
+    {
+      "baseline": "V129",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S129",
+      "malformed_member": "/evidence/entries/0/performed",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/evidence/entries/0/performed",
+          "value": "true"
+        }
+      ],
+      "purpose": "If present, performed must be boolean."
+    },
+    {
+      "baseline": "V129",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S130",
+      "malformed_member": "/evidence/entries/0/performed",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/evidence/entries/0/performed",
+          "value": null
+        }
+      ],
+      "purpose": "If present, performed must be boolean."
+    },
+    {
+      "baseline": "V130",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S131",
+      "malformed_member": "/evidence/entries/0/corpus_digest",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/evidence/entries/0/corpus_digest",
+          "value": 1
+        }
+      ],
+      "purpose": "If present, corpus_digest must be string."
+    },
+    {
+      "baseline": "V130",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S132",
+      "malformed_member": "/evidence/entries/0/corpus_digest",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/evidence/entries/0/corpus_digest",
+          "value": []
+        }
+      ],
+      "purpose": "If present, corpus_digest must be string."
+    },
+    {
+      "baseline": "V130",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S133",
+      "malformed_member": "/evidence/entries/0/corpus_digest",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/evidence/entries/0/corpus_digest",
+          "value": null
+        }
+      ],
+      "purpose": "If present, corpus_digest must be string."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "Original registered expected object with explicit §1.2/§1.3/§3 changes: {\"eligible\": false, \"merge_allowed\": false, \"passed\": false}",
+      "id": "S134",
+      "malformed_member": null,
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/evidence/entries/0/selected_tests",
+          "value": -1
+        }
+      ],
+      "purpose": "Well-formed numeric selected_tests, negative integer; fails whole-positive-u64 validity, no malformed member."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "Original registered expected object with explicit §1.2/§1.3/§3 changes: {\"eligible\": false, \"merge_allowed\": false, \"passed\": false}",
+      "id": "S135",
+      "malformed_member": null,
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/evidence/entries/0/selected_tests",
+          "value": -0.5
+        }
+      ],
+      "purpose": "Well-formed numeric selected_tests, negative fraction; fails whole-positive-u64 validity, no malformed member."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "Original registered expected object with explicit §1.2/§1.3/§3 changes: {\"eligible\": false, \"merge_allowed\": false, \"passed\": false}",
+      "id": "S136",
+      "malformed_member": null,
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/evidence/entries/0/selected_tests",
+          "value": 0.5
+        }
+      ],
+      "purpose": "Well-formed numeric selected_tests, positive fraction; fails whole-positive-u64 validity, no malformed member."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "Original registered expected object with explicit §1.2/§1.3/§3 changes: {\"eligible\": false, \"merge_allowed\": false, \"passed\": false}",
+      "id": "S137",
+      "malformed_member": null,
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/evidence/entries/0/selected_tests",
+          "value": 1.5
+        }
+      ],
+      "purpose": "Well-formed numeric selected_tests, fraction above one; fails whole-positive-u64 validity, no malformed member."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "Original registered expected object with explicit §1.2/§1.3/§3 changes: {\"eligible\": false, \"merge_allowed\": false, \"passed\": false}",
+      "id": "S138",
+      "malformed_member": null,
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/evidence/entries/0/selected_tests",
+          "value": 0
+        }
+      ],
+      "purpose": "Well-formed numeric selected_tests, zero; fails whole-positive-u64 validity, no malformed member."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "Original registered expected object with explicit §1.2/§1.3/§3 changes: {\"eligible\": false, \"merge_allowed\": false, \"passed\": false}",
+      "id": "S139",
+      "malformed_member": null,
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/evidence/entries/0/selected_tests",
+          "value": 18446744073709551616
+        }
+      ],
+      "purpose": "Well-formed numeric selected_tests, u64 overflow; fails whole-positive-u64 validity, no malformed member."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "Original registered expected object unchanged",
+      "id": "S140",
+      "malformed_member": null,
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/evidence/entries/0/selected_tests",
+          "value": 1
+        }
+      ],
+      "purpose": "Positive whole u64 selected_tests; all registered baseline predicates stay true."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "Original registered expected object unchanged",
+      "id": "S141",
+      "malformed_member": null,
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/evidence/entries/0/selected_tests",
+          "value": 12
+        }
+      ],
+      "purpose": "Positive whole u64 selected_tests; all registered baseline predicates stay true."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "Original registered expected object unchanged",
+      "id": "S142",
+      "malformed_member": null,
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/evidence/entries/0/selected_tests",
+          "value": 18446744073709551615
+        }
+      ],
+      "purpose": "Positive whole u64 selected_tests; all registered baseline predicates stay true."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "Original registered expected object with explicit §1.2/§1.3/§3 changes: {\"eligible\": false, \"merge_allowed\": false, \"passed\": false}",
+      "id": "S143",
+      "malformed_member": null,
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/evidence/entries/0/selected_tests"
+        }
+      ],
+      "purpose": "Kind-specific member is optional for shape, but its absence fails Passed."
+    },
+    {
+      "baseline": "V129",
+      "expectation_derivation": "Original registered expected object with explicit §1.2/§1.3/§3 changes: {\"eligible\": false, \"merge_allowed\": false, \"passed\": false}",
+      "id": "S144",
+      "malformed_member": null,
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/evidence/entries/0/performed"
+        }
+      ],
+      "purpose": "Kind-specific member is optional for shape, but its absence fails Passed."
+    },
+    {
+      "baseline": "V130",
+      "expectation_derivation": "Original registered expected object with explicit §1.2/§1.3/§3 changes: {\"eligible\": false, \"merge_allowed\": false, \"passed\": false}",
+      "id": "S145",
+      "malformed_member": null,
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/evidence/entries/0/corpus_digest"
+        }
+      ],
+      "purpose": "Kind-specific member is optional for shape, but its absence fails Passed."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "Original registered expected object with explicit §1.2/§1.3/§3 changes: {\"eligible\": false, \"merge_allowed\": false, \"passed\": false}",
+      "id": "S146",
+      "malformed_member": null,
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/evidence/entries/0/outcome",
+          "value": "failed"
+        }
+      ],
+      "purpose": "String outcome is well formed in verifier fixture §3 but does not satisfy Passed."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "Original registered expected object with explicit §1.2/§1.3/§3 changes: {\"eligible\": false, \"merge_allowed\": false, \"passed\": false}",
+      "id": "S147",
+      "malformed_member": null,
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/evidence/entries/0/outcome",
+          "value": "not_run"
+        }
+      ],
+      "purpose": "String outcome is well formed in verifier fixture §3 but does not satisfy Passed."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "Original registered expected object with explicit §1.2/§1.3/§3 changes: {\"eligible\": false, \"merge_allowed\": false, \"passed\": false}",
+      "id": "S148",
+      "malformed_member": null,
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/evidence/entries/0/outcome",
+          "value": "not_applicable"
+        }
+      ],
+      "purpose": "String outcome is well formed in verifier fixture §3 but does not satisfy Passed."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "Original registered expected object with explicit §1.2/§1.3/§3 changes: {\"eligible\": false, \"merge_allowed\": false, \"passed\": false}",
+      "id": "S149",
+      "malformed_member": null,
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/evidence/entries/0/outcome",
+          "value": "inconclusive"
+        }
+      ],
+      "purpose": "String outcome is well formed in verifier fixture §3 but does not satisfy Passed."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "Original registered expected object with explicit §1.2/§1.3/§3 changes: {\"eligible\": false, \"merge_allowed\": false, \"passed\": false}",
+      "id": "S150",
+      "malformed_member": null,
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/evidence/entries/0/outcome",
+          "value": "unknown-outcome"
+        }
+      ],
+      "purpose": "String outcome is well formed in verifier fixture §3 but does not satisfy Passed."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S151",
+      "malformed_member": "/exception",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/exception"
+        }
+      ],
+      "purpose": "The exception key is required; absence is not an explicit null."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S152",
+      "malformed_member": "/exception",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/exception",
+          "value": false
+        }
+      ],
+      "purpose": "Exception must be null or object; supplied non-null malformed exception gives valid_exception=false."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S153",
+      "malformed_member": "/exception",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/exception",
+          "value": "none"
+        }
+      ],
+      "purpose": "Exception must be null or object; supplied non-null malformed exception gives valid_exception=false."
+    },
+    {
+      "baseline": "V127",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S154",
+      "malformed_member": "/exception",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/exception",
+          "value": []
+        }
+      ],
+      "purpose": "Exception must be null or object; supplied non-null malformed exception gives valid_exception=false."
+    },
+    {
+      "baseline": "V148",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S155",
+      "malformed_member": "/exception/subject",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/exception/subject"
+        }
+      ],
+      "purpose": "Missing required member /exception/subject."
+    },
+    {
+      "baseline": "V148",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S156",
+      "malformed_member": "/exception/subject",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/exception/subject",
+          "value": 7
+        }
+      ],
+      "purpose": "Wrong type for required member /exception/subject."
+    },
+    {
+      "baseline": "V148",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S157",
+      "malformed_member": "/exception/base",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/exception/base"
+        }
+      ],
+      "purpose": "Missing required member /exception/base."
+    },
+    {
+      "baseline": "V148",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S158",
+      "malformed_member": "/exception/base",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/exception/base",
+          "value": 7
+        }
+      ],
+      "purpose": "Wrong type for required member /exception/base."
+    },
+    {
+      "baseline": "V148",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S159",
+      "malformed_member": "/exception/policy",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/exception/policy"
+        }
+      ],
+      "purpose": "Missing required member /exception/policy."
+    },
+    {
+      "baseline": "V148",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S160",
+      "malformed_member": "/exception/policy",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/exception/policy",
+          "value": 7
+        }
+      ],
+      "purpose": "Wrong type for required member /exception/policy."
+    },
+    {
+      "baseline": "V148",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S161",
+      "malformed_member": "/exception/issuer",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/exception/issuer"
+        }
+      ],
+      "purpose": "Missing required member /exception/issuer."
+    },
+    {
+      "baseline": "V148",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S162",
+      "malformed_member": "/exception/issuer",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/exception/issuer",
+          "value": 7
+        }
+      ],
+      "purpose": "Wrong type for required member /exception/issuer."
+    },
+    {
+      "baseline": "V148",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S163",
+      "malformed_member": "/exception/issued_at",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/exception/issued_at"
+        }
+      ],
+      "purpose": "Missing required member /exception/issued_at."
+    },
+    {
+      "baseline": "V148",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S164",
+      "malformed_member": "/exception/issued_at",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/exception/issued_at",
+          "value": 7
+        }
+      ],
+      "purpose": "Wrong type for required member /exception/issued_at."
+    },
+    {
+      "baseline": "V148",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S165",
+      "malformed_member": "/exception/expires_at",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/exception/expires_at"
+        }
+      ],
+      "purpose": "Missing required member /exception/expires_at."
+    },
+    {
+      "baseline": "V148",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S166",
+      "malformed_member": "/exception/expires_at",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/exception/expires_at",
+          "value": 7
+        }
+      ],
+      "purpose": "Wrong type for required member /exception/expires_at."
+    },
+    {
+      "baseline": "V148",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S167",
+      "malformed_member": "/exception/reason",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/exception/reason"
+        }
+      ],
+      "purpose": "Missing required member /exception/reason."
+    },
+    {
+      "baseline": "V148",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S168",
+      "malformed_member": "/exception/reason",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/exception/reason",
+          "value": 7
+        }
+      ],
+      "purpose": "Wrong type for required member /exception/reason."
+    },
+    {
+      "baseline": "V148",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S169",
+      "malformed_member": "/exception/compensating_control",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/exception/compensating_control"
+        }
+      ],
+      "purpose": "Missing required member /exception/compensating_control."
+    },
+    {
+      "baseline": "V148",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S170",
+      "malformed_member": "/exception/compensating_control",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/exception/compensating_control",
+          "value": 7
+        }
+      ],
+      "purpose": "Wrong type for required member /exception/compensating_control."
+    },
+    {
+      "baseline": "V148",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S171",
+      "malformed_member": "/exception/follow_up",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/exception/follow_up"
+        }
+      ],
+      "purpose": "Missing required member /exception/follow_up."
+    },
+    {
+      "baseline": "V148",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S172",
+      "malformed_member": "/exception/follow_up",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/exception/follow_up",
+          "value": 7
+        }
+      ],
+      "purpose": "Wrong type for required member /exception/follow_up."
+    },
+    {
+      "baseline": "V148",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S173",
+      "malformed_member": "/exception/authentic",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/exception/authentic"
+        }
+      ],
+      "purpose": "Missing required member /exception/authentic."
+    },
+    {
+      "baseline": "V148",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S174",
+      "malformed_member": "/exception/authentic",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/exception/authentic",
+          "value": "true"
+        }
+      ],
+      "purpose": "Wrong type for required member /exception/authentic."
+    },
+    {
+      "baseline": "V148",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S175",
+      "malformed_member": "/exception/revoked",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/exception/revoked"
+        }
+      ],
+      "purpose": "Missing required member /exception/revoked."
+    },
+    {
+      "baseline": "V148",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S176",
+      "malformed_member": "/exception/revoked",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/exception/revoked",
+          "value": "true"
+        }
+      ],
+      "purpose": "Wrong type for required member /exception/revoked."
+    },
+    {
+      "baseline": "V148",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S177",
+      "malformed_member": "/exception/waived",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/exception/waived"
+        }
+      ],
+      "purpose": "Missing required member /exception/waived."
+    },
+    {
+      "baseline": "V148",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S178",
+      "malformed_member": "/exception/waived",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/exception/waived",
+          "value": {}
+        }
+      ],
+      "purpose": "Wrong type for required member /exception/waived."
+    },
+    {
+      "baseline": "V148",
+      "expectation_derivation": "§3 malformed refusal",
+      "id": "S179",
+      "malformed_member": "/exception/waived/0",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/exception/waived/0",
+          "value": 7
+        }
+      ],
+      "purpose": "Exception waived must contain strings."
+    },
+    {
+      "baseline": "V148",
+      "expectation_derivation": "Original registered expected object with explicit §1.2/§1.3/§3 changes: {\"merge_allowed\": false, \"valid_exception\": false}",
+      "id": "S180",
+      "malformed_member": null,
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/exception/reason",
+          "value": ""
+        }
+      ],
+      "purpose": "Empty required exception content is shape-valid but invalidates the exception."
+    },
+    {
+      "baseline": "V148",
+      "expectation_derivation": "Original registered expected object with explicit §1.2/§1.3/§3 changes: {\"merge_allowed\": false, \"valid_exception\": false}",
+      "id": "S181",
+      "malformed_member": null,
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/exception/compensating_control",
+          "value": ""
+        }
+      ],
+      "purpose": "Empty required exception content is shape-valid but invalidates the exception."
+    },
+    {
+      "baseline": "V148",
+      "expectation_derivation": "Original registered expected object with explicit §1.2/§1.3/§3 changes: {\"merge_allowed\": false, \"valid_exception\": false}",
+      "id": "S182",
+      "malformed_member": null,
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/exception/follow_up",
+          "value": ""
+        }
+      ],
+      "purpose": "Empty required exception content is shape-valid but invalidates the exception."
+    },
+    {
+      "baseline": "V147",
+      "expectation_derivation": "Original registered expected object with explicit §1.2/§1.3/§3 changes: {\"merge_allowed\": false, \"valid_exception\": false}",
+      "id": "S183",
+      "malformed_member": null,
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/exception/logged_at"
+        }
+      ],
+      "purpose": "logged_at is shape-optional; missing timestamp prevents a self-issued Solo exception."
+    },
+    {
+      "baseline": "V147",
+      "expectation_derivation": "Original registered expected object with explicit §1.2/§1.3/§3 changes: {\"merge_allowed\": false, \"valid_exception\": false}",
+      "id": "S184",
+      "malformed_member": null,
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/exception/logged_at",
+          "value": "not-a-timestamp"
+        }
+      ],
+      "purpose": "logged_at cannot parse on the Solo self-issued path; invalid exception, not malformed fixture."
+    },
+    {
+      "baseline": "V147",
+      "expectation_derivation": "Original registered expected object with explicit §1.2/§1.3/§3 changes: {\"merge_allowed\": false, \"valid_exception\": false}",
+      "id": "S185",
+      "malformed_member": null,
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/exception/logged_at",
+          "value": 7
+        }
+      ],
+      "purpose": "logged_at cannot parse on the Solo self-issued path; invalid exception, not malformed fixture."
+    },
+    {
+      "baseline": "V147",
+      "expectation_derivation": "Original registered expected object with explicit §1.2/§1.3/§3 changes: {\"merge_allowed\": false, \"valid_exception\": false}",
+      "id": "S186",
+      "malformed_member": null,
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/exception/logged_at",
+          "value": null
+        }
+      ],
+      "purpose": "logged_at cannot parse on the Solo self-issued path; invalid exception, not malformed fixture."
+    },
+    {
+      "baseline": "V147",
+      "expectation_derivation": "Original registered expected object with explicit §1.2/§1.3/§3 changes: {\"merge_allowed\": false, \"valid_exception\": false}",
+      "id": "S187",
+      "malformed_member": null,
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/exception/logged_at",
+          "value": {}
+        }
+      ],
+      "purpose": "logged_at cannot parse on the Solo self-issued path; invalid exception, not malformed fixture."
+    },
+    {
+      "baseline": "V148",
+      "expectation_derivation": "Original registered expected object unchanged",
+      "id": "S188",
+      "malformed_member": null,
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/exception/logged_at",
+          "value": {
+            "unused": true
+          }
+        }
+      ],
+      "purpose": "Independent issuer does not use logged_at; §3 supplies no unconditional type rule for that optional member."
+    }
+  ],
+  "format": "rha-verifier-shape-recipes-1"
+}

@@ -1,0 +1,143 @@
+schema_version = 1
+id = "CHG-004"
+slug = "h4-crate-harness"
+title = "H4 crate-level corpus harness and evidence"
+mode = "agent"
+executor_composition = "agent"
+authority_profile = "ECC-Solo"
+status = "proposed"
+plan_ref = "docs/plan/IMPLEMENTATION-PLAN.md §6 and §8 W4"
+branch = "chg/004-h4-crate-harness"
+base_revision = "140fdfb92d62d3481d95f3e2efc1d24a0206fcc4"
+intent = "Generate declared crate-level fixtures; run and strictly grade the checker and separate compiler case; retain H4 evidence and generate the enforcement map."
+non_goals = ["Module harness (CHG-007)", "Transitive evaluator", "Reading or running Kennedy's held-out cases (DP-1.1b)", "Changing Accepted maturity (DP-1.6)", "Changing manifest expectations or grading"]
+
+[[actors]]
+id = "human:kennedy"
+type = "human"
+
+[[actors]]
+id = "agent:executor"
+type = "agent"
+accountable_to = "human:kennedy"
+
+[roles]
+planner = "human:kennedy"
+executor = ["agent:executor"]
+integrator = "human:kennedy"
+verifier = ["automation:xtask-ci (local, advisory)", "automation:github-actions (CI, advisory)"]
+acceptor = "human:kennedy"
+
+[[work]]
+id = "W4"
+executor = "agent:executor"
+depends_on = ["CHG-003", "DP-1.1a", "DP-1.1b", "DP-1.1c"]
+output = "Crate fixtures, corpus CLI, strict grading, H4 evidence, enforcement map, Proposed maturity and change record."
+owned_scope = ["xtask/src/corpus.rs", "xtask/src/corpus/**", "xtask/src/cli.rs", "xtask/src/main.rs", "xtask/src/docs.rs", "xtask/tests/corpus/crate/**", ".gitignore", "xtask/tests/corpus*.rs", "xtask/tests/corpus/manifest.toml (EM-M03 cells only)", ".rha/acceptances/CHG-003.toml (creation)", ".rha/tasks/CHG-004-h4-crate-harness.toml", "docs/changes/CHG-004-h4-crate-harness.md", "docs/enforcement-map.md", "docs/maturity.md", "generated docs", "evidence/CHG-004/**", "evidence/h4-crate/**", "evidence/ci/**"]
+claim = "agent:executor is the sole branch writer, as Kennedy instructed; the executor's checkout was a JJ workspace named chg004. No W4 issue or board item exists; this task records ownership and status. CHG-004.4, the make-ready review, was written by the supervising session as agent:executor after the executor handed off (see [[provenance.sessions]])."
+
+[[decisions]]
+id = "approved-em-m03-cells"
+commit = "93843290c3f71b9a385c6f275acef3bd70266643"
+parent_manifest_sha256 = "9f5c1a93262aa6fc60eae5dc946e38e7425d707df552cf13bf6e6b458c02cbcf"
+corrected_manifest_sha256 = "18d4afbfe5a63843d498a109fe4702629548a25ddc730198848983208d3c46a4"
+question = "Which protected manifest edit is authorized before the harness?"
+answer = 'Only EM-M03 cells = ["law3-d1", "law6-b3"], plus the matching frozen test row. Kennedy explicitly approved this exact value on 2026-09-20 ("Approved and merged", PR 6), as confirmed in the W4 instruction and objective. Expected outcome, hole, partial scope and grading values remain fixed.'
+decided_by = "human:kennedy"
+date = "2026-09-20"
+
+[[decisions]]
+id = "commit-order"
+question = "What must precede harness code?"
+answer = "Kennedy requires first the CHG-003 acceptance record, second the approved EM-M03 edit citing approval, then the harness."
+decided_by = "human:kennedy"
+date = "2026-09-20"
+
+[compatibility]
+api = "Additive corpus CLI; existing architecture report and exit codes preserved."
+schema = "New advisory H4 record; manifest schema unchanged."
+dependencies = "No new dependencies planned."
+resources = "Offline Cargo metadata per fixture and cargo check for R01; generated fixtures are committed under xtask/tests/corpus/crate/ and checked for drift; build output stays ignored."
+
+[claim]
+affected_components = []
+contract_changes = "none: no product component exists"
+architecture_delta = "New xtask modules corpus::{fixture, grade, runner}; the checker's findings carry structured fields (CHG-004.1); the docs command projects the latest H4 record into docs/enforcement-map.md. No new dependency."
+performance_impact = "none claimed"
+unresolved = [
+  "C13: the checker's accurate adapter.foreign_core warning about adapter-x -> core-b is an unmatched finding under DP-1.1c, so the H4 run is failed and law3-d1 is downgraded. Kennedy decides between amending the registration and leaving the result failed (change record, acceptance concern 1).",
+  "Pedantic Clippy warnings in xtask/src/corpus/ (naming, formatting, function length). L0.clippy passes under the §6.4 policy, which denies clippy::all and warns pedantic; a tidy-up is a later sub-item with no grading or execution consequence. (Moved here from the removed docs/backlog.md.)",
+  "The docs projection does not reject a stale H4 manifest digest; the current record matches the protected manifest. A guard belongs with the re-registration mechanics of CHG-007 or the record lint of CHG-019. (Moved here from the removed docs/backlog.md.)",
+  "Four records cite revisions absent from this branch's history, because the draft was rewritten before its first push: evidence/CHG-004/20260920T115809Z-762ab470f54b.json, evidence/CHG-004/20260920T120146Z-540ce6a70c43.json, evidence/h4-crate/20260920T115738Z-defbfb7196a6-1446859.json, evidence/h4-crate/20260920T120111Z-b8c37856c21a-1452921.json. Kept as observations; their subjects cannot be checked out and they are not the evidence for this candidate.",
+  "xtask/tests/corpus_crate.rs pins C13 as the one failed case; a registration amendment changes that assertion in the same commit.",
+  "Held-out cases: not run by any agent; Kennedy runs them at acceptance (DP-1.1b).",
+]
+
+[provenance]
+# The Executor is model-agnostic; [[provenance.sessions]] names the model
+# exposed in each span (spec §11.6.5). Reshaped in CHG-004.4 to the form the
+# other task records use; the four digests below were verified against 140fdfb.
+harness = "Codex, the executor's session, with a read-only verification worker; Claude Code for CHG-004.4"
+task_scope = "CHG-004: docs/plan/IMPLEMENTATION-PLAN.md §6 and §8 W4"
+permissions = "Workspace files, shell, network, and gh through the user's account. Protected surfaces: .rha/acceptances/CHG-003.toml (creation, pre-approved by [acceptance]) and the EM-M03 row of xtask/tests/corpus/manifest.toml (decision approved-em-m03-cells); no others."
+budgets = "unknown"
+reasoning_effort = "unknown"
+instruction_sources = [
+  { path = "AGENTS.md (at 140fdfb)", sha256 = "5c3e2af3bd6c0fc44a8f9bc9a4d51641dc56cdd7a11f768ac0d800eb0ed690fe" },
+  { path = "CONTRIBUTING.md (at 140fdfb)", sha256 = "9de567ddb7dfa07a6a03e7dc483a93c490357347fa1ac4f98565d00a225ff3b9" },
+  { path = "xtask/AGENTS.md (at 140fdfb)", sha256 = "4bc74c0bff383fd35e79f44768e92cb774c95b20d73b127c8bcfa5afa9c30e56" },
+  { path = "docs/plan/IMPLEMENTATION-PLAN.md (§6 and §8 W4, at 140fdfb)", sha256 = "4d9b1c64e8b6c62e37d7db9b26722c330f2fdd6804441d50c45b3ca3a2fbdbdf" },
+  { path = "docs/spec/rha-spec-v0.10.md (§4.1, §9.14, §17, at 140fdfb)", sha256 = "bd96216829035ade64c43befa5e672c58078f6afa4b04145c6183227e4e1071a" },
+  { path = "user message of 2026-09-20 starting W4: the goal text, and the kickoff stating CHG-003 accepted at 140fdfb and EM-M03 approved", sha256 = "unknown" },
+  { path = "user message of 2026-09-20 asking the supervising session to review and make ready the draft (CHG-004.4)", sha256 = "unknown" },
+]
+
+[[provenance.sessions]]
+model_id = "GPT-6 (session default), as the executor's session reported it"
+span = "CHG-004 through CHG-004.3: commits dedc8cc through 2ad75c8"
+
+[[provenance.sessions]]
+model_id = "claude-fable-5-1"
+span = "CHG-004.4: the make-ready review; CHG-004.5: the two review findings on 2fe6732"
+
+[[decisions]]
+id = "explicit-w4-fixture-scope"
+question = "Which fixture storage and scoring contract governs W4?"
+answer = "Kennedy's W4 objective explicitly requires committed generated fixtures, a drift gate, combined 22-case detection including rustc R01, exact cargo xtask architecture invocation, full corpus_crate integration, and docs-command generation of the enforcement map. This instruction supersedes the manifest's earlier prose about uncommitted generated copies; no protected manifest prose, cases or grading are changed."
+decided_by = "human:kennedy"
+date = "2026-09-20"
+
+[[decisions]]
+id = "make-ready-chg-004.4"
+question = "What did the supervising session change to make the draft ready for review, and on whose authority?"
+answer = "Authority: Kennedy's request of 2026-09-20 to review and make ready the draft. Verified first, at 2ad75c8 on this machine: no fixture drift (229 inputs), generated docs current, 141 tests pass, and `cargo xtask corpus run --level crate` reproduces 22/22 detected with C13 the sole failure. Changed: (1) docs/orchestration-log.md is removed again; CHG-003.2 determination 4 removed it as a journal of the executor's internal worker roles that is not an artifact of §11.7.11 or plan §3.4, and this draft re-added it without a determination; the text stays in history at ac6f7c6. (2) docs/backlog.md is removed; its two items move to this record's unresolved list, which owns an item's open questions (§11.7.1), so the wiki does not render a third queue. (3) This record's provenance takes the shape the other task records use, with a session per span; the digests were verified against 140fdfb. (4) The change record carries the §11.7.5 headings and an acceptance-concerns section: the C13 adjudication with the exact amendment proposed for Kennedy, the four records whose subjects are not in this branch's history, and the test that pins the failed outcome. (5) The CI record for the draft's head, run 35510728858, is committed. Not changed: any case, grading value, checker rule, fixture, or protected surface; the H4 result stands as failed on C13 until Kennedy decides."
+decided_by = "human:kennedy (authority); agent:executor (determinations)"
+date = "2026-09-20"
+
+[[decisions]]
+id = "review-findings-chg-004.5"
+question = "Two automated review findings on 2fe6732, posted when the PR left draft: do they name a concrete failure on that revision?"
+answer = "Both do, and both are repaired in CHG-004.5 under the review rules in AGENTS.md. (1) P2, xtask/src/corpus/fixture.rs: `corpus generate` wrote every expected input and never removed a committed input the registration no longer produces, so after a manifest change the drift check kept failing and only manual deletion could clear it. Repair: `fixture::materialize` makes the committed tree equal the declaration, writing and pruning, leaving Cargo outputs alone and removing a case directory emptied by pruning; `sync` uses it and names each pruned path. (2) P2, xtask/src/corpus/runner.rs: a case that produced no observation was recorded as one untyped `execution_error` string, so a bad registration (unsupported detector, fixture drift) and a detector that could not be spawned looked the same in evidence, losing the config_error/tool_error distinction the checker's own reports keep. Repair: `runner::execute` returns an `ExecutionError` with a class; the record carries `error_class` beside the message. Neither repair touches a rule, a case, a grading value, or the committed fixtures; the H4 result is unchanged."
+decided_by = "agent:executor (determinations, under the review rules in AGENTS.md); human:kennedy (request of 2026-09-20 to review and resolve the PR conversations)"
+date = "2026-09-20"
+
+[[repairs]]
+id = "CHG-004.5"
+hypothesis = "Two harness defects with no effect on the H4 result: the generator cannot converge after a manifest change, and pre-observation failures lose their class."
+discriminating_check = "A scratch tree with a stray input, an emptied case directory, and Cargo output: before the repair `sync` left the stray file and the drift check failed; after it, the stray file and the empty directory are gone, the Cargo output stays, and drift is empty. An unsupported detector and a detector spawned in a missing directory now carry config_error and tool_error respectively."
+change = "fixture::materialize (write and prune); runner::ExecutionError with a class, recorded as error_class."
+scope = ["xtask/src/corpus/fixture.rs", "xtask/src/corpus/runner.rs", "xtask/tests/corpus_harness.rs"]
+
+[[repairs]]
+id = "CHG-004.1"
+hypothesis = "The accepted checker detects the violations but omits structured fields required by registered witnesses."
+discriminating_check = "Clean committed-fixture run 20260920T121342Z-3c6c758911ff-1462546.json: 13/22 combined detections (12 checker plus R01), 10 unmatched findings, nine failed checker cases."
+change = "Expose crate, cycle members, matched forbidden selector, conflicting roles, port and owner from checker observations. Preserve every rule, warning, case and grading value."
+scope = ["xtask/src/graph/check.rs", "xtask/src/graph/report.rs", "xtask/src/architecture.rs"]
+
+[[repairs]]
+id = "CHG-004.3"
+hypothesis = "CI's fetch-depth 2 lacks the historical registration and correction objects required by the new corpus test and evidence writer."
+discriminating_check = "CI run 35510429218: 140 of 141 nextest tests passed; full_committed_corpus failed because 15d916a was unavailable. All seven other L0 checks passed."
+change = "Read the registration revision from its existing acceptance record and the correction revision from its approval decision. Pin original/corrected manifest byte digests from the actual historical objects; test the transformation by those digests in both deep and shallow checkouts. No workflow, case, grading or expected outcome changes."
+scope = ["xtask/src/corpus/runner.rs", "xtask/tests/corpus_crate.rs", ".rha/tasks/CHG-004-h4-crate-harness.toml"]

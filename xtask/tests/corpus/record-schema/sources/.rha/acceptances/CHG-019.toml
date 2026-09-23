@@ -1,0 +1,67 @@
+# P-B acceptance, written as the first commit of P-C. Source: PR 17 merge and its main CI run.
+schema_version = 1
+id = "CHG-019"
+covers = ["CHG-019", "CHG-020"]
+change = "docs/changes/CHG-019-trust.md"
+task = ".rha/tasks/CHG-019-trust.toml"
+
+[acceptor]
+principal = "human:kennedy"
+role = "acceptor"
+date = "2026-09-22"
+authority_profile = "ECC-Solo"
+basis = "Kennedy (kmosoti) merged PR 17 at 2026-09-23T00:32:18Z (2026-09-22 America/Chicago); acceptance is by merge under policy [acceptance]."
+event = "merge of pull request 17"
+
+[subject]
+revision = "ec493b794040ede8878705132c89f9a4855f2dbe"
+tree = "14d75660f4ffaf023ba2b1de5da347c0db03019f"
+parents = ["dc564ea9dc8ae6d4e7130e4d212b55e7407ba81b", "b54848c972233bdea3a3df23f9d2d77c251c0008"]
+pull_request = "https://github.com/kmosoti/recursive-hexagonal-architecture/pull/17"
+integrator_edits = "none"
+
+[[evidence]]
+path = "evidence/ci/35802502127.json"
+class = "ci"
+subject_revision = "ec493b794040ede8878705132c89f9a4855f2dbe"
+subject_tree = "14d75660f4ffaf023ba2b1de5da347c0db03019f"
+sha256 = "2ef8db71105142d4f74e8156b829d9c904b0b0ac58256f1157ae14280d9c78f4"
+note = "Downloaded with gh run download 35802502127 -n rha-evidence; main at the P-B merge. All eight L0 checks passed; nextest selected 213 tests."
+
+[outcomes]
+passed = ["L0.fmt", "L0.clippy", "L0.nextest", "L0.doctest", "L0.architecture", "L0.deny", "L0.machete", "L0.typos"]
+not_run = ["Trusted producer key cut-over and isolation exercise: DP-4.1; no isolated producer", "Held-out checks: Kennedy only, spec §9.14"]
+failed = []
+not_applicable = []
+inconclusive = []
+
+[disposition]
+decision = "accepted"
+kind = "bootstrap_acceptance"
+merge_allowed = false
+eligibility_at_acceptance = "blocked"
+basis = "L0 passed. Authentic and Applicable are false as recorded below. P-B includes the explicitly approved policy migration DP-5.3; this is a controlled transition in the §11.5 sense, while the acceptance kind remains bootstrap_acceptance under the current policy. No claim of conformance."
+exception = "none"
+
+[[disposition.predicates]]
+name = "Authentic"
+holds = false
+reason = "no trusted producers in policy: this ci record is unauthenticated"
+
+[[disposition.predicates]]
+name = "Applicable"
+holds = false
+reason = "the candidate's policy sha256:8dd543e64d7954fe60549907332ba3a2edd1543e5b2a70ecdd524789684dc512 differs from the base policy sha256:72bf2e5218b241b1dbf4ee4b96935fa89d45bd0a22fbe65c9c5a94b79bb314b3"
+
+[[disposition.predicates]]
+name = "Complete"
+holds = true
+reason = "Every required L0 id is present exactly once."
+
+[[disposition.predicates]]
+name = "Passed"
+holds = true
+reason = "All eight L0 checks passed; nextest selected 213 tests."
+
+[carried_forward]
+open = ["CHG-019.1: schema contract, JSON schemas, unknown outcomes and corpus-report lint coverage (P-C stage 0)", "CHG-019.1: after-data amendment of verifier fixture shape and explicit unchecked-citation output (P-C stage 0)", "Historical record defects remain disclosed in docs/changes/CHG-019-trust.md, not rewritten", "DP-4.1: Authentic cannot hold until a producer isolated from candidate code exists"]

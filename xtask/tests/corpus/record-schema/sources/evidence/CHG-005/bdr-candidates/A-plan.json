@@ -1,0 +1,29 @@
+{
+  "candidate": "A-plan",
+  "exit": 0,
+  "summary": {
+    "crates": 8,
+    "errors": 0,
+    "outcome": "passed",
+    "warnings": 1
+  },
+  "findings": [
+    {
+      "rule": "adapter.foreign_core",
+      "from": "adapter-html",
+      "to": "document",
+      "severity": "warning"
+    }
+  ],
+  "edges_examined": {
+    "build": 0,
+    "dev": 0,
+    "normal": 18
+  },
+  "tool": {
+    "git_dirty": false,
+    "git_rev": "7616a18bf768fe5eb927a33137e0a2270b058aaa",
+    "name": "xtask architecture",
+    "version": "0.1.0"
+  }
+}

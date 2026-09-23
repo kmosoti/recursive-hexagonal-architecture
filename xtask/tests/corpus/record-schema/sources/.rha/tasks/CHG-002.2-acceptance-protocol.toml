@@ -1,0 +1,108 @@
+# Task record (spec §11.7.11 shape, stored as TOML).
+schema_version = 1
+id = "CHG-002.2"
+slug = "acceptance-protocol"
+title = "Acceptance by merge, a decision ledger, and the CHG-002 acceptance record"
+mode = "agent"
+executor_composition = "agent"
+authority_profile = "ECC-Solo"
+status = "proposed"
+plan_ref = "docs/plan/IMPLEMENTATION-PLAN.md §2 item 3 and §9"
+branch = "chg/002.2-acceptance-protocol"
+base_revision = "15d916a16e2323612893ade5b68de792c6a47989"
+intent = "Stop the same three open items (no acceptance record, unanswered decision points, grading values still proposed) from carrying from one item report to the next. The merge becomes the acceptance; the Executor writes the record as the next item's first commit; .rha/decisions.toml owns decision-point status; the CHG-002 acceptance record is written under that rule."
+non_goals = [
+  "Any checker code (CHG-003)",
+  "Kennedy's held-out cases (DP-1.1b), which no agent may author or read",
+  "Changing any lane, check, or strictness parameter",
+]
+
+[[actors]]
+id = "human:kennedy"
+type = "human"
+
+[[actors]]
+# The planning session acting as Executor for this process change; the
+# implementation Executor session is not involved.
+id = "agent:executor"
+type = "agent"
+accountable_to = "human:kennedy"
+
+[roles]
+planner = "human:kennedy"
+executor = ["agent:executor"]
+integrator = "human:kennedy"
+verifier = ["automation:xtask-ci (local, advisory)", "automation:github-actions (class ci, advisory)"]
+acceptor = "human:kennedy"
+
+[[work]]
+id = "W2.2"
+executor = "agent:executor"
+depends_on = ["CHG-002"]
+output = ".rha/policy.toml [acceptance]; .rha/decisions.toml; .rha/acceptances/CHG-002.toml; evidence/ci/35481271471.json (the run on main for 15d916a); manifest [grading] decided; plan §2/§9, CONTRIBUTING, AGENTS.md updated."
+owned_scope = [
+  ".rha/policy.toml ([acceptance] section only; protected, approval below)",
+  ".rha/acceptances/CHG-002.toml (protected, approval below)",
+  ".rha/decisions.toml (new)",
+  "xtask/tests/corpus/manifest.toml ([grading] header only; protected, approval below)",
+  "xtask/src/corpus.rs (Grading fields), xtask/tests/corpus_manifest.rs (one assertion)",
+  "docs/plan/IMPLEMENTATION-PLAN.md, CONTRIBUTING.md, AGENTS.md",
+  "evidence/ci/35481271471.json, evidence/CHG-002.2/**, generated docs",
+]
+
+[[decisions]]
+id = "protected-surface-approval"
+question = "Which protected surfaces may this change touch?"
+answer = "Kennedy asked on 2026-09-20 that the durable plan and artifacts stop carrying the three recurring open items. That instruction covers: appending [acceptance] to .rha/policy.toml, creating .rha/acceptances/CHG-002.toml, and replacing the manifest's [grading] proposal header with the decided one. Kennedy's merge of this pull request is the approval of each; if he does not merge, none of it stands."
+decided_by = "human:kennedy"
+date = "2026-09-20"
+
+[[decisions]]
+id = "acceptance-by-merge"
+question = "What is the acceptance event under ECC-Solo?"
+answer = "The merge into main by the acceptance authority. The record is a materialization the Executor writes first thing in the next item; creating it is pre-approved, editing an existing one is not."
+decided_by = "human:kennedy"
+date = "2026-09-20"
+
+[[decisions]]
+id = "grading-values"
+question = "Do the three [grading] values stand?"
+answer = "Yes, the strict readings, as DP-1.1c. Relaxing one before CHG-004 is a protected edit recorded in the ledger first."
+decided_by = "human:kennedy (by merge of this change)"
+date = "2026-09-20"
+
+[claim]
+affected_components = []
+contract_changes = "none: no product component exists"
+architecture_delta = "none. Two optional fields on the Grading record type; no new dependency."
+performance_impact = "none claimed"
+unresolved = [
+  "This change edits .rha/policy.toml, so its own records report Applicable false (controlled transition, §11.5), and L0.architecture is still not_run until CHG-003.",
+]
+
+[acceptance]
+criteria = [
+  ".rha/acceptances/CHG-002.toml cites 15d916a, its tree, and a CI record whose subject is that revision",
+  ".rha/decisions.toml has a row for every plan §9 point, with DP-1.1 split into 1.1a/1.1b/1.1c",
+  "The manifest's [grading] header names the decider; the corpus tests pass",
+  "The lane runs after `cargo xtask docs`, so the record describes the tree that exists",
+]
+
+[provenance]
+harness = "Claude Code, VS Code extension"
+task_scope = "CHG-002.2"
+permissions = "Workspace files, shell, git, gh as kmosoti. Protected surfaces as approved above."
+budgets = "unknown"
+reasoning_effort = "unknown"
+instruction_sources = [
+  # Corrected in CHG-003.1 (D-002.2.1 on .rha/acceptances/CHG-002.2.toml). The
+  # value first recorded here, 42e6e00e06c1d3da…, is the plan at e7a60b1;
+  # b2c5ee1 edited the plan again and this line was not updated.
+  { path = "docs/plan/IMPLEMENTATION-PLAN.md (after this change, at 4be4a19)", sha256 = "4d9b1c64e8b6c62e37d7db9b26722c330f2fdd6804441d50c45b3ca3a2fbdbdf" },
+  { path = "docs/spec/rha-spec-v0.10.md", sha256 = "bd96216829035ade64c43befa5e672c58078f6afa4b04145c6183227e4e1071a" },
+  { path = "user message of 2026-09-20 asking that the artifacts stop carrying the recurring open items", sha256 = "unknown" },
+]
+
+[[provenance.sessions]]
+model_id = "claude-fable-5-1"
+span = "CHG-002.2, all commits"

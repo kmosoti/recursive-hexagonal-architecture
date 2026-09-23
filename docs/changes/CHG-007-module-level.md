@@ -46,3 +46,12 @@ The separate `codex exec` generator supplied 256 seeded legal source maps and an
 The artifact self-checks record 512 rustc legality checks, 25 offline Cargo checks, 14 hand-derived reference checks, 4,096 supplementary graph checks and 641 byte-identical regeneration comparisons. These validate corpus construction, not a production checker. The frozen M/L-M/EM-M manifest remains the headline oracle.
 
 Reproduction of the immutable generation package uses its original staging layout: copy `xtask/tests/corpus/module` to `target/m2/module-generation`, and the two committed module prompts to `target/m2/module-generator-prompt.md` and `target/m2/module-generator-correction.md`, then run its README commands. The scripts never rewrite the committed registration in that workflow.
+
+
+### Stage 0 registrations
+
+The [record-shape registration](../../xtask/tests/corpus/record-schema/registration.toml) binds 119 committed source snapshots (116 supported records plus three excluded BDR reports), the mechanically derived inventory, and 1,497 exact structural recipes. Historical variants remain explicit; no historical record is rewritten. A separate read-only audit independently matched all 1,497 structural expectations before implementation.
+
+The [verifier-shape supplement](../../xtask/tests/corpus/verifier-shape/registration.toml) binds 188 fixtures: 153 malformed cases and 35 well-formed controls/predicate cases. Its construction is independent of model code. The original 152 verifier cases and 80 lint cases remain unchanged. This supplement grades the disclosed after-data amendment, not a claim of pre-registration before the P-B verifier existed.
+
+During pre-registration, the generator proposed precise leaf-path diagnostic labels where the old contract had no wire spelling. §4.1 now mechanically records P-B's existing grouped labels; 91 proposed diagnostic strings were corrected before commit, preserving every predicate expectation and precise offending JSON Pointer. The three prompts and their digests, interrupted attempt and failed inspection commands are retained. This compatibility clarification avoids changing existing verifier behavior for a cosmetic diagnostic choice.

@@ -1,0 +1,168 @@
+# Acceptance record (spec §11.4, §11.7.6; §11.7.11 shape, stored as TOML).
+#
+# An acceptance is an authorized disposition linked to an exact subject. It
+# does not overwrite an observation: every outcome below is the one the
+# evidence records hold, including the check that did not run.
+#
+# Written by the Executor on 2026-09-19 as CHG-001.4, recording the decision
+# Kennedy stated in this conversation ("CHG-001 is accepted at 44b1e44") and
+# had already taken by merging pull request 2. `.rha/acceptances/**` is a
+# protected surface; the instruction is the approval, and it is in the
+# CHG-001 task record under the decision `acceptance-records`, extended on
+# the same day to cover this record.
+schema_version = 1
+id = "CHG-001"
+change = "docs/changes/CHG-001-ambient-effect-deny-list.md"
+task = ".rha/tasks/CHG-001-ambient-effect-deny-list.toml"
+
+[acceptor]
+principal = "human:kennedy"
+role = "acceptor"
+date = "2026-09-19"
+authority_profile = "ECC-Solo"
+
+[subject]
+# What was accepted: the merge commit on main, not the branch head.
+revision = "44b1e44b8216bb4ad789f600c579cba37010dc64"
+tree = "336f32c8968d8f9b523cae4d96f168ba59c485c9"
+parents = [
+  "c55431692b838cdd3763ba2210559aa2b4b1719e",
+  "a31cdd101d4981dd178b73e8b062f50ca5ba860e",
+]
+pull_request = "https://github.com/kmosoti/recursive-hexagonal-architecture/pull/2"
+merged_at = "2026-09-19T23:38:21Z"
+milestone = "M1 (in progress; W1 of six)"
+tag = "none: M1 is tagged after W6"
+# The merge introduced nothing of its own: the merge commit's tree equals the
+# tree of its second parent, the branch head a31cdd1. `git diff a31cdd1
+# 44b1e44` is empty.
+integrator_edits = "none"
+
+[[evidence]]
+path = "evidence/CHG-001/20260919T232940Z-78fe0093c4a4.json"
+class = "local"
+subject_revision = "78fe0093c4a40eeda43d7449902e28b515916131"
+subject_tree = "6ac2b8fad647cf93cfa8854dcc15b3a11602855f"
+note = "The last local run on the candidate branch, on a clean working tree. Its tree is not the accepted tree: two commits followed it, 81851f4 adding a CI record and a31cdd1 moving the proposal queue out of docs/spec/."
+
+[[evidence]]
+path = "evidence/ci/35476272071.json"
+class = "ci"
+subject_revision = "a37d3c6c9970817ef1db5af6f96edd03f752f2f8"
+subject_tree = "25d6633c836a99076b7dcd0ba1fc41181539e902"
+note = "GitHub Actions run 35476272071, on the ephemeral merge commit for branch head 5c24f54. Superseded as the head moved; kept because the change record cites it."
+
+[[evidence]]
+path = "evidence/ci/35476379661.json"
+class = "ci"
+subject_revision = "534343167ecb081350b05a057738278f5ba865e8"
+subject_tree = "336f32c8968d8f9b523cae4d96f168ba59c485c9"
+note = """
+GitHub Actions run 35476379661, on the ephemeral merge commit GitHub built \
+for branch head a31cdd1. This is the record that covers what was accepted: \
+its subject tree equals [subject].tree above, byte for byte, so the lane ran \
+on exactly the content now on main. The revision differs because the \
+ephemeral commit is not the merge commit Kennedy created; the tree is the \
+binding identity. Downloaded from the run's rha-evidence artifact in \
+CHG-001.4 and committed then, which is why it is absent from the merged \
+history it describes.\
+"""
+
+[outcomes]
+# As recorded, not as hoped (§11.4). All three records above agree on these.
+passed = [
+  "L0.fmt",
+  "L0.clippy",
+  "L0.nextest",
+  "L0.doctest",
+  "L0.deny",
+  "L0.machete",
+  "L0.typos",
+]
+not_run = ["L0.architecture"]
+failed = []
+not_applicable = []
+inconclusive = []
+
+[disposition]
+decision = "accepted"
+kind = "controlled_transition"
+basis = "spec §11.5: this change edits .rha/policy.toml, so no record produced on the candidate can satisfy Applicable against the base policy it proposes to replace. Kennedy's acceptance is the controlled transition, not MergeAllowed of §11.7.6."
+eligibility_at_acceptance = "blocked"
+exception = "none: no exception was issued, and the outcomes stand as recorded"
+
+[[disposition.predicates]]
+name = "Authentic"
+holds = false
+reason = "`.rha/policy.toml` lists no trusted producers until the verifier of CHG-019 and CHG-020 exists, so every record is advisory."
+
+[[disposition.predicates]]
+name = "Applicable"
+holds = false
+reason = """
+Every cited record reports base_policy_digest sha256:f102c03a… against its \
+own policy_digest sha256:dc2ef7e0…: the candidate adds .cargo/config.toml to \
+[surface] protected, and the base revision c554316 does not yet carry that \
+policy. This is the controlled transition, and it closed on merge: a lane run \
+at 44b1e44 reports both digests as sha256:dc2ef7e0… and Applicable true. That \
+run is reported in this conversation and is not committed; main carries no \
+record of its own.\
+"""
+
+[[disposition.predicates]]
+name = "Complete"
+holds = true
+reason = "Every check of lane L0 appears in each record with a unique id."
+
+[[disposition.predicates]]
+name = "Passed"
+holds = false
+reason = "L0.architecture is not_run (not_implemented until CHG-003) and DP-0.5 makes every L0 check required and non-waivable."
+
+[[defects]]
+# Defects found in the accepted subject. An acceptance closes the work item;
+# it does not repair or conceal what the item shipped (§11.4).
+id = "D-001.1"
+severity = "record integrity"
+found_by = "human:kennedy"
+found_at = "acceptance, 2026-09-19"
+statement = """
+`.rha/tasks/CHG-001-ambient-effect-deny-list.toml` shipped at 44b1e44 with \
+the literal placeholder SPEC_DIGEST as the sha256 of its fifth \
+instruction_sources entry, \
+\"docs/spec/rha-spec-v0.10.md (CHG-001.3 corrected …)\". The record therefore \
+asserted a witness it did not hold: a reader could not tell which revision of \
+the specification the Executor worked from at the end of CHG-001.3, and the \
+field's shape invited them to read the placeholder as a digest.\
+"""
+why_it_matters = """
+An instruction_sources digest is what lets a later reader reproduce the \
+Executor's inputs (§11.6.5). A placeholder in that position is the same class \
+of error as an invented digest: both put an unverifiable string where a \
+verifiable one belongs. It survived local and CI verification because no check \
+reads task records; the policy's L0 lane has no record-schema check until \
+CHG-019.\
+"""
+repair = """
+Fixed in CHG-001.4: the field now reads \
+bd96216829035ade64c43befa5e672c58078f6afa4b04145c6183227e4e1071a, the sha256 \
+of docs/spec/rha-spec-v0.10.md at 44b1e44, which is the corrected §6.8 text \
+the entry names. Verify with `git show 44b1e44:docs/spec/rha-spec-v0.10.md | \
+sha256sum`.\
+"""
+follow_up = "A record-schema check that rejects a placeholder or a non-hex digest belongs to CHG-019; until then the acceptance review is the only control."
+
+[carried_forward]
+# The acceptance closes the work item, not these. Each is stated in
+# docs/changes/CHG-001-ambient-effect-deny-list.md under "Acceptance concerns",
+# except where marked.
+open = [
+  "L0.architecture is required and non-waivable, so CHG-002 cannot be Eligible either; Kennedy decided on 2026-09-19 to leave the policy unchanged and the check not_run until CHG-003.",
+  "No product crate uses xtask/templates/core-clippy.toml, and the rule effect.core_clippy_template is not run by any L0 command until CHG-003 wires it into `cargo xtask architecture`. The template is validated against generated fixtures only.",
+  "The deny list is defeated by anything that lowers a lint level for the build: RUSTFLAGS, a .cargo/config.toml above the build directory, or --cap-lints=warn (ADR-0002 rules 5 and 6). This repository protects .cargo/config.toml; it cannot protect a build run elsewhere.",
+  "The three lints stay at deny in the root Cargo.toml because clap's derives expand to a group allow, which is E0453 under forbid (ADR-0002 rule 8). The escape is closed per core crate at the crate root instead, and only for crates the rule checks.",
+  "Six proposals sit unreviewed in docs/proposals/spec-v0.11.md, including one to split the §1.4 row that pairs the deny list with the no_std option.",
+  "docs/maturity.md proposes I for the deny list; the Accepted column still reads S (spec v0.10). Promotion is DP-1.6, at W4 and W6.",
+  "No held-out acceptance check exists for this change (§9.14). DP-1.1 introduces the first, at W2.",
+  "The evidence record for the accepted tree was committed after the merge, in CHG-001.4, not in the item it describes. A CI artifact expires; an acceptance that depends on downloading one is not reproducible indefinitely.",
+]
