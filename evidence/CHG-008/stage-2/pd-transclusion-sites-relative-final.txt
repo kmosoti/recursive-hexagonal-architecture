@@ -1,0 +1,2 @@
+{"cases": 12, "sources": 37, "page_controls": 14, "transclusions": 30, "witnesses": 8}
+TX12 corrected relative hrefs and HTML observations: PASS

@@ -1,0 +1,1 @@
+{"cases": 12, "cases_sha256": "672232cf85a3712c3b7c621b40214df6c7ea23dfcbfe1ed5ba113d6dafd34118", "content_sha256": "af373c174af3f6ac7964474122c47f7004bdcf87354ac73d2cedbfa28e9139cb", "kind_counts": {"site": 12}, "package": "target/m2/transclusion-sites", "payload_count": 7}

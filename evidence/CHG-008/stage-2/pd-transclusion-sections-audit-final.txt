@@ -1,0 +1,1 @@
+{"cases": 80, "cases_sha256": "d43d842b1f7b5eed0833eba2ad4131673299590f240d1f909d2b57760e05b0bf", "content_sha256": "c727fe249b0e5fbfb3a3341a57972a7fbe9320cfe8b09b81ce78d493aacb3de9", "kind_counts": {"section": 80}, "package": "target/m2/transclusion-sections", "payload_count": 7}

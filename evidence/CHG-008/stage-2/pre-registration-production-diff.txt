@@ -1,0 +1,3 @@
+git diff 2020336abd2ab0f0d5d882b90b210fcda3a877d6 -- crates
+exit=0
+stdout is empty: no transclusion implementation precedes this registration.

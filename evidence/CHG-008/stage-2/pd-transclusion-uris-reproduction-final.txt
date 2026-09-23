@@ -1,0 +1,28 @@
+COMMAND python3 -B target/m2/audit-semantic-package.py /home/kmosoti/projects/rha-m2/target/m2/verify-transclusion-uris uri
+{"cases": 153, "cases_sha256": "5b9a07b9079c123dc58aa57cf87c1334ade164bc96fab37f53b5d7379cde90ad", "content_sha256": "c2b2474dd57bb695d1d8b4c6f14ae7958f160cfb4c20fd98bbca5c4ae7e43126", "kind_counts": {"uri": 153}, "package": "/home/kmosoti/projects/rha-m2/target/m2/verify-transclusion-uris", "payload_count": 7}
+EXIT 0
+COMMAND python3 -B /home/kmosoti/projects/rha-m2/target/m2/verify-transclusion-uris/reference.py
+PASS cases=153
+PASS legacy_rows_preserved=148
+PASS authored_controls=25
+PASS added_controls=5
+PASS seeded_cases=128 seed=90092028
+PASS differential expected-values=reference for every row
+PASS control coverage=empty/query/fragment/scheme/path/image/unicode/percent/dot-segments/NFC/self-import
+PASS full-package metadata=derived from frozen snapshots
+PASS read-only mode=no files written
+EXIT 0
+COMMAND python3 -B /home/kmosoti/projects/rha-m2/target/m2/verify-transclusion-uris/reference.py --reproduce-to reproduced
+reproduced 9 package files under reproduced/
+EXIT 0
+BYTE_IDENTICAL_FILES 9
+COMMAND python3 -B target/m2/audit-semantic-package.py /home/kmosoti/projects/rha-m2/target/m2/verify-transclusion-uris/reproduced uri
+{"cases": 153, "cases_sha256": "5b9a07b9079c123dc58aa57cf87c1334ade164bc96fab37f53b5d7379cde90ad", "content_sha256": "c2b2474dd57bb695d1d8b4c6f14ae7958f160cfb4c20fd98bbca5c4ae7e43126", "kind_counts": {"uri": 153}, "package": "/home/kmosoti/projects/rha-m2/target/m2/verify-transclusion-uris/reproduced", "payload_count": 7}
+EXIT 0
+CORRUPTED_COPY_EXIT 1
+Traceback (most recent call last):
+  File "/home/kmosoti/projects/rha-m2/target/m2/audit-semantic-package.py", line 10, in <module>
+    file=p/name;assert file.is_file() and not file.is_symlink();assert h(file.read_bytes())==digest,name
+                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: CASES.json
+VALID_COPY_ACCEPTED_AND_CASE_CORRUPTION_REJECTED

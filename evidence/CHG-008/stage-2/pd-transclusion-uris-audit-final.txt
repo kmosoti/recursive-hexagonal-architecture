@@ -1,0 +1,1 @@
+{"cases": 153, "cases_sha256": "5b9a07b9079c123dc58aa57cf87c1334ade164bc96fab37f53b5d7379cde90ad", "content_sha256": "c2b2474dd57bb695d1d8b4c6f14ae7958f160cfb4c20fd98bbca5c4ae7e43126", "kind_counts": {"uri": 153}, "package": "target/m2/transclusion-uris", "payload_count": 7}
