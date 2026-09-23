@@ -15,3 +15,7 @@ Pre-implementation addendum after probes, before the assurance repair: include s
 Adapter measurement includes all core paths (including tests). The complete P-C-to-H3 core diff will also be retained so the preceding assurance repairs remain visible. Protected metadata: adapter/app manifests, Cargo.lock and assumption-ledger support; no new core allow-list or module direction is planned.
 
 [H3 observation](h3-json.md) records both measurements, the seeded detection list and the limits of the claim.
+
+| Stage | Original plan prediction | Predeclared production set | Predeclared additional changes | Start | End / observed |
+| --- | --- | --- | --- | --- | --- |
+| Transclusion (CHG-009) | document + graph + site::assembly | document, graph, site::assembly, site::build, site facade, app-cli | Renderer setup tests migrate Assemble calls; owner-local oracle tests, dev-only serde_json manifests/live test allow-list, records and generated docs. Renderer production remains unchanged. | This BDR/contract/prediction commit, before corpus and code | pending |

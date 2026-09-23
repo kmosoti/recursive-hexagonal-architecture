@@ -279,3 +279,39 @@ answer = "Add the required backlog file and permit that exact basename in the ex
 decided_by = "agent:executor under human:kennedy's delegation"
 delegation = "Kennedy, 2026-09-22: Determine a large slice to hand off to gpt-6-astra ultra. Make sure it has a goal to implement its work and fix any and all issue in accordance with rha design. (Let it flag and improve the architecture and tooling if it can justify it no need for my approval). I approve all PRs as long as both an opus 5.5 and gpt-6 agent has reviewed and approved the code. Kennedy, 2026-09-22: Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me."
 date = "2026-09-23"
+
+[[decisions]]
+id = "transclusion-page-model-boundary"
+question = "New parser-only syntax should not become a renderer obligation."
+answer = "Choose the site-owned PageNode tree, preserving the existing site::Node facade shape. Independent scoring is 24/25 for the owned tree, 13/25 for sharing document AST, and 16/25 for flat render events. Accept BDR-0007 refutation criterion under the delegation before code. Assembly explicitly converts and expands document syntax; renderers consume only the existing renderable vocabulary. No blanket From conversion is appropriate because origin, graph and expansion context matter. The original plan prediction remains visible; setup tests and glue/build changes are declared separately."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: Determine a large slice to hand off to gpt-6-astra ultra. Make sure it has a goal to implement its work and fix any and all issue in accordance with rha design. (Let it flag and improve the architecture and tooling if it can justify it no need for my approval). I approve all PRs as long as both an opus 5.5 and gpt-6 agent has reviewed and approved the code. Kennedy, 2026-09-22: Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me."
+date = "2026-09-23"
+
+[[decisions]]
+id = "transclusion-semantics"
+question = "Actual parser behavior and selected-section dependencies must govern the new feature."
+answer = "The measured parser emits WikiLink Image tokens; preserve excluded images and escaped/spaced navigation behavior. Add a dedicated document Transclusion descriptor and navigation-independent graph diagnostics. Select nested sections with ancestor shells, block all deterministic DFS back edges over regions, and look up expansion targets by full region/occurrence identity. Preserve host navigation indices and append imported ones. Assembly owns namespacing and lexical origin-path rebasing. Reject page-only cycle detection, inferring embeds from arbitrary images, and following unanalyzed region edges. The new check kinds extend the v1 envelope for new inputs while preserving all old corpus outputs."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: Determine a large slice to hand off to gpt-6-astra ultra. Make sure it has a goal to implement its work and fix any and all issue in accordance with rha design. (Let it flag and improve the architecture and tooling if it can justify it no need for my approval). I approve all PRs as long as both an opus 5.5 and gpt-6 agent has reviewed and approved the code. Kennedy, 2026-09-22: Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me."
+date = "2026-09-23"
+
+[[decisions]]
+id = "owner-local-json-oracles"
+question = "Owner-local differential tests need to decode the independent semantic fixture streams without introducing presentation dependencies into core production code."
+answer = "Authorize serde_json 1.0.151 as a dev dependency only in document, graph or site where a test actually parses the registered oracle data, and add only that exact package name to the live core.dev_allow. Keep the normal core allow list unchanged. A separate audit confirmed every frozen H4 fixture supplies its own rules file and digest, so this live test-policy addition changes no registered case or grade. Reject exporting private algorithms solely for an external harness or placing all checks outside the packages exercised by targeted mutation analysis."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: Determine a large slice to hand off to gpt-6-astra ultra. Make sure it has a goal to implement its work and fix any and all issue in accordance with rha design. (Let it flag and improve the architecture and tooling if it can justify it no need for my approval). I approve all PRs as long as both an opus 5.5 and gpt-6 agent has reviewed and approved the code. Kennedy, 2026-09-22: Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me."
+date = "2026-09-23"
+
+[[provenance.generations]]
+artifact = "Transclusion and site-owned page-tree contract"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "OpenAI Codex v0.156.1, profile write, read-only documentation proposal"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-008/pd-transclusion-contract-prompt.md"
+prompt_sha256 = "36274c15885d9806a414b4bd3a54d38e2c7ec3fb169aa337e368b71eab7f3d8b"
+sample = "sample 1; session 01a0cd42-8016-7fe2-a804-8e44f48cd7f9"
+separation = "Root measured existing parser behavior; a separate design review scored three page-tree alternatives and a separate policy audit checked frozen H4 rule ownership. No W9 code or expected data exists yet."
+edits = "Root fixed patch formatting, made exact public names and absent-anchor behavior explicit, scoped unmatched fragment rewriting correctly, and chose an explicit candidate list for the new ambiguity kind. Existing witness shapes remain unchanged."

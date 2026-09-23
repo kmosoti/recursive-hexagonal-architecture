@@ -1,0 +1,2 @@
+links: [Link { target: "Page", anchor: None, alias: None, line: 1 }, Link { target: "Next", anchor: None, alias: None, line: 2 }]
+body: [Paragraph([Text("!["), Text("see "), WikiLink { index: 0, children: [Text("Page")] }, Text("]"), Text("(image.png)"), SoftBreak, WikiLink { index: 1, children: [Text("Next")] }])]
