@@ -266,6 +266,11 @@ decided_by = "human:kennedy"
 date = "2026-09-22"
 answer = "Codex (gpt-6-astra, extra-high, read-only) validates that the code conforms to the registered deterministic contracts and schemas (the fixture contracts, corpus registrations, record shapes, .rha/schemas once they exist) and to the RHA guidelines (spec laws, AGENTS.md, scoped guides, policy). It does not generate code, corpora or oracles. A finding cites the contract clause or guideline it breaks. Amends plan M6 and §2.4's use of Codex as a generator; the plan text follows at its next revision."
 delegation = "Kennedy, 2026-09-22: 'Use recommended. ... Accept the recommend and most correct implementations going forward instead of escalating to me.' (quoted in full in .rha/tasks/CHG-005-rhawiki-m1.toml, decision delegation-2026-09-22)"
+# Amended 2026-09-23: the reviewer model.
+amendment_date = "2026-09-23"
+amendment_decided_by = "human:kennedy"
+amendment_approved_in = "Kennedy, 2026-09-23: 'For reviews. Use gpt 6 sol on medium for the future. Ask me first when yiu think astra is needed.'"
+amendment_text = "GPT-6 reviews and conformance validations use codex exec -m gpt-6-sol -c model_reasoning_effort=medium -s read-only. gpt-6-astra, at any effort, is used only after asking Kennedy. A merge needs an approving review from an Opus 5.5 agent and a GPT-6 agent on the same head (Kennedy, 2026-09-22)."
 
 [[decision]]
 id = "CHG-019.1-contract-amendment"
