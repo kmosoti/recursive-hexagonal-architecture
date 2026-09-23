@@ -49,3 +49,9 @@
 - Reasoning that did not change the outcome: none beyond locating the missing registered input.
 - Mistake caught: locally present generation staging hid a clean-checkout dependency. The CI artifact named the exact missing source.
 - Next rule: when a registration cites generated inputs, verify its committed archive from a filesystem layout without staging artifacts before the first push.
+
+## Atom #9 — P-D assurance prerequisites
+- Tiers: Luna high for fixed controls and repair proposal; root for running negative/positive checks and preserving stage boundaries.
+- Reasoning that did not change the outcome: considering later feature internals while the prerequisite gate was pending.
+- Mistakes caught: source inspection suggested five failures; actual execution confirmed all five and preserved three valid controls. A patch-fence extraction error was rejected before any file changed.
+- Next rule: run staged probes against existing built crates when a read-only review holds the branch, then apply the tested controls after the review closes; keep adapter and prerequisite measurements distinct.

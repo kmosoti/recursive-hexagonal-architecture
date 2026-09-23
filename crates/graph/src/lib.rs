@@ -70,8 +70,9 @@ fn fold(s: &str) -> String {
     s.chars().flat_map(char::to_lowercase).collect()
 }
 
-/// Resolves the links of every document against all of them. Independent of
-/// input order (plan §9.4 permutation invariance).
+/// Resolves the links of every document against all of them. Documents must
+/// have unique page ids, as enforced by `library::Corpus`. Within that input
+/// domain, resolution is independent of order (plan §9.4 permutation invariance).
 #[must_use]
 pub fn resolve(documents: &[Document]) -> SiteGraph {
     let by_id: BTreeMap<&PageId, &Document> = documents.iter().map(|d| (&d.id, d)).collect();

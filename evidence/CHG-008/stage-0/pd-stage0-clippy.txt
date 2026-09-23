@@ -1,0 +1,276 @@
+warning: this function has too many lines (102/100)
+   --> crates/document/src/parse.rs:220:5
+    |
+220 |     fn end(&mut self, _end: TagEnd) {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_lines
+    = note: `-W clippy::too-many-lines` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::too_many_lines)]`
+
+warning: these match arms have identical bodies
+   --> crates/document/src/parse.rs:272:13
+    |
+272 |             Frame::Paragraph => Some(Node::Paragraph(children)),
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+324 |             Frame::Other => Some(Node::Paragraph(children)),
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: if this is unintentional make the arms return different values
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#match_same_arms
+    = note: `-W clippy::match-same-arms` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::match_same_arms)]`
+help: otherwise merge the patterns into a single arm
+    |
+272 ~             Frame::Paragraph | Frame::Other => Some(Node::Paragraph(children)),
+273 |             Frame::Emphasis => Some(Node::Emphasis(children)),
+...
+323 |             }
+324 ~             };
+    |
+
+warning: possible infinite iteration detected
+   --> crates/document/src/parse.rs:234:21
+    |
+234 | /                     (from..)
+235 | |                         .map(|k| format!("{base}-{k}"))
+236 | |                         .find(|c| !used.contains(c))
+    | |____________________________________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#maybe_infinite_iter
+    = note: `-W clippy::maybe-infinite-iter` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::maybe_infinite_iter)]`
+
+warning: you seem to be trying to use `match` for destructuring a single pattern. Consider using `if let`
+   --> crates/document/src/parse.rs:239:28
+    |
+239 |                   let slug = match self.seen.get_mut(&base) {
+    |  ____________________________^
+240 | |                     Some((count, first_line)) => {
+241 | |                         *count += 1;
+242 | |                         self.diagnostics.push(Diagnostic::DuplicateSlug {
+...   |
+257 | |                 };
+    | |_________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#single_match_else
+    = note: `-W clippy::single-match-else` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::single_match_else)]`
+help: try
+    |
+239 ~                 let slug = if let Some((count, first_line)) = self.seen.get_mut(&base) {
+240 +                     *count += 1;
+241 +                     self.diagnostics.push(Diagnostic::DuplicateSlug {
+242 +                         slug: base.clone(),
+243 +                         first_line: *first_line,
+244 +                         second_line: line,
+245 +                     });
+246 +                     next_free(&self.used, *count)
+247 +                 } else {
+248 +                     self.seen.insert(base.clone(), (1, line));
+249 +                     if self.used.contains(&base) {
+250 +                         next_free(&self.used, 2)
+251 +                     } else {
+252 +                         base.clone()
+253 +                     }
+254 ~                 };
+    |
+
+warning: consider adding a `;` to the last statement for consistent formatting
+   --> crates/document/src/parse.rs:355:17
+    |
+355 |                 out.push_str(&plain(c))
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^ help: add a `;` here: `out.push_str(&plain(c));`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#semicolon_if_nothing_returned
+    = note: `-W clippy::semicolon-if-nothing-returned` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::semicolon_if_nothing_returned)]`
+
+warning: `document` (lib) generated 5 warnings (run `cargo clippy --fix --lib -p document -- ` to apply 2 suggestions)
+    Checking graph v0.1.0 (/home/kmosoti/projects/rha-m2/crates/graph)
+    Checking site v0.1.0 (/home/kmosoti/projects/rha-m2/crates/site)
+warning: used `expect()` on a `Result` value
+  --> crates/graph/tests/properties.rs:12:9
+   |
+12 |         RelPath::new(path).expect("valid"),
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: if this value is an `Err`, it will panic
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#expect_used
+   = note: requested on the command line with `-W clippy::expect-used`
+
+warning: use of `format!` to build up a string from an iterator
+  --> crates/graph/tests/properties.rs:28:36
+   |
+28 |                 let body: String = ts.iter().map(|t| format!("[[{t}]] ")).collect();
+   |                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+help: call `fold` instead
+  --> crates/graph/tests/properties.rs:28:46
+   |
+28 |                 let body: String = ts.iter().map(|t| format!("[[{t}]] ")).collect();
+   |                                              ^^^
+help: ... and use the `write!` macro here
+  --> crates/graph/tests/properties.rs:28:54
+   |
+28 |                 let body: String = ts.iter().map(|t| format!("[[{t}]] ")).collect();
+   |                                                      ^^^^^^^^^^^^^^^^^^^
+   = note: this can be written more efficiently by appending to a `String` directly
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#format_collect
+   = note: `-W clippy::format-collect` implied by `-W clippy::pedantic`
+   = help: to override `-W clippy::pedantic` add `#[allow(clippy::format_collect)]`
+
+warning: `graph` (test "properties") generated 2 warnings
+warning: these match arms have identical bodies
+   --> crates/graph/tests/oracle_resolve.rs:173:9
+    |
+173 |         0 => destination_id.clone(),                          // Exact whole ID.
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+180 |         _ => destination_id.clone(),
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^ the wildcard arm
+    |
+    = help: if this is unintentional make the arms return different values
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#match_same_arms
+    = note: `-W clippy::match-same-arms` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::match_same_arms)]`
+help: otherwise remove the non-wildcard arm
+    |
+173 -         0 => destination_id.clone(),                          // Exact whole ID.
+173 +         // Exact whole ID.
+    |
+
+warning: `graph` (test "oracle_resolve") generated 1 warning
+warning: used `expect()` on a `Result` value
+  --> crates/site/tests/build_properties.rs:12:5
+   |
+12 | /     load(&MemorySources::new(&[
+13 | |         ("a.md", "# A\n[[b]] [[zz]]"),
+14 | |         ("x/b.md", "# B\n## One\n[[a#a]]"),
+15 | |     ]))
+16 | |     .expect("loads")
+   | |____________________^
+   |
+   = note: if this value is an `Err`, it will panic
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#expect_used
+   = note: requested on the command line with `-W clippy::expect-used`
+
+warning: used `expect()` on a `Result` value
+   --> crates/site/tests/build_properties.rs:110:19
+    |
+110 |             path: RelPath::new(&format!("{}.txt", p.id)).expect("valid"),
+    |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is an `Err`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#expect_used
+
+warning: `site` (test "build_properties") generated 2 warnings
+warning: used `expect()` on a `Result` value
+  --> crates/site/tests/assurance_controls.rs:11:5
+   |
+11 | /     Corpus::new(vec![
+12 | |         Source::new(
+13 | |             RelPath::new("a.md").expect("valid"),
+14 | |             "# A\n[[b]]".to_owned(),
+...  |
+20 | |     ])
+21 | |     .expect("unique page ids")
+   | |______________________________^
+   |
+   = note: if this value is an `Err`, it will panic
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#expect_used
+   = note: requested on the command line with `-W clippy::expect-used`
+
+warning: used `expect()` on a `Result` value
+  --> crates/site/tests/assurance_controls.rs:13:13
+   |
+13 |             RelPath::new("a.md").expect("valid"),
+   |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: if this value is an `Err`, it will panic
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#expect_used
+
+warning: used `expect()` on a `Result` value
+  --> crates/site/tests/assurance_controls.rs:17:13
+   |
+17 |             RelPath::new("b.md").expect("valid"),
+   |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: if this value is an `Err`, it will panic
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#expect_used
+
+warning: used `expect()` on a `Result` value
+  --> crates/site/tests/assurance_controls.rs:43:5
+   |
+43 |     RelPath::new(&format!("{id}.html")).expect("source-derived page id is a valid path")
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: if this value is an `Err`, it will panic
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#expect_used
+
+warning: used `expect()` on a `Result` value
+  --> crates/site/tests/assurance_controls.rs:64:23
+   |
+64 |                 path: RelPath::new("_assets/echo.css").expect("valid"),
+   |                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: if this value is an `Err`, it will panic
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#expect_used
+
+warning: used `expect()` on a `Result` value
+  --> crates/site/tests/assurance_controls.rs:68:23
+   |
+68 |                 path: RelPath::new("_assets/echo.js").expect("valid"),
+   |                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: if this value is an `Err`, it will panic
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#expect_used
+
+warning: used `expect()` on a `Result` value
+   --> crates/site/tests/assurance_controls.rs:140:19
+    |
+140 |             path: RelPath::new("a.html").expect("valid"),
+    |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is an `Err`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#expect_used
+
+warning: used `expect()` on a `Result` value
+   --> crates/site/tests/assurance_controls.rs:156:23
+    |
+156 |                 path: RelPath::new("_assets/shared.css").expect("valid"),
+    |                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is an `Err`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#expect_used
+
+warning: used `expect()` on a `Result` value
+   --> crates/site/tests/assurance_controls.rs:160:23
+    |
+160 |                 path: RelPath::new("_assets/shared.css").expect("valid"),
+    |                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is an `Err`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#expect_used
+
+warning: used `expect()` on a `Result` value
+   --> crates/site/tests/assurance_controls.rs:181:19
+    |
+181 |             path: RelPath::new("_assets/site.css").expect("valid"),
+    |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is an `Err`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#expect_used
+
+warning: used `expect()` on a `Result` value
+   --> crates/site/tests/assurance_controls.rs:199:19
+    |
+199 |             path: RelPath::new("_assets/changing.css").expect("valid"),
+    |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is an `Err`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#expect_used
+
+warning: `site` (test "assurance_controls") generated 11 warnings
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.37s

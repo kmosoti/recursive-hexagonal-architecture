@@ -29,6 +29,8 @@ use library::{Corpus, DuplicatePageId};
 pub struct BuildReport {
     pub written: Vec<RelPath>,
     pub deleted: Vec<RelPath>,
+    /// Number of source pages whose outputs were unchanged; asset writes do
+    /// not affect this count.
     pub unchanged: usize,
     pub link_witnesses: Vec<Witness>,
     pub diagnostics: Vec<(library::PageId, Diagnostic)>,
@@ -158,9 +160,9 @@ pub fn build_all(
         link_witnesses: graph.witnesses.clone(),
         ..BuildReport::default()
     };
-    let produced = commands
+    let changed_pages = commands
         .iter()
-        .filter(|c| matches!(c, build::Command::Write { .. }))
+        .filter(|c| matches!(c, build::Command::Write { page: Some(_), .. }))
         .count();
     for command in commands {
         match command {
@@ -174,7 +176,7 @@ pub fn build_all(
             }
         }
     }
-    report.unchanged = documents.len().saturating_sub(produced);
+    report.unchanged = documents.len().saturating_sub(changed_pages);
     report.diagnostics = documents
         .iter()
         .flat_map(|d| d.diagnostics.iter().map(|x| (d.id.clone(), x.clone())))

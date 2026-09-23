@@ -12,7 +12,7 @@ Stage 0 is the declared assurance prerequisite investigation. Each later feature
 
 ## Evidence
 
-No P-D implementation gate has run yet. P-C evidence remains in its own record. P-D evidence, raw change-spread observations, mutation questions and final lane/review will be linked here.
+The assurance prerequisite gate passes 280 tests with current generated docs and zero scope findings. P-C evidence remains in its own record. Later feature stages, raw change-spread measurements, mutation questions and final lane/review will be linked here as they run.
 
 ## Decisions
 
@@ -31,3 +31,5 @@ P-C's forward CI repair was merged into this local stacked branch at 2fa29ae93ea
 **Graph API determination.** [A separate executable probe](../../evidence/CHG-008/stage-0/pd-graph-precondition.txt) observes permutation-sensitive resolution for duplicate PageIds and confirms Corpus rejects the same duplicate sources. The product input domain is protected. The repair documents the uniqueness precondition on graph::resolve; it does not invent resolution semantics for invalid duplicate-ID slices.
 
 The stage prediction was committed first in 25c75c6. Before production edits, it is refined to include site::build port documentation in addition to site::contract, site::testing, site glue and graph API documentation. The original prediction remains visible. Both the full P-C-to-H3 core diff and the isolated adapter-stage diff will be retained.
+
+**Repair result and stage gate:** the owner contract now distinguishes the dropped TOC, contains asset panics, reports asset nondeterminism and duplicate paths, and propagates post-delete listing errors. The fake preserves the observed TOC. Asset-only writes no longer reduce unchanged source-page counts. The graph API states its existing uniqueness precondition. [Targeted positive/negative controls pass](../../evidence/CHG-008/stage-0/pd-stage0-controls.txt); [all 280 nextest tests pass](../../evidence/CHG-008/stage-0/pd-stage0-gate.txt), none skipped; [Clippy](../../evidence/CHG-008/stage-0/pd-stage0-clippy.txt), [docs](../../evidence/CHG-008/stage-0/pd-stage0-docs-check.txt) and [scope](../../evidence/CHG-008/stage-0/pd-stage0-scope.txt) pass. TOC sensitivity is a sampled discrimination check; each adapter still needs an exact semantic assertion. No old test or corpus grade was weakened.
