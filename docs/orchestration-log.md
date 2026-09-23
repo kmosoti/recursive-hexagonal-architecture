@@ -37,3 +37,9 @@
 - Reasoning that did not change the outcome: repeatedly considering future P-D implementations while this small experiment was already decided.
 - Mistakes caught: a proposal worker used jj status under old global guidance; it failed without a repository change and is disclosed. Future prompts explicitly forbid JJ, including status. Shell-script transport also tripped on Markdown backticks before execution; use patch files or unambiguous quoting.
 - Next rule: inspect and close the current gate before reasoning about a future stage. Keep the actual-type snapshot, direct-std check and transitive-std limitation together in the result.
+
+## Atom #7 — P-C record closure
+- Tiers: Luna high for deterministic shape and storage edits; root for source/record comparisons. The supplemental generator was separate and forbidden implementation access.
+- Reasoning that did not change the outcome: discussing general schema evolution before comparing the actual producer's two new fields.
+- Mistakes caught: an H5 filename overwrote a prior observation; the original census could not describe newer producer fields; a proposal invented Python stat_result methods. Repeated real CLI runs and immediate projection execution distinguished all three.
+- Next rule: lint a freshly produced record from every supported producer before declaring schema closure; preserve original corpus grades and register additive shape controls before code.

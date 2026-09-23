@@ -607,3 +607,15 @@ prompt_sha256 = "5ed732158951998ae26ccf30ec4783f66dcf278fd530c65e4a653684c3af7cf
 sample = "deterministic census and 16 contract-derived recipes; no PRNG"
 separation = "Generator forbidden to read schema files, schema compiler or lint implementation. Root verifies all payload/source hashes and commits this supplement before schema support code."
 note = "After-data amendment, ledger CHG-019.1-markdown-shape-amendment. Content SHA256 e271498e5619751e3fd8d50eeee26728a7154d3b9cb451f9c75cffa37913b183. Original1497 recipes and markdown finding grades unchanged. Reproduce only in the original target/m2 staging layout; the committed package is immutable."
+
+[[provenance.generations]]
+artifact = "Mechanical optional markdown record-shape projection and grader"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "OpenAI Codex v0.156.1, profile write, read-only patch proposal"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-007/markdown-schema-projection-prompt.md"
+prompt_sha256 = "9c05b90b2207ca921dc5df7b4e10103d3d1ae3930de951297ff817cea8dbec1d"
+sample = "sample 1"
+separation = "Supplement committed at d8ee895db6922da1e321f0552495ef1cf5d02fe3 before code. Root independently generated schemas and ran all old/new recipes."
+edits = "Corrected an invented Python stat_result method to stat.S_ISLNK/S_ISREG before projection; removed an unused mutable test binding. No corpus byte or expectation changed."

@@ -1,0 +1,53 @@
+   Compiling xtask v0.1.0 (/home/kmosoti/projects/rha-m2/xtask)
+warning: variable does not need to be mutable
+   --> xtask/tests/markdown_record_shape.rs:299:13
+    |
+299 |         let mut expected_codes = recipe.expected_schema_codes;
+    |             ----^^^^^^^^^^^^^^
+    |             |
+    |             help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: `xtask` (test "markdown_record_shape") generated 1 warning (run `cargo fix --test "markdown_record_shape" -p xtask` to apply 1 suggestion)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.22s
+     Running tests/markdown_record_shape.rs (target/debug/deps/markdown_record_shape-a8595308fba74d07)
+
+running 2 tests
+markdown-schema supplement recipes: total=16 accepted=4 rejected=12
+test frozen_markdown_shape_supplement_matches_all_registered_recipes ... ok
+test schema_codegen_check_matches_projected_schemas ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+
+     Running tests/record_lint.rs (target/debug/deps/record_lint-1e46ccaffdc70f99)
+
+running 1 test
+test every_registered_record_is_linted_as_registered ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+
+     Running tests/record_schema.rs (target/debug/deps/record_schema-aa65c824664341ed)
+
+running 1 test
+record-schema acceptance: 155
+record-schema evidence: 479
+record-schema h4: 285
+record-schema h5_conformance: 68
+record-schema markdown_corpus: 95
+record-schema policy: 184
+record-schema task: 231
+record-schema total: 1497
+test every_registered_record_schema_recipe_matches_exactly ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.97s
+
+     Running tests/record_schema_cli.rs (target/debug/deps/record_schema_cli-4ac1d668ba4418c6)
+
+running 3 tests
+test cli_reports_unchecked_and_checked_citations_without_following_escape_symlinks ... ok
+test cli_schema_controls_are_rejected_or_accepted_as_registered ... ok
+test cli_classifies_report_inputs_and_commented_tasks_correctly ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.83s
+

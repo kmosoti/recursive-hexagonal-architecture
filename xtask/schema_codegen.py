@@ -4,8 +4,12 @@
 import argparse
 import hashlib
 import json
+import stat
+import os
 from pathlib import Path
+import re
 import sys
+import tomllib
 
 
 HERE = Path(__file__).resolve().parent
@@ -15,6 +19,16 @@ OUTPUT_DIR = ROOT / ".rha" / "schemas"
 CONTRACT_PATH = "docs/architecture/record-schema-contract.md"
 SCHEMA_URI = "https://json-schema.org/draft/2020-12/schema"
 INVENTORY_FORMAT = "rha-observed-shapes-1"
+SUPPLEMENT_DIR = ROOT / "xtask" / "tests" / "corpus" / "markdown-schema-supplement"
+SUPPLEMENT_REGISTRATION_PATH = SUPPLEMENT_DIR / "registration.toml"
+SUPPLEMENT_SUMS_PATH = SUPPLEMENT_DIR / "SHA256SUMS"
+SUPPLEMENT_ADDITIONS_PATH = SUPPLEMENT_DIR / "ADDITIONS.json"
+SUPPLEMENT_CONTENT_SHA256 = (
+    "e271498e5619751e3fd8d50eeee26728a7154d3b9cb451f9c75cffa37913b183"
+)
+SUPPLEMENT_AMENDMENT_PATH = (
+    "docs/architecture/markdown-record-shape-amendment.md"
+)
 
 FAMILIES = {
     "acceptance",
@@ -112,6 +126,246 @@ def canonical_json(value):
         )
         + "\n"
     ).encode("utf-8")
+
+
+def _safe_relative_path(value, context):
+    if (
+        not isinstance(value, str)
+        or not value
+        or "\\" in value
+        or value.startswith("/")
+        or any(part in ("", ".", "..") for part in value.split("/"))
+    ):
+        fail(f"{context}: unsafe relative path {value!r}")
+    return value
+
+
+def _sha256_digest(value, context):
+    if not isinstance(value, str) or re.fullmatch(r"[0-9a-f]{64}", value) is None:
+        fail(f"{context}: expected a lowercase SHA-256 digest")
+    return value
+
+
+def _supplement_payload_paths():
+    if SUPPLEMENT_DIR.is_symlink() or not SUPPLEMENT_DIR.is_dir():
+        fail(f"markdown schema supplement is not a durable directory: {SUPPLEMENT_DIR}")
+
+    payloads = set()
+
+    def onerror(error):
+        fail(f"walking markdown schema supplement: {error}")
+
+    for current, directories, files in os.walk(
+        SUPPLEMENT_DIR,
+        topdown=True,
+        followlinks=False,
+        onerror=onerror,
+    ):
+        directories.sort()
+        files.sort()
+        for name in directories + files:
+            path = Path(current) / name
+            if path.is_symlink():
+                fail(f"symlink in markdown schema supplement: {path}")
+            if not path.is_dir() and not path.is_file():
+                fail(f"non-file supplement entry: {path}")
+        for name in files:
+            path = Path(current) / name
+            relative = path.relative_to(SUPPLEMENT_DIR).as_posix()
+            if relative not in {"registration.toml", "SHA256SUMS"}:
+                payloads.add(relative)
+    return payloads
+
+
+def _load_supplement_registration():
+    try:
+        registration_bytes = SUPPLEMENT_REGISTRATION_PATH.read_bytes()
+        registration = tomllib.loads(registration_bytes.decode("utf-8"))
+    except (UnicodeDecodeError, tomllib.TOMLDecodeError) as exc:
+        fail(f"cannot parse {SUPPLEMENT_REGISTRATION_PATH}: {exc}")
+
+    if registration.get("content_sha256") != SUPPLEMENT_CONTENT_SHA256:
+        fail("markdown schema supplement registration content_sha256 is not pinned")
+    if registration.get("family") != "markdown_corpus":
+        fail("markdown schema supplement registration has an unknown family")
+    if registration.get("after_data") is not True:
+        fail("markdown schema supplement registration must declare after_data = true")
+    if not isinstance(registration.get("grading_authority_ledger_id"), str):
+        fail("markdown schema supplement registration has no ledger id")
+    return registration
+
+
+def _verify_supplement_manifest(registration):
+    sums_bytes = SUPPLEMENT_SUMS_PATH.read_bytes()
+    if hashlib.sha256(sums_bytes).hexdigest() != SUPPLEMENT_CONTENT_SHA256:
+        fail("markdown schema supplement SHA256SUMS content digest is not pinned")
+    if not sums_bytes.endswith(b"\n"):
+        fail("markdown schema supplement SHA256SUMS must end with LF")
+
+    try:
+        sums_text = sums_bytes.decode("utf-8")
+    except UnicodeDecodeError as exc:
+        fail(f"markdown schema supplement SHA256SUMS is not UTF-8: {exc}")
+
+    listed = {}
+    previous = None
+    for line in sums_text[:-1].split("\n"):
+        if not line or "\r" in line or len(line) < 66 or line[64:66] != "  ":
+            fail(f"malformed markdown schema supplement SHA256SUMS line: {line!r}")
+        digest = _sha256_digest(line[:64], "SHA256SUMS digest")
+        relative = _safe_relative_path(line[66:], "SHA256SUMS path")
+        if previous is not None and previous >= relative:
+            fail(f"markdown schema supplement SHA256SUMS is not strictly sorted at {relative}")
+        previous = relative
+        if relative in listed:
+            fail(f"duplicate markdown schema supplement payload: {relative}")
+
+        path = SUPPLEMENT_DIR / relative
+        try:
+            metadata = path.lstat()
+        except OSError as exc:
+            fail(f"reading listed supplement payload {relative}: {exc}")
+        if stat.S_ISLNK(metadata.st_mode) or not stat.S_ISREG(metadata.st_mode):
+            fail(f"listed supplement payload is not a durable file: {relative}")
+        if hashlib.sha256(path.read_bytes()).hexdigest() != digest:
+            fail(f"markdown schema supplement payload digest mismatch: {relative}")
+        listed[relative] = digest
+
+    actual = _supplement_payload_paths()
+    if set(listed) != actual:
+        fail(
+            "markdown schema supplement inventory differs from durable payload set: "
+            f"listed {len(listed)}, actual {len(actual)}"
+        )
+    if registration.get("content_sha256") != SUPPLEMENT_CONTENT_SHA256:
+        fail("markdown schema supplement registration does not match SHA256SUMS")
+
+
+def _load_supplement():
+    registration = _load_supplement_registration()
+    _verify_supplement_manifest(registration)
+
+    try:
+        additions = json.loads(SUPPLEMENT_ADDITIONS_PATH.read_bytes().decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        fail(f"cannot parse {SUPPLEMENT_ADDITIONS_PATH}: {exc}")
+
+    if not isinstance(additions, dict) or set(additions) != {
+        "after_data",
+        "family",
+        "optional",
+        "source_paths",
+    }:
+        fail("markdown schema supplement ADDITIONS.json has malformed top-level keys")
+    if additions["family"] != "markdown_corpus":
+        fail("markdown schema supplement ADDITIONS.json has an unknown family")
+    if additions["after_data"] is not True:
+        fail("markdown schema supplement ADDITIONS.json must declare after_data")
+
+    optional = additions["optional"]
+    if not isinstance(optional, list) or len(optional) != 2:
+        fail("markdown schema supplement must contain exactly two optional properties")
+    seen_paths = set()
+    for index, addition in enumerate(optional):
+        context = f"ADDITIONS.json optional[{index}]"
+        if not isinstance(addition, dict) or set(addition) != {
+            "instance_path",
+            "types",
+        }:
+            fail(f"{context}: malformed optional property")
+        path = parse_pointer(addition["instance_path"], f"{context}.instance_path")
+        if not path or path in seen_paths:
+            fail(f"{context}: duplicate or root instance path")
+        seen_paths.add(path)
+        types = addition["types"]
+        if (
+            not isinstance(types, list)
+            or not types
+            or any(not isinstance(item, str) for item in types)
+            or any(item not in JSON_TYPES for item in types)
+            or len(set(types)) != len(types)
+        ):
+            fail(f"{context}.types: malformed JSON type list")
+        schema_type(types)
+
+    sources = additions["source_paths"]
+    registered_sources = registration.get("sources")
+    if not isinstance(sources, list) or not isinstance(registered_sources, list):
+        fail("markdown schema supplement source inventory is malformed")
+    normalized_sources = []
+    for index, source in enumerate(registered_sources):
+        context = f"registration.sources[{index}]"
+        if not isinstance(source, dict) or set(source) != {"path", "sha256"}:
+            fail(f"{context}: malformed source entry")
+        relative = _safe_relative_path(source["path"], f"{context}.path")
+        digest = _sha256_digest(source["sha256"], f"{context}.sha256")
+        path = ROOT / relative
+        if path.is_symlink() or not path.is_file():
+            fail(f"{context}: source is not a durable file")
+        if hashlib.sha256(path.read_bytes()).hexdigest() != digest:
+            fail(f"{context}: source digest mismatch")
+        normalized_sources.append({"path": relative, "sha256": digest})
+    if sources != normalized_sources:
+        fail("ADDITIONS.json source_paths do not match registration.sources")
+
+    return registration, additions
+
+
+def apply_supplement(schemas, registration, additions):
+    projected = dict(schemas)
+    document = json.loads(projected["markdown_corpus"].decode("utf-8"))
+
+    for index, addition in enumerate(additions["optional"]):
+        context = f"ADDITIONS.json optional[{index}]"
+        parts = parse_pointer(addition["instance_path"], f"{context}.instance_path")
+        node = document
+        for segment in parts[:-1]:
+            if segment == "*":
+                if (
+                    not isinstance(node, dict)
+                    or node.get("type") != "array"
+                    or not isinstance(node.get("items"), dict)
+                ):
+                    fail(f"{context}: wildcard does not traverse an array schema")
+                node = node["items"]
+            else:
+                if (
+                    not isinstance(node, dict)
+                    or node.get("type") != "object"
+                    or not isinstance(node.get("properties"), dict)
+                    or segment not in node["properties"]
+                ):
+                    fail(f"{context}: instance path is absent from the base schema")
+                node = node["properties"][segment]
+
+        leaf = parts[-1]
+        if leaf in {"*", "{}"} or not isinstance(node, dict):
+            fail(f"{context}: malformed leaf path")
+        if (
+            node.get("type") != "object"
+            or node.get("additionalProperties") is not False
+            or not isinstance(node.get("properties"), dict)
+        ):
+            fail(f"{context}: addition parent is not a closed object")
+        if leaf in node["properties"]:
+            fail(f"{context}: addition leaf already exists in the base schema")
+        if leaf in node.get("required", []):
+            fail(f"{context}: optional addition cannot be required")
+        node["properties"][leaf] = {"type": schema_type(addition["types"])}
+
+    if "x-rha-amendment" in document:
+        fail("markdown schema base already contains x-rha-amendment")
+    source_paths = {source["path"] for source in additions["source_paths"]}
+    if SUPPLEMENT_AMENDMENT_PATH not in source_paths:
+        fail("markdown schema supplement does not cite its amendment contract")
+    document["x-rha-amendment"] = {
+        "contractpath": SUPPLEMENT_AMENDMENT_PATH,
+        "ledgerid": registration["grading_authority_ledger_id"],
+        "content_sha256": registration["content_sha256"],
+        "after_data": registration["after_data"],
+    }
+    projected["markdown_corpus"] = canonical_json(document)
+    return projected
 
 
 class SchemaBuilder:
@@ -613,6 +867,8 @@ def main(argv=None):
             fail(f"cannot parse {INVENTORY_PATH}: {exc}")
         validate_inventory(inventory)
         schemas = build_schemas(inventory, inventory_bytes)
+        registration, additions = _load_supplement()
+        schemas = apply_supplement(schemas, registration, additions)
     except (InventoryError, OSError) as exc:
         print(f"schema_codegen.py: error: {exc}", file=sys.stderr)
         return 2

@@ -4,7 +4,7 @@ Task: [CHG-007](../../.rha/tasks/CHG-007-module-level.toml). Covers CHG-007, CHG
 
 ## Intent and scope
 
-Complete the P-B schema follow-on before module extraction, then the registered module checks and the isolated no_std experiment. The first commit binds P-B's acceptance to its exact main CI run. The Executor is the sole branch writer; generators use staging artifacts and validators are read-only.
+Complete the P-B schema follow-on before module extraction, then the registered module checks and the isolated no_std experiment. The first commit binds P-B's acceptance to its exact main CI run. The Executor is the sole branch writer; generators use staging artifacts and validators are read-only. Contribution mode is agent under ECC-Solo. Kennedy is Planner, Integrator and Acceptor; the root Executor owns implementation and evidence, while the separate GPT-6 validator and supervising Opus 5.5 session own their advisory reviews.
 
 ## Deltas
 
@@ -169,3 +169,18 @@ The unchanged [markdown corpus](../../evidence/md-corpus/20260923T044415Z-ed79a7
 **Repair attempt 17, H5 record preservation.** A [scratch-directory probe](../../evidence/CHG-007/closure/h5-repeat-probe.txt) runs the original corpus twice at one subject: both exit 0 but leave one pathname with a replaced modification time. The [new regression fails on old code](../../evidence/CHG-007/closure/h5-repeat-negative.txt), expecting two retained observations. Under decision h5-immutable-observations, the filename now includes measured time and PID, and create_new refuses collisions. The H5 body schema and fixture grades do not change. The [repaired controls pass](../../evidence/CHG-007/closure/h5-repaired-controls.txt); archived records were never modified by this probe.
 
 **Repair attempt 18, producer/schema shape gap.** The [refresh lint](../../evidence/CHG-007/closure/markdown-shape-mismatch.txt) rejects two fields the current markdown producer already emits: cases[*].well_formed and product.binary_sha256. The original committed-record census predates those observations. Ledger CHG-019.1-markdown-shape-amendment discloses the extension after data; a separate generator is registering observed types and malformed controls before their schema projection changes. Both fields remain optional for historical compatibility, enclosing objects remain closed, and the original structural recipes and markdown case grading are unchanged.
+
+The [16-case supplement](../../xtask/tests/corpus/markdown-schema-supplement/registration.toml) was committed at d8ee895 before support code. Its mechanical projection adds only the two optional properties and amendment provenance to the markdown schema; the other six schemas are byte-identical. [All 16 new cases, 1,497 original recipes and 80 lint cases pass unchanged](../../evidence/CHG-007/closure/markdown-schema-controls.txt). A [changed-payload negative control](../../evidence/CHG-007/closure/markdown-supplement-negative.txt) is refused. The [real report now lints](../../evidence/CHG-007/closure/markdown-schema-report-lint.txt). The proposal initially called a nonexistent Python stat_result method; [the failed projection](../../evidence/CHG-007/closure/markdown-schema-generate.txt) is retained, and the implementation now uses the standard stat predicates.
+
+**Packet implementation gate:** [all 269 tests passed](../../evidence/CHG-007/closure/pc-final-stage-gate.txt), none skipped, after the immutable-H5 and optional-shape repairs. [Generated docs](../../evidence/CHG-007/closure/pc-final-docs-check.txt) are current and [scope has zero findings](../../evidence/CHG-007/closure/pc-final-scope.txt). The clean-head L0 record and independent review remain the pre-PR steps.
+
+| Stage | Implementation range | Primary evidence |
+| --- | --- | --- |
+| Previous acceptance / registration | dd20db4–f7b5c62 | CHG-019 acceptance and registered module/schema packages |
+| Stage 0 | f7b5c62–2961dd6 | evidence/CHG-007/stage-0 |
+| Stage 1 | 2961dd6–bbf0cf2 | evidence/CHG-007/stage-1 |
+| Stage 2 | bbf0cf2–f915daa | evidence/CHG-007/stage-2 |
+| Stage 3 | f915daa–ae2f918 | evidence/CHG-007/stage-3 and H4 records |
+| Stage 4 | ae2f918–90c29fb | evidence/CHG-007/stage-4 |
+| E1 | 90c29fb–ed79a7a | experiments/no-std-graph/result.md |
+| Closure repairs | ed79a7a onward | evidence/CHG-007/closure; after-data supplement registered in d8ee895 |

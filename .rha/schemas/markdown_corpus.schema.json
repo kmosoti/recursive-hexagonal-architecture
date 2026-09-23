@@ -77,6 +77,9 @@
           },
           "site": {
             "type": "string"
+          },
+          "well_formed": {
+            "type": "boolean"
           }
         },
         "required": [
@@ -120,6 +123,9 @@
       "additionalProperties": false,
       "properties": {
         "binary": {
+          "type": "string"
+        },
+        "binary_sha256": {
           "type": "string"
         },
         "git_dirty": {
@@ -227,6 +233,12 @@
   ],
   "title": "RHA Markdown corpus record schema",
   "type": "object",
+  "x-rha-amendment": {
+    "after_data": true,
+    "content_sha256": "e271498e5619751e3fd8d50eeee26728a7154d3b9cb451f9c75cffa37913b183",
+    "contractpath": "docs/architecture/markdown-record-shape-amendment.md",
+    "ledgerid": "CHG-019.1-markdown-shape-amendment"
+  },
   "x-rha-contract": "docs/architecture/record-schema-contract.md",
   "x-rha-family": "markdown_corpus",
   "x-rha-inventory-format": "rha-observed-shapes-1",

@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "/home/kmosoti/projects/rha-m2/xtask/schema_codegen.py", line 906, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "/home/kmosoti/projects/rha-m2/xtask/schema_codegen.py", line 869, in main
+    registration, additions = _load_supplement()
+                              ~~~~~~~~~~~~~~~~^^
+  File "/home/kmosoti/projects/rha-m2/xtask/schema_codegen.py", line 245, in _load_supplement
+    _verify_supplement_manifest(registration)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/home/kmosoti/projects/rha-m2/xtask/schema_codegen.py", line 227, in _verify_supplement_manifest
+    if metadata.is_symlink() or not metadata.is_file():
+       ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'os.stat_result' object has no attribute 'is_symlink'
