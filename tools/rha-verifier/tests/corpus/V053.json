@@ -1,0 +1,105 @@
+{
+  "id": "V053",
+  "row": "11.7.9#4",
+  "purpose": "Both entry params and actual corpus cite another set",
+  "policy": {
+    "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "profile": "ECC-Solo",
+    "checks": [
+      {
+        "id": "L1.corpus",
+        "kind": "corpus",
+        "params": {
+          "corpus_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        }
+      },
+      {
+        "id": "L0.fmt",
+        "kind": "format",
+        "params": {}
+      }
+    ],
+    "rules": [
+      {
+        "id": "core.change",
+        "scope": "crates/core/**",
+        "requires": [
+          "L1.corpus"
+        ]
+      }
+    ],
+    "default_obligations": [
+      "L0.fmt"
+    ],
+    "non_waivable": [
+      "L0.fmt",
+      "L0.nextest"
+    ],
+    "trusted_producers": [
+      "automation:ci"
+    ],
+    "required_inputs": [
+      "toolchain",
+      "lockfile"
+    ],
+    "exception_authority": [
+      "human:reviewer",
+      "human:kennedy"
+    ],
+    "acceptance_authority": [
+      "human:kennedy"
+    ],
+    "cooling_off_hours": 24
+  },
+  "local_policies": [],
+  "base": "1111111111111111111111111111111111111111",
+  "candidate_tree": "2222222222222222222222222222222222222222",
+  "surface": [
+    "crates/core/src/lib.rs"
+  ],
+  "evidence": {
+    "producer": "automation:ci",
+    "integrity": "valid",
+    "subject": "2222222222222222222222222222222222222222",
+    "policy": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "base": "1111111111111111111111111111111111111111",
+    "inputs": {
+      "toolchain": "1.98.1",
+      "lockfile": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    },
+    "entries": [
+      {
+        "id": "L1.corpus",
+        "kind": "corpus",
+        "params": {
+          "corpus_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+        },
+        "outcome": "passed",
+        "corpus_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+      }
+    ]
+  },
+  "exception": null,
+  "acceptor": "human:kennedy",
+  "accountable_change_authority": "human:kennedy",
+  "now": "2026-09-22T12:00:00Z",
+  "expected": {
+    "r_eff": [
+      {
+        "id": "L1.corpus",
+        "kind": "corpus",
+        "params": {
+          "corpus_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        }
+      }
+    ],
+    "conflict": false,
+    "authentic": true,
+    "applicable": true,
+    "complete": false,
+    "passed": false,
+    "eligible": false,
+    "valid_exception": null,
+    "merge_allowed": false
+  }
+}

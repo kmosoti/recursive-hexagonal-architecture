@@ -1,0 +1,23 @@
+[package]
+name = "rha-verifier"
+version = "0.1.0"
+description = "The spec §11.7.6 acceptance model: obligations, predicates, exceptions, MergeAllowed"
+edition.workspace = true
+rust-version.workspace = true
+publish = false
+
+# A tool, like xtask: classified by metadata so that adding it to
+# rha-crates.toml's protected tools list is not needed (P-B).
+[package.metadata.rha]
+role = "tool"
+
+[dependencies]
+serde_json = "1.0.151"
+sha2 = "0.11.0"
+toml = "1.1.6"
+
+[dev-dependencies]
+proptest = "1.11.0"
+
+[lints]
+workspace = true

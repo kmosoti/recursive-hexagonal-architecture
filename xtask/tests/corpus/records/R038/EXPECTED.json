@@ -1,0 +1,9 @@
+{
+  "id": "R038",
+  "record": "record.json",
+  "kind": "evidence",
+  "accept": false,
+  "reasons": [
+    "timestamp.malformed"
+  ]
+}

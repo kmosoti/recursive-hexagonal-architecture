@@ -1,0 +1,9 @@
+{
+  "id": "R054",
+  "record": "record.json",
+  "kind": "evidence",
+  "accept": false,
+  "reasons": [
+    "evidence.failed_without_error_class"
+  ]
+}

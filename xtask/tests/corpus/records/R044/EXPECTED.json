@@ -1,0 +1,9 @@
+{
+  "id": "R044",
+  "record": "record.json",
+  "kind": "evidence",
+  "accept": false,
+  "reasons": [
+    "evidence.missing_required_check"
+  ]
+}

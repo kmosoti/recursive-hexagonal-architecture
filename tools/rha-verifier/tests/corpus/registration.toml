@@ -1,0 +1,14 @@
+# Registration (plan §2.4 rules 1, 2 and 5; P-B stage 1). Committed before any
+# lint or verifier code exists. tree_sha256 is over the sorted lines
+# "<path> <sha256>" of every file here except this one and the prompt.
+schema_version = 1
+registered_in = "CHG-019 (P-B stage 1)"
+contents = "152 verifier fixtures (26 legitimate, 57 merge-allowed)"
+generation = "sampled"
+generator = { harness = "codex-cli 0.155.1", model = "gpt-6-astra", reasoning_effort = "xhigh", sandbox = "workspace-write" }
+prompt_path = "tools/rha-verifier/tests/corpus/GENERATOR-PROMPT.md"
+prompt_sha256 = "95e5fae6c4adb1605585ec61f1cbea37e2043eb987237a2deac5f09d0a7557b0"
+sample = "run 1 of 1, 2026-09-22"
+contract = "docs/architecture/verifier-contract.md (committed in f39c90b, before generation)"
+separate_session = "No lint or verifier code existed; the implementing session did not write or edit any fixture."
+tree_sha256 = "8f347b6e6299cb0eeee7a849887068afecd97fc181243cd360d83abcc34fb984"

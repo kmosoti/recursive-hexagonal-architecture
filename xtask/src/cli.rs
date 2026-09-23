@@ -30,6 +30,11 @@ pub enum Command {
         #[command(subcommand)]
         command: EvidenceCommand,
     },
+    /// Record tooling (spec §11.7.11; P-B).
+    Rha {
+        #[command(subcommand)]
+        command: RhaCommand,
+    },
     /// Check that the change stays inside its task record's scope and the
     /// repository layout (plan §2.2 M4).
     Scope {
@@ -153,4 +158,16 @@ pub struct CiArgs {
 pub enum Label {
     Local,
     Ci,
+}
+
+#[derive(Debug, Subcommand)]
+pub enum RhaCommand {
+    /// Lint task, acceptance and evidence records; exit 1 if any is rejected.
+    Lint {
+        /// Record files: `.json` is evidence; TOML with `[acceptor]` is an
+        /// acceptance record; other TOML is a task record. At least one is
+        /// required: an empty run would pass having checked nothing.
+        #[arg(required = true)]
+        files: Vec<PathBuf>,
+    },
 }

@@ -1,0 +1,9 @@
+{
+  "id": "R062",
+  "record": "record.json",
+  "kind": "evidence",
+  "accept": false,
+  "reasons": [
+    "evidence.not_applicable_without_rule"
+  ]
+}

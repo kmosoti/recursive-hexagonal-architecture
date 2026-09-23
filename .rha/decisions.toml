@@ -214,7 +214,12 @@ default = "median wall-clock of `rhawiki build` on synth-5k; delta 5 %; alpha 0.
 [[decision]]
 id = "DP-4.1"
 title = "Trusted producer keys and exception parameters for rha-verifier; acceptance of its corpus outcomes"
-status = "open"
+status = "decided"
+decided_by = "agent:executor under human:kennedy's delegation"
+date = "2026-09-22"
+answer = "No key is created: every producer available is the Executor or a CI job that runs the candidate's xtask, and either would make Authentic vacuous. TrustedProducers stays empty and the stage 4 cut-over is not_run. Exception parameters are DP-0.5's. The verifier corpus outcomes, 152/152 as registered, are accepted."
+record = ".rha/tasks/CHG-019-trust.toml, decision dp-4.1"
+delegation = "Kennedy, 2026-09-22: 'Use recommended. ... Accept the recommend and most correct implementations going forward instead of escalating to me.' (quoted in full in .rha/tasks/CHG-019-trust.toml, decision delegation-2026-09-22)"
 owner = "human:kennedy"
 needed_by = "CHG-020"
 
@@ -242,9 +247,12 @@ default = "pre-PR command"
 [[decision]]
 id = "DP-5.3"
 title = "Retire [acceptance.bootstrap] once Authentic can hold, and name the bootstrap acceptance kind (spec-v0.11 row 8)"
-status = "open"
-owner = "human:kennedy"
-needed_by = "P-B stage 4"
+status = "decided"
+decided_by = "agent:executor under human:kennedy's delegation"
+date = "2026-09-22"
+answer = "Not retired, because Authentic cannot hold (DP-4.1). Named: the period's acceptances are kind = bootstrap_acceptance in .rha/policy.toml, and controlled_transition keeps its §11.5 meaning."
+record = ".rha/tasks/CHG-019-trust.toml, decision dp-5.3"
+delegation = "Kennedy, 2026-09-22: 'Use recommended. ... Accept the recommend and most correct implementations going forward instead of escalating to me.' (quoted in full in .rha/tasks/CHG-019-trust.toml, decision delegation-2026-09-22)"
 
 [[decision]]
 id = "DP-5.4"

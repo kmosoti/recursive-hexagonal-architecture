@@ -1,0 +1,127 @@
+{
+  "id": "V087",
+  "row": "11.7.9#8",
+  "purpose": "Invalid exception follow_up = ",
+  "policy": {
+    "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "profile": "ECC-Solo",
+    "checks": [
+      {
+        "id": "L1.performance",
+        "kind": "comparison",
+        "params": {
+          "delta": 0.03,
+          "n": 30,
+          "executions": 5
+        }
+      },
+      {
+        "id": "L0.fmt",
+        "kind": "format",
+        "params": {}
+      }
+    ],
+    "rules": [
+      {
+        "id": "core.change",
+        "scope": "crates/core/**",
+        "requires": [
+          "L1.performance"
+        ]
+      }
+    ],
+    "default_obligations": [
+      "L0.fmt"
+    ],
+    "non_waivable": [
+      "L0.fmt",
+      "L0.nextest"
+    ],
+    "trusted_producers": [
+      "automation:ci"
+    ],
+    "required_inputs": [
+      "toolchain",
+      "lockfile"
+    ],
+    "exception_authority": [
+      "human:reviewer",
+      "human:kennedy"
+    ],
+    "acceptance_authority": [
+      "human:kennedy"
+    ],
+    "cooling_off_hours": 24
+  },
+  "local_policies": [],
+  "base": "1111111111111111111111111111111111111111",
+  "candidate_tree": "2222222222222222222222222222222222222222",
+  "surface": [
+    "crates/core/src/lib.rs"
+  ],
+  "evidence": {
+    "producer": "automation:ci",
+    "integrity": "valid",
+    "subject": "2222222222222222222222222222222222222222",
+    "policy": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "base": "1111111111111111111111111111111111111111",
+    "inputs": {
+      "toolchain": "1.98.1",
+      "lockfile": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    },
+    "entries": [
+      {
+        "id": "L1.performance",
+        "kind": "comparison",
+        "params": {
+          "delta": 0.03,
+          "n": 30,
+          "executions": 5
+        },
+        "outcome": "failed",
+        "performed": true
+      }
+    ]
+  },
+  "exception": {
+    "issuer": "human:reviewer",
+    "authentic": true,
+    "subject": "2222222222222222222222222222222222222222",
+    "base": "1111111111111111111111111111111111111111",
+    "policy": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "waived": [
+      "L1.performance"
+    ],
+    "issued_at": "2026-09-20T12:00:00Z",
+    "expires_at": "2026-09-23T12:00:00Z",
+    "revoked": false,
+    "logged_at": "2026-09-20T12:00:00Z",
+    "reason": "Benchmark exceeds the approved tolerance.",
+    "compensating_control": "Keep the previous implementation available for rollback.",
+    "follow_up": ""
+  },
+  "acceptor": "human:kennedy",
+  "accountable_change_authority": "human:kennedy",
+  "now": "2026-09-22T12:00:00Z",
+  "expected": {
+    "r_eff": [
+      {
+        "id": "L1.performance",
+        "kind": "comparison",
+        "params": {
+          "delta": 0.03,
+          "n": 30,
+          "executions": 5
+        }
+      }
+    ],
+    "conflict": false,
+    "authentic": true,
+    "applicable": true,
+    "complete": true,
+    "passed": false,
+    "eligible": false,
+    "valid_exception": false,
+    "merge_allowed": false
+  }
+}

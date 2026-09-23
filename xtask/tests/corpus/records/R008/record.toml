@@ -1,0 +1,107 @@
+# Fixture presentation: a leading TOML comment.
+# Acceptance record (spec §11.4, §11.7.6; §11.7.11 shape, stored as TOML).
+# First commit of PLAN-2; creation pre-approved by .rha/policy.toml [acceptance].
+schema_version = 1
+id = "CHG-004.6"
+change = "docs/changes/CHG-004.6-c13-registration.md"
+task = ".rha/tasks/CHG-004.6-c13-registration.toml"
+
+[acceptor]
+principal = "human:kennedy"
+role = "acceptor"
+date = "2026-09-22"
+authority_profile = "ECC-Solo"
+basis = "The merge is the acceptance under .rha/policy.toml [acceptance]. Kennedy instructed on 2026-09-22: \"Then merge if no real issue\", after asking for a local Codex review; the review approved on its third round and the supervising session merged pull request 14 on that instruction."
+event = "merge of pull request 14"
+
+[subject]
+revision = "bb1ee4e1ec3a6a45b4d50d85bff35e91fe3ecec4"
+tree = "3c0fdf7a802ab7cfe8ae41007f72e93318ded436"
+parents = ["434b7064e3f21db5676aacb92525e4eef9f0ff2a", "61bdf47d4f186e708cfd91c235bd8d00a184d2c0"]
+pull_request = "https://github.com/kmosoti/recursive-hexagonal-architecture/pull/14"
+milestone = "M1 (in progress; W4 closed with the amended registration)"
+tag = "none: M1 is tagged at the close of the next packet"
+integrator_edits = "none: merge tree equals the second parent tree"
+
+[[evidence]]
+path = "evidence/ci/35776292128.json"
+class = "ci"
+subject_revision = "bb1ee4e1ec3a6a45b4d50d85bff35e91fe3ecec4"
+subject_tree = "3c0fdf7a802ab7cfe8ae41007f72e93318ded436"
+note = "GitHub Actions run 35776292128 on main at the accepted merge, downloaded unchanged. All eight L0 checks passed; nextest selected 151 tests."
+
+[[evidence]]
+path = "evidence/h4-crate/20260922T194637Z-f13f2bd5df1d.json"
+class = "local"
+note = "The final amended H4 run, clean tree at f13f2bd: 22/22 detected, 0 unmatched findings, 1 registered fact (C13), EM-C01 and EM-C02 documented, exit 0; anchor_verified and every commit_verified true. The failed CHG-004 runs stay beside it."
+
+[[evidence]]
+path = "https://github.com/kmosoti/recursive-hexagonal-architecture/pull/14#issuecomment-5782983439"
+class = "review"
+note = "Local Codex review (gpt-5.6-sol, medium, read-only): REQUEST_CHANGES at 5ef607c and b423829, APPROVE at 61bdf47. Advisory."
+
+[outcomes]
+passed = ["L0.fmt", "L0.clippy", "L0.nextest", "L0.doctest", "L0.architecture", "L0.deny", "L0.machete", "L0.typos"]
+not_run = []
+failed = []
+not_applicable = []
+inconclusive = []
+
+[h4]
+outcome = "passed"
+registration = "amended after the data under the DP-1.1c amendment (C13 expected_findings); disclosed on the ledger, in the record's amendment chain, and in the maturity row"
+
+[held_out]
+decision = "DP-1.1b, as amended in CHG-004.6"
+outcome = "not_run"
+reason = "Kennedy has not supplied the archive or directory; `cargo xtask corpus held-out` is ready. No outcome is inferred."
+
+[disposition]
+decision = "accepted"
+kind = "controlled_transition"
+merge_allowed = false
+eligibility_at_acceptance = "blocked"
+basis = "All L0 checks passed. Authentic remains false under .rha/policy.toml [acceptance.bootstrap] until the verifier and trusted producers exist."
+exception = "none"
+
+[[disposition.predicates]]
+name = "Authentic"
+holds = false
+reason = "No trusted producers; this CI record is unauthenticated."
+
+[[disposition.predicates]]
+name = "Applicable"
+holds = true
+reason = "This change edited no policy; candidate and base policy digests agree."
+
+[[disposition.predicates]]
+name = "Complete"
+holds = true
+reason = "Every required L0 check is recorded with a unique id."
+
+[[disposition.predicates]]
+name = "Passed"
+holds = true
+reason = "All eight L0 checks passed."
+
+[[defects]]
+id = "D-004.6.1"
+status = "repaired_before_acceptance"
+found_by = "local Codex review, gpt-5.6-sol medium, of 5ef607c"
+record = "docs/changes/CHG-004.6-c13-registration.md: CHG-004.6.1"
+statement = "The held-out runner ran an unverified directory, printed the private report path, and checked archive members by name only; the amendment chain was unanchored and skipped CHG-002.2's grading change; the approved sentence lacked the preceding full stop."
+repair = "All five repaired in c9fa524 and 0d0356a; the anchor made fail-closed in f13f2bd after the second round."
+
+[[defects]]
+id = "D-004.6.2"
+status = "disclosed_history"
+statement = "The executor's session prepared this item in a JJ worktree with a Python runner under a new scripts/ directory and documentation outside the plan's layout; none of it was committed. The supervising session took the item over on Kennedy's instruction."
+repair = "The runner is `cargo xtask corpus held-out`. PLAN-2 adds a scope and layout guard so that a stray directory is caught mechanically."
+
+[carried_forward]
+open = [
+  "DP-1.6: V (crate level) for the crate-graph checker is proposed with the post-hoc amendment disclosed; Kennedy accepts or declines.",
+  "DP-1.1b: held-out cases not yet run; supply the archive or the directory.",
+  "DP-1.3 blocks the first product crate.",
+  "Housekeeping: the worktrees rha-chg0046, rha-chg004 and recursive_hexogonal_architecture-pr6-review are stale.",
+]

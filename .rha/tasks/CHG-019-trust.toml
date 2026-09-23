@@ -1,0 +1,186 @@
+# Task record (spec §11.7.11 shape, stored as TOML). Packet P-B of plan revision 2.
+schema_version = 1
+id = "CHG-019"
+covers = ["CHG-019", "CHG-020"]
+slug = "trust"
+title = "P-B: record lint and the §11.7.6 verifier"
+mode = "agent"
+executor_composition = "agent"
+authority_profile = "ECC-Solo"
+status = "in_progress"
+plan_ref = "docs/plan/IMPLEMENTATION-PLAN.md §8.1 P-B; §8.2 W15 and W16"
+branch = "chg/019-trust"
+base_revision = "72c5cfd2fa96efbb81adb817ae10a93e03c87713"
+intent = "Stage 1: fix the verifier and lint contract and register both corpora from a separate generator session before any code. Stage 2: schemas and `cargo xtask rha lint`. Stage 3: `tools/rha-verifier` with a differential second implementation, graded on the stage 1 corpus. Stage 4: keys and the cut-over (gate DP-4.1, DP-5.3)."
+non_goals = ["Product crates (P-A)", "The isolation exercise, which stays not_run (no protected runner exists)", "Editing .rha/policy.toml before gate DP-5.3"]
+scope_globs = [".rha/tasks/CHG-019-trust.toml", ".rha/policy.toml", ".rha/decisions.toml", "Cargo.toml", ".rha/acceptances/CHG-005.toml", "docs/**", "evidence/**", "xtask/**", "tools/**", "Cargo.lock", ".rha/schemas/**"]
+protected_scope = ["Cargo.toml", ".rha/policy.toml", ".rha/decisions.toml", ".rha/acceptances/CHG-005.toml"]
+
+[[actors]]
+id = "human:kennedy"
+type = "human"
+
+[[actors]]
+id = "agent:executor"
+type = "agent"
+accountable_to = "human:kennedy"
+
+[roles]
+planner = "human:kennedy"
+executor = ["agent:executor"]
+integrator = "human:kennedy"
+verifier = ["automation:xtask-ci (local, advisory)", "automation:github-actions (class ci, advisory)", "local Codex review, gpt-6-astra extra-high (advisory)"]
+acceptor = "human:kennedy"
+
+[[work]]
+id = "P-B"
+executor = "agent:executor"
+depends_on = ["PLAN-2 (accepted at 72c5cfd)"]
+output = "See plan §8.1 P-B."
+claim = "The supervising session (Claude Opus 5.5) is the only writer on chg/019-trust, in the worktree ../rha-p-b. Its corpora are written by a separate Codex session (gpt-6-astra, extra-high) that has not seen lint or verifier code, because none exists at registration."
+
+[[decisions]]
+id = "concurrent-with-p-a"
+question = "P-B starts while P-A waits at gate DP-1.3. Which acceptance record is its first commit?"
+answer = "None of its own: PLAN-2's acceptance is P-A's first commit. The item that merges after P-A carries P-A's acceptance record as its first commit, and if P-B merges first, P-A carries none extra. Running P-B while P-A waits at a Kennedy gate follows the plan's own note that P-B depends on nothing in the product; the order in §8.1 governs merges, not starts."
+decided_by = "agent:executor"
+date = "2026-09-22"
+
+[[decisions]]
+id = "authority"
+question = "On whose authority, and who reviews and generates?"
+answer = "Kennedy, 2026-09-22: 'Can you implement each packet. Then once ready to review or need an adversarial generation when confidence is low pass to codex cli to gpt-6-astra extra high.'"
+decided_by = "human:kennedy"
+date = "2026-09-22"
+
+[[decisions]]
+id = "workspace-tools-member"
+question = "May P-B add tools/* to the workspace members (Cargo.toml is protected)?"
+answer = "Yes, as the approved plan lays it out: §4.1 gives members = [\"crates/*\", \"xtask\", \"tools/*\"] and W16 puts the verifier at tools/rha-verifier; W0 installed only the first two. Approved with revision 1 and again with revision 2 (DP-5.1). The edit adds that one entry and nothing else."
+decided_by = "human:kennedy (plan approval, DP-5.1)"
+date = "2026-09-22"
+
+[[decisions]]
+id = "protected-edits-quoted"
+question = "The review found that the Cargo.toml edit had no quoted approval (M1). Asked of Kennedy on 2026-09-22: 'Three protected edits follow the approved plan's layout, but no approval of yours is quoted for them. Do you approve them?' (Cargo.toml tools/*; crates/site/rha-modules.toml; crates/site/AGENTS.md)."
+answer = "Kennedy chose 'Approve all three'."
+decided_by = "human:kennedy"
+date = "2026-09-22"
+
+[[decisions]]
+id = "review-round-1"
+question = "Codex (gpt-6-astra, extra-high) requested changes with 7 P1 and 1 P2. Which are concrete failures?"
+answer = "Findings 1 to 7 are confirmed; determinations are in the change record under 'Review round 1'. Finding 7 is closed by the quoted approval above. Finding 8, sampling provenance for the Executor's own code, is declined: plan §2.4 rule 1 governs artifacts from separate generator sessions, and the Executor's work is covered by [[provenance.sessions]]. The wording is proposed for plan revision 3."
+decided_by = "agent:executor (under the AGENTS.md review rules)"
+date = "2026-09-22"
+
+
+[[decisions]]
+id = "delegation-2026-09-22"
+question = "Who decides the open recommended options, and what is the reviewer for?"
+answer = "Kennedy delegated both on 2026-09-22: 'Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me.' The Executor records the recommended or most correct option as decided under this delegation, cites it, and does not escalate. Codex validates conformance to the registered contracts and schemas and to the RHA guidelines, and does not regenerate (ledger DP-5.4, recorded on P-A)."
+decided_by = "human:kennedy"
+date = "2026-09-22"
+
+[[decisions]]
+id = "automated-review-threads"
+question = "Two open threads from the automated Codex reviewer on PR 17, at 9bcffad."
+answer = "Both confirmed. The lint requires an operand; the verifier refuses a corpus directory whose registration digest does not hold or that is empty. Determinations in the change record."
+decided_by = "agent:executor"
+date = "2026-09-22"
+
+
+[[decisions]]
+id = "dp-4.1"
+question = "DP-4.1: trusted producer keys and exception parameters for rha-verifier; acceptance of its corpus outcomes (stage 4 gate)."
+answer = "No key is created. Every producer available now is either the Executor or a CI job that runs the candidate's own xtask (docs/threat-model.md: CI evidence is class ci, never protected); a key either could use would make Authentic hold for records the candidate controls, the failure spec §11.7.6 and the §11.7.9 row 'schema-valid but unauthenticated' exist to prevent. TrustedProducers stays empty, Authentic stays false, and stage 4's key cut-over is not_run with that reason. Exception parameters are the policy's existing ones (DP-0.5). The corpus outcomes, 152/152 decided as registered, are accepted."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "'Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me.'"
+date = "2026-09-22"
+
+[[decisions]]
+id = "dp-5.3"
+question = "DP-5.3: retire [acceptance.bootstrap] once Authentic can hold, and name the bootstrap acceptance kind (spec-v0.11 row 8)."
+answer = "Not retired: Authentic cannot hold (dp-4.1). Named: .rha/policy.toml [acceptance.bootstrap] now labels the period's acceptances kind = bootstrap_acceptance, with merge_allowed = false and no claim of conformance, and controlled_transition keeps its §11.5 meaning. The expiry now names DP-4.1 only, since Passed has been satisfiable since CHG-003. This decision is the quoted approval of that protected edit; earlier records keep their label."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "'Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me.'"
+date = "2026-09-22"
+
+
+[[decisions]]
+id = "schema-contract"
+question = "The schema contract for .rha/schemas/ that stage 2 found missing: how are required fields, types and allowed keys fixed without inventing them (§2.4 rule 6)?"
+answer = "Derived mechanically from the record shapes committed so far (task, acceptance and evidence records, the policy), registered with malformed cases before any schema file is written, as a follow-on item after this packet. Codex validates against that registration and verifier-contract.md, and does not author either (DP-5.4)."
+decided_by = "agent:executor under human:kennedy's delegation (decision delegation-2026-09-22)"
+date = "2026-09-22"
+
+
+[[decisions]]
+id = "ledger-rows-dp-4.1-dp-5.3"
+question = "The validator found DP-4.1 and DP-5.3 decided in this record but not on the ledger, which owns decision status."
+answer = "DP-4.1's row is updated and a DP-5.3 row is added, each citing its decision here. The ledger is protected; the approval is the delegation (decision delegation-2026-09-22)."
+decided_by = "agent:executor under human:kennedy's delegation"
+date = "2026-09-22"
+
+
+[[decisions]]
+id = "scope-cargo-toml"
+question = "After the merge with main, P-A's scope guard reported Cargo.toml outside this record's scope_globs, although protected_scope names it with the approval of decisions workspace-tools-member and protected-edits-quoted."
+answer = "An omission in scope_globs; Cargo.toml is added. The Executor's earlier hand check had listed Cargo.toml as allowed, which masked it; the guard is the check from here on."
+decided_by = "agent:executor"
+date = "2026-09-22"
+
+
+[[decisions]]
+id = "p-a-acceptance-record"
+question = "Writing .rha/acceptances/CHG-005.toml, P-A's acceptance record, in this item (decision concurrent-with-p-a)."
+answer = "Creating the previous item's acceptance record is pre-approved by .rha/policy.toml [acceptance]; the path is named in scope_globs and protected_scope accordingly. It was pushed once before being named here, and the scope guard caught that."
+decided_by = "agent:executor"
+date = "2026-09-22"
+
+[provenance]
+harness = "Claude Code"
+task_scope = "P-B"
+permissions = "Workspace files, shell, git and gh through the user's account; no protected surface before gate DP-5.3."
+budgets = "unknown"
+reasoning_effort = "unknown"
+
+[[provenance.sessions]]
+model_id = "claude-opus-5-5"
+span = "P-B"
+
+[[provenance.generations]]
+artifact = "tools/rha-verifier/tests/corpus/V*.json (152) and xtask/tests/corpus/records/R* (80)"
+generation = "sampled"
+model = "gpt-6-astra"
+reasoning_effort = "xhigh"
+harness = "codex-cli 0.155.1, workspace-write"
+prompt_path = "tools/rha-verifier/tests/corpus/GENERATOR-PROMPT.md"
+sample = "run 1 of 1, 2026-09-22"
+separation = "generated against docs/architecture/verifier-contract.md before any lint or verifier code existed"
+omissions = "the generator recorded every case the contract does not determine (schema requiredness, nested unknown keys, comparison intervals, permissions and graph rows) in each REGISTRATION.md; none were invented"
+
+
+[[provenance.generations]]
+artifact = "tools/rha-verifier/tests/reference/mod.rs"
+generation = "sampled"
+model = "gpt-6-astra"
+reasoning_effort = "xhigh"
+harness = "codex-cli 0.155.1, workspace-write"
+prompt_path = "tools/rha-verifier/tests/reference/REFERENCE-PROMPT.md"
+prompt_sha256 = "ba3f1d48b19c19ea37dffcd7e580e5db35424b9e3ac659fd6fc731329840ea84"
+sample = "run 1 of 1, 2026-09-22"
+first_committed_sha256 = "924570934352601661b44f5375b09facdc78a9fa3f3bcdf1d89423a200a698a8"
+edits = "none"
+separation = "written from the contract by a session told not to read the corpus or tools/rha-verifier/src; model.rs was committed 6.5 minutes before it, so independence rests on the instruction, not on order (corrected after the Opus 5.5 review)"
+
+[[provenance.generations]]
+artifact = "the Executor's own work in this packet: tools/rha-verifier/src/**, the non-reference tests, xtask/src/record_lint.rs, the records and documents"
+generation = "sampled"
+model = "claude-opus-5-5"
+harness = "Claude Code"
+prompt = "Kennedy's instruction as quoted in decision authority: 'Can you implement each packet. Then once ready to review or need an adversarial generation when confidence is low pass to codex cli to gpt-6-astra extra high.'"
+prompt_sha256 = "a362345f5550853748062a579fc7765e0c07464380f472b912ab8f3412794f18"
+sample = "one interactive session, iterated under review (rounds recorded in the change record)"
+oracles = "the registered corpora (152, 80), the independent reference verifier, the property tests, the lane"
+

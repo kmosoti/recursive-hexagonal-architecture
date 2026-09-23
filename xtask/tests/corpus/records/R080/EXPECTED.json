@@ -1,0 +1,12 @@
+{
+  "id": "R080",
+  "record": "record.json",
+  "kind": "evidence",
+  "accept": false,
+  "reasons": [
+    "digest.malformed",
+    "evidence.duplicate_check_id",
+    "evidence.missing_required_check",
+    "evidence.passed_nonzero_exit"
+  ]
+}

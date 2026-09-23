@@ -1,0 +1,9 @@
+{
+  "id": "R050",
+  "record": "record.json",
+  "kind": "evidence",
+  "accept": false,
+  "reasons": [
+    "evidence.passed_nonzero_exit"
+  ]
+}

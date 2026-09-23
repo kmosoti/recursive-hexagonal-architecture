@@ -1,0 +1,9 @@
+{
+  "id": "R052",
+  "record": "record.json",
+  "kind": "evidence",
+  "accept": false,
+  "reasons": [
+    "evidence.passed_invalid_kind"
+  ]
+}

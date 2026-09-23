@@ -1,0 +1,9 @@
+{
+  "id": "R071",
+  "record": "record.json",
+  "kind": "evidence",
+  "accept": false,
+  "reasons": [
+    "digest.mismatch"
+  ]
+}

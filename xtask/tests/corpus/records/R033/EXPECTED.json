@@ -1,0 +1,9 @@
+{
+  "id": "R033",
+  "record": "record.json",
+  "kind": "evidence",
+  "accept": false,
+  "reasons": [
+    "revision.malformed"
+  ]
+}

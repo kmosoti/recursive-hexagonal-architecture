@@ -1,0 +1,65 @@
+# Task record (spec §11.7.11 shape, stored as TOML). Packet P-B of plan revision 2.
+schema_version = 1
+id = "CHG-019"
+covers = ["CHG-019", "CHG-020"]
+slug = "trust"
+title = "P-B: record lint and the §11.7.6 verifier"
+mode = "agent"
+executor_composition = "agent"
+authority_profile = "ECC-Solo"
+status = "in_progress"
+plan_ref = "docs/plan/IMPLEMENTATION-PLAN.md §8.1 P-B; §8.2 W15 and W16"
+branch = "chg/019-trust"
+base_revision = "111111111111111111111111111111111111111"
+intent = "Stage 1: fix the verifier and lint contract and register both corpora from a separate generator session before any code. Stage 2: schemas and `cargo xtask rha lint`. Stage 3: `tools/rha-verifier` with a differential second implementation, graded on the stage 1 corpus. Stage 4: keys and the cut-over (gate DP-4.1, DP-5.3)."
+non_goals = ["Product crates (P-A)", "The isolation exercise, which stays not_run (no protected runner exists)", "Editing .rha/policy.toml before gate DP-5.3"]
+scope_globs = [".rha/tasks/CHG-019-trust.toml", "docs/**", "evidence/**", "xtask/**", "tools/**", "Cargo.lock", ".rha/schemas/**"]
+protected_scope = []
+
+[[actors]]
+id = "human:kennedy"
+type = "human"
+
+[[actors]]
+id = "agent:executor"
+type = "agent"
+accountable_to = "human:kennedy"
+
+[roles]
+planner = "human:kennedy"
+executor = ["agent:executor"]
+integrator = "human:kennedy"
+verifier = ["automation:xtask-ci (local, advisory)", "automation:github-actions (class ci, advisory)", "local Codex review, gpt-6-astra extra-high (advisory)"]
+acceptor = "human:kennedy"
+
+[[work]]
+id = "P-B"
+executor = "agent:executor"
+depends_on = ["PLAN-2 (accepted at 72c5cfd)"]
+output = "See plan §8.1 P-B."
+claim = "The supervising session (Claude Opus 5.5) is the only writer on chg/019-trust, in the worktree ../rha-p-b. Its corpora are written by a separate Codex session (gpt-6-astra, extra-high) that has not seen lint or verifier code, because none exists at registration."
+
+[[decisions]]
+id = "concurrent-with-p-a"
+question = "P-B starts while P-A waits at gate DP-1.3. Which acceptance record is its first commit?"
+answer = "None of its own: PLAN-2's acceptance is P-A's first commit. The item that merges after P-A carries P-A's acceptance record as its first commit, and if P-B merges first, P-A carries none extra. Running P-B while P-A waits at a Kennedy gate follows the plan's own note that P-B depends on nothing in the product; the order in §8.1 governs merges, not starts."
+decided_by = "agent:executor"
+date = "2026-09-22"
+
+[[decisions]]
+id = "authority"
+question = "On whose authority, and who reviews and generates?"
+answer = "Kennedy, 2026-09-22: 'Can you implement each packet. Then once ready to review or need an adversarial generation when confidence is low pass to codex cli to gpt-6-astra extra high.'"
+decided_by = "human:kennedy"
+date = "2026-09-22"
+
+[provenance]
+harness = "Claude Code"
+task_scope = "P-B"
+permissions = "Workspace files, shell, git and gh through the user's account; no protected surface before gate DP-5.3."
+budgets = "unknown"
+reasoning_effort = "unknown"
+
+[[provenance.sessions]]
+model_id = "claude-opus-5-5"
+span = "P-B"
