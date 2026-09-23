@@ -86,7 +86,13 @@ pub fn step(
     let mut produced: BTreeMap<RelPath, (Vec<u8>, Option<PageId>)> = BTreeMap::new();
     let mut commands = Vec::new();
     for doc in inputs.documents {
-        let model = assembler.assemble(doc, inputs.graph, &lookup, &inputs.context);
+        let model = assembler.assemble(
+            doc,
+            inputs.documents,
+            inputs.graph,
+            &lookup,
+            &inputs.context,
+        );
         let out = renderer.render(&model);
         if produced
             .insert(out.path.clone(), (out.bytes, Some(doc.id.clone())))

@@ -11,10 +11,12 @@
 
 mod node;
 mod parse;
+mod section;
 mod slug;
 
-pub use node::{Align, CalloutKind, Node};
+pub use node::{Align, CalloutKind, Node, Transclusion};
 pub use parse::parse;
+pub use section::{section_nodes, transclusions};
 pub use slug::slugify;
 
 use library::{Digest, PageId};

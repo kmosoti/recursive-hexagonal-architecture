@@ -12,11 +12,12 @@ pub mod contract;
 mod port;
 pub mod testing;
 
-pub use build::{PageRenderer, Rendered};
 /// What a renderer needs from the owners of the model, re-exported so that a
 /// rendering adapter depends on its port's owner only (D1; no
 /// `adapter.foreign_core`).
-pub use document::{Align, CalloutKind, Node};
+pub use assembly::PageNode as Node;
+pub use build::{PageRenderer, Rendered};
+pub use document::{Align, CalloutKind};
 pub use library::{PageId, RelPath};
 pub use port::{Clock, OutputSink, SinkError};
 
@@ -95,6 +96,39 @@ pub fn witnesses(
                 target: target.clone(),
                 heading: heading.clone(),
             },
+            Witness::BrokenTransclusion { from, target, .. } => CheckWitness::BrokenTransclusion {
+                from: from.to_string(),
+                target: target.clone(),
+            },
+            Witness::AmbiguousTransclusion {
+                from,
+                target,
+                candidates,
+                ..
+            } => CheckWitness::AmbiguousTransclusion {
+                from: from.to_string(),
+                target: target.clone(),
+                candidates: candidates.iter().map(ToString::to_string).collect(),
+            },
+            Witness::MissingTransclusionAnchor {
+                from,
+                target,
+                heading,
+                ..
+            } => CheckWitness::MissingTransclusionAnchor {
+                from: from.to_string(),
+                target: target.clone(),
+                heading: heading.clone(),
+            },
+            Witness::TransclusionCycle { path } => CheckWitness::TransclusionCycle {
+                path: path
+                    .iter()
+                    .map(|region| match region.anchor.as_deref() {
+                        Some(anchor) => format!("{}#{anchor}", region.page),
+                        None => region.page.to_string(),
+                    })
+                    .collect(),
+            },
         });
     }
     out.sort();
@@ -123,6 +157,23 @@ pub enum CheckWitness {
         from: String,
         target: String,
         heading: String,
+    },
+    BrokenTransclusion {
+        from: String,
+        target: String,
+    },
+    AmbiguousTransclusion {
+        from: String,
+        target: String,
+        candidates: Vec<String>,
+    },
+    MissingTransclusionAnchor {
+        from: String,
+        target: String,
+        heading: String,
+    },
+    TransclusionCycle {
+        path: Vec<String>,
     },
 }
 

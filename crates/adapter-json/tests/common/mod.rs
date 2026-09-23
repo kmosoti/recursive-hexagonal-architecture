@@ -557,7 +557,7 @@ pub fn models_from_corpus(corpus: &Corpus, built_at: &str) -> Vec<PageModel> {
     };
     documents
         .iter()
-        .map(|document| DefaultAssembler.assemble(document, &graph, &lookup, &context))
+        .map(|document| DefaultAssembler.assemble(document, &documents, &graph, &lookup, &context))
         .collect()
 }
 

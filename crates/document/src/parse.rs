@@ -39,10 +39,12 @@ enum Frame {
     Image {
         src: String,
         alt: String,
+        line: usize,
+        wikilink: bool,
     },
     List {
         start: Option<u64>,
-        items: Vec<Vec<Node>>,
+        items: Vec<Vec<BuildNode>>,
     },
     Item,
     Quote {
@@ -54,15 +56,46 @@ enum Frame {
     },
     Table {
         align: Vec<Align>,
-        head: Vec<Vec<Node>>,
-        rows: Vec<Vec<Vec<Node>>>,
+        head: Vec<Vec<BuildNode>>,
+        rows: Vec<Vec<Vec<BuildNode>>>,
         in_head: bool,
     },
     Row {
-        cells: Vec<Vec<Node>>,
+        cells: Vec<Vec<BuildNode>>,
     },
     Cell,
     Other,
+}
+
+enum BuildNode {
+    Node(Node),
+    Image {
+        src: String,
+        alt: String,
+        line: usize,
+        wikilink: bool,
+    },
+}
+
+impl BuildNode {
+    fn is_ignorable(&self) -> bool {
+        matches!(
+            self,
+            Self::Node(Node::Text(text))
+                if text.chars().all(|character| matches!(character, ' ' | '\t'))
+        )
+    }
+
+    fn into_node(self) -> Node {
+        match self {
+            Self::Node(node) => node,
+            Self::Image { src, alt, .. } => Node::Image { src, alt },
+        }
+    }
+}
+
+fn into_nodes(nodes: Vec<BuildNode>) -> Vec<Node> {
+    nodes.into_iter().map(BuildNode::into_node).collect()
 }
 
 fn level(l: HeadingLevel) -> u8 {
@@ -101,20 +134,55 @@ fn line_of(starts: &[usize], offset: usize) -> usize {
 }
 
 struct Builder {
-    stack: Vec<(Frame, Vec<Node>)>,
+    stack: Vec<(Frame, Vec<BuildNode>)>,
     headings: Vec<Heading>,
     links: Vec<Link>,
     diagnostics: Vec<Diagnostic>,
     seen: BTreeMap<String, (usize, usize)>,
     /// Every final slug allocated so far on the page.
     used: std::collections::BTreeSet<String>,
+    next_transclusion: usize,
 }
 
 impl Builder {
-    fn push_node(&mut self, node: Node) {
+    fn push_node(&mut self, node: BuildNode) {
         if let Some((_, children)) = self.stack.last_mut() {
             children.push(node);
         }
+    }
+
+    fn transclusion(&mut self, children: &[BuildNode]) -> Option<Node> {
+        let mut meaningful = children.iter().filter(|node| !node.is_ignorable());
+        let Some(BuildNode::Image {
+            src,
+            line,
+            wikilink: true,
+            ..
+        }) = meaningful.next()
+        else {
+            return None;
+        };
+        if meaningful.next().is_some() {
+            return None;
+        }
+
+        let (target, anchor) = match src.split_once('#') {
+            Some((target, anchor)) => (target, Some(anchor)),
+            None => (src.as_str(), None),
+        };
+        if target.is_empty() || anchor == Some("") {
+            return None;
+        }
+
+        let id = self.next_transclusion;
+        self.next_transclusion += 1;
+        Some(Node::Transclusion(crate::Transclusion {
+            id,
+            target: target.to_owned(),
+            anchor: anchor.map(str::to_owned),
+            display: src.clone(),
+            line: *line,
+        }))
     }
 
     /// Plain text for an enclosing heading, if any.
@@ -161,9 +229,15 @@ impl Builder {
             Tag::Link { dest_url, .. } => Frame::Link {
                 href: dest_url.to_string(),
             },
-            Tag::Image { dest_url, .. } => Frame::Image {
+            Tag::Image {
+                link_type,
+                dest_url,
+                ..
+            } => Frame::Image {
                 src: dest_url.to_string(),
                 alt: String::new(),
+                line,
+                wikilink: matches!(link_type, LinkType::WikiLink { has_pothole: false }),
             },
             Tag::List(start) => Frame::List {
                 start,
@@ -263,38 +337,80 @@ impl Builder {
                     base_slug: base,
                     line,
                 });
-                Some(Node::Heading {
+                Some(BuildNode::Node(Node::Heading {
                     level,
                     slug,
-                    children,
-                })
+                    children: into_nodes(children),
+                }))
             }
-            Frame::Paragraph => Some(Node::Paragraph(children)),
-            Frame::Emphasis => Some(Node::Emphasis(children)),
-            Frame::Strong => Some(Node::Strong(children)),
-            Frame::Strike => Some(Node::Strikethrough(children)),
-            Frame::Link { href } => Some(Node::Link { href, children }),
+            Frame::Paragraph => {
+                if let Some(node) = self.transclusion(&children) {
+                    Some(BuildNode::Node(node))
+                } else {
+                    Some(BuildNode::Node(Node::Paragraph(into_nodes(children))))
+                }
+            }
+            Frame::Emphasis => Some(BuildNode::Node(Node::Emphasis(into_nodes(children)))),
+            Frame::Strong => Some(BuildNode::Node(Node::Strong(into_nodes(children)))),
+            Frame::Strike => Some(BuildNode::Node(Node::Strikethrough(into_nodes(children)))),
+            Frame::Link { href } => Some(BuildNode::Node(Node::Link {
+                href,
+                children: into_nodes(children),
+            })),
             Frame::WikiLink { index } => {
                 if let Some(link) = self.links.get_mut(index)
                     && link.alias.is_some()
                 {
                     link.alias = Some(plain(&children));
                 }
-                Some(Node::WikiLink { index, children })
+                Some(BuildNode::Node(Node::WikiLink {
+                    index,
+                    children: into_nodes(children),
+                }))
             }
-            Frame::Image { src, alt } => Some(Node::Image { src, alt }),
-            Frame::List { start, items } => Some(Node::List { start, items }),
+            Frame::Image {
+                src,
+                alt,
+                line,
+                wikilink,
+            } => Some(BuildNode::Image {
+                src,
+                alt,
+                line,
+                wikilink,
+            }),
+            Frame::List { start, items } => Some(BuildNode::Node(Node::List {
+                start,
+                items: items.into_iter().map(into_nodes).collect(),
+            })),
             Frame::Item => {
+                let item = if let Some(node) = self.transclusion(&children) {
+                    vec![BuildNode::Node(node)]
+                } else {
+                    children
+                };
                 if let Some((Frame::List { items, .. }, _)) = self.stack.last_mut() {
-                    items.push(children);
+                    items.push(item);
                 }
                 None
             }
-            Frame::Quote { kind } => Some(Node::BlockQuote { kind, children }),
-            Frame::CodeBlock { lang, text } => Some(Node::CodeBlock { lang, text }),
+            Frame::Quote { kind } => Some(BuildNode::Node(Node::BlockQuote {
+                kind,
+                children: into_nodes(children),
+            })),
+            Frame::CodeBlock { lang, text } => {
+                Some(BuildNode::Node(Node::CodeBlock { lang, text }))
+            }
             Frame::Table {
                 align, head, rows, ..
-            } => Some(Node::Table { align, head, rows }),
+            } => Some(BuildNode::Node(Node::Table {
+                align,
+                head: head.into_iter().map(into_nodes).collect(),
+                rows: rows
+                    .into_iter()
+                    .map(|row| row.into_iter().map(into_nodes).collect())
+                    .collect(),
+            })),
             Frame::Row { cells } => {
                 if let Some((
                     Frame::Table {
@@ -321,7 +437,7 @@ impl Builder {
                 }
                 None
             }
-            Frame::Other => Some(Node::Paragraph(children)),
+            Frame::Other => Some(BuildNode::Node(Node::Paragraph(into_nodes(children)))),
         };
         if let Some(node) = node {
             self.push_node(node);
@@ -341,27 +457,49 @@ impl Builder {
             _ => {}
         }
         self.heading_text(text);
-        self.push_node(Node::Text(text.to_owned()));
+        self.push_node(BuildNode::Node(Node::Text(text.to_owned())));
     }
 }
 
 /// The plain text of a node list.
-fn plain(nodes: &[Node]) -> String {
+fn plain(nodes: &[BuildNode]) -> String {
     let mut out = String::new();
     for node in nodes {
         match node {
-            Node::Text(t) | Node::Code(t) => out.push_str(t),
-            Node::Emphasis(c) | Node::Strong(c) | Node::Strikethrough(c) | Node::Paragraph(c) => {
-                out.push_str(&plain(c))
-            }
-            Node::Link { children, .. }
-            | Node::WikiLink { children, .. }
-            | Node::Heading { children, .. } => out.push_str(&plain(children)),
-            Node::SoftBreak | Node::HardBreak => out.push(' '),
-            _ => {}
+            BuildNode::Image { .. } => {}
+            BuildNode::Node(Node::Text(text) | Node::Code(text)) => out.push_str(text),
+            BuildNode::Node(
+                Node::Emphasis(children)
+                | Node::Strong(children)
+                | Node::Strikethrough(children)
+                | Node::Paragraph(children)
+                | Node::Heading { children, .. }
+                | Node::Link { children, .. }
+                | Node::WikiLink { children, .. },
+            ) => out.push_str(&plain_nodes(children)),
+            BuildNode::Node(Node::SoftBreak | Node::HardBreak) => out.push(' '),
+            BuildNode::Node(_) => {}
         }
     }
     out
+}
+
+fn plain_nodes(nodes: &[Node]) -> String {
+    nodes.iter().fold(String::new(), |mut out, node| {
+        match node {
+            Node::Text(text) | Node::Code(text) => out.push_str(text),
+            Node::Emphasis(children)
+            | Node::Strong(children)
+            | Node::Strikethrough(children)
+            | Node::Paragraph(children)
+            | Node::Heading { children, .. }
+            | Node::Link { children, .. }
+            | Node::WikiLink { children, .. } => out.push_str(&plain_nodes(children)),
+            Node::SoftBreak | Node::HardBreak => out.push(' '),
+            _ => {}
+        }
+        out
+    })
 }
 
 /// Parses one source. Total: never fails, never panics on any UTF-8 input.
@@ -377,6 +515,7 @@ pub fn parse(source: &Source) -> Document {
         diagnostics: Vec::new(),
         seen: BTreeMap::new(),
         used: std::collections::BTreeSet::new(),
+        next_transclusion: 0,
     };
     for (event, range) in Parser::new_ext(text, options()).into_offset_iter() {
         let line = line_of(&starts, range.start);
@@ -386,33 +525,37 @@ pub fn parse(source: &Source) -> Document {
             Event::Text(t) => b.text(&t),
             Event::Code(t) => {
                 b.heading_text(&t);
-                b.push_node(Node::Code(t.to_string()));
+                b.push_node(BuildNode::Node(Node::Code(t.to_string())));
             }
             Event::Html(t) | Event::InlineHtml(t) => {
                 b.diagnostics
                     .push(Diagnostic::Unsupported { kind: "html", line });
-                b.push_node(Node::Html(t.to_string()));
+                b.push_node(BuildNode::Node(Node::Html(t.to_string())));
             }
             Event::SoftBreak => {
                 b.heading_text(" ");
-                b.push_node(Node::SoftBreak);
+                b.push_node(BuildNode::Node(Node::SoftBreak));
             }
-            Event::HardBreak => b.push_node(Node::HardBreak),
-            Event::Rule => b.push_node(Node::Rule),
-            Event::TaskListMarker(done) => b.push_node(Node::TaskMarker(done)),
+            Event::HardBreak => b.push_node(BuildNode::Node(Node::HardBreak)),
+            Event::Rule => b.push_node(BuildNode::Node(Node::Rule)),
+            Event::TaskListMarker(done) => b.push_node(BuildNode::Node(Node::TaskMarker(done))),
             Event::InlineMath(t) | Event::DisplayMath(t) | Event::FootnoteReference(t) => {
                 b.diagnostics.push(Diagnostic::Unsupported {
                     kind: "inline",
                     line,
                 });
-                b.push_node(Node::Text(t.to_string()));
+                b.push_node(BuildNode::Node(Node::Text(t.to_string())));
             }
         }
     }
     while b.stack.len() > 1 {
         b.end(TagEnd::Paragraph);
     }
-    let body = b.stack.pop().map(|(_, c)| c).unwrap_or_default();
+    let body = b
+        .stack
+        .pop()
+        .map(|(_, c)| into_nodes(c))
+        .unwrap_or_default();
     let title = b
         .headings
         .iter()

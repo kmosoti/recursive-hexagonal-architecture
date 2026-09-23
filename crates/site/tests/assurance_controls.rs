@@ -29,6 +29,7 @@ fn pages(corpus: &Corpus) -> Vec<PageModel> {
         .map(|document| {
             DefaultAssembler.assemble(
                 document,
+                &documents,
                 &graph,
                 &no_titles,
                 &AssembleContext {

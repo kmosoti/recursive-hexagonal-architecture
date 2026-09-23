@@ -5,6 +5,7 @@ use std::time::{SystemTime, UNIX_EPOCH};
 
 use serde_json::Value;
 use xtask::graph::model::Target;
+use xtask::util;
 
 struct TempDir(PathBuf);
 
@@ -264,6 +265,50 @@ fn architecture_cli_checks_live_site_and_preserves_report_contract() {
     assert_eq!(site["outcome"], "passed");
     assert!(site["test_edges"].is_array() || report["test_edges"].is_array());
     assert!(site["module_edges"].is_array() || report["module_edges"].is_array());
+
+    let source_files = site["source_files_sha256"]
+        .as_object()
+        .expect("site source_files_sha256");
+    for relative in [
+        "xtask/tests/support/registered_package.rs",
+        "xtask/tests/support/registered_package_embedded.rs",
+    ] {
+        let path = fs::canonicalize(workspace.join(relative)).expect("canonical support source");
+        let key = path.display().to_string();
+        let actual = source_files
+            .get(&key)
+            .unwrap_or_else(|| panic!("site source digest missing for {key}"));
+        assert_eq!(
+            actual,
+            &serde_json::json!(util::sha256_file(&path).expect("support source digest"))
+        );
+    }
+    assert!(
+        source_files.keys().all(|path| path.ends_with(".rs")),
+        "embedded corpus payloads must not be labelled as Rust modules: {source_files:?}"
+    );
+
+    let test_edges = report["test_edges"].as_array().expect("test_edges array");
+    let module_edges = report["module_edges"].as_array().expect("module_edges array");
+    let helper_prefix = "assembly::transclusion_tests::registered_package";
+    let helper_edges = test_edges
+        .iter()
+        .filter(|edge| {
+            edge["from"].as_str().is_some_and(|from| {
+                from == helper_prefix || from.starts_with(&format!("{helper_prefix}::"))
+            })
+        })
+        .collect::<Vec<_>>();
+    assert!(
+        !helper_edges.is_empty(),
+        "shared helper edges were not reported as test edges"
+    );
+    for edge in helper_edges {
+        assert_eq!(edge["severity"], "note");
+        assert!(!module_edges.iter().any(|candidate| {
+            candidate["from"] == edge["from"] && candidate["to"] == edge["to"]
+        }));
+    }
 }
 
 #[test]

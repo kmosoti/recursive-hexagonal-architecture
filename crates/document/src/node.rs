@@ -26,6 +26,7 @@ pub enum Node {
         index: usize,
         children: Vec<Node>,
     },
+    Transclusion(Transclusion),
     Image {
         src: String,
         alt: String,
@@ -68,4 +69,14 @@ pub enum Align {
     Left,
     Center,
     Right,
+}
+
+/// A parser-recognized transclusion embed.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct Transclusion {
+    pub id: usize,
+    pub target: String,
+    pub anchor: Option<String>,
+    pub display: String,
+    pub line: usize,
 }

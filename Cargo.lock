@@ -282,6 +282,7 @@ dependencies = [
  "library",
  "proptest",
  "pulldown-cmark",
+ "serde_json",
 ]
 
 [[package]]
@@ -391,6 +392,7 @@ dependencies = [
  "document",
  "library",
  "proptest",
+ "serde_json",
 ]
 
 [[package]]
@@ -977,6 +979,7 @@ dependencies = [
  "graph",
  "library",
  "proptest",
+ "serde_json",
 ]
 
 [[package]]

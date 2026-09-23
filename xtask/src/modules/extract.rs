@@ -111,6 +111,7 @@ enum Resolution {
 
 struct Engine {
     crate_root: PathBuf,
+    permitted_test_root: Option<PathBuf>,
     crate_name: String,
     edition: String,
     externals: BTreeSet<String>,
@@ -353,11 +354,28 @@ impl Engine {
         let file = fs::canonicalize(&file)
             .map_err(|error| format!("failed to canonicalize {}: {}", file.display(), error))?;
         if !file.starts_with(&self.crate_root) {
-            return Err(format!(
-                "module file {} is outside crate root {}",
-                file.display(),
-                self.crate_root.display()
-            ));
+            let permitted = inherited_test
+                && self
+                    .permitted_test_root
+                    .as_ref()
+                    .is_some_and(|root| file.starts_with(root));
+            if !permitted {
+                if inherited_test && self.permitted_test_root.is_some() {
+                    return Err(format!(
+                        "module file {} is outside permitted test source root {}",
+                        file.display(),
+                        self.permitted_test_root
+                            .as_ref()
+                            .expect("permitted test root checked above")
+                            .display()
+                    ));
+                }
+                return Err(format!(
+                    "module file {} is outside crate root {}",
+                    file.display(),
+                    self.crate_root.display()
+                ));
+            }
         }
         if self.active_files.contains(&file) {
             return Err(format!(
@@ -1281,14 +1299,63 @@ impl TokenStreamString for Meta {
 }
 
 pub fn extract(
-    crate_root: &std::path::Path,
-    root_file: &std::path::Path,
+    crate_root: &Path,
+    root_file: &Path,
     crate_name: &str,
     edition: &str,
-    externals: &std::collections::BTreeSet<String>,
+    externals: &BTreeSet<String>,
+) -> Result<Extracted, String> {
+    extract_impl(crate_root, root_file, None, crate_name, edition, externals)
+}
+
+pub fn extract_with_test_root(
+    crate_root: &Path,
+    root_file: &Path,
+    permitted_test_root: &Path,
+    crate_name: &str,
+    edition: &str,
+    externals: &BTreeSet<String>,
+) -> Result<Extracted, String> {
+    extract_impl(
+        crate_root,
+        root_file,
+        Some(permitted_test_root),
+        crate_name,
+        edition,
+        externals,
+    )
+}
+
+fn extract_impl(
+    crate_root: &Path,
+    root_file: &Path,
+    permitted_test_root: Option<&Path>,
+    crate_name: &str,
+    edition: &str,
+    externals: &BTreeSet<String>,
 ) -> Result<Extracted, String> {
     let crate_root = fs::canonicalize(crate_root)
         .map_err(|error| format!("failed to canonicalize {}: {}", crate_root.display(), error))?;
+    let permitted_test_root = permitted_test_root
+        .map(|root| {
+            fs::canonicalize(root).map_err(|error| {
+                format!(
+                    "failed to canonicalize permitted test source root {}: {}",
+                    root.display(),
+                    error
+                )
+            })
+        })
+        .transpose()?;
+    if let Some(permitted_test_root) = &permitted_test_root
+        && !crate_root.starts_with(permitted_test_root)
+    {
+        return Err(format!(
+            "crate root {} is outside permitted test source root {}",
+            crate_root.display(),
+            permitted_test_root.display()
+        ));
+    }
     let root_file = fs::canonicalize(root_file)
         .map_err(|error| format!("failed to canonicalize {}: {}", root_file.display(), error))?;
     if !root_file.starts_with(&crate_root) {
@@ -1313,6 +1380,7 @@ pub fn extract(
 
     let mut engine = Engine {
         crate_root,
+        permitted_test_root,
         crate_name: normalized_crate.clone(),
         edition: edition.to_owned(),
         externals: all_externals,

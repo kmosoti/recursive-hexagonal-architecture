@@ -63,6 +63,26 @@ fn json(w: &CheckWitness) -> serde_json::Value {
         CheckWitness::AmbiguousLink { from, target } => {
             serde_json::json!({"kind": "ambiguous_link", "from": from, "target": target})
         }
+        CheckWitness::BrokenTransclusion { from, target } => {
+            serde_json::json!({"kind": "broken_transclusion", "from": from, "target": target})
+        }
+        CheckWitness::AmbiguousTransclusion {
+            from,
+            target,
+            candidates,
+        } => {
+            serde_json::json!({"kind": "ambiguous_transclusion", "from": from, "target": target, "candidates": candidates})
+        }
+        CheckWitness::MissingTransclusionAnchor {
+            from,
+            target,
+            heading,
+        } => {
+            serde_json::json!({"kind": "missing_transclusion_anchor", "from": from, "target": target, "heading": heading})
+        }
+        CheckWitness::TransclusionCycle { path } => {
+            serde_json::json!({"kind": "transclusion_cycle", "path": path})
+        }
         CheckWitness::MissingAnchor {
             from,
             target,
@@ -98,7 +118,8 @@ fn run(cli: Cli) -> Result<u8, String> {
                     let models = documents
                         .iter()
                         .map(|document| {
-                            DefaultAssembler.assemble(document, &graph, &lookup, &context)
+                            DefaultAssembler
+                                .assemble(document, &documents, &graph, &lookup, &context)
                         })
                         .collect::<Vec<_>>();
                     let renderer = adapter_json::JsonRenderer::new(&models).map_err(|e| {

@@ -31,7 +31,7 @@ harness = []
 # digest, unicode-normalization for NFC page ids and slugs.
 allow = ["pulldown-cmark", "sha2", "unicode-normalization"]
 # Dev-dependencies of a core crate (approved with the list above).
-dev_allow = ["proptest"]
+dev_allow = ["proptest", "serde_json"]
 # A build script runs arbitrary code at build time, which is an ambient effect
 # the deny list of CHG-001 cannot see (§4.1, Law 5 row).
 allow_build_scripts = false
