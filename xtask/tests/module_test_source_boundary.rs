@@ -625,7 +625,7 @@ fn registered_module_test_boundary_cases_are_graded_exactly() {
     copy_package(&package, &copied_package);
     verify_package(&copied_package).expect("verified copied positive package");
     let mut corrupted_cases =
-        fs::read(&copied_package.join("CASES.json")).expect("copied CASES.json");
+        fs::read(copied_package.join("CASES.json")).expect("copied CASES.json");
     corrupted_cases.push(b'\n');
     fs::write(copied_package.join("CASES.json"), corrupted_cases).expect("corrupt copied package");
     assert_eq!(
