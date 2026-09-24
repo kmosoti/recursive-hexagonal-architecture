@@ -142,7 +142,9 @@ fn exact_keys(actual: &BTreeSet<String>, expected: &[&str]) -> Result<(), String
         .map(|value| (*value).to_owned())
         .collect::<BTreeSet<_>>();
     if actual != &expected {
-        return Err(format!("keys differ: actual={actual:?}, expected={expected:?}"));
+        return Err(format!(
+            "keys differ: actual={actual:?}, expected={expected:?}"
+        ));
     }
     Ok(())
 }
@@ -157,7 +159,10 @@ fn verify_package(path: &Path) -> Result<Vec<Case>, String> {
                 .map_err(|error| format!("reading package entry type: {error}"))?
                 .is_file()
             {
-                return Err(format!("package entry is not a file: {}", entry.path().display()));
+                return Err(format!(
+                    "package entry is not a file: {}",
+                    entry.path().display()
+                ));
             }
             entry
                 .file_name()
@@ -283,7 +288,10 @@ fn verify_package(path: &Path) -> Result<Vec<Case>, String> {
         .as_array()
         .ok_or_else(|| "source_snapshots is not an array".to_owned())?;
     if snapshots.len() != 3 {
-        return Err(format!("expected three source snapshots, found {}", snapshots.len()));
+        return Err(format!(
+            "expected three source snapshots, found {}",
+            snapshots.len()
+        ));
     }
     let snapshot_spec = [
         (
@@ -304,7 +312,10 @@ fn verify_package(path: &Path) -> Result<Vec<Case>, String> {
             .as_table()
             .ok_or_else(|| "source snapshot is not a table".to_owned())?;
         let keys = table.keys().cloned().collect::<BTreeSet<_>>();
-        exact_keys(&keys, &["original_documentary_path", "relative_path", "sha256"])?;
+        exact_keys(
+            &keys,
+            &["original_documentary_path", "relative_path", "sha256"],
+        )?;
         let bytes = fs::read(path.join(relative))
             .map_err(|error| format!("reading source snapshot {relative}: {error}"))?;
         if table["relative_path"].as_str() != Some(relative)
@@ -315,8 +326,8 @@ fn verify_package(path: &Path) -> Result<Vec<Case>, String> {
         }
     }
 
-    let cases_bytes =
-        fs::read(path.join("CASES.json")).map_err(|error| format!("reading CASES.json: {error}"))?;
+    let cases_bytes = fs::read(path.join("CASES.json"))
+        .map_err(|error| format!("reading CASES.json: {error}"))?;
     let cases: Vec<Case> = serde_json::from_slice(&cases_bytes)
         .map_err(|error| format!("parsing CASES.json: {error}"))?;
     if cases.len() != 12 {
@@ -351,8 +362,14 @@ fn normal_parts(value: &str) -> Vec<String> {
 
 fn resolve_virtual_link(link: &str, target: &str) -> String {
     assert!(!target.is_empty(), "empty symlink target");
-    assert!(!target.contains('\\'), "backslash in symlink target: {target}");
-    assert!(Path::new(target).is_relative(), "absolute symlink target: {target}");
+    assert!(
+        !target.contains('\\'),
+        "backslash in symlink target: {target}"
+    );
+    assert!(
+        Path::new(target).is_relative(),
+        "absolute symlink target: {target}"
+    );
 
     let mut parts = normal_parts(link);
     parts.pop().expect("symlink has a parent");
@@ -365,7 +382,10 @@ fn resolve_virtual_link(link: &str, target: &str) -> String {
                     .to_owned(),
             ),
             Component::ParentDir => {
-                assert!(parts.pop().is_some(), "symlink target escapes case root: {target}");
+                assert!(
+                    parts.pop().is_some(),
+                    "symlink target escapes case root: {target}"
+                );
             }
             Component::CurDir => {}
             other => panic!("invalid symlink target component {other:?}: {target}"),
@@ -481,7 +501,10 @@ fn assert_case_shape(case: &Case) {
         assert!(expected.test_edge.is_none());
         assert!(expected.source_files.is_empty());
     } else {
-        assert!(case.crate_root.starts_with(&(case.workspace_root.clone() + "/")));
+        assert!(
+            case.crate_root
+                .starts_with(&(case.workspace_root.clone() + "/"))
+        );
         assert!(expected.reason_contains.is_none());
         assert!(!expected.modules.is_empty());
         assert!(expected.test_edge.is_some());
@@ -511,7 +534,13 @@ fn extract_case(case: &Case, owned_root: &Path) -> Result<Extracted, String> {
     let root_file = owned_root.join(&case.root_file);
     let externals = BTreeSet::new();
     match case.mode.as_str() {
-        "strict" => extract(&crate_root, &root_file, &case.crate_name, "2021", &externals),
+        "strict" => extract(
+            &crate_root,
+            &root_file,
+            &case.crate_name,
+            "2021",
+            &externals,
+        ),
         "workspace" => extract_with_test_root(
             &crate_root,
             &root_file,
@@ -534,7 +563,10 @@ fn relative_source_map(owned_root: &Path, extracted: &Extracted) -> BTreeMap<Str
     for (path, digest) in source_map_for_extracted(owned_root, extracted) {
         let path = PathBuf::from(path);
         assert!(path.is_absolute());
-        assert_eq!(fs::canonicalize(&path).expect("canonical source map path"), path);
+        assert_eq!(
+            fs::canonicalize(&path).expect("canonical source map path"),
+            path
+        );
         let relative = path
             .strip_prefix(&canonical_root)
             .expect("source map path inside fixture root")
@@ -578,7 +610,10 @@ fn source_map_for_extracted(owned_root: &Path, extracted: &Extracted) -> BTreeMa
 fn registered_module_test_boundary_cases_are_graded_exactly() {
     let package = package_root();
     let cases = verify_package(&package).expect("registered package");
-    let ids = cases.iter().map(|case| case.id.as_str()).collect::<Vec<_>>();
+    let ids = cases
+        .iter()
+        .map(|case| case.id.as_str())
+        .collect::<Vec<_>>();
     assert_eq!(ids.len(), CASE_IDS.len());
     assert_eq!(
         ids.iter().copied().collect::<BTreeSet<_>>(),
@@ -606,7 +641,11 @@ fn registered_module_test_boundary_cases_are_graded_exactly() {
 
         if case.expected.outcome == "refused" {
             let error = extracted.expect_err("refused case unexpectedly parsed");
-            let reason = case.expected.reason_contains.as_deref().expect("refusal reason");
+            let reason = case
+                .expected
+                .reason_contains
+                .as_deref()
+                .expect("refusal reason");
             assert!(
                 error.contains(reason),
                 "{}: expected {reason:?} in {error:?}",
@@ -633,7 +672,10 @@ fn registered_module_test_boundary_cases_are_graded_exactly() {
                 if extracted.modules.contains_key(candidate) {
                     break candidate.to_owned();
                 }
-                candidate = candidate.rsplit_once("::").expect("internal module endpoint").0;
+                candidate = candidate
+                    .rsplit_once("::")
+                    .expect("internal module endpoint")
+                    .0;
             }
         };
         assert_eq!(
@@ -658,7 +700,12 @@ fn registered_module_test_boundary_cases_are_graded_exactly() {
         for (relative, expected_digest) in &case.expected.source_files {
             let path = scratch.path().join(relative);
             let bytes = fs::read(&path).expect("measured source bytes");
-            assert_eq!(sha256(&bytes), *expected_digest, "{}: measured digest", case.id);
+            assert_eq!(
+                sha256(&bytes),
+                *expected_digest,
+                "{}: measured digest",
+                case.id
+            );
         }
 
         if let Some(mutation) = &case.mutation {
@@ -666,13 +713,25 @@ fn registered_module_test_boundary_cases_are_graded_exactly() {
                 .expect("helper mutation");
             let mutated = extract_case(&case, scratch.path())
                 .unwrap_or_else(|error| panic!("{} after mutation: {error}", case.id));
-            assert_eq!(mutated.modules, extracted.modules, "{}: mutation modules", case.id);
-            assert_eq!(mutated.edges, extracted.edges, "{}: mutation edges", case.id);
+            assert_eq!(
+                mutated.modules, extracted.modules,
+                "{}: mutation modules",
+                case.id
+            );
+            assert_eq!(
+                mutated.edges, extracted.edges,
+                "{}: mutation edges",
+                case.id
+            );
             let mutated_sources = relative_source_map(scratch.path(), &mutated);
             assert_eq!(mutated_sources.len(), actual_sources.len());
             for (path, digest) in &mutated_sources {
                 if path == &mutation.path {
-                    assert_eq!(digest, &mutation.expected_sha256, "{}: mutation digest", case.id);
+                    assert_eq!(
+                        digest, &mutation.expected_sha256,
+                        "{}: mutation digest",
+                        case.id
+                    );
                     assert_ne!(digest, actual_sources.get(path).expect("original digest"));
                 } else {
                     assert_eq!(digest, actual_sources.get(path).expect("original digest"));
@@ -726,10 +785,16 @@ fn inner_test_attributes_still_classify_in_crate_edges_as_test_only() {
     let source_root = crate_root.join("src");
     fs::create_dir_all(&source_root).expect("source directory");
     let root_file = source_root.join("lib.rs");
-    fs::write(&root_file, "#![cfg(test)]\npub fn root_only(){}\nmod checks;\n")
-        .expect("root source");
-    fs::write(source_root.join("checks.rs"), "pub fn check(){crate::root_only();}\n")
-        .expect("child source");
+    fs::write(
+        &root_file,
+        "#![cfg(test)]\npub fn root_only(){}\nmod checks;\n",
+    )
+    .expect("root source");
+    fs::write(
+        source_root.join("checks.rs"),
+        "pub fn check(){crate::root_only();}\n",
+    )
+    .expect("child source");
     let extracted = extract(&crate_root, &root_file, "x", "2021", &BTreeSet::new())
         .expect("strict in-crate extraction");
     assert_eq!(extracted.edges.len(), 1);

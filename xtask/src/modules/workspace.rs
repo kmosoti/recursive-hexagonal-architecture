@@ -156,12 +156,15 @@ pub fn apply(graph: &CrateGraph, report: &mut Value) -> Result<(), String> {
                 source_path.display()
             )
         })?;
-        let source_files = source_files_with_test_root(&crate_root, &graph.workspace_root, &extracted).map_err(|error| {
-            format!(
-                "crate {}: hashing declared module source files: {error}",
-                node.name
-            )
-        })?;
+        let source_files =
+            source_files_with_test_root(&crate_root, &graph.workspace_root, &extracted).map_err(
+                |error| {
+                    format!(
+                        "crate {}: hashing declared module source files: {error}",
+                        node.name
+                    )
+                },
+            )?;
 
         let test_edges = extracted.edges.iter().filter(|edge| edge.test_only).count();
         let checked = rules::check(&crate_root, &composite.crate_name, &rules_path, &extracted)

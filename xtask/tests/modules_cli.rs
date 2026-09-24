@@ -289,7 +289,9 @@ fn architecture_cli_checks_live_site_and_preserves_report_contract() {
     );
 
     let test_edges = report["test_edges"].as_array().expect("test_edges array");
-    let module_edges = report["module_edges"].as_array().expect("module_edges array");
+    let module_edges = report["module_edges"]
+        .as_array()
+        .expect("module_edges array");
     let helper_prefix = "assembly::transclusion_tests::registered_package";
     let helper_edges = test_edges
         .iter()
