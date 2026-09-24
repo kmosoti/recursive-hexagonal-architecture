@@ -562,3 +562,27 @@ prompt = "Fix one authority bug in the Rust module-graph checker: an inner #![cf
 prompt_sha256 = "48ccaa8ef6c06d11685a423036aca9884adab816efb3c21481c53e30dbbf6e5a"
 sample = "one run (conversation 1e4f6846), base 5760b7c; one escalation, answered by the supervisor; output patch sha256 37beb40a2d0c9c40a18303e7ded09e31e7f9d5239d1e4972d3a7dbaa2457f17d"
 oracles = "The registered module_test_source_boundary tests and corpus, module H4, the workspace suite, architecture, fmt and clippy, rerun by the supervising session on the integrated branch"
+
+[[decisions]]
+id = "section-refs-scope"
+question = "Where do §n.n references resolve (CHG-010)?"
+answer = "Within the page that contains them, in the document crate only, as the plan predicts. A reference resolves to the first heading on the same page with that section number (docs/architecture/section-reference-contract.md). Cross-page references, such as index.md citing a spec section, stay plain text; they are a recorded follow-up that would need graph and a designated spec page. Alternative rejected for this stage: cross-page resolution through graph and a spec-page setting, which widens the touched set beyond the plan's prediction and adds configuration without a present need (the spec's own 271 references are to itself)."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: 'Use recommended. ... Accept the recommend and most correct implementations going forward instead of escalating to me.' Kennedy, 2026-09-24: 'I want the antigravity to have full permission and escalate to you in which you decide. Only escalate to me (human) when absolutely necessary.'"
+date = "2026-09-24"
+
+[[decisions]]
+id = "section-refs-observation"
+question = "How is CHG-010 observed and graded?"
+answer = "Document gains section_refs: Vec<SectionRef { text, number, target, line }> in document order, plus Diagnostic::UnresolvedSectionRef { number, line } on a page that has numbered headings. A separate session registers the corpus and its grader before implementation (M7); the implementer may not edit them (per-run frozen graders in the supervision kit)."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: 'Use recommended. ... Accept the recommend and most correct implementations going forward instead of escalating to me.' Kennedy, 2026-09-24: 'I want the antigravity to have full permission and escalate to you in which you decide. Only escalate to me (human) when absolutely necessary.'"
+date = "2026-09-24"
+
+[[decisions]]
+id = "section-refs-check-surface"
+question = "Is an unresolved §-reference a `rhawiki check` witness?"
+answer = "Not in this stage. The `check --format json` schema was fixed in P-A and Kennedy's held-out fixtures (DP-1.4) are written against it; adding a witness kind changes that contract. The diagnostic is recorded on the Document and tested; surfacing it in check is a follow-up with its own schema decision."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: 'Use recommended. ... Accept the recommend and most correct implementations going forward instead of escalating to me.' Kennedy, 2026-09-24: 'I want the antigravity to have full permission and escalate to you in which you decide. Only escalate to me (human) when absolutely necessary.'"
+date = "2026-09-24"
