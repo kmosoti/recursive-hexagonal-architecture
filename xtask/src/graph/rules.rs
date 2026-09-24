@@ -217,7 +217,11 @@ mod tests {
             rules.core.allow,
             ["pulldown-cmark", "sha2", "unicode-normalization"]
         );
-        assert_eq!(rules.core.dev_allow, ["proptest"]);
+        // serde_json added in P-D (CHG-008 decision owner-local-json-oracles):
+        // a dev-dependency of document, graph and site only, where tests parse
+        // the registered transclusion oracle data. The normal allow list above
+        // is unchanged (§9.14: the approved requirement changed).
+        assert_eq!(rules.core.dev_allow, ["proptest", "serde_json"]);
         assert!(!rules.core.allow_build_scripts);
         assert_eq!(rules.forbidden.len(), 3);
         assert!(!rules.transitive.enabled);
