@@ -13,15 +13,15 @@ A heading has a section number when its text (`Heading::text`) begins with one o
 - `N(.N)*`, optionally followed by one `.`: `1. Problem, Scope…` has number `1`; `1.1 Target class…` has `1.1`; `11.7.6 Acceptance…` has `11.7.6`. Here `N` is one or more ASCII digits.
 - `Appendix L(.N)*`, optionally followed by one `.`: `Appendix A. Mathematical…` has number `A`. Here `L` is one ASCII uppercase letter.
 
-The heading text may also end right after the number, which then has no trailing whitespace. Numbers are compared as exact strings: `1.10` and `1.1` differ, and `01` and `1` differ. When several headings carry the same number, the first in document order is the target.
+The heading text may also end right after the number, which then has no trailing whitespace. Every heading counts, wherever it is nested: a heading inside a block quote or a list item has a section number by the same rule. Numbers are compared as exact strings: `1.10` and `1.1` differ, and `01` and `1` differ. When several headings carry the same number, the first in document order is the target.
 
 ## 2. Recognizing a reference
 
-References are recognized only in text content. That means paragraphs, list items, table cells and block quotes, at any depth. They are never recognized in headings, inline code, code blocks, raw HTML, the text or destination of a markdown link or a wikilink, a transclusion, or an image's alt text.
+References are recognized only in text content. That means paragraphs, list items, table cells and block quotes, at any depth. They are never recognized in headings, inline code, code blocks, raw HTML (an HTML block, or the characters of an inline HTML tag; text between two inline tags, as in `<b>§7</b>`, is ordinary text and is recognized), the text or destination of a markdown link or a wikilink, a transclusion, or an image's alt text.
 
-A reference is `§` or `§§`, then at most one space, then a number: `N(.N)*` or `L(.N)*`. An `L` counts only when the character after it is not a letter. The number is the longest match: a `.` belongs to it only when a digit follows. So in `see §7.` the number is `7`, and the final `.` is sentence punctuation.
+A reference is `§` or `§§`, then at most one space (U+0020 only; a tab or a line break ends it), then a number: `N(.N)*` or `L(.N)*`. An `L` counts only when the character after it is not a letter. The number is the longest match: a `.` belongs to it only when a digit follows. So in `see §7.` the number is `7`, and the final `.` is sentence punctuation.
 
-A **range continuation** directly after a number is optional whitespace, then `–` (U+2013) or `-`, then optional whitespace, then an optional `§`, then a number. It makes that number a second reference, the range end. So `§§3–7`, `§3–§5` and `§§8.3–8.4` each contain two references. A comma list after `§§`, such as `§§8.3, 8.4`, gives only the first reference; this is a known limitation. Every other occurrence of `§` needs its own `§`, so `§6 and §12.1` gives two references.
+A **range continuation** directly after a number is optional spaces (U+0020 only, never a line break), then `–` (U+2013) or `-`, then optional spaces, then an optional `§`, then a number. It makes that number a second reference, the range end. So `§§3–7`, `§3–§5` and `§§8.3–8.4` each contain two references. A comma list after `§§`, such as `§§8.3, 8.4`, gives only the first reference; this is a known limitation. It also applies after a range: `§§3–7, 9` gives `3` and `7`, and `9` is not a reference. Every other occurrence of `§` needs its own `§`, so `§6 and §12.1` gives two references.
 
 ## 3. Resolution and rendering
 
@@ -44,7 +44,7 @@ pub struct SectionRef {
     pub text: String,           // the characters rendered as the link text (or left as text)
     pub number: String,         // the section number referred to
     pub target: Option<String>, // the target heading's slug when resolved, else None
-    pub line: usize,            // 1-based source line of the reference
+    pub line: usize,            // 1-based source line of the reference's first character
 }
 ```
 
@@ -55,4 +55,8 @@ The registered grader compares this list, and the diagnostics, with the register
 - **Out of scope:** cross-page references (for example `index.md` citing a spec section), comma lists after `§§`, and surfacing `UnresolvedSectionRef` in `rhawiki check`, whose JSON schema stays fixed (decision `section-refs-check-surface`).
 - **Nothing else changes:** headings, slugs, the TOC, wikilinks, transclusion, other links and `rhawiki check` output.
 - **Invariant:** every resolved `SectionRef::target` is the slug of a heading on the same page, and the corresponding `Node::Link` has `href == "#" + target`.
-- **The real spec** (`docs/spec/rha-spec-v0.10.md`) records no `UnresolvedSectionRef`: every reference in its text content names one of its own numbered headings. A rough pre-registration count found 163 numbered headings and no unresolved number among 366 `§` occurrences, including occurrences in code and headings, which are not references.
+- **The real spec** (`docs/spec/rha-spec-v0.10.md`) records no `UnresolvedSectionRef`: every reference in its text content names one of its own numbered headings. A pre-registration count found 163 numbered headings and no unresolved number. The spec also has 10 `§` characters in contexts that are not references (1 in a heading, 9 in fenced code).
+
+## Amendment before registration (2026-09-24)
+
+The independent oracle author's registration review raised five questions the first draft left open. They were answered in the text above before any fixture was registered and before any code existed: nested headings count; text between inline HTML tags is recognized; the one space is U+0020 only, so a tab or a line break ends a reference; range whitespace never crosses a line break; a comma list after a range is not continued; and `line` is the line of the reference's first character.
