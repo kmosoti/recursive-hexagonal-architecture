@@ -1,0 +1,56 @@
+# Task record (spec §11.7.11 shape, stored as TOML).
+schema_version = 1
+id = "PLAN-3"
+slug = "reviewer-alignment"
+title = "Align the plan's kickoff prompt and M6 with the ledger (prompt audit)"
+mode = "agent"
+executor_composition = "agent"
+authority_profile = "ECC-Solo"
+status = "proposed"
+plan_ref = "docs/plan/IMPLEMENTATION-PLAN.md (revision 2, revised here)"
+branch = "chg/plan-3-reviewer-alignment"
+base_revision = "74aeb1d853fda49d585eb40e8d7c9727089d610c"
+intent = "Apply the prompt audit of 2026-09-23 (/claude-api prompt-audit, target Claude Opus 5.5): the kickoff prompt and M6 restate reviewer models, roles, effort and the gate rule that .rha/decisions.toml DP-5.4 and Kennedy's delegation have since changed. Point them at the ledger instead of pinning values. DP-5.4 names this as the plan text that follows at its next revision."
+non_goals = [
+  "Any change outside docs/plan/IMPLEMENTATION-PLAN.md lines 7, 14, 16 and 67",
+  "The frozen plan copies in xtask/tests/corpus/{record-schema,verifier-shape}/inputs, pinned by registration digests",
+  "The acceptance record owed for CHG-007 (PR 18), which P-D's resume point assigns to that packet",
+]
+scope_globs = [".rha/tasks/PLAN-3-reviewer-alignment.toml", "docs/plan/IMPLEMENTATION-PLAN.md", "docs/changes/PLAN-3-reviewer-alignment.md", "docs/tasks/index.md", "docs/evidence/index.md", "docs/enforcement-map.md", "evidence/PLAN-3/**"]
+protected_scope = []
+
+[[actors]]
+id = "human:kennedy"
+type = "human"
+
+[[actors]]
+id = "agent:executor"
+type = "agent"
+accountable_to = "human:kennedy"
+
+[roles]
+planner = "human:kennedy"
+executor = ["agent:executor"]
+integrator = "human:kennedy"
+verifier = ["automation:xtask-ci (local, advisory)", "automation:github-actions (class ci, advisory)", "Opus 5.5 reviewer agent and GPT-6 validator per DP-5.4"]
+acceptor = "human:kennedy"
+
+[[work]]
+id = "PLAN-3"
+executor = "agent:executor"
+depends_on = ["PLAN-2 (accepted)", "DP-5.4 and its 2026-09-23 amendment"]
+output = "docs/plan/IMPLEMENTATION-PLAN.md lines 7, 14, 16 and 67; this task record and its change record."
+
+[[decisions]]
+id = "apply-audit"
+question = "Apply the proposed prompt-audit diff (findings F1 to F5; F6 is a low-confidence flag, not applied)?"
+answer = "Kennedy, 2026-09-23: 'Go ahead'."
+decided_by = "human:kennedy"
+date = "2026-09-23"
+
+[provenance]
+harness = "Claude Code (model claude-opus-5-5)"
+task_scope = "PLAN-3"
+permissions = "Workspace files, shell, git and gh through the user's account; no protected surface touched."
+budgets = "unknown"
+reasoning_effort = "unknown"
