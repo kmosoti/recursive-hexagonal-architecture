@@ -7,10 +7,8 @@ use pulldown_cmark::{
 };
 
 use crate::{
-    Align, CalloutKind, Diagnostic, Document, Heading, Link, Node,
-    section_ref::{
-        PendingRef, ScannedPiece, make_section_ref_marker, resolve_section_refs, scan_references,
-    },
+    Align, CalloutKind, Diagnostic, Document, Heading, Link, Transclusion,
+    section_ref::{PendingRef, ScannedPiece, resolve_section_refs, scan_references},
     slugify,
 };
 
@@ -73,35 +71,67 @@ enum Frame {
     Other,
 }
 
-enum BuildNode {
-    Node(Node),
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub(crate) enum BuildNode {
+    Heading {
+        level: u8,
+        slug: String,
+        children: Vec<BuildNode>,
+    },
+    Paragraph(Vec<BuildNode>),
+    Text(String),
+    Code(String),
+    CodeBlock {
+        lang: Option<String>,
+        text: String,
+    },
+    Emphasis(Vec<BuildNode>),
+    Strong(Vec<BuildNode>),
+    Strikethrough(Vec<BuildNode>),
+    Link {
+        href: String,
+        children: Vec<BuildNode>,
+    },
+    WikiLink {
+        index: usize,
+        children: Vec<BuildNode>,
+    },
+    Transclusion(Transclusion),
     Image {
         src: String,
         alt: String,
         line: usize,
         wikilink: bool,
     },
+    List {
+        start: Option<u64>,
+        items: Vec<Vec<BuildNode>>,
+    },
+    BlockQuote {
+        kind: Option<CalloutKind>,
+        children: Vec<BuildNode>,
+    },
+    Table {
+        align: Vec<Align>,
+        head: Vec<Vec<BuildNode>>,
+        rows: Vec<Vec<Vec<BuildNode>>>,
+    },
+    Rule,
+    SoftBreak,
+    HardBreak,
+    Html(String),
+    TaskMarker(bool),
+    SectionRef(usize),
 }
 
 impl BuildNode {
     fn is_ignorable(&self) -> bool {
         matches!(
             self,
-            Self::Node(Node::Text(text))
+            Self::Text(text)
                 if text.chars().all(|character| matches!(character, ' ' | '\t'))
         )
     }
-
-    fn into_node(self) -> Node {
-        match self {
-            Self::Node(node) => node,
-            Self::Image { src, alt, .. } => Node::Image { src, alt },
-        }
-    }
-}
-
-fn into_nodes(nodes: Vec<BuildNode>) -> Vec<Node> {
-    nodes.into_iter().map(BuildNode::into_node).collect()
 }
 
 fn level(l: HeadingLevel) -> u8 {
@@ -158,7 +188,7 @@ impl Builder {
         }
     }
 
-    fn transclusion(&mut self, children: &[BuildNode]) -> Option<Node> {
+    fn transclusion(&mut self, children: &[BuildNode]) -> Option<Transclusion> {
         let mut meaningful = children.iter().filter(|node| !node.is_ignorable());
         let Some(BuildNode::Image {
             src,
@@ -183,13 +213,13 @@ impl Builder {
 
         let id = self.next_transclusion;
         self.next_transclusion += 1;
-        Some(Node::Transclusion(crate::Transclusion {
+        Some(Transclusion {
             id,
             target: target.to_owned(),
             anchor: anchor.map(str::to_owned),
             display: src.clone(),
             line: *line,
-        }))
+        })
     }
 
     /// Plain text for an enclosing heading, if any.
@@ -344,36 +374,30 @@ impl Builder {
                     base_slug: base,
                     line,
                 });
-                Some(BuildNode::Node(Node::Heading {
+                Some(BuildNode::Heading {
                     level,
                     slug,
-                    children: into_nodes(children),
-                }))
+                    children,
+                })
             }
             Frame::Paragraph => {
-                if let Some(node) = self.transclusion(&children) {
-                    Some(BuildNode::Node(node))
+                if let Some(transclusion) = self.transclusion(&children) {
+                    Some(BuildNode::Transclusion(transclusion))
                 } else {
-                    Some(BuildNode::Node(Node::Paragraph(into_nodes(children))))
+                    Some(BuildNode::Paragraph(children))
                 }
             }
-            Frame::Emphasis => Some(BuildNode::Node(Node::Emphasis(into_nodes(children)))),
-            Frame::Strong => Some(BuildNode::Node(Node::Strong(into_nodes(children)))),
-            Frame::Strike => Some(BuildNode::Node(Node::Strikethrough(into_nodes(children)))),
-            Frame::Link { href } => Some(BuildNode::Node(Node::Link {
-                href,
-                children: into_nodes(children),
-            })),
+            Frame::Emphasis => Some(BuildNode::Emphasis(children)),
+            Frame::Strong => Some(BuildNode::Strong(children)),
+            Frame::Strike => Some(BuildNode::Strikethrough(children)),
+            Frame::Link { href } => Some(BuildNode::Link { href, children }),
             Frame::WikiLink { index } => {
                 if let Some(link) = self.links.get_mut(index)
                     && link.alias.is_some()
                 {
                     link.alias = Some(plain(&children));
                 }
-                Some(BuildNode::Node(Node::WikiLink {
-                    index,
-                    children: into_nodes(children),
-                }))
+                Some(BuildNode::WikiLink { index, children })
             }
             Frame::Image {
                 src,
@@ -386,13 +410,10 @@ impl Builder {
                 line,
                 wikilink,
             }),
-            Frame::List { start, items } => Some(BuildNode::Node(Node::List {
-                start,
-                items: items.into_iter().map(into_nodes).collect(),
-            })),
+            Frame::List { start, items } => Some(BuildNode::List { start, items }),
             Frame::Item => {
-                let item = if let Some(node) = self.transclusion(&children) {
-                    vec![BuildNode::Node(node)]
+                let item = if let Some(transclusion) = self.transclusion(&children) {
+                    vec![BuildNode::Transclusion(transclusion)]
                 } else {
                     children
                 };
@@ -401,23 +422,11 @@ impl Builder {
                 }
                 None
             }
-            Frame::Quote { kind } => Some(BuildNode::Node(Node::BlockQuote {
-                kind,
-                children: into_nodes(children),
-            })),
-            Frame::CodeBlock { lang, text } => {
-                Some(BuildNode::Node(Node::CodeBlock { lang, text }))
-            }
+            Frame::Quote { kind } => Some(BuildNode::BlockQuote { kind, children }),
+            Frame::CodeBlock { lang, text } => Some(BuildNode::CodeBlock { lang, text }),
             Frame::Table {
                 align, head, rows, ..
-            } => Some(BuildNode::Node(Node::Table {
-                align,
-                head: head.into_iter().map(into_nodes).collect(),
-                rows: rows
-                    .into_iter()
-                    .map(|row| row.into_iter().map(into_nodes).collect())
-                    .collect(),
-            })),
+            } => Some(BuildNode::Table { align, head, rows }),
             Frame::Row { cells } => {
                 if let Some((
                     Frame::Table {
@@ -444,7 +453,7 @@ impl Builder {
                 }
                 None
             }
-            Frame::Other => Some(BuildNode::Node(Node::Paragraph(into_nodes(children)))),
+            Frame::Other => Some(BuildNode::Paragraph(children)),
         };
         if let Some(node) = node {
             self.push_node(node);
@@ -479,7 +488,7 @@ impl Builder {
         }
         self.heading_text(text);
         if self.is_reference_excluded() || !text.contains('§') {
-            self.push_node(BuildNode::Node(Node::Text(text.to_owned())));
+            self.push_node(BuildNode::Text(text.to_owned()));
             return;
         }
 
@@ -487,7 +496,7 @@ impl Builder {
         for piece in pieces {
             match piece {
                 ScannedPiece::Text(t) => {
-                    self.push_node(BuildNode::Node(Node::Text(t)));
+                    self.push_node(BuildNode::Text(t));
                 }
                 ScannedPiece::Ref {
                     ref_text,
@@ -496,14 +505,11 @@ impl Builder {
                 } => {
                     let ref_index = self.pending_refs.len();
                     self.pending_refs.push(PendingRef {
-                        text: ref_text.clone(),
+                        text: ref_text,
                         number,
                         line,
                     });
-                    self.push_node(BuildNode::Node(Node::Link {
-                        href: make_section_ref_marker(ref_index),
-                        children: vec![Node::Text(ref_text)],
-                    }));
+                    self.push_node(BuildNode::SectionRef(ref_index));
                 }
             }
         }
@@ -515,39 +521,19 @@ fn plain(nodes: &[BuildNode]) -> String {
     let mut out = String::new();
     for node in nodes {
         match node {
-            BuildNode::Node(Node::Text(text) | Node::Code(text)) => out.push_str(text),
-            BuildNode::Node(
-                Node::Emphasis(children)
-                | Node::Strong(children)
-                | Node::Strikethrough(children)
-                | Node::Paragraph(children)
-                | Node::Heading { children, .. }
-                | Node::Link { children, .. }
-                | Node::WikiLink { children, .. },
-            ) => out.push_str(&plain_nodes(children)),
-            BuildNode::Node(Node::SoftBreak | Node::HardBreak) => out.push(' '),
-            BuildNode::Image { .. } | BuildNode::Node(_) => {}
+            BuildNode::Text(text) | BuildNode::Code(text) => out.push_str(text),
+            BuildNode::Emphasis(children)
+            | BuildNode::Strong(children)
+            | BuildNode::Strikethrough(children)
+            | BuildNode::Paragraph(children)
+            | BuildNode::Heading { children, .. }
+            | BuildNode::Link { children, .. }
+            | BuildNode::WikiLink { children, .. } => out.push_str(&plain(children)),
+            BuildNode::SoftBreak | BuildNode::HardBreak => out.push(' '),
+            _ => {}
         }
     }
     out
-}
-
-fn plain_nodes(nodes: &[Node]) -> String {
-    nodes.iter().fold(String::new(), |mut out, node| {
-        match node {
-            Node::Text(text) | Node::Code(text) => out.push_str(text),
-            Node::Emphasis(children)
-            | Node::Strong(children)
-            | Node::Strikethrough(children)
-            | Node::Paragraph(children)
-            | Node::Heading { children, .. }
-            | Node::Link { children, .. }
-            | Node::WikiLink { children, .. } => out.push_str(&plain_nodes(children)),
-            Node::SoftBreak | Node::HardBreak => out.push(' '),
-            _ => {}
-        }
-        out
-    })
 }
 
 /// Parses one source. Total: never fails, never panics on any UTF-8 input.
@@ -574,37 +560,33 @@ pub fn parse(source: &Source) -> Document {
             Event::Text(t) => b.text(&t, range.start, &starts),
             Event::Code(t) => {
                 b.heading_text(&t);
-                b.push_node(BuildNode::Node(Node::Code(t.to_string())));
+                b.push_node(BuildNode::Code(t.to_string()));
             }
             Event::Html(t) | Event::InlineHtml(t) => {
                 b.diagnostics
                     .push(Diagnostic::Unsupported { kind: "html", line });
-                b.push_node(BuildNode::Node(Node::Html(t.to_string())));
+                b.push_node(BuildNode::Html(t.to_string()));
             }
             Event::SoftBreak => {
                 b.heading_text(" ");
-                b.push_node(BuildNode::Node(Node::SoftBreak));
+                b.push_node(BuildNode::SoftBreak);
             }
-            Event::HardBreak => b.push_node(BuildNode::Node(Node::HardBreak)),
-            Event::Rule => b.push_node(BuildNode::Node(Node::Rule)),
-            Event::TaskListMarker(done) => b.push_node(BuildNode::Node(Node::TaskMarker(done))),
+            Event::HardBreak => b.push_node(BuildNode::HardBreak),
+            Event::Rule => b.push_node(BuildNode::Rule),
+            Event::TaskListMarker(done) => b.push_node(BuildNode::TaskMarker(done)),
             Event::InlineMath(t) | Event::DisplayMath(t) | Event::FootnoteReference(t) => {
                 b.diagnostics.push(Diagnostic::Unsupported {
                     kind: "inline",
                     line,
                 });
-                b.push_node(BuildNode::Node(Node::Text(t.to_string())));
+                b.push_node(BuildNode::Text(t.to_string()));
             }
         }
     }
     while b.stack.len() > 1 {
         b.end(TagEnd::Paragraph);
     }
-    let body = b
-        .stack
-        .pop()
-        .map(|(_, c)| into_nodes(c))
-        .unwrap_or_default();
+    let body = b.stack.pop().map(|(_, c)| c).unwrap_or_default();
     let (section_refs, section_diagnostics, body) =
         resolve_section_refs(&b.headings, b.pending_refs, body);
     b.diagnostics.extend(section_diagnostics);

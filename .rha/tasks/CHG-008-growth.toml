@@ -608,3 +608,14 @@ prompt = "Implement section references per docs/architecture/section-reference-c
 prompt_sha256 = "e7ad155b23b1d6255339ff627cb906f6166635a77db79dc4d6a3578adbda2c2b"
 sample = "one run (conversation 2c3d3284), base fdf6523; one escalation (the grader's std::fs reads), answered by the supervisor; output patch sha256 6d4d47f45c95add272283055d97e6242a73d78646d6679c205639afe29e86521"
 oracles = "The registered section-refs grader (84 cases, including the spec), the workspace suite, architecture, fmt, clippy and module H4, rerun by the supervising session on the integrated branch"
+
+[[provenance.generations]]
+artifact = "crates/document/src (parse.rs, section_ref.rs): repair of the c556d01 review findings (P1 marker collision, P2 global text merging, P2 tabs in ranges)"
+generation = "sampled"
+model = "gemini-3.8-flash-high"
+reasoning_effort = "high (model tier)"
+harness = "Antigravity CLI 1.2.10, /boost pasted into the interactive session in agy-jail: the pipeline ran (4 conversations: root, DeepCoder coordinator, first worker, improvement worker; invoke_subagent in the transcript)"
+prompt = "Repair three defects an independent review found in the section-reference implementation: a user link with the internal marker href panics parse; text nodes merged on pages without references; tabs accepted in range whitespace. The review tests, the registered grader, the corpus, the contract and the spec are fixed; change only crates/document/src."
+prompt_sha256 = "a67941df150c885cc09e136e5d05c51daf416fa1b4f29cbd9f04e740584c1db2"
+sample = "one Boost run (root 9612bbad), base e7461bf; no escalations; output patch sha256 5cfbf43fe0243165589d726e674596f46f917d5701390211de7af071832fc6d8"
+oracles = "section_refs_review.rs (3 tests, from the supervising session; the golden trees captured at 4be1a7d), the registered grader (84 cases), the workspace suite, fmt, clippy and architecture, rerun by the supervising session"

@@ -140,3 +140,10 @@ The package reproduces byte for byte from its reference, and its snapshot equals
 - **P3, determined as a known limitation:** under the contract as written, `§3 - A thing` makes `A` a range end. The contract is not changed after registration.
 
 Hypothesis for the repair: carry references in a dedicated internal representation that user input cannot produce, and merge text only where a reference marker is flattened. Discriminating check: [section_refs_review.rs](../../crates/document/tests/section_refs_review.rs), written by the supervising session, a different model family from the implementer. Its three tests fail at c556d01 for exactly the reported reasons. The P2 "nothing else changes" test compares against the parser at 4be1a7d, the commit before the implementation: the body trees and headings of the review's inputs and of every docs page without `§`, captured at that commit into `crates/document/tests/data/pre_section_ref_trees.json`.
+
+Repair attempt 12's change, from the first run in which agy's Boost pipeline actually engaged (a root, a DeepCoder coordinator, a first worker and an improvement worker):
+- **P1:** references travel as a crate-private `BuildNode::SectionRef` variant, so user input cannot produce one and a user's link is always kept.
+- **First P2:** text is merged only where an unresolved reference is flattened back into text; a page without references gets exactly the pre-feature tree.
+- **Second P2:** range whitespace is U+0020 only.
+
+Rerun on this branch: the three review tests pass, the registered grader passes all 84 cases, the workspace gives 329 passed and 0 failed, fmt and clippy are clean, and architecture passes.

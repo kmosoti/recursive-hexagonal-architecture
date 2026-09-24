@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use crate::{Diagnostic, Heading, Node};
+use crate::{Diagnostic, Heading, Node, parse::BuildNode};
 
 /// A section reference (§n.n).
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -24,24 +24,6 @@ pub enum ScannedPiece {
         number: String,
         line: usize,
     },
-}
-
-const SECTION_REF_PREFIX: &str = "__rha_internal_section_ref_";
-const SECTION_REF_SUFFIX: &str = "__";
-
-#[must_use]
-pub fn make_section_ref_marker(ref_index: usize) -> String {
-    format!("{SECTION_REF_PREFIX}{ref_index}{SECTION_REF_SUFFIX}")
-}
-
-#[must_use]
-pub fn parse_section_ref_marker(href: &str) -> Option<usize> {
-    if href.starts_with(SECTION_REF_PREFIX) && href.ends_with(SECTION_REF_SUFFIX) {
-        let inner = &href[SECTION_REF_PREFIX.len()..href.len() - SECTION_REF_SUFFIX.len()];
-        inner.parse::<usize>().ok()
-    } else {
-        None
-    }
 }
 
 /// Extracts the section number of a heading from its text, per contract section 1.
@@ -190,14 +172,14 @@ fn match_number(s: &str) -> Option<&str> {
 }
 
 /// Matches a range continuation directly after a number:
-/// optional whitespace (U+0020 or '\t'), a dash ('–' or '-'), optional whitespace,
+/// optional whitespace (U+0020 only), a dash ('–' or '-'), optional whitespace,
 /// an optional single '§' (rejecting '§§'), and a number.
 ///
 /// Returns (`range_separator`, `end_ref_text`, `end_number`, `total_consumed_bytes`).
 fn match_range_continuation(s: &str) -> Option<(&str, &str, &str, usize)> {
     let bytes = s.as_bytes();
     let mut k = 0;
-    while k < bytes.len() && (bytes[k] == b' ' || bytes[k] == b'\t') {
+    while k < bytes.len() && bytes[k] == b' ' {
         k += 1;
     }
     if s[k..].starts_with('–') {
@@ -207,7 +189,7 @@ fn match_range_continuation(s: &str) -> Option<(&str, &str, &str, usize)> {
     } else {
         return None;
     }
-    while k < bytes.len() && (bytes[k] == b' ' || bytes[k] == b'\t') {
+    while k < bytes.len() && bytes[k] == b' ' {
         k += 1;
     }
     if s[k..].starts_with("§§") {
@@ -228,37 +210,33 @@ fn match_range_continuation(s: &str) -> Option<(&str, &str, &str, usize)> {
 #[must_use]
 pub fn scan_references(text: &str, base_offset: usize, starts: &[usize]) -> Vec<ScannedPiece> {
     let mut pieces = Vec::new();
-    let mut pos = 0;
+    let mut last_flush = 0;
+    let mut search_pos = 0;
     let bytes = text.as_bytes();
 
-    while pos < text.len() {
-        let Some(rel_i) = text[pos..].find('§') else {
-            pieces.push(ScannedPiece::Text(text[pos..].to_owned()));
+    while search_pos < text.len() {
+        let Some(rel_i) = text[search_pos..].find('§') else {
             break;
         };
-        let i = pos + rel_i;
-        if i > pos {
-            pieces.push(ScannedPiece::Text(text[pos..i].to_owned()));
-        }
-        pos = i;
+        let i = search_pos + rel_i;
 
-        let sign_len = if text[pos..].starts_with("§§") {
+        let sign_len = if text[i..].starts_with("§§") {
             "§§".len()
         } else {
             "§".len()
         };
-        let mut cur = pos + sign_len;
+        let mut cur = i + sign_len;
         if cur < text.len() && bytes[cur] == b' ' {
             cur += 1;
         }
 
         if let Some(number) = match_number(&text[cur..]) {
-            let ref_start = pos;
+            let ref_start = i;
             let ref_end = cur + number.len();
             let ref_text = text[ref_start..ref_end].to_owned();
             let number_str = number.to_owned();
             let ref_line = starts.partition_point(|&s| s <= base_offset + ref_start);
-            pos = ref_end;
+            let mut pos = ref_end;
 
             if let Some((range_sep, end_text, end_num, total_consumed)) =
                 match_range_continuation(&text[pos..])
@@ -270,6 +248,9 @@ pub fn scan_references(text: &str, base_offset: usize, starts: &[usize]) -> Vec<
                 let end_ref_line = starts.partition_point(|&s| s <= base_offset + end_ref_start);
                 pos += total_consumed;
 
+                if ref_start > last_flush {
+                    pieces.push(ScannedPiece::Text(text[last_flush..ref_start].to_owned()));
+                }
                 pieces.push(ScannedPiece::Ref {
                     ref_text,
                     number: number_str,
@@ -281,18 +262,27 @@ pub fn scan_references(text: &str, base_offset: usize, starts: &[usize]) -> Vec<
                     number: end_number_str,
                     line: end_ref_line,
                 });
+                last_flush = pos;
+                search_pos = pos;
             } else {
+                if ref_start > last_flush {
+                    pieces.push(ScannedPiece::Text(text[last_flush..ref_start].to_owned()));
+                }
                 pieces.push(ScannedPiece::Ref {
                     ref_text,
                     number: number_str,
                     line: ref_line,
                 });
+                last_flush = pos;
+                search_pos = pos;
             }
         } else {
-            let ch_len = text[pos..].chars().next().map_or(1, char::len_utf8);
-            pieces.push(ScannedPiece::Text(text[pos..pos + ch_len].to_owned()));
-            pos += ch_len;
+            search_pos = i + '§'.len_utf8();
         }
+    }
+
+    if last_flush < text.len() {
+        pieces.push(ScannedPiece::Text(text[last_flush..].to_owned()));
     }
 
     pieces
@@ -302,7 +292,7 @@ pub fn scan_references(text: &str, base_offset: usize, starts: &[usize]) -> Vec<
 pub fn resolve_section_refs(
     headings: &[Heading],
     pending_refs: Vec<PendingRef>,
-    body: Vec<Node>,
+    body: Vec<BuildNode>,
 ) -> (Vec<SectionRef>, Vec<Diagnostic>, Vec<Node>) {
     let mut heading_numbers = BTreeMap::new();
     for heading in headings {
@@ -338,49 +328,66 @@ pub fn resolve_section_refs(
     (section_refs, diagnostics, new_body)
 }
 
-fn resolve_and_flatten(nodes: Vec<Node>, section_refs: &[SectionRef]) -> Vec<Node> {
-    let mut out = Vec::new();
+fn resolve_and_flatten(nodes: Vec<BuildNode>, section_refs: &[SectionRef]) -> Vec<Node> {
+    let mut out = Vec::with_capacity(nodes.len());
+    let mut just_flattened_ref = false;
+
     for node in nodes {
         match node {
-            Node::Heading {
+            BuildNode::Heading {
                 level,
                 slug,
                 children,
             } => {
+                just_flattened_ref = false;
                 out.push(Node::Heading {
                     level,
                     slug,
                     children: resolve_and_flatten(children, section_refs),
                 });
             }
-            Node::Paragraph(children) => {
+            BuildNode::Paragraph(children) => {
+                just_flattened_ref = false;
                 out.push(Node::Paragraph(resolve_and_flatten(children, section_refs)));
             }
-            Node::Emphasis(children) => {
+            BuildNode::Emphasis(children) => {
+                just_flattened_ref = false;
                 out.push(Node::Emphasis(resolve_and_flatten(children, section_refs)));
             }
-            Node::Strong(children) => {
+            BuildNode::Strong(children) => {
+                just_flattened_ref = false;
                 out.push(Node::Strong(resolve_and_flatten(children, section_refs)));
             }
-            Node::Strikethrough(children) => {
+            BuildNode::Strikethrough(children) => {
+                just_flattened_ref = false;
                 out.push(Node::Strikethrough(resolve_and_flatten(
                     children,
                     section_refs,
                 )));
             }
-            Node::WikiLink { index, children } => {
+            BuildNode::Link { href, children } => {
+                just_flattened_ref = false;
+                out.push(Node::Link {
+                    href,
+                    children: resolve_and_flatten(children, section_refs),
+                });
+            }
+            BuildNode::WikiLink { index, children } => {
+                just_flattened_ref = false;
                 out.push(Node::WikiLink {
                     index,
                     children: resolve_and_flatten(children, section_refs),
                 });
             }
-            Node::BlockQuote { kind, children } => {
+            BuildNode::BlockQuote { kind, children } => {
+                just_flattened_ref = false;
                 out.push(Node::BlockQuote {
                     kind,
                     children: resolve_and_flatten(children, section_refs),
                 });
             }
-            Node::List { start, items } => {
+            BuildNode::List { start, items } => {
+                just_flattened_ref = false;
                 out.push(Node::List {
                     start,
                     items: items
@@ -389,7 +396,8 @@ fn resolve_and_flatten(nodes: Vec<Node>, section_refs: &[SectionRef]) -> Vec<Nod
                         .collect(),
                 });
             }
-            Node::Table { align, head, rows } => {
+            BuildNode::Table { align, head, rows } => {
+                just_flattened_ref = false;
                 out.push(Node::Table {
                     align,
                     head: head
@@ -406,43 +414,72 @@ fn resolve_and_flatten(nodes: Vec<Node>, section_refs: &[SectionRef]) -> Vec<Nod
                         .collect(),
                 });
             }
-            Node::Link { href, children } => {
-                if let Some(ref_idx) = parse_section_ref_marker(&href) {
-                    let sref = &section_refs[ref_idx];
-                    if let Some(slug) = &sref.target {
-                        out.push(Node::Link {
-                            href: format!("#{slug}"),
-                            children: resolve_and_flatten(children, section_refs),
-                        });
+            BuildNode::Transclusion(transclusion) => {
+                just_flattened_ref = false;
+                out.push(Node::Transclusion(transclusion));
+            }
+            BuildNode::Image { src, alt, .. } => {
+                just_flattened_ref = false;
+                out.push(Node::Image { src, alt });
+            }
+            BuildNode::Text(text) => {
+                if just_flattened_ref {
+                    if let Some(Node::Text(last)) = out.last_mut() {
+                        last.push_str(&text);
                     } else {
-                        let resolved_children = resolve_and_flatten(children, section_refs);
-                        for child in resolved_children {
-                            push_merging_text(&mut out, child);
-                        }
+                        out.push(Node::Text(text));
                     }
+                    just_flattened_ref = false;
                 } else {
-                    out.push(Node::Link {
-                        href,
-                        children: resolve_and_flatten(children, section_refs),
-                    });
+                    out.push(Node::Text(text));
                 }
             }
-            other => {
-                push_merging_text(&mut out, other);
+            BuildNode::Code(text) => {
+                just_flattened_ref = false;
+                out.push(Node::Code(text));
+            }
+            BuildNode::CodeBlock { lang, text } => {
+                just_flattened_ref = false;
+                out.push(Node::CodeBlock { lang, text });
+            }
+            BuildNode::Rule => {
+                just_flattened_ref = false;
+                out.push(Node::Rule);
+            }
+            BuildNode::SoftBreak => {
+                just_flattened_ref = false;
+                out.push(Node::SoftBreak);
+            }
+            BuildNode::HardBreak => {
+                just_flattened_ref = false;
+                out.push(Node::HardBreak);
+            }
+            BuildNode::Html(text) => {
+                just_flattened_ref = false;
+                out.push(Node::Html(text));
+            }
+            BuildNode::TaskMarker(checked) => {
+                just_flattened_ref = false;
+                out.push(Node::TaskMarker(checked));
+            }
+            BuildNode::SectionRef(ref_idx) => {
+                let sref = &section_refs[ref_idx];
+                if let Some(slug) = &sref.target {
+                    out.push(Node::Link {
+                        href: format!("#{slug}"),
+                        children: vec![Node::Text(sref.text.clone())],
+                    });
+                    just_flattened_ref = false;
+                } else {
+                    if let Some(Node::Text(last)) = out.last_mut() {
+                        last.push_str(&sref.text);
+                    } else {
+                        out.push(Node::Text(sref.text.clone()));
+                    }
+                    just_flattened_ref = true;
+                }
             }
         }
     }
     out
-}
-
-fn push_merging_text(out: &mut Vec<Node>, node: Node) {
-    if let Node::Text(new_text) = node {
-        if let Some(Node::Text(last_text)) = out.last_mut() {
-            last_text.push_str(&new_text);
-        } else {
-            out.push(Node::Text(new_text));
-        }
-    } else {
-        out.push(node);
-    }
 }
