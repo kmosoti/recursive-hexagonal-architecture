@@ -147,3 +147,9 @@ Repair attempt 12's change, from the first run in which agy's Boost pipeline act
 - **Second P2:** range whitespace is U+0020 only.
 
 Rerun on this branch: the three review tests pass, the registered grader passes all 84 cases, the workspace gives 329 passed and 0 failed, fmt and clippy are clean, and architecture passes.
+
+**§-reference stage (CHG-010) closed.** The re-review of the repair (3d3d836) approves it. All three findings are fixed. With the old and new binaries run on the same docs, JSON build output differs only on the three pages that contain resolved references; HTML differs only by the 410 inserted anchors, all of which resolve; `check` output is byte-identical. A million-input fuzz found no lost or duplicated characters, and every user link is kept. Carried forward:
+- **P3:** an unresolved reference at a pulldown-cmark text-event boundary merges two text nodes that the parser used to keep separate. Only JSON node boundaries change; visible text, HTML and every real page are unchanged. Follow-up: merge only within one scanned text event.
+- **Pre-existing, a new follow-up item:** pulldown-cmark 0.13.4 panics on some wikilink inputs, which contradicts `parse`'s documented totality. It reproduces at 4be1a7d, before this feature.
+
+[Stage gate](../../evidence/CHG-008/stage-2/section-refs-stage-gate.txt): nextest (CI profile) 328 passed; docs current; architecture and scope with 0 findings; fmt and clippy clean; module H4 28/28; `rhawiki check --root docs` reports zero witnesses. Change spread: document only, as the plan predicted ([change-spread](../observations/change-spread.md)).

@@ -1,0 +1,8 @@
+# git diff --numstat 0e69149 3d3d836068517269f8f6c9e7f5ffe3d29c878a06 -- crates (§-references stage, CHG-010)
+5	0	crates/document/src/lib.rs
+138	103	crates/document/src/parse.rs
+485	0	crates/document/src/section_ref.rs
+102	0	crates/document/tests/data/pre_section_ref_trees.json
+340	0	crates/document/tests/section_refs.rs
+106	0	crates/document/tests/section_refs_review.rs
+1	0	crates/document/tests/transclusion.rs
