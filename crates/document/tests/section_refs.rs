@@ -5,8 +5,6 @@
 #![allow(clippy::expect_used, clippy::unwrap_used)]
 
 use std::collections::BTreeMap;
-use std::fs;
-use std::path::{Path, PathBuf};
 
 use document::{Diagnostic, Document, Node, SectionRef, parse};
 use library::{Digest, RelPath, Source};
@@ -24,12 +22,48 @@ const PAYLOAD_FILES: &[&str] = &[
 
 const EXPECTED_CASE_COUNT: usize = 84;
 
-fn package_dir() -> PathBuf {
-    Path::new(env!("CARGO_MANIFEST_DIR")).join("../../xtask/tests/corpus/section-refs")
-}
+/// The package and the spec, embedded at compile time: a core crate's tests do no file I/O
+/// (decision pure-fixture-inputs; the core Clippy deny list forbids `std::fs`).
+const PACKAGE: &[(&str, &[u8])] = &[
+    (
+        "SHA256SUMS",
+        include_bytes!("../../../xtask/tests/corpus/section-refs/SHA256SUMS"),
+    ),
+    (
+        "CASES.json",
+        include_bytes!("../../../xtask/tests/corpus/section-refs/CASES.json"),
+    ),
+    (
+        "README.md",
+        include_bytes!("../../../xtask/tests/corpus/section-refs/README.md"),
+    ),
+    (
+        "reference.py",
+        include_bytes!("../../../xtask/tests/corpus/section-refs/reference.py"),
+    ),
+    (
+        "selftestreport.txt",
+        include_bytes!("../../../xtask/tests/corpus/section-refs/selftestreport.txt"),
+    ),
+    (
+        "source-snapshots/contract.md",
+        include_bytes!("../../../xtask/tests/corpus/section-refs/source-snapshots/contract.md"),
+    ),
+    (
+        "source-snapshots/prompt.md",
+        include_bytes!("../../../xtask/tests/corpus/section-refs/source-snapshots/prompt.md"),
+    ),
+];
 
-fn repo_root() -> PathBuf {
-    Path::new(env!("CARGO_MANIFEST_DIR")).join("../..")
+const SPEC_PATH: &str = "docs/spec/rha-spec-v0.10.md";
+const SPEC: &[u8] = include_bytes!("../../../docs/spec/rha-spec-v0.10.md");
+
+fn embedded(path: &str) -> &'static [u8] {
+    PACKAGE
+        .iter()
+        .find(|(name, _)| *name == path)
+        .map(|(_, bytes)| *bytes)
+        .unwrap_or_else(|| panic!("{path}: not embedded"))
 }
 
 fn sha256_hex(bytes: &[u8]) -> String {
@@ -38,10 +72,8 @@ fn sha256_hex(bytes: &[u8]) -> String {
 
 /// Verify every payload file's digest against `SHA256SUMS` before trusting
 /// anything else in the package.
-fn verify_sha256sums(dir: &Path) {
-    let sums_path = dir.join("SHA256SUMS");
-    let sums_text = fs::read_to_string(&sums_path)
-        .unwrap_or_else(|error| panic!("reading {}: {error}", sums_path.display()));
+fn verify_sha256sums() {
+    let sums_text = std::str::from_utf8(embedded("SHA256SUMS")).expect("SHA256SUMS is UTF-8");
 
     let mut listed = BTreeMap::new();
     for line in sums_text.lines() {
@@ -71,10 +103,7 @@ fn verify_sha256sums(dir: &Path) {
     );
 
     for path in PAYLOAD_FILES {
-        let full = dir.join(path);
-        let bytes =
-            fs::read(&full).unwrap_or_else(|error| panic!("reading {}: {error}", full.display()));
-        let actual = sha256_hex(&bytes);
+        let actual = sha256_hex(embedded(path));
         let expected = listed
             .get(*path)
             .unwrap_or_else(|| panic!("{path}: not listed in SHA256SUMS"));
@@ -85,10 +114,9 @@ fn verify_sha256sums(dir: &Path) {
     }
 }
 
-fn load_cases(dir: &Path) -> Vec<Value> {
-    let cases_path = dir.join("CASES.json");
-    let bytes = fs::read(&cases_path).expect("reading CASES.json");
-    let value: Value = serde_json::from_slice(&bytes).expect("CASES.json is valid JSON");
+fn load_cases() -> Vec<Value> {
+    let value: Value =
+        serde_json::from_slice(embedded("CASES.json")).expect("CASES.json is valid JSON");
     value
         .as_array()
         .expect("CASES.json is a JSON array")
@@ -109,9 +137,11 @@ fn case_markdown(case: &Value, id: &str) -> String {
     // The real-spec case: identified by path + sha256 instead of inlined text.
     let path = expect_str(case, "path", id);
     let expected_sha256 = expect_str(case, "sha256", id);
-    let full_path = repo_root().join(path);
-    let bytes = fs::read(&full_path)
-        .unwrap_or_else(|error| panic!("{id}: reading {}: {error}", full_path.display()));
+    assert_eq!(
+        path, SPEC_PATH,
+        "{id}: the only path-identified case is the spec"
+    );
+    let bytes = SPEC.to_vec();
     let actual_sha256 = sha256_hex(&bytes);
     assert_eq!(
         actual_sha256, expected_sha256,
@@ -254,9 +284,8 @@ fn collect_links(nodes: &[Node], out: &mut Vec<(String, String)>) {
 
 #[test]
 fn all_registered_section_ref_cases_grade_exact_refs_diagnostics_and_link_invariant() {
-    let dir = package_dir();
-    verify_sha256sums(&dir);
-    let cases = load_cases(&dir);
+    verify_sha256sums();
+    let cases = load_cases();
     assert_eq!(
         cases.len(),
         EXPECTED_CASE_COUNT,
