@@ -1,0 +1,88 @@
+# Acceptance record for P-C (CHG-007, CHG-019.1, E1). Written in P-D, the item that
+# merges after P-C: P-D's branch was cut before P-C merged, so this record follows the
+# merge of main into chg/008-growth instead of being the branch's first commit.
+# History is not rewritten. Creation is pre-approved by [acceptance].
+schema_version = 1
+id = "CHG-007"
+covers = ["CHG-007", "CHG-019.1", "E1"]
+change = "docs/changes/CHG-007-module-level.md"
+task = ".rha/tasks/CHG-007-module-level.toml"
+
+[acceptor]
+principal = "human:kennedy"
+role = "acceptor"
+date = "2026-09-23"
+authority_profile = "ECC-Solo"
+basis = "PR 18 was merged at 2026-09-23T09:15:36Z through Kennedy's account (kmosoti) by the supervising session, under Kennedy's rule of 2026-09-22: \"I approve all PRs as long as both an opus 5.5 and gpt-6 agent has reviewed and approved the code.\" Both approved head 6f376d1 (PR 18 comment of 2026-09-23T09:15:34Z). Acceptance is by merge under policy [acceptance]."
+event = "merge of pull request 18"
+
+[subject]
+revision = "74aeb1d853fda49d585eb40e8d7c9727089d610c"
+tree = "8e698cd54e8ef9321cda215ce006cc96a88ee010"
+parents = ["ec493b794040ede8878705132c89f9a4855f2dbe", "6f376d1e46027d43d82562316d4056702bf97e9b"]
+pull_request = "https://github.com/kmosoti/recursive-hexagonal-architecture/pull/18"
+integrator_edits = "none"
+
+[[evidence]]
+path = "evidence/ci/35841881942.json"
+class = "ci"
+subject_revision = "74aeb1d853fda49d585eb40e8d7c9727089d610c"
+subject_tree = "8e698cd54e8ef9321cda215ce006cc96a88ee010"
+sha256 = "5e05b062e68fc9f8710c3589d2e3b7589fcf6e69178bb213641067a23bba1f47"
+note = "Downloaded with gh run download 35841881942 -n rha-evidence (rha/evidence.json); main at the P-C merge. All eight L0 checks passed; nextest selected 290 tests."
+
+[[evidence]]
+path = "evidence/CHG-007/20260923T091129Z-3d86fce33e52.json"
+class = "local"
+subject_revision = "3d86fce33e52cf68c87c4cc78ec6cd7199e3603b"
+sha256 = "cbdd8f2a763c54b99f93ad308937b9afbf19dbe6f0a8c02cf37f84cecba4aa0a"
+note = "L0 at the validated head before the L0-record commit 6f376d1: all eight passed, 290 tests, clean tree."
+
+[[evidence]]
+path = "https://github.com/kmosoti/recursive-hexagonal-architecture/pull/18"
+class = "review"
+note = "GPT-6 (gpt-6-sol, medium, validator): APPROVE, no findings. Opus 5.5 (independent reviewer): APPROVE after four rounds; every finding was confirmed by running it and repaired (CHG-007.3, CHG-007.4, the schema generator ported to Rust). Two automated threads resolved: match guards refuted, cfg(test) on associated items repaired. Module H4 28/28 as registered."
+
+[outcomes]
+passed = ["L0.fmt", "L0.clippy", "L0.nextest", "L0.doctest", "L0.architecture", "L0.deny", "L0.machete", "L0.typos"]
+not_run = ["DP-2.1: module-level held-out cases (Kennedy's, spec §9.14)", "Trusted producer key cut-over: DP-4.1; no isolated producer"]
+failed = []
+not_applicable = []
+inconclusive = []
+
+[disposition]
+decision = "accepted"
+kind = "bootstrap_acceptance"
+merge_allowed = false
+eligibility_at_acceptance = "blocked"
+basis = "All L0 checks passed; Authentic false under [acceptance.bootstrap] (DP-4.1). No claim of conformance."
+exception = "none"
+
+[[disposition.predicates]]
+name = "Authentic"
+holds = false
+reason = "No trusted producers in policy (DP-4.1); this ci record is unauthenticated."
+
+[[disposition.predicates]]
+name = "Applicable"
+holds = true
+reason = "P-C did not edit .rha/policy.toml: the candidate and base policies are identical (git diff ec493b7 74aeb1d -- .rha/policy.toml is empty)."
+
+[[disposition.predicates]]
+name = "Complete"
+holds = true
+reason = "Every required L0 id is present exactly once."
+
+[[disposition.predicates]]
+name = "Passed"
+holds = true
+reason = "All eight L0 checks passed; nextest selected 290 tests."
+
+[carried_forward]
+open = [
+  "P3 (Opus review of PR 18): a function-local `mod` in the glue root that shares a component's name is attributed to that component.",
+  "P3 (Opus review of PR 18): a finding raised inside a block module has no `source_file` in its witness.",
+  "Module H4 evidence records repeat the committed random expectations (6.5 MB or more each); store digests and counts instead (plan M8). Owed by P-D.",
+  "Five extractor defects confirmed by the 2026-09-23 stress test (a local named like the crate, pub(crate) inside a macro, cfg(test) on statements, paths inside attributes, a cfg-gated mod with a missing file): a follow-up item.",
+  "DP-2.1 held-out module cases open for Kennedy.",
+]
