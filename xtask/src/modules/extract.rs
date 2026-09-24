@@ -7,8 +7,8 @@ use serde::Serialize;
 use syn::ext::IdentExt as _;
 use syn::visit::Visit;
 use syn::{
-    Attribute, Expr, ExprLit, FnArg, GenericParam, Item, ItemMacro, ItemMod, ItemUse, Lit, Meta,
-    Pat, Path as SynPath, Stmt, UseTree,
+    AttrStyle, Attribute, Expr, ExprLit, FnArg, GenericParam, Item, ItemMacro, ItemMod, ItemUse,
+    Lit, Meta, Pat, Path as SynPath, Stmt, UseTree,
 };
 
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Serialize)]
@@ -49,13 +49,19 @@ struct ModuleData {
     test: bool,
 }
 
+#[derive(Clone, Copy)]
+struct ModuleContext {
+    test: bool,
+    authority: bool,
+}
+
 struct ChildSpec {
     path: Vec<String>,
     name: String,
     file: PathBuf,
     inline_items: Option<Vec<Item>>,
     path_attr: Option<String>,
-    test: bool,
+    context: ModuleContext,
 }
 
 #[derive(Clone)]
@@ -186,7 +192,7 @@ impl Engine {
         path: Vec<String>,
         file: PathBuf,
         items: Vec<Item>,
-        test: bool,
+        context: ModuleContext,
         directory: PathBuf,
         attr_base: PathBuf,
     ) -> Result<(), String> {
@@ -208,7 +214,7 @@ impl Engine {
                         path: declaration.0,
                         alias: declaration.1,
                         glob: declaration.2,
-                        test: test || item_test,
+                        test: context.test || item_test,
                     });
                 }
             }
@@ -235,7 +241,14 @@ impl Engine {
                     child.push(item_mod.ident.unraw().to_string());
                     child
                 };
-                let child_test = test || item_test;
+                let decl_test = item_mod
+                    .attrs
+                    .iter()
+                    .any(|attr| matches!(attr.style, AttrStyle::Outer) && is_exact_cfg_test(attr));
+                let child_context = ModuleContext {
+                    test: context.test || item_test,
+                    authority: context.authority || decl_test,
+                };
                 let inline_items = item_mod.content.as_ref().map(|(_, body)| body.clone());
                 children.push(ChildSpec {
                     path: child_path,
@@ -243,7 +256,7 @@ impl Engine {
                     file: file.clone(),
                     inline_items,
                     path_attr,
-                    test: child_test,
+                    context: child_context,
                 });
             }
         }
@@ -256,7 +269,7 @@ impl Engine {
                 items,
                 definitions,
                 imports,
-                test,
+                test: context.test,
             },
         );
 
@@ -272,7 +285,7 @@ impl Engine {
                     child.path,
                     child.file,
                     items,
-                    child.test,
+                    child.context,
                     child_directory,
                     child_attr_base,
                 )?;
@@ -318,7 +331,7 @@ impl Engine {
                 self.discover_file(
                     child.path,
                     selected,
-                    child.test,
+                    child.context,
                     child_directory,
                     child_attr_base,
                 )?;
@@ -356,27 +369,26 @@ impl Engine {
         &mut self,
         path: Vec<String>,
         file: PathBuf,
-        inherited_test: bool,
+        context: ModuleContext,
         directory: PathBuf,
         attr_base: PathBuf,
     ) -> Result<(), String> {
         let file = fs::canonicalize(&file)
             .map_err(|error| format!("failed to canonicalize {}: {}", file.display(), error))?;
         if !file.starts_with(&self.crate_root) {
-            let permitted = inherited_test
+            let permitted = context.authority
                 && self
                     .permitted_test_root
                     .as_ref()
                     .is_some_and(|root| file.starts_with(root));
             if !permitted {
-                if inherited_test && self.permitted_test_root.is_some() {
+                if context.authority
+                    && let Some(permitted_test_root) = &self.permitted_test_root
+                {
                     return Err(format!(
                         "module file {} is outside permitted test source root {}",
                         file.display(),
-                        self.permitted_test_root
-                            .as_ref()
-                            .expect("permitted test root checked above")
-                            .display()
+                        permitted_test_root.display()
                     ));
                 }
                 return Err(format!(
@@ -410,11 +422,15 @@ impl Engine {
             }
         };
         let (file_test, _) = self.attr_info(&parsed.attrs, &path);
+        let next_context = ModuleContext {
+            test: context.test || file_test,
+            authority: context.authority,
+        };
         let result = self.install_module(
             path.clone(),
             file.clone(),
             parsed.items,
-            inherited_test || file_test,
+            next_context,
             directory,
             attr_base,
         );
@@ -1342,12 +1358,16 @@ fn item_cfg_test(item: &Item) -> bool {
     }
 }
 
+fn is_exact_cfg_test(attr: &Attribute) -> bool {
+    attr.path().is_ident("cfg")
+        && matches!(&attr.meta, Meta::List(list) if list.tokens.to_string() == "test")
+}
+
 /// `#[cfg(test)]`, or a bare `#[test]`, which rustc compiles only under
 /// `--test` (CHG-007.3, review finding 7).
 fn attrs_cfg_test(attrs: &[Attribute]) -> bool {
     attrs.iter().any(|attr| {
-        (attr.path().is_ident("cfg")
-            && matches!(&attr.meta, Meta::List(list) if list.tokens.to_string() == "test"))
+        is_exact_cfg_test(attr)
             || (attr.path().is_ident("test") && matches!(attr.meta, Meta::Path(_)))
     })
 }
@@ -1529,11 +1549,15 @@ fn extract_impl(
     };
     engine.active_files.insert(root_file.clone());
     let (root_test, _) = engine.attr_info(&parsed.attrs, std::slice::from_ref(&normalized_crate));
+    let context = ModuleContext {
+        test: root_test,
+        authority: false,
+    };
     engine.install_module(
         vec![normalized_crate.clone()],
         root_file.clone(),
         parsed.items,
-        root_test,
+        context,
         root_file.parent().unwrap_or(Path::new(".")).to_path_buf(),
         root_file.parent().unwrap_or(Path::new(".")).to_path_buf(),
     )?;

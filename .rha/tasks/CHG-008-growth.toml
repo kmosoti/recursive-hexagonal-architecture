@@ -551,3 +551,14 @@ answer = "Yes. While GPT-6 is out of commission (the Codex usage limit resets 20
 decided_by = "human:kennedy"
 delegation = "Kennedy, 2026-09-24: 'And yes, you can merge. No need for GPT-6 while it's out of commission'"
 date = "2026-09-24"
+
+[[provenance.generations]]
+artifact = "xtask/src/modules/extract.rs: separate external-read authority from test classification (resume point item 1)"
+generation = "sampled"
+model = "gemini-3.8-flash-high"
+reasoning_effort = "high (model tier)"
+harness = "Antigravity CLI 1.2.10, /boost, in agy-jail (supervised; ~/.gemini/teamwork)"
+prompt = "Fix one authority bug in the Rust module-graph checker: an inner #![cfg(test)] or #![test] must not grant external-read authority; only an explicit test declaration in declaration ancestry does. Registered tests, corpora and the contract document must not change; acceptance is the boundary tests, the workspace tests, module H4 28/28, cargo xtask architecture, fmt and clippy, and an empty diff under xtask/tests and docs."
+prompt_sha256 = "48ccaa8ef6c06d11685a423036aca9884adab816efb3c21481c53e30dbbf6e5a"
+sample = "one run (conversation 1e4f6846), base 5760b7c; one escalation, answered by the supervisor; output patch sha256 37beb40a2d0c9c40a18303e7ded09e31e7f9d5239d1e4972d3a7dbaa2457f17d"
+oracles = "The registered module_test_source_boundary tests and corpus, module H4, the workspace suite, architecture, fmt and clippy, rerun by the supervising session on the integrated branch"
