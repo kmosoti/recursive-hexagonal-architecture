@@ -18,6 +18,7 @@ pub mod modules;
 pub mod policy;
 pub mod record_lint;
 pub mod record_schema;
+pub mod schema_codegen;
 pub mod scope;
 pub mod tools;
 pub mod util;

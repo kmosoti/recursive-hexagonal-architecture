@@ -180,4 +180,11 @@ pub enum RhaCommand {
         #[arg(required = true)]
         files: Vec<PathBuf>,
     },
+    /// Translate the registered record-shape inventory and markdown-schema
+    /// supplement into `.rha/schemas/*.schema.json`, or with --check compare.
+    Schemas {
+        /// Compare instead of writing; exit 1 if any schema is missing or differs.
+        #[arg(long)]
+        check: bool,
+    },
 }

@@ -4,6 +4,7 @@ use std::path::{Path, PathBuf};
 
 use proc_macro2::TokenTree;
 use serde::Serialize;
+use syn::ext::IdentExt as _;
 use syn::visit::Visit;
 use syn::{
     Attribute, Expr, ExprLit, FnArg, GenericParam, Item, ItemMacro, ItemMod, ItemUse, Lit, Meta,
@@ -115,6 +116,8 @@ struct Engine {
     crate_name: String,
     edition: String,
     externals: BTreeSet<String>,
+    /// Aliases of the crate root from `extern crate self as <alias>;`.
+    crate_aliases: BTreeSet<String>,
     modules: BTreeMap<String, ModuleData>,
     module_paths: BTreeMap<String, PathBuf>,
     edges: BTreeSet<Edge>,
@@ -200,7 +203,7 @@ impl Engine {
         for item in &items {
             let (item_test, path_attr) = self.item_attrs(item, &path);
             if let Item::Use(item_use) = item {
-                for declaration in flatten_use(&item_use.tree, &[]) {
+                for declaration in flatten_use(&item_use.tree, &use_root(item_use)) {
                     imports.push(UseDecl {
                         path: declaration.0,
                         alias: declaration.1,
@@ -216,21 +219,27 @@ impl Engine {
                 let external = item
                     .rename
                     .as_ref()
-                    .map(|(_, ident)| ident.to_string())
-                    .unwrap_or_else(|| item.ident.to_string());
-                self.externals.insert(external);
+                    .map(|(_, ident)| ident.unraw().to_string())
+                    .unwrap_or_else(|| item.ident.unraw().to_string());
+                // `extern crate self as me;` names this crate, not an external
+                // one (CHG-007.3, review finding 4).
+                if item.ident == "self" {
+                    self.crate_aliases.insert(external);
+                } else {
+                    self.externals.insert(external);
+                }
             }
             if let Item::Mod(item_mod) = item {
                 let child_path = {
                     let mut child = path.clone();
-                    child.push(item_mod.ident.to_string());
+                    child.push(item_mod.ident.unraw().to_string());
                     child
                 };
                 let child_test = test || item_test;
                 let inline_items = item_mod.content.as_ref().map(|(_, body)| body.clone());
                 children.push(ChildSpec {
                     path: child_path,
-                    name: item_mod.ident.to_string(),
+                    name: item_mod.ident.unraw().to_string(),
                     file: file.clone(),
                     inline_items,
                     path_attr,
@@ -416,18 +425,18 @@ impl Engine {
 
 fn item_definition(item: &Item) -> Option<String> {
     match item {
-        Item::Const(item) => Some(item.ident.to_string()),
-        Item::Enum(item) => Some(item.ident.to_string()),
-        Item::Fn(item) => Some(item.sig.ident.to_string()),
-        Item::Macro(item) => item.ident.as_ref().map(ToString::to_string),
-        Item::Mod(item) => Some(item.ident.to_string()),
-        Item::Static(item) => Some(item.ident.to_string()),
-        Item::Struct(item) => Some(item.ident.to_string()),
-        Item::Trait(item) => Some(item.ident.to_string()),
-        Item::TraitAlias(item) => Some(item.ident.to_string()),
-        Item::Type(item) => Some(item.ident.to_string()),
-        Item::Union(item) => Some(item.ident.to_string()),
-        Item::Use(item) => flatten_use(&item.tree, &[])
+        Item::Const(item) => Some(item.ident.unraw().to_string()),
+        Item::Enum(item) => Some(item.ident.unraw().to_string()),
+        Item::Fn(item) => Some(item.sig.ident.unraw().to_string()),
+        Item::Macro(item) => item.ident.as_ref().map(|ident| ident.unraw().to_string()),
+        Item::Mod(item) => Some(item.ident.unraw().to_string()),
+        Item::Static(item) => Some(item.ident.unraw().to_string()),
+        Item::Struct(item) => Some(item.ident.unraw().to_string()),
+        Item::Trait(item) => Some(item.ident.unraw().to_string()),
+        Item::TraitAlias(item) => Some(item.ident.unraw().to_string()),
+        Item::Type(item) => Some(item.ident.unraw().to_string()),
+        Item::Union(item) => Some(item.ident.unraw().to_string()),
+        Item::Use(item) => flatten_use(&item.tree, &use_root(item))
             .into_iter()
             .find(|(_, alias, glob)| !*glob && alias != "_")
             .map(|(_, alias, _)| alias),
@@ -443,12 +452,12 @@ fn flatten_use(tree: &UseTree, prefix: &[String]) -> Vec<(Vec<String>, String, b
     match tree {
         UseTree::Path(path) => {
             let mut next = prefix.to_vec();
-            next.push(path.ident.to_string());
+            next.push(path.ident.unraw().to_string());
             flatten_use(&path.tree, &next)
         }
         UseTree::Name(name) => {
             let mut path = prefix.to_vec();
-            let ident = name.ident.to_string();
+            let ident = name.ident.unraw().to_string();
             if ident == "self" {
                 let alias = path.last().cloned().unwrap_or_else(|| "self".to_owned());
                 vec![(path, alias, false)]
@@ -459,11 +468,11 @@ fn flatten_use(tree: &UseTree, prefix: &[String]) -> Vec<(Vec<String>, String, b
         }
         UseTree::Rename(rename) => {
             let mut path = prefix.to_vec();
-            let ident = rename.ident.to_string();
+            let ident = rename.ident.unraw().to_string();
             if ident != "self" {
                 path.push(ident);
             }
-            vec![(path, rename.rename.to_string(), false)]
+            vec![(path, rename.rename.unraw().to_string(), false)]
         }
         UseTree::Glob(_) => vec![(prefix.to_vec(), "*".to_owned(), true)],
         UseTree::Group(group) => group
@@ -524,7 +533,7 @@ impl<'a> Walker<'a> {
     }
 
     fn walk_use(&mut self, item: &ItemUse) {
-        for (path, _, _) in flatten_use(&item.tree, &[]) {
+        for (path, _, _) in flatten_use(&item.tree, &use_root(item)) {
             self.record_path(&path, "syntax", true, true);
         }
     }
@@ -552,6 +561,20 @@ impl<'a> Walker<'a> {
         let head = &path[0];
         let tail = &path[1..];
 
+        // A leading `::` is the crate root in edition 2015 and an external
+        // crate from 2018 on (CHG-007.3, review finding 5).
+        if head == LEADING_COLON {
+            // In 2015 the crate root holds the extern crates too, so
+            // `::std::..` stays external (CHG-007.4, GPT-6 re-review 2).
+            let external = tail
+                .first()
+                .is_some_and(|first| self.engine.externals.contains(first));
+            return if self.engine.edition == "2015" && !external {
+                Resolution::Target(with_suffix(vec![self.engine.crate_name.clone()], tail))
+            } else {
+                Resolution::External
+            };
+        }
         if self.engine.externals.contains(head) {
             return Resolution::External;
         }
@@ -641,6 +664,12 @@ impl<'a> Walker<'a> {
                 1 => return Resolution::Target(candidates.into_iter().next().unwrap_or_default()),
                 _ => return Resolution::Ambiguous,
             }
+        }
+        // An `extern crate self as <alias>;` name is in the extern prelude:
+        // local names shadow it, so it is tried last (CHG-007.4, GPT-6
+        // re-review 3).
+        if self.engine.crate_aliases.contains(head) {
+            return Resolution::Target(with_suffix(vec![self.engine.crate_name.clone()], tail));
         }
         Resolution::Unknown
     }
@@ -781,6 +810,13 @@ impl<'a> Walker<'a> {
             return;
         }
 
+        // A block module is not installed; a path into it from inside it is
+        // local, not an edge to its enclosing module.
+        if !self.engine.modules.contains_key(&module_name(&self.module))
+            && target.starts_with(&self.module)
+        {
+            return;
+        }
         let mut owner = target.clone();
         while !owner.is_empty() && !self.engine.modules.contains_key(&module_name(&owner)) {
             owner.pop();
@@ -796,9 +832,12 @@ impl<'a> Walker<'a> {
             let name = target[owner.len()].clone();
             let mut active = BTreeSet::new();
             if !self.exported(&owner, &name, &mut active) {
+                // The owning module is certain even when the item is not
+                // found in its source (made by a macro, in an `extern` block):
+                // the component edge stands, and the item is a limitation
+                // (CHG-007.3, review finding 2).
                 self.engine
-                    .limit(&self.module, "unresolved_path", target.join("::"));
-                return;
+                    .limit(&self.module, "unresolved_item", target.join("::"));
             }
         }
         if owner != self.module {
@@ -868,14 +907,14 @@ impl<'a> Walker<'a> {
                     index += 1;
                 }
                 TokenTree::Ident(ident) => {
-                    let mut path = vec![ident.to_string()];
+                    let mut path = vec![ident.unraw().to_string()];
                     let mut end = index + 1;
                     while end + 2 < tokens.len()
                         && is_colon(&tokens[end])
                         && is_colon(&tokens[end + 1])
                     {
                         if let TokenTree::Ident(next) = &tokens[end + 2] {
-                            path.push(next.to_string());
+                            path.push(next.unraw().to_string());
                             end += 3;
                         } else {
                             break;
@@ -906,7 +945,53 @@ impl<'ast> Visit<'ast> for Walker<'_> {
 
     fn visit_visibility(&mut self, _visibility: &'ast syn::Visibility) {}
 
-    fn visit_item_mod(&mut self, _item: &'ast ItemMod) {}
+    /// Modules at module scope are installed and walked by the engine. A
+    /// module declared in a function body or a const block is walked here,
+    /// with the enclosing module as the edge source, since it owns the block,
+    /// so the component is certain (CHG-007.3, review finding 1).
+    fn visit_item_mod(&mut self, item: &'ast ItemMod) {
+        if self.frames.last().is_none_or(|frame| frame.module_scope) {
+            return;
+        }
+        let name = item.ident.unraw().to_string();
+        let Some((_, items)) = &item.content else {
+            self.engine.limit(
+                &self.module,
+                "block_module",
+                format!("{name}: an out-of-line module in a block is not read"),
+            );
+            return;
+        };
+        self.engine.limit(
+            &self.module,
+            "block_module",
+            format!("{name}: walked in its enclosing module; its imports are not installed"),
+        );
+        let mut path = self
+            .frames
+            .last()
+            .map_or_else(|| self.module.clone(), |f| f.module.clone());
+        path.push(name);
+        // The block module is the current module while it is walked, so the
+        // frames of functions inside it resolve `self::` and `super::` from
+        // it; the edge source maps to the enclosing component by prefix
+        // (CHG-007.4, both re-reviews).
+        let enclosing = std::mem::replace(&mut self.module, path.clone());
+        let mut frame = Frame::block(path);
+        for inner in items {
+            if !matches!(inner, Item::Use(_))
+                && let Some(defined) = item_definition(inner)
+            {
+                frame.definitions.insert(defined);
+            }
+        }
+        self.frames.push(frame);
+        for inner in items {
+            self.walk_item(inner);
+        }
+        self.frames.pop();
+        self.module = enclosing;
+    }
 
     fn visit_item_use(&mut self, item: &'ast ItemUse) {
         self.walk_use(item);
@@ -994,7 +1079,7 @@ impl<'ast> Visit<'ast> for Walker<'_> {
         for statement in &block.stmts {
             if let Stmt::Item(Item::Use(item)) = statement {
                 let (item_test, _) = self.engine.attr_info(&item.attrs, &self.module);
-                for (path, alias, glob) in flatten_use(&item.tree, &[]) {
+                for (path, alias, glob) in flatten_use(&item.tree, &use_root(item)) {
                     let declaration = UseDecl {
                         path,
                         alias,
@@ -1111,6 +1196,37 @@ impl<'ast> Visit<'ast> for Walker<'_> {
         }
     }
 
+    // `#[cfg(test)]` applies to every associated item, not only functions:
+    // a test-only associated const or type is a test edge (CHG-007.2, the
+    // automated review thread on pull request 18).
+    fn visit_trait_item(&mut self, item: &'ast syn::TraitItem) {
+        let attrs: &[syn::Attribute] = match item {
+            syn::TraitItem::Const(item) => &item.attrs,
+            syn::TraitItem::Fn(item) => &item.attrs,
+            syn::TraitItem::Type(item) => &item.attrs,
+            syn::TraitItem::Macro(item) => &item.attrs,
+            _ => &[],
+        };
+        let old_test = self.test;
+        self.test = old_test || attrs_cfg_test(attrs);
+        syn::visit::visit_trait_item(self, item);
+        self.test = old_test;
+    }
+
+    fn visit_impl_item(&mut self, item: &'ast syn::ImplItem) {
+        let attrs: &[syn::Attribute] = match item {
+            syn::ImplItem::Const(item) => &item.attrs,
+            syn::ImplItem::Fn(item) => &item.attrs,
+            syn::ImplItem::Type(item) => &item.attrs,
+            syn::ImplItem::Macro(item) => &item.attrs,
+            _ => &[],
+        };
+        let old_test = self.test;
+        self.test = old_test || attrs_cfg_test(attrs);
+        syn::visit::visit_impl_item(self, item);
+        self.test = old_test;
+    }
+
     fn visit_trait_item_fn(&mut self, item: &'ast syn::TraitItemFn) {
         let old_test = self.test;
         self.test = old_test || attrs_cfg_test(&item.attrs);
@@ -1148,7 +1264,7 @@ struct NameCollector<'a> {
 
 impl<'ast> Visit<'ast> for NameCollector<'_> {
     fn visit_pat_ident(&mut self, pat: &'ast syn::PatIdent) {
-        self.names.insert(pat.ident.to_string());
+        self.names.insert(pat.ident.unraw().to_string());
         syn::visit::visit_pat_ident(self, pat);
     }
 
@@ -1164,10 +1280,12 @@ fn generic_frame(module: &[String], generics: &syn::Generics) -> Frame {
     for parameter in &generics.params {
         match parameter {
             GenericParam::Type(parameter) => {
-                frame.type_locals.insert(parameter.ident.to_string());
+                frame
+                    .type_locals
+                    .insert(parameter.ident.unraw().to_string());
             }
             GenericParam::Const(parameter) => {
-                frame.locals.insert(parameter.ident.to_string());
+                frame.locals.insert(parameter.ident.unraw().to_string());
             }
             GenericParam::Lifetime(_) => {}
         }
@@ -1180,10 +1298,25 @@ fn collect_pattern_names(pattern: &Pat, names: &mut BTreeSet<String>) {
     collector.visit_pat(pattern);
 }
 
+/// The root of a `use` tree: the leading `::` marker when it has one.
+fn use_root(item: &ItemUse) -> Vec<String> {
+    item.leading_colon
+        .map(|_| vec![LEADING_COLON.to_owned()])
+        .unwrap_or_default()
+}
+
+/// The marker for a path written with a leading `::`.
+const LEADING_COLON: &str = "::";
+
 fn syn_path_names(path: &SynPath) -> Vec<String> {
-    path.segments
-        .iter()
-        .map(|segment| segment.ident.to_string())
+    path.leading_colon
+        .map(|_| LEADING_COLON.to_owned())
+        .into_iter()
+        .chain(
+            path.segments
+                .iter()
+                .map(|segment| segment.ident.unraw().to_string()),
+        )
         .collect()
 }
 
@@ -1209,10 +1342,13 @@ fn item_cfg_test(item: &Item) -> bool {
     }
 }
 
+/// `#[cfg(test)]`, or a bare `#[test]`, which rustc compiles only under
+/// `--test` (CHG-007.3, review finding 7).
 fn attrs_cfg_test(attrs: &[Attribute]) -> bool {
     attrs.iter().any(|attr| {
-        attr.path().is_ident("cfg")
-            && matches!(&attr.meta, Meta::List(list) if list.tokens.to_string() == "test")
+        (attr.path().is_ident("cfg")
+            && matches!(&attr.meta, Meta::List(list) if list.tokens.to_string() == "test"))
+            || (attr.path().is_ident("test") && matches!(attr.meta, Meta::Path(_)))
     })
 }
 
@@ -1292,7 +1428,7 @@ impl TokenStreamString for Meta {
         self.path()
             .segments
             .iter()
-            .map(|segment| segment.ident.to_string())
+            .map(|segment| segment.ident.unraw().to_string())
             .collect::<Vec<_>>()
             .join("::")
     }
@@ -1384,6 +1520,7 @@ fn extract_impl(
         crate_name: normalized_crate.clone(),
         edition: edition.to_owned(),
         externals: all_externals,
+        crate_aliases: BTreeSet::new(),
         modules: BTreeMap::new(),
         module_paths: BTreeMap::new(),
         edges: BTreeSet::new(),

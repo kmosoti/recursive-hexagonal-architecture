@@ -13,7 +13,7 @@ base_revision = "ec493b794040ede8878705132c89f9a4855f2dbe"
 intent = "Deliver milestone M2: P-C CHG-007, CHG-019.1 and E1; P-D CHG-008 to CHG-014. Implement all required stages, fix every confirmed issue within M2 scope, keep registered grading unchanged absent a disclosed amendment, obtain separate GPT-6 validation, open two green stacked PRs, and never merge."
 non_goals = ["Editing docs/spec/**", "Reading or writing held-out material", "Merge or tag", "Rewriting pushed history", "P-D product growth before the P-C head"]
 scope_globs = [".rha/tasks/CHG-007-module-level.toml", ".rha/acceptances/CHG-019.toml", ".rha/decisions.toml", ".rha/schemas/**", "docs/**", "evidence/**", "xtask/**", "tools/rha-verifier/**", "experiments/no-std-graph/**", "Cargo.lock", "rha-baseline.json", "CONTRIBUTING.md", "deny.toml", "crates/site/AGENTS.md"]
-protected_scope = [".rha/acceptances/CHG-019.toml", ".rha/decisions.toml", "rha-baseline.json", "CONTRIBUTING.md", ".rha/schemas/**", "xtask/Cargo.toml", "xtask/src/record_lint.rs", "xtask/src/record_schema.rs", "xtask/schema_codegen.py", "xtask/src/lib.rs", "xtask/src/modules/**", "xtask/src/metadata.rs", "xtask/src/graph/**", "xtask/src/architecture.rs", "xtask/src/corpus/**", "xtask/src/corpus.rs", "xtask/src/docs.rs", "xtask/src/scope.rs", "xtask/src/clippy_template.rs", "xtask/src/cli.rs", "xtask/src/main.rs", "xtask/src/util.rs", "deny.toml", "crates/site/AGENTS.md", "experiments/no-std-graph/Cargo.toml", "tools/rha-verifier/src/main.rs"]
+protected_scope = [".rha/acceptances/CHG-019.toml", ".rha/decisions.toml", "rha-baseline.json", "CONTRIBUTING.md", ".rha/schemas/**", "xtask/Cargo.toml", "xtask/src/record_lint.rs", "xtask/src/record_schema.rs", "xtask/src/schema_codegen.rs", "xtask/src/lib.rs", "xtask/src/modules/**", "xtask/src/metadata.rs", "xtask/src/graph/**", "xtask/src/architecture.rs", "xtask/src/corpus/**", "xtask/src/corpus.rs", "xtask/src/docs.rs", "xtask/src/scope.rs", "xtask/src/clippy_template.rs", "xtask/src/cli.rs", "xtask/src/main.rs", "xtask/src/util.rs", "deny.toml", "crates/site/AGENTS.md", "experiments/no-std-graph/Cargo.toml", "tools/rha-verifier/src/main.rs"]
 
 [[actors]]
 id = "human:kennedy"
@@ -70,6 +70,29 @@ decided_by = "agent:executor under human:kennedy's delegation"
 delegation = "Kennedy, 2026-09-22: Determine a large slice to hand off to gpt-6-astra ultra. Make sure it has a goal to implement its work and fix any and all issue in accordance with rha design. (Let it flag and improve the architecture and tooling if it can justify it no need for my approval). I approve all PRs as long as both an opus 5.5 and gpt-6 agent has reviewed and approved the code. Kennedy, 2026-09-22: Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me."
 date = "2026-09-22"
 
+
+[[decisions]]
+id = "pr18-writer"
+question = "Who writes on chg/007-module-level after the PR opened, while the Codex Executor works on P-D?"
+answer = "Kennedy, 2026-09-23: 'You address the pr. Let astra do its thing.' The supervising Claude Opus 5.5 session (Claude Code) is the sole writer on chg/007-module-level from CHG-007.2 on; the Codex Executor was told by a queued message not to commit here, and continues P-D on chg/008-growth, merging main after PR 18 merges. The [[work]] claim above describes the branch up to 8e3037b."
+decided_by = "human:kennedy"
+date = "2026-09-23"
+
+[[decisions]]
+id = "pr18-automated-threads"
+question = "The two automated review threads on PR 18 (on 96019ef): match guards (P1), cfg(test) on associated items (P2)."
+answer = "P1 refuted by running it: syn 3 carries the guard in Pat::Guard, which visit_pat walks. P2 confirmed and repaired in visit_impl_item and visit_trait_item. Determinations in the change record, section CHG-007.2."
+decided_by = "agent:supervisor"
+date = "2026-09-23"
+
+
+[[decisions]]
+id = "opus-review-pr18"
+question = "The independent Opus 5.5 review of PR 18 at 8e3037b: seven findings (block modules, dropped edges to unfound items, Python in L0, extern crate self, 2015 leading ::, raw identifiers, #[test] outside cfg(test))."
+answer = "All seven confirmed by running them and repaired in CHG-007.3. The schema generator moves from xtask/schema_codegen.py to Rust (cargo xtask rha schemas), with the committed schemas as the byte-exact oracle. Determinations in the change record."
+decided_by = "agent:supervisor"
+date = "2026-09-23"
+
 [provenance]
 harness = "codex-cli 0.156.0"
 task_scope = "P-C"
@@ -80,6 +103,16 @@ reasoning_effort = "ultra (requested in handoff)"
 [[provenance.sessions]]
 model_id = "gpt-6-astra (requested in handoff)"
 span = "M2 Executor, P-C"
+
+[[provenance.generations]]
+artifact = "CHG-007.3: xtask/src/schema_codegen.rs (the Rust port of xtask/schema_codegen.py), its CLI wiring and the rewritten schema tests"
+generation = "sampled"
+harness = "Claude Code agent, spawned by the supervising session, isolated worktree, no commit rights"
+model = "claude-opus-5-5"
+reasoning_effort = "unknown"
+prompt = "Port xtask/schema_codegen.py to Rust as cargo xtask rha schemas [--check]; the committed .rha/schemas/*.json are the byte-exact oracle; replace the python3 calls in the tests; add a corrupted-byte negative; delete the script."
+sample = "run 1 of 1, 2026-09-23"
+oracles = "The committed schemas byte for byte (write run and --check); 30 mutated-input side-by-side runs against the script before its deletion (agent-reported); the supervisor's own reruns: --check, git diff --exit-code .rha/schemas, and the test binary under env -i PATH=/nonexistent (4 passed)"
 
 [[provenance.generations]]
 artifact = "Executor implementation, non-oracle tests, records and documentation for P-C"
