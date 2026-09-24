@@ -800,3 +800,45 @@ fn inner_test_attributes_still_classify_in_crate_edges_as_test_only() {
     assert_eq!(extracted.edges.len(), 1);
     assert!(extracted.edges[0].test_only);
 }
+
+/// An inline module's inner `#![cfg(test)]` is not declaration ancestry either (verifier
+/// probes E1 and N2 of the 7ef5ac7 review: accepted before the fix, refused after).
+#[test]
+fn an_inline_module_inner_test_attribute_cannot_grant_external_read_authority() {
+    // Each #[path] resolves from the inline module's directory, which must exist.
+    for (label, root, inline_dir) in [
+        (
+            "inline-inner-authority",
+            "pub fn root_only(){}\nmod x {\n    #![cfg(test)]\n    #[path = \"../../../shared/helper.rs\"]\n    mod y;\n}\n",
+            "src/x",
+        ),
+        (
+            "nested-inline-inner-authority",
+            "pub fn root_only(){}\nmod x {\n    #![cfg(test)]\n    mod z {\n        #[path = \"../../../../shared/helper.rs\"]\n        mod y;\n    }\n}\n",
+            "src/x/z",
+        ),
+    ] {
+        let scratch = Scratch::new(label);
+        let workspace = scratch.path().join("ws");
+        let crate_root = workspace.join("member");
+        fs::create_dir_all(crate_root.join(inline_dir)).expect("inline module directory");
+        fs::create_dir_all(workspace.join("shared")).expect("shared directory");
+        let root_file = crate_root.join("src/lib.rs");
+        fs::write(&root_file, root).expect("root source");
+        fs::write(
+            workspace.join("shared/helper.rs"),
+            "pub fn shared(){crate::root_only();}\n",
+        )
+        .expect("helper source");
+        let error = extract_with_test_root(
+            &crate_root,
+            &root_file,
+            &workspace,
+            "m",
+            "2021",
+            &BTreeSet::new(),
+        )
+        .expect_err("an inline module's inner attribute is not declaration ancestry");
+        assert!(error.contains("outside crate root"), "{label}: {error}");
+    }
+}
