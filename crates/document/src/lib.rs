@@ -12,11 +12,13 @@
 mod node;
 mod parse;
 mod section;
+mod section_ref;
 mod slug;
 
 pub use node::{Align, CalloutKind, Node, Transclusion};
 pub use parse::parse;
 pub use section::{section_nodes, transclusions};
+pub use section_ref::SectionRef;
 pub use slug::slugify;
 
 use library::{Digest, PageId};
@@ -32,6 +34,7 @@ pub struct Document {
     pub links: Vec<Link>,
     pub body: Vec<Node>,
     pub diagnostics: Vec<Diagnostic>,
+    pub section_refs: Vec<SectionRef>,
 }
 
 /// A heading with its final, unique slug.
@@ -65,6 +68,8 @@ pub enum Diagnostic {
         first_line: usize,
         second_line: usize,
     },
+    /// An unresolved section reference on a page with at least one numbered heading.
+    UnresolvedSectionRef { number: String, line: usize },
     /// Syntax the model preserves only as text.
     Unsupported { kind: &'static str, line: usize },
 }

@@ -6,7 +6,13 @@ use pulldown_cmark::{
     TagEnd,
 };
 
-use crate::{Align, CalloutKind, Diagnostic, Document, Heading, Link, Node, slugify};
+use crate::{
+    Align, CalloutKind, Diagnostic, Document, Heading, Link, Node,
+    section_ref::{
+        PendingRef, ScannedPiece, make_section_ref_marker, resolve_section_refs, scan_references,
+    },
+    slugify,
+};
 
 /// The parser options. `ENABLE_HEADING_ATTRIBUTES` is off on purpose: it
 /// strips `{…}` from heading text, and the registered contract derives a
@@ -142,6 +148,7 @@ struct Builder {
     /// Every final slug allocated so far on the page.
     used: std::collections::BTreeSet<String>,
     next_transclusion: usize,
+    pending_refs: Vec<PendingRef>,
 }
 
 impl Builder {
@@ -444,7 +451,21 @@ impl Builder {
         }
     }
 
-    fn text(&mut self, text: &str) {
+    fn is_reference_excluded(&self) -> bool {
+        self.stack.iter().skip(1).any(|(frame, _)| {
+            matches!(
+                frame,
+                Frame::Heading { .. }
+                    | Frame::Link { .. }
+                    | Frame::WikiLink { .. }
+                    | Frame::Image { .. }
+                    | Frame::CodeBlock { .. }
+                    | Frame::Other
+            )
+        })
+    }
+
+    fn text(&mut self, text: &str, offset: usize, starts: &[usize]) {
         match self.stack.last_mut() {
             Some((Frame::CodeBlock { text: t, .. }, _)) => {
                 t.push_str(text);
@@ -457,7 +478,35 @@ impl Builder {
             _ => {}
         }
         self.heading_text(text);
-        self.push_node(BuildNode::Node(Node::Text(text.to_owned())));
+        if self.is_reference_excluded() || !text.contains('§') {
+            self.push_node(BuildNode::Node(Node::Text(text.to_owned())));
+            return;
+        }
+
+        let pieces = scan_references(text, offset, starts);
+        for piece in pieces {
+            match piece {
+                ScannedPiece::Text(t) => {
+                    self.push_node(BuildNode::Node(Node::Text(t)));
+                }
+                ScannedPiece::Ref {
+                    ref_text,
+                    number,
+                    line,
+                } => {
+                    let ref_index = self.pending_refs.len();
+                    self.pending_refs.push(PendingRef {
+                        text: ref_text.clone(),
+                        number,
+                        line,
+                    });
+                    self.push_node(BuildNode::Node(Node::Link {
+                        href: make_section_ref_marker(ref_index),
+                        children: vec![Node::Text(ref_text)],
+                    }));
+                }
+            }
+        }
     }
 }
 
@@ -466,7 +515,6 @@ fn plain(nodes: &[BuildNode]) -> String {
     let mut out = String::new();
     for node in nodes {
         match node {
-            BuildNode::Image { .. } => {}
             BuildNode::Node(Node::Text(text) | Node::Code(text)) => out.push_str(text),
             BuildNode::Node(
                 Node::Emphasis(children)
@@ -478,7 +526,7 @@ fn plain(nodes: &[BuildNode]) -> String {
                 | Node::WikiLink { children, .. },
             ) => out.push_str(&plain_nodes(children)),
             BuildNode::Node(Node::SoftBreak | Node::HardBreak) => out.push(' '),
-            BuildNode::Node(_) => {}
+            BuildNode::Image { .. } | BuildNode::Node(_) => {}
         }
     }
     out
@@ -516,13 +564,14 @@ pub fn parse(source: &Source) -> Document {
         seen: BTreeMap::new(),
         used: std::collections::BTreeSet::new(),
         next_transclusion: 0,
+        pending_refs: Vec::new(),
     };
     for (event, range) in Parser::new_ext(text, options()).into_offset_iter() {
         let line = line_of(&starts, range.start);
         match event {
             Event::Start(tag) => b.start(tag, line),
             Event::End(end) => b.end(end),
-            Event::Text(t) => b.text(&t),
+            Event::Text(t) => b.text(&t, range.start, &starts),
             Event::Code(t) => {
                 b.heading_text(&t);
                 b.push_node(BuildNode::Node(Node::Code(t.to_string())));
@@ -556,6 +605,9 @@ pub fn parse(source: &Source) -> Document {
         .pop()
         .map(|(_, c)| into_nodes(c))
         .unwrap_or_default();
+    let (section_refs, section_diagnostics, body) =
+        resolve_section_refs(&b.headings, b.pending_refs, body);
+    b.diagnostics.extend(section_diagnostics);
     let title = b
         .headings
         .iter()
@@ -569,5 +621,6 @@ pub fn parse(source: &Source) -> Document {
         links: b.links,
         body,
         diagnostics: b.diagnostics,
+        section_refs,
     }
 }

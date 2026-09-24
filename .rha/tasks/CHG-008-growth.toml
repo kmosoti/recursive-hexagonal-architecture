@@ -557,7 +557,7 @@ artifact = "xtask/src/modules/extract.rs: separate external-read authority from 
 generation = "sampled"
 model = "gemini-3.8-flash-high"
 reasoning_effort = "high (model tier)"
-harness = "Antigravity CLI 1.2.10, /boost, in agy-jail (supervised; ~/.gemini/teamwork)"
+harness = "Antigravity CLI 1.2.10, one agent in agy-jail (supervised; ~/.gemini/teamwork). Corrected 2026-09-24: recorded first as /boost, but the /boost prefix was passed as agy's initial prompt (-i), which does not expand slash commands, so no Boost pipeline ran (the transcript shows one conversation and no invoke_subagent)."
 prompt = "Fix one authority bug in the Rust module-graph checker: an inner #![cfg(test)] or #![test] must not grant external-read authority; only an explicit test declaration in declaration ancestry does. Registered tests, corpora and the contract document must not change; acceptance is the boundary tests, the workspace tests, module H4 28/28, cargo xtask architecture, fmt and clippy, and an empty diff under xtask/tests and docs."
 prompt_sha256 = "48ccaa8ef6c06d11685a423036aca9884adab816efb3c21481c53e30dbbf6e5a"
 sample = "one run (conversation 1e4f6846), base 5760b7c; one escalation, answered by the supervisor; output patch sha256 37beb40a2d0c9c40a18303e7ded09e31e7f9d5239d1e4972d3a7dbaa2457f17d"
@@ -597,3 +597,14 @@ prompt = "Write the registered grading corpus and grader for CHG-010 from docs/a
 prompt_sha256 = "2849e871b0783ced6f02bdf5cafcf97f293cd3828a0f29af6170cfa8d87f7a55"
 sample = "one session in two rounds: 76 cases with five open questions left out, then 84 after the contract amendment a3ca8de"
 oracles = "reference.py self-tests; SHA256SUMS; reproduction by the supervising session (CASES.json byte-identical); a stub-crate compile of the grader; the supervising session's registration review"
+
+[[provenance.generations]]
+artifact = "crates/document: §-references (section_ref.rs, parse.rs, lib.rs; the transclusion test literal gains section_refs)"
+generation = "sampled"
+model = "gemini-3.8-flash-high"
+reasoning_effort = "high (model tier)"
+harness = "Antigravity CLI 1.2.10, one agent in agy-jail (supervised). Launched as /teamwork-preview, but the command was passed as the initial prompt (-i) and not expanded, so no team ran (one conversation, no invoke_subagent in the transcript)"
+prompt = "Implement section references per docs/architecture/section-reference-contract.md in the document crate; the registered grader and corpus, the contract and the spec are fixed; acceptance is the grader, the workspace tests, architecture, fmt, clippy, docs --check, an empty diff on frozen paths, and crates changes only under crates/document."
+prompt_sha256 = "e7ad155b23b1d6255339ff627cb906f6166635a77db79dc4d6a3578adbda2c2b"
+sample = "one run (conversation 2c3d3284), base fdf6523; one escalation (the grader's std::fs reads), answered by the supervisor; output patch sha256 6d4d47f45c95add272283055d97e6242a73d78646d6679c205639afe29e86521"
+oracles = "The registered section-refs grader (84 cases, including the spec), the workspace suite, architecture, fmt, clippy and module H4, rerun by the supervising session on the integrated branch"

@@ -289,6 +289,7 @@ fn fixture_document(body: Vec<Node>) -> Document {
         links: Vec::new(),
         body,
         diagnostics: Vec::new(),
+        section_refs: Vec::new(),
     }
 }
 
