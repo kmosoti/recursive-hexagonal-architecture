@@ -586,3 +586,14 @@ answer = "Not in this stage. The `check --format json` schema was fixed in P-A a
 decided_by = "agent:executor under human:kennedy's delegation"
 delegation = "Kennedy, 2026-09-22: 'Use recommended. ... Accept the recommend and most correct implementations going forward instead of escalating to me.' Kennedy, 2026-09-24: 'I want the antigravity to have full permission and escalate to you in which you decide. Only escalate to me (human) when absolutely necessary.'"
 date = "2026-09-24"
+
+[[provenance.generations]]
+artifact = "xtask/tests/corpus/section-refs (84 cases, reference.py, registration) and the grader crates/document/tests/section_refs.rs, registered before any CHG-010 code"
+generation = "sampled"
+model = "claude-sonnet-5"
+reasoning_effort = "medium"
+harness = "Claude Code oracle-author subagent (separate session; read the contract and public types only, never parser internals)"
+prompt = "Write the registered grading corpus and grader for CHG-010 from docs/architecture/section-reference-contract.md: an independent Python reference, synthetic cases covering every grammar edge, the real spec as a case, and a Rust grader comparing Document::section_refs, the diagnostics and the link invariant."
+prompt_sha256 = "2849e871b0783ced6f02bdf5cafcf97f293cd3828a0f29af6170cfa8d87f7a55"
+sample = "one session in two rounds: 76 cases with five open questions left out, then 84 after the contract amendment a3ca8de"
+oracles = "reference.py self-tests; SHA256SUMS; reproduction by the supervising session (CASES.json byte-identical); a stub-crate compile of the grader; the supervising session's registration review"
