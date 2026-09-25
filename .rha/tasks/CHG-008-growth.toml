@@ -654,6 +654,16 @@ prompt_sha256 = "8ae086808f1c0c59274fb3348ff59a8da26c66bc183e402a2fb9a7450722ced
 sample = "one run, base 4f789b5; no escalations; output patch sha256 c0507172df254e8ccfa5564366af6f8f9889b3bdf7e3a773395c6577b18c7b9b"
 oracles = "citations_review_2.rs (4 tests from the supervising session, the two `![` trees validated at b554bba), citations_review.rs, the registered graders and golden trees, the workspace suite, fmt, clippy, architecture and docs --check, rerun by the supervising session"
 
+[[provenance.generations]]
+artifact = "crates/document/src/parse.rs: repair of the 14a1d57 review finding (P2 bare label ending a tight item before a code block, table, heading, rule or HTML block)"
+generation = "authored"
+model = "claude-opus-5-5"
+reasoning_effort = "unknown"
+harness = "Claude Code, the supervising session, directly: a one-arm widening of the match the previous repair introduced; agy's Gemini window was empty and its Claude window nearly so"
+prompt = "none (supervisor edit following the review finding and the registered oracle's answers)"
+sample = "one edit, base 7fd3928; output patch sha256 6d14379350f745bd1960f4aa5524ac0ce957b86532861b1fc61f46152af13b00"
+oracles = "citations_review_3.rs (6 tests, expected values from the registered oracle reference.py analyze_page), all earlier review tests, the registered graders and golden trees, the workspace suite, fmt, clippy, architecture and docs --check; independent verification by a separate verifier pass (same model family as the author: disclosed)"
+
 [[decisions]]
 id = "citations-anchor-node"
 question = "How does a citation link to its reference entry (CHG-011)?"

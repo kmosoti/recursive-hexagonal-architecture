@@ -260,11 +260,20 @@ impl Builder {
         } else {
             match &children[1] {
                 BuildNode::Text(s) => s.starts_with(' '),
-                BuildNode::SoftBreak | BuildNode::HardBreak => true,
-                // In a tight list item, a nested list or block quote directly
-                // follows the item's inline text. The label is "followed by
-                // the end of the paragraph" (contract section 1).
-                BuildNode::List { .. } | BuildNode::BlockQuote { .. } => true,
+                // A break, or any block: in a tight list item the item's
+                // inline text ends where a nested block begins, so the label
+                // is "followed by the end of the paragraph" (contract section
+                // 1). An HTML block arrives as a Paragraph.
+                BuildNode::SoftBreak
+                | BuildNode::HardBreak
+                | BuildNode::Heading { .. }
+                | BuildNode::Paragraph(_)
+                | BuildNode::CodeBlock { .. }
+                | BuildNode::List { .. }
+                | BuildNode::BlockQuote { .. }
+                | BuildNode::Table { .. }
+                | BuildNode::Rule
+                | BuildNode::Transclusion(_) => true,
                 _ => false,
             }
         };
