@@ -123,6 +123,7 @@ dependencies = [
  "adapter-json",
  "adapter-sys",
  "clap",
+ "document",
  "library",
  "serde_json",
  "site",

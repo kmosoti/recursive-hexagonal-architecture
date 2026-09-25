@@ -804,3 +804,11 @@ answer = "Yes, under grader-compat-anchor's rule: a Document struct literal in a
 decided_by = "agent:supervisor under human:kennedy's delegation"
 delegation = "Kennedy, 2026-09-22: 'Use recommended. ... Accept the recommend and most correct implementations going forward instead of escalating to me.' Kennedy, 2026-09-24: 'I want the antigravity to have full permission and escalate to you in which you decide. Only escalate to me (human) when absolutely necessary.'"
 date = "2026-09-25"
+
+[[decisions]]
+id = "front-matter-differential"
+question = "Where does the M12 revision differential for CHG-013 live, and what does it compare?"
+answer = "In crates/app-cli/tests/front_matter_unchanged.rs, because it reads files (pure-fixture-inputs keeps I/O out of core-crate tests); app-cli gains an in-workspace dev-dependency on document, since site does not re-export parse (no external dependency is added; app-cli may depend on any member). Inputs are frozen: the spec, every registered corpus page under xtask/tests/corpus, and 3,000 seeded generated pages (980 with front matter, 2,442 without). It compares digests of each document's pre-existing observation surface with those captured at the contract commit: equal without front matter, different with it (the negative control)."
+decided_by = "agent:supervisor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: 'Use recommended. ... Accept the recommend and most correct implementations going forward instead of escalating to me.' Kennedy, 2026-09-24: 'I want the antigravity to have full permission and escalate to you in which you decide. Only escalate to me (human) when absolutely necessary.'"
+date = "2026-09-25"

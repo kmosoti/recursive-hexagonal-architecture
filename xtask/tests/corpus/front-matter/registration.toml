@@ -1,0 +1,43 @@
+schema_version = 1
+package = "front-matter"
+eventual_path = "xtask/tests/corpus/front-matter"
+case_count = 62
+kind_count = 1
+payload_count = 6
+model = "claude-sonnet-5"
+effort = "medium"
+
+[case_counts]
+synthetic = 62
+
+[source_digests]
+contract_sha256 = "007ebed97ce8bdecfe640e0cbb40f4b1e30ff7245ca1cb547cce0849a2b499be"
+prompt_sha256 = "716afa3bcbee60d245e8e40c62dc7e170c8568de846db0f9fac24160ab7493a8"
+
+[source_paths]
+contract = "xtask/tests/corpus/front-matter/source-snapshots/contract.md"
+prompt = "xtask/tests/corpus/front-matter/source-snapshots/prompt.md"
+
+[original_paths]
+contract = "docs/architecture/front-matter-contract.md"
+prompt = "(oracle-author task prompt for CHG-013, no repository path; captured verbatim as given)"
+
+[decisions]
+# .rha/tasks/CHG-008-growth.toml, read for context only (not restated here
+# per AGENTS.md): front-matter-first-line, front-matter-grammar,
+# front-matter-check-surface, tags-stage-split, front-matter-compat.
+ids = [
+    "front-matter-first-line",
+    "front-matter-grammar",
+    "front-matter-check-surface",
+    "tags-stage-split",
+    "front-matter-compat",
+]
+
+[status]
+# Written before any implementation of the feature exists (see the
+# reference package's docstring and README.md). The grader
+# (crates/document/tests/front_matter.rs) does not compile against HEAD:
+# it depends on `document::FrontMatter`, `Document::front_matter`, and
+# `Diagnostic::InvalidFrontMatter`, none of which are implemented yet.
+implemented = false
