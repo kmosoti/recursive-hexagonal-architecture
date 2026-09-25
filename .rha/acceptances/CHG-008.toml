@@ -1,0 +1,78 @@
+# Acceptance record for P-D's catch-up PR (CHG-008 stages 0 to 2.4); written in PLAN-4 after that PR merged first (see the PLAN-4 change record). Creation pre-approved by [acceptance].
+schema_version = 1
+id = "CHG-008"
+change = "docs/changes/CHG-008-growth.md"
+task = ".rha/tasks/CHG-008-growth.toml"
+
+[acceptor]
+principal = "human:kennedy"
+role = "acceptor"
+date = "2026-09-25"
+authority_profile = "ECC-Solo"
+basis = "Kennedy, 2026-09-25: 'Now make more comprehensive edits ci rund and commit the larhe branch' (PLAN-4 decision apply-stage-division-study); merge rule DP-5.4 amendment_2 (the supervising session's approval while GPT-6 is unavailable). The supervising session merged pull request 21 at the reviewed head."
+event = "merge of pull request 21"
+
+[subject]
+revision = "abd1f847821e2b211563b2928f51f0638578242e"
+tree = "3b3474ae36ad9a7362fcb836b1a96cf1afc8994c"
+parents = ["ac1e460deeb327287e7e817c6bebd4bf465dc528", "73033a44adf4c05f6cd362da577a52322cf20413"]
+pull_request = "https://github.com/kmosoti/recursive-hexagonal-architecture/pull/21"
+integrator_edits = "none"
+
+[[evidence]]
+path = "evidence/ci/36150611033.json"
+class = "ci"
+subject_revision = "abd1f847821e2b211563b2928f51f0638578242e"
+subject_tree = "3b3474ae36ad9a7362fcb836b1a96cf1afc8994c"
+note = "Run 36150611033 on main at the merge (push): all eight L0 checks passed, 407 tests."
+
+[[evidence]]
+path = "https://github.com/kmosoti/recursive-hexagonal-architecture/pull/21#issuecomment-5834455597"
+class = "review"
+note = "Claude verifier: REQUEST_CHANGES on 1122d6b, APPROVE of the repair diff; Gemini verification team (agy, verification only): APPROVE on 1122d6b, product tree identical to the merged head 73033a4."
+
+[outcomes]
+passed = ["L0.fmt", "L0.clippy", "L0.nextest", "L0.doctest", "L0.architecture", "L0.deny", "L0.machete", "L0.typos"]
+not_run = []
+failed = []
+not_applicable = []
+inconclusive = []
+
+[disposition]
+decision = "accepted"
+kind = "bootstrap_acceptance"
+merge_allowed = false
+eligibility_at_acceptance = "blocked"
+basis = "All L0 checks passed; Authentic false under [acceptance.bootstrap] (DP-4.1). No claim of conformance."
+exception = "none"
+
+[[disposition.predicates]]
+name = "Authentic"
+holds = false
+reason = "No trusted producers in policy (DP-4.1); this ci record is unauthenticated."
+
+[[disposition.predicates]]
+name = "Applicable"
+holds = true
+reason = "P-D did not edit .rha/policy.toml: git diff ac1e460 abd1f84 -- .rha/policy.toml is empty."
+
+[[disposition.predicates]]
+name = "Complete"
+holds = true
+reason = "Every required L0 id is present exactly once."
+
+[[disposition.predicates]]
+name = "Passed"
+holds = true
+reason = "All eight L0 checks passed; nextest selected 407 tests."
+
+[carried_forward]
+open = [
+  "P-D stage 2 feature 5 (tags and front matter, CHG-013) and stage 3 (mutation, DP-2.2) follow as their own PRs (plan revision 3, M2).",
+  "P3: an unresolved reference or citation at a text-event boundary merges text nodes (JSON node boundaries only).",
+  "P3: DuplicateReferenceEntry diagnostics follow parse-time diagnostics instead of source order.",
+  "P3: crates/document/src/node.rs:59 still says callout rendering is plain.",
+  "Follow-ups: deep nesting overflows the parser's stack; pulldown-cmark 0.13.4 panics on some wikilink inputs; the lint does not check the acceptance kind rule.",
+  "Module H4 evidence records repeat the committed random expectations; shrinking them is owed.",
+  "No GPT-6 review of P-D; the Codex limit resets 2026-09-29.",
+]

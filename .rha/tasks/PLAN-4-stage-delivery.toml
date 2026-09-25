@@ -16,8 +16,8 @@ non_goals = [
   "The frozen plan copies in xtask/tests/corpus/{record-schema,verifier-shape}/inputs, pinned by registration digests",
   "Retroactive restructuring of merged packets or of P-D's completed stages, whose history stays as it is",
 ]
-scope_globs = [".rha/tasks/PLAN-4-stage-delivery.toml", ".rha/acceptances/PLAN-3.toml", "evidence/ci/36008186429.json", "docs/plan/IMPLEMENTATION-PLAN.md", "docs/changes/PLAN-4-stage-delivery.md", "docs/tasks/index.md", "docs/evidence/index.md", "docs/enforcement-map.md", "evidence/PLAN-4/**"]
-protected_scope = [".rha/acceptances/PLAN-3.toml"]
+scope_globs = [".rha/tasks/PLAN-4-stage-delivery.toml", ".rha/acceptances/PLAN-3.toml", "evidence/ci/36008186429.json", ".rha/acceptances/CHG-008.toml", "evidence/ci/36150611033.json", "docs/plan/IMPLEMENTATION-PLAN.md", "docs/changes/PLAN-4-stage-delivery.md", "docs/tasks/index.md", "docs/evidence/index.md", "docs/enforcement-map.md", "evidence/PLAN-4/**"]
+protected_scope = [".rha/acceptances/PLAN-3.toml", ".rha/acceptances/CHG-008.toml"]
 
 [[actors]]
 id = "human:kennedy"
