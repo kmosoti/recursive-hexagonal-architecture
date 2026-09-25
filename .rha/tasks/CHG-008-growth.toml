@@ -764,3 +764,43 @@ answer = "Yes while GPT-6 is unavailable (DP-5.4 amendment_2, merge-rule-gpt6-un
 decided_by = "agent:supervisor under human:kennedy's delegation"
 delegation = "Kennedy, 2026-09-24: 'I want the antigravity to have full permission and escalate to you in which you decide. Only escalate to me (human) when absolutely necessary.'"
 date = "2026-09-25"
+
+[[decisions]]
+id = "front-matter-first-line"
+question = "Where is front matter recognised?"
+answer = "Only when the file's first line is exactly `---` and a later line is exactly `---` or `...`. pulldown-cmark's YAML metadata option is not used: probed 2026-09-25, it also recognises `---` blocks in the middle of a page, which would remove content from existing pages."
+decided_by = "agent:supervisor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: 'Use recommended. ... Accept the recommend and most correct implementations going forward instead of escalating to me.' Kennedy, 2026-09-24: 'I want the antigravity to have full permission and escalate to you in which you decide. Only escalate to me (human) when absolutely necessary.'"
+date = "2026-09-25"
+
+[[decisions]]
+id = "front-matter-grammar"
+question = "Which front-matter syntax is parsed?"
+answer = "A restricted YAML subset parsed without a dependency (the core allow list is protected and serde_yaml is unmaintained, DP-0.4): `key: value` lines, indented `- item` lists under an empty-valued key, comments and blank lines; `title` and `tags` (flow list, block list or scalar) are recognised, other keys ignored, anything else is an InvalidFrontMatter diagnostic."
+decided_by = "agent:supervisor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: 'Use recommended. ... Accept the recommend and most correct implementations going forward instead of escalating to me.' Kennedy, 2026-09-24: 'I want the antigravity to have full permission and escalate to you in which you decide. Only escalate to me (human) when absolutely necessary.'"
+date = "2026-09-25"
+
+[[decisions]]
+id = "front-matter-check-surface"
+question = "Is InvalidFrontMatter a rhawiki check witness?"
+answer = "No. The check JSON schema stays fixed for Kennedy's held-out fixtures, as for section references and citations."
+decided_by = "agent:supervisor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: 'Use recommended. ... Accept the recommend and most correct implementations going forward instead of escalating to me.' Kennedy, 2026-09-24: 'I want the antigravity to have full permission and escalate to you in which you decide. Only escalate to me (human) when absolutely necessary.'"
+date = "2026-09-25"
+
+[[decisions]]
+id = "tags-stage-split"
+question = "How is W9 feature 5 staged?"
+answer = "Plan revision 3, M13: front matter and tags touch document only (stage A, this PR); the tag index page needs site assembly, adapter-html and adapter-json (stage B, its own contract and PR). Keeping both in one stage would exceed M13's three-production-crate bound."
+decided_by = "agent:supervisor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: 'Use recommended. ... Accept the recommend and most correct implementations going forward instead of escalating to me.' Kennedy, 2026-09-24: 'I want the antigravity to have full permission and escalate to you in which you decide. Only escalate to me (human) when absolutely necessary.'"
+date = "2026-09-25"
+
+[[decisions]]
+id = "front-matter-compat"
+question = "May earlier tests gain the new Document field?"
+answer = "Yes, under grader-compat-anchor's rule: a Document struct literal in an earlier test may gain `front_matter: None`; nothing else in an earlier test changes."
+decided_by = "agent:supervisor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: 'Use recommended. ... Accept the recommend and most correct implementations going forward instead of escalating to me.' Kennedy, 2026-09-24: 'I want the antigravity to have full permission and escalate to you in which you decide. Only escalate to me (human) when absolutely necessary.'"
+date = "2026-09-25"

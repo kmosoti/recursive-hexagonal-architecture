@@ -191,3 +191,20 @@ A separate Claude verifier reviewed the combined head. It found L0 all passed, 4
 - **P1, confirmed: the task record failed `rha lint`.** A field this session added in 352b0f1 (`resume_prompt_sha256`) is not in the schema, and no later stage gate linted the task record, so this record's claim that task records still receive the lint was false from 352b0f1 on. Repair: the value is folded into the generation's prompt text, and the record lints as accepted. From now on, each stage gate runs `cargo xtask rha lint .rha/tasks/CHG-008-growth.toml`.
 - **P2, confirmed: "teamwork is reserved for verification" was cited without a decision.** Repair: decisions agy-teamwork-verification-only (Kennedy's words, narrowing agy-supervised-implementation) and agy-verification-second-family are recorded, and both citations now name the id.
 - **P3, confirmed: stale resume point and missing spread headline.** The resume point now shows the review and PR row and the current merge rule. change-spread.md opens with the plan's original prediction accuracy (plan revision 3). Shrinking the H4 evidence records stays owed.
+
+### Stage 2, feature 5, stage A: front matter and tags (CHG-013), prepared before corpus and code
+
+This is the first stage delivered under plan revision 3. It is its own PR, `chg/013-tags-front-matter`, whose first commit is PLAN-4's acceptance record. The [contract](../architecture/front-matter-contract.md) recognises front matter only when it starts on the file's first line, parses a restricted YAML subset without a new dependency, removes the block from the body, lets its title replace the derived title, and records tags on the document. Two probes shaped it:
+- **Current parser:** today a front-matter block renders as a rule plus a heading made of the metadata text.
+- **pulldown-cmark's metadata option:** it recognises `---` blocks mid-page, so it is not used.
+
+Decisions front-matter-first-line, front-matter-grammar, front-matter-check-surface, tags-stage-split and front-matter-compat are in the task record. **M13 split:** the tag index page (site assembly and both renderers) is stage B. **Prediction:** document only.
+
+**Lessons applied from the previous stages (M11).** CHG-012's close predates M11, so its lessons are reconstructed here from the CHG-011 and CHG-012 records, each cited and applied or rejected:
+1. *Probe the parser before writing the contract* (CHG-012). Applied: two probes, above.
+2. *Register a revision differential with a negative control before code* (CHG-011's `![` defect; M12). Applied: `crates/app-cli/tests/front_matter_unchanged.rs`. It compares per-page document digests from the pre-feature parser over the spec, the repository docs and a seeded generated corpus. It requires every page with front matter to change, which is the negative control.
+3. *Run clippy and fmt on registered graders at registration* (CHG-011, 0db8b76). Applied at registration.
+4. *Lint the task record at every stage gate* (PR #21 review). Applied in this stage's gate.
+5. *Write full hashes in prose; short ones can trip the typos check* (PLAN-4). Applied.
+6. *Implementation by Boost or a single agent; verification by an agy verification-only team plus a Claude verifier* (decisions agy-teamwork-verification-only, agy-verification-second-family). Applied.
+7. *Graders must not read files in core crates* (pure-fixture-inputs, the lesson lost between CHG-009 and CHG-010). Applied: the core grader embeds its data. The differential lives in app-cli, where I/O is allowed.
