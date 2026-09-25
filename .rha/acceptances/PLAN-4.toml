@@ -1,0 +1,74 @@
+# Acceptance record; first commit of the CHG-013 stage PR (plan revision 3, M2). Creation pre-approved by [acceptance].
+schema_version = 1
+id = "PLAN-4"
+change = "docs/changes/PLAN-4-stage-delivery.md"
+task = ".rha/tasks/PLAN-4-stage-delivery.toml"
+
+[acceptor]
+principal = "human:kennedy"
+role = "acceptor"
+date = "2026-09-25"
+authority_profile = "ECC-Solo"
+basis = "Kennedy, 2026-09-25: 'Now make more comprehensive edits ci rund and commit the larhe branch' (decision apply-stage-division-study); merge rule DP-5.4 amendment_2. The supervising session merged pull request 20 at the reviewed head."
+event = "merge of pull request 20"
+
+[subject]
+revision = "a5a6a09c52c56af31ec0f6410277abc9a7a8a957"
+tree = "a8b8762edf2461af784617201657d06c70a96aed"
+parents = ["abd1f847821e2b211563b2928f51f0638578242e", "3587963b05b1cbf6bbecce6692d788afc2be3a93"]
+pull_request = "https://github.com/kmosoti/recursive-hexagonal-architecture/pull/20"
+integrator_edits = "none"
+
+[[evidence]]
+path = "evidence/ci/36152243024.json"
+sha256 = "95222a0acae50010991d7f35bcb81f33a106834531f9e351275a405b9c0193a3"
+class = "ci"
+subject_revision = "a5a6a09c52c56af31ec0f6410277abc9a7a8a957"
+subject_tree = "a8b8762edf2461af784617201657d06c70a96aed"
+note = "Run 36152243024 on main at the merge (push): all eight L0 checks passed, 407 tests."
+
+[[evidence]]
+path = "https://github.com/kmosoti/recursive-hexagonal-architecture/pull/20#issuecomment-5834689626"
+class = "review"
+note = "Claude verifier: REQUEST_CHANGES on cbe2d3b and 34981ab, APPROVE on f73f736; the named P3s were repaired before the merge. No second-family review of this plan-text change."
+
+[outcomes]
+passed = ["L0.fmt", "L0.clippy", "L0.nextest", "L0.doctest", "L0.architecture", "L0.deny", "L0.machete", "L0.typos"]
+not_run = []
+failed = []
+not_applicable = []
+inconclusive = []
+
+[disposition]
+decision = "accepted"
+kind = "bootstrap_acceptance"
+merge_allowed = false
+eligibility_at_acceptance = "blocked"
+basis = "All L0 checks passed; Authentic false under [acceptance.bootstrap] (DP-4.1). No claim of conformance."
+exception = "none"
+
+[[disposition.predicates]]
+name = "Authentic"
+holds = false
+reason = "No trusted producers in policy (DP-4.1); this ci record is unauthenticated."
+
+[[disposition.predicates]]
+name = "Applicable"
+holds = true
+reason = "PLAN-4 did not edit .rha/policy.toml: git diff abd1f847821e2b211563b2928f51f0638578242e a5a6a09c52c56af31ec0f6410277abc9a7a8a957 -- .rha/policy.toml is empty."
+
+[[disposition.predicates]]
+name = "Complete"
+holds = true
+reason = "Every required L0 id is present exactly once."
+
+[[disposition.predicates]]
+name = "Passed"
+holds = true
+reason = "All eight L0 checks passed; nextest selected 407 tests."
+
+[carried_forward]
+open = [
+  "No second-family review of PLAN-4; the Codex limit resets 2026-09-29.",
+  "rha lint does not verify acceptance values (all-zero tree, wrong digest and flipped predicates are accepted); records are checked by recomputation.",
+]
