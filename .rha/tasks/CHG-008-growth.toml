@@ -675,6 +675,17 @@ prompt_sha256 = "0d93359203a4dc64fe619933c44e4fad30ea8e0855df98124ada488a1e1d759
 sample = "one Boost run, base 030d82c, 2026-09-25T04:59Z to 05:14Z; no escalations; output sha256 b6bec879ea11b523d538bb5685a9cdf9bc15544600e70bce1d113a33c3497bae"
 oracles = "callouts_render.rs (6 tests, a separate Sonnet oracle-author session), callouts_unchanged.rs (goldens captured at 558987a), the workspace suite, fmt, clippy, architecture and docs --check, rerun by the supervising session"
 
+[[provenance.generations]]
+artifact = "evidence/CHG-008/stage-2/callouts-verification-gemini-team.md: independent verification of c469d10 (CHG-012), no product change"
+generation = "sampled"
+model = "gemini-3.8-flash-high"
+reasoning_effort = "high (model tier)"
+harness = "Antigravity CLI 1.2.10, /teamwork-preview pasted into agy-jail as a verification-only team (Kennedy, 2026-09-25: teamwork reserved for verification); crates/, docs/, xtask/, tools/, .rha/, evidence/ and the manifests frozen; probes only under verify/"
+prompt = "Adversarially verify c469d10 against docs/architecture/callout-contract.md: section 2 rendering, the section 3 differential against 030d82c, fuzzing and the gates; report a verdict with concrete failing inputs; change nothing."
+prompt_sha256 = "d5636edcc9b1397bb6648041cade17b3d4e082c0a090fd05a09a1d6573bc23c2"
+sample = "one teamwork run, 2026-09-25T05:16Z to 05:49Z; verdict APPROVE, 0 findings; no escalations"
+oracles = "not applicable (a review); its claims were compared with the separate Claude verifier's, which approved with two P3s this team did not report"
+
 [[decisions]]
 id = "citations-anchor-node"
 question = "How does a citation link to its reference entry (CHG-011)?"
