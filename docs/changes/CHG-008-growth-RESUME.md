@@ -19,7 +19,7 @@ Written 2026-09-23 by the supervising session, after the previous Executor's run
 | Stage 2, feature 4: callouts | Done: gate passed at c469d10; Boost implemented, a Gemini verification team and a Claude verifier approved | `docs/architecture/callout-contract.md`; `evidence/CHG-008/stage-2/callouts-*` |
 | Stage 2, feature 5 (tags and front matter) | Not started | plan W9 |
 | Stage 3: mutation analysis (DP-2.2) | Not started | plan W10 |
-| Review and PR | Not started | |
+| Review and PR | Catch-up PR #21 open (plan revision 3, M2); feature 5 and stage 3 follow as their own PRs | PR #21 |
 
 ## Unfinished work at the snapshot (`44ef02a`)
 
@@ -54,7 +54,7 @@ P-C (PR 18) was merged at `74aeb1d` while this branch was being written. The pre
 
 ## Standing rules that apply
 
-- Merge rule (Kennedy, 2026-09-22): a PR merges only when an Opus 5.5 agent and a GPT-6 agent have each reviewed and approved the same head. The integrating session merges; the author never does.
+- Merge rule: DP-5.4 in `.rha/decisions.toml`. Until GPT-6 returns (2026-09-29), amendment_2 (merge-rule-gpt6-unavailable) applies: the supervising session's approval of the head, backed by a separate Claude verifier and an agy verification team (agy-verification-second-family). The 2026-09-22 Opus plus GPT-6 rule applies again afterwards.
 - GPT-6 reviews use `codex exec -m gpt-6-sol -c model_reasoning_effort=medium -s read-only` (ledger DP-5.4, as amended 2026-09-23).
 - Ask Kennedy before using `gpt-6-astra` for any role.
 - The Codex account's usage limit resets on 2026-09-29 at 21:09.

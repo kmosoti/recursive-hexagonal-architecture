@@ -1,5 +1,7 @@
 # P-D change-spread observations
 
+**Headline (plan revision 3).** The plan's original predictions matched the observed production crates exactly in 2 of 5 stages: adapter-json/H3 and §-references. They missed three: transclusion also touched site::build, the site facade and app-cli; citations also touched site::assembly, adapter-html and adapter-json; callouts touched adapter-html only, not document. The refined predictions, made before code after probing, matched in 5 of 5. That measures the probing, not the architecture.
+
 Each expected set is committed before its stage. Observed sets come from git diff --numstat over that stage's actual commit range. The original plan prediction remains visible alongside any justified pre-implementation refinement. Records/evidence/tooling are reported separately from product components.
 
 | Stage | Original plan prediction | Predeclared product set | Start | End | Observed |
