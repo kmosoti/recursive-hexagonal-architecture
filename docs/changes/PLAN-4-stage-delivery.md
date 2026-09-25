@@ -22,3 +22,9 @@
 **Not changed.** The frozen plan copies in the registered corpus inputs. Merged packets and P-D's completed stages keep their history.
 
 **Acceptance concerns.** No GPT-6 review is possible until 2026-09-29. The study's pre-registration was weak, and the report says so.
+
+**Review of cbe2d3b (separate Claude verifier): REQUEST_CHANGES; determinations.** Every value in the PLAN-3 acceptance record was recomputed and found correct; scope, lint, docs and typos passed. Findings:
+- **P2, confirmed: the PLAN-3 record had the retired kind.** It used `controlled_transition` and had no predicates, while `[acceptance.bootstrap]` has required `bootstrap_acceptance` with `[[disposition.predicates]]` since 5a768af. Repair: kind and all four predicates, as in CHG-007.toml; lint accepts it. The lint does not check this rule, which is a gap in the lint and a follow-up.
+- **P2, confirmed: M6 cited a decision absent from main and an agy rule with no recorded source.** Repair: M6 now names decisions agy-verification-second-family and agy-teamwork-verification-only (Kennedy's words), which PR #21 records. PR #21 therefore merges before this PR, and this branch merges main before its own merge.
+- **P2, confirmed: revision 2 text still said one PR per packet** (provenance, kickoff prompt, M2 base text, M5, §2.3). Repair: each passage now states the revision 3 rule, and the provenance says revision 3 wins where old text remains.
+- **P3, confirmed: M11 to M13 came before M10.** Repair: reordered. The change-spread headline that line 440 promises is added in PR #21 (5e1dd51).

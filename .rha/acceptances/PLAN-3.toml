@@ -40,11 +40,31 @@ inconclusive = []
 
 [disposition]
 decision = "accepted"
-kind = "controlled_transition"
+kind = "bootstrap_acceptance"
 merge_allowed = false
 eligibility_at_acceptance = "blocked"
-basis = "All L0 checks passed; Authentic false under [acceptance.bootstrap]."
+basis = "All L0 checks passed; Authentic false under [acceptance.bootstrap] (DP-4.1). No claim of conformance."
 exception = "none"
+
+[[disposition.predicates]]
+name = "Authentic"
+holds = false
+reason = "No trusted producers in policy (DP-4.1); this ci record is unauthenticated."
+
+[[disposition.predicates]]
+name = "Applicable"
+holds = true
+reason = "PLAN-3 did not edit .rha/policy.toml: git diff 74aeb1d ac1e460 -- .rha/policy.toml is empty."
+
+[[disposition.predicates]]
+name = "Complete"
+holds = true
+reason = "Every required L0 id is present exactly once."
+
+[[disposition.predicates]]
+name = "Passed"
+holds = true
+reason = "All eight L0 checks passed; nextest selected 290 tests."
 
 [carried_forward]
 open = [
