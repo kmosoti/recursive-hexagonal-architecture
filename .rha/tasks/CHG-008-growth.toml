@@ -812,3 +812,11 @@ answer = "In crates/app-cli/tests/front_matter_unchanged.rs, because it reads fi
 decided_by = "agent:supervisor under human:kennedy's delegation"
 delegation = "Kennedy, 2026-09-22: 'Use recommended. ... Accept the recommend and most correct implementations going forward instead of escalating to me.' Kennedy, 2026-09-24: 'I want the antigravity to have full permission and escalate to you in which you decide. Only escalate to me (human) when absolutely necessary.'"
 date = "2026-09-25"
+
+[[decisions]]
+id = "front-matter-open-questions"
+question = "How are the seven questions the front-matter oracle registration left open decided?"
+answer = "In front-matter-contract.md section 2.1, before implementation, each by the simplest reading consistent with section 2: split flow lists on every comma; strip matching quotes from every tag value; no space before the colon; an empty list item is an empty tag and is dropped; a trailing carriage return is trailing whitespace; an unclosed flow list is an invalid line; only lowercase title and tags are recognised."
+decided_by = "agent:supervisor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: 'Use recommended. ... Accept the recommend and most correct implementations going forward instead of escalating to me.' Kennedy, 2026-09-24: 'I want the antigravity to have full permission and escalate to you in which you decide. Only escalate to me (human) when absolutely necessary.'"
+date = "2026-09-25"

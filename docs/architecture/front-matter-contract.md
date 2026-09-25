@@ -65,6 +65,17 @@ Each front-matter line is one of the following.
 
 `line` is the 1-based source line of the offending front-matter line. Front matter with invalid lines is still front matter, and its valid keys still apply.
 
+### 2.1 Amendment: the registration's open questions (decided before implementation)
+
+The oracle registration (7cbbfca) left seven questions open and kept them out of its corpus. They are decided here before any implementation (decision front-matter-open-questions):
+1. **Quoted comma in a flow list:** the split is on every comma, as written in section 2. `tags: [a, "b, c"]` gives the tags `a`, `"b` and `c"`, and the quotes are then not matching pairs, so they stay.
+2. **Quote removal:** it applies to every tag value, whether from a flow element, a block item or a scalar, as well as to `title`.
+3. **Space before the colon:** not allowed. The colon must follow the key directly, so `title : x` is an invalid line.
+4. **Empty list item:** `-` or `- ` alone is an empty tag. It is dropped without a diagnostic.
+5. **CRLF:** a carriage return at the end of a line counts as trailing whitespace, for the delimiters and for every front-matter line. The revision differential's inputs contain no CRLF front matter, so its registered predicate is unaffected.
+6. **Unclosed flow list:** a `tags` value that starts with `[` and does not end with `]` is an invalid line, and `tags` is then absent unless a later line gives it (first occurrence wins only among valid lines).
+7. **Key case:** only the exact lowercase keys `title` and `tags` are recognised. `Title` and `TAGS` are unknown keys and are ignored.
+
 ## 3. Effect on the document
 
 - **Body:** the front-matter block, from the opening line to the closing line inclusive, produces no body nodes. Everything after the closing line is parsed as the page's markdown, and every line number reported anywhere (headings, links, diagnostics, §-references, citations, reference entries) is still the line number in the source file.
