@@ -1,0 +1,24 @@
+schema_version = 1
+eventual_package = "xtask/tests/corpus/transclusion/uris"
+seed = 90092028
+case_count = 153
+kind_counts = { uri = 153 }
+payload_count = 7
+content_sha256 = "c2b2474dd57bb695d1d8b4c6f14ae7958f160cfb4c20fd98bbca5c4ae7e43126"
+model = "gpt-5.6-luna"
+effort = "high"
+
+[source_digests]
+contract_sha256 = "603120d9ebab92619d67f8caec7172c07793d3e0f80e67912b4d05a402c489e0"
+bdr_sha256 = "907b00767da407ccad7ce7f9fbbbac0e2c1746227f2b7981e6681321476f4e28"
+prompt_sha256 = "5ee9589eef22695a3b3825bfb50eb2656ce7e1870c4696329967d09eda54b8a3"
+
+[source_paths]
+contract = "xtask/tests/corpus/transclusion/uris/source-snapshots/contract.md"
+bdr = "xtask/tests/corpus/transclusion/uris/source-snapshots/bdr.md"
+prompt = "xtask/tests/corpus/transclusion/uris/source-snapshots/prompt.md"
+
+[original_paths]
+contract = "docs/architecture/transclusion-contract.md"
+bdr = "docs/adr/BDR-0007-site-owns-page-tree.md"
+prompt = "xtask/tests/corpus/write-prompts/CHG-008/pd-transclusion-uris-generator-prompt.md"

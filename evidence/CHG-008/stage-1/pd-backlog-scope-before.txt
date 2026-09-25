@@ -1,0 +1,4 @@
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.22s
+     Running `target/debug/xtask scope --task CHG-008 --base origin/chg/007-module-level`
+docs/backlog.md[scope.layout]: `docs/backlog.md` is not part of the plan §3.4 docs layout
+scope: 94 changed path(s), 1 finding(s), task CHG-008, base origin/chg/007-module-level

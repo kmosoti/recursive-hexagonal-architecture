@@ -1,0 +1,10 @@
+Independent reference self-test report
+projector projection controls: passed
+hand-derived flatten controls: passed
+duplicate constructor control: passed
+seeded reproduction byte determinism: passed
+Rust White_Space normalization controls: passed
+first-generation CASES.json identity: passed
+frozen source/prompt snapshot closure: passed
+case count: 79
+kind counts: {'cli_check': 1, 'cli_html': 2, 'cli_json': 1, 'collision': 1, 'contract': 1, 'duplicate': 2, 'project': 70, 'reconcile': 1}

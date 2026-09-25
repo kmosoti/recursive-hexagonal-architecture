@@ -1,0 +1,7 @@
+20	0	crates/adapter-json/Cargo.toml
+357	0	crates/adapter-json/src/lib.rs
+712	0	crates/adapter-json/tests/common/mod.rs
+220	0	crates/adapter-json/tests/registered.rs
+1	0	crates/app-cli/Cargo.toml
+43	10	crates/app-cli/src/main.rs
+197	0	crates/app-cli/tests/json_renderer.rs

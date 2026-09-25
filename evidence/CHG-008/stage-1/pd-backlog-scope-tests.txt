@@ -1,0 +1,162 @@
+   Compiling xtask v0.1.0 (/home/kmosoti/projects/rha-m2/xtask)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 6.74s
+     Running unittests src/lib.rs (target/debug/deps/xtask-05780c931aeee373)
+
+running 4 tests
+test scope::tests::globs_match_segments_and_double_stars ... ok
+test scope::tests::a_path_outside_the_task_scope_is_reported_and_an_approved_protected_one_is_not ... ok
+test scope::tests::the_improvisations_of_lesson_l4_are_caught ... ok
+test scope::tests::the_current_repository_fits_its_own_layout ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 77 filtered out; finished in 0.01s
+
+     Running unittests src/main.rs (target/debug/deps/xtask-7f18627a45ecf465)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/architecture_cli.rs (target/debug/deps/architecture_cli-d10d6327e6477c20)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.00s
+
+     Running tests/architecture_rules.rs (target/debug/deps/architecture_rules-95e62c8c955197b7)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 30 filtered out; finished in 0.00s
+
+     Running tests/citation_pairs.rs (target/debug/deps/citation_pairs-57f83876bcbe9af0)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.00s
+
+     Running tests/clippy_corpus.rs (target/debug/deps/clippy_corpus-816e714588b0e07c)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 7 filtered out; finished in 0.00s
+
+     Running tests/corpus_crate.rs (target/debug/deps/corpus_crate-af63955176e95a4a)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+     Running tests/corpus_harness.rs (target/debug/deps/corpus_harness-c4a3e3a14913c86f)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 18 filtered out; finished in 0.00s
+
+     Running tests/corpus_manifest.rs (target/debug/deps/corpus_manifest-a55f9615e91b2f76)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 11 filtered out; finished in 0.00s
+
+     Running tests/corpus_markdown.rs (target/debug/deps/corpus_markdown-769f6c4a6197aa57)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running tests/corpus_trust.rs (target/debug/deps/corpus_trust-c4aeb13b99066cb5)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 7 filtered out; finished in 0.00s
+
+     Running tests/executable_identity.rs (target/debug/deps/executable_identity-cba6bbeeac0561f6)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running tests/held_out.rs (target/debug/deps/held_out-5dc1000b5c4e032f)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 8 filtered out; finished in 0.00s
+
+     Running tests/markdown_record_shape.rs (target/debug/deps/markdown_record_shape-a8595308fba74d07)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.00s
+
+     Running tests/module_corpus.rs (target/debug/deps/module_corpus-74e6a8c5214a79f1)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+     Running tests/module_enforcement_docs.rs (target/debug/deps/module_enforcement_docs-9fef05bb28dd2dc4)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 8 filtered out; finished in 0.00s
+
+     Running tests/module_extraction.rs (target/debug/deps/module_extraction-8aa3b65bfb5d1976)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 8 filtered out; finished in 0.00s
+
+     Running tests/module_only_cli.rs (target/debug/deps/module_only_cli-fa79686b0ee94d9c)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 5 filtered out; finished in 0.00s
+
+     Running tests/module_report_controls.rs (target/debug/deps/module_report_controls-d41f56fb2c4cca5f)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.00s
+
+     Running tests/module_rules.rs (target/debug/deps/module_rules-64c1145129d06aa8)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 7 filtered out; finished in 0.00s
+
+     Running tests/modules_cli.rs (target/debug/deps/modules_cli-f62898d24578ee7b)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+     Running tests/policy_drift.rs (target/debug/deps/policy_drift-fc6357b28bb171ac)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+     Running tests/record_lint.rs (target/debug/deps/record_lint-1e46ccaffdc70f99)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running tests/record_lint_cli.rs (target/debug/deps/record_lint_cli-ea1b8a0cea05fb6d)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+     Running tests/record_schema.rs (target/debug/deps/record_schema-aa65c824664341ed)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running tests/record_schema_cli.rs (target/debug/deps/record_schema_cli-4ac1d668ba4418c6)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.00s
+

@@ -1,0 +1,31 @@
+    Checking bitflags v2.13.2
+    Checking library v0.1.0 (/home/kmosoti/projects/rha-m2/crates/library)
+    Checking serde_core v1.0.229
+    Checking pulldown-cmark v0.13.4
+    Checking document v0.1.0 (/home/kmosoti/projects/rha-m2/crates/document)
+    Checking graph v0.1.0 (/home/kmosoti/projects/rha-m2/crates/graph)
+    Checking site v0.1.0 (/home/kmosoti/projects/rha-m2/crates/site)
+    Checking adapter-html v0.1.0 (/home/kmosoti/projects/rha-m2/crates/adapter-html)
+    Checking adapter-sys v0.1.0 (/home/kmosoti/projects/rha-m2/crates/adapter-sys)
+    Checking adapter-fs v0.1.0 (/home/kmosoti/projects/rha-m2/crates/adapter-fs)
+    Checking serde_json v1.0.151
+    Checking adapter-json v0.1.0 (/home/kmosoti/projects/rha-m2/crates/adapter-json)
+error[E0283]: type annotations needed
+    --> crates/adapter-json/src/lib.rs:50:13
+     |
+  50 |         let entries = ordered.iter().map(|page| search_entry(page)).collect();
+     |             ^^^^^^^                                                 ------- type must be known at this point
+     |
+     = note: the type must implement `FromIterator<Value>`
+note: required by a bound in `collect`
+    --> /home/kmosoti/.rustup/toolchains/1.98.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/traits/iterator.rs:2077:19
+     |
+2077 |     fn collect<B: FromIterator<Self::Item>>(self) -> B
+     |                   ^^^^^^^^^^^^^^^^^^^^^^^^ required by this bound in `Iterator::collect`
+help: consider giving `entries` an explicit type
+     |
+  50 |         let entries: Vec<_> = ordered.iter().map(|page| search_entry(page)).collect();
+     |                    ++++++++
+
+For more information about this error, try `rustc --explain E0283`.
+error: could not compile `adapter-json` (lib) due to 1 previous error

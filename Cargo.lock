@@ -20,6 +20,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "adapter-json"
+version = "0.1.0"
+dependencies = [
+ "library",
+ "serde_json",
+ "site",
+]
+
+[[package]]
 name = "adapter-sys"
 version = "0.1.0"
 dependencies = [
@@ -111,6 +120,7 @@ version = "0.1.0"
 dependencies = [
  "adapter-fs",
  "adapter-html",
+ "adapter-json",
  "adapter-sys",
  "clap",
  "library",
@@ -272,6 +282,7 @@ dependencies = [
  "library",
  "proptest",
  "pulldown-cmark",
+ "serde_json",
 ]
 
 [[package]]
@@ -381,6 +392,7 @@ dependencies = [
  "document",
  "library",
  "proptest",
+ "serde_json",
 ]
 
 [[package]]
@@ -967,6 +979,7 @@ dependencies = [
  "graph",
  "library",
  "proptest",
+ "serde_json",
 ]
 
 [[package]]

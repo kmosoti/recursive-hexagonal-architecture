@@ -1,0 +1,16 @@
+Rust standard char::is_whitespace / str::split_whitespace contract:
+U+001C false
+U+001D false
+U+001E false
+U+001F false
+U+0085 true
+U+00A0 true
+U+2003 true
+Python str.isspace / str.split:
+U+001C True
+U+001D True
+U+001E True
+U+001F True
+U+0085 True
+U+00A0 True
+U+2003 True

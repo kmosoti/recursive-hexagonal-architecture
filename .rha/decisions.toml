@@ -271,6 +271,11 @@ amendment_date = "2026-09-23"
 amendment_decided_by = "human:kennedy"
 amendment_approved_in = "Kennedy, 2026-09-23: 'For reviews. Use gpt 6 sol on medium for the future. Ask me first when yiu think astra is needed.'"
 amendment_text = "GPT-6 reviews and conformance validations use codex exec -m gpt-6-sol -c model_reasoning_effort=medium -s read-only. gpt-6-astra, at any effort, is used only after asking Kennedy. A merge needs an approving review from an Opus 5.5 agent and a GPT-6 agent on the same head (Kennedy, 2026-09-22)."
+# Amended 2026-09-24: merging while GPT-6 is unavailable.
+amendment_2_date = "2026-09-24"
+amendment_2_decided_by = "human:kennedy"
+amendment_2_approved_in = "Kennedy, 2026-09-24: 'And yes, you can merge. No need for GPT-6 while it's out of commission' (recorded in .rha/tasks/CHG-008-growth.toml, decision merge-rule-gpt6-unavailable)"
+amendment_2_text = "While GPT-6 is unavailable (Codex usage limit until 2026-09-29 21:09), a PR merges on the supervising session's review and approval of the same head; the Claude review of agent-authored work is a separate verifier pass. The Opus 5.5 + GPT-6 rule applies again once GPT-6 is available."
 
 [[decision]]
 id = "CHG-019.1-contract-amendment"

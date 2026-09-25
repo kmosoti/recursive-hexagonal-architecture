@@ -1,0 +1,3 @@
+    Checking adapter-json v0.1.0 (/home/kmosoti/projects/rha-m2/crates/adapter-json)
+    Checking app-cli v0.1.0 (/home/kmosoti/projects/rha-m2/crates/app-cli)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.22s

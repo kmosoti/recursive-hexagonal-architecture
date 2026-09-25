@@ -26,6 +26,7 @@ pub enum Node {
         index: usize,
         children: Vec<Node>,
     },
+    Transclusion(Transclusion),
     Image {
         src: String,
         alt: String,
@@ -49,6 +50,10 @@ pub enum Node {
     /// Raw HTML, kept as text and never emitted as markup.
     Html(String),
     TaskMarker(bool),
+    /// An inline anchor target for citations.
+    Anchor {
+        id: String,
+    },
 }
 
 /// A GFM callout's kind (preserved; rendering is plain in Phase 1).
@@ -68,4 +73,14 @@ pub enum Align {
     Left,
     Center,
     Right,
+}
+
+/// A parser-recognized transclusion embed.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct Transclusion {
+    pub id: usize,
+    pub target: String,
+    pub anchor: Option<String>,
+    pub display: String,
+    pub line: usize,
 }

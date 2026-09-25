@@ -1,0 +1,29 @@
+schema_version = 1
+id = "module-test-boundary"
+kind = "module_test_boundary"
+payloads = 7
+files = 9
+actual_case_count = 12
+authored = true
+prng = false
+model = "gpt-5.6-luna"
+effort = "high"
+content_sha256 = "8733ce9ebf7d1d15f7d35ec7f3ae81861199c45ddc7aebffbf8c13a9fe40338f"
+
+[kind_counts]
+module_test_boundary = 12
+
+[[source_snapshots]]
+relative_path = "contractaddendum.md"
+original_documentary_path = "docs/architecture/module-test-source-boundary.md"
+sha256 = "579a16fdda82db88b7a70292f864efc8b512b9a283e4705e7ac444aa04d1b5b9"
+
+[[source_snapshots]]
+relative_path = "originalcontract.md"
+original_documentary_path = "docs/architecture/module-check-contract.md"
+sha256 = "3f0b6d3c4c647d9210ea5e86517b15ffb2e7126eb08add2b33bbf7ef7751133e"
+
+[[source_snapshots]]
+relative_path = "prompt.md"
+original_documentary_path = "xtask/tests/corpus/write-prompts/CHG-008/pd-module-test-boundary-generator-prompt.md"
+sha256 = "1f9b4cd218e42e63a9d2485eddd5b83af7b1832dba50bd2bc7fb416d5512ad2d"

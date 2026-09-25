@@ -1,0 +1,63 @@
+   Compiling graph v0.1.0 (/home/kmosoti/projects/rha-m2/crates/graph)
+   Compiling site v0.1.0 (/home/kmosoti/projects/rha-m2/crates/site)
+   Compiling adapter-html v0.1.0 (/home/kmosoti/projects/rha-m2/crates/adapter-html)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.40s
+     Running unittests src/lib.rs (target/debug/deps/adapter_html-10d8c217556e947f)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/escaping.rs (target/debug/deps/escaping-bd3c817c28395f0e)
+
+running 3 tests
+test hrefs_are_encoded_and_md_links_point_at_the_produced_page ... ok
+test the_renderer_meets_the_site_contract_and_escapes_page_text ... ok
+test escaping_round_trips_and_leaves_no_markup ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+     Running unittests src/lib.rs (target/debug/deps/site-281218a44b2e6178)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/assurance_controls.rs (target/debug/deps/assurance_controls-08ee72caa156db2e)
+
+running 10 tests
+test output_sink_contract_reports_postdelete_listing_failure ... ok
+test existing_positive_contract_controls_remain_empty ... ok
+test renderer_contract_contains_asset_panics ... ok
+test renderer_contract_reports_duplicate_assets ... ok
+test build_counts_unchanged_pages_when_only_an_asset_changes ... ok
+test renderer_contract_detects_a_renderer_that_drops_toc ... ok
+test renderer_contract_reports_nondeterminism_and_panics ... ok
+test renderer_contract_reports_page_asset_collisions ... ok
+test renderer_contract_reports_nondeterministic_assets ... ok
+test stable_debug_echo_renderer_has_no_contract_violations ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/build_properties.rs (target/debug/deps/build_properties-0de4a786c4f3104f)
+
+running 4 tests
+test assembly_is_deterministic ... ok
+test inv_k_rejects_a_write_for_no_page_and_a_delete_of_nothing ... ok
+test the_renderer_and_sink_contracts_catch_seeded_violators_and_pass_the_fakes ... ok
+test build_writes_then_converges_and_deletes_stale_outputs ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests adapter_html
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests site
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

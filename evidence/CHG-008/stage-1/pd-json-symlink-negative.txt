@@ -1,0 +1,20 @@
+   Compiling adapter-json v0.1.0 (/home/kmosoti/projects/rha-m2/crates/adapter-json)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.14s
+     Running tests/registered.rs (target/debug/deps/registered-3007968e9bda427c)
+
+running 1 test
+
+thread 'symlinked_cases_file_is_refused_before_reading' (2878362) panicked at crates/adapter-json/tests/registered.rs:189:5:
+CASES.json digest mismatch
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test symlinked_cases_file_is_refused_before_reading ... FAILED
+
+failures:
+
+failures:
+    symlinked_cases_file_is_refused_before_reading
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p adapter-json --test registered`
+negative control exit: 101

@@ -1,0 +1,1 @@
+Separate read-only schema_audit reviewer: no semantic discrepancy in corrected153-case package. First148rows unchanged; five controls appended. CanonicalNFC inputs, preserved destination escapes, uppercase mapped Unicode anchor, self-import matched/query/unmatched expectations all agree with contract. No target implementation or corpus edits by reviewer.

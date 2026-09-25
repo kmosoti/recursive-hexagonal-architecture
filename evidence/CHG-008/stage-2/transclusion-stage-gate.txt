@@ -1,0 +1,16 @@
+# Transclusion stage gate at 79e89b33e3cc1da122439cc106fb54f6859b1bfc (2026-09-24T20:30:16Z)
+## cargo nextest run --workspace --all-features --profile ci
+     Summary [  27.293s] 324 tests run: 324 passed, 0 skipped
+exit=0
+## cargo xtask docs --check
+docs: 4 generated files are current
+## cargo xtask architecture
+summary: 0 error(s), 0 warning(s), passed
+## cargo xtask scope --task CHG-008
+scope: 253 changed path(s), 0 finding(s), task CHG-008, base origin/main
+## cargo fmt --all -- --check
+exit=0
+## cargo clippy --workspace --all-targets --all-features
+exit=0
+## module H4
+module H4: outcome=passed, evidence=target/h4-gate/20260924T203102Z-79e89b33e3cc.json, cases=28, passed=28, failed=0, live=true, reference=true, supplementary=true

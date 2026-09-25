@@ -1,0 +1,22 @@
+   Compiling adapter-json v0.1.0 (/home/kmosoti/projects/rha-m2/crates/adapter-json)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.55s
+     Running tests/registered.rs (target/debug/deps/registered-3007968e9bda427c)
+
+running 1 test
+
+thread 'registered_json_adapter_cases_are_all_graded' (2879724) panicked at crates/adapter-json/tests/registered.rs:124:5:
+assertion `left == right` failed
+  left: 0
+ right: 1
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test registered_json_adapter_cases_are_all_graded ... FAILED
+
+failures:
+
+failures:
+    registered_json_adapter_cases_are_all_graded
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.11s
+
+error: test failed, to rerun pass `-p adapter-json --test registered`
+deliberately varying constructor output; old grader exit: 101

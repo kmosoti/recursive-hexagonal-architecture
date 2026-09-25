@@ -1,0 +1,1826 @@
+[
+  {
+    "anchors": {},
+    "destination": "child.md",
+    "expected": "../source/child.md",
+    "host": "guides/Host",
+    "id": "control-child",
+    "kind": "uri",
+    "origin": "source/Source",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {},
+    "destination": "../peer.md#x",
+    "expected": "../peer.md#x",
+    "host": "guides/Host",
+    "id": "control-parent",
+    "kind": "uri",
+    "origin": "source/Source",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {},
+    "destination": "asset.png",
+    "expected": "../source/asset.png",
+    "host": "guides/Host",
+    "id": "control-image",
+    "kind": "uri",
+    "origin": "source/Source",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-host-anchor"
+    },
+    "destination": "#inside",
+    "expected": "#mapped-host-anchor",
+    "host": "guides/Host",
+    "id": "control-matched",
+    "kind": "uri",
+    "origin": "source/Source",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-host-anchor"
+    },
+    "destination": "#outside",
+    "expected": "../source/Source.md#outside",
+    "host": "guides/Host",
+    "id": "control-unmatched",
+    "kind": "uri",
+    "origin": "source/Source",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "outside": "wrong-kind"
+    },
+    "destination": "?q=1#outside",
+    "expected": "../source/Source.md?q=1#outside",
+    "host": "guides/Host",
+    "id": "control-query-fragment",
+    "kind": "uri",
+    "origin": "source/Source",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {},
+    "destination": "",
+    "expected": "../source/Source.md",
+    "host": "guides/Host",
+    "id": "control-empty",
+    "kind": "uri",
+    "origin": "source/Source",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {},
+    "destination": "/assets/icon.svg",
+    "expected": "/assets/icon.svg",
+    "host": "guides/Host",
+    "id": "control-absolute",
+    "kind": "uri",
+    "origin": "source/Source",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {},
+    "destination": "https://example.test/a:b",
+    "expected": "https://example.test/a:b",
+    "host": "guides/Host",
+    "id": "control-scheme",
+    "kind": "uri",
+    "origin": "source/Source",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {},
+    "destination": "//cdn.example.test/a.png",
+    "expected": "//cdn.example.test/a.png",
+    "host": "guides/Host",
+    "id": "control-protocol-relative",
+    "kind": "uri",
+    "origin": "source/Source",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {},
+    "destination": "./a:b.md",
+    "expected": "./a:b.md",
+    "host": "docs/Host",
+    "id": "control-colon-like",
+    "kind": "uri",
+    "origin": "docs/Origin",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {},
+    "destination": "subdir/",
+    "expected": "../source/subdir/",
+    "host": "guides/Host",
+    "id": "control-directory",
+    "kind": "uri",
+    "origin": "source/Source",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {},
+    "destination": "../../escape.md",
+    "expected": "../../escape.md",
+    "host": "guides/Host",
+    "id": "control-above-root",
+    "kind": "uri",
+    "origin": "source/Source",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {},
+    "destination": "child.md",
+    "expected": "../docs/%C3%89lan/child.md",
+    "host": "guides/Über",
+    "id": "control-unicode-page",
+    "kind": "uri",
+    "origin": "docs/Élan/Start",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-host-anchor"
+    },
+    "destination": "#%69nside",
+    "expected": "#mapped-host-anchor",
+    "host": "guides/Host",
+    "id": "control-percent-match",
+    "kind": "uri",
+    "origin": "source/Source",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-host-anchor"
+    },
+    "destination": "#%ZZ",
+    "expected": "../source/Source.md#%ZZ",
+    "host": "guides/Host",
+    "id": "control-invalid-percent",
+    "kind": "uri",
+    "origin": "source/Source",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "a b": "plus-space"
+    },
+    "destination": "#a+b",
+    "expected": "../source/Source.md#a+b",
+    "host": "guides/Host",
+    "id": "control-plus-literal",
+    "kind": "uri",
+    "origin": "source/Source",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-host-anchor"
+    },
+    "destination": "#inside",
+    "expected": "../source/Source.md#inside",
+    "host": "guides/Host",
+    "id": "control-image-anchor",
+    "kind": "uri",
+    "origin": "source/Source",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-host-anchor"
+    },
+    "destination": "#%FF",
+    "expected": "../source/Source.md#%FF",
+    "host": "guides/Host",
+    "id": "control-invalid-utf8",
+    "kind": "uri",
+    "origin": "source/Source",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-host-anchor"
+    },
+    "destination": "#Inside",
+    "expected": "../source/Source.md#Inside",
+    "host": "guides/Host",
+    "id": "control-case-sensitive",
+    "kind": "uri",
+    "origin": "source/Source",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside"
+    },
+    "destination": "#a+b",
+    "expected": "../manual/Part-2/Entry.md#a+b",
+    "host": "unicode/Überblick",
+    "id": "seeded-001",
+    "kind": "uri",
+    "origin": "manual/Part-2/Entry",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside",
+      "outside": "mapped-outside"
+    },
+    "destination": "?q=1#frag",
+    "expected": "../../source/Source.md?q=1#frag",
+    "host": "manual/Part-1/Host",
+    "id": "seeded-002",
+    "kind": "uri",
+    "origin": "source/Source",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside",
+      "outside": "mapped-outside"
+    },
+    "destination": "../peer.md#x",
+    "expected": "../peer.md#x",
+    "host": "docs/Reference",
+    "id": "seeded-003",
+    "kind": "uri",
+    "origin": "source/peer",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside",
+      "outside": "mapped-outside"
+    },
+    "destination": "#%69nside",
+    "expected": "#mapped-inside",
+    "host": "manual/Part-1/Host",
+    "id": "seeded-004",
+    "kind": "uri",
+    "origin": "manual/Part-2/Entry",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {},
+    "destination": "a:b.md",
+    "expected": "a:b.md",
+    "host": "docs/Reference",
+    "id": "seeded-005",
+    "kind": "uri",
+    "origin": "unicode/Élan/Start",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "a b": "space-anchor",
+      "a+b": "plus-anchor"
+    },
+    "destination": "child.md",
+    "expected": "../../unicode/%C3%89lan/child.md",
+    "host": "manual/Part-1/Host",
+    "id": "seeded-006",
+    "kind": "uri",
+    "origin": "unicode/Élan/Start",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside",
+      "outside": "mapped-outside"
+    },
+    "destination": "../../escape.md",
+    "expected": "../../escape.md",
+    "host": "a/b/C",
+    "id": "seeded-007",
+    "kind": "uri",
+    "origin": "a/b/Other",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "a b": "space-anchor",
+      "a+b": "plus-anchor"
+    },
+    "destination": "assets/image.png",
+    "expected": "../../source/assets/image.png",
+    "host": "manual/Part-1/Host",
+    "id": "seeded-008",
+    "kind": "uri",
+    "origin": "source/Source",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside",
+      "outside": "mapped-outside"
+    },
+    "destination": "../peer.md#x",
+    "expected": "../../manual/peer.md#x",
+    "host": "a/b/C",
+    "id": "seeded-009",
+    "kind": "uri",
+    "origin": "manual/Part-2/Entry",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "ümlaut": "mapped-ümlaut"
+    },
+    "destination": "#%ZZ",
+    "expected": "deep/one/two/Three.md#%ZZ",
+    "host": "Host",
+    "id": "seeded-010",
+    "kind": "uri",
+    "origin": "deep/one/two/Three",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "a b": "space-anchor",
+      "a+b": "plus-anchor"
+    },
+    "destination": "assets/image.png",
+    "expected": "../a/b/assets/image.png",
+    "host": "docs/Reference",
+    "id": "seeded-011",
+    "kind": "uri",
+    "origin": "a/b/Other",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside"
+    },
+    "destination": "../../escape.md",
+    "expected": "../../escape.md",
+    "host": "unicode/Überblick",
+    "id": "seeded-012",
+    "kind": "uri",
+    "origin": "source/peer",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "a b": "space-anchor",
+      "a+b": "plus-anchor"
+    },
+    "destination": "nested/",
+    "expected": "../source/nested/",
+    "host": "unicode/Überblick",
+    "id": "seeded-013",
+    "kind": "uri",
+    "origin": "source/peer",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside"
+    },
+    "destination": "?q=1#frag",
+    "expected": "../deep/one/two/Three.md?q=1#frag",
+    "host": "unicode/Überblick",
+    "id": "seeded-014",
+    "kind": "uri",
+    "origin": "deep/one/two/Three",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside"
+    },
+    "destination": "nested/",
+    "expected": "%C3%89lan/nested/",
+    "host": "unicode/Überblick",
+    "id": "seeded-015",
+    "kind": "uri",
+    "origin": "unicode/Élan/Start",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "ümlaut": "mapped-ümlaut"
+    },
+    "destination": "/absolute/path",
+    "expected": "/absolute/path",
+    "host": "docs/Reference",
+    "id": "seeded-016",
+    "kind": "uri",
+    "origin": "source/peer",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside",
+      "outside": "mapped-outside"
+    },
+    "destination": "//cdn.example.test/a.png",
+    "expected": "//cdn.example.test/a.png",
+    "host": "docs/Reference",
+    "id": "seeded-017",
+    "kind": "uri",
+    "origin": "unicode/Élan/Start",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "a b": "space-anchor",
+      "a+b": "plus-anchor"
+    },
+    "destination": "ümlaut/child.md",
+    "expected": "../source/ümlaut/child.md",
+    "host": "guides/Host",
+    "id": "seeded-018",
+    "kind": "uri",
+    "origin": "source/Source",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {},
+    "destination": "../peer.md#x",
+    "expected": "../manual/peer.md#x",
+    "host": "unicode/Überblick",
+    "id": "seeded-019",
+    "kind": "uri",
+    "origin": "manual/Part-2/Entry",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside"
+    },
+    "destination": "?q=1",
+    "expected": "../../source/Source.md?q=1",
+    "host": "a/b/C",
+    "id": "seeded-020",
+    "kind": "uri",
+    "origin": "source/Source",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside",
+      "outside": "mapped-outside"
+    },
+    "destination": "assets/image.png",
+    "expected": "../manual/Part-2/assets/image.png",
+    "host": "unicode/Überblick",
+    "id": "seeded-021",
+    "kind": "uri",
+    "origin": "manual/Part-2/Entry",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside",
+      "outside": "mapped-outside"
+    },
+    "destination": "#outside",
+    "expected": "#mapped-outside",
+    "host": "a/b/C",
+    "id": "seeded-022",
+    "kind": "uri",
+    "origin": "manual/Part-2/Entry",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "a b": "space-anchor",
+      "a+b": "plus-anchor"
+    },
+    "destination": "mailto:user@example.test",
+    "expected": "mailto:user@example.test",
+    "host": "Host",
+    "id": "seeded-023",
+    "kind": "uri",
+    "origin": "Origin",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside",
+      "outside": "mapped-outside"
+    },
+    "destination": "#a+b",
+    "expected": "manual/Part-2/Entry.md#a+b",
+    "host": "Host",
+    "id": "seeded-024",
+    "kind": "uri",
+    "origin": "manual/Part-2/Entry",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "a b": "space-anchor",
+      "a+b": "plus-anchor"
+    },
+    "destination": "nested/",
+    "expected": "../source/nested/",
+    "host": "unicode/Überblick",
+    "id": "seeded-025",
+    "kind": "uri",
+    "origin": "source/peer",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "ümlaut": "mapped-ümlaut"
+    },
+    "destination": "?q=1",
+    "expected": "../../manual/Part-2/Entry.md?q=1",
+    "host": "a/b/C",
+    "id": "seeded-026",
+    "kind": "uri",
+    "origin": "manual/Part-2/Entry",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "ümlaut": "mapped-ümlaut"
+    },
+    "destination": "#a+b",
+    "expected": "manual/Part-2/Entry.md#a+b",
+    "host": "Host",
+    "id": "seeded-027",
+    "kind": "uri",
+    "origin": "manual/Part-2/Entry",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {},
+    "destination": "../../escape.md",
+    "expected": "../../../escape.md",
+    "host": "guides/Host",
+    "id": "seeded-028",
+    "kind": "uri",
+    "origin": "Origin",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {},
+    "destination": "./same.md",
+    "expected": "../manual/Part-2/same.md",
+    "host": "unicode/Überblick",
+    "id": "seeded-029",
+    "kind": "uri",
+    "origin": "manual/Part-2/Entry",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {},
+    "destination": "#%69nside",
+    "expected": "../manual/Part-2/Entry.md#%69nside",
+    "host": "guides/Host",
+    "id": "seeded-030",
+    "kind": "uri",
+    "origin": "manual/Part-2/Entry",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside"
+    },
+    "destination": "../peer.md#x",
+    "expected": "../../deep/one/peer.md#x",
+    "host": "manual/Part-1/Host",
+    "id": "seeded-031",
+    "kind": "uri",
+    "origin": "deep/one/two/Three",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside",
+      "outside": "mapped-outside"
+    },
+    "destination": "../../escape.md",
+    "expected": "../deep/escape.md",
+    "host": "guides/Host",
+    "id": "seeded-032",
+    "kind": "uri",
+    "origin": "deep/one/two/Three",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "ümlaut": "mapped-ümlaut"
+    },
+    "destination": "../peer.md#x",
+    "expected": "../../peer.md#x",
+    "host": "docs/Reference",
+    "id": "seeded-033",
+    "kind": "uri",
+    "origin": "Origin",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside"
+    },
+    "destination": "/absolute/path",
+    "expected": "/absolute/path",
+    "host": "docs/Reference",
+    "id": "seeded-034",
+    "kind": "uri",
+    "origin": "Origin",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {},
+    "destination": "#%69nside",
+    "expected": "../../deep/one/two/Three.md#%69nside",
+    "host": "a/b/C",
+    "id": "seeded-035",
+    "kind": "uri",
+    "origin": "deep/one/two/Three",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {},
+    "destination": "?q=1#frag",
+    "expected": "../../source/peer.md?q=1#frag",
+    "host": "a/b/C",
+    "id": "seeded-036",
+    "kind": "uri",
+    "origin": "source/peer",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside",
+      "outside": "mapped-outside"
+    },
+    "destination": "#%FF",
+    "expected": "a/b/Other.md#%FF",
+    "host": "Host",
+    "id": "seeded-037",
+    "kind": "uri",
+    "origin": "a/b/Other",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "a b": "space-anchor",
+      "a+b": "plus-anchor"
+    },
+    "destination": "mailto:user@example.test",
+    "expected": "mailto:user@example.test",
+    "host": "a/b/C",
+    "id": "seeded-038",
+    "kind": "uri",
+    "origin": "Origin",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "ümlaut": "mapped-ümlaut"
+    },
+    "destination": "#inside",
+    "expected": "../manual/Part-2/Entry.md#inside",
+    "host": "docs/Reference",
+    "id": "seeded-039",
+    "kind": "uri",
+    "origin": "manual/Part-2/Entry",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside"
+    },
+    "destination": "./a:b.md",
+    "expected": "../a:b.md",
+    "host": "unicode/Überblick",
+    "id": "seeded-040",
+    "kind": "uri",
+    "origin": "Origin",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "ümlaut": "mapped-ümlaut"
+    },
+    "destination": "ümlaut/child.md",
+    "expected": "../deep/one/two/ümlaut/child.md",
+    "host": "guides/Host",
+    "id": "seeded-041",
+    "kind": "uri",
+    "origin": "deep/one/two/Three",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "ümlaut": "mapped-ümlaut"
+    },
+    "destination": "#inside",
+    "expected": "source/peer.md#inside",
+    "host": "Host",
+    "id": "seeded-042",
+    "kind": "uri",
+    "origin": "source/peer",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {},
+    "destination": "?q=1",
+    "expected": "../Origin.md?q=1",
+    "host": "guides/Host",
+    "id": "seeded-043",
+    "kind": "uri",
+    "origin": "Origin",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {},
+    "destination": "nested/",
+    "expected": "../nested/",
+    "host": "unicode/Überblick",
+    "id": "seeded-044",
+    "kind": "uri",
+    "origin": "Origin",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside",
+      "outside": "mapped-outside"
+    },
+    "destination": "?q=1#frag",
+    "expected": "source/peer.md?q=1#frag",
+    "host": "Host",
+    "id": "seeded-045",
+    "kind": "uri",
+    "origin": "source/peer",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside"
+    },
+    "destination": "/absolute/path",
+    "expected": "/absolute/path",
+    "host": "manual/Part-1/Host",
+    "id": "seeded-046",
+    "kind": "uri",
+    "origin": "a/b/Other",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {},
+    "destination": "#a+b",
+    "expected": "../source/peer.md#a+b",
+    "host": "unicode/Überblick",
+    "id": "seeded-047",
+    "kind": "uri",
+    "origin": "source/peer",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {},
+    "destination": "child.md",
+    "expected": "../manual/Part-2/child.md",
+    "host": "guides/Host",
+    "id": "seeded-048",
+    "kind": "uri",
+    "origin": "manual/Part-2/Entry",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "a b": "space-anchor",
+      "a+b": "plus-anchor"
+    },
+    "destination": "assets/image.png",
+    "expected": "../manual/Part-2/assets/image.png",
+    "host": "guides/Host",
+    "id": "seeded-049",
+    "kind": "uri",
+    "origin": "manual/Part-2/Entry",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside",
+      "outside": "mapped-outside"
+    },
+    "destination": "child.md",
+    "expected": "../source/child.md",
+    "host": "unicode/Überblick",
+    "id": "seeded-050",
+    "kind": "uri",
+    "origin": "source/Source",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside",
+      "outside": "mapped-outside"
+    },
+    "destination": "//cdn.example.test/a.png",
+    "expected": "//cdn.example.test/a.png",
+    "host": "unicode/Überblick",
+    "id": "seeded-051",
+    "kind": "uri",
+    "origin": "manual/Part-2/Entry",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "a b": "space-anchor",
+      "a+b": "plus-anchor"
+    },
+    "destination": "./same.md",
+    "expected": "%C3%89lan/same.md",
+    "host": "unicode/Überblick",
+    "id": "seeded-052",
+    "kind": "uri",
+    "origin": "unicode/Élan/Start",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {},
+    "destination": "/absolute/path",
+    "expected": "/absolute/path",
+    "host": "a/b/C",
+    "id": "seeded-053",
+    "kind": "uri",
+    "origin": "source/Source",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "a b": "space-anchor",
+      "a+b": "plus-anchor"
+    },
+    "destination": "#outside",
+    "expected": "../deep/one/two/Three.md#outside",
+    "host": "docs/Reference",
+    "id": "seeded-054",
+    "kind": "uri",
+    "origin": "deep/one/two/Three",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "a b": "space-anchor",
+      "a+b": "plus-anchor"
+    },
+    "destination": "#%FF",
+    "expected": "../../source/Source.md#%FF",
+    "host": "manual/Part-1/Host",
+    "id": "seeded-055",
+    "kind": "uri",
+    "origin": "source/Source",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside"
+    },
+    "destination": "nested/",
+    "expected": "nested/",
+    "host": "a/b/C",
+    "id": "seeded-056",
+    "kind": "uri",
+    "origin": "a/b/Other",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "ümlaut": "mapped-ümlaut"
+    },
+    "destination": "#inside",
+    "expected": "../../Origin.md#inside",
+    "host": "a/b/C",
+    "id": "seeded-057",
+    "kind": "uri",
+    "origin": "Origin",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "ümlaut": "mapped-ümlaut"
+    },
+    "destination": "#%69nside",
+    "expected": "../a/b/Other.md#%69nside",
+    "host": "unicode/Überblick",
+    "id": "seeded-058",
+    "kind": "uri",
+    "origin": "a/b/Other",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "ümlaut": "mapped-ümlaut"
+    },
+    "destination": "./a:b.md",
+    "expected": "unicode/%C3%89lan/a:b.md",
+    "host": "Host",
+    "id": "seeded-059",
+    "kind": "uri",
+    "origin": "unicode/Élan/Start",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "ümlaut": "mapped-ümlaut"
+    },
+    "destination": "./same.md",
+    "expected": "../same.md",
+    "host": "docs/Reference",
+    "id": "seeded-060",
+    "kind": "uri",
+    "origin": "Origin",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside"
+    },
+    "destination": "a:b.md",
+    "expected": "a:b.md",
+    "host": "guides/Host",
+    "id": "seeded-061",
+    "kind": "uri",
+    "origin": "unicode/Élan/Start",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "a b": "space-anchor",
+      "a+b": "plus-anchor"
+    },
+    "destination": "a:b.md",
+    "expected": "a:b.md",
+    "host": "guides/Host",
+    "id": "seeded-062",
+    "kind": "uri",
+    "origin": "source/peer",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside",
+      "outside": "mapped-outside"
+    },
+    "destination": "#inside",
+    "expected": "#mapped-inside",
+    "host": "a/b/C",
+    "id": "seeded-063",
+    "kind": "uri",
+    "origin": "source/peer",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {},
+    "destination": "?q=1#frag",
+    "expected": "../../Origin.md?q=1#frag",
+    "host": "a/b/C",
+    "id": "seeded-064",
+    "kind": "uri",
+    "origin": "Origin",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "ümlaut": "mapped-ümlaut"
+    },
+    "destination": "#a+b",
+    "expected": "../source/Source.md#a+b",
+    "host": "unicode/Überblick",
+    "id": "seeded-065",
+    "kind": "uri",
+    "origin": "source/Source",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside"
+    },
+    "destination": "nested/",
+    "expected": "../../nested/",
+    "host": "manual/Part-1/Host",
+    "id": "seeded-066",
+    "kind": "uri",
+    "origin": "Origin",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside",
+      "outside": "mapped-outside"
+    },
+    "destination": "#a+b",
+    "expected": "unicode/%C3%89lan/Start.md#a+b",
+    "host": "Host",
+    "id": "seeded-067",
+    "kind": "uri",
+    "origin": "unicode/Élan/Start",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside"
+    },
+    "destination": "/absolute/path",
+    "expected": "/absolute/path",
+    "host": "manual/Part-1/Host",
+    "id": "seeded-068",
+    "kind": "uri",
+    "origin": "source/Source",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "a b": "space-anchor",
+      "a+b": "plus-anchor"
+    },
+    "destination": "#a+b",
+    "expected": "#plus-anchor",
+    "host": "guides/Host",
+    "id": "seeded-069",
+    "kind": "uri",
+    "origin": "Origin",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside",
+      "outside": "mapped-outside"
+    },
+    "destination": "//cdn.example.test/a.png",
+    "expected": "//cdn.example.test/a.png",
+    "host": "guides/Host",
+    "id": "seeded-070",
+    "kind": "uri",
+    "origin": "a/b/Other",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {},
+    "destination": "../../escape.md",
+    "expected": "../../deep/escape.md",
+    "host": "a/b/C",
+    "id": "seeded-071",
+    "kind": "uri",
+    "origin": "deep/one/two/Three",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside",
+      "outside": "mapped-outside"
+    },
+    "destination": "?q=1#frag",
+    "expected": "../../source/peer.md?q=1#frag",
+    "host": "a/b/C",
+    "id": "seeded-072",
+    "kind": "uri",
+    "origin": "source/peer",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "ümlaut": "mapped-ümlaut"
+    },
+    "destination": "#%FF",
+    "expected": "unicode/%C3%89lan/Start.md#%FF",
+    "host": "Host",
+    "id": "seeded-073",
+    "kind": "uri",
+    "origin": "unicode/Élan/Start",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "ümlaut": "mapped-ümlaut"
+    },
+    "destination": "?q=1",
+    "expected": "../../unicode/%C3%89lan/Start.md?q=1",
+    "host": "a/b/C",
+    "id": "seeded-074",
+    "kind": "uri",
+    "origin": "unicode/Élan/Start",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {},
+    "destination": "#%FF",
+    "expected": "../a/b/Other.md#%FF",
+    "host": "unicode/Überblick",
+    "id": "seeded-075",
+    "kind": "uri",
+    "origin": "a/b/Other",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside"
+    },
+    "destination": "../../escape.md",
+    "expected": "../../../../escape.md",
+    "host": "a/b/C",
+    "id": "seeded-076",
+    "kind": "uri",
+    "origin": "Origin",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside",
+      "outside": "mapped-outside"
+    },
+    "destination": "/absolute/path",
+    "expected": "/absolute/path",
+    "host": "guides/Host",
+    "id": "seeded-077",
+    "kind": "uri",
+    "origin": "source/peer",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {},
+    "destination": "#%ZZ",
+    "expected": "../../source/Source.md#%ZZ",
+    "host": "a/b/C",
+    "id": "seeded-078",
+    "kind": "uri",
+    "origin": "source/Source",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "ümlaut": "mapped-ümlaut"
+    },
+    "destination": "../peer.md#x",
+    "expected": "../peer.md#x",
+    "host": "Host",
+    "id": "seeded-079",
+    "kind": "uri",
+    "origin": "Origin",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside",
+      "outside": "mapped-outside"
+    },
+    "destination": "#a+b",
+    "expected": "../../unicode/%C3%89lan/Start.md#a+b",
+    "host": "a/b/C",
+    "id": "seeded-080",
+    "kind": "uri",
+    "origin": "unicode/Élan/Start",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside",
+      "outside": "mapped-outside"
+    },
+    "destination": "#%FF",
+    "expected": "../source/peer.md#%FF",
+    "host": "guides/Host",
+    "id": "seeded-081",
+    "kind": "uri",
+    "origin": "source/peer",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside",
+      "outside": "mapped-outside"
+    },
+    "destination": "/absolute/path",
+    "expected": "/absolute/path",
+    "host": "Host",
+    "id": "seeded-082",
+    "kind": "uri",
+    "origin": "Origin",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside",
+      "outside": "mapped-outside"
+    },
+    "destination": "a:b.md",
+    "expected": "a:b.md",
+    "host": "unicode/Überblick",
+    "id": "seeded-083",
+    "kind": "uri",
+    "origin": "manual/Part-2/Entry",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "ümlaut": "mapped-ümlaut"
+    },
+    "destination": "#a+b",
+    "expected": "../../Origin.md#a+b",
+    "host": "a/b/C",
+    "id": "seeded-084",
+    "kind": "uri",
+    "origin": "Origin",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside",
+      "outside": "mapped-outside"
+    },
+    "destination": "a:b.md",
+    "expected": "a:b.md",
+    "host": "manual/Part-1/Host",
+    "id": "seeded-085",
+    "kind": "uri",
+    "origin": "source/peer",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside",
+      "outside": "mapped-outside"
+    },
+    "destination": "../peer.md#x",
+    "expected": "../peer.md#x",
+    "host": "a/b/C",
+    "id": "seeded-086",
+    "kind": "uri",
+    "origin": "a/b/Other",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {},
+    "destination": "child.md",
+    "expected": "../../unicode/%C3%89lan/child.md",
+    "host": "manual/Part-1/Host",
+    "id": "seeded-087",
+    "kind": "uri",
+    "origin": "unicode/Élan/Start",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside",
+      "outside": "mapped-outside"
+    },
+    "destination": "./same.md",
+    "expected": "source/same.md",
+    "host": "Host",
+    "id": "seeded-088",
+    "kind": "uri",
+    "origin": "source/Source",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "ümlaut": "mapped-ümlaut"
+    },
+    "destination": "#outside",
+    "expected": "%C3%89lan/Start.md#outside",
+    "host": "unicode/Überblick",
+    "id": "seeded-089",
+    "kind": "uri",
+    "origin": "unicode/Élan/Start",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside",
+      "outside": "mapped-outside"
+    },
+    "destination": "./same.md",
+    "expected": "../source/same.md",
+    "host": "guides/Host",
+    "id": "seeded-090",
+    "kind": "uri",
+    "origin": "source/peer",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "a b": "space-anchor",
+      "a+b": "plus-anchor"
+    },
+    "destination": "child.md",
+    "expected": "../deep/one/two/child.md",
+    "host": "guides/Host",
+    "id": "seeded-091",
+    "kind": "uri",
+    "origin": "deep/one/two/Three",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside"
+    },
+    "destination": "../../escape.md",
+    "expected": "deep/escape.md",
+    "host": "Host",
+    "id": "seeded-092",
+    "kind": "uri",
+    "origin": "deep/one/two/Three",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "ümlaut": "mapped-ümlaut"
+    },
+    "destination": "#%ZZ",
+    "expected": "../../unicode/%C3%89lan/Start.md#%ZZ",
+    "host": "manual/Part-1/Host",
+    "id": "seeded-093",
+    "kind": "uri",
+    "origin": "unicode/Élan/Start",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {},
+    "destination": "#%ZZ",
+    "expected": "../../a/b/Other.md#%ZZ",
+    "host": "manual/Part-1/Host",
+    "id": "seeded-094",
+    "kind": "uri",
+    "origin": "a/b/Other",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {},
+    "destination": "#%ZZ",
+    "expected": "../unicode/%C3%89lan/Start.md#%ZZ",
+    "host": "guides/Host",
+    "id": "seeded-095",
+    "kind": "uri",
+    "origin": "unicode/Élan/Start",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside",
+      "outside": "mapped-outside"
+    },
+    "destination": "./a:b.md",
+    "expected": "../a:b.md",
+    "host": "guides/Host",
+    "id": "seeded-096",
+    "kind": "uri",
+    "origin": "Origin",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "ümlaut": "mapped-ümlaut"
+    },
+    "destination": "../../escape.md",
+    "expected": "../../escape.md",
+    "host": "a/b/C",
+    "id": "seeded-097",
+    "kind": "uri",
+    "origin": "manual/Part-2/Entry",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside",
+      "outside": "mapped-outside"
+    },
+    "destination": "?q=1#frag",
+    "expected": "unicode/%C3%89lan/Start.md?q=1#frag",
+    "host": "Host",
+    "id": "seeded-098",
+    "kind": "uri",
+    "origin": "unicode/Élan/Start",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside",
+      "outside": "mapped-outside"
+    },
+    "destination": "assets/image.png",
+    "expected": "../a/b/assets/image.png",
+    "host": "unicode/Überblick",
+    "id": "seeded-099",
+    "kind": "uri",
+    "origin": "a/b/Other",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "ümlaut": "mapped-ümlaut"
+    },
+    "destination": "?q=1#frag",
+    "expected": "../../unicode/%C3%89lan/Start.md?q=1#frag",
+    "host": "manual/Part-1/Host",
+    "id": "seeded-100",
+    "kind": "uri",
+    "origin": "unicode/Élan/Start",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {},
+    "destination": "#%69nside",
+    "expected": "../../unicode/%C3%89lan/Start.md#%69nside",
+    "host": "manual/Part-1/Host",
+    "id": "seeded-101",
+    "kind": "uri",
+    "origin": "unicode/Élan/Start",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "ümlaut": "mapped-ümlaut"
+    },
+    "destination": "?q=1#frag",
+    "expected": "../../deep/one/two/Three.md?q=1#frag",
+    "host": "manual/Part-1/Host",
+    "id": "seeded-102",
+    "kind": "uri",
+    "origin": "deep/one/two/Three",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside",
+      "outside": "mapped-outside"
+    },
+    "destination": "#%69nside",
+    "expected": "../../source/Source.md#%69nside",
+    "host": "a/b/C",
+    "id": "seeded-103",
+    "kind": "uri",
+    "origin": "source/Source",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "ümlaut": "mapped-ümlaut"
+    },
+    "destination": "#outside",
+    "expected": "../a/b/Other.md#outside",
+    "host": "guides/Host",
+    "id": "seeded-104",
+    "kind": "uri",
+    "origin": "a/b/Other",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "ümlaut": "mapped-ümlaut"
+    },
+    "destination": "../peer.md#x",
+    "expected": "../../peer.md#x",
+    "host": "guides/Host",
+    "id": "seeded-105",
+    "kind": "uri",
+    "origin": "Origin",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "a b": "space-anchor",
+      "a+b": "plus-anchor"
+    },
+    "destination": "/absolute/path",
+    "expected": "/absolute/path",
+    "host": "Host",
+    "id": "seeded-106",
+    "kind": "uri",
+    "origin": "unicode/Élan/Start",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "a b": "space-anchor",
+      "a+b": "plus-anchor"
+    },
+    "destination": "mailto:user@example.test",
+    "expected": "mailto:user@example.test",
+    "host": "docs/Reference",
+    "id": "seeded-107",
+    "kind": "uri",
+    "origin": "unicode/Élan/Start",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "ümlaut": "mapped-ümlaut"
+    },
+    "destination": "ümlaut/child.md",
+    "expected": "../source/ümlaut/child.md",
+    "host": "unicode/Überblick",
+    "id": "seeded-108",
+    "kind": "uri",
+    "origin": "source/Source",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {},
+    "destination": "mailto:user@example.test",
+    "expected": "mailto:user@example.test",
+    "host": "a/b/C",
+    "id": "seeded-109",
+    "kind": "uri",
+    "origin": "source/peer",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "a b": "space-anchor",
+      "a+b": "plus-anchor"
+    },
+    "destination": "nested/",
+    "expected": "../../source/nested/",
+    "host": "manual/Part-1/Host",
+    "id": "seeded-110",
+    "kind": "uri",
+    "origin": "source/peer",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside"
+    },
+    "destination": "#inside",
+    "expected": "#mapped-inside",
+    "host": "a/b/C",
+    "id": "seeded-111",
+    "kind": "uri",
+    "origin": "deep/one/two/Three",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside",
+      "outside": "mapped-outside"
+    },
+    "destination": "./same.md",
+    "expected": "%C3%89lan/same.md",
+    "host": "unicode/Überblick",
+    "id": "seeded-112",
+    "kind": "uri",
+    "origin": "unicode/Élan/Start",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside"
+    },
+    "destination": "?q=1",
+    "expected": "../source/peer.md?q=1",
+    "host": "unicode/Überblick",
+    "id": "seeded-113",
+    "kind": "uri",
+    "origin": "source/peer",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside",
+      "outside": "mapped-outside"
+    },
+    "destination": "./same.md",
+    "expected": "../../deep/one/two/same.md",
+    "host": "a/b/C",
+    "id": "seeded-114",
+    "kind": "uri",
+    "origin": "deep/one/two/Three",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside"
+    },
+    "destination": "nested/",
+    "expected": "../deep/one/two/nested/",
+    "host": "unicode/Überblick",
+    "id": "seeded-115",
+    "kind": "uri",
+    "origin": "deep/one/two/Three",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside"
+    },
+    "destination": "./a:b.md",
+    "expected": "../source/a:b.md",
+    "host": "unicode/Überblick",
+    "id": "seeded-116",
+    "kind": "uri",
+    "origin": "source/peer",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside"
+    },
+    "destination": "./a:b.md",
+    "expected": "./a:b.md",
+    "host": "Host",
+    "id": "seeded-117",
+    "kind": "uri",
+    "origin": "Origin",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {},
+    "destination": "#%69nside",
+    "expected": "../../source/peer.md#%69nside",
+    "host": "a/b/C",
+    "id": "seeded-118",
+    "kind": "uri",
+    "origin": "source/peer",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside"
+    },
+    "destination": "#inside",
+    "expected": "#mapped-inside",
+    "host": "docs/Reference",
+    "id": "seeded-119",
+    "kind": "uri",
+    "origin": "deep/one/two/Three",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside",
+      "outside": "mapped-outside"
+    },
+    "destination": "./same.md",
+    "expected": "../../same.md",
+    "host": "a/b/C",
+    "id": "seeded-120",
+    "kind": "uri",
+    "origin": "Origin",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "ümlaut": "mapped-ümlaut"
+    },
+    "destination": "//cdn.example.test/a.png",
+    "expected": "//cdn.example.test/a.png",
+    "host": "a/b/C",
+    "id": "seeded-121",
+    "kind": "uri",
+    "origin": "deep/one/two/Three",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "a b": "space-anchor",
+      "a+b": "plus-anchor"
+    },
+    "destination": "ümlaut/child.md",
+    "expected": "../source/ümlaut/child.md",
+    "host": "docs/Reference",
+    "id": "seeded-122",
+    "kind": "uri",
+    "origin": "source/peer",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside",
+      "outside": "mapped-outside"
+    },
+    "destination": "#inside",
+    "expected": "../Part-2/Entry.md#inside",
+    "host": "manual/Part-1/Host",
+    "id": "seeded-123",
+    "kind": "uri",
+    "origin": "manual/Part-2/Entry",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "inside": "mapped-inside"
+    },
+    "destination": "child.md",
+    "expected": "../source/child.md",
+    "host": "guides/Host",
+    "id": "seeded-124",
+    "kind": "uri",
+    "origin": "source/Source",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "a b": "space-anchor",
+      "a+b": "plus-anchor"
+    },
+    "destination": "../peer.md#x",
+    "expected": "../manual/peer.md#x",
+    "host": "unicode/Überblick",
+    "id": "seeded-125",
+    "kind": "uri",
+    "origin": "manual/Part-2/Entry",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "a b": "space-anchor",
+      "a+b": "plus-anchor"
+    },
+    "destination": "./same.md",
+    "expected": "../../source/same.md",
+    "host": "a/b/C",
+    "id": "seeded-126",
+    "kind": "uri",
+    "origin": "source/Source",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "ümlaut": "mapped-ümlaut"
+    },
+    "destination": "child.md",
+    "expected": "../../deep/one/two/child.md",
+    "host": "manual/Part-1/Host",
+    "id": "seeded-127",
+    "kind": "uri",
+    "origin": "deep/one/two/Three",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {
+      "ümlaut": "mapped-ümlaut"
+    },
+    "destination": "#%FF",
+    "expected": "manual/Part-2/Entry.md#%FF",
+    "host": "Host",
+    "id": "seeded-128",
+    "kind": "uri",
+    "origin": "manual/Part-2/Entry",
+    "reference_kind": "image"
+  },
+  {
+    "anchors": {},
+    "destination": "dir%20name/%2E%2E/file.md?x=%2F#f%20g",
+    "expected": "../source/dir%20name/%2E%2E/file.md?x=%2F#f%20g",
+    "host": "guides/Host",
+    "id": "control-supplied-escapes",
+    "kind": "uri",
+    "origin": "source/Source",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "ümlaut": "tx-0-sameünicode"
+    },
+    "destination": "#%C3%BCmlaut",
+    "expected": "#tx-0-same%C3%BCnicode",
+    "host": "guides/Host",
+    "id": "control-unicode-generated-anchor",
+    "kind": "uri",
+    "origin": "source/Source",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "same": "tx-0-same"
+    },
+    "destination": "#same",
+    "expected": "#tx-0-same",
+    "host": "self/Source",
+    "id": "control-self-import-matched",
+    "kind": "uri",
+    "origin": "self/Source",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "same": "tx-0-same"
+    },
+    "destination": "?view=full",
+    "expected": "Source.md?view=full",
+    "host": "self/Source",
+    "id": "control-self-import-query",
+    "kind": "uri",
+    "origin": "self/Source",
+    "reference_kind": "link"
+  },
+  {
+    "anchors": {
+      "same": "tx-0-same"
+    },
+    "destination": "#missing",
+    "expected": "Source.md#missing",
+    "host": "self/Source",
+    "id": "control-self-import-unmatched",
+    "kind": "uri",
+    "origin": "self/Source",
+    "reference_kind": "link"
+  }
+]

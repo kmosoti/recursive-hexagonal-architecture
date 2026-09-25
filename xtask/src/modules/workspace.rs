@@ -15,12 +15,47 @@ pub fn source_files(
     crate_root: &Path,
     extracted: &extract::Extracted,
 ) -> Result<BTreeMap<String, String>, String> {
+    source_files_impl(crate_root, None, extracted)
+}
+
+pub fn source_files_with_test_root(
+    crate_root: &Path,
+    permitted_test_root: &Path,
+    extracted: &extract::Extracted,
+) -> Result<BTreeMap<String, String>, String> {
+    source_files_impl(crate_root, Some(permitted_test_root), extracted)
+}
+
+fn source_files_impl(
+    crate_root: &Path,
+    permitted_test_root: Option<&Path>,
+    extracted: &extract::Extracted,
+) -> Result<BTreeMap<String, String>, String> {
     let crate_root = fs::canonicalize(crate_root).map_err(|error| {
         format!(
             "failed to canonicalize crate root {}: {error}",
             crate_root.display()
         )
     })?;
+    let permitted_test_root = permitted_test_root
+        .map(|root| {
+            fs::canonicalize(root).map_err(|error| {
+                format!(
+                    "failed to canonicalize permitted test source root {}: {error}",
+                    root.display()
+                )
+            })
+        })
+        .transpose()?;
+    if let Some(permitted_test_root) = &permitted_test_root
+        && !crate_root.starts_with(permitted_test_root)
+    {
+        return Err(format!(
+            "crate root {} is outside permitted test source root {}",
+            crate_root.display(),
+            permitted_test_root.display()
+        ));
+    }
     let mut paths = BTreeSet::new();
     for path in extracted.modules.values() {
         let path = if path.is_absolute() {
@@ -35,11 +70,25 @@ pub fn source_files(
             )
         })?;
         if !path.starts_with(&crate_root) {
-            return Err(format!(
-                "source file {} is outside crate root {}",
-                path.display(),
-                crate_root.display()
-            ));
+            if let Some(permitted_test_root) = &permitted_test_root
+                && path.starts_with(permitted_test_root)
+            {
+            } else {
+                let root = permitted_test_root
+                    .as_ref()
+                    .map_or(&crate_root, |root| root);
+                let label = if permitted_test_root.is_some() {
+                    "permitted test source root"
+                } else {
+                    "crate root"
+                };
+                return Err(format!(
+                    "source file {} is outside {} {}",
+                    path.display(),
+                    label,
+                    root.display()
+                ));
+            }
         }
         paths.insert(path);
     }
@@ -92,9 +141,10 @@ pub fn apply(graph: &CrateGraph, report: &mut Value) -> Result<(), String> {
         let source_path = resolve_path(&crate_root, &composite.source);
         let rules_path = resolve_path(&crate_root, Path::new(&composite.rules));
 
-        let extracted = extract::extract(
+        let extracted = extract::extract_with_test_root(
             &crate_root,
             &source_path,
+            &graph.workspace_root,
             &composite.crate_name,
             &composite.edition,
             &composite.externals,
@@ -106,12 +156,15 @@ pub fn apply(graph: &CrateGraph, report: &mut Value) -> Result<(), String> {
                 source_path.display()
             )
         })?;
-        let source_files = source_files(&crate_root, &extracted).map_err(|error| {
-            format!(
-                "crate {}: hashing declared module source files: {error}",
-                node.name
-            )
-        })?;
+        let source_files =
+            source_files_with_test_root(&crate_root, &graph.workspace_root, &extracted).map_err(
+                |error| {
+                    format!(
+                        "crate {}: hashing declared module source files: {error}",
+                        node.name
+                    )
+                },
+            )?;
 
         let test_edges = extracted.edges.iter().filter(|edge| edge.test_only).count();
         let checked = rules::check(&crate_root, &composite.crate_name, &rules_path, &extracted)

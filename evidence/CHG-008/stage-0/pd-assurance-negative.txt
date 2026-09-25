@@ -1,0 +1,56 @@
+
+running 8 tests
+test output_sink_contract_reports_postdelete_listing_failure ... FAILED
+test existing_positive_contract_controls_remain_empty ... ok
+test renderer_contract_contains_asset_panics ... FAILED
+test renderer_contract_reports_nondeterminism_and_panics ... ok
+test renderer_contract_detects_a_renderer_that_drops_toc ... FAILED
+test build_counts_unchanged_pages_when_only_an_asset_changes ... FAILED
+test renderer_contract_reports_page_asset_collisions_and_duplicate_assets ... FAILED
+test stable_debug_echo_renderer_has_no_contract_violations ... ok
+
+failures:
+
+---- output_sink_contract_reports_postdelete_listing_failure stdout ----
+
+thread 'output_sink_contract_reports_postdelete_listing_failure' (2848365) panicked at target/m2/pd-assurance-controls.rs:333:5:
+[]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- renderer_contract_contains_asset_panics stdout ----
+
+thread 'renderer_contract_contains_asset_panics' (2848366) panicked at target/m2/pd-assurance-controls.rs:128:9:
+assets panic
+
+thread 'renderer_contract_contains_asset_panics' (2848366) panicked at target/m2/pd-assurance-controls.rs:276:29:
+asset panic must not escape page_renderer: Any { .. }
+
+---- renderer_contract_detects_a_renderer_that_drops_toc stdout ----
+
+thread 'renderer_contract_detects_a_renderer_that_drops_toc' (2848367) panicked at target/m2/pd-assurance-controls.rs:266:5:
+[]
+
+---- build_counts_unchanged_pages_when_only_an_asset_changes stdout ----
+
+thread 'build_counts_unchanged_pages_when_only_an_asset_changes' (2848363) panicked at target/m2/pd-assurance-controls.rs:326:5:
+assertion `left == right` failed: BuildReport { written: [RelPath("_assets/site.css")], deleted: [], unchanged: 1, link_witnesses: [], diagnostics: [] }
+  left: 1
+ right: 2
+
+---- renderer_contract_reports_page_asset_collisions_and_duplicate_assets stdout ----
+
+thread 'renderer_contract_reports_page_asset_collisions_and_duplicate_assets' (2848369) panicked at target/m2/pd-assurance-controls.rs:285:5:
+[]
+
+
+failures:
+    build_counts_unchanged_pages_when_only_an_asset_changes
+    output_sink_contract_reports_postdelete_listing_failure
+    renderer_contract_contains_asset_panics
+    renderer_contract_detects_a_renderer_that_drops_toc
+    renderer_contract_reports_page_asset_collisions_and_duplicate_assets
+
+test result: FAILED. 3 passed; 5 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+exit: 101

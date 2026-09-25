@@ -1,0 +1,28 @@
+   Compiling app-cli v0.1.0 (/home/kmosoti/projects/rha-m2/crates/app-cli)
+   Compiling adapter-json v0.1.0 (/home/kmosoti/projects/rha-m2/crates/adapter-json)
+warning: struct `OwnedTempDir` is never constructed
+  --> crates/app-cli/tests/json_renderer.rs:22:8
+   |
+22 | struct OwnedTempDir(PathBuf);
+   |        ^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `app-cli` (test "json_renderer") generated 1 warning
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.62s
+     Running tests/registered.rs (target/debug/deps/registered-3007968e9bda427c)
+
+running 2 tests
+test corrupted_cases_copy_is_refused_without_touching_fixture ... ok
+adapter-json registered cases completed: 75
+test registered_json_adapter_cases_are_all_graded ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+     Running tests/json_renderer.rs (target/debug/deps/json_renderer-003ba78d1d1b740c)
+
+running 1 test
+test registered_cli_cases_are_exactly_graded ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+

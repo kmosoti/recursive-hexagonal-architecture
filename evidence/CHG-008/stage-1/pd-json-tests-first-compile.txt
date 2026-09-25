@@ -1,0 +1,130 @@
+   Compiling adapter-json v0.1.0 (/home/kmosoti/projects/rha-m2/crates/adapter-json)
+   Compiling app-cli v0.1.0 (/home/kmosoti/projects/rha-m2/crates/app-cli)
+error[E0432]: unresolved import `site::LinkTarget`
+  --> crates/adapter-json/tests/common/mod.rs:10:32
+   |
+10 | use site::{Align, CalloutKind, LinkTarget, Node, PageRenderer, Rendered};
+   |                                ^^^^^^^^^^ no `LinkTarget` in the root
+
+error[E0432]: unresolved import `site::LinkTarget`
+  --> crates/app-cli/tests/../../adapter-json/tests/common/mod.rs:10:32
+   |
+10 | use site::{Align, CalloutKind, LinkTarget, Node, PageRenderer, Rendered};
+   |                                ^^^^^^^^^^ no `LinkTarget` in the root
+
+warning: unused import: `find_case`
+ --> crates/adapter-json/tests/registered.rs:9:21
+  |
+9 | use common::{cases, find_case};
+  |                     ^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+error[E0277]: can't compare `Vec<std::string::String>` with `Value`
+  --> crates/app-cli/tests/json_renderer.rs:91:5
+   |
+91 |     assert_eq!(output_paths(&output), case["expected_paths"]);
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no implementation for `Vec<std::string::String> == Value`
+   |
+   = help: the trait `PartialEq<Value>` is not implemented for `Vec<std::string::String>`
+   = help: the following other types implement trait `PartialEq<Rhs>`:
+             `Vec<T, A1>` implements `PartialEq<Vec<U, A2>>`
+             `Vec<T, A>` implements `PartialEq<&[U; N]>`
+             `Vec<T, A>` implements `PartialEq<&[U]>`
+             `Vec<T, A>` implements `PartialEq<&mut [U]>`
+             `Vec<T, A>` implements `PartialEq<[U; N]>`
+             `Vec<T, A>` implements `PartialEq<[U]>`
+             `Vec<u8>` implements `PartialEq<ByteStr>`
+             `Vec<u8>` implements `PartialEq<ByteString>`
+
+error[E0277]: can't compare `Vec<std::string::String>` with `Value`
+  --> crates/adapter-json/tests/registered.rs:68:5
+   |
+68 |     assert_eq!(common::sink_paths(&sink), case["expected_initial_paths"]);
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no implementation for `Vec<std::string::String> == Value`
+   |
+   = help: the trait `PartialEq<Value>` is not implemented for `Vec<std::string::String>`
+   = help: the following other types implement trait `PartialEq<Rhs>`:
+             `Vec<T, A1>` implements `PartialEq<Vec<U, A2>>`
+             `Vec<T, A>` implements `PartialEq<&[U; N]>`
+             `Vec<T, A>` implements `PartialEq<&[U]>`
+             `Vec<T, A>` implements `PartialEq<&mut [U]>`
+             `Vec<T, A>` implements `PartialEq<[U; N]>`
+             `Vec<T, A>` implements `PartialEq<[U]>`
+             `Vec<u8>` implements `PartialEq<ByteStr>`
+             `Vec<u8>` implements `PartialEq<ByteString>`
+
+error[E0277]: can't compare `Vec<std::string::String>` with `Value`
+  --> crates/adapter-json/tests/registered.rs:75:5
+   |
+75 |     assert_eq!(common::sink_paths(&sink), case["expected_final_paths"]);
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no implementation for `Vec<std::string::String> == Value`
+   |
+   = help: the trait `PartialEq<Value>` is not implemented for `Vec<std::string::String>`
+   = help: the following other types implement trait `PartialEq<Rhs>`:
+             `Vec<T, A1>` implements `PartialEq<Vec<U, A2>>`
+             `Vec<T, A>` implements `PartialEq<&[U; N]>`
+             `Vec<T, A>` implements `PartialEq<&[U]>`
+             `Vec<T, A>` implements `PartialEq<&mut [U]>`
+             `Vec<T, A>` implements `PartialEq<[U; N]>`
+             `Vec<T, A>` implements `PartialEq<[U]>`
+             `Vec<u8>` implements `PartialEq<ByteStr>`
+             `Vec<u8>` implements `PartialEq<ByteString>`
+
+error[E0277]: can't compare `Vec<&str>` with `Value`
+   --> crates/app-cli/tests/json_renderer.rs:115:5
+    |
+115 |     assert_eq!(ids, case["expected_index_ids"]);
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no implementation for `Vec<&str> == Value`
+    |
+    = help: the trait `PartialEq<Value>` is not implemented for `Vec<&str>`
+    = help: the following other types implement trait `PartialEq<Rhs>`:
+              `Vec<T, A1>` implements `PartialEq<Vec<U, A2>>`
+              `Vec<T, A>` implements `PartialEq<&[U; N]>`
+              `Vec<T, A>` implements `PartialEq<&[U]>`
+              `Vec<T, A>` implements `PartialEq<&mut [U]>`
+              `Vec<T, A>` implements `PartialEq<[U; N]>`
+              `Vec<T, A>` implements `PartialEq<[U]>`
+              `Vec<u8>` implements `PartialEq<ByteStr>`
+              `Vec<u8>` implements `PartialEq<ByteString>`
+
+error[E0277]: can't compare `Vec<std::string::String>` with `Value`
+  --> crates/adapter-json/tests/registered.rs:87:5
+   |
+87 |     assert_eq!(common::index_ids(index), case["expected_index_ids"]);
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no implementation for `Vec<std::string::String> == Value`
+   |
+   = help: the trait `PartialEq<Value>` is not implemented for `Vec<std::string::String>`
+   = help: the following other types implement trait `PartialEq<Rhs>`:
+             `Vec<T, A1>` implements `PartialEq<Vec<U, A2>>`
+             `Vec<T, A>` implements `PartialEq<&[U; N]>`
+             `Vec<T, A>` implements `PartialEq<&[U]>`
+             `Vec<T, A>` implements `PartialEq<&mut [U]>`
+             `Vec<T, A>` implements `PartialEq<[U; N]>`
+             `Vec<T, A>` implements `PartialEq<[U]>`
+             `Vec<u8>` implements `PartialEq<ByteStr>`
+             `Vec<u8>` implements `PartialEq<ByteString>`
+
+error[E0277]: can't compare `Vec<std::string::String>` with `Value`
+   --> crates/app-cli/tests/json_renderer.rs:128:5
+    |
+128 |     assert_eq!(output_paths(&output), case["expected_paths"]);
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no implementation for `Vec<std::string::String> == Value`
+    |
+    = help: the trait `PartialEq<Value>` is not implemented for `Vec<std::string::String>`
+    = help: the following other types implement trait `PartialEq<Rhs>`:
+              `Vec<T, A1>` implements `PartialEq<Vec<U, A2>>`
+              `Vec<T, A>` implements `PartialEq<&[U; N]>`
+              `Vec<T, A>` implements `PartialEq<&[U]>`
+              `Vec<T, A>` implements `PartialEq<&mut [U]>`
+              `Vec<T, A>` implements `PartialEq<[U; N]>`
+              `Vec<T, A>` implements `PartialEq<[U]>`
+              `Vec<u8>` implements `PartialEq<ByteStr>`
+              `Vec<u8>` implements `PartialEq<ByteString>`
+
+Some errors have detailed explanations: E0277, E0432.
+For more information about an error, try `rustc --explain E0277`.
+error: could not compile `app-cli` (test "json_renderer") due to 4 previous errors
+warning: build failed, waiting for other jobs to finish...
+warning: `adapter-json` (test "registered") generated 1 warning
+error: could not compile `adapter-json` (test "registered") due to 4 previous errors; 1 warning emitted

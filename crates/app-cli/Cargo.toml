@@ -13,6 +13,7 @@ path = "src/main.rs"
 [dependencies]
 adapter-fs = { path = "../adapter-fs" }
 adapter-html = { path = "../adapter-html" }
+adapter-json = { path = "../adapter-json" }
 adapter-sys = { path = "../adapter-sys" }
 clap = { version = "4.6.7", features = ["derive"] }
 library = { path = "../library" }

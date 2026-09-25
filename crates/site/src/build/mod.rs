@@ -19,8 +19,12 @@ pub struct Rendered {
 
 /// The rendering port, exported at the crate root (plan §3.1).
 ///
-/// Assumption `site.build.renderer_deterministic_total`: never panics, and
-/// equal models give equal bytes. `site::contract::page_renderer` checks it.
+/// Assumption `site.build.renderer_deterministic_total`: render and assets do
+/// not panic; equal page models give equal bytes; page and asset output paths
+/// are unique across one corpus; and TOC changes are observably preserved in
+/// rendered page bytes. Adapters using global configuration must be
+/// constructed with data belonging to the same corpus as the page models.
+/// `site::contract::page_renderer` checks these properties on samples.
 pub trait PageRenderer {
     fn render(&self, page: &PageModel) -> Rendered;
     /// Files every build writes besides pages (for example a stylesheet).
@@ -82,7 +86,13 @@ pub fn step(
     let mut produced: BTreeMap<RelPath, (Vec<u8>, Option<PageId>)> = BTreeMap::new();
     let mut commands = Vec::new();
     for doc in inputs.documents {
-        let model = assembler.assemble(doc, inputs.graph, &lookup, &inputs.context);
+        let model = assembler.assemble(
+            doc,
+            inputs.documents,
+            inputs.graph,
+            &lookup,
+            &inputs.context,
+        );
         let out = renderer.render(&model);
         if produced
             .insert(out.path.clone(), (out.bytes, Some(doc.id.clone())))

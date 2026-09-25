@@ -240,6 +240,38 @@ fn link_members_are_refused_before_extraction() {
     std::fs::remove_dir_all(dir).expect("clean");
 }
 
+/// `text` with every run of 7 or more lowercase hex digits blanked. Revisions and digests in the
+/// summary are hex and can spell a probe word (`e8dda29…cafea…` did); page names and witness
+/// text never are pure hex runs that long.
+fn without_hex_ids(text: &str) -> String {
+    let mut out = String::with_capacity(text.len());
+    let mut run = String::new();
+    for c in text.chars().chain(std::iter::once(' ')) {
+        if c.is_ascii_digit() || ('a'..='f').contains(&c) {
+            run.push(c);
+            continue;
+        }
+        if run.len() >= 7 {
+            out.push('#');
+        } else {
+            out.push_str(&run);
+        }
+        run.clear();
+        out.push(c);
+    }
+    out.pop();
+    out
+}
+
+#[test]
+fn hex_ids_are_blanked_but_page_names_are_kept() {
+    let rev = "\"git_rev\":\"e8dda29d87cefacce920b7d67bfcafea4379332b\"";
+    assert!(!without_hex_ids(rev).contains("cafe"));
+    assert!(without_hex_ids("\"page\":\"cafe\"").contains("cafe"));
+    assert!(without_hex_ids("\"page\":\"Guide\"").contains("Guide"));
+    assert!(without_hex_ids("x cafe-guide 1234567").contains("cafe"));
+}
+
 #[test]
 fn markdown_sites_are_observed_as_counts_only() {
     let root = root();
@@ -266,7 +298,7 @@ fn markdown_sites_are_observed_as_counts_only() {
     assert_eq!(rows.len(), 2);
     assert!(rows.iter().all(|r| r["outcome"] == "observed"), "{summary}");
     assert_eq!(rows[1]["witnesses"], 2, "MD051 has two witnesses");
-    let text = serde_json::to_string(&summary).expect("json");
+    let text = without_hex_ids(&serde_json::to_string(&summary).expect("json"));
     assert!(
         !text.contains("Guide") && !text.contains("cafe"),
         "no page names or witness text"

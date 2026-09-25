@@ -1,0 +1,766 @@
+schema_version = 1
+id = "CHG-008"
+covers = ["CHG-008", "CHG-009", "CHG-010", "CHG-011", "CHG-012", "CHG-013", "CHG-014"]
+slug = "growth"
+title = "P-D: adapter-json, measured feature growth and mutation diagnosis"
+mode = "agent"
+executor_composition = "agent"
+authority_profile = "ECC-Solo"
+status = "in_progress"
+plan_ref = "docs/plan/IMPLEMENTATION-PLAN.md §8.1 P-D and §8.2 W8/W9/W10; Kennedy M2 handoff"
+branch = "chg/008-growth"
+base_revision = "96019efceb8dc094ef4c323b8836a2e9c873a599"
+intent = "Deliver P-D, CHG-008 through CHG-014: adapter-json and H3, five individually measured W9 features, mutation diagnosis, green lanes and an open stacked PR; fix confirmed defects under RHA and never merge."
+non_goals = ["Spec edits", "Held-out material", "Merge/tag", "History rewriting", "Undisclosed changes to registered corpus grading"]
+scope_globs = [".rha/tasks/CHG-008-growth.toml", ".rha/acceptances/CHG-007.toml", ".rha/assumptions.toml", ".rha/decisions.toml", ".rha/policy.toml", "crates/**", "Cargo.toml", "Cargo.lock", ".cargo/**", ".github/**", "rha-crates.toml", "docs/**", "evidence/**", "xtask/**", "CONTRIBUTING.md", "rha-baseline.json"]
+protected_scope = [".rha/acceptances/CHG-007.toml", ".rha/assumptions.toml", ".rha/decisions.toml", ".rha/policy.toml", "Cargo.toml", "crates/*/Cargo.toml", "crates/*/rha-modules.toml", ".cargo/**", ".github/**", "rha-crates.toml", "xtask/**", "CONTRIBUTING.md", "crates/*/AGENTS.md", "rha-baseline.json"]
+
+[[actors]]
+id = "human:kennedy"
+type = "human"
+
+[[actors]]
+id = "agent:executor"
+type = "agent"
+accountable_to = "human:kennedy"
+
+[roles]
+planner = "human:kennedy"
+executor = ["agent:executor"]
+integrator = "human:kennedy"
+verifier = ["automation:xtask-ci (advisory)", "separate GPT-6 validator", "supervising Opus 5.5 session"]
+acceptor = "human:kennedy"
+
+[[work]]
+id = "P-D"
+executor = "agent:executor"
+depends_on = ["P-C, merged at 74aeb1d (PR 18); main merged into this branch at a18253a"]
+output = "Individually gated H3/W9/mutation stages, complete records, independent GPT-6 approval and green stacked PR"
+claim = "From 2026-09-24 the supervising session (Claude Opus 5.5 in Claude Code) is the sole writer on chg/008-growth in /home/kmosoti/projects/rha-m2 (decision writer-handoff-2026-09-24). The M2 Executor that wrote until 2026-09-23 stopped at its usage limit. Implementation sessions (agy) write only in their own isolated clones under ~/teamwork_projects; the supervising session integrates their diffs as commits. Other sessions are read-only on the branch. Plain Git/gh only; never JJ."
+
+[[decisions]]
+id = "delegation-m2"
+question = "Authority and stacked delivery"
+answer = "The Kennedy handoff governs decisions and justified protected changes. P-D stacks on P-C; no acceptance record is invented for its unmerged parent. Scope is measured against origin/chg/007-module-level. When P-C merges, merge main into P-D without rebasing. Separate GPT-6 validation and supervising Opus review precede Kennedy integration; this Executor never merges."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: Determine a large slice to hand off to gpt-6-astra ultra. Make sure it has a goal to implement its work and fix any and all issue in accordance with rha design. (Let it flag and improve the architecture and tooling if it can justify it no need for my approval). I approve all PRs as long as both an opus 5.5 and gpt-6 agent has reviewed and approved the code. Kennedy, 2026-09-22: Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me."
+date = "2026-09-23"
+
+[[decisions]]
+id = "assurance-prerequisites"
+question = "Confirm and repair prerequisites for the H3 experiment before adding the adapter"
+answer = "Before the adapter stage, reproduce the owner contract TOC-drop gap, assets panic/collision behavior, page unchanged counting and graph duplicate-ID precondition question. Repair only confirmed consequences. Record both the complete P-C-to-H3 core numstat and the adapter-stage numstat; never conceal assurance changes or silently move the baseline. Alternative rejected: add a renderer against a known incomplete contract and call it validated."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: Determine a large slice to hand off to gpt-6-astra ultra. Make sure it has a goal to implement its work and fix any and all issue in accordance with rha design. (Let it flag and improve the architecture and tooling if it can justify it no need for my approval). I approve all PRs as long as both an opus 5.5 and gpt-6 agent has reviewed and approved the code. Kennedy, 2026-09-22: Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me."
+date = "2026-09-23"
+
+[[decisions]]
+id = "protected-growth-scope"
+question = "Protected surfaces required by the planned additions"
+answer = "A new adapter requires its BDR before Cargo files, explicit port-owner metadata and app-cli composition. Mutation execution requires real risk-trigger evaluation/configuration and a weekly assurance workflow with measured installed tool versions. Exact edits receive additional problem/alternative decisions before implementation; this initial scope admits the plan-required surfaces, without approval for changing spec content or registered grades."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: Determine a large slice to hand off to gpt-6-astra ultra. Make sure it has a goal to implement its work and fix any and all issue in accordance with rha design. (Let it flag and improve the architecture and tooling if it can justify it no need for my approval). I approve all PRs as long as both an opus 5.5 and gpt-6 agent has reviewed and approved the code. Kennedy, 2026-09-22: Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me."
+date = "2026-09-23"
+
+[provenance]
+harness = "M2 root session launched with codex-cli 0.156.0; separate process versions recorded individually"
+task_scope = "P-D"
+permissions = "Repository and Git/gh; no JJ, spec edits, held-out, sibling projects, history rewriting or merges"
+budgets = "unknown"
+reasoning_effort = "ultra (requested in handoff)"
+
+[[provenance.sessions]]
+model_id = "gpt-6-astra (requested in handoff)"
+span = "M2 Executor, P-D"
+
+[[provenance.generations]]
+artifact = "Executor implementation, records and non-oracle tests for P-D"
+generation = "sampled"
+model = "gpt-6-astra (requested in handoff)"
+reasoning_effort = "ultra (requested in handoff)"
+harness = "codex-cli 0.156.0 root session"
+prompt = "Deliver P-D, CHG-008 through CHG-014: adapter-json and H3, five individually measured W9 features, mutation diagnosis, green lanes and an open stacked PR; fix confirmed defects under RHA and never merge."
+prompt_sha256 = "391f5a82067a1e9b0f5cc338ea427759807f6b0fd16b9d33e84716f97ff934b3"
+sample = "one ongoing M2 Executor session; repairs recorded"
+oracles = "Registered contracts/corpora, stage gates, full L0, scope/docs, independent GPT-6 validator"
+
+[[decisions]]
+id = "confirmed-assurance-repairs"
+question = "Five assurance failures and an overstated graph API claim were reproduced before H3."
+answer = "Strengthen PageRenderer checks with a TOC-only counterfactual, caught asset panics/determinism and page/asset path uniqueness; the counterfactual is sampled sensitivity, not a semantic proof. Make the fake preserve TOC. Report post-delete listing errors. Count only source-page writes when reporting unchanged pages. Document unique PageId as graph::resolve input precondition, already enforced by Corpus; reject changing duplicate-input resolver behavior solely to broaden an undocumented domain. Extend the pre-implementation touched prediction to site::build port documentation. Reject claiming H3 against known incomplete assurance or subtracting assets from a source-page count."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: Determine a large slice to hand off to gpt-6-astra ultra. Make sure it has a goal to implement its work and fix any and all issue in accordance with rha design. (Let it flag and improve the architecture and tooling if it can justify it no need for my approval). I approve all PRs as long as both an opus 5.5 and gpt-6 agent has reviewed and approved the code. Kennedy, 2026-09-22: Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me."
+date = "2026-09-23"
+
+[[provenance.generations]]
+artifact = "Assurance prerequisite controls"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "OpenAI Codex v0.156.1, profile write, read-only patch proposal"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-008/pd-assurance-controls-prompt.md"
+prompt_sha256 = "c58a79411e7e7e1284ebb384fc7d89d5741afb3aad51f3d5d8327abb84c9398a"
+sample = "sample 1, session 01a0ccc5-5bd6-7eb0-a875-a1f4d1f6f3e0"
+separation = "Root compiled the standalone control source against existing built crates and observed failures before any production repair; all branch writes and validation remain with root."
+edits = "Root adds the separately reproduced graph uniqueness precondition and clarifies the sampled TOC check. No registered corpus grade changes."
+
+[[provenance.generations]]
+artifact = "Decided owner-contract and unchanged-count repair"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "OpenAI Codex v0.156.1, profile write, read-only patch proposal"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-008/pd-assurance-repair-prompt.md"
+prompt_sha256 = "24a5aea9dbe6e4a30570876df792bc738a6e77edde0d0fa61cd404dbb4398bda"
+sample = "sample 1, session 01a0ccce-7fbb-7a51-896a-5350dde1d07c"
+separation = "Root compiled the standalone control source against existing built crates and observed failures before any production repair; all branch writes and validation remain with root."
+edits = "Root adds the separately reproduced graph uniqueness precondition and clarifies the sampled TOC check. No registered corpus grade changes."
+
+[[decisions]]
+id = "json-adapter-boundary"
+question = "Add a third renderer and a whole-site search index without presentation decisions entering the cores."
+answer = "Accept BDR-0006 refutation criterion before creating adapter-json. Choose an immutable constructor-built search index emitted through existing PageRenderer::assets, normal dependencies site and serde_json only, with composition in app-cli. Score 18/20 versus 16/20 for a batch/finalize port and 8/20 for stateful accumulation. Disclose a second pure analysis/assembly pass and require fresh configuration for each corpus. Reject hidden render-call state and speculative core port expansion. Authorize adapter/app manifests and Cargo.lock, plus the assumption-ledger third-adapter discharge only after tests pass. Scope includes that ledger explicitly. Exact JSON/search contract and cases precede implementation. Preserve both full P-C-to-H3 and isolated adapter-stage core measurements."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: Determine a large slice to hand off to gpt-6-astra ultra. Make sure it has a goal to implement its work and fix any and all issue in accordance with rha design. (Let it flag and improve the architecture and tooling if it can justify it no need for my approval). I approve all PRs as long as both an opus 5.5 and gpt-6 agent has reviewed and approved the code. Kennedy, 2026-09-22: Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me."
+date = "2026-09-23"
+
+[[provenance.generations]]
+artifact = "JSON adapter boundary and fixed output contract"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "OpenAI Codex v0.156.1, profile write, read-only documentation proposal"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-008/pd-json-contract-prompt.md"
+prompt_sha256 = "2787cd1617ec9715d093bf246082aef3572cd4fc2894eef1142c572429c197fe"
+sample = "sample 1, session 01a0ccd4-795f-71e0-a89e-2d708d4c6ad9"
+separation = "Separate advisory design scored three alternatives; root selected the immutable constructor before documentation and source implementation."
+edits = "Corrected the decision date, task id, change-record ownership and refutation wording; removed an unrequested object-member ordering constraint before any corpus generation. JSON members/types/values remain exact."
+
+[[decisions]]
+id = "json-registration-refinements"
+question = "Pre-registration review found evolving source citations and a cross-language whitespace discrepancy in the independent reference."
+answer = "Freeze exact contract and model snapshots inside the corpus and verify those bytes, not future live source equality. Clarify code-block text inclusion, one index asset, and Rust whitespace semantics. The independent generator repairs its normalization for U+001C through U+001F before registration; all 79 fixture expectations remain byte-identical. Reject relying on staging files, silently changing old grades, or treating Python whitespace as identical to Rust. No JSON adapter implementation existed or ran before this registration. These are pre-registration refinements, not an amendment to an already graded corpus."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: Determine a large slice to hand off to gpt-6-astra ultra. Make sure it has a goal to implement its work and fix any and all issue in accordance with rha design. (Let it flag and improve the architecture and tooling if it can justify it no need for my approval). I approve all PRs as long as both an opus 5.5 and gpt-6 agent has reviewed and approved the code. Kennedy, 2026-09-22: Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me."
+date = "2026-09-23"
+
+[[provenance.generations]]
+artifact = "Independent JSON projection and lifecycle corpus, generation/correction 1"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "OpenAI Codex v0.156.1, separate generator, writes restricted to assigned staging package"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-008/pd-json-generator-prompt.md"
+prompt_sha256 = "cdc8435f8ad8db0b8e776eee08397c4189a63ae8c9c9a36198128f55bc482742"
+sample = "seed 8072026, 64 random projections; session 01a0ccd9-4b08-7461-80f7-df3233efe5c5"
+separation = "Generator forbidden to read renderer implementation or tests; no adapter-json code exists before registration. Root validates hashes, controls and byte reproduction before committing the package."
+edits = "Snapshots/metadata and Unicode reference normalization repaired before freeze; CASES SHA256 fb7b1f6f9bf28d6e7eda3cc0d17b2613c6ba0070166468df89d05fc43059e854 unchanged. Final package content SHA256 5a48898b2705fcaefabceb3af3ebe8bb939fe1c239f997fbb2f94edc394cd697. The first whitespace follow-up invented a filename and stopped; the fourth prompt corrected it and the reproduction instructions."
+
+[[provenance.generations]]
+artifact = "Independent JSON projection and lifecycle corpus, generation/correction 2"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "OpenAI Codex v0.156.1, separate generator, writes restricted to assigned staging package"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-008/pd-json-generator-correction-prompt.md"
+prompt_sha256 = "a4b523c216bd82c841bdd091cf44fd958ee489040215b8b020bb7d1c1c8c9984"
+sample = "seed 8072026, 64 random projections; session 01a0ccd9-4b08-7461-80f7-df3233efe5c5"
+separation = "Generator forbidden to read renderer implementation or tests; no adapter-json code exists before registration. Root validates hashes, controls and byte reproduction before committing the package."
+edits = "Snapshots/metadata and Unicode reference normalization repaired before freeze; CASES SHA256 fb7b1f6f9bf28d6e7eda3cc0d17b2613c6ba0070166468df89d05fc43059e854 unchanged. Final package content SHA256 5a48898b2705fcaefabceb3af3ebe8bb939fe1c239f997fbb2f94edc394cd697. The first whitespace follow-up invented a filename and stopped; the fourth prompt corrected it and the reproduction instructions."
+
+[[provenance.generations]]
+artifact = "Independent JSON projection and lifecycle corpus, generation/correction 3"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "OpenAI Codex v0.156.1, separate generator, writes restricted to assigned staging package"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-008/pd-json-whitespace-correction-prompt.md"
+prompt_sha256 = "fa370c4c6730d6ec112a2c1f0c72df1de73998ad5db93be28428831a41e5277e"
+sample = "seed 8072026, 64 random projections; session 01a0ccd9-4b08-7461-80f7-df3233efe5c5"
+separation = "Generator forbidden to read renderer implementation or tests; no adapter-json code exists before registration. Root validates hashes, controls and byte reproduction before committing the package."
+edits = "Snapshots/metadata and Unicode reference normalization repaired before freeze; CASES SHA256 fb7b1f6f9bf28d6e7eda3cc0d17b2613c6ba0070166468df89d05fc43059e854 unchanged. Final package content SHA256 5a48898b2705fcaefabceb3af3ebe8bb939fe1c239f997fbb2f94edc394cd697. The first whitespace follow-up invented a filename and stopped; the fourth prompt corrected it and the reproduction instructions."
+
+[[provenance.generations]]
+artifact = "Independent JSON projection and lifecycle corpus, generation/correction 4"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "OpenAI Codex v0.156.1, separate generator, writes restricted to assigned staging package"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-008/pd-json-reference-finish-prompt.md"
+prompt_sha256 = "ac83ca58be6a3614c2fbdacec2c2527ed8d262809ddeda85511ca8df227c7c01"
+sample = "seed 8072026, 64 random projections; session 01a0ccd9-4b08-7461-80f7-df3233efe5c5"
+separation = "Generator forbidden to read renderer implementation or tests; no adapter-json code exists before registration. Root validates hashes, controls and byte reproduction before committing the package."
+edits = "Snapshots/metadata and Unicode reference normalization repaired before freeze; CASES SHA256 fb7b1f6f9bf28d6e7eda3cc0d17b2613c6ba0070166468df89d05fc43059e854 unchanged. Final package content SHA256 5a48898b2705fcaefabceb3af3ebe8bb939fe1c239f997fbb2f94edc394cd697. The first whitespace follow-up invented a filename and stopped; the fourth prompt corrected it and the reproduction instructions."
+
+[[provenance.generations]]
+artifact = "pd-json-renderer-write"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "OpenAI Codex v0.156.1, profile write, read-only patch proposal"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-008/pd-json-renderer-write-prompt.md"
+prompt_sha256 = "b9acb64d1af2050530f851696ba7d048ff2c122dae9e70524bf4362c554a7033"
+sample = "one proposal; session 01a0cced-e054-7df1-a25c-9a53a1bca615"
+separation = "Frozen corpus committed before code; root is sole branch writer and runs compilation, registered grading and negative controls. A separate read-only verifier checked grading coverage."
+edits = "Root supplied the missing collection type, reconciled patch context from actual files instead of copied hashes, moved the Html arm, corrected the OutputSink::list return type, and formatted. Tests preserve all registered expectations; source fault injections were restored and rebuilt."
+
+[[provenance.generations]]
+artifact = "pd-json-cli-write"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "OpenAI Codex v0.156.1, profile write, read-only patch proposal"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-008/pd-json-cli-write-prompt.md"
+prompt_sha256 = "0086f429959a51aa68f3459e4c98e743ba2dc3e46b24027c553678021afb4dd6"
+sample = "one proposal; session 01a0cced-e054-7211-b53c-09773a9d86a6"
+separation = "Frozen corpus committed before code; root is sole branch writer and runs compilation, registered grading and negative controls. A separate read-only verifier checked grading coverage."
+edits = "Root supplied the missing collection type, reconciled patch context from actual files instead of copied hashes, moved the Html arm, corrected the OutputSink::list return type, and formatted. Tests preserve all registered expectations; source fault injections were restored and rebuilt."
+
+[[provenance.generations]]
+artifact = "pd-json-tests-write"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "OpenAI Codex v0.156.1, profile write, read-only patch proposal"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-008/pd-json-tests-write-prompt.md"
+prompt_sha256 = "aa8147aa3387916b393bfc8dea6116f6c4b9061968e11622609533ef5eb8f606"
+sample = "one proposal; session 01a0cced-e029-7e01-a239-10c7211514e1"
+separation = "Frozen corpus committed before code; root is sole branch writer and runs compilation, registered grading and negative controls. A separate read-only verifier checked grading coverage."
+edits = "Root supplied the missing collection type, reconciled patch context from actual files instead of copied hashes, moved the Html arm, corrected the OutputSink::list return type, and formatted. Tests preserve all registered expectations; source fault injections were restored and rebuilt."
+
+[[provenance.generations]]
+artifact = "pd-json-tests-repair"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "OpenAI Codex v0.156.1, profile write, read-only patch proposal"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-008/pd-json-tests-repair-prompt.md"
+prompt_sha256 = "213f08b02155919b93474cd408a765451394645fccd47beb67d9d01c6d315b2d"
+sample = "one proposal; session 01a0cced-e029-7e01-a239-10c7211514e1"
+separation = "Frozen corpus committed before code; root is sole branch writer and runs compilation, registered grading and negative controls. A separate read-only verifier checked grading coverage."
+edits = "Root supplied the missing collection type, reconciled patch context from actual files instead of copied hashes, moved the Html arm, corrected the OutputSink::list return type, and formatted. Tests preserve all registered expectations; source fault injections were restored and rebuilt."
+
+[[provenance.generations]]
+artifact = "pd-json-tests-finish"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "OpenAI Codex v0.156.1, profile write, read-only patch proposal"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-008/pd-json-tests-finish-prompt.md"
+prompt_sha256 = "4974f31306faabb27c57c2f8037b75fefd380eb6fb49fb6117ad367ca70d54d5"
+sample = "one proposal; session 01a0ccfb-cb66-73e1-9fd4-5758967bd73a"
+separation = "Frozen corpus committed before code; root is sole branch writer and runs compilation, registered grading and negative controls. A separate read-only verifier checked grading coverage."
+edits = "Root supplied the missing collection type, reconciled patch context from actual files instead of copied hashes, moved the Html arm, corrected the OutputSink::list return type, and formatted. Tests preserve all registered expectations; source fault injections were restored and rebuilt."
+
+[[provenance.generations]]
+artifact = "pd-json-observation-strengthening"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "OpenAI Codex v0.156.1, profile write, read-only patch proposal"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-008/pd-json-observation-strengthening-prompt.md"
+prompt_sha256 = "0c169a9e2ace10bcef5d4109c43820348b29287889a32556a0e666d2c4836db1"
+sample = "one proposal; session 01a0cd00-1871-7a62-b232-26e4131241ed"
+separation = "Frozen corpus committed before code; root is sole branch writer and runs compilation, registered grading and negative controls. A separate read-only verifier checked grading coverage."
+edits = "Root supplied the missing collection type, reconciled patch context from actual files instead of copied hashes, moved the Html arm, corrected the OutputSink::list return type, and formatted. Tests preserve all registered expectations; source fault injections were restored and rebuilt."
+
+[[decisions]]
+id = "json-analysis-cost-qualification"
+question = "The BDR draft called the extra analysis/assembly pass O(n+e), but the current assembly performs a linear resolution lookup per link."
+answer = "Append an explicit cost qualification to the BDR and observation without rewriting the historical prediction. Retain the measured claim of one additional pure pipeline pass and index memory; withdraw the unsupported linear-time bound. Reject optimizing core lookup solely to rescue a presentation-adapter cost claim. The W8 zero-core-change criterion and all corpus grades remain unchanged."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: Determine a large slice to hand off to gpt-6-astra ultra. Make sure it has a goal to implement its work and fix any and all issue in accordance with rha design. (Let it flag and improve the architecture and tooling if it can justify it no need for my approval). I approve all PRs as long as both an opus 5.5 and gpt-6 agent has reviewed and approved the code. Kennedy, 2026-09-22: Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me."
+date = "2026-09-23"
+
+[[decisions]]
+id = "backlog-layout"
+question = "The global working agreement requires docs/backlog.md for deferred low-impact work, but the local scope allow-list omits it."
+answer = "Add the required backlog file and permit that exact basename in the existing docs layout check. Record lookup-scaling work there and stop pursuing it in M2. Reject an untracked note or a broad relaxation of allowed docs paths. This is a local guide/layout reconciliation, not a spec or corpus-grade change."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: Determine a large slice to hand off to gpt-6-astra ultra. Make sure it has a goal to implement its work and fix any and all issue in accordance with rha design. (Let it flag and improve the architecture and tooling if it can justify it no need for my approval). I approve all PRs as long as both an opus 5.5 and gpt-6 agent has reviewed and approved the code. Kennedy, 2026-09-22: Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me."
+date = "2026-09-23"
+
+[[decisions]]
+id = "transclusion-page-model-boundary"
+question = "New parser-only syntax should not become a renderer obligation."
+answer = "Choose the site-owned PageNode tree, preserving the existing site::Node facade shape. Independent scoring is 24/25 for the owned tree, 13/25 for sharing document AST, and 16/25 for flat render events. Accept BDR-0007 refutation criterion under the delegation before code. Assembly explicitly converts and expands document syntax; renderers consume only the existing renderable vocabulary. No blanket From conversion is appropriate because origin, graph and expansion context matter. The original plan prediction remains visible; setup tests and glue/build changes are declared separately."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: Determine a large slice to hand off to gpt-6-astra ultra. Make sure it has a goal to implement its work and fix any and all issue in accordance with rha design. (Let it flag and improve the architecture and tooling if it can justify it no need for my approval). I approve all PRs as long as both an opus 5.5 and gpt-6 agent has reviewed and approved the code. Kennedy, 2026-09-22: Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me."
+date = "2026-09-23"
+
+[[decisions]]
+id = "transclusion-semantics"
+question = "Actual parser behavior and selected-section dependencies must govern the new feature."
+answer = "The measured parser emits WikiLink Image tokens; preserve excluded images and escaped/spaced navigation behavior. Add a dedicated document Transclusion descriptor and navigation-independent graph diagnostics. Select nested sections with ancestor shells, block all deterministic DFS back edges over regions, and look up expansion targets by full region/occurrence identity. Preserve host navigation indices and append imported ones. Assembly owns namespacing and lexical origin-path rebasing. Reject page-only cycle detection, inferring embeds from arbitrary images, and following unanalyzed region edges. The new check kinds extend the v1 envelope for new inputs while preserving all old corpus outputs."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: Determine a large slice to hand off to gpt-6-astra ultra. Make sure it has a goal to implement its work and fix any and all issue in accordance with rha design. (Let it flag and improve the architecture and tooling if it can justify it no need for my approval). I approve all PRs as long as both an opus 5.5 and gpt-6 agent has reviewed and approved the code. Kennedy, 2026-09-22: Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me."
+date = "2026-09-23"
+
+[[decisions]]
+id = "owner-local-json-oracles"
+question = "Owner-local differential tests need to decode the independent semantic fixture streams without introducing presentation dependencies into core production code."
+answer = "Authorize serde_json 1.0.151 as a dev dependency only in document, graph or site where a test actually parses the registered oracle data, and add only that exact package name to the live core.dev_allow. Keep the normal core allow list unchanged. A separate audit confirmed every frozen H4 fixture supplies its own rules file and digest, so this live test-policy addition changes no registered case or grade. Reject exporting private algorithms solely for an external harness or placing all checks outside the packages exercised by targeted mutation analysis."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: Determine a large slice to hand off to gpt-6-astra ultra. Make sure it has a goal to implement its work and fix any and all issue in accordance with rha design. (Let it flag and improve the architecture and tooling if it can justify it no need for my approval). I approve all PRs as long as both an opus 5.5 and gpt-6 agent has reviewed and approved the code. Kennedy, 2026-09-22: Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me."
+date = "2026-09-23"
+
+[[provenance.generations]]
+artifact = "Transclusion and site-owned page-tree contract"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "OpenAI Codex v0.156.1, profile write, read-only documentation proposal"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-008/pd-transclusion-contract-prompt.md"
+prompt_sha256 = "36274c15885d9806a414b4bd3a54d38e2c7ec3fb169aa337e368b71eab7f3d8b"
+sample = "sample 1; session 01a0cd42-8016-7fe2-a804-8e44f48cd7f9"
+separation = "Root measured existing parser behavior; a separate design review scored three page-tree alternatives and a separate policy audit checked frozen H4 rule ownership. No W9 code or expected data exists yet."
+edits = "Root fixed patch formatting, made exact public names and absent-anchor behavior explicit, scoped unmatched fragment rewriting correctly, and chose an explicit candidate list for the new ambiguity kind. Existing witness shapes remain unchanged."
+
+[[decisions]]
+id = "transclusion-pre-registration-review"
+question = "Independent draft review found illegal mixed-paragraph semantic nodes and missing URI discrimination before the new corpus was registered."
+answer = "Normalize recognized transclusions to direct block nodes; repair the independent section generator and add a legality self-check before freeze. Add URI controls for preserved destination escapes, encoded Unicode anchors and self-imports. Clarify uppercase newly generated escapes to match the existing HTML encoder, preserving supplied escapes. The proposed NFD byte expectation is refuted by the actual PageId constructor, which normalizes NFC; retain the canonical PageId domain. These are disclosed pre-registration refinements: no target code exists or has informed expectations, and no registered corpus is changed."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: Determine a large slice to hand off to gpt-6-astra ultra. Make sure it has a goal to implement its work and fix any and all issue in accordance with rha design. (Let it flag and improve the architecture and tooling if it can justify it no need for my approval). I approve all PRs as long as both an opus 5.5 and gpt-6 agent has reviewed and approved the code. Kennedy, 2026-09-22: Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me."
+date = "2026-09-23"
+
+[[provenance.generations]]
+artifact = "pd-transclusion-regions-correction"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "OpenAI Codex v0.156.1, profile write; independent generator restricted to its staging package"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-008/pd-transclusion-regions-correction-prompt.md"
+prompt_sha256 = "270ded651daec8175fbbfe51c01552511bbc9f668e38039b6d68f3874e26aff3"
+sample = "separate session 01a0cd55-8362-7fe2-aa48-9f27402e8a2c; seeds regions=90092026, sections=90092027, uris=90092028; sites authored with no PRNG"
+separation = "All four packages registered before any transclusion implementation. Generator prompts forbid target implementation/test reads. Root audits inventory, copied-package reproduction and discriminating corruption controls; separate reviewers check semantics."
+edits = "Pre-registration corrections are disclosed in the change record: direct-block section legality, full package reproduction, five additive URI controls, authored Markdown paragraph boundaries, complete site observations and relative origin paths. No target implementation results informed expectations."
+
+[[provenance.generations]]
+artifact = "pd-transclusion-regions-generator"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "OpenAI Codex v0.156.1, profile write; independent generator restricted to its staging package"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-008/pd-transclusion-regions-generator-prompt.md"
+prompt_sha256 = "d6629d490a5fe648e48f904807ef18f20b9b96b770d8a04605be8d5f6a7c74f6"
+sample = "separate session 01a0cd55-8362-7fe2-aa48-9f27402e8a2c; seeds regions=90092026, sections=90092027, uris=90092028; sites authored with no PRNG"
+separation = "All four packages registered before any transclusion implementation. Generator prompts forbid target implementation/test reads. Root audits inventory, copied-package reproduction and discriminating corruption controls; separate reviewers check semantics."
+edits = "Pre-registration corrections are disclosed in the change record: direct-block section legality, full package reproduction, five additive URI controls, authored Markdown paragraph boundaries, complete site observations and relative origin paths. No target implementation results informed expectations."
+
+[[provenance.generations]]
+artifact = "pd-transclusion-sections-correction"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "OpenAI Codex v0.156.1, profile write; independent generator restricted to its staging package"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-008/pd-transclusion-sections-correction-prompt.md"
+prompt_sha256 = "a6ce0b79f17c7afa57832c37e4dcd60def3661c36eaad1f09b26a8b538723584"
+sample = "separate session 01a0cd55-8351-73a1-8e85-b3ce160f1bdb; seeds regions=90092026, sections=90092027, uris=90092028; sites authored with no PRNG"
+separation = "All four packages registered before any transclusion implementation. Generator prompts forbid target implementation/test reads. Root audits inventory, copied-package reproduction and discriminating corruption controls; separate reviewers check semantics."
+edits = "Pre-registration corrections are disclosed in the change record: direct-block section legality, full package reproduction, five additive URI controls, authored Markdown paragraph boundaries, complete site observations and relative origin paths. No target implementation results informed expectations."
+
+[[provenance.generations]]
+artifact = "pd-transclusion-sections-generator"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "OpenAI Codex v0.156.1, profile write; independent generator restricted to its staging package"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-008/pd-transclusion-sections-generator-prompt.md"
+prompt_sha256 = "f119f7892c3c9c9a18a4c148ace5ddf1e7ffd1718fee0264fa251c2c1948e015"
+sample = "separate session 01a0cd55-8351-73a1-8e85-b3ce160f1bdb; seeds regions=90092026, sections=90092027, uris=90092028; sites authored with no PRNG"
+separation = "All four packages registered before any transclusion implementation. Generator prompts forbid target implementation/test reads. Root audits inventory, copied-package reproduction and discriminating corruption controls; separate reviewers check semantics."
+edits = "Pre-registration corrections are disclosed in the change record: direct-block section legality, full package reproduction, five additive URI controls, authored Markdown paragraph boundaries, complete site observations and relative origin paths. No target implementation results informed expectations."
+
+[[provenance.generations]]
+artifact = "pd-transclusion-sections-legality-fix"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "OpenAI Codex v0.156.1, profile write; independent generator restricted to its staging package"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-008/pd-transclusion-sections-legality-fix-prompt.md"
+prompt_sha256 = "d1e2d474053bc4c79f91558211c51d2e5705b0f4eda77f76fdca480f9b11e760"
+sample = "separate session 01a0cd55-8351-73a1-8e85-b3ce160f1bdb; seeds regions=90092026, sections=90092027, uris=90092028; sites authored with no PRNG"
+separation = "All four packages registered before any transclusion implementation. Generator prompts forbid target implementation/test reads. Root audits inventory, copied-package reproduction and discriminating corruption controls; separate reviewers check semantics."
+edits = "Pre-registration corrections are disclosed in the change record: direct-block section legality, full package reproduction, five additive URI controls, authored Markdown paragraph boundaries, complete site observations and relative origin paths. No target implementation results informed expectations."
+
+[[provenance.generations]]
+artifact = "pd-transclusion-sites-correction"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "OpenAI Codex v0.156.1, profile write; independent generator restricted to its staging package"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-008/pd-transclusion-sites-correction-prompt.md"
+prompt_sha256 = "c51b7a3f63c22e8feb79cff0fc1c570f4718122b0afee44a8b9c25538571634b"
+sample = "separate session 01a0cd55-83be-79f2-8992-9dba233728fc; seeds regions=90092026, sections=90092027, uris=90092028; sites authored with no PRNG"
+separation = "All four packages registered before any transclusion implementation. Generator prompts forbid target implementation/test reads. Root audits inventory, copied-package reproduction and discriminating corruption controls; separate reviewers check semantics."
+edits = "Pre-registration corrections are disclosed in the change record: direct-block section legality, full package reproduction, five additive URI controls, authored Markdown paragraph boundaries, complete site observations and relative origin paths. No target implementation results informed expectations."
+
+[[provenance.generations]]
+artifact = "pd-transclusion-sites-coverage"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "OpenAI Codex v0.156.1, profile write; independent generator restricted to its staging package"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-008/pd-transclusion-sites-coverage-prompt.md"
+prompt_sha256 = "1b4ca10510e3f33da245d2f10b20f8a0afd4b2ddba8151c25cbe82691253d7b8"
+sample = "separate session 01a0cd55-83be-79f2-8992-9dba233728fc; seeds regions=90092026, sections=90092027, uris=90092028; sites authored with no PRNG"
+separation = "All four packages registered before any transclusion implementation. Generator prompts forbid target implementation/test reads. Root audits inventory, copied-package reproduction and discriminating corruption controls; separate reviewers check semantics."
+edits = "Pre-registration corrections are disclosed in the change record: direct-block section legality, full package reproduction, five additive URI controls, authored Markdown paragraph boundaries, complete site observations and relative origin paths. No target implementation results informed expectations."
+
+[[provenance.generations]]
+artifact = "pd-transclusion-sites-generator"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "OpenAI Codex v0.156.1, profile write; independent generator restricted to its staging package"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-008/pd-transclusion-sites-generator-prompt.md"
+prompt_sha256 = "4bd289cf1a954d9647506ef13e719dc98e26bee4347a3ec403b42169fb04e885"
+sample = "separate session 01a0cd55-83be-79f2-8992-9dba233728fc; seeds regions=90092026, sections=90092027, uris=90092028; sites authored with no PRNG"
+separation = "All four packages registered before any transclusion implementation. Generator prompts forbid target implementation/test reads. Root audits inventory, copied-package reproduction and discriminating corruption controls; separate reviewers check semantics."
+edits = "Pre-registration corrections are disclosed in the change record: direct-block section legality, full package reproduction, five additive URI controls, authored Markdown paragraph boundaries, complete site observations and relative origin paths. No target implementation results informed expectations."
+
+[[provenance.generations]]
+artifact = "pd-transclusion-sites-relative-fix"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "OpenAI Codex v0.156.1, profile write; independent generator restricted to its staging package"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-008/pd-transclusion-sites-relative-fix-prompt.md"
+prompt_sha256 = "673f1f843c2ed55878bea838c91cd263dec8279ebfa973fe426e5a65c8fcb2d6"
+sample = "separate session 01a0cd55-83be-79f2-8992-9dba233728fc; seeds regions=90092026, sections=90092027, uris=90092028; sites authored with no PRNG"
+separation = "All four packages registered before any transclusion implementation. Generator prompts forbid target implementation/test reads. Root audits inventory, copied-package reproduction and discriminating corruption controls; separate reviewers check semantics."
+edits = "Pre-registration corrections are disclosed in the change record: direct-block section legality, full package reproduction, five additive URI controls, authored Markdown paragraph boundaries, complete site observations and relative origin paths. No target implementation results informed expectations."
+
+[[provenance.generations]]
+artifact = "pd-transclusion-uris-correction"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "OpenAI Codex v0.156.1, profile write; independent generator restricted to its staging package"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-008/pd-transclusion-uris-correction-prompt.md"
+prompt_sha256 = "c74955fbe58a0ec1c20afac75acc5148e3989f1d7d9b1193f1534331dbe4b512"
+sample = "separate session 01a0cd55-83ac-75f2-884e-b91e671d1ba6; seeds regions=90092026, sections=90092027, uris=90092028; sites authored with no PRNG"
+separation = "All four packages registered before any transclusion implementation. Generator prompts forbid target implementation/test reads. Root audits inventory, copied-package reproduction and discriminating corruption controls; separate reviewers check semantics."
+edits = "Pre-registration corrections are disclosed in the change record: direct-block section legality, full package reproduction, five additive URI controls, authored Markdown paragraph boundaries, complete site observations and relative origin paths. No target implementation results informed expectations."
+
+[[provenance.generations]]
+artifact = "pd-transclusion-uris-generator"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "OpenAI Codex v0.156.1, profile write; independent generator restricted to its staging package"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-008/pd-transclusion-uris-generator-prompt.md"
+prompt_sha256 = "5ee9589eef22695a3b3825bfb50eb2656ce7e1870c4696329967d09eda54b8a3"
+sample = "separate session 01a0cd55-83ac-75f2-884e-b91e671d1ba6; seeds regions=90092026, sections=90092027, uris=90092028; sites authored with no PRNG"
+separation = "All four packages registered before any transclusion implementation. Generator prompts forbid target implementation/test reads. Root audits inventory, copied-package reproduction and discriminating corruption controls; separate reviewers check semantics."
+edits = "Pre-registration corrections are disclosed in the change record: direct-block section legality, full package reproduction, five additive URI controls, authored Markdown paragraph boundaries, complete site observations and relative origin paths. No target implementation results informed expectations."
+
+[[decisions]]
+id = "transclusion-fixture-freeze"
+question = "Independent draft fixtures and their self-checks contained concrete errors before registration."
+answer = "Repair and freeze the four independent packages before production code: 262 region graphs, 80 legal section trees, 153 URI cases and 12 authored sites. Correct paragraph boundaries and relative paths rather than treating impossible inputs as valid feature examples. Preserve all original region cases and first 148 URI rows. Reject a self-consistency-only gate: require independent semantic review, complete byte-identical reproduction, valid-copy acceptance and corruption rejection. A legality checker false acceptance is repaired with discriminating nested-inline negatives. This is pre-registration correction, not a change to registered grading."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: Determine a large slice to hand off to gpt-6-astra ultra. Make sure it has a goal to implement its work and fix any and all issue in accordance with rha design. (Let it flag and improve the architecture and tooling if it can justify it no need for my approval). I approve all PRs as long as both an opus 5.5 and gpt-6 agent has reviewed and approved the code. Kennedy, 2026-09-22: Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me."
+date = "2026-09-23"
+
+[[decisions]]
+id = "workspace-test-source-boundary"
+question = "The declared site module check rejects the legitimate shared test helper because its file is outside the crate directory, even though it remains inside the workspace."
+answer = "Permit an explicitly configured canonical workspace read root only for inherited test-only module sources during full-workspace extraction. Keep the existing extraction API and standalone module mode crate-root strict, and keep production module sources crate-root strict. Check canonical targets before reading so symlinks cannot escape; apply the same permitted root to source hashing and bind every traversed helper byte. Preserve logical module ownership and separately reported test edges, including registered M11. Reject hiding the helper in include!, dropping test modules, duplicating the shared grader, or broad unrestricted path access. Add independently registered boundary controls before tooling code; no registered case or grade changes. This repairs checker configuration and provenance, not the RHA structural method."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: Determine a large slice to hand off to gpt-6-astra ultra. Make sure it has a goal to implement its work and fix any and all issue in accordance with rha design. (Let it flag and improve the architecture and tooling if it can justify it no need for my approval). I approve all PRs as long as both an opus 5.5 and gpt-6 agent has reviewed and approved the code. Kennedy, 2026-09-22: Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me."
+date = "2026-09-23"
+
+[[decisions]]
+id = "pure-fixture-inputs"
+question = "Clippy rejects runtime fixture I/O in the core owner graders, including unconditional core library forbids."
+answer = "Keep one pure binding/schema validator and use deterministic compile-time embedded bytes in document, graph and site graders. Place filesystem scanning, byte acquisition and tamper/symlink controls only in the app-cli integration harness, which consumes the same scanned payload map it validates. Generate the 36 embedded file mappings mechanically from the four frozen packages and check drift. Reject lint allows, conditional forbid relaxation, hidden I/O aliases, production API widening and a support crate. Core purity, manifests, dependencies and registered grading remain unchanged by this repair. The separately justified workspace test-source boundary still applies to the shared pure modules."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: Determine a large slice to hand off to gpt-6-astra ultra. Make sure it has a goal to implement its work and fix any and all issue in accordance with rha design. (Let it flag and improve the architecture and tooling if it can justify it no need for my approval). I approve all PRs as long as both an opus 5.5 and gpt-6 agent has reviewed and approved the code. Kennedy, 2026-09-22: Use recommended. Shift using codex to validate that the deterministic schema is used according to rha guidelines rather than regenerating code as thats the contract that should determine the qiality of the code. Reviee the PR codex reviews. Accept the recommend and most correct implementations going forward instead of escalating to me."
+date = "2026-09-23"
+
+[[provenance.generations]]
+artifact = "pd-module-test-boundary-generator"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "OpenAI Codex v0.156.1, profile write; independent fixture author restricted to target/m2/module-test-boundary"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-008/pd-module-test-boundary-generator-prompt.md"
+prompt_sha256 = "1f9b4cd218e42e63a9d2485eddd5b83af7b1832dba50bd2bc7fb416d5512ad2d"
+sample = "session 01a0cd91-6f59-7761-acf6-a65d05d22eb3; 12 authored cases, no PRNG"
+separation = "Prompts prohibit extractor implementation and test reads. The boundary package is committed before changes to module extraction or workspace source hashing; a separate read-only review checks semantics."
+edits = "Before freeze, source snapshots/metadata were completed, nested inheritance crossed a real file boundary, non-grant controls were added and isolated inside the permitted workspace, and distinct refusal diagnostics were registered. No target result informed expected outputs."
+
+[[provenance.generations]]
+artifact = "pd-module-test-boundary-correction"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "OpenAI Codex v0.156.1, profile write; independent fixture author restricted to target/m2/module-test-boundary"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-008/pd-module-test-boundary-correction-prompt.md"
+prompt_sha256 = "67421666b71ffb89ecbf515b7ccb89389dae2298ad398afc489c1bc5d3ee6b56"
+sample = "session 01a0cd91-6f59-7761-acf6-a65d05d22eb3; 12 authored cases, no PRNG"
+separation = "Prompts prohibit extractor implementation and test reads. The boundary package is committed before changes to module extraction or workspace source hashing; a separate read-only review checks semantics."
+edits = "Before freeze, source snapshots/metadata were completed, nested inheritance crossed a real file boundary, non-grant controls were added and isolated inside the permitted workspace, and distinct refusal diagnostics were registered. No target result informed expected outputs."
+
+[[provenance.generations]]
+artifact = "pd-module-test-boundary-diagnostics"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "OpenAI Codex v0.156.1, profile write; independent fixture author restricted to target/m2/module-test-boundary"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-008/pd-module-test-boundary-diagnostics-prompt.md"
+prompt_sha256 = "f7524a38998d54b622338aac4038ec3ef8e7699ecbde310cea1abbc36d667b31"
+sample = "session 01a0cd91-6f59-7761-acf6-a65d05d22eb3; 12 authored cases, no PRNG"
+separation = "Prompts prohibit extractor implementation and test reads. The boundary package is committed before changes to module extraction or workspace source hashing; a separate read-only review checks semantics."
+edits = "Before freeze, source snapshots/metadata were completed, nested inheritance crossed a real file boundary, non-grant controls were added and isolated inside the permitted workspace, and distinct refusal diagnostics were registered. No target result informed expected outputs."
+
+[[provenance.generations]]
+artifact = "pd-module-test-boundary-placement"
+generation = "sampled"
+model = "gpt-5.6-luna"
+reasoning_effort = "high"
+harness = "OpenAI Codex v0.156.1, profile write; independent fixture author restricted to target/m2/module-test-boundary"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-008/pd-module-test-boundary-placement-prompt.md"
+prompt_sha256 = "acc6ed6e916e52acbc28e2a1113c1c2a8bd5964e10a0f95c02bce91edc108e4f"
+sample = "session 01a0cd91-6f59-7761-acf6-a65d05d22eb3; 12 authored cases, no PRNG"
+separation = "Prompts prohibit extractor implementation and test reads. The boundary package is committed before changes to module extraction or workspace source hashing; a separate read-only review checks semantics."
+edits = "Before freeze, source snapshots/metadata were completed, nested inheritance crossed a real file boundary, non-grant controls were added and isolated inside the permitted workspace, and distinct refusal diagnostics were registered. No target result informed expected outputs."
+
+[[decisions]]
+id = "writer-handoff-2026-09-24"
+question = "Who writes on chg/008-growth after the M2 Executor stopped?"
+answer = "The supervising session takes over as the sole writer (plan M3), from the resume point docs/changes/CHG-008-growth-RESUME.md. It merged origin/main without rebasing (a18253a; only the generated docs/tasks/index.md conflicted, regenerated) and writes P-C's acceptance record. Implementation work is generated by supervised agy runs in isolated clones and integrated here as commits; each run is listed under [[provenance.generations]]."
+decided_by = "human:kennedy"
+delegation = "Kennedy, 2026-09-24: 'Operation is a go'"
+date = "2026-09-24"
+
+[[decisions]]
+id = "agy-supervised-implementation"
+question = "How is Antigravity (Gemini) used to implement P-D's remaining stages?"
+answer = "agy runs /boost (one hard problem) or /teamwork-preview (a multi-part stage) with full permission inside an isolated jail (~/.gemini/teamwork/agy-jail): it sees only its clone, cannot push, and escalates questions, permissions and protected edits to the supervising session, which decides under the delegation and escalates to Kennedy only for what is reserved to him. Graded oracles are registered by a separate session before the run (M7, §2.4 rule 2). The supervising session integrates, runs the deterministic checks (scope, registered corpora, L0) and reviews. The supervision kit's guarantees and its verification are in ~/.gemini/teamwork/DESIGN.md."
+decided_by = "human:kennedy"
+delegation = "Kennedy, 2026-09-24: 'I want the antigravity to have full permission and escalate to you in which you decide. Only escalate to me (human) when absolutely necessary. You will review and approve PRs and verify changes' and 'Operation is a go'"
+date = "2026-09-24"
+
+[[decisions]]
+id = "merge-rule-gpt6-unavailable"
+question = "Can a PR merge while GPT-6 (Codex) is unavailable?"
+answer = "Yes. While GPT-6 is out of commission (the Codex usage limit resets 2026-09-29 21:09), the supervising session's review and approval of a head suffices, and the supervising session merges. The Claude review of agy-authored work is a separate verifier pass, not the integrating session's own reading. When GPT-6 is available again, DP-5.4's Opus 5.5 + GPT-6 rule applies. Recorded on the ledger as DP-5.4's second amendment (protected edit of .rha/decisions.toml, approved here)."
+decided_by = "human:kennedy"
+delegation = "Kennedy, 2026-09-24: 'And yes, you can merge. No need for GPT-6 while it's out of commission'"
+date = "2026-09-24"
+
+[[provenance.generations]]
+artifact = "xtask/src/modules/extract.rs: separate external-read authority from test classification (resume point item 1)"
+generation = "sampled"
+model = "gemini-3.8-flash-high"
+reasoning_effort = "high (model tier)"
+harness = "Antigravity CLI 1.2.10, one agent in agy-jail (supervised; ~/.gemini/teamwork). Corrected 2026-09-24: recorded first as /boost, but the /boost prefix was passed as agy's initial prompt (-i), which does not expand slash commands, so no Boost pipeline ran (the transcript shows one conversation and no invoke_subagent)."
+prompt = "Fix one authority bug in the Rust module-graph checker: an inner #![cfg(test)] or #![test] must not grant external-read authority; only an explicit test declaration in declaration ancestry does. Registered tests, corpora and the contract document must not change; acceptance is the boundary tests, the workspace tests, module H4 28/28, cargo xtask architecture, fmt and clippy, and an empty diff under xtask/tests and docs."
+prompt_sha256 = "48ccaa8ef6c06d11685a423036aca9884adab816efb3c21481c53e30dbbf6e5a"
+sample = "one run (conversation 1e4f6846), base 5760b7c; one escalation, answered by the supervisor; output patch sha256 37beb40a2d0c9c40a18303e7ded09e31e7f9d5239d1e4972d3a7dbaa2457f17d"
+oracles = "The registered module_test_source_boundary tests and corpus, module H4, the workspace suite, architecture, fmt and clippy, rerun by the supervising session on the integrated branch"
+
+[[decisions]]
+id = "section-refs-scope"
+question = "Where do §n.n references resolve (CHG-010)?"
+answer = "Within the page that contains them, in the document crate only, as the plan predicts. A reference resolves to the first heading on the same page with that section number (docs/architecture/section-reference-contract.md). Cross-page references, such as index.md citing a spec section, stay plain text; they are a recorded follow-up that would need graph and a designated spec page. Alternative rejected for this stage: cross-page resolution through graph and a spec-page setting, which widens the touched set beyond the plan's prediction and adds configuration without a present need (the spec's own 271 references are to itself)."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: 'Use recommended. ... Accept the recommend and most correct implementations going forward instead of escalating to me.' Kennedy, 2026-09-24: 'I want the antigravity to have full permission and escalate to you in which you decide. Only escalate to me (human) when absolutely necessary.'"
+date = "2026-09-24"
+
+[[decisions]]
+id = "section-refs-observation"
+question = "How is CHG-010 observed and graded?"
+answer = "Document gains section_refs: Vec<SectionRef { text, number, target, line }> in document order, plus Diagnostic::UnresolvedSectionRef { number, line } on a page that has numbered headings. A separate session registers the corpus and its grader before implementation (M7); the implementer may not edit them (per-run frozen graders in the supervision kit)."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: 'Use recommended. ... Accept the recommend and most correct implementations going forward instead of escalating to me.' Kennedy, 2026-09-24: 'I want the antigravity to have full permission and escalate to you in which you decide. Only escalate to me (human) when absolutely necessary.'"
+date = "2026-09-24"
+
+[[decisions]]
+id = "section-refs-check-surface"
+question = "Is an unresolved §-reference a `rhawiki check` witness?"
+answer = "Not in this stage. The `check --format json` schema was fixed in P-A and Kennedy's held-out fixtures (DP-1.4) are written against it; adding a witness kind changes that contract. The diagnostic is recorded on the Document and tested; surfacing it in check is a follow-up with its own schema decision."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: 'Use recommended. ... Accept the recommend and most correct implementations going forward instead of escalating to me.' Kennedy, 2026-09-24: 'I want the antigravity to have full permission and escalate to you in which you decide. Only escalate to me (human) when absolutely necessary.'"
+date = "2026-09-24"
+
+[[provenance.generations]]
+artifact = "xtask/tests/corpus/section-refs (84 cases, reference.py, registration) and the grader crates/document/tests/section_refs.rs, registered before any CHG-010 code"
+generation = "sampled"
+model = "claude-sonnet-5"
+reasoning_effort = "medium"
+harness = "Claude Code oracle-author subagent (separate session; read the contract and public types only, never parser internals)"
+prompt = "Write the registered grading corpus and grader for CHG-010 from docs/architecture/section-reference-contract.md: an independent Python reference, synthetic cases covering every grammar edge, the real spec as a case, and a Rust grader comparing Document::section_refs, the diagnostics and the link invariant."
+prompt_sha256 = "2849e871b0783ced6f02bdf5cafcf97f293cd3828a0f29af6170cfa8d87f7a55"
+sample = "one session in two rounds: 76 cases with five open questions left out, then 84 after the contract amendment a3ca8de"
+oracles = "reference.py self-tests; SHA256SUMS; reproduction by the supervising session (CASES.json byte-identical); a stub-crate compile of the grader; the supervising session's registration review"
+
+[[provenance.generations]]
+artifact = "crates/document: §-references (section_ref.rs, parse.rs, lib.rs; the transclusion test literal gains section_refs)"
+generation = "sampled"
+model = "gemini-3.8-flash-high"
+reasoning_effort = "high (model tier)"
+harness = "Antigravity CLI 1.2.10, one agent in agy-jail (supervised). Launched as /teamwork-preview, but the command was passed as the initial prompt (-i) and not expanded, so no team ran (one conversation, no invoke_subagent in the transcript)"
+prompt = "Implement section references per docs/architecture/section-reference-contract.md in the document crate; the registered grader and corpus, the contract and the spec are fixed; acceptance is the grader, the workspace tests, architecture, fmt, clippy, docs --check, an empty diff on frozen paths, and crates changes only under crates/document."
+prompt_sha256 = "e7ad155b23b1d6255339ff627cb906f6166635a77db79dc4d6a3578adbda2c2b"
+sample = "one run (conversation 2c3d3284), base fdf6523; one escalation (the grader's std::fs reads), answered by the supervisor; output patch sha256 6d4d47f45c95add272283055d97e6242a73d78646d6679c205639afe29e86521"
+oracles = "The registered section-refs grader (84 cases, including the spec), the workspace suite, architecture, fmt, clippy and module H4, rerun by the supervising session on the integrated branch"
+
+[[provenance.generations]]
+artifact = "crates/document/src (parse.rs, section_ref.rs): repair of the c556d01 review findings (P1 marker collision, P2 global text merging, P2 tabs in ranges)"
+generation = "sampled"
+model = "gemini-3.8-flash-high"
+reasoning_effort = "high (model tier)"
+harness = "Antigravity CLI 1.2.10, /boost pasted into the interactive session in agy-jail: the pipeline ran (4 conversations: root, DeepCoder coordinator, first worker, improvement worker; invoke_subagent in the transcript)"
+prompt = "Repair three defects an independent review found in the section-reference implementation: a user link with the internal marker href panics parse; text nodes merged on pages without references; tabs accepted in range whitespace. The review tests, the registered grader, the corpus, the contract and the spec are fixed; change only crates/document/src."
+prompt_sha256 = "a67941df150c885cc09e136e5d05c51daf416fa1b4f29cbd9f04e740584c1db2"
+sample = "one Boost run (root 9612bbad), base e7461bf; no escalations; output patch sha256 5cfbf43fe0243165589d726e674596f46f917d5701390211de7af071832fc6d8"
+oracles = "section_refs_review.rs (3 tests, from the supervising session; the golden trees captured at 4be1a7d), the registered grader (84 cases), the workspace suite, fmt, clippy and architecture, rerun by the supervising session"
+
+[[provenance.generations]]
+artifact = "CHG-011 citations: crates/document/src (citation.rs, parse.rs, section_ref.rs, section.rs, node.rs, lib.rs), crates/site/src/assembly/mod.rs, crates/adapter-html/src/lib.rs, crates/adapter-json/src/lib.rs, docs/architecture/json-renderer-contract.md, compatibility edits in earlier tests, and new tests (adapter-html and adapter-json anchor.rs, site citation_assembly.rs, app-cli citations_supplementary.rs, document citation_properties.rs and citation_edge_cases.rs)"
+generation = "sampled"
+model = "gemini-3.8-flash-high"
+reasoning_effort = "high (model tier)"
+harness = "Antigravity CLI 1.2.10, /teamwork-preview pasted into the interactive session in agy-jail: the first real teamwork run (42 conversations: root, Sentinel, two project orchestrators, explorers, workers, reviewers, challengers and forensic auditors per milestone; invoke_subagent in the audit)"
+prompt = "Implement citations per docs/architecture/citation-contract.md through the parser, site assembly and both renderers; registered graders, corpus, contracts and spec fixed. After a quota stop killed the first team, a resume prompt restarted it from its saved state at Milestone 2 (resume prompt sha256 5c6c7908538ad9b105a5fe57c554c3cfe1f4d1ba23f71cd1b756b4d9bf576306)."
+prompt_sha256 = "f60fed9f200c215948cca8677166e66839451585649c84441b85da0dc6b3d144"
+sample = "one teamwork run, base 3e9e561, 2026-09-24T22:43Z to 2026-09-25T01:12Z; milestones M1-M3 passed the team's own gate (2 reviewers, 2 challengers, forensic auditor each); M4's acceptance commands all exited 0 in the team's tree, but its victory gate was cut off by the Gemini five-hour quota, so the supervisor integrated. Two escalations (a protected Cargo.toml lint edit, denied; a section_refs grader question, answered by re-registration). Output patch sha256 27d7d40ef08f0320a8ca45ed7f66ca70560b76d27c67c7af3e878b4b57a1fa01"
+oracles = "citations.rs (69 cases), citations_render.rs and citations_unchanged.rs (44 golden trees), registered before the run; the earlier registered suites; fmt, clippy, architecture and docs --check; all rerun by the supervising session on the integrated tree"
+
+[[provenance.generations]]
+artifact = "crates/document/src/parse.rs: repair of the 352b0f1 review findings (P2 entry order in tight list items with nested blocks; P2 citation directly after `!`)"
+generation = "sampled"
+model = "claude-opus-4-6-thinking"
+reasoning_effort = "unknown (the model takes no --effort in agy)"
+harness = "Antigravity CLI 1.2.10, /boost pasted into agy-jail with --model claude-opus-4-6-thinking; Boost's DeepCoder subagent hit the Gemini quota (subagents keep their own model), so the root killed it and repaired as a single agent (Solo Routine)"
+prompt = "Repair two defects an independent review found in the citation parser: entry registration order in tight list items with nested blocks, and citations after `!`. The regression tests, registered graders, corpus, contracts and spec are fixed; change only crates/document/src."
+prompt_sha256 = "a5238311ef44162e73e00963aeb6f68f2c1159eb73381dcd1eb8d529764e5e70"
+sample = "one run, base b554bba; no escalations; output patch sha256 ab32f0972c43cd087e8c5b2450cbdbb35af24b1414a8016c968e492e96ee93c6"
+oracles = "citations_review.rs (6 tests from the supervising session, written before the repair), the registered graders and golden trees, the workspace suite, fmt, clippy, architecture and docs --check, rerun by the supervising session"
+
+[[provenance.generations]]
+artifact = "crates/document/src (parse.rs, section_ref.rs): repair of the e8dda29 review findings (P2 `![` split on pages without citations; P3 bare label ending a tight item before a nested block)"
+generation = "sampled"
+model = "claude-opus-4-6-thinking"
+reasoning_effort = "unknown (the model takes no --effort in agy)"
+harness = "Antigravity CLI 1.2.10, plain mode in agy-jail with --model claude-opus-4-6-thinking, single agent (no Boost: its subagent runs on Gemini)"
+prompt = "Repair two defects an independent review found: a failed `![` must lower back to one Text(\"![\") so pages without citations keep the pre-feature tree; a bare label ending a tight list item's text before a nested list or block quote is an entry. Tests, graders, corpus, contracts, spec and xtask are fixed; change only crates/document/src."
+prompt_sha256 = "8ae086808f1c0c59274fb3348ff59a8da26c66bc183e402a2fb9a7450722ced2"
+sample = "one run, base 4f789b5; no escalations; output patch sha256 c0507172df254e8ccfa5564366af6f8f9889b3bdf7e3a773395c6577b18c7b9b"
+oracles = "citations_review_2.rs (4 tests from the supervising session, the two `![` trees validated at b554bba), citations_review.rs, the registered graders and golden trees, the workspace suite, fmt, clippy, architecture and docs --check, rerun by the supervising session"
+
+[[provenance.generations]]
+artifact = "crates/document/src/parse.rs: repair of the 14a1d57 review finding (P2 bare label ending a tight item before a code block, table, heading, rule or HTML block)"
+generation = "authored"
+model = "claude-opus-5-5"
+reasoning_effort = "unknown"
+harness = "Claude Code, the supervising session, directly: a one-arm widening of the match the previous repair introduced; agy's Gemini window was empty and its Claude window nearly so"
+prompt = "none (supervisor edit following the review finding and the registered oracle's answers)"
+sample = "one edit, base 7fd3928; output patch sha256 6d14379350f745bd1960f4aa5524ac0ce957b86532861b1fc61f46152af13b00"
+oracles = "citations_review_3.rs (6 tests, expected values from the registered oracle reference.py analyze_page), all earlier review tests, the registered graders and golden trees, the workspace suite, fmt, clippy, architecture and docs --check; independent verification by a separate verifier pass (same model family as the author: disclosed)"
+
+[[provenance.generations]]
+artifact = "CHG-012 callouts: crates/adapter-html/src/lib.rs (callout title, stylesheet rules) and crates/adapter-html/tests/callouts.rs"
+generation = "sampled"
+model = "gemini-3.8-flash-high"
+reasoning_effort = "high (model tier)"
+harness = "Antigravity CLI 1.2.10, /boost pasted into agy-jail: the pipeline ran on Gemini (4 conversations: root, DeepCoder, first worker, improvement worker)"
+prompt = "Implement callout rendering per docs/architecture/callout-contract.md: a callout-title paragraph per GFM callout and additive stylesheet rules; everything else unchanged; change only crates/adapter-html."
+prompt_sha256 = "0d93359203a4dc64fe619933c44e4fad30ea8e0855df98124ada488a1e1d759b"
+sample = "one Boost run, base 030d82c, 2026-09-25T04:59Z to 05:14Z; no escalations; output sha256 b6bec879ea11b523d538bb5685a9cdf9bc15544600e70bce1d113a33c3497bae"
+oracles = "callouts_render.rs (6 tests, a separate Sonnet oracle-author session), callouts_unchanged.rs (goldens captured at 558987a), the workspace suite, fmt, clippy, architecture and docs --check, rerun by the supervising session"
+
+[[provenance.generations]]
+artifact = "evidence/CHG-008/stage-2/callouts-verification-gemini-team.md: independent verification of c469d10 (CHG-012), no product change"
+generation = "sampled"
+model = "gemini-3.8-flash-high"
+reasoning_effort = "high (model tier)"
+harness = "Antigravity CLI 1.2.10, /teamwork-preview pasted into agy-jail as a verification-only team (decision agy-teamwork-verification-only); crates/, docs/, xtask/, tools/, .rha/, evidence/ and the manifests frozen; probes only under verify/"
+prompt = "Adversarially verify c469d10 against docs/architecture/callout-contract.md: section 2 rendering, the section 3 differential against 030d82c, fuzzing and the gates; report a verdict with concrete failing inputs; change nothing."
+prompt_sha256 = "d5636edcc9b1397bb6648041cade17b3d4e082c0a090fd05a09a1d6573bc23c2"
+sample = "one teamwork run, 2026-09-25T05:16Z to 05:49Z; verdict APPROVE, 0 findings; no escalations"
+oracles = "not applicable (a review); its claims were compared with the separate Claude verifier's, which approved with two P3s this team did not report"
+
+[[decisions]]
+id = "citations-anchor-node"
+question = "How does a citation link to its reference entry (CHG-011)?"
+answer = "A new inline Node::Anchor { id } marks each reference entry, carried by site assembly as PageNode::Anchor and rendered by both renderers (docs/architecture/citation-contract.md). A link needs a target, and paragraphs carry no ids. Alternative rejected: link every citation to the References heading (document only, as the plan predicted), which does not reach the entry. The plan's prediction is kept visible next to the refined one, and the difference is change-spread data: a new link target needs render support, which the plan did not foresee."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: 'Use recommended. ... Accept the recommend and most correct implementations going forward instead of escalating to me.' Kennedy, 2026-09-24: 'I want the antigravity to have full permission and escalate to you in which you decide. Only escalate to me (human) when absolutely necessary.'"
+date = "2026-09-24"
+
+[[decisions]]
+id = "citations-scope"
+question = "Where do citations resolve?"
+answer = "Within the page, as §-references do. Cross-page citations and list forms such as [R1, R2] are out of scope. Anchors inside transcluded content are dropped, because the source page owns them."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: 'Use recommended. ... Accept the recommend and most correct implementations going forward instead of escalating to me.' Kennedy, 2026-09-24: 'I want the antigravity to have full permission and escalate to you in which you decide. Only escalate to me (human) when absolutely necessary.'"
+date = "2026-09-24"
+
+[[decisions]]
+id = "citations-check-surface"
+question = "Are unresolved citations or duplicate entries `rhawiki check` witnesses?"
+answer = "Not in this stage. The check JSON schema stays fixed for Kennedy's held-out fixtures (as section-refs-check-surface). The diagnostics are recorded on the Document and tested."
+decided_by = "agent:executor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: 'Use recommended. ... Accept the recommend and most correct implementations going forward instead of escalating to me.' Kennedy, 2026-09-24: 'I want the antigravity to have full permission and escalate to you in which you decide. Only escalate to me (human) when absolutely necessary.'"
+date = "2026-09-24"
+
+[[decisions]]
+id = "grader-compat-anchor"
+question = "A new Node variant and new Document fields stop earlier registered tests from compiling (exhaustive matches, struct literals). May they be edited?"
+answer = "Yes, with exactly two edit forms: add Node::Anchor { .. } to an arm that does nothing, and add reference_entries: Vec::new(), citations: Vec::new() to Document literals. No assertion, expected value, fixture or case count changes. A runtime failure of an earlier test is a regression, not a reason to edit it. Applied in transclusion.rs, section_refs.rs and site transclusion_tests.rs; adapter-json tests/common/mod.rs gained an additive Anchor decoding arm in the same spirit, accepted by consequence (no existing expectation changed)."
+decided_by = "agent:supervisor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-24: 'I want the antigravity to have full permission and escalate to you in which you decide. Only escalate to me (human) when absolutely necessary.'"
+date = "2026-09-24"
+
+[[decisions]]
+id = "citations-grader-reregistration"
+question = "Two registered graders failed for reasons outside the implementation: citations.rs broke workspace clippy (doc_lazy_continuation), and section_refs.rs counted every intra-page link as a section reference, which citations make false on the spec page."
+answer = "Re-registered by the supervisor, not by the implementer: 0db8b76 inserts one blank doc line in citations.rs; c5d376b makes section_refs.rs skip exactly citation-shaped links (text [R<digits>] with at most one lowercase letter and href #ref-<label lowercase>). The implementer's proposals were declined: relaxing workspace lints in Cargo.toml (weakens every crate), and skipping every #ref- href (would hide a section ref to a heading slugged ref-...). Both regraded before and after the feature."
+decided_by = "agent:supervisor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-24: 'I want the antigravity to have full permission and escalate to you in which you decide. Only escalate to me (human) when absolutely necessary.'"
+date = "2026-09-25"
+
+[[decisions]]
+id = "callouts-gfm-only"
+question = "Which callout syntax does CHG-012 support?"
+answer = "GitHub-flavoured alerts only: the five kinds with the marker alone on the first line, as pulldown-cmark 0.13.4 already recognises with ENABLE_GFM (probed 2026-09-25). Custom titles, other kinds and fold markers are Obsidian extensions and stay ordinary block quotes. Alternative rejected: Obsidian-style callouts, which need parser post-processing and a new node shape (document, site, adapter-html, adapter-json and the JSON contract) for syntax the parser's declared dialect does not have and no page in docs/ uses."
+decided_by = "agent:supervisor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: 'Use recommended. ... Accept the recommend and most correct implementations going forward instead of escalating to me.' Kennedy, 2026-09-24: 'I want the antigravity to have full permission and escalate to you in which you decide. Only escalate to me (human) when absolutely necessary.'"
+date = "2026-09-25"
+
+[[decisions]]
+id = "callouts-html-title"
+question = "How is a callout rendered?"
+answer = "As GFM renders it: a title paragraph <p class=\"callout-title\">Label</p> as the first child of <blockquote class=\"callout kind\">, and stylesheet rules for .callout, .callout-title and each kind. JSON output is unchanged (its contract already excludes a generated label), so the prediction is adapter-html only; the plan's document part is already done (Phase 1 parses the kind)."
+decided_by = "agent:supervisor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: 'Use recommended. ... Accept the recommend and most correct implementations going forward instead of escalating to me.' Kennedy, 2026-09-24: 'I want the antigravity to have full permission and escalate to you in which you decide. Only escalate to me (human) when absolutely necessary.'"
+date = "2026-09-25"
+
+[[decisions]]
+id = "callouts-check-surface"
+question = "Are callouts rhawiki check witnesses?"
+answer = "No. Nothing about a callout can be broken, and the check JSON schema stays fixed for Kennedy's held-out fixtures."
+decided_by = "agent:supervisor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: 'Use recommended. ... Accept the recommend and most correct implementations going forward instead of escalating to me.' Kennedy, 2026-09-24: 'I want the antigravity to have full permission and escalate to you in which you decide. Only escalate to me (human) when absolutely necessary.'"
+date = "2026-09-25"
+
+[[decisions]]
+id = "agy-teamwork-verification-only"
+question = "Is agy /teamwork-preview still used to implement stages?"
+answer = "No. Implementation by agy uses /boost or a single agent; /teamwork-preview is reserved for verification-only runs (product code, docs and records frozen in the jail; probes and a report only). This narrows agy-supervised-implementation, which allowed teamwork for multi-part stages."
+decided_by = "human:kennedy"
+delegation = "Kennedy, 2026-09-25: 'Agy should be good now. I guess for now instead of teamwork foe implementing. We reserve it for verification only'"
+date = "2026-09-25"
+
+[[decisions]]
+id = "agy-verification-second-family"
+question = "Does an agy verification-only teamwork run count as the second-family review of M6?"
+answer = "Yes while GPT-6 is unavailable (DP-5.4 amendment_2, merge-rule-gpt6-unavailable): a Gemini team with everything but its probe folder frozen reviews the same head as the Claude verifier. After GPT-6 returns it is an additional reviewer, not a substitute."
+decided_by = "agent:supervisor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-24: 'I want the antigravity to have full permission and escalate to you in which you decide. Only escalate to me (human) when absolutely necessary.'"
+date = "2026-09-25"

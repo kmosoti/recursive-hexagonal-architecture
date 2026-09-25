@@ -1,0 +1,20 @@
+[package]
+name = "adapter-json"
+version = "0.1.0"
+description = "rhawiki adapter: page models to deterministic JSON"
+edition.workspace = true
+rust-version.workspace = true
+publish = false
+
+[package.metadata.rha]
+implements = ["site::PageRenderer"]
+
+[dependencies]
+site = { path = "../site" }
+serde_json = "1.0.151"
+
+[dev-dependencies]
+library = { path = "../library" }
+
+[lints]
+workspace = true

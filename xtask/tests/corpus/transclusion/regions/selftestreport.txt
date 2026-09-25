@@ -1,0 +1,10 @@
+transclusion-region-corpus-selftest
+status = passed
+seed = 90092026
+authored_cases = 6
+random_cases = 256
+case_count = 262
+kind_count = 1
+payload_count = 7
+checks = hand_controls,graph_invariants,permutation_invariance,byte_reproduction
+cases_sha256 = 1812d1c3dc11a2c12116105590436768630886d8b00747c377efbe498f375b22

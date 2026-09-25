@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/home/kmosoti/projects/rha-m2/target/m2/audit-json-registration.py", line 11, in <module>
+    f=p/name;assert f.is_file() and not f.is_symlink();assert h(f.read_bytes())==digest,name
+                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: CASES.json
+
+exit: 1

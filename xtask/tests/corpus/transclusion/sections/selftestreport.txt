@@ -1,0 +1,9 @@
+selftest: PASS
+cases: 80 (hand=16, seeded=64)
+kinds: section=80
+selection_checks: 80
+descriptor_checks: 80
+mutation_checks: 80
+legality_checks: 80
+negative_legality_controls: direct-invalid, paragraph-quote, paragraph-heading, unknown-block, paragraph-unknown
+reproduction: full package bytes match deterministic frozen-input output

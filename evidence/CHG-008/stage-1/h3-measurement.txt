@@ -1,0 +1,42 @@
+{
+  "adapter_stage_start": "d2cc1cd793bbd820a130c9df1e120cc1c9f71e7f",
+  "adapter_stage_end": "bd708fd3277afcb80a3898b6a498ea3c010e0e4c",
+  "whole_packet_base": "8e3037b5b4a342a3e2bec36af874246838c610b7",
+  "commands": {
+    "h3-adapter-core-numstat.txt": [
+      "git",
+      "diff",
+      "--numstat",
+      "d2cc1cd793bbd820a130c9df1e120cc1c9f71e7f..bd708fd3277afcb80a3898b6a498ea3c010e0e4c",
+      "--",
+      "crates/library",
+      "crates/document",
+      "crates/graph",
+      "crates/site"
+    ],
+    "h3-whole-core-numstat.txt": [
+      "git",
+      "diff",
+      "--numstat",
+      "8e3037b5b4a342a3e2bec36af874246838c610b7..bd708fd3277afcb80a3898b6a498ea3c010e0e4c",
+      "--",
+      "crates/library",
+      "crates/document",
+      "crates/graph",
+      "crates/site"
+    ],
+    "h3-product-numstat.txt": [
+      "git",
+      "diff",
+      "--numstat",
+      "d2cc1cd793bbd820a130c9df1e120cc1c9f71e7f..bd708fd3277afcb80a3898b6a498ea3c010e0e4c",
+      "--",
+      "crates"
+    ]
+  },
+  "files_sha256": {
+    "h3-adapter-core-numstat.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "h3-whole-core-numstat.txt": "99e668fb150face4528316eb7f824814bcfb401b8491846a3d162a8c009eb0b1",
+    "h3-product-numstat.txt": "7b62b2e02209a8a4fdefe9e12349e3ff91c27294799c36fa4e638f982aa44501"
+  }
+}

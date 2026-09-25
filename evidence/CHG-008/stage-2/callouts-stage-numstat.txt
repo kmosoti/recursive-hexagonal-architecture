@@ -1,0 +1,9 @@
+# git diff --numstat 558987a c469d108d201d89e702af742567a5b98a8fad412 -- crates (callout stage, CHG-012)
+12	11	crates/adapter-html/src/lib.rs
+155	0	crates/adapter-html/tests/callouts.rs
+566	0	crates/app-cli/tests/callouts_render.rs
+169	0	crates/app-cli/tests/callouts_unchanged.rs
+45	0	crates/app-cli/tests/data/callouts_unchanged/docs/callouts.md
+32	0	crates/app-cli/tests/data/callouts_unchanged/docs/plain.md
+7	0	crates/app-cli/tests/data/callouts_unchanged/docs/sub/host.md
+10	0	crates/app-cli/tests/data/callouts_unchanged/golden.json

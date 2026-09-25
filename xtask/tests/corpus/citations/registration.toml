@@ -1,0 +1,39 @@
+schema_version = 1
+package = "citations"
+eventual_path = "xtask/tests/corpus/citations"
+case_count = 69
+kind_count = 1
+payload_count = 7
+model = "claude-sonnet-5"
+effort = "medium"
+
+[case_counts]
+synthetic = 68
+real_spec = 1
+
+[real_spec_counts]
+reference_entries = 168
+citations = 411
+duplicate_reference_entry_diagnostics = 0
+unresolved_citation_diagnostics = 0
+
+[source_digests]
+contract_sha256 = "b2db04aadbc89ab454d9ee64f07975f50dc2fffbf7f3009c03eef04c6e6efe98"
+section_reference_contract_sha256 = "e86c980491bf1116dfbd008cfbc460bf8254786189b06bade1655a9c95071749"
+prompt_sha256 = "f60cf30fb4958a666b84c06d9ad1b22d5669f628b925b43297f0da89d511ebd0"
+
+[source_paths]
+contract = "xtask/tests/corpus/citations/source-snapshots/contract.md"
+section_reference_contract = "xtask/tests/corpus/citations/source-snapshots/section-reference-contract.md"
+prompt = "xtask/tests/corpus/citations/source-snapshots/prompt.md"
+
+[original_paths]
+contract = "docs/architecture/citation-contract.md"
+section_reference_contract = "docs/architecture/section-reference-contract.md"
+prompt = "(oracle-author task prompt for CHG-011, no repository path; captured verbatim as given)"
+
+[decisions]
+# .rha/tasks/CHG-008-growth.toml, read for context only (not restated here
+# per AGENTS.md): citations-anchor-node, citations-scope,
+# citations-check-surface.
+ids = ["citations-anchor-node", "citations-scope", "citations-check-surface"]

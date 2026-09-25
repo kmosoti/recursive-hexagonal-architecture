@@ -9,12 +9,18 @@
     clippy::disallowed_macros
 )]
 
+mod citation;
 mod node;
 mod parse;
+mod section;
+mod section_ref;
 mod slug;
 
-pub use node::{Align, CalloutKind, Node};
+pub use citation::{Citation, ReferenceEntry};
+pub use node::{Align, CalloutKind, Node, Transclusion};
 pub use parse::parse;
+pub use section::{section_nodes, transclusions};
+pub use section_ref::SectionRef;
 pub use slug::slugify;
 
 use library::{Digest, PageId};
@@ -30,6 +36,9 @@ pub struct Document {
     pub links: Vec<Link>,
     pub body: Vec<Node>,
     pub diagnostics: Vec<Diagnostic>,
+    pub section_refs: Vec<SectionRef>,
+    pub reference_entries: Vec<ReferenceEntry>,
+    pub citations: Vec<Citation>,
 }
 
 /// A heading with its final, unique slug.
@@ -63,6 +72,16 @@ pub enum Diagnostic {
         first_line: usize,
         second_line: usize,
     },
+    /// An unresolved section reference on a page with at least one numbered heading.
+    UnresolvedSectionRef { number: String, line: usize },
+    /// A reference entry's label duplicates an earlier one on the page.
+    DuplicateReferenceEntry {
+        label: String,
+        first_line: usize,
+        second_line: usize,
+    },
+    /// An unresolved citation on a page with at least one reference entry.
+    UnresolvedCitation { label: String, line: usize },
     /// Syntax the model preserves only as text.
     Unsupported { kind: &'static str, line: usize },
 }

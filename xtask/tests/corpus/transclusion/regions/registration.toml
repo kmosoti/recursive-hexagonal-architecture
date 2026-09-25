@@ -1,0 +1,33 @@
+schema_version = 1
+seed = 90092026
+model = "gpt-5.6-luna"
+effort = "high"
+content_sha256 = "0a5f534edf4e6171961b5db2761f81237fa99e1f470b671247654ef5fed01812"
+
+[counts]
+cases = 262
+kinds = 1
+payloads = 7
+authored = 6
+random = 256
+
+[kinds]
+region_graph = 262
+
+[[sources]]
+name = "contract"
+path = "xtask/tests/corpus/transclusion/regions/source-snapshots/contract.md"
+original_path = "docs/architecture/transclusion-contract.md"
+sha256 = "603120d9ebab92619d67f8caec7172c07793d3e0f80e67912b4d05a402c489e0"
+
+[[sources]]
+name = "bdr"
+path = "xtask/tests/corpus/transclusion/regions/source-snapshots/bdr.md"
+original_path = "docs/adr/BDR-0007-site-owns-page-tree.md"
+sha256 = "907b00767da407ccad7ce7f9fbbbac0e2c1746227f2b7981e6681321476f4e28"
+
+[[sources]]
+name = "prompt"
+path = "xtask/tests/corpus/transclusion/regions/source-snapshots/prompt.md"
+original_path = "xtask/tests/corpus/write-prompts/CHG-008/pd-transclusion-regions-generator-prompt.md"
+sha256 = "d6629d490a5fe648e48f904807ef18f20b9b96b770d8a04605be8d5f6a7c74f6"

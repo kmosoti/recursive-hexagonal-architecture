@@ -41,7 +41,7 @@ impl Clock for FixedClock {
     }
 }
 
-/// A renderer writing `<id>.txt` with the title and link count.
+/// A renderer writing `<id>.txt` with the title, debug TOC, and link count.
 #[derive(Debug, Clone, Copy, Default)]
 pub struct StubRenderer;
 
@@ -52,7 +52,7 @@ impl PageRenderer for StubRenderer {
         let path = RelPath::new(&name).expect("page ids are relative paths");
         Rendered {
             path,
-            bytes: format!("{}|{}", page.title, page.links.len()).into_bytes(),
+            bytes: format!("{}|{}|{:?}", page.title, page.links.len(), page.toc).into_bytes(),
         }
     }
     fn assets(&self) -> Vec<Rendered> {

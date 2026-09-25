@@ -86,8 +86,8 @@ fn assembly_is_deterministic() {
     let none = |_: &library::PageId| None;
     for doc in &docs {
         assert_eq!(
-            DefaultAssembler.assemble(doc, &graph, &none, &ctx),
-            DefaultAssembler.assemble(doc, &graph, &none, &ctx)
+            DefaultAssembler.assemble(doc, &docs, &graph, &none, &ctx),
+            DefaultAssembler.assemble(doc, &docs, &graph, &none, &ctx)
         );
     }
 }
@@ -122,7 +122,7 @@ fn the_renderer_and_sink_contracts_catch_seeded_violators_and_pass_the_fakes() {
     let none = |_: &library::PageId| None;
     let pages: Vec<_> = docs
         .iter()
-        .map(|d| DefaultAssembler.assemble(d, &graph, &none, &AssembleContext::default()))
+        .map(|d| DefaultAssembler.assemble(d, &docs, &graph, &none, &AssembleContext::default()))
         .collect();
     assert!(page_renderer(&StubRenderer, &pages).is_empty());
     assert!(

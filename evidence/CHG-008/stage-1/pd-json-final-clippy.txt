@@ -1,0 +1,1550 @@
+warning: this function has too many lines (102/100)
+   --> crates/document/src/parse.rs:220:5
+    |
+220 |     fn end(&mut self, _end: TagEnd) {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_lines
+    = note: `-W clippy::too-many-lines` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::too_many_lines)]`
+
+warning: these match arms have identical bodies
+   --> crates/document/src/parse.rs:272:13
+    |
+272 |             Frame::Paragraph => Some(Node::Paragraph(children)),
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+324 |             Frame::Other => Some(Node::Paragraph(children)),
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: if this is unintentional make the arms return different values
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#match_same_arms
+    = note: `-W clippy::match-same-arms` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::match_same_arms)]`
+help: otherwise merge the patterns into a single arm
+    |
+272 ~             Frame::Paragraph | Frame::Other => Some(Node::Paragraph(children)),
+273 |             Frame::Emphasis => Some(Node::Emphasis(children)),
+...
+323 |             }
+324 ~             };
+    |
+
+warning: possible infinite iteration detected
+   --> crates/document/src/parse.rs:234:21
+    |
+234 | /                     (from..)
+235 | |                         .map(|k| format!("{base}-{k}"))
+236 | |                         .find(|c| !used.contains(c))
+    | |____________________________________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#maybe_infinite_iter
+    = note: `-W clippy::maybe-infinite-iter` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::maybe_infinite_iter)]`
+
+warning: you seem to be trying to use `match` for destructuring a single pattern. Consider using `if let`
+   --> crates/document/src/parse.rs:239:28
+    |
+239 |                   let slug = match self.seen.get_mut(&base) {
+    |  ____________________________^
+240 | |                     Some((count, first_line)) => {
+241 | |                         *count += 1;
+242 | |                         self.diagnostics.push(Diagnostic::DuplicateSlug {
+...   |
+257 | |                 };
+    | |_________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#single_match_else
+    = note: `-W clippy::single-match-else` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::single_match_else)]`
+help: try
+    |
+239 ~                 let slug = if let Some((count, first_line)) = self.seen.get_mut(&base) {
+240 +                     *count += 1;
+241 +                     self.diagnostics.push(Diagnostic::DuplicateSlug {
+242 +                         slug: base.clone(),
+243 +                         first_line: *first_line,
+244 +                         second_line: line,
+245 +                     });
+246 +                     next_free(&self.used, *count)
+247 +                 } else {
+248 +                     self.seen.insert(base.clone(), (1, line));
+249 +                     if self.used.contains(&base) {
+250 +                         next_free(&self.used, 2)
+251 +                     } else {
+252 +                         base.clone()
+253 +                     }
+254 ~                 };
+    |
+
+warning: consider adding a `;` to the last statement for consistent formatting
+   --> crates/document/src/parse.rs:355:17
+    |
+355 |                 out.push_str(&plain(c))
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^ help: add a `;` here: `out.push_str(&plain(c));`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#semicolon_if_nothing_returned
+    = note: `-W clippy::semicolon-if-nothing-returned` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::semicolon_if_nothing_returned)]`
+
+warning: `document` (lib) generated 5 warnings (run `cargo clippy --fix --lib -p document -- ` to apply 2 suggestions)
+    Checking adapter-json v0.1.0 (/home/kmosoti/projects/rha-m2/crates/adapter-json)
+warning: case-sensitive file extension comparison
+   --> crates/adapter-fs/src/lib.rs:116:42
+    |
+116 |     name.starts_with(".rhawiki-tmp-") && name.ends_with(".tmp")
+    |                                          ^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: consider using a case-insensitive comparison instead
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#case_sensitive_file_extension_comparisons
+    = note: `-W clippy::case-sensitive-file-extension-comparisons` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::case_sensitive_file_extension_comparisons)]`
+help: use std::path::Path
+    |
+116 ~     name.starts_with(".rhawiki-tmp-") && std::path::Path::new(name)
+117 +         .extension()
+118 +         .is_some_and(|ext| ext.eq_ignore_ascii_case("tmp"))
+    |
+
+warning: this function has too many lines (130/100)
+   --> crates/adapter-html/src/lib.rs:113:5
+    |
+113 |     fn node(&self, out: &mut String, node: &Node) {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_lines
+    = note: `-W clippy::too-many-lines` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::too_many_lines)]`
+
+warning: you seem to be trying to use `match` for destructuring a single pattern. Consider using `if let`
+   --> crates/adapter-html/src/lib.rs:157:51
+    |
+157 |               Node::WikiLink { index, children } => match self.page.links.get(*index) {
+    |  ___________________________________________________^
+158 | |                 Some(LinkTarget::Page { id, anchor }) => {
+159 | |                     let href = if id == &self.page.id {
+160 | |                         String::new()
+...   |
+182 | |             },
+    | |_____________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#single_match_else
+    = note: `-W clippy::single-match-else` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::single_match_else)]`
+help: try
+    |
+157 ~             Node::WikiLink { index, children } => if let Some(LinkTarget::Page { id, anchor }) = self.page.links.get(*index) {
+158 +                 let href = if id == &self.page.id {
+159 +                     String::new()
+160 +                 } else {
+161 +                     relative(&self.page.id, id)
+162 +                 };
+163 +                 let frag = anchor
+164 +                     .as_ref()
+165 +                     .map(|a| format!("#{}", encode(a, false)))
+166 +                     .unwrap_or_default();
+167 +                 let _ = write!(
+168 +                     out,
+169 +                     "<a class=\"wikilink\" href=\"{}{}\">",
+170 +                     escape(&href),
+171 +                     escape(&frag)
+172 +                 );
+173 +                 self.nodes(out, children);
+174 +                 out.push_str("</a>");
+175 +             } else {
+176 +                 out.push_str("<span class=\"broken\">");
+177 +                 self.nodes(out, children);
+178 +                 out.push_str("</span>");
+179 ~             },
+    |
+
+warning: `adapter-fs` (lib) generated 1 warning
+warning: `adapter-html` (lib) generated 2 warnings (run `cargo clippy --fix --lib -p adapter-html -- ` to apply 1 suggestion)
+    Checking app-cli v0.1.0 (/home/kmosoti/projects/rha-m2/crates/app-cli)
+warning: used `expect()` on a `Result` value
+  --> crates/app-cli/tests/cli.rs:14:15
+   |
+14 |       let out = Command::new(env!("CARGO_BIN_EXE_rhawiki"))
+   |  _______________^
+15 | |         .args(["check", "--format", "json", "--root"])
+16 | |         .arg(dir)
+17 | |         .output()
+18 | |         .expect("rhawiki runs");
+   | |_______________________________^
+   |
+   = note: if this value is an `Err`, it will panic
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#expect_used
+   = note: requested on the command line with `-W clippy::expect-used`
+
+warning: used `expect()` on a `Result` value
+  --> crates/app-cli/tests/cli.rs:21:9
+   |
+21 |         serde_json::from_slice(&out.stdout).expect("json"),
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: if this value is an `Err`, it will panic
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#expect_used
+
+warning: used `expect()` on an `Option` value
+  --> crates/app-cli/tests/cli.rs:27:14
+   |
+27 |     for w in v.as_array().expect("array") {
+   |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: if this value is `None`, it will panic
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#expect_used
+
+warning: used `expect()` on a `Result` value
+  --> crates/app-cli/tests/cli.rs:28:18
+   |
+28 |         *m.entry(serde_json::to_string(w).expect("json"))
+   |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: if this value is an `Err`, it will panic
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#expect_used
+
+warning: binding's name is too similar to existing binding
+   --> crates/adapter-json/tests/common/mod.rs:672:17
+    |
+672 |             let rendered = comparison_renderer.render(model);
+    |                 ^^^^^^^^
+    |
+note: existing binding defined here
+   --> crates/adapter-json/tests/common/mod.rs:626:9
+    |
+626 |     let renderer = adapter_json::JsonRenderer::new(&models).unwrap();
+    |         ^^^^^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#similar_names
+    = note: `-W clippy::similar-names` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::similar_names)]`
+
+warning: binding's name is too similar to existing binding
+   --> crates/app-cli/tests/../../adapter-json/tests/common/mod.rs:672:17
+    |
+672 |             let rendered = comparison_renderer.render(model);
+    |                 ^^^^^^^^
+    |
+note: existing binding defined here
+   --> crates/app-cli/tests/../../adapter-json/tests/common/mod.rs:626:9
+    |
+626 |     let renderer = adapter_json::JsonRenderer::new(&models).unwrap();
+    |         ^^^^^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#similar_names
+    = note: `-W clippy::similar-names` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::similar_names)]`
+
+warning: `app-cli` (test "cli") generated 4 warnings
+warning: redundant closure
+  --> crates/adapter-json/tests/common/mod.rs:49:29
+   |
+49 |         entries.sort_by_key(|entry| entry.file_name());
+   |                             ^^^^^^^^^^^^^^^^^^^^^^^^^ help: replace the closure with the method itself: `std::fs::DirEntry::file_name`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#redundant_closure_for_method_calls
+   = note: `-W clippy::redundant-closure-for-method-calls` implied by `-W clippy::pedantic`
+   = help: to override `-W clippy::pedantic` add `#[allow(clippy::redundant_closure_for_method_calls)]`
+
+warning: this function has too many lines (188/100)
+   --> crates/adapter-json/tests/common/mod.rs:264:1
+    |
+264 | pub fn node(value: &Value) -> Node {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_lines
+    = note: `-W clippy::too-many-lines` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::too_many_lines)]`
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/adapter-json/tests/common/mod.rs:272:27
+    |
+272 |                   children: value["children"]
+    |  ___________________________^
+273 | |                     .as_array()
+274 | |                     .unwrap()
+    | |_____________________________^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+    = note: requested on the command line with `-W clippy::unwrap-used`
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/adapter-json/tests/common/mod.rs:283:17
+    |
+283 | /                 value["children"]
+284 | |                     .as_array()
+285 | |                     .unwrap()
+    | |_____________________________^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/adapter-json/tests/common/mod.rs:313:17
+    |
+313 | /                 value["children"]
+314 | |                     .as_array()
+315 | |                     .unwrap()
+    | |_____________________________^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/adapter-json/tests/common/mod.rs:324:17
+    |
+324 | /                 value["children"]
+325 | |                     .as_array()
+326 | |                     .unwrap()
+    | |_____________________________^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/adapter-json/tests/common/mod.rs:335:17
+    |
+335 | /                 value["children"]
+336 | |                     .as_array()
+337 | |                     .unwrap()
+    | |_____________________________^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/adapter-json/tests/common/mod.rs:347:27
+    |
+347 |                   children: value["children"]
+    |  ___________________________^
+348 | |                     .as_array()
+349 | |                     .unwrap()
+    | |_____________________________^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/adapter-json/tests/common/mod.rs:359:27
+    |
+359 |                   children: value["children"]
+    |  ___________________________^
+360 | |                     .as_array()
+361 | |                     .unwrap()
+    | |_____________________________^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/adapter-json/tests/common/mod.rs:382:24
+    |
+382 |                   items: value["items"]
+    |  ________________________^
+383 | |                     .as_array()
+384 | |                     .unwrap()
+    | |_____________________________^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/adapter-json/tests/common/mod.rs:386:33
+    |
+386 |                     .map(|item| item.as_array().unwrap().iter().map(node).collect())
+    |                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/adapter-json/tests/common/mod.rs:394:27
+    |
+394 |                   children: value["children"]
+    |  ___________________________^
+395 | |                     .as_array()
+396 | |                     .unwrap()
+    | |_____________________________^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/adapter-json/tests/common/mod.rs:405:24
+    |
+405 |                   align: value["align"]
+    |  ________________________^
+406 | |                     .as_array()
+407 | |                     .unwrap()
+    | |_____________________________^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/adapter-json/tests/common/mod.rs:411:23
+    |
+411 |                   head: value["head"]
+    |  _______________________^
+412 | |                     .as_array()
+413 | |                     .unwrap()
+    | |_____________________________^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/adapter-json/tests/common/mod.rs:415:33
+    |
+415 |                     .map(|cell| cell.as_array().unwrap().iter().map(node).collect())
+    |                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/adapter-json/tests/common/mod.rs:417:23
+    |
+417 |                   rows: value["rows"]
+    |  _______________________^
+418 | |                     .as_array()
+419 | |                     .unwrap()
+    | |_____________________________^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/adapter-json/tests/common/mod.rs:422:25
+    |
+422 | /                         row.as_array()
+423 | |                             .unwrap()
+    | |_____________________________________^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/adapter-json/tests/common/mod.rs:425:41
+    |
+425 | ...                   .map(|cell| cell.as_array().unwrap().iter().map(node).collect())
+    |                                   ^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/adapter-json/tests/common/mod.rs:469:17
+    |
+469 |       let links = value["links"]
+    |  _________________^
+470 | |         .as_array()
+471 | |         .unwrap()
+    | |_________________^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/adapter-json/tests/common/mod.rs:491:14
+    |
+491 |           toc: value["toc"]
+    |  ______________^
+492 | |             .as_array()
+493 | |             .unwrap()
+    | |_____________________^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/adapter-json/tests/common/mod.rs:504:22
+    |
+504 |           breadcrumbs: value["breadcrumbs"]
+    |  ______________________^
+505 | |             .as_array()
+506 | |             .unwrap()
+    | |_____________________^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/adapter-json/tests/common/mod.rs:508:25
+    |
+508 |             .map(|item| item.as_str().unwrap().to_owned())
+    |                         ^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/adapter-json/tests/common/mod.rs:510:20
+    |
+510 |           backlinks: value["backlinks"]
+    |  ____________________^
+511 | |             .as_array()
+512 | |             .unwrap()
+    | |_____________________^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/adapter-json/tests/common/mod.rs:520:15
+    |
+520 |         body: value["body"].as_array().unwrap().iter().map(node).collect(),
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/adapter-json/tests/common/mod.rs:535:19
+    |
+535 |       let sources = values
+    |  ___________________^
+536 | |         .as_array()
+537 | |         .unwrap()
+    | |_________________^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on a `Result` value
+   --> crates/adapter-json/tests/common/mod.rs:541:24
+    |
+541 |             let path = RelPath::new(&string(source, "path")).unwrap();
+    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is an `Err`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on a `Result` value
+   --> crates/adapter-json/tests/common/mod.rs:545:5
+    |
+545 |     Corpus::new(sources).unwrap()
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is an `Err`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `expect()` on a `Result` value
+   --> crates/adapter-json/tests/common/mod.rs:566:16
+    |
+566 |     let text = std::str::from_utf8(&rendered.bytes).expect("renderer output must be UTF-8");
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is an `Err`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#expect_used
+    = note: requested on the command line with `-W clippy::expect-used`
+
+warning: used `expect()` on a `Result` value
+   --> crates/adapter-json/tests/common/mod.rs:584:25
+    |
+584 |     let actual: Value = serde_json::from_str(text).expect("renderer output must be JSON");
+    |                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is an `Err`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#expect_used
+
+warning: used `unwrap()` on a `Result` value
+   --> crates/adapter-json/tests/common/mod.rs:626:20
+    |
+626 |     let renderer = adapter_json::JsonRenderer::new(&models).unwrap();
+    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is an `Err`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on a `Result` value
+   --> crates/adapter-json/tests/common/mod.rs:627:32
+    |
+627 |     let independent_renderer = adapter_json::JsonRenderer::new(&models).unwrap();
+    |                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is an `Err`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on a `Result` value
+   --> crates/adapter-json/tests/common/mod.rs:666:35
+    |
+666 |         let comparison_renderer = adapter_json::JsonRenderer::new(&comparison).unwrap();
+    |                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is an `Err`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on a `Result` value
+   --> crates/adapter-json/tests/common/mod.rs:698:24
+    |
+698 |     let value: Value = serde_json::from_slice(bytes).unwrap();
+    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is an `Err`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/adapter-json/tests/common/mod.rs:699:5
+    |
+699 | /     value["entries"]
+700 | |         .as_array()
+701 | |         .unwrap()
+    | |_________________^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on a `Result` value
+  --> crates/adapter-json/tests/registered.rs:54:5
+   |
+54 |     fs::create_dir(&root).unwrap();
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: if this value is an `Err`, it will panic
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `expect_err()` on a `Result` value
+  --> crates/adapter-json/tests/registered.rs:93:17
+   |
+93 |     let error = JsonRenderer::new(&pages).expect_err("duplicate IDs must be rejected");
+   |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: if this value is an `Ok`, it will panic
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#expect_used
+
+warning: used `unwrap()` on an `Option` value
+  --> crates/adapter-json/tests/registered.rs:96:28
+   |
+96 |             assert_eq!(id, case["expected_error"]["id"].as_str().unwrap());
+   |                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: if this value is `None`, it will panic
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/adapter-json/tests/registered.rs:104:13
+    |
+104 |     assert!(case["fresh_renderer_each_build"].as_bool().unwrap());
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/adapter-json/tests/registered.rs:105:17
+    |
+105 |     let clock = case["clock"].as_str().unwrap();
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on a `Result` value
+   --> crates/adapter-json/tests/registered.rs:111:27
+    |
+111 |     let before_renderer = JsonRenderer::new(&before_models).unwrap();
+    |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is an `Err`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `expect()` on a `Result` value
+   --> crates/adapter-json/tests/registered.rs:112:17
+    |
+112 |       let first = site::build_all(
+    |  _________________^
+113 | |         &before,
+114 | |         &FixedClock(clock.to_owned()),
+115 | |         &mut sink,
+...   |
+118 | |     .expect("initial build must succeed");
+    | |_________________________________________^
+    |
+    = note: if this value is an `Err`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#expect_used
+
+warning: used `unwrap()` on a `Result` value
+   --> crates/adapter-json/tests/registered.rs:126:26
+    |
+126 |     let after_renderer = JsonRenderer::new(&after_models).unwrap();
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is an `Err`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `expect()` on a `Result` value
+   --> crates/adapter-json/tests/registered.rs:127:18
+    |
+127 |       let second = site::build_all(
+    |  __________________^
+128 | |         &after,
+129 | |         &FixedClock(clock.to_owned()),
+130 | |         &mut sink,
+...   |
+133 | |     .expect("reconciled build must succeed");
+    | |____________________________________________^
+    |
+    = note: if this value is an `Err`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#expect_used
+
+warning: redundant closure
+   --> crates/adapter-json/tests/registered.rs:143:22
+    |
+143 |                 .map(|path| path.as_str())
+    |                      ^^^^^^^^^^^^^^^^^^^^ help: replace the closure with the method itself: `library::RelPath::as_str`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#redundant_closure_for_method_calls
+
+warning: casting `u64` to `usize` may truncate the value on targets with 32-bit wide pointers
+   --> crates/adapter-json/tests/registered.rs:150:9
+    |
+150 |         case["expected_unchanged"].as_u64().unwrap() as usize
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_truncation
+    = note: `-W clippy::cast-possible-truncation` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::cast_possible_truncation)]`
+help: ... or use `try_from` and handle the error accordingly
+    |
+150 -         case["expected_unchanged"].as_u64().unwrap() as usize
+150 +         usize::try_from(case["expected_unchanged"].as_u64().unwrap())
+    |
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/adapter-json/tests/registered.rs:150:9
+    |
+150 |         case["expected_unchanged"].as_u64().unwrap() as usize
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/adapter-json/tests/registered.rs:152:17
+    |
+152 |       let index = sink
+    |  _________________^
+153 | |         .files
+154 | |         .get(&library::RelPath::new("assets/search-index.json").unwrap())
+155 | |         .unwrap();
+    | |_________________^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on a `Result` value
+   --> crates/adapter-json/tests/registered.rs:154:15
+    |
+154 |         .get(&library::RelPath::new("assets/search-index.json").unwrap())
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is an `Err`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on a `Result` value
+   --> crates/adapter-json/tests/registered.rs:165:20
+    |
+165 |     let renderer = JsonRenderer::new(&models).unwrap();
+    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is an `Err`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `expect_err()` on a `Result` value
+   --> crates/adapter-json/tests/registered.rs:171:17
+    |
+171 |       let error = site::build_all(&corpus, &FixedClock("t0".to_owned()), &mut sink, &renderer)
+    |  _________________^
+172 | |         .expect_err("page/asset collision must fail");
+    | |_____________________________________________________^
+    |
+    = note: if this value is an `Ok`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#expect_used
+
+warning: wildcard matches only a single variant and will also match any future added variants
+   --> crates/adapter-json/tests/registered.rs:177:9
+    |
+177 |         other => panic!("unexpected collision error {other:?}"),
+    |         ^^^^^ help: try: `other @ site::SiteError::Sink(_)`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#match_wildcard_for_single_variants
+    = note: `-W clippy::match-wildcard-for-single-variants` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::match_wildcard_for_single_variants)]`
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/adapter-json/tests/registered.rs:175:38
+    |
+175 |             assert!(message.contains(case["expected_error_contains"].as_str().unwrap()));
+    |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: casting `u64` to `usize` may truncate the value on targets with 32-bit wide pointers
+   --> crates/adapter-json/tests/registered.rs:181:9
+    |
+181 |         case["expected_sink_files"].as_u64().unwrap() as usize
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_truncation
+help: ... or use `try_from` and handle the error accordingly
+    |
+181 -         case["expected_sink_files"].as_u64().unwrap() as usize
+181 +         usize::try_from(case["expected_sink_files"].as_u64().unwrap())
+    |
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/adapter-json/tests/registered.rs:181:9
+    |
+181 |         case["expected_sink_files"].as_u64().unwrap() as usize
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/adapter-json/tests/registered.rs:188:13
+    |
+188 |     assert!(case["owner_contract_passed"].as_bool().unwrap());
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on a `Result` value
+   --> crates/adapter-json/tests/registered.rs:190:20
+    |
+190 |     let renderer = JsonRenderer::new(&models).unwrap();
+    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is an `Err`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: redundant closure
+  --> crates/app-cli/tests/../../adapter-json/tests/common/mod.rs:49:29
+   |
+49 |         entries.sort_by_key(|entry| entry.file_name());
+   |                             ^^^^^^^^^^^^^^^^^^^^^^^^^ help: replace the closure with the method itself: `std::fs::DirEntry::file_name`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#redundant_closure_for_method_calls
+   = note: `-W clippy::redundant-closure-for-method-calls` implied by `-W clippy::pedantic`
+   = help: to override `-W clippy::pedantic` add `#[allow(clippy::redundant_closure_for_method_calls)]`
+
+warning: this function has too many lines (188/100)
+   --> crates/app-cli/tests/../../adapter-json/tests/common/mod.rs:264:1
+    |
+264 | pub fn node(value: &Value) -> Node {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_lines
+    = note: `-W clippy::too-many-lines` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::too_many_lines)]`
+
+warning: `adapter-json` (test "registered") generated 57 warnings (run `cargo clippy --fix --test "registered" -p adapter-json -- ` to apply 2 suggestions)
+warning: used `unwrap()` on an `Option` value
+   --> crates/app-cli/tests/../../adapter-json/tests/common/mod.rs:272:27
+    |
+272 |                   children: value["children"]
+    |  ___________________________^
+273 | |                     .as_array()
+274 | |                     .unwrap()
+    | |_____________________________^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+    = note: requested on the command line with `-W clippy::unwrap-used`
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/app-cli/tests/../../adapter-json/tests/common/mod.rs:283:17
+    |
+283 | /                 value["children"]
+284 | |                     .as_array()
+285 | |                     .unwrap()
+    | |_____________________________^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/app-cli/tests/../../adapter-json/tests/common/mod.rs:313:17
+    |
+313 | /                 value["children"]
+314 | |                     .as_array()
+315 | |                     .unwrap()
+    | |_____________________________^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/app-cli/tests/../../adapter-json/tests/common/mod.rs:324:17
+    |
+324 | /                 value["children"]
+325 | |                     .as_array()
+326 | |                     .unwrap()
+    | |_____________________________^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/app-cli/tests/../../adapter-json/tests/common/mod.rs:335:17
+    |
+335 | /                 value["children"]
+336 | |                     .as_array()
+337 | |                     .unwrap()
+    | |_____________________________^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/app-cli/tests/../../adapter-json/tests/common/mod.rs:347:27
+    |
+347 |                   children: value["children"]
+    |  ___________________________^
+348 | |                     .as_array()
+349 | |                     .unwrap()
+    | |_____________________________^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/app-cli/tests/../../adapter-json/tests/common/mod.rs:359:27
+    |
+359 |                   children: value["children"]
+    |  ___________________________^
+360 | |                     .as_array()
+361 | |                     .unwrap()
+    | |_____________________________^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/app-cli/tests/../../adapter-json/tests/common/mod.rs:382:24
+    |
+382 |                   items: value["items"]
+    |  ________________________^
+383 | |                     .as_array()
+384 | |                     .unwrap()
+    | |_____________________________^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/app-cli/tests/../../adapter-json/tests/common/mod.rs:386:33
+    |
+386 |                     .map(|item| item.as_array().unwrap().iter().map(node).collect())
+    |                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/app-cli/tests/../../adapter-json/tests/common/mod.rs:394:27
+    |
+394 |                   children: value["children"]
+    |  ___________________________^
+395 | |                     .as_array()
+396 | |                     .unwrap()
+    | |_____________________________^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/app-cli/tests/../../adapter-json/tests/common/mod.rs:405:24
+    |
+405 |                   align: value["align"]
+    |  ________________________^
+406 | |                     .as_array()
+407 | |                     .unwrap()
+    | |_____________________________^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/app-cli/tests/../../adapter-json/tests/common/mod.rs:411:23
+    |
+411 |                   head: value["head"]
+    |  _______________________^
+412 | |                     .as_array()
+413 | |                     .unwrap()
+    | |_____________________________^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/app-cli/tests/../../adapter-json/tests/common/mod.rs:415:33
+    |
+415 |                     .map(|cell| cell.as_array().unwrap().iter().map(node).collect())
+    |                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/app-cli/tests/../../adapter-json/tests/common/mod.rs:417:23
+    |
+417 |                   rows: value["rows"]
+    |  _______________________^
+418 | |                     .as_array()
+419 | |                     .unwrap()
+    | |_____________________________^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/app-cli/tests/../../adapter-json/tests/common/mod.rs:422:25
+    |
+422 | /                         row.as_array()
+423 | |                             .unwrap()
+    | |_____________________________________^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/app-cli/tests/../../adapter-json/tests/common/mod.rs:425:41
+    |
+425 | ...                   .map(|cell| cell.as_array().unwrap().iter().map(node).collect())
+    |                                   ^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/app-cli/tests/../../adapter-json/tests/common/mod.rs:469:17
+    |
+469 |       let links = value["links"]
+    |  _________________^
+470 | |         .as_array()
+471 | |         .unwrap()
+    | |_________________^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/app-cli/tests/../../adapter-json/tests/common/mod.rs:491:14
+    |
+491 |           toc: value["toc"]
+    |  ______________^
+492 | |             .as_array()
+493 | |             .unwrap()
+    | |_____________________^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/app-cli/tests/../../adapter-json/tests/common/mod.rs:504:22
+    |
+504 |           breadcrumbs: value["breadcrumbs"]
+    |  ______________________^
+505 | |             .as_array()
+506 | |             .unwrap()
+    | |_____________________^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/app-cli/tests/../../adapter-json/tests/common/mod.rs:508:25
+    |
+508 |             .map(|item| item.as_str().unwrap().to_owned())
+    |                         ^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/app-cli/tests/../../adapter-json/tests/common/mod.rs:510:20
+    |
+510 |           backlinks: value["backlinks"]
+    |  ____________________^
+511 | |             .as_array()
+512 | |             .unwrap()
+    | |_____________________^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/app-cli/tests/../../adapter-json/tests/common/mod.rs:520:15
+    |
+520 |         body: value["body"].as_array().unwrap().iter().map(node).collect(),
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/app-cli/tests/../../adapter-json/tests/common/mod.rs:535:19
+    |
+535 |       let sources = values
+    |  ___________________^
+536 | |         .as_array()
+537 | |         .unwrap()
+    | |_________________^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on a `Result` value
+   --> crates/app-cli/tests/../../adapter-json/tests/common/mod.rs:541:24
+    |
+541 |             let path = RelPath::new(&string(source, "path")).unwrap();
+    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is an `Err`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on a `Result` value
+   --> crates/app-cli/tests/../../adapter-json/tests/common/mod.rs:545:5
+    |
+545 |     Corpus::new(sources).unwrap()
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is an `Err`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `expect()` on a `Result` value
+   --> crates/app-cli/tests/../../adapter-json/tests/common/mod.rs:566:16
+    |
+566 |     let text = std::str::from_utf8(&rendered.bytes).expect("renderer output must be UTF-8");
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is an `Err`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#expect_used
+    = note: requested on the command line with `-W clippy::expect-used`
+
+warning: used `expect()` on a `Result` value
+   --> crates/app-cli/tests/../../adapter-json/tests/common/mod.rs:584:25
+    |
+584 |     let actual: Value = serde_json::from_str(text).expect("renderer output must be JSON");
+    |                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is an `Err`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#expect_used
+
+warning: used `unwrap()` on a `Result` value
+   --> crates/app-cli/tests/../../adapter-json/tests/common/mod.rs:626:20
+    |
+626 |     let renderer = adapter_json::JsonRenderer::new(&models).unwrap();
+    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is an `Err`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on a `Result` value
+   --> crates/app-cli/tests/../../adapter-json/tests/common/mod.rs:627:32
+    |
+627 |     let independent_renderer = adapter_json::JsonRenderer::new(&models).unwrap();
+    |                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is an `Err`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on a `Result` value
+   --> crates/app-cli/tests/../../adapter-json/tests/common/mod.rs:666:35
+    |
+666 |         let comparison_renderer = adapter_json::JsonRenderer::new(&comparison).unwrap();
+    |                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is an `Err`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on a `Result` value
+   --> crates/app-cli/tests/../../adapter-json/tests/common/mod.rs:698:24
+    |
+698 |     let value: Value = serde_json::from_slice(bytes).unwrap();
+    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is an `Err`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/app-cli/tests/../../adapter-json/tests/common/mod.rs:699:5
+    |
+699 | /     value["entries"]
+700 | |         .as_array()
+701 | |         .unwrap()
+    | |_________________^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on a `Result` value
+  --> crates/app-cli/tests/json_renderer.rs:18:5
+   |
+18 |     fs::create_dir(&root).unwrap();
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: if this value is an `Err`, it will panic
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+  --> crates/app-cli/tests/json_renderer.rs:31:19
+   |
+31 |     for source in sources.as_array().unwrap() {
+   |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: if this value is `None`, it will panic
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+  --> crates/app-cli/tests/json_renderer.rs:32:20
+   |
+32 |         let path = source["path"].as_str().unwrap();
+   |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: if this value is `None`, it will panic
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on a `Result` value
+  --> crates/app-cli/tests/json_renderer.rs:33:19
+   |
+33 |         let rel = library::RelPath::new(path).unwrap();
+   |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: if this value is an `Err`, it will panic
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on a `Result` value
+  --> crates/app-cli/tests/json_renderer.rs:36:13
+   |
+36 |             fs::create_dir_all(parent).unwrap();
+   |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: if this value is an `Err`, it will panic
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on a `Result` value
+  --> crates/app-cli/tests/json_renderer.rs:38:9
+   |
+38 |         fs::write(target, source["text"].as_str().unwrap()).unwrap();
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: if this value is an `Err`, it will panic
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+  --> crates/app-cli/tests/json_renderer.rs:38:27
+   |
+38 |         fs::write(target, source["text"].as_str().unwrap()).unwrap();
+   |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: if this value is `None`, it will panic
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on a `Result` value
+  --> crates/app-cli/tests/json_renderer.rs:44:20
+   |
+44 |     let metadata = fs::symlink_metadata(&current).unwrap();
+   |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: if this value is an `Err`, it will panic
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on a `Result` value
+  --> crates/app-cli/tests/json_renderer.rs:47:22
+   |
+47 |         for entry in fs::read_dir(current).unwrap() {
+   |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: if this value is an `Err`, it will panic
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on a `Result` value
+  --> crates/app-cli/tests/json_renderer.rs:48:25
+   |
+48 |             let entry = entry.unwrap();
+   |                         ^^^^^^^^^^^^^^
+   |
+   = note: if this value is an `Err`, it will panic
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+  --> crates/app-cli/tests/json_renderer.rs:53:13
+   |
+53 | /             relative
+54 | |                 .to_str()
+55 | |                 .unwrap()
+   | |_________________________^
+   |
+   = note: if this value is `None`, it will panic
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `expect()` on a `Result` value
+  --> crates/app-cli/tests/json_renderer.rs:79:5
+   |
+79 |     command.output().expect("rhawiki build must start")
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: if this value is an `Err`, it will panic
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#expect_used
+
+warning: used `unwrap()` on a `Result` value
+   --> crates/app-cli/tests/json_renderer.rs:105:5
+    |
+105 |     fs::create_dir(&source).unwrap();
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is an `Err`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: casting `i64` to `i32` may truncate the value
+   --> crates/app-cli/tests/json_renderer.rs:110:14
+    |
+110 |         Some(case["expected_exit"].as_i64().unwrap() as i32)
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_truncation
+    = note: `-W clippy::cast-possible-truncation` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::cast_possible_truncation)]`
+help: ... or use `try_from` and handle the error accordingly
+    |
+110 -         Some(case["expected_exit"].as_i64().unwrap() as i32)
+110 +         Some(i32::try_from(case["expected_exit"].as_i64().unwrap()))
+    |
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/app-cli/tests/json_renderer.rs:110:14
+    |
+110 |         Some(case["expected_exit"].as_i64().unwrap() as i32)
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/app-cli/tests/json_renderer.rs:117:27
+    |
+117 |     let expected_titles = case["expected_titles"].as_object().unwrap();
+    |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on a `Result` value
+   --> crates/app-cli/tests/json_renderer.rs:120:27
+    |
+120 |         let page: Value = serde_json::from_slice(&fs::read(path).unwrap()).unwrap();
+    |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is an `Err`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on a `Result` value
+   --> crates/app-cli/tests/json_renderer.rs:120:51
+    |
+120 |         let page: Value = serde_json::from_slice(&fs::read(path).unwrap()).unwrap();
+    |                                                   ^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is an `Err`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/app-cli/tests/json_renderer.rs:126:23
+    |
+126 |         for member in case["required_page_members"].as_array().unwrap() {
+    |                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/app-cli/tests/json_renderer.rs:128:26
+    |
+128 |                 page.get(member.as_str().unwrap()).is_some(),
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on a `Result` value
+   --> crates/app-cli/tests/json_renderer.rs:137:9
+    |
+137 | /         serde_json::from_slice(&fs::read(output.join("assets/search-index.json")).unwrap())
+138 | |             .unwrap();
+    | |_____________________^
+    |
+    = note: if this value is an `Err`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on a `Result` value
+   --> crates/app-cli/tests/json_renderer.rs:137:33
+    |
+137 |         serde_json::from_slice(&fs::read(output.join("assets/search-index.json")).unwrap())
+    |                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is an `Err`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/app-cli/tests/json_renderer.rs:139:15
+    |
+139 |       let ids = index["entries"]
+    |  _______________^
+140 | |         .as_array()
+141 | |         .unwrap()
+    | |_________________^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/app-cli/tests/json_renderer.rs:143:22
+    |
+143 |         .map(|entry| entry["id"].as_str().unwrap())
+    |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on a `Result` value
+   --> crates/app-cli/tests/json_renderer.rs:153:5
+    |
+153 |     fs::create_dir(&source).unwrap();
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is an `Err`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/app-cli/tests/json_renderer.rs:155:18
+    |
+155 |     let format = case["explicit_format"].as_bool().unwrap().then_some("html");
+    |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: casting `i64` to `i32` may truncate the value
+   --> crates/app-cli/tests/json_renderer.rs:159:14
+    |
+159 |         Some(case["expected_exit"].as_i64().unwrap() as i32)
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_truncation
+help: ... or use `try_from` and handle the error accordingly
+    |
+159 -         Some(case["expected_exit"].as_i64().unwrap() as i32)
+159 +         Some(i32::try_from(case["expected_exit"].as_i64().unwrap()))
+    |
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/app-cli/tests/json_renderer.rs:159:14
+    |
+159 |         Some(case["expected_exit"].as_i64().unwrap() as i32)
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/app-cli/tests/json_renderer.rs:165:28
+    |
+165 |     for (path, markers) in case["expected_markers"].as_object().unwrap() {
+    |                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on a `Result` value
+   --> crates/app-cli/tests/json_renderer.rs:166:20
+    |
+166 |         let text = fs::read_to_string(output.join(path)).unwrap();
+    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is an `Err`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/app-cli/tests/json_renderer.rs:167:23
+    |
+167 |         for marker in markers.as_array().unwrap() {
+    |                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/app-cli/tests/json_renderer.rs:169:31
+    |
+169 |                 text.contains(marker.as_str().unwrap()),
+    |                               ^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on a `Result` value
+   --> crates/app-cli/tests/json_renderer.rs:180:5
+    |
+180 |     fs::create_dir(&source).unwrap();
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is an `Err`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `expect()` on a `Result` value
+   --> crates/app-cli/tests/json_renderer.rs:182:18
+    |
+182 |       let result = Command::new(env!("CARGO_BIN_EXE_rhawiki"))
+    |  __________________^
+183 | |         .arg("check")
+184 | |         .arg("--root")
+185 | |         .arg(&source)
+...   |
+188 | |         .output()
+189 | |         .expect("rhawiki check must start");
+    | |___________________________________________^
+    |
+    = note: if this value is an `Err`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#expect_used
+
+warning: casting `i64` to `i32` may truncate the value
+   --> crates/app-cli/tests/json_renderer.rs:192:14
+    |
+192 |         Some(case["expected_exit"].as_i64().unwrap() as i32)
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_possible_truncation
+help: ... or use `try_from` and handle the error accordingly
+    |
+192 -         Some(case["expected_exit"].as_i64().unwrap() as i32)
+192 +         Some(i32::try_from(case["expected_exit"].as_i64().unwrap()))
+    |
+
+warning: used `unwrap()` on an `Option` value
+   --> crates/app-cli/tests/json_renderer.rs:192:14
+    |
+192 |         Some(case["expected_exit"].as_i64().unwrap() as i32)
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is `None`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: used `unwrap()` on a `Result` value
+   --> crates/app-cli/tests/json_renderer.rs:195:25
+    |
+195 |     let actual: Value = serde_json::from_slice(&result.stdout).unwrap();
+    |                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: if this value is an `Err`, it will panic
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unwrap_used
+
+warning: `app-cli` (test "json_renderer") generated 72 warnings (run `cargo clippy --fix --test "json_renderer" -p app-cli -- ` to apply 1 suggestion)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.42s

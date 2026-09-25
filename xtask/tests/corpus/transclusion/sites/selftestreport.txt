@@ -1,0 +1,9 @@
+PASS
+- deterministic generator produced 12 site rows: TX01..TX12
+- CASES.json matched deterministic generator bytes
+- expected_documents covered 37 authored sources
+- expected_check schema_version was 1 for every row
+- expected_pages selected 14 page controls
+- observations included 30 transclusions, 3 navigation links, 8 images, and 8 witnesses
+- strict reproduction recreated all nine package files byte-for-byte
+- no target implementation, renderer, network, or live oracle was invoked

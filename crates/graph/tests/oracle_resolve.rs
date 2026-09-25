@@ -128,6 +128,16 @@ fn project_witness(witness: &Witness) -> WitnessTuple {
             target.clone(),
             Some(heading.clone()),
         ),
+        Witness::BrokenTransclusion { .. } => {
+            panic!("unexpected witness: BrokenTransclusion")
+        }
+        Witness::AmbiguousTransclusion { .. } => {
+            panic!("unexpected witness: AmbiguousTransclusion")
+        }
+        Witness::MissingTransclusionAnchor { .. } => {
+            panic!("unexpected witness: MissingTransclusionAnchor")
+        }
+        Witness::TransclusionCycle { .. } => panic!("unexpected witness: TransclusionCycle"),
     }
 }
 

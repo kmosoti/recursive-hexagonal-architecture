@@ -1,0 +1,34 @@
+schema_version = 1
+profile = "write"
+kind = "site"
+seed = "authored"
+seed_mode = "no_prng"
+model = "gpt-5.6-luna"
+effort = "high"
+case_count = 12
+kind_count = 1
+payload_count = 7
+content_sha256 = "af373c174af3f6ac7964474122c47f7004bdcf87354ac73d2cedbfa28e9139cb"
+
+[kind_counts]
+site = 12
+
+[source_digests]
+contract = "603120d9ebab92619d67f8caec7172c07793d3e0f80e67912b4d05a402c489e0"
+bdr = "907b00767da407ccad7ce7f9fbbbac0e2c1746227f2b7981e6681321476f4e28"
+prompt = "4bd289cf1a954d9647506ef13e719dc98e26bee4347a3ec403b42169fb04e885"
+
+[source_paths]
+contract = "source-snapshots/contract.md"
+bdr = "source-snapshots/bdr.md"
+prompt = "source-snapshots/prompt.md"
+
+[original_paths]
+contract = "docs/architecture/transclusion-contract.md"
+bdr = "docs/adr/BDR-0007-site-owns-page-tree.md"
+prompt = "xtask/tests/corpus/write-prompts/CHG-008/pd-transclusion-sites-generator-prompt.md"
+
+[generator]
+path = "reference.py"
+read_only_default = true
+reproduction_subdirectory = "reproduced"

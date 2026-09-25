@@ -1,0 +1,25 @@
+COMMAND python3 -B target/m2/audit-semantic-package.py /home/kmosoti/projects/rha-m2/target/m2/verify-transclusion-sites site
+{"cases": 12, "cases_sha256": "672232cf85a3712c3b7c621b40214df6c7ea23dfcbfe1ed5ba113d6dafd34118", "content_sha256": "af373c174af3f6ac7964474122c47f7004bdcf87354ac73d2cedbfa28e9139cb", "kind_counts": {"site": 12}, "package": "/home/kmosoti/projects/rha-m2/target/m2/verify-transclusion-sites", "payload_count": 7}
+EXIT 0
+COMMAND python3 -B /home/kmosoti/projects/rha-m2/target/m2/verify-transclusion-sites/reference.py
+PASS
+- deterministic generator produced 12 site rows (TX01..TX12)
+- CASES.json byte comparison matched generator output
+- every source path is covered by expected_documents
+- every expected_pages object has the seven declared page fields
+- no target implementation, renderer, or live oracle was invoked
+EXIT 0
+COMMAND python3 -B /home/kmosoti/projects/rha-m2/target/m2/verify-transclusion-sites/reference.py --reproduce-to reproduced
+reproduced 9 package files under reproduced
+EXIT 0
+BYTE_IDENTICAL_FILES 9
+COMMAND python3 -B target/m2/audit-semantic-package.py /home/kmosoti/projects/rha-m2/target/m2/verify-transclusion-sites/reproduced site
+{"cases": 12, "cases_sha256": "672232cf85a3712c3b7c621b40214df6c7ea23dfcbfe1ed5ba113d6dafd34118", "content_sha256": "af373c174af3f6ac7964474122c47f7004bdcf87354ac73d2cedbfa28e9139cb", "kind_counts": {"site": 12}, "package": "/home/kmosoti/projects/rha-m2/target/m2/verify-transclusion-sites/reproduced", "payload_count": 7}
+EXIT 0
+CORRUPTED_COPY_EXIT 1
+Traceback (most recent call last):
+  File "/home/kmosoti/projects/rha-m2/target/m2/audit-semantic-package.py", line 10, in <module>
+    file=p/name;assert file.is_file() and not file.is_symlink();assert h(file.read_bytes())==digest,name
+                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: CASES.json
+VALID_COPY_ACCEPTED_AND_CASE_CORRUPTION_REJECTED

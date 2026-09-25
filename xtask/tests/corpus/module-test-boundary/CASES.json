@@ -1,0 +1,308 @@
+[
+  {
+    "id": "strict_external_cfg_test_helper",
+    "kind": "module_test_boundary",
+    "mode": "strict",
+    "crate_name": "x",
+    "crate_root": "workspace/member",
+    "workspace_root": "workspace",
+    "root_file": "workspace/member/src/lib.rs",
+    "files": {
+      "workspace/member/src/lib.rs": "pub fn root_only(){}\n#[cfg(test)]\n#[path = \"../../shared/helper.rs\"]\nmod checks;\n",
+      "workspace/shared/helper.rs": "pub fn shared(){crate::root_only();}\n"
+    },
+    "symlinks": {},
+    "expected": {
+      "outcome": "refused",
+      "reason_contains": "outside crate root",
+      "modules": [],
+      "test_edge": null,
+      "source_files": {}
+    },
+    "mutation": null
+  },
+  {
+    "id": "workspace_external_cfg_test_helper",
+    "kind": "module_test_boundary",
+    "mode": "workspace",
+    "crate_name": "x",
+    "crate_root": "workspace/member",
+    "workspace_root": "workspace",
+    "root_file": "workspace/member/src/lib.rs",
+    "files": {
+      "workspace/member/src/lib.rs": "pub fn root_only(){}\n#[cfg(test)]\n#[path = \"../../shared/helper.rs\"]\nmod checks;\n",
+      "workspace/shared/helper.rs": "pub fn shared(){crate::root_only();}\n"
+    },
+    "symlinks": {},
+    "expected": {
+      "outcome": "accepted",
+      "reason_contains": null,
+      "modules": [
+        "x",
+        "x::checks"
+      ],
+      "test_edge": {
+        "from": "x::checks",
+        "to": "x"
+      },
+      "source_files": {
+        "workspace/member/src/lib.rs": "5fde5dcb65d5178608d56dd0e91a462d255b993fad327489fc24da9cca05537d",
+        "workspace/shared/helper.rs": "f5acdf2cc44a3b3214ec6bef6b004a9910776c630ec0b32617a5fde244d5caef"
+      }
+    },
+    "mutation": {
+      "path": "workspace/shared/helper.rs",
+      "text": "pub fn shared(){crate::root_only();} // comment mutation\n",
+      "expected_sha256": "30762a6798919489e941dc972450e4da9820c51965b1393011939e9006b520ad"
+    }
+  },
+  {
+    "id": "workspace_production_external_helper",
+    "kind": "module_test_boundary",
+    "mode": "workspace",
+    "crate_name": "x",
+    "crate_root": "workspace/member",
+    "workspace_root": "workspace",
+    "root_file": "workspace/member/src/lib.rs",
+    "files": {
+      "workspace/member/src/lib.rs": "pub fn root_only(){}\n#[path = \"../../shared/helper.rs\"]\nmod checks;\n",
+      "workspace/shared/helper.rs": "this is intentionally invalid Rust\n"
+    },
+    "symlinks": {},
+    "expected": {
+      "outcome": "refused",
+      "reason_contains": "outside crate root",
+      "modules": [],
+      "test_edge": null,
+      "source_files": {}
+    },
+    "mutation": null
+  },
+  {
+    "id": "nested_out_of_line_inherited_cfg_test_helper",
+    "kind": "module_test_boundary",
+    "mode": "workspace",
+    "crate_name": "x",
+    "crate_root": "workspace/member",
+    "workspace_root": "workspace",
+    "root_file": "workspace/member/src/lib.rs",
+    "files": {
+      "workspace/member/src/lib.rs": "pub fn root_only(){}\n#[cfg(test)]\nmod checks;\n",
+      "workspace/member/src/checks.rs": "#[path = \"../../shared/helper.rs\"]\nmod shared;\n",
+      "workspace/shared/helper.rs": "pub fn shared(){crate::root_only();}\n"
+    },
+    "symlinks": {},
+    "expected": {
+      "outcome": "accepted",
+      "reason_contains": null,
+      "modules": [
+        "x",
+        "x::checks",
+        "x::checks::shared"
+      ],
+      "test_edge": {
+        "from": "x::checks::shared",
+        "to": "x"
+      },
+      "source_files": {
+        "workspace/member/src/lib.rs": "aacdbbce84f7d69bb8d2ff6e7e2daf87c07ecf9a3f7317f8ffa3904d62ae0030",
+        "workspace/member/src/checks.rs": "dc7a435bb3a006b6f4f04f7e958d4e7ca65313fa025146e91d4d23b85b3800e7",
+        "workspace/shared/helper.rs": "f5acdf2cc44a3b3214ec6bef6b004a9910776c630ec0b32617a5fde244d5caef"
+      }
+    },
+    "mutation": null
+  },
+  {
+    "id": "workspace_cfg_test_target_outside_workspace",
+    "kind": "module_test_boundary",
+    "mode": "workspace",
+    "crate_name": "x",
+    "crate_root": "workspace/member",
+    "workspace_root": "workspace",
+    "root_file": "workspace/member/src/lib.rs",
+    "files": {
+      "workspace/member/src/lib.rs": "pub fn root_only(){}\n#[cfg(test)]\n#[path = \"../../../external/helper.rs\"]\nmod checks;\n",
+      "workspace/shared/helper.rs": "pub fn shared(){crate::root_only();}\n",
+      "external/helper.rs": "this is intentionally invalid Rust\n"
+    },
+    "symlinks": {},
+    "expected": {
+      "outcome": "refused",
+      "reason_contains": "outside permitted test source root",
+      "modules": [],
+      "test_edge": null,
+      "source_files": {}
+    },
+    "mutation": null
+  },
+  {
+    "id": "workspace_cfg_test_canonical_symlink_inside",
+    "kind": "module_test_boundary",
+    "mode": "workspace",
+    "crate_name": "x",
+    "crate_root": "workspace/member",
+    "workspace_root": "workspace",
+    "root_file": "workspace/member/src/lib.rs",
+    "files": {
+      "workspace/member/src/lib.rs": "pub fn root_only(){}\n#[cfg(test)]\n#[path = \"../../shared/linked_helper.rs\"]\nmod checks;\n",
+      "workspace/shared/helper.rs": "pub fn shared(){crate::root_only();}\n"
+    },
+    "symlinks": {
+      "workspace/shared/linked_helper.rs": "helper.rs"
+    },
+    "expected": {
+      "outcome": "accepted",
+      "reason_contains": null,
+      "modules": [
+        "x",
+        "x::checks"
+      ],
+      "test_edge": {
+        "from": "x::checks",
+        "to": "x"
+      },
+      "source_files": {
+        "workspace/member/src/lib.rs": "26697fc4a687d7629a8572d478b98b1b1e4d1cad14ee9ac0e69282d64ce9205d",
+        "workspace/shared/helper.rs": "f5acdf2cc44a3b3214ec6bef6b004a9910776c630ec0b32617a5fde244d5caef"
+      }
+    },
+    "mutation": null
+  },
+  {
+    "id": "workspace_cfg_test_canonical_symlink_outside",
+    "kind": "module_test_boundary",
+    "mode": "workspace",
+    "crate_name": "x",
+    "crate_root": "workspace/member",
+    "workspace_root": "workspace",
+    "root_file": "workspace/member/src/lib.rs",
+    "files": {
+      "workspace/member/src/lib.rs": "pub fn root_only(){}\n#[cfg(test)]\n#[path = \"../../shared/linked_helper.rs\"]\nmod checks;\n",
+      "workspace/shared/helper.rs": "pub fn shared(){crate::root_only();}\n",
+      "external/helper.rs": "this is intentionally invalid Rust\n"
+    },
+    "symlinks": {
+      "workspace/shared/linked_helper.rs": "../../external/helper.rs"
+    },
+    "expected": {
+      "outcome": "refused",
+      "reason_contains": "outside permitted test source root",
+      "modules": [],
+      "test_edge": null,
+      "source_files": {}
+    },
+    "mutation": null
+  },
+  {
+    "id": "workspace_production_symlink_inside_workspace",
+    "kind": "module_test_boundary",
+    "mode": "workspace",
+    "crate_name": "x",
+    "crate_root": "workspace/member",
+    "workspace_root": "workspace",
+    "root_file": "workspace/member/src/lib.rs",
+    "files": {
+      "workspace/member/src/lib.rs": "pub fn root_only(){}\n#[path = \"../../shared/linked_helper.rs\"]\nmod checks;\n",
+      "workspace/shared/helper.rs": "this is intentionally invalid Rust\n"
+    },
+    "symlinks": {
+      "workspace/shared/linked_helper.rs": "helper.rs"
+    },
+    "expected": {
+      "outcome": "refused",
+      "reason_contains": "outside crate root",
+      "modules": [],
+      "test_edge": null,
+      "source_files": {}
+    },
+    "mutation": null
+  },
+  {
+    "id": "workspace_external_inner_cfg_test_non_test_declaration",
+    "kind": "module_test_boundary",
+    "mode": "workspace",
+    "crate_name": "x",
+    "crate_root": "workspace/member",
+    "workspace_root": "workspace",
+    "root_file": "workspace/member/src/lib.rs",
+    "files": {
+      "workspace/member/src/lib.rs": "pub fn root_only(){}\n#[path = \"../../shared/helper.rs\"]\nmod checks;\n",
+      "workspace/shared/helper.rs": "#![cfg(test)]\nthis is intentionally invalid Rust\n"
+    },
+    "symlinks": {},
+    "expected": {
+      "outcome": "refused",
+      "reason_contains": "outside crate root",
+      "modules": [],
+      "test_edge": null,
+      "source_files": {}
+    },
+    "mutation": null
+  },
+  {
+    "id": "workspace_external_nonexact_cfg_test_declaration",
+    "kind": "module_test_boundary",
+    "mode": "workspace",
+    "crate_name": "x",
+    "crate_root": "workspace/member",
+    "workspace_root": "workspace",
+    "root_file": "workspace/member/src/lib.rs",
+    "files": {
+      "workspace/member/src/lib.rs": "pub fn root_only(){}\n#[cfg(any(test, feature = \"x\"))]\n#[path = \"../../shared/helper.rs\"]\nmod checks;\n",
+      "workspace/shared/helper.rs": "this is intentionally invalid Rust\n"
+    },
+    "symlinks": {},
+    "expected": {
+      "outcome": "refused",
+      "reason_contains": "outside crate root",
+      "modules": [],
+      "test_edge": null,
+      "source_files": {}
+    },
+    "mutation": null
+  },
+  {
+    "id": "workspace_external_cfg_attr_path_declaration",
+    "kind": "module_test_boundary",
+    "mode": "workspace",
+    "crate_name": "x",
+    "crate_root": "workspace/member",
+    "workspace_root": "workspace",
+    "root_file": "workspace/member/src/lib.rs",
+    "files": {
+      "workspace/member/src/lib.rs": "pub fn root_only(){}\n#[path = \"../../shared/helper.rs\"]\n#[cfg_attr(test, allow(dead_code))]\nmod checks;\n",
+      "workspace/shared/helper.rs": "this is intentionally invalid Rust\n"
+    },
+    "symlinks": {},
+    "expected": {
+      "outcome": "refused",
+      "reason_contains": "outside crate root",
+      "modules": [],
+      "test_edge": null,
+      "source_files": {}
+    },
+    "mutation": null
+  },
+  {
+    "id": "workspace_root_narrower_than_crate_root",
+    "kind": "module_test_boundary",
+    "mode": "workspace",
+    "crate_name": "x",
+    "crate_root": "workspace/member",
+    "workspace_root": "workspace/shared",
+    "root_file": "workspace/member/src/lib.rs",
+    "files": {
+      "workspace/member/src/lib.rs": "pub fn root_only(){}\n#[cfg(test)]\n#[path = \"../../shared/helper.rs\"]\nmod checks;\n",
+      "workspace/shared/helper.rs": "pub fn shared(){crate::root_only();}\n"
+    },
+    "symlinks": {},
+    "expected": {
+      "outcome": "refused",
+      "reason_contains": "crate root",
+      "modules": [],
+      "test_edge": null,
+      "source_files": {}
+    },
+    "mutation": null
+  }
+]

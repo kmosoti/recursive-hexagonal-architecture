@@ -1,0 +1,1 @@
+{"case_count": 79, "cases_sha256": "fb7b1f6f9bf28d6e7eda3cc0d17b2613c6ba0070166468df89d05fc43059e854", "content_sha256": "5a48898b2705fcaefabceb3af3ebe8bb939fe1c239f997fbb2f94edc394cd697", "kind_counts": {"cli_check": 1, "cli_html": 2, "cli_json": 1, "collision": 1, "contract": 1, "duplicate": 2, "project": 70, "reconcile": 1}, "payload_count": 10}

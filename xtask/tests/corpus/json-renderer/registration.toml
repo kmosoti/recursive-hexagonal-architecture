@@ -1,0 +1,100 @@
+schema_version = 1
+seed = 8072026
+model = "gpt-5.6-luna"
+effort = "high"
+prompt_path = "xtask/tests/corpus/write-prompts/CHG-008/pd-json-generator-prompt.md"
+prompt_sha256 = "cdc8435f8ad8db0b8e776eee08397c4189a63ae8c9c9a36198128f55bc482742"
+correction_prompt_path = "xtask/tests/corpus/write-prompts/CHG-008/pd-json-generator-correction-prompt.md"
+correction_prompt_sha256 = "a4b523c216bd82c841bdd091cf44fd958ee489040215b8b020bb7d1c1c8c9984"
+whitespace_prompt_path = "xtask/tests/corpus/write-prompts/CHG-008/pd-json-whitespace-correction-prompt.md"
+whitespace_prompt_sha256 = "fa370c4c6730d6ec112a2c1f0c72df1de73998ad5db93be28428831a41e5277e"
+prompt_count = 3
+case_count = 79
+random_project_count = 64
+payload_count = 10
+content_sha256 = "5a48898b2705fcaefabceb3af3ebe8bb939fe1c239f997fbb2f94edc394cd697"
+
+[kind_counts]
+cli_check = 1
+cli_html = 2
+cli_json = 1
+collision = 1
+contract = 1
+duplicate = 2
+project = 70
+reconcile = 1
+
+[[sources]]
+name = "contract"
+source_path = "xtask/tests/corpus/json-renderer/source-snapshots/contract.md"
+original_path = "docs/architecture/json-renderer-contract.md"
+source_sha256 = "08e3271fe9a4a0035bc611f0ed3a07fc2041db51e8730e52333b01e092ed0a36"
+
+[[sources]]
+name = "node"
+source_path = "xtask/tests/corpus/json-renderer/source-snapshots/node.rs"
+original_path = "crates/document/src/node.rs"
+source_sha256 = "04e9bbf4ca0d411df88c2dd7f7904ca8a3c96c9998d62150d40dd036ff33b0b3"
+
+[[sources]]
+name = "page_model"
+source_path = "xtask/tests/corpus/json-renderer/source-snapshots/page-model.rs"
+original_path = "crates/site/src/assembly/mod.rs"
+source_sha256 = "e65c9567dffa3b25bf63f83795b73ed64aa815c410b76a8544158af42db26a2f"
+
+[[inventory]]
+path = "CASES.json"
+bytes = 479037
+sha256 = "fb7b1f6f9bf28d6e7eda3cc0d17b2613c6ba0070166468df89d05fc43059e854"
+
+[[inventory]]
+path = "README.md"
+bytes = 2276
+sha256 = "a3543355a423a71ad07d8d321ea82296df5e81c1475b61851c537520a83db8c3"
+
+[[inventory]]
+path = "reference.py"
+bytes = 39601
+sha256 = "491e8d42c7c123d8eca1e6eaf361c279c8974d70be91d07a3ed2f02902e4d9f2"
+
+[[inventory]]
+path = "selftestreport.txt"
+bytes = 490
+sha256 = "c69873801e754f1e7c93aa7f697d99280cf2dd2c03d6f9ea6b99e3ba976fcce9"
+
+[[inventory]]
+path = "source-snapshots/contract.md"
+bytes = 7947
+sha256 = "08e3271fe9a4a0035bc611f0ed3a07fc2041db51e8730e52333b01e092ed0a36"
+
+[[inventory]]
+path = "source-snapshots/correction-prompt.md"
+bytes = 2795
+sha256 = "a4b523c216bd82c841bdd091cf44fd958ee489040215b8b020bb7d1c1c8c9984"
+
+[[inventory]]
+path = "source-snapshots/node.rs"
+bytes = 1489
+sha256 = "04e9bbf4ca0d411df88c2dd7f7904ca8a3c96c9998d62150d40dd036ff33b0b3"
+
+[[inventory]]
+path = "source-snapshots/original-prompt.md"
+bytes = 6236
+sha256 = "cdc8435f8ad8db0b8e776eee08397c4189a63ae8c9c9a36198128f55bc482742"
+
+[[inventory]]
+path = "source-snapshots/page-model.rs"
+bytes = 3296
+sha256 = "e65c9567dffa3b25bf63f83795b73ed64aa815c410b76a8544158af42db26a2f"
+
+[[inventory]]
+path = "source-snapshots/whitespace-correction-prompt.md"
+bytes = 2077
+sha256 = "fa370c4c6730d6ec112a2c1f0c72df1de73998ad5db93be28428831a41e5277e"
+
+[self_tests]
+reference_projector = true
+hand_derived_flatten_controls = true
+duplicate_id_control = true
+seeded_reproduction_byte_check = true
+adapter_implementation = "not_run"

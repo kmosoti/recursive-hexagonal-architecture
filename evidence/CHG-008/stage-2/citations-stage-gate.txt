@@ -1,0 +1,18 @@
+# Citation stage gate at 0339267140802add3b2fe93836d8dd4219a8eadd (2026-09-25T03:24:21Z)
+## cargo nextest run --workspace --all-features --profile ci
+     Summary [  20.838s] 394 tests run: 394 passed, 0 skipped
+exit=0
+## cargo xtask docs --check
+docs: 4 generated files are current
+## cargo xtask architecture
+summary: 0 error(s), 0 warning(s), passed
+## cargo xtask scope --task CHG-008
+scope: 294 changed path(s), 0 finding(s), task CHG-008, base origin/main
+## cargo fmt --all -- --check
+exit=0
+## cargo clippy --workspace --all-targets --all-features
+exit=0
+## module H4
+module H4: outcome=passed, evidence=target/h4-c11gate/20260925T032449Z-033926714080.json, cases=28, passed=28, failed=0, live=true, reference=true, supplementary=true
+## rhawiki check --root docs --format json | counts
+{}
