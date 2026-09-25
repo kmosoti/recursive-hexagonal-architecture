@@ -1,0 +1,73 @@
+# Acceptance record; first commit of PLAN-4. Creation pre-approved by [acceptance].
+schema_version = 1
+id = "PLAN-3"
+change = "docs/changes/PLAN-3-reviewer-alignment.md"
+task = ".rha/tasks/PLAN-3-reviewer-alignment.toml"
+
+[acceptor]
+principal = "human:kennedy"
+role = "acceptor"
+date = "2026-09-24"
+authority_profile = "ECC-Solo"
+basis = "Kennedy, 2026-09-23: 'Go ahead' (task record decision apply-audit); pull request 19 was merged by the kmosoti account on 2026-09-24. The record does not show which session performed the merge."
+event = "merge of pull request 19"
+
+[subject]
+revision = "ac1e460deeb327287e7e817c6bebd4bf465dc528"
+tree = "05cd82427ed442f0a0b6b21d0574ae87bd88bb60"
+parents = ["74aeb1d853fda49d585eb40e8d7c9727089d610c", "f1c4885509247b721b1940205db2ee961aebb193"]
+pull_request = "https://github.com/kmosoti/recursive-hexagonal-architecture/pull/19"
+integrator_edits = "none"
+
+[[evidence]]
+path = "evidence/ci/36008186429.json"
+sha256 = "4258fce44ef203ca5cf186dc214fb57fae1bd2d8bd122783a4bac487b673ab09"
+class = "ci"
+subject_revision = "ac1e460deeb327287e7e817c6bebd4bf465dc528"
+subject_tree = "05cd82427ed442f0a0b6b21d0574ae87bd88bb60"
+note = "Run 36008186429 on main at the merge (push): all eight L0 checks passed, 290 tests."
+
+[[evidence]]
+path = "https://github.com/kmosoti/recursive-hexagonal-architecture/pull/19#issuecomment-5805655825"
+class = "review"
+note = "The Codex cloud review did not run: usage limit reached. No GPT-6 review of this change exists."
+
+[outcomes]
+passed = ["L0.fmt", "L0.clippy", "L0.nextest", "L0.doctest", "L0.architecture", "L0.deny", "L0.machete", "L0.typos"]
+not_run = []
+failed = []
+not_applicable = []
+inconclusive = []
+
+[disposition]
+decision = "accepted"
+kind = "bootstrap_acceptance"
+merge_allowed = false
+eligibility_at_acceptance = "blocked"
+basis = "All L0 checks passed; Authentic false under [acceptance.bootstrap] (DP-4.1). No claim of conformance."
+exception = "none"
+
+[[disposition.predicates]]
+name = "Authentic"
+holds = false
+reason = "No trusted producers in policy (DP-4.1); this ci record is unauthenticated."
+
+[[disposition.predicates]]
+name = "Applicable"
+holds = true
+reason = "PLAN-3 did not edit .rha/policy.toml: git diff 74aeb1d ac1e460 -- .rha/policy.toml is empty."
+
+[[disposition.predicates]]
+name = "Complete"
+holds = true
+reason = "Every required L0 id is present exactly once."
+
+[[disposition.predicates]]
+name = "Passed"
+holds = true
+reason = "All eight L0 checks passed; nextest selected 290 tests."
+
+[carried_forward]
+open = [
+  "No second-family review of PLAN-3: the Codex limit resets 2026-09-29.",
+]
