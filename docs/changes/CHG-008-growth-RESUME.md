@@ -46,6 +46,8 @@ After these, run the transclusion stage gate:
 
 P-C (PR 18) was merged at `74aeb1d` while this branch was being written. The previous Executor never learned of it, because the queued messages did not reach its session.
 
+Items 1 and 2 are done: main was merged in a18253a, and `.rha/acceptances/CHG-007.toml` was written in 61dd6d3.
+
 1. **Merge `origin/main` into `chg/008-growth`.** Never rebase. A dry run shows that only `docs/tasks/index.md` conflicts; regenerate it with `cargo xtask docs`. The extractor changes on main (CHG-007.2 to CHG-007.4) and this branch's changes to `extract.rs` combine without conflict. Even so, rerun `xtask/tests/module_review_threads.rs` and the module H4 afterwards.
 2. **Write P-C's acceptance record next:** `.rha/acceptances/CHG-007.toml`, bound to merge `74aeb1d` and to the main CI run at that merge, run `35841881942`. Download its evidence with `gh run download` into `evidence/ci/`. It is kind `bootstrap_acceptance`, with `[[disposition.predicates]]` as in `.rha/acceptances/CHG-005.toml`. Carry two open P3 items from the Opus review of PR 18:
    - a function-local `mod` in the glue root that shares a component's name is attributed to that component;
