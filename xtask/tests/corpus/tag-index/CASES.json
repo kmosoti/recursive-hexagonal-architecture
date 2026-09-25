@@ -1,0 +1,839 @@
+[
+  {
+    "id": "no-tags-no-index-page",
+    "pages": {
+      "solo": "# Solo Page\n\nJust a page, no front matter at all.\n"
+    },
+    "expected_index_pages": {}
+  },
+  {
+    "id": "tags-absent-index-page-present-nothing-appended",
+    "pages": {
+      "hub": "---\nindex: tags\n---\n\n# Hub\n\nNo tags exist on this site.\n",
+      "plain": "# Plain\n\nNo front matter, no tags.\n"
+    },
+    "expected_index_pages": {
+      "hub": {
+        "sections": [],
+        "toc_tail": []
+      }
+    }
+  },
+  {
+    "id": "tags-present-no-index-page-nothing-appended",
+    "pages": {
+      "alpha": "---\ntags: [Red]\n---\n\n# Alpha\n\nBody.\n",
+      "beta": "---\ntags: [Blue]\n---\n\n# Beta\n\nBody.\n"
+    },
+    "expected_index_pages": {}
+  },
+  {
+    "id": "two-index-pages-both-get-sections",
+    "pages": {
+      "idx-one": "---\nindex: tags\n---\n\n# Index One\n\nFirst index page.\n",
+      "idx-two": "---\nindex: tags\n---\n\n# Index Two\n\nSecond index page.\n",
+      "alpha": "---\ntags: [Red]\n---\n\n# Alpha\n\nBody.\n",
+      "beta": "---\ntags: [Blue]\n---\n\n# Beta\n\nBody.\n"
+    },
+    "expected_index_pages": {
+      "idx-one": {
+        "sections": [
+          {
+            "heading_text": "Blue",
+            "slug": "tag-blue",
+            "links": [
+              {
+                "page_id": "beta",
+                "link_text": "Beta"
+              }
+            ]
+          },
+          {
+            "heading_text": "Red",
+            "slug": "tag-red",
+            "links": [
+              {
+                "page_id": "alpha",
+                "link_text": "Alpha"
+              }
+            ]
+          }
+        ],
+        "toc_tail": [
+          {
+            "level": 2,
+            "text": "Blue",
+            "anchor": "tag-blue"
+          },
+          {
+            "level": 2,
+            "text": "Red",
+            "anchor": "tag-red"
+          }
+        ]
+      },
+      "idx-two": {
+        "sections": [
+          {
+            "heading_text": "Blue",
+            "slug": "tag-blue",
+            "links": [
+              {
+                "page_id": "beta",
+                "link_text": "Beta"
+              }
+            ]
+          },
+          {
+            "heading_text": "Red",
+            "slug": "tag-red",
+            "links": [
+              {
+                "page_id": "alpha",
+                "link_text": "Alpha"
+              }
+            ]
+          }
+        ],
+        "toc_tail": [
+          {
+            "level": 2,
+            "text": "Blue",
+            "anchor": "tag-blue"
+          },
+          {
+            "level": 2,
+            "text": "Red",
+            "anchor": "tag-red"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "index-page-itself-tagged",
+    "pages": {
+      "hub": "---\nindex: tags\ntags: [Docs]\n---\n\n# Hub\n\nBody.\n",
+      "leaf": "---\ntags: [Docs]\n---\n\n# Leaf\n\nBody.\n"
+    },
+    "expected_index_pages": {
+      "hub": {
+        "sections": [
+          {
+            "heading_text": "Docs",
+            "slug": "tag-docs",
+            "links": [
+              {
+                "page_id": "hub",
+                "link_text": "Hub"
+              },
+              {
+                "page_id": "leaf",
+                "link_text": "Leaf"
+              }
+            ]
+          }
+        ],
+        "toc_tail": [
+          {
+            "level": 2,
+            "text": "Docs",
+            "anchor": "tag-docs"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "ascii-case-identity-merges-across-pages",
+    "pages": {
+      "a-page": "---\ntags: [Alpha]\n---\n\n# A Page\n\nBody.\n",
+      "b-page": "---\ntags: [ALPHA]\n---\n\n# B Page\n\nBody.\n",
+      "hub": "---\nindex: tags\n---\n\n# Hub\n\nBody.\n"
+    },
+    "expected_index_pages": {
+      "hub": {
+        "sections": [
+          {
+            "heading_text": "Alpha",
+            "slug": "tag-alpha",
+            "links": [
+              {
+                "page_id": "a-page",
+                "link_text": "A Page"
+              },
+              {
+                "page_id": "b-page",
+                "link_text": "B Page"
+              }
+            ]
+          }
+        ],
+        "toc_tail": [
+          {
+            "level": 2,
+            "text": "Alpha",
+            "anchor": "tag-alpha"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "display-spelling-from-first-page-in-page-id-order",
+    "pages": {
+      "zzz-page": "---\ntags: [TEST]\n---\n\n# Zzz Page\n\nBody.\n",
+      "aaa-page": "---\ntags: [test]\n---\n\n# Aaa Page\n\nBody.\n",
+      "hub": "---\nindex: tags\n---\n\n# Hub\n\nBody.\n"
+    },
+    "expected_index_pages": {
+      "hub": {
+        "sections": [
+          {
+            "heading_text": "test",
+            "slug": "tag-test",
+            "links": [
+              {
+                "page_id": "aaa-page",
+                "link_text": "Aaa Page"
+              },
+              {
+                "page_id": "zzz-page",
+                "link_text": "Zzz Page"
+              }
+            ]
+          }
+        ],
+        "toc_tail": [
+          {
+            "level": 2,
+            "text": "test",
+            "anchor": "tag-test"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "non-ascii-tag-cjk",
+    "pages": {
+      "hub": "---\nindex: tags\n---\n\n# Hub\n\nBody.\n",
+      "leaf": "---\ntags: [\"\u65e5\u672c\u8a9e\"]\n---\n\n# Leaf\n\nBody.\n"
+    },
+    "expected_index_pages": {
+      "hub": {
+        "sections": [
+          {
+            "heading_text": "\u65e5\u672c\u8a9e",
+            "slug": "tag-\u65e5\u672c\u8a9e",
+            "links": [
+              {
+                "page_id": "leaf",
+                "link_text": "Leaf"
+              }
+            ]
+          }
+        ],
+        "toc_tail": [
+          {
+            "level": 2,
+            "text": "\u65e5\u672c\u8a9e",
+            "anchor": "tag-\u65e5\u672c\u8a9e"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "non-ascii-tag-accented-cafe",
+    "pages": {
+      "hub": "---\nindex: tags\n---\n\n# Hub\n\nBody.\n",
+      "leaf": "---\ntags: [Caf\u00e9]\n---\n\n# Leaf\n\nBody.\n"
+    },
+    "expected_index_pages": {
+      "hub": {
+        "sections": [
+          {
+            "heading_text": "Caf\u00e9",
+            "slug": "tag-caf\u00e9",
+            "links": [
+              {
+                "page_id": "leaf",
+                "link_text": "Leaf"
+              }
+            ]
+          }
+        ],
+        "toc_tail": [
+          {
+            "level": 2,
+            "text": "Caf\u00e9",
+            "anchor": "tag-caf\u00e9"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "tag-slug-empty-from-symbols-only",
+    "pages": {
+      "hub": "---\nindex: tags\n---\n\n# Hub\n\nBody.\n",
+      "leaf": "---\ntags: ['!!!']\n---\n\n# Leaf\n\nBody.\n"
+    },
+    "expected_index_pages": {
+      "hub": {
+        "sections": [
+          {
+            "heading_text": "!!!",
+            "slug": "tag",
+            "links": [
+              {
+                "page_id": "leaf",
+                "link_text": "Leaf"
+              }
+            ]
+          }
+        ],
+        "toc_tail": [
+          {
+            "level": 2,
+            "text": "!!!",
+            "anchor": "tag"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "two-empty-slug-tags-dedup-tag-and-tag-2",
+    "pages": {
+      "hub": "---\nindex: tags\n---\n\n# Hub\n\nBody.\n",
+      "leaf": "---\ntags: ['!!!', '@@@']\n---\n\n# Leaf\n\nBody.\n"
+    },
+    "expected_index_pages": {
+      "hub": {
+        "sections": [
+          {
+            "heading_text": "!!!",
+            "slug": "tag",
+            "links": [
+              {
+                "page_id": "leaf",
+                "link_text": "Leaf"
+              }
+            ]
+          },
+          {
+            "heading_text": "@@@",
+            "slug": "tag-2",
+            "links": [
+              {
+                "page_id": "leaf",
+                "link_text": "Leaf"
+              }
+            ]
+          }
+        ],
+        "toc_tail": [
+          {
+            "level": 2,
+            "text": "!!!",
+            "anchor": "tag"
+          },
+          {
+            "level": 2,
+            "text": "@@@",
+            "anchor": "tag-2"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "tag-slug-collides-with-page-own-heading-slug",
+    "pages": {
+      "hub": "---\nindex: tags\n---\n\n# Hub\n\n## Tag Rust\n\nSome unrelated section that happens to slug to tag-rust.\n",
+      "leaf": "---\ntags: [Rust]\n---\n\n# Leaf\n\nBody.\n"
+    },
+    "expected_index_pages": {
+      "hub": {
+        "sections": [
+          {
+            "heading_text": "Rust",
+            "slug": "tag-rust-2",
+            "links": [
+              {
+                "page_id": "leaf",
+                "link_text": "Leaf"
+              }
+            ]
+          }
+        ],
+        "toc_tail": [
+          {
+            "level": 2,
+            "text": "Rust",
+            "anchor": "tag-rust-2"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "two-tags-collide-with-each-other-suffix-2",
+    "pages": {
+      "hub": "---\nindex: tags\n---\n\n# Hub\n\nBody.\n",
+      "leaf": "---\ntags: [C, 'C++']\n---\n\n# Leaf\n\nBody.\n"
+    },
+    "expected_index_pages": {
+      "hub": {
+        "sections": [
+          {
+            "heading_text": "C",
+            "slug": "tag-c",
+            "links": [
+              {
+                "page_id": "leaf",
+                "link_text": "Leaf"
+              }
+            ]
+          },
+          {
+            "heading_text": "C++",
+            "slug": "tag-c-2",
+            "links": [
+              {
+                "page_id": "leaf",
+                "link_text": "Leaf"
+              }
+            ]
+          }
+        ],
+        "toc_tail": [
+          {
+            "level": 2,
+            "text": "C",
+            "anchor": "tag-c"
+          },
+          {
+            "level": 2,
+            "text": "C++",
+            "anchor": "tag-c-2"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "three-tags-collide-skip-to-first-unused-suffix-3",
+    "pages": {
+      "hub": "---\nindex: tags\n---\n\n# Hub\n\nBody.\n",
+      "leaf": "---\ntags: [C, 'C++', 'C?!']\n---\n\n# Leaf\n\nBody.\n"
+    },
+    "expected_index_pages": {
+      "hub": {
+        "sections": [
+          {
+            "heading_text": "C",
+            "slug": "tag-c",
+            "links": [
+              {
+                "page_id": "leaf",
+                "link_text": "Leaf"
+              }
+            ]
+          },
+          {
+            "heading_text": "C++",
+            "slug": "tag-c-2",
+            "links": [
+              {
+                "page_id": "leaf",
+                "link_text": "Leaf"
+              }
+            ]
+          },
+          {
+            "heading_text": "C?!",
+            "slug": "tag-c-3",
+            "links": [
+              {
+                "page_id": "leaf",
+                "link_text": "Leaf"
+              }
+            ]
+          }
+        ],
+        "toc_tail": [
+          {
+            "level": 2,
+            "text": "C",
+            "anchor": "tag-c"
+          },
+          {
+            "level": 2,
+            "text": "C++",
+            "anchor": "tag-c-2"
+          },
+          {
+            "level": 2,
+            "text": "C?!",
+            "anchor": "tag-c-3"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "pages-in-subdirectories",
+    "pages": {
+      "hub": "---\nindex: tags\n---\n\n# Hub\n\nBody.\n",
+      "docs/intro": "---\ntags: [Guide]\n---\n\n# Intro\n\nBody.\n",
+      "docs/setup/step1": "---\ntags: [Guide]\n---\n\n# Step One\n\nBody.\n"
+    },
+    "expected_index_pages": {
+      "hub": {
+        "sections": [
+          {
+            "heading_text": "Guide",
+            "slug": "tag-guide",
+            "links": [
+              {
+                "page_id": "docs/intro",
+                "link_text": "Intro"
+              },
+              {
+                "page_id": "docs/setup/step1",
+                "link_text": "Step One"
+              }
+            ]
+          }
+        ],
+        "toc_tail": [
+          {
+            "level": 2,
+            "text": "Guide",
+            "anchor": "tag-guide"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "index-quoted-value-tags",
+    "pages": {
+      "hub": "---\nindex: \"tags\"\n---\n\n# Hub\n\nBody.\n",
+      "leaf": "---\ntags: [Docs]\n---\n\n# Leaf\n\nBody.\n"
+    },
+    "expected_index_pages": {
+      "hub": {
+        "sections": [
+          {
+            "heading_text": "Docs",
+            "slug": "tag-docs",
+            "links": [
+              {
+                "page_id": "leaf",
+                "link_text": "Leaf"
+              }
+            ]
+          }
+        ],
+        "toc_tail": [
+          {
+            "level": 2,
+            "text": "Docs",
+            "anchor": "tag-docs"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "index-other-value-no-effect",
+    "pages": {
+      "hub": "---\nindex: other\n---\n\n# Hub\n\nBody.\n",
+      "leaf": "---\ntags: [Docs]\n---\n\n# Leaf\n\nBody.\n"
+    },
+    "expected_index_pages": {}
+  },
+  {
+    "id": "index-empty-value-absent",
+    "pages": {
+      "hub": "---\nindex:\n---\n\n# Hub\n\nBody.\n",
+      "leaf": "---\ntags: [Docs]\n---\n\n# Leaf\n\nBody.\n"
+    },
+    "expected_index_pages": {}
+  },
+  {
+    "id": "index-first-occurrence-wins-other-beats-later-tags",
+    "pages": {
+      "hub": "---\nindex: other\nindex: tags\n---\n\n# Hub\n\nBody.\n",
+      "leaf": "---\ntags: [Docs]\n---\n\n# Leaf\n\nBody.\n"
+    },
+    "expected_index_pages": {}
+  },
+  {
+    "id": "index-first-occurrence-wins-tags-beats-later-other",
+    "pages": {
+      "hub": "---\nindex: tags\nindex: other\n---\n\n# Hub\n\nBody.\n",
+      "leaf": "---\ntags: [Docs]\n---\n\n# Leaf\n\nBody.\n"
+    },
+    "expected_index_pages": {
+      "hub": {
+        "sections": [
+          {
+            "heading_text": "Docs",
+            "slug": "tag-docs",
+            "links": [
+              {
+                "page_id": "leaf",
+                "link_text": "Leaf"
+              }
+            ]
+          }
+        ],
+        "toc_tail": [
+          {
+            "level": 2,
+            "text": "Docs",
+            "anchor": "tag-docs"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "index-value-flow-list-syntax-not-special-cased",
+    "pages": {
+      "hub": "---\nindex: [tags]\n---\n\n# Hub\n\nBody.\n",
+      "leaf": "---\ntags: [Docs]\n---\n\n# Leaf\n\nBody.\n"
+    },
+    "expected_index_pages": {}
+  },
+  {
+    "id": "link-text-uses-front-matter-title",
+    "pages": {
+      "hub": "---\nindex: tags\n---\n\n# Hub\n\nBody.\n",
+      "leaf": "---\ntitle: \"My Custom Title\"\ntags: [Docs]\n---\n\n# Leaf Heading Ignored For Title\n\nBody.\n"
+    },
+    "expected_index_pages": {
+      "hub": {
+        "sections": [
+          {
+            "heading_text": "Docs",
+            "slug": "tag-docs",
+            "links": [
+              {
+                "page_id": "leaf",
+                "link_text": "My Custom Title"
+              }
+            ]
+          }
+        ],
+        "toc_tail": [
+          {
+            "level": 2,
+            "text": "Docs",
+            "anchor": "tag-docs"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "link-text-uses-derived-first-heading-title",
+    "pages": {
+      "hub": "---\nindex: tags\n---\n\n# Hub\n\nBody.\n",
+      "leaf2": "---\ntags: [Docs2]\n---\n\n# Real Heading\n\nBody.\n"
+    },
+    "expected_index_pages": {
+      "hub": {
+        "sections": [
+          {
+            "heading_text": "Docs2",
+            "slug": "tag-docs2",
+            "links": [
+              {
+                "page_id": "leaf2",
+                "link_text": "Real Heading"
+              }
+            ]
+          }
+        ],
+        "toc_tail": [
+          {
+            "level": 2,
+            "text": "Docs2",
+            "anchor": "tag-docs2"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "link-text-falls-back-to-basename-title",
+    "pages": {
+      "hub": "---\nindex: tags\n---\n\n# Hub\n\nBody.\n",
+      "leaf3": "---\ntags: [Docs3]\n---\n\nJust a paragraph, no heading.\n"
+    },
+    "expected_index_pages": {
+      "hub": {
+        "sections": [
+          {
+            "heading_text": "Docs3",
+            "slug": "tag-docs3",
+            "links": [
+              {
+                "page_id": "leaf3",
+                "link_text": "leaf3"
+              }
+            ]
+          }
+        ],
+        "toc_tail": [
+          {
+            "level": 2,
+            "text": "Docs3",
+            "anchor": "tag-docs3"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "existing-body-links-precede-generated-link-indices",
+    "pages": {
+      "hub": "---\nindex: tags\n---\n\n# Hub\n\nSee also [[leaf3]].\n",
+      "leaf3": "---\ntags: [Zeta]\n---\n\n# Leaf Three\n\nBody.\n"
+    },
+    "expected_index_pages": {
+      "hub": {
+        "sections": [
+          {
+            "heading_text": "Zeta",
+            "slug": "tag-zeta",
+            "links": [
+              {
+                "page_id": "leaf3",
+                "link_text": "Leaf Three"
+              }
+            ]
+          }
+        ],
+        "toc_tail": [
+          {
+            "level": 2,
+            "text": "Zeta",
+            "anchor": "tag-zeta"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "multiple-tags-multiple-pages-cross-product",
+    "pages": {
+      "hub": "---\nindex: tags\n---\n\n# Hub\n\nBody.\n",
+      "page-a": "---\ntags: [Red, Blue]\n---\n\n# Page A\n\nBody.\n",
+      "page-b": "---\ntags: [Blue, Green]\n---\n\n# Page B\n\nBody.\n",
+      "page-c": "---\ntags: [Red]\n---\n\n# Page C\n\nBody.\n"
+    },
+    "expected_index_pages": {
+      "hub": {
+        "sections": [
+          {
+            "heading_text": "Blue",
+            "slug": "tag-blue",
+            "links": [
+              {
+                "page_id": "page-a",
+                "link_text": "Page A"
+              },
+              {
+                "page_id": "page-b",
+                "link_text": "Page B"
+              }
+            ]
+          },
+          {
+            "heading_text": "Green",
+            "slug": "tag-green",
+            "links": [
+              {
+                "page_id": "page-b",
+                "link_text": "Page B"
+              }
+            ]
+          },
+          {
+            "heading_text": "Red",
+            "slug": "tag-red",
+            "links": [
+              {
+                "page_id": "page-a",
+                "link_text": "Page A"
+              },
+              {
+                "page_id": "page-c",
+                "link_text": "Page C"
+              }
+            ]
+          }
+        ],
+        "toc_tail": [
+          {
+            "level": 2,
+            "text": "Blue",
+            "anchor": "tag-blue"
+          },
+          {
+            "level": 2,
+            "text": "Green",
+            "anchor": "tag-green"
+          },
+          {
+            "level": 2,
+            "text": "Red",
+            "anchor": "tag-red"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "tags-collected-regardless-of-flow-or-block-list-form",
+    "pages": {
+      "hub": "---\nindex: tags\n---\n\n# Hub\n\nBody.\n",
+      "leaf-flow": "---\ntags: [Foo]\n---\n\n# Leaf Flow\n\nBody.\n",
+      "leaf-block": "---\ntags:\n - Foo\n---\n\n# Leaf Block\n\nBody.\n"
+    },
+    "expected_index_pages": {
+      "hub": {
+        "sections": [
+          {
+            "heading_text": "Foo",
+            "slug": "tag-foo",
+            "links": [
+              {
+                "page_id": "leaf-block",
+                "link_text": "Leaf Block"
+              },
+              {
+                "page_id": "leaf-flow",
+                "link_text": "Leaf Flow"
+              }
+            ]
+          }
+        ],
+        "toc_tail": [
+          {
+            "level": 2,
+            "text": "Foo",
+            "anchor": "tag-foo"
+          }
+        ]
+      }
+    }
+  }
+]

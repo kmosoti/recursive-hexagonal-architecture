@@ -1,0 +1,50 @@
+schema_version = 1
+package = "tag-index"
+eventual_path = "xtask/tests/corpus/tag-index"
+case_count = 27
+kind_count = 1
+payload_count = 6
+model = "claude-sonnet-5"
+effort = "medium"
+
+[case_counts]
+synthetic = 27
+
+[source_digests]
+contract_sha256 = "92593133db839baae1a6746f09c3d85e61a1d16dd291e111ca4a2fc477a1ae3a"
+prompt_sha256 = "be10aeb0781fe2dbd8dab5e4501222cb6049855edf8b198f499d1cab3dc2590f"
+
+[source_paths]
+contract = "xtask/tests/corpus/tag-index/source-snapshots/contract.md"
+prompt = "xtask/tests/corpus/tag-index/source-snapshots/prompt.md"
+
+[original_paths]
+contract = "docs/architecture/tag-index-contract.md"
+prompt = "(oracle-author task prompt for CHG-013 stage B, captured verbatim as given; no repository path)"
+
+[related_contracts]
+# Read for API facts and output shapes only (AGENTS.md), never for how the
+# tag-index feature itself will be implemented.
+front_matter = "docs/architecture/front-matter-contract.md"
+json_renderer = "docs/architecture/json-renderer-contract.md"
+
+[decisions]
+# .rha/tasks/CHG-008-growth.toml, read for context only (not restated here
+# per AGENTS.md): tag-index-opt-in, tag-index-anchors, tag-index-scope,
+# tag-index-check-surface.
+ids = [
+    "tag-index-opt-in",
+    "tag-index-anchors",
+    "tag-index-scope",
+    "tag-index-check-surface",
+]
+
+[status]
+# Written before any implementation of the feature exists (see the
+# reference package's docstring and README.md). The grader
+# (crates/app-cli/tests/tag_index.rs) is expected to compile at HEAD (the
+# feature needs no new public API for this end-to-end grader) and to fail
+# for the right reason: no generated section is appended, because
+# `front_matter.index` and `site::assembly`'s tag-index pass do not exist
+# yet.
+implemented = false

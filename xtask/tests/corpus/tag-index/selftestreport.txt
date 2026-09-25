@@ -1,0 +1,37 @@
+PASS slugify keeps the contract example
+PASS slugify collapses nothing
+PASS slugify drops filtered punctuation entirely
+PASS slugify keeps non-ASCII letters, lowercased
+PASS slugify of only punctuation is empty
+PASS ascii_lower only touches A-Z
+PASS a plain index page has no tags
+PASS a plain index page is a tag index
+PASS ASCII-case identity merges into one group
+PASS display spelling is the first page's spelling (a-page)
+PASS pages of the tag are listed in page-id order
+PASS display spelling comes from the page-id-first page, not map order
+PASS first empty-slug tag anchors at 'tag'
+PASS second empty-slug tag anchors at 'tag-2'
+PASS a tag colliding with the page's own heading slug gets -2
+PASS three colliding tags occupy tag-c, tag-c-2, tag-c-3 in tag order
+PASS a tag index page on a site with no tags gets an empty generated section
+PASS a site with tags but no index page appends nothing anywhere
+PASS two index pages get identical generated sections
+PASS an index page that carries the tag is listed under its own generated section
+PASS a quoted index: "tags" value is recognized
+PASS index: other is not a tag index page
+PASS index: (empty) is not a tag index page
+PASS first index: occurrence wins even when a later one says tags
+PASS first index: occurrence wins when it says tags
+PASS index: [tags] is a literal scalar, not special-cased flow-list syntax
+PASS generated link text uses the front-matter title
+PASS generated link text falls back to the first level-1 heading
+PASS generated link text falls back to the page id's basename
+PASS tag order is blue < green < red by ASCII-lowercased spelling
+PASS Blue lists page-a then page-b, in page-id order
+PASS Red lists page-a then page-c, in page-id order
+PASS flow-list and block-list tag forms merge into one tag with both pages
+PASS case_count=27
+PASS case ids are unique
+PASS at least 25 cases are registered
+PASS case_count=27
