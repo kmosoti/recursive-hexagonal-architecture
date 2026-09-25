@@ -63,7 +63,25 @@ fn digest_of(key: &str, text: &str) -> String {
     Digest::of(surface.as_bytes()).to_string()
 }
 
-fn frozen_inputs() -> BTreeMap<String, String> {
+/// The frozen inputs are exactly the non-generated keys of the golden file: the spec and every
+/// registered corpus page that existed at registration. They are read by name, never discovered,
+/// so a corpus registered later (for example this stage's own oracle package) cannot change the
+/// input set. A missing file fails the test.
+fn frozen_inputs(golden: &BTreeMap<String, String>) -> BTreeMap<String, String> {
+    let root = repo_root();
+    golden
+        .keys()
+        .filter(|key| !key.starts_with("generated/"))
+        .map(|key| {
+            let text = fs::read_to_string(root.join(key))
+                .unwrap_or_else(|error| panic!("{key}: registered input missing: {error}"));
+            (key.clone(), text)
+        })
+        .collect()
+}
+
+/// Discovery, used only when capturing the golden file.
+fn discovered_inputs() -> BTreeMap<String, String> {
     let root = repo_root();
     let mut out = BTreeMap::new();
     let spec = "docs/spec/rha-spec-v0.10.md";
@@ -175,13 +193,13 @@ fn generated_inputs() -> BTreeMap<String, String> {
 
 #[test]
 fn documents_without_front_matter_are_unchanged_and_documents_with_it_change() {
-    let mut inputs = frozen_inputs();
-    inputs.extend(generated_inputs());
-    let observed: BTreeMap<String, String> = inputs
-        .iter()
-        .map(|(key, text)| (key.clone(), digest_of(key, text)))
-        .collect();
     if std::env::var_os("RHAWIKI_CAPTURE_FM_GOLDEN").is_some() {
+        let mut inputs = discovered_inputs();
+        inputs.extend(generated_inputs());
+        let observed: BTreeMap<String, String> = inputs
+            .iter()
+            .map(|(key, text)| (key.clone(), digest_of(key, text)))
+            .collect();
         let path = Path::new(env!("CARGO_MANIFEST_DIR"))
             .join("tests/data/front_matter_unchanged/golden.json");
         fs::write(
@@ -192,6 +210,12 @@ fn documents_without_front_matter_are_unchanged_and_documents_with_it_change() {
         return;
     }
     let golden: BTreeMap<String, String> = serde_json::from_str(GOLDEN).unwrap();
+    let mut inputs = frozen_inputs(&golden);
+    inputs.extend(generated_inputs());
+    let observed: BTreeMap<String, String> = inputs
+        .iter()
+        .map(|(key, text)| (key.clone(), digest_of(key, text)))
+        .collect();
     assert_eq!(
         golden.keys().collect::<Vec<_>>(),
         observed.keys().collect::<Vec<_>>(),
