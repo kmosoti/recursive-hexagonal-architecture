@@ -7,7 +7,8 @@ use pulldown_cmark::{
 };
 
 use crate::{
-    Align, CalloutKind, Diagnostic, Document, Heading, Link, Transclusion,
+    Align, CalloutKind, Diagnostic, Document, Heading, Link, ReferenceEntry, Transclusion,
+    citation::{PendingCitation, parse_citation_label, resolve_citations},
     section_ref::{PendingRef, ScannedPiece, resolve_section_refs, scan_references},
     slugify,
 };
@@ -122,6 +123,14 @@ pub(crate) enum BuildNode {
     Html(String),
     TaskMarker(bool),
     SectionRef(usize),
+    Anchor {
+        id: String,
+    },
+    Citation(usize),
+    OpenBracket {
+        offset: usize,
+        line: usize,
+    },
 }
 
 impl BuildNode {
@@ -179,6 +188,9 @@ struct Builder {
     used: std::collections::BTreeSet<String>,
     next_transclusion: usize,
     pending_refs: Vec<PendingRef>,
+    reference_entries: Vec<ReferenceEntry>,
+    seen_entries: BTreeMap<String, usize>,
+    pending_citations: Vec<PendingCitation>,
 }
 
 impl Builder {
@@ -229,6 +241,49 @@ impl Builder {
                 t.push_str(text);
                 return;
             }
+        }
+    }
+
+    fn check_reference_entry(&mut self, children: &mut Vec<BuildNode>) {
+        if children.is_empty() {
+            return;
+        }
+        let BuildNode::Citation(cit_idx) = children[0] else {
+            return;
+        };
+        let is_entry = if children.len() == 1 {
+            true
+        } else {
+            match &children[1] {
+                BuildNode::Text(s) => s.starts_with(' '),
+                BuildNode::SoftBreak | BuildNode::HardBreak => true,
+                _ => false,
+            }
+        };
+        if !is_entry {
+            return;
+        }
+
+        let cit = &mut self.pending_citations[cit_idx];
+        let label = cit.label.clone();
+        let line = cit.line;
+
+        if let Some(&first_line) = self.seen_entries.get(&label) {
+            self.diagnostics.push(Diagnostic::DuplicateReferenceEntry {
+                label,
+                first_line,
+                second_line: line,
+            });
+        } else {
+            self.seen_entries.insert(label.clone(), line);
+            let anchor = format!("ref-{}", label.to_ascii_lowercase());
+            self.reference_entries.push(ReferenceEntry {
+                label,
+                anchor: anchor.clone(),
+                line,
+            });
+            cit.is_entry_label = true;
+            children.insert(0, BuildNode::Anchor { id: anchor });
         }
     }
 
@@ -329,7 +384,7 @@ impl Builder {
     }
 
     fn end(&mut self, _end: TagEnd) {
-        let Some((frame, children)) = self.stack.pop() else {
+        let Some((frame, mut children)) = self.stack.pop() else {
             return;
         };
         let node = match frame {
@@ -384,6 +439,7 @@ impl Builder {
                 if let Some(transclusion) = self.transclusion(&children) {
                     Some(BuildNode::Transclusion(transclusion))
                 } else {
+                    self.check_reference_entry(&mut children);
                     Some(BuildNode::Paragraph(children))
                 }
             }
@@ -415,6 +471,7 @@ impl Builder {
                 let item = if let Some(transclusion) = self.transclusion(&children) {
                     vec![BuildNode::Transclusion(transclusion)]
                 } else {
+                    self.check_reference_entry(&mut children);
                     children
                 };
                 if let Some((Frame::List { items, .. }, _)) = self.stack.last_mut() {
@@ -474,6 +531,28 @@ impl Builder {
         })
     }
 
+    fn try_match_citation(children: &[BuildNode], offset: usize) -> Option<(String, usize)> {
+        if children.len() < 2 {
+            return None;
+        }
+        let n = children.len();
+        let BuildNode::OpenBracket {
+            offset: open_offset,
+            line: open_line,
+        } = children[n - 2]
+        else {
+            return None;
+        };
+        let BuildNode::Text(ref label_str) = children[n - 1] else {
+            return None;
+        };
+        if open_offset + 1 + label_str.len() != offset {
+            return None;
+        }
+        let label = parse_citation_label(label_str)?;
+        Some((label.to_owned(), open_line))
+    }
+
     fn text(&mut self, text: &str, offset: usize, starts: &[usize]) {
         match self.stack.last_mut() {
             Some((Frame::CodeBlock { text: t, .. }, _)) => {
@@ -487,7 +566,41 @@ impl Builder {
             _ => {}
         }
         self.heading_text(text);
-        if self.is_reference_excluded() || !text.contains('§') {
+        if self.is_reference_excluded() {
+            self.push_node(BuildNode::Text(text.to_owned()));
+            return;
+        }
+
+        if text == "[" {
+            let line = line_of(starts, offset);
+            self.push_node(BuildNode::OpenBracket { offset, line });
+            return;
+        }
+
+        if text == "]" {
+            let matched = self
+                .stack
+                .last_mut()
+                .and_then(|(_, children)| Self::try_match_citation(children, offset));
+            if let Some((label, open_line)) = matched {
+                let cit_idx = self.pending_citations.len();
+                self.pending_citations.push(PendingCitation {
+                    label,
+                    line: open_line,
+                    is_entry_label: false,
+                });
+                if let Some((_, children)) = self.stack.last_mut() {
+                    children.pop();
+                    children.pop();
+                    children.push(BuildNode::Citation(cit_idx));
+                }
+                return;
+            }
+            self.push_node(BuildNode::Text("]".to_owned()));
+            return;
+        }
+
+        if !text.contains('§') {
             self.push_node(BuildNode::Text(text.to_owned()));
             return;
         }
@@ -530,6 +643,7 @@ fn plain(nodes: &[BuildNode]) -> String {
             | BuildNode::Link { children, .. }
             | BuildNode::WikiLink { children, .. } => out.push_str(&plain(children)),
             BuildNode::SoftBreak | BuildNode::HardBreak => out.push(' '),
+            BuildNode::OpenBracket { .. } => out.push('['),
             _ => {}
         }
     }
@@ -551,6 +665,9 @@ pub fn parse(source: &Source) -> Document {
         used: std::collections::BTreeSet::new(),
         next_transclusion: 0,
         pending_refs: Vec::new(),
+        reference_entries: Vec::new(),
+        seen_entries: BTreeMap::new(),
+        pending_citations: Vec::new(),
     };
     for (event, range) in Parser::new_ext(text, options()).into_offset_iter() {
         let line = line_of(&starts, range.start);
@@ -587,8 +704,16 @@ pub fn parse(source: &Source) -> Document {
         b.end(TagEnd::Paragraph);
     }
     let body = b.stack.pop().map(|(_, c)| c).unwrap_or_default();
-    let (section_refs, section_diagnostics, body) =
-        resolve_section_refs(&b.headings, b.pending_refs, body);
+    let (citations, citation_diagnostics, resolved_citations) =
+        resolve_citations(&b.reference_entries, &b.pending_citations);
+    let (section_refs, section_diagnostics, body) = resolve_section_refs(
+        &b.headings,
+        b.pending_refs,
+        &b.pending_citations,
+        &resolved_citations,
+        body,
+    );
+    b.diagnostics.extend(citation_diagnostics);
     b.diagnostics.extend(section_diagnostics);
     let title = b
         .headings
@@ -604,5 +729,7 @@ pub fn parse(source: &Source) -> Document {
         body,
         diagnostics: b.diagnostics,
         section_refs,
+        reference_entries: b.reference_entries,
+        citations,
     }
 }

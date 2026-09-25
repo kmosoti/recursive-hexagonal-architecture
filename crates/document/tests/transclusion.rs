@@ -218,7 +218,11 @@ fn plain(nodes: &[Node]) -> String {
             }
             Node::CodeBlock { text, .. } => output.push_str(text),
             Node::Image { alt, .. } => output.push_str(alt),
-            Node::TaskMarker(_) | Node::Rule | Node::SoftBreak | Node::HardBreak => {}
+            Node::Anchor { .. }
+            | Node::TaskMarker(_)
+            | Node::Rule
+            | Node::SoftBreak
+            | Node::HardBreak => {}
             Node::Transclusion(Transclusion { display, .. }) => output.push_str(display),
         }
     }
@@ -264,7 +268,8 @@ fn headings(nodes: &[Node], output: &mut Vec<Heading>) {
                     }
                 }
             }
-            Node::Text(_)
+            Node::Anchor { .. }
+            | Node::Text(_)
             | Node::Code(_)
             | Node::CodeBlock { .. }
             | Node::Image { .. }
@@ -290,6 +295,8 @@ fn fixture_document(body: Vec<Node>) -> Document {
         body,
         diagnostics: Vec::new(),
         section_refs: Vec::new(),
+        reference_entries: Vec::new(),
+        citations: Vec::new(),
     }
 }
 
@@ -380,7 +387,8 @@ fn visit_images(nodes: &[Node], output: &mut Vec<Value>) {
                     }
                 }
             }
-            Node::Text(_)
+            Node::Anchor { .. }
+            | Node::Text(_)
             | Node::Code(_)
             | Node::CodeBlock { .. }
             | Node::Rule
@@ -457,7 +465,8 @@ fn heading_slugs(nodes: &[Node], output: &mut Vec<String>) {
                     }
                 }
             }
-            Node::Text(_)
+            Node::Anchor { .. }
+            | Node::Text(_)
             | Node::Code(_)
             | Node::CodeBlock { .. }
             | Node::Image { .. }

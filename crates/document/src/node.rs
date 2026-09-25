@@ -50,6 +50,10 @@ pub enum Node {
     /// Raw HTML, kept as text and never emitted as markup.
     Html(String),
     TaskMarker(bool),
+    /// An inline anchor target for citations.
+    Anchor {
+        id: String,
+    },
 }
 
 /// A GFM callout's kind (preserved; rendering is plain in Phase 1).

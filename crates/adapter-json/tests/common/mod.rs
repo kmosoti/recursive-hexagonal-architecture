@@ -364,6 +364,12 @@ pub fn node(value: &Value) -> Node {
                     .collect(),
             }
         }
+        "Anchor" => {
+            exact_keys(value, &["id", "kind"]);
+            Node::Anchor {
+                id: string(value, "id"),
+            }
+        }
         "Image" => {
             exact_keys(value, &["alt", "kind", "src"]);
             Node::Image {

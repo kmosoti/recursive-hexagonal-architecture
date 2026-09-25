@@ -296,6 +296,7 @@ fn collect_links(nodes: &[Node], out: &mut Vec<(String, String)>) {
             | Node::HardBreak
             | Node::Html(_)
             | Node::TaskMarker(_)
+            | Node::Anchor { .. }
             | Node::Transclusion(_) => {}
         }
     }

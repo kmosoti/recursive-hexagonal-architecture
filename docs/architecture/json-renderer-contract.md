@@ -75,6 +75,7 @@ The `body` array is an exhaustive projection of `site::Node`:
 | `CodeBlock` | `{"type":"code_block","language":null\|String,"text":String}` |
 | `Link` | `{"type":"link","href":String,"children":[Node]}` |
 | `WikiLink` | `{"type":"wiki_link","link_index":usize,"children":[Node]}` |
+| `Anchor` | `{"type":"anchor","id":String}` |
 | `Image` | `{"type":"image","src":String,"alt":String}` |
 | `List` | `{"type":"list","start":null\|u64,"items":[[Node]]}` |
 | `BlockQuote` | `{"type":"block_quote","kind":null\|CalloutKind,"children":[Node]}` |
@@ -134,8 +135,9 @@ Search text is collected recursively from visible body content:
   cells add whitespace boundaries around their contents;
 - list, block-quote, and table nesting preserves the recursive order;
 - soft and hard breaks add a whitespace boundary;
-- rules add a whitespace boundary; and
-- task-marker state is ignored.
+- rules add a whitespace boundary;
+- task-marker state is ignored; and
+- anchor nodes add no search text.
 
 Adjacent inline fragments are concatenated without artificial spaces. A
 boundary is an internal whitespace separator, not text visible in the final

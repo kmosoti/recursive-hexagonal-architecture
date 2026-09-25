@@ -145,7 +145,7 @@ fn collect_page_nodes(
                     }
                 }
             }
-            Node::TaskMarker(_) => {}
+            Node::TaskMarker(_) | Node::Anchor { .. } => {}
             Node::Rule | Node::SoftBreak | Node::HardBreak => text.push(" ".to_owned()),
         }
     }

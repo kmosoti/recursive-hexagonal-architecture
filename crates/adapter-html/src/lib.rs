@@ -180,6 +180,9 @@ impl Ctx<'_> {
                     out.push_str("</span>");
                 }
             },
+            Node::Anchor { id } => {
+                let _ = write!(out, "<a id=\"{}\"></a>", escape(id));
+            }
             Node::Image { src, alt } => {
                 let _ = write!(out, "<img src=\"{}\" alt=\"{}\">", escape(src), escape(alt));
             }

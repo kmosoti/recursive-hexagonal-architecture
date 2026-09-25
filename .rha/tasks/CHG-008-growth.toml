@@ -620,6 +620,18 @@ prompt_sha256 = "a67941df150c885cc09e136e5d05c51daf416fa1b4f29cbd9f04e740584c1db
 sample = "one Boost run (root 9612bbad), base e7461bf; no escalations; output patch sha256 5cfbf43fe0243165589d726e674596f46f917d5701390211de7af071832fc6d8"
 oracles = "section_refs_review.rs (3 tests, from the supervising session; the golden trees captured at 4be1a7d), the registered grader (84 cases), the workspace suite, fmt, clippy and architecture, rerun by the supervising session"
 
+[[provenance.generations]]
+artifact = "CHG-011 citations: crates/document/src (citation.rs, parse.rs, section_ref.rs, section.rs, node.rs, lib.rs), crates/site/src/assembly/mod.rs, crates/adapter-html/src/lib.rs, crates/adapter-json/src/lib.rs, docs/architecture/json-renderer-contract.md, compatibility edits in earlier tests, and new tests (adapter-html and adapter-json anchor.rs, site citation_assembly.rs, app-cli citations_supplementary.rs, document citation_properties.rs and citation_edge_cases.rs)"
+generation = "sampled"
+model = "gemini-3.8-flash-high"
+reasoning_effort = "high (model tier)"
+harness = "Antigravity CLI 1.2.10, /teamwork-preview pasted into the interactive session in agy-jail: the first real teamwork run (42 conversations: root, Sentinel, two project orchestrators, explorers, workers, reviewers, challengers and forensic auditors per milestone; invoke_subagent in the audit)"
+prompt = "Implement citations per docs/architecture/citation-contract.md through the parser, site assembly and both renderers; registered graders, corpus, contracts and spec fixed. After a quota stop killed the first team, a resume prompt restarted it from its saved state at Milestone 2."
+prompt_sha256 = "f60fed9f200c215948cca8677166e66839451585649c84441b85da0dc6b3d144"
+resume_prompt_sha256 = "5c6c7908538ad9b105a5fe57c554c3cfe1f4d1ba23f71cd1b756b4d9bf576306"
+sample = "one teamwork run, base 3e9e561, 2026-09-24T22:43Z to 2026-09-25T01:12Z; milestones M1-M3 passed the team's own gate (2 reviewers, 2 challengers, forensic auditor each); M4's acceptance commands all exited 0 in the team's tree, but its victory gate was cut off by the Gemini five-hour quota, so the supervisor integrated. Two escalations (a protected Cargo.toml lint edit, denied; a section_refs grader question, answered by re-registration). Output patch sha256 27d7d40ef08f0320a8ca45ed7f66ca70560b76d27c67c7af3e878b4b57a1fa01"
+oracles = "citations.rs (69 cases), citations_render.rs and citations_unchanged.rs (44 golden trees), registered before the run; the earlier registered suites; fmt, clippy, architecture and docs --check; all rerun by the supervising session on the integrated tree"
+
 [[decisions]]
 id = "citations-anchor-node"
 question = "How does a citation link to its reference entry (CHG-011)?"
@@ -643,3 +655,19 @@ answer = "Not in this stage. The check JSON schema stays fixed for Kennedy's hel
 decided_by = "agent:executor under human:kennedy's delegation"
 delegation = "Kennedy, 2026-09-22: 'Use recommended. ... Accept the recommend and most correct implementations going forward instead of escalating to me.' Kennedy, 2026-09-24: 'I want the antigravity to have full permission and escalate to you in which you decide. Only escalate to me (human) when absolutely necessary.'"
 date = "2026-09-24"
+
+[[decisions]]
+id = "grader-compat-anchor"
+question = "A new Node variant and new Document fields stop earlier registered tests from compiling (exhaustive matches, struct literals). May they be edited?"
+answer = "Yes, with exactly two edit forms: add Node::Anchor { .. } to an arm that does nothing, and add reference_entries: Vec::new(), citations: Vec::new() to Document literals. No assertion, expected value, fixture or case count changes. A runtime failure of an earlier test is a regression, not a reason to edit it. Applied in transclusion.rs, section_refs.rs and site transclusion_tests.rs; adapter-json tests/common/mod.rs gained an additive Anchor decoding arm in the same spirit, accepted by consequence (no existing expectation changed)."
+decided_by = "agent:supervisor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-24: 'I want the antigravity to have full permission and escalate to you in which you decide. Only escalate to me (human) when absolutely necessary.'"
+date = "2026-09-24"
+
+[[decisions]]
+id = "citations-grader-reregistration"
+question = "Two registered graders failed for reasons outside the implementation: citations.rs broke workspace clippy (doc_lazy_continuation), and section_refs.rs counted every intra-page link as a section reference, which citations make false on the spec page."
+answer = "Re-registered by the supervisor, not by the implementer: 0db8b76 inserts one blank doc line in citations.rs; c5d376b makes section_refs.rs skip exactly citation-shaped links (text [R<digits>] with at most one lowercase letter and href #ref-<label lowercase>). The implementer's proposals were declined: relaxing workspace lints in Cargo.toml (weakens every crate), and skipping every #ref- href (would hide a section ref to a heading slugged ref-...). Both regraded before and after the feature."
+decided_by = "agent:supervisor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-24: 'I want the antigravity to have full permission and escalate to you in which you decide. Only escalate to me (human) when absolutely necessary.'"
+date = "2026-09-25"

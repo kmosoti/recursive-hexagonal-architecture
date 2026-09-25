@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use crate::{Diagnostic, Heading, Node, parse::BuildNode};
+use crate::{Diagnostic, Heading, Node, citation::PendingCitation, parse::BuildNode};
 
 /// A section reference (§n.n).
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -292,6 +292,8 @@ pub fn scan_references(text: &str, base_offset: usize, starts: &[usize]) -> Vec<
 pub fn resolve_section_refs(
     headings: &[Heading],
     pending_refs: Vec<PendingRef>,
+    pending_citations: &[PendingCitation],
+    resolved_citations: &[Option<String>],
     body: Vec<BuildNode>,
 ) -> (Vec<SectionRef>, Vec<Diagnostic>, Vec<Node>) {
     let mut heading_numbers = BTreeMap::new();
@@ -323,12 +325,17 @@ pub fn resolve_section_refs(
         });
     }
 
-    let new_body = resolve_and_flatten(body, &section_refs);
+    let new_body = resolve_and_flatten(body, &section_refs, pending_citations, resolved_citations);
 
     (section_refs, diagnostics, new_body)
 }
 
-fn resolve_and_flatten(nodes: Vec<BuildNode>, section_refs: &[SectionRef]) -> Vec<Node> {
+fn resolve_and_flatten(
+    nodes: Vec<BuildNode>,
+    section_refs: &[SectionRef],
+    pending_citations: &[PendingCitation],
+    resolved_citations: &[Option<String>],
+) -> Vec<Node> {
     let mut out = Vec::with_capacity(nodes.len());
     let mut just_flattened_ref = false;
 
@@ -343,47 +350,84 @@ fn resolve_and_flatten(nodes: Vec<BuildNode>, section_refs: &[SectionRef]) -> Ve
                 out.push(Node::Heading {
                     level,
                     slug,
-                    children: resolve_and_flatten(children, section_refs),
+                    children: resolve_and_flatten(
+                        children,
+                        section_refs,
+                        pending_citations,
+                        resolved_citations,
+                    ),
                 });
             }
             BuildNode::Paragraph(children) => {
                 just_flattened_ref = false;
-                out.push(Node::Paragraph(resolve_and_flatten(children, section_refs)));
+                out.push(Node::Paragraph(resolve_and_flatten(
+                    children,
+                    section_refs,
+                    pending_citations,
+                    resolved_citations,
+                )));
             }
             BuildNode::Emphasis(children) => {
                 just_flattened_ref = false;
-                out.push(Node::Emphasis(resolve_and_flatten(children, section_refs)));
+                out.push(Node::Emphasis(resolve_and_flatten(
+                    children,
+                    section_refs,
+                    pending_citations,
+                    resolved_citations,
+                )));
             }
             BuildNode::Strong(children) => {
                 just_flattened_ref = false;
-                out.push(Node::Strong(resolve_and_flatten(children, section_refs)));
+                out.push(Node::Strong(resolve_and_flatten(
+                    children,
+                    section_refs,
+                    pending_citations,
+                    resolved_citations,
+                )));
             }
             BuildNode::Strikethrough(children) => {
                 just_flattened_ref = false;
                 out.push(Node::Strikethrough(resolve_and_flatten(
                     children,
                     section_refs,
+                    pending_citations,
+                    resolved_citations,
                 )));
             }
             BuildNode::Link { href, children } => {
                 just_flattened_ref = false;
                 out.push(Node::Link {
                     href,
-                    children: resolve_and_flatten(children, section_refs),
+                    children: resolve_and_flatten(
+                        children,
+                        section_refs,
+                        pending_citations,
+                        resolved_citations,
+                    ),
                 });
             }
             BuildNode::WikiLink { index, children } => {
                 just_flattened_ref = false;
                 out.push(Node::WikiLink {
                     index,
-                    children: resolve_and_flatten(children, section_refs),
+                    children: resolve_and_flatten(
+                        children,
+                        section_refs,
+                        pending_citations,
+                        resolved_citations,
+                    ),
                 });
             }
             BuildNode::BlockQuote { kind, children } => {
                 just_flattened_ref = false;
                 out.push(Node::BlockQuote {
                     kind,
-                    children: resolve_and_flatten(children, section_refs),
+                    children: resolve_and_flatten(
+                        children,
+                        section_refs,
+                        pending_citations,
+                        resolved_citations,
+                    ),
                 });
             }
             BuildNode::List { start, items } => {
@@ -392,7 +436,14 @@ fn resolve_and_flatten(nodes: Vec<BuildNode>, section_refs: &[SectionRef]) -> Ve
                     start,
                     items: items
                         .into_iter()
-                        .map(|item| resolve_and_flatten(item, section_refs))
+                        .map(|item| {
+                            resolve_and_flatten(
+                                item,
+                                section_refs,
+                                pending_citations,
+                                resolved_citations,
+                            )
+                        })
                         .collect(),
                 });
             }
@@ -402,13 +453,27 @@ fn resolve_and_flatten(nodes: Vec<BuildNode>, section_refs: &[SectionRef]) -> Ve
                     align,
                     head: head
                         .into_iter()
-                        .map(|cell| resolve_and_flatten(cell, section_refs))
+                        .map(|cell| {
+                            resolve_and_flatten(
+                                cell,
+                                section_refs,
+                                pending_citations,
+                                resolved_citations,
+                            )
+                        })
                         .collect(),
                     rows: rows
                         .into_iter()
                         .map(|row| {
                             row.into_iter()
-                                .map(|cell| resolve_and_flatten(cell, section_refs))
+                                .map(|cell| {
+                                    resolve_and_flatten(
+                                        cell,
+                                        section_refs,
+                                        pending_citations,
+                                        resolved_citations,
+                                    )
+                                })
                                 .collect()
                         })
                         .collect(),
@@ -461,6 +526,56 @@ fn resolve_and_flatten(nodes: Vec<BuildNode>, section_refs: &[SectionRef]) -> Ve
             BuildNode::TaskMarker(checked) => {
                 just_flattened_ref = false;
                 out.push(Node::TaskMarker(checked));
+            }
+            BuildNode::Anchor { id } => {
+                just_flattened_ref = false;
+                out.push(Node::Anchor { id });
+            }
+            BuildNode::OpenBracket { .. } => {
+                if just_flattened_ref {
+                    if let Some(Node::Text(last)) = out.last_mut() {
+                        last.push('[');
+                    } else {
+                        out.push(Node::Text("[".to_owned()));
+                    }
+                    just_flattened_ref = false;
+                } else {
+                    out.push(Node::Text("[".to_owned()));
+                }
+            }
+            BuildNode::Citation(cit_idx) => {
+                let cit = &pending_citations[cit_idx];
+                if cit.is_entry_label {
+                    let formatted = format!("[{}]", cit.label);
+                    if just_flattened_ref {
+                        if let Some(Node::Text(last)) = out.last_mut() {
+                            last.push_str(&formatted);
+                        } else {
+                            out.push(Node::Text(formatted));
+                        }
+                        just_flattened_ref = false;
+                    } else {
+                        out.push(Node::Text(formatted));
+                    }
+                } else if let Some(target) = &resolved_citations[cit_idx] {
+                    just_flattened_ref = false;
+                    out.push(Node::Link {
+                        href: format!("#{target}"),
+                        children: vec![Node::Text(format!("[{}]", cit.label))],
+                    });
+                } else {
+                    let formatted = format!("[{}]", cit.label);
+                    if just_flattened_ref {
+                        if let Some(Node::Text(last)) = out.last_mut() {
+                            last.push_str(&formatted);
+                        } else {
+                            out.push(Node::Text(formatted));
+                        }
+                        just_flattened_ref = false;
+                    } else {
+                        out.push(Node::Text(formatted));
+                    }
+                }
             }
             BuildNode::SectionRef(ref_idx) => {
                 let sref = &section_refs[ref_idx];

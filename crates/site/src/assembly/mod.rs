@@ -40,6 +40,9 @@ pub enum PageNode {
         index: usize,
         children: Vec<PageNode>,
     },
+    Anchor {
+        id: String,
+    },
     Image {
         src: String,
         alt: String,
@@ -311,6 +314,13 @@ impl AssemblyState<'_> {
             DocumentNode::HardBreak => vec![PageNode::HardBreak],
             DocumentNode::Html(text) => vec![PageNode::Html(text.clone())],
             DocumentNode::TaskMarker(checked) => vec![PageNode::TaskMarker(*checked)],
+            DocumentNode::Anchor { id } => {
+                if imported {
+                    vec![]
+                } else {
+                    vec![PageNode::Anchor { id: id.clone() }]
+                }
+            }
             DocumentNode::Transclusion(transclusion) => {
                 self.expand_transclusion(origin, region, transclusion, chain)
             }
@@ -445,6 +455,7 @@ fn collect_heading_slugs(nodes: &[DocumentNode], used: &mut BTreeSet<String>) {
             | DocumentNode::HardBreak
             | DocumentNode::Html(_)
             | DocumentNode::TaskMarker(_)
+            | DocumentNode::Anchor { .. }
             | DocumentNode::Transclusion(_) => {}
         }
     }
@@ -517,6 +528,7 @@ fn collect_fragment_headings(nodes: &[DocumentNode], slugs: &mut Vec<String>) {
             | DocumentNode::HardBreak
             | DocumentNode::Html(_)
             | DocumentNode::TaskMarker(_)
+            | DocumentNode::Anchor { .. }
             | DocumentNode::Transclusion(_) => {}
         }
     }

@@ -104,7 +104,8 @@ fn collect_transclusions<'a>(nodes: &'a [Node], result: &mut Vec<&'a Transclusio
             | Node::SoftBreak
             | Node::HardBreak
             | Node::Html(_)
-            | Node::TaskMarker(_) => {}
+            | Node::TaskMarker(_)
+            | Node::Anchor { .. } => {}
         }
     }
 }

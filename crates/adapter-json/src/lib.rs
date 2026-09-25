@@ -194,6 +194,10 @@ fn node_value(node: &Node) -> Value {
             "link_index": index,
             "children": nodes_value(children),
         }),
+        Node::Anchor { id } => json!({
+            "type": "anchor",
+            "id": id,
+        }),
         Node::Image { src, alt } => json!({
             "type": "image",
             "src": src,
@@ -344,7 +348,7 @@ impl SearchText {
                     }
                 }
             }
-            Node::TaskMarker(_) => {}
+            Node::TaskMarker(_) | Node::Anchor { .. } => {}
             Node::Rule | Node::SoftBreak | Node::HardBreak => self.boundary(),
         }
     }
