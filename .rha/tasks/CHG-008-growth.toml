@@ -664,6 +664,17 @@ prompt = "none (supervisor edit following the review finding and the registered 
 sample = "one edit, base 7fd3928; output patch sha256 6d14379350f745bd1960f4aa5524ac0ce957b86532861b1fc61f46152af13b00"
 oracles = "citations_review_3.rs (6 tests, expected values from the registered oracle reference.py analyze_page), all earlier review tests, the registered graders and golden trees, the workspace suite, fmt, clippy, architecture and docs --check; independent verification by a separate verifier pass (same model family as the author: disclosed)"
 
+[[provenance.generations]]
+artifact = "CHG-012 callouts: crates/adapter-html/src/lib.rs (callout title, stylesheet rules) and crates/adapter-html/tests/callouts.rs"
+generation = "sampled"
+model = "gemini-3.8-flash-high"
+reasoning_effort = "high (model tier)"
+harness = "Antigravity CLI 1.2.10, /boost pasted into agy-jail: the pipeline ran on Gemini (4 conversations: root, DeepCoder, first worker, improvement worker)"
+prompt = "Implement callout rendering per docs/architecture/callout-contract.md: a callout-title paragraph per GFM callout and additive stylesheet rules; everything else unchanged; change only crates/adapter-html."
+prompt_sha256 = "0d93359203a4dc64fe619933c44e4fad30ea8e0855df98124ada488a1e1d759b"
+sample = "one Boost run, base 030d82c, 2026-09-25T04:59Z to 05:14Z; no escalations; output sha256 b6bec879ea11b523d538bb5685a9cdf9bc15544600e70bce1d113a33c3497bae"
+oracles = "callouts_render.rs (6 tests, a separate Sonnet oracle-author session), callouts_unchanged.rs (goldens captured at 558987a), the workspace suite, fmt, clippy, architecture and docs --check, rerun by the supervising session"
+
 [[decisions]]
 id = "citations-anchor-node"
 question = "How does a citation link to its reference entry (CHG-011)?"

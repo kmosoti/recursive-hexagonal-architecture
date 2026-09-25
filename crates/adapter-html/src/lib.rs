@@ -27,7 +27,7 @@ pub fn escape(text: &str) -> String {
 #[derive(Debug, Clone, Copy, Default)]
 pub struct HtmlRenderer;
 
-const STYLE: &str = "body{font-family:system-ui,sans-serif;max-width:52rem;margin:2rem auto;padding:0 1rem;line-height:1.5}\nnav.toc{font-size:.9rem}\n.broken{color:#b00020;text-decoration:underline dotted}\npre{overflow-x:auto;background:#f5f5f5;padding:.5rem}\nblockquote{border-left:3px solid #ccc;margin-left:0;padding-left:1rem}\ntable{border-collapse:collapse}td,th{border:1px solid #ccc;padding:.2rem .4rem}\nfooter{margin-top:3rem;font-size:.8rem;color:#666}\n";
+const STYLE: &str = "body{font-family:system-ui,sans-serif;max-width:52rem;margin:2rem auto;padding:0 1rem;line-height:1.5}\nnav.toc{font-size:.9rem}\n.broken{color:#b00020;text-decoration:underline dotted}\npre{overflow-x:auto;background:#f5f5f5;padding:.5rem}\nblockquote{border-left:3px solid #ccc;margin-left:0;padding-left:1rem}\ntable{border-collapse:collapse}td,th{border:1px solid #ccc;padding:.2rem .4rem}\nfooter{margin-top:3rem;font-size:.8rem;color:#666}\n.callout{border-left:4px solid #888;padding:.5rem 1rem;margin-left:0}\n.callout-title{font-weight:bold;margin:0 0 .5rem 0}\n.callout.note{border-left:4px solid #0969da;background:#f0f7ff}\n.callout.tip{border-left:4px solid #1a7f37;background:#f0fff4}\n.callout.important{border-left:4px solid #8250df;background:#fbf5ff}\n.callout.warning{border-left:4px solid #9a6700;background:#fff8c5}\n.callout.caution{border-left:4px solid #cf222e;background:#ffebe9}\n";
 
 /// Percent-encodes everything outside RFC 3986's unreserved set, keeping
 /// `/` when `keep_slash`, so a page id like `Budget?2026` stays a path and
@@ -204,16 +204,17 @@ impl Ctx<'_> {
                 let _ = writeln!(out, "</{tag}>");
             }
             Node::BlockQuote { kind, children } => {
-                let class = kind.map(|k| match k {
-                    CalloutKind::Note => "note",
-                    CalloutKind::Tip => "tip",
-                    CalloutKind::Important => "important",
-                    CalloutKind::Warning => "warning",
-                    CalloutKind::Caution => "caution",
-                });
-                match class {
-                    Some(c) => {
-                        let _ = writeln!(out, "<blockquote class=\"callout {c}\">");
+                match kind {
+                    Some(k) => {
+                        let (class, label) = match k {
+                            CalloutKind::Note => ("note", "Note"),
+                            CalloutKind::Tip => ("tip", "Tip"),
+                            CalloutKind::Important => ("important", "Important"),
+                            CalloutKind::Warning => ("warning", "Warning"),
+                            CalloutKind::Caution => ("caution", "Caution"),
+                        };
+                        let _ = writeln!(out, "<blockquote class=\"callout {class}\">");
+                        let _ = writeln!(out, "<p class=\"callout-title\">{label}</p>");
                     }
                     None => out.push_str("<blockquote>\n"),
                 }
