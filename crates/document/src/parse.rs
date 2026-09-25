@@ -130,6 +130,10 @@ pub(crate) enum BuildNode {
     OpenBracket {
         offset: usize,
         line: usize,
+        /// Text that preceded `[` in the same pulldown-cmark text event.
+        /// When the bracket does not form a citation, it is rejoined with the
+        /// bracket: `Text(prefix + "[")`.
+        prefix: Option<String>,
     },
 }
 
@@ -257,6 +261,10 @@ impl Builder {
             match &children[1] {
                 BuildNode::Text(s) => s.starts_with(' '),
                 BuildNode::SoftBreak | BuildNode::HardBreak => true,
+                // In a tight list item, a nested list or block quote directly
+                // follows the item's inline text. The label is "followed by
+                // the end of the paragraph" (contract section 1).
+                BuildNode::List { .. } | BuildNode::BlockQuote { .. } => true,
                 _ => false,
             }
         };
@@ -537,6 +545,7 @@ impl Builder {
         let BuildNode::OpenBracket {
             offset: open_offset,
             line: open_line,
+            ..
         } = children[n - 2]
         else {
             return None;
@@ -570,13 +579,15 @@ impl Builder {
         }
 
         if let Some(prefix) = text.strip_suffix('[') {
-            if !prefix.is_empty() {
-                self.push_node(BuildNode::Text(prefix.to_owned()));
-            }
             let line = line_of(starts, offset + prefix.len());
             self.push_node(BuildNode::OpenBracket {
                 offset: offset + prefix.len(),
                 line,
+                prefix: if prefix.is_empty() {
+                    None
+                } else {
+                    Some(prefix.to_owned())
+                },
             });
             return;
         }
@@ -594,8 +605,15 @@ impl Builder {
                     is_entry_label: false,
                 });
                 if let Some((_, children)) = self.stack.last_mut() {
-                    children.pop();
-                    children.pop();
+                    children.pop(); // label text
+                    // Extract prefix from the OpenBracket before removing it.
+                    let prefix = match children.pop() {
+                        Some(BuildNode::OpenBracket { prefix, .. }) => prefix,
+                        _ => None,
+                    };
+                    if let Some(p) = prefix {
+                        children.push(BuildNode::Text(p));
+                    }
                     children.push(BuildNode::Citation(cit_idx));
                 }
                 return;
@@ -678,7 +696,12 @@ fn plain(nodes: &[BuildNode]) -> String {
             | BuildNode::Link { children, .. }
             | BuildNode::WikiLink { children, .. } => out.push_str(&plain(children)),
             BuildNode::SoftBreak | BuildNode::HardBreak => out.push(' '),
-            BuildNode::OpenBracket { .. } => out.push('['),
+            BuildNode::OpenBracket { prefix, .. } => {
+                if let Some(p) = prefix {
+                    out.push_str(p);
+                }
+                out.push('[');
+            }
             _ => {}
         }
     }

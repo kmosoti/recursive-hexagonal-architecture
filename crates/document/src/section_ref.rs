@@ -531,16 +531,25 @@ fn resolve_and_flatten(
                 just_flattened_ref = false;
                 out.push(Node::Anchor { id });
             }
-            BuildNode::OpenBracket { .. } => {
+            BuildNode::OpenBracket { prefix, .. } => {
+                // Rejoin the prefix that was split from the same text event.
+                let combined = match prefix {
+                    Some(p) => {
+                        let mut s = p;
+                        s.push('[');
+                        s
+                    }
+                    None => "[".to_owned(),
+                };
                 if just_flattened_ref {
                     if let Some(Node::Text(last)) = out.last_mut() {
-                        last.push('[');
+                        last.push_str(&combined);
                     } else {
-                        out.push(Node::Text("[".to_owned()));
+                        out.push(Node::Text(combined));
                     }
                     just_flattened_ref = false;
                 } else {
-                    out.push(Node::Text("[".to_owned()));
+                    out.push(Node::Text(combined));
                 }
             }
             BuildNode::Citation(cit_idx) => {
