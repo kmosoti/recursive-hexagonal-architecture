@@ -1,0 +1,922 @@
+[
+  {
+    "id": "recognized-basic-title-and-tags",
+    "markdown": "---\ntitle: Hello World\ntags: [a, b]\n---\n\nBody text.\n",
+    "front_matter": {
+      "title": "Hello World",
+      "tags": [
+        "a",
+        "b"
+      ],
+      "end_line": 4
+    },
+    "title": "Hello World",
+    "invalid_front_matter_lines": [],
+    "headings": []
+  },
+  {
+    "id": "recognized-empty-front-matter-block",
+    "markdown": "---\n---\n\n# Heading\n",
+    "front_matter": {
+      "title": null,
+      "tags": [],
+      "end_line": 2
+    },
+    "title": "Heading",
+    "invalid_front_matter_lines": [],
+    "headings": [
+      {
+        "level": 1,
+        "text": "Heading",
+        "line": 4
+      }
+    ]
+  },
+  {
+    "id": "recognized-closer-dot-dot-dot",
+    "markdown": "---\ntitle: Via Dots\n...\n\nBody text.\n",
+    "front_matter": {
+      "title": "Via Dots",
+      "tags": [],
+      "end_line": 3
+    },
+    "title": "Via Dots",
+    "invalid_front_matter_lines": [],
+    "headings": []
+  },
+  {
+    "id": "recognized-opening-trailing-spaces-and-tabs",
+    "markdown": "---  \ntitle: Trailing\n---\t\n\nBody text.\n",
+    "front_matter": {
+      "title": "Trailing",
+      "tags": [],
+      "end_line": 3
+    },
+    "title": "Trailing",
+    "invalid_front_matter_lines": [],
+    "headings": []
+  },
+  {
+    "id": "recognized-closer-dot-dot-dot-trailing-whitespace",
+    "markdown": "---\ntitle: Dots Trailing\n...   \n\nBody text.\n",
+    "front_matter": {
+      "title": "Dots Trailing",
+      "tags": [],
+      "end_line": 3
+    },
+    "title": "Dots Trailing",
+    "invalid_front_matter_lines": [],
+    "headings": []
+  },
+  {
+    "id": "recognized-only-comments-and-blanks",
+    "markdown": "---\n# just a comment\n\n   \n---\n\nBody text.\n",
+    "front_matter": {
+      "title": null,
+      "tags": [],
+      "end_line": 5
+    },
+    "title": "fixture",
+    "invalid_front_matter_lines": [],
+    "headings": []
+  },
+  {
+    "id": "recognized-front-matter-lines-produce-no-body-nodes",
+    "markdown": "---\ntitle: Hidden\ntags: [x]\n---\n\n# Real Heading\n\nBody paragraph.\n",
+    "front_matter": {
+      "title": "Hidden",
+      "tags": [
+        "x"
+      ],
+      "end_line": 4
+    },
+    "title": "Hidden",
+    "invalid_front_matter_lines": [],
+    "headings": [
+      {
+        "level": 1,
+        "text": "Real Heading",
+        "line": 6
+      }
+    ]
+  },
+  {
+    "id": "not-recognized-leading-blank-line",
+    "markdown": "\n---\ntitle: x\n\n---\n\n# Heading\n",
+    "front_matter": null,
+    "title": "Heading",
+    "invalid_front_matter_lines": [],
+    "headings": [
+      {
+        "level": 1,
+        "text": "Heading",
+        "line": 7
+      }
+    ]
+  },
+  {
+    "id": "not-recognized-byte-order-mark",
+    "markdown": "\ufeff---\ntitle: x\n\n---\n\n# Heading\n",
+    "front_matter": null,
+    "title": "Heading",
+    "invalid_front_matter_lines": [],
+    "headings": [
+      {
+        "level": 1,
+        "text": "Heading",
+        "line": 6
+      }
+    ]
+  },
+  {
+    "id": "not-recognized-missing-closer",
+    "markdown": "---\ntitle: x\n\n# Real Heading\n\nBody paragraph.\n",
+    "front_matter": null,
+    "title": "Real Heading",
+    "invalid_front_matter_lines": [],
+    "headings": [
+      {
+        "level": 1,
+        "text": "Real Heading",
+        "line": 4
+      }
+    ]
+  },
+  {
+    "id": "not-recognized-dashes-mid-page",
+    "markdown": "# Real Heading\n\n---\ntitle: x\n\n---\n\nBody paragraph.\n",
+    "front_matter": null,
+    "title": "Real Heading",
+    "invalid_front_matter_lines": [],
+    "headings": [
+      {
+        "level": 1,
+        "text": "Real Heading",
+        "line": 1
+      }
+    ]
+  },
+  {
+    "id": "not-recognized-plus-plus-plus",
+    "markdown": "+++\ntitle: x\n+++\n\n# Heading\n",
+    "front_matter": null,
+    "title": "Heading",
+    "invalid_front_matter_lines": [],
+    "headings": [
+      {
+        "level": 1,
+        "text": "Heading",
+        "line": 5
+      }
+    ]
+  },
+  {
+    "id": "title-double-quotes",
+    "markdown": "---\ntitle: \"Quoted Title\"\n---\n\nBody.\n",
+    "front_matter": {
+      "title": "Quoted Title",
+      "tags": [],
+      "end_line": 3
+    },
+    "title": "Quoted Title",
+    "invalid_front_matter_lines": [],
+    "headings": []
+  },
+  {
+    "id": "title-single-quotes",
+    "markdown": "---\ntitle: 'Quoted Title'\n---\n\nBody.\n",
+    "front_matter": {
+      "title": "Quoted Title",
+      "tags": [],
+      "end_line": 3
+    },
+    "title": "Quoted Title",
+    "invalid_front_matter_lines": [],
+    "headings": []
+  },
+  {
+    "id": "title-empty-after-quote-removal-treated-absent",
+    "markdown": "---\ntitle: \"\"\n---\n\n# Fallback Heading\n",
+    "front_matter": {
+      "title": null,
+      "tags": [],
+      "end_line": 3
+    },
+    "title": "Fallback Heading",
+    "invalid_front_matter_lines": [],
+    "headings": [
+      {
+        "level": 1,
+        "text": "Fallback Heading",
+        "line": 5
+      }
+    ]
+  },
+  {
+    "id": "title-empty-value-unquoted-treated-absent",
+    "markdown": "---\ntitle:\n---\n\n# Fallback Heading\n",
+    "front_matter": {
+      "title": null,
+      "tags": [],
+      "end_line": 3
+    },
+    "title": "Fallback Heading",
+    "invalid_front_matter_lines": [],
+    "headings": [
+      {
+        "level": 1,
+        "text": "Fallback Heading",
+        "line": 5
+      }
+    ]
+  },
+  {
+    "id": "title-duplicate-first-wins",
+    "markdown": "---\ntitle: First\ntitle: Second\n---\n\nBody.\n",
+    "front_matter": {
+      "title": "First",
+      "tags": [],
+      "end_line": 4
+    },
+    "title": "First",
+    "invalid_front_matter_lines": [],
+    "headings": []
+  },
+  {
+    "id": "title-duplicate-first-empty-still-wins-over-nonempty-second",
+    "markdown": "---\ntitle:\ntitle: Second\n---\n\n# Fallback Heading\n",
+    "front_matter": {
+      "title": null,
+      "tags": [],
+      "end_line": 4
+    },
+    "title": "Fallback Heading",
+    "invalid_front_matter_lines": [],
+    "headings": [
+      {
+        "level": 1,
+        "text": "Fallback Heading",
+        "line": 6
+      }
+    ]
+  },
+  {
+    "id": "title-value-containing-colon",
+    "markdown": "---\ntitle: A: B\n---\n\nBody.\n",
+    "front_matter": {
+      "title": "A: B",
+      "tags": [],
+      "end_line": 3
+    },
+    "title": "A: B",
+    "invalid_front_matter_lines": [],
+    "headings": []
+  },
+  {
+    "id": "title-mismatched-quotes-kept-literal",
+    "markdown": "---\ntitle: \"Unmatched\n---\n\nBody.\n",
+    "front_matter": {
+      "title": "\"Unmatched",
+      "tags": [],
+      "end_line": 3
+    },
+    "title": "\"Unmatched",
+    "invalid_front_matter_lines": [],
+    "headings": []
+  },
+  {
+    "id": "title-key-is-case-sensitive-capital-t-ignored",
+    "markdown": "---\nTitle: Not Recognized\n---\n\n# Fallback Heading\n",
+    "front_matter": {
+      "title": null,
+      "tags": [],
+      "end_line": 3
+    },
+    "title": "Fallback Heading",
+    "invalid_front_matter_lines": [],
+    "headings": [
+      {
+        "level": 1,
+        "text": "Fallback Heading",
+        "line": 5
+      }
+    ]
+  },
+  {
+    "id": "title-surrounded-by-comments-and-blanks",
+    "markdown": "---\n# a comment before\n\ntitle: Between Blanks\n\n# a comment after\n---\n\nBody.\n",
+    "front_matter": {
+      "title": "Between Blanks",
+      "tags": [],
+      "end_line": 7
+    },
+    "title": "Between Blanks",
+    "invalid_front_matter_lines": [],
+    "headings": []
+  },
+  {
+    "id": "tags-flow-basic",
+    "markdown": "---\ntags: [alpha, beta, gamma]\n---\n\nBody.\n",
+    "front_matter": {
+      "title": null,
+      "tags": [
+        "alpha",
+        "beta",
+        "gamma"
+      ],
+      "end_line": 3
+    },
+    "title": "fixture",
+    "invalid_front_matter_lines": [],
+    "headings": []
+  },
+  {
+    "id": "tags-flow-quoted-element-with-space",
+    "markdown": "---\ntags: [alpha, \"beta gamma\"]\n---\n\nBody.\n",
+    "front_matter": {
+      "title": null,
+      "tags": [
+        "alpha",
+        "beta gamma"
+      ],
+      "end_line": 3
+    },
+    "title": "fixture",
+    "invalid_front_matter_lines": [],
+    "headings": []
+  },
+  {
+    "id": "tags-flow-empty-elements-dropped",
+    "markdown": "---\ntags: [alpha, , beta,  ]\n---\n\nBody.\n",
+    "front_matter": {
+      "title": null,
+      "tags": [
+        "alpha",
+        "beta"
+      ],
+      "end_line": 3
+    },
+    "title": "fixture",
+    "invalid_front_matter_lines": [],
+    "headings": []
+  },
+  {
+    "id": "tags-flow-ascii-case-duplicate-first-spelling-kept",
+    "markdown": "---\ntags: [Alpha, alpha, ALPHA, beta]\n---\n\nBody.\n",
+    "front_matter": {
+      "title": null,
+      "tags": [
+        "Alpha",
+        "beta"
+      ],
+      "end_line": 3
+    },
+    "title": "fixture",
+    "invalid_front_matter_lines": [],
+    "headings": []
+  },
+  {
+    "id": "tags-flow-order-is-first-appearance",
+    "markdown": "---\ntags: [zeta, alpha, mu]\n---\n\nBody.\n",
+    "front_matter": {
+      "title": null,
+      "tags": [
+        "zeta",
+        "alpha",
+        "mu"
+      ],
+      "end_line": 3
+    },
+    "title": "fixture",
+    "invalid_front_matter_lines": [],
+    "headings": []
+  },
+  {
+    "id": "tags-flow-empty-brackets-no-tags",
+    "markdown": "---\ntags: []\n---\n\nBody.\n",
+    "front_matter": {
+      "title": null,
+      "tags": [],
+      "end_line": 3
+    },
+    "title": "fixture",
+    "invalid_front_matter_lines": [],
+    "headings": []
+  },
+  {
+    "id": "tags-block-basic",
+    "markdown": "---\ntags:\n - alpha\n - beta\n---\n\nBody.\n",
+    "front_matter": {
+      "title": null,
+      "tags": [
+        "alpha",
+        "beta"
+      ],
+      "end_line": 5
+    },
+    "title": "fixture",
+    "invalid_front_matter_lines": [],
+    "headings": []
+  },
+  {
+    "id": "tags-block-empty-value-trailing-spaces",
+    "markdown": "---\ntags:   \n - alpha\n---\n\nBody.\n",
+    "front_matter": {
+      "title": null,
+      "tags": [
+        "alpha"
+      ],
+      "end_line": 4
+    },
+    "title": "fixture",
+    "invalid_front_matter_lines": [],
+    "headings": []
+  },
+  {
+    "id": "tags-block-ascii-case-duplicate-first-spelling-kept",
+    "markdown": "---\ntags:\n - Alpha\n - alpha\n---\n\nBody.\n",
+    "front_matter": {
+      "title": null,
+      "tags": [
+        "Alpha"
+      ],
+      "end_line": 5
+    },
+    "title": "fixture",
+    "invalid_front_matter_lines": [],
+    "headings": []
+  },
+  {
+    "id": "tags-block-no-items-empty-tags",
+    "markdown": "---\ntags:\nother: x\n---\n\nBody.\n",
+    "front_matter": {
+      "title": null,
+      "tags": [],
+      "end_line": 4
+    },
+    "title": "fixture",
+    "invalid_front_matter_lines": [],
+    "headings": []
+  },
+  {
+    "id": "tags-block-interrupted-by-another-key-second-item-invalid",
+    "markdown": "---\ntags:\n - alpha\nother: x\n - beta\n---\n\nBody.\n",
+    "front_matter": {
+      "title": null,
+      "tags": [
+        "alpha"
+      ],
+      "end_line": 6
+    },
+    "title": "fixture",
+    "invalid_front_matter_lines": [
+      5
+    ],
+    "headings": []
+  },
+  {
+    "id": "tags-scalar-single-tag",
+    "markdown": "---\ntags: solo\n---\n\nBody.\n",
+    "front_matter": {
+      "title": null,
+      "tags": [
+        "solo"
+      ],
+      "end_line": 3
+    },
+    "title": "fixture",
+    "invalid_front_matter_lines": [],
+    "headings": []
+  },
+  {
+    "id": "tags-scalar-with-comma-no-brackets-is-one-literal-tag",
+    "markdown": "---\ntags: alpha, beta\n---\n\nBody.\n",
+    "front_matter": {
+      "title": null,
+      "tags": [
+        "alpha, beta"
+      ],
+      "end_line": 3
+    },
+    "title": "fixture",
+    "invalid_front_matter_lines": [],
+    "headings": []
+  },
+  {
+    "id": "tags-duplicate-key-first-wins-flow-then-block-ignored",
+    "markdown": "---\ntags: [alpha]\ntags:\n - beta\n---\n\nBody.\n",
+    "front_matter": {
+      "title": null,
+      "tags": [
+        "alpha"
+      ],
+      "end_line": 5
+    },
+    "title": "fixture",
+    "invalid_front_matter_lines": [],
+    "headings": []
+  },
+  {
+    "id": "tags-list-item-under-non-tags-key-ignored-value-no-diagnostic",
+    "markdown": "---\naliases:\n - old-name\ntags: [real]\n---\n\nBody.\n",
+    "front_matter": {
+      "title": null,
+      "tags": [
+        "real"
+      ],
+      "end_line": 5
+    },
+    "title": "fixture",
+    "invalid_front_matter_lines": [],
+    "headings": []
+  },
+  {
+    "id": "comment-lines-ignored",
+    "markdown": "---\n# a full-line comment\ntitle: Kept\n---\n\nBody.\n",
+    "front_matter": {
+      "title": "Kept",
+      "tags": [],
+      "end_line": 4
+    },
+    "title": "Kept",
+    "invalid_front_matter_lines": [],
+    "headings": []
+  },
+  {
+    "id": "comment-line-with-leading-spaces",
+    "markdown": "---\n   # indented comment\ntitle: Kept\n---\n\nBody.\n",
+    "front_matter": {
+      "title": "Kept",
+      "tags": [],
+      "end_line": 4
+    },
+    "title": "Kept",
+    "invalid_front_matter_lines": [],
+    "headings": []
+  },
+  {
+    "id": "blank-lines-with-only-tabs-ignored",
+    "markdown": "---\n\t\t\ntitle: Kept\n---\n\nBody.\n",
+    "front_matter": {
+      "title": "Kept",
+      "tags": [],
+      "end_line": 4
+    },
+    "title": "Kept",
+    "invalid_front_matter_lines": [],
+    "headings": []
+  },
+  {
+    "id": "comments-interspersed-between-list-items",
+    "markdown": "---\ntags:\n - alpha\n# a comment between items\n - beta\n---\n\nBody.\n",
+    "front_matter": {
+      "title": null,
+      "tags": [
+        "alpha",
+        "beta"
+      ],
+      "end_line": 6
+    },
+    "title": "fixture",
+    "invalid_front_matter_lines": [],
+    "headings": []
+  },
+  {
+    "id": "unknown-key-scalar-ignored-no-diagnostic",
+    "markdown": "---\ndate: 2026-09-25\ntitle: Kept\n---\n\nBody.\n",
+    "front_matter": {
+      "title": "Kept",
+      "tags": [],
+      "end_line": 4
+    },
+    "title": "Kept",
+    "invalid_front_matter_lines": [],
+    "headings": []
+  },
+  {
+    "id": "unknown-key-with-block-list-ignored-no-diagnostic",
+    "markdown": "---\naliases:\n - one\n - two\ntitle: Kept\n---\n\nBody.\n",
+    "front_matter": {
+      "title": "Kept",
+      "tags": [],
+      "end_line": 6
+    },
+    "title": "Kept",
+    "invalid_front_matter_lines": [],
+    "headings": []
+  },
+  {
+    "id": "invalid-nested-map",
+    "markdown": "---\nouter:\n  inner: value\n---\n\nBody.\n",
+    "front_matter": {
+      "title": null,
+      "tags": [],
+      "end_line": 4
+    },
+    "title": "fixture",
+    "invalid_front_matter_lines": [
+      3
+    ],
+    "headings": []
+  },
+  {
+    "id": "invalid-multiple-unindented-list-items",
+    "markdown": "---\ntags:\n- a\n- b\n---\n\nBody.\n",
+    "front_matter": {
+      "title": null,
+      "tags": [],
+      "end_line": 5
+    },
+    "title": "fixture",
+    "invalid_front_matter_lines": [
+      3,
+      4
+    ],
+    "headings": []
+  },
+  {
+    "id": "invalid-unindented-list-item-under-empty-key",
+    "markdown": "---\ntags:\n - alpha\n- unindented\n---\n\nBody.\n",
+    "front_matter": {
+      "title": null,
+      "tags": [
+        "alpha"
+      ],
+      "end_line": 5
+    },
+    "title": "fixture",
+    "invalid_front_matter_lines": [
+      4
+    ],
+    "headings": []
+  },
+  {
+    "id": "invalid-list-item-without-preceding-empty-valued-key",
+    "markdown": "---\n - stray item\ntitle: Kept\n---\n\nBody.\n",
+    "front_matter": {
+      "title": "Kept",
+      "tags": [],
+      "end_line": 4
+    },
+    "title": "Kept",
+    "invalid_front_matter_lines": [
+      2
+    ],
+    "headings": []
+  },
+  {
+    "id": "invalid-tab-indented-list-item-not-a-space",
+    "markdown": "---\ntags:\n\t- tab-indented\n---\n\nBody.\n",
+    "front_matter": {
+      "title": null,
+      "tags": [],
+      "end_line": 4
+    },
+    "title": "fixture",
+    "invalid_front_matter_lines": [
+      3
+    ],
+    "headings": []
+  },
+  {
+    "id": "invalid-key-starting-with-digit",
+    "markdown": "---\n1title: x\ntitle: Kept\n---\n\nBody.\n",
+    "front_matter": {
+      "title": "Kept",
+      "tags": [],
+      "end_line": 4
+    },
+    "title": "Kept",
+    "invalid_front_matter_lines": [
+      2
+    ],
+    "headings": []
+  },
+  {
+    "id": "invalid-two-lines-report-both-in-order",
+    "markdown": "---\n  bad1: x\ntitle: Kept\n  bad2: y\n---\n\nBody.\n",
+    "front_matter": {
+      "title": "Kept",
+      "tags": [],
+      "end_line": 5
+    },
+    "title": "Kept",
+    "invalid_front_matter_lines": [
+      2,
+      4
+    ],
+    "headings": []
+  },
+  {
+    "id": "invalid-line-does-not-suppress-valid-keys",
+    "markdown": "---\ntitle: Kept\nnot a valid line at all\ntags: [x]\n---\n\nBody.\n",
+    "front_matter": {
+      "title": "Kept",
+      "tags": [
+        "x"
+      ],
+      "end_line": 5
+    },
+    "title": "Kept",
+    "invalid_front_matter_lines": [
+      3
+    ],
+    "headings": []
+  },
+  {
+    "id": "invalid-line-does-not-change-most-recent-key-value-line",
+    "markdown": "---\ntags:\nnot valid either\n - still-attached\n---\n\nBody.\n",
+    "front_matter": {
+      "title": null,
+      "tags": [
+        "still-attached"
+      ],
+      "end_line": 5
+    },
+    "title": "fixture",
+    "invalid_front_matter_lines": [
+      3
+    ],
+    "headings": []
+  },
+  {
+    "id": "heading-line-number-immediately-after-closer",
+    "markdown": "---\ntitle: Has Title\n---\n# Heading Right After\n",
+    "front_matter": {
+      "title": "Has Title",
+      "tags": [],
+      "end_line": 3
+    },
+    "title": "Has Title",
+    "invalid_front_matter_lines": [],
+    "headings": [
+      {
+        "level": 1,
+        "text": "Heading Right After",
+        "line": 4
+      }
+    ]
+  },
+  {
+    "id": "heading-line-number-after-blank-lines",
+    "markdown": "---\ntitle: Has Title\n---\n\n\n# Heading On Line Six\n",
+    "front_matter": {
+      "title": "Has Title",
+      "tags": [],
+      "end_line": 3
+    },
+    "title": "Has Title",
+    "invalid_front_matter_lines": [],
+    "headings": [
+      {
+        "level": 1,
+        "text": "Heading On Line Six",
+        "line": 6
+      }
+    ]
+  },
+  {
+    "id": "multiple-headings-line-numbers-after-front-matter",
+    "markdown": "---\ntags: [x]\n---\n\n# First\n\n## Second\n\n# Third\n",
+    "front_matter": {
+      "title": null,
+      "tags": [
+        "x"
+      ],
+      "end_line": 3
+    },
+    "title": "First",
+    "invalid_front_matter_lines": [],
+    "headings": [
+      {
+        "level": 1,
+        "text": "First",
+        "line": 5
+      },
+      {
+        "level": 2,
+        "text": "Second",
+        "line": 7
+      },
+      {
+        "level": 1,
+        "text": "Third",
+        "line": 9
+      }
+    ]
+  },
+  {
+    "id": "title-override-wins-over-body-heading",
+    "markdown": "---\ntitle: From Front Matter\n---\n\n# Body Heading Ignored For Title\n",
+    "front_matter": {
+      "title": "From Front Matter",
+      "tags": [],
+      "end_line": 3
+    },
+    "title": "From Front Matter",
+    "invalid_front_matter_lines": [],
+    "headings": [
+      {
+        "level": 1,
+        "text": "Body Heading Ignored For Title",
+        "line": 5
+      }
+    ]
+  },
+  {
+    "id": "title-falls-back-to-body-heading-when-front-matter-has-no-title",
+    "markdown": "---\ntags: [x]\n---\n\n# Derived From Heading\n",
+    "front_matter": {
+      "title": null,
+      "tags": [
+        "x"
+      ],
+      "end_line": 3
+    },
+    "title": "Derived From Heading",
+    "invalid_front_matter_lines": [],
+    "headings": [
+      {
+        "level": 1,
+        "text": "Derived From Heading",
+        "line": 5
+      }
+    ]
+  },
+  {
+    "id": "title-falls-back-to-basename-when-no-front-matter-title-and-no-heading",
+    "markdown": "---\ntags: [x]\n---\n\nJust a paragraph, no heading.\n",
+    "front_matter": {
+      "title": null,
+      "tags": [
+        "x"
+      ],
+      "end_line": 3
+    },
+    "title": "fixture",
+    "invalid_front_matter_lines": [],
+    "headings": []
+  },
+  {
+    "id": "title-not-affected-by-level-2-heading-only",
+    "markdown": "---\ntags: [x]\n---\n\n## Only A Level Two Heading\n",
+    "front_matter": {
+      "title": null,
+      "tags": [
+        "x"
+      ],
+      "end_line": 3
+    },
+    "title": "fixture",
+    "invalid_front_matter_lines": [],
+    "headings": [
+      {
+        "level": 2,
+        "text": "Only A Level Two Heading",
+        "line": 5
+      }
+    ]
+  },
+  {
+    "id": "no-front-matter-title-still-derived-from-first-heading-as-before",
+    "markdown": "# Ordinary First Heading\n\nBody paragraph.\n",
+    "front_matter": null,
+    "title": "Ordinary First Heading",
+    "invalid_front_matter_lines": [],
+    "headings": [
+      {
+        "level": 1,
+        "text": "Ordinary First Heading",
+        "line": 1
+      }
+    ]
+  },
+  {
+    "id": "no-front-matter-title-falls-back-to-basename-as-before",
+    "markdown": "Just a paragraph, no heading, no front matter.\n",
+    "front_matter": null,
+    "title": "fixture",
+    "invalid_front_matter_lines": [],
+    "headings": []
+  },
+  {
+    "id": "realistic-full-front-matter-title-tags-comments-blanks-invalid",
+    "markdown": "---\n# a leading comment\ntitle: \"A Real Page\"\n\ntags:\n - Rust\n - rust\naliases:\n - old-slug\n---\n\n# A Real Page\n\nBody paragraph mentioning nothing special.\n",
+    "front_matter": {
+      "title": "A Real Page",
+      "tags": [
+        "Rust"
+      ],
+      "end_line": 10
+    },
+    "title": "A Real Page",
+    "invalid_front_matter_lines": [],
+    "headings": [
+      {
+        "level": 1,
+        "text": "A Real Page",
+        "line": 12
+      }
+    ]
+  }
+]

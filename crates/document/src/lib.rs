@@ -10,6 +10,7 @@
 )]
 
 mod citation;
+mod front_matter;
 mod node;
 mod parse;
 mod section;
@@ -17,6 +18,7 @@ mod section_ref;
 mod slug;
 
 pub use citation::{Citation, ReferenceEntry};
+pub use front_matter::FrontMatter;
 pub use node::{Align, CalloutKind, Node, Transclusion};
 pub use parse::parse;
 pub use section::{section_nodes, transclusions};
@@ -39,6 +41,7 @@ pub struct Document {
     pub section_refs: Vec<SectionRef>,
     pub reference_entries: Vec<ReferenceEntry>,
     pub citations: Vec<Citation>,
+    pub front_matter: Option<FrontMatter>,
 }
 
 /// A heading with its final, unique slug.
@@ -84,4 +87,6 @@ pub enum Diagnostic {
     UnresolvedCitation { label: String, line: usize },
     /// Syntax the model preserves only as text.
     Unsupported { kind: &'static str, line: usize },
+    /// An invalid line in a front-matter block.
+    InvalidFrontMatter { line: usize },
 }

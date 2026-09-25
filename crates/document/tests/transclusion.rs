@@ -297,6 +297,7 @@ fn fixture_document(body: Vec<Node>) -> Document {
         section_refs: Vec::new(),
         reference_entries: Vec::new(),
         citations: Vec::new(),
+        front_matter: None,
     }
 }
 

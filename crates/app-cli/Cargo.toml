@@ -22,3 +22,6 @@ site = { path = "../site" }
 
 [lints]
 workspace = true
+
+[dev-dependencies]
+document = { path = "../document" }

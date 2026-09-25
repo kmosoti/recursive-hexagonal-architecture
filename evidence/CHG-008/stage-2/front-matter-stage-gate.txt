@@ -1,0 +1,23 @@
+# Front-matter stage A gate at 5062df039e882110e5ded32965908284c21ea974 (2026-09-25T20:05:17Z)
+## cargo nextest run --workspace --all-features --profile ci
+     Summary [  21.077s] 426 tests run: 426 passed, 0 skipped
+exit=0
+## cargo xtask docs --check
+docs: 4 generated files are current
+## cargo xtask architecture
+summary: 0 error(s), 0 warning(s), passed
+## cargo xtask scope --task CHG-008
+scope: 28 changed path(s), 0 finding(s), task CHG-008, base origin/main
+## cargo xtask rha lint .rha/tasks/CHG-008-growth.toml .rha/acceptances/PLAN-4.toml
+.rha/tasks/CHG-008-growth.toml: accepted with unchecked citations (task)
+.rha/acceptances/PLAN-4.toml: accepted with unchecked citations (acceptance)
+## cargo fmt --all -- --check
+exit=0
+## cargo clippy --workspace --all-targets --all-features
+exit=0
+## typos
+exit=0
+## module H4
+module H4: outcome=passed, evidence=target/h4-c13gate/20260925T200550Z-5062df039e88.json, cases=28, passed=28, failed=0, live=true, reference=true, supplementary=true
+## rhawiki check --root docs --format json | counts
+{}

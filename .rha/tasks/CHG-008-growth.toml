@@ -12,8 +12,8 @@ branch = "chg/008-growth"
 base_revision = "96019efceb8dc094ef4c323b8836a2e9c873a599"
 intent = "Deliver P-D, CHG-008 through CHG-014: adapter-json and H3, five individually measured W9 features, mutation diagnosis, green lanes and an open stacked PR; fix confirmed defects under RHA and never merge."
 non_goals = ["Spec edits", "Held-out material", "Merge/tag", "History rewriting", "Undisclosed changes to registered corpus grading"]
-scope_globs = [".rha/tasks/CHG-008-growth.toml", ".rha/acceptances/CHG-007.toml", ".rha/assumptions.toml", ".rha/decisions.toml", ".rha/policy.toml", "crates/**", "Cargo.toml", "Cargo.lock", ".cargo/**", ".github/**", "rha-crates.toml", "docs/**", "evidence/**", "xtask/**", "CONTRIBUTING.md", "rha-baseline.json"]
-protected_scope = [".rha/acceptances/CHG-007.toml", ".rha/assumptions.toml", ".rha/decisions.toml", ".rha/policy.toml", "Cargo.toml", "crates/*/Cargo.toml", "crates/*/rha-modules.toml", ".cargo/**", ".github/**", "rha-crates.toml", "xtask/**", "CONTRIBUTING.md", "crates/*/AGENTS.md", "rha-baseline.json"]
+scope_globs = [".rha/tasks/CHG-008-growth.toml", ".rha/acceptances/CHG-007.toml", ".rha/acceptances/PLAN-4.toml", ".rha/assumptions.toml", ".rha/decisions.toml", ".rha/policy.toml", "crates/**", "Cargo.toml", "Cargo.lock", ".cargo/**", ".github/**", "rha-crates.toml", "docs/**", "evidence/**", "xtask/**", "CONTRIBUTING.md", "rha-baseline.json"]
+protected_scope = [".rha/acceptances/CHG-007.toml", ".rha/acceptances/PLAN-4.toml", ".rha/assumptions.toml", ".rha/decisions.toml", ".rha/policy.toml", "Cargo.toml", "crates/*/Cargo.toml", "crates/*/rha-modules.toml", ".cargo/**", ".github/**", "rha-crates.toml", "xtask/**", "CONTRIBUTING.md", "crates/*/AGENTS.md", "rha-baseline.json"]
 
 [[actors]]
 id = "human:kennedy"
@@ -685,6 +685,17 @@ prompt_sha256 = "d5636edcc9b1397bb6648041cade17b3d4e082c0a090fd05a09a1d6573bc23c
 sample = "one teamwork run, 2026-09-25T05:16Z to 05:49Z; verdict APPROVE, 0 findings; no escalations"
 oracles = "not applicable (a review); its claims were compared with the separate Claude verifier's, which approved with two P3s this team did not report"
 
+[[provenance.generations]]
+artifact = "CHG-013 stage A: crates/document/src (new front_matter.rs, parse.rs, lib.rs) and the front_matter: None literal in crates/document/tests/transclusion.rs"
+generation = "sampled"
+model = "gemini-3.8-flash-high"
+reasoning_effort = "high (model tier)"
+harness = "Antigravity CLI 1.2.10, /boost pasted into agy-jail: root, DeepCoder and workers on Gemini; one escalation (the differential's key mismatch, a registration defect the supervisor repaired in ba73e8d)"
+prompt = "Implement front matter and tags per docs/architecture/front-matter-contract.md sections 1, 2, 2.1 and 3; recognise only from the first line; no pulldown metadata option; change only crates/document/src plus one allowed test literal."
+prompt_sha256 = "a690edba55beabe13c90293d392e6aab916f54a758ad602c294bd92a8ad4a486"
+sample = "one Boost run, base 07c2ed2, 2026-09-25T18:56Z to 19:20Z; output sha256 ca91a7d45f608e2dd47a3ac65fa05b4a3e890b8fe086a58a2021169b765e206b"
+oracles = "front_matter.rs (62 cases, a separate Sonnet oracle-author session), the M12 revision differential front_matter_unchanged.rs (3,422 inputs, re-registered in ba73e8d), the workspace suite, fmt, clippy, architecture, docs --check and the task-record lint, rerun by the supervising session"
+
 [[decisions]]
 id = "citations-anchor-node"
 question = "How does a citation link to its reference entry (CHG-011)?"
@@ -763,4 +774,60 @@ question = "Does an agy verification-only teamwork run count as the second-famil
 answer = "Yes while GPT-6 is unavailable (DP-5.4 amendment_2, merge-rule-gpt6-unavailable): a Gemini team with everything but its probe folder frozen reviews the same head as the Claude verifier. After GPT-6 returns it is an additional reviewer, not a substitute."
 decided_by = "agent:supervisor under human:kennedy's delegation"
 delegation = "Kennedy, 2026-09-24: 'I want the antigravity to have full permission and escalate to you in which you decide. Only escalate to me (human) when absolutely necessary.'"
+date = "2026-09-25"
+
+[[decisions]]
+id = "front-matter-first-line"
+question = "Where is front matter recognised?"
+answer = "Only when the file's first line is exactly `---` and a later line is exactly `---` or `...`. pulldown-cmark's YAML metadata option is not used: probed 2026-09-25, it also recognises `---` blocks in the middle of a page, which would remove content from existing pages."
+decided_by = "agent:supervisor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: 'Use recommended. ... Accept the recommend and most correct implementations going forward instead of escalating to me.' Kennedy, 2026-09-24: 'I want the antigravity to have full permission and escalate to you in which you decide. Only escalate to me (human) when absolutely necessary.'"
+date = "2026-09-25"
+
+[[decisions]]
+id = "front-matter-grammar"
+question = "Which front-matter syntax is parsed?"
+answer = "A restricted YAML subset parsed without a dependency (the core allow list is protected and serde_yaml is unmaintained, DP-0.4): `key: value` lines, indented `- item` lists under an empty-valued key, comments and blank lines; `title` and `tags` (flow list, block list or scalar) are recognised, other keys ignored, anything else is an InvalidFrontMatter diagnostic."
+decided_by = "agent:supervisor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: 'Use recommended. ... Accept the recommend and most correct implementations going forward instead of escalating to me.' Kennedy, 2026-09-24: 'I want the antigravity to have full permission and escalate to you in which you decide. Only escalate to me (human) when absolutely necessary.'"
+date = "2026-09-25"
+
+[[decisions]]
+id = "front-matter-check-surface"
+question = "Is InvalidFrontMatter a rhawiki check witness?"
+answer = "No. The check JSON schema stays fixed for Kennedy's held-out fixtures, as for section references and citations."
+decided_by = "agent:supervisor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: 'Use recommended. ... Accept the recommend and most correct implementations going forward instead of escalating to me.' Kennedy, 2026-09-24: 'I want the antigravity to have full permission and escalate to you in which you decide. Only escalate to me (human) when absolutely necessary.'"
+date = "2026-09-25"
+
+[[decisions]]
+id = "tags-stage-split"
+question = "How is W9 feature 5 staged?"
+answer = "Plan revision 3, M13: front matter and tags touch document only (stage A, this PR); the tag index page needs site assembly, adapter-html and adapter-json (stage B, its own contract and PR). Keeping both in one stage would exceed M13's three-production-crate bound."
+decided_by = "agent:supervisor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: 'Use recommended. ... Accept the recommend and most correct implementations going forward instead of escalating to me.' Kennedy, 2026-09-24: 'I want the antigravity to have full permission and escalate to you in which you decide. Only escalate to me (human) when absolutely necessary.'"
+date = "2026-09-25"
+
+[[decisions]]
+id = "front-matter-compat"
+question = "May earlier tests gain the new Document field?"
+answer = "Yes, under grader-compat-anchor's rule: a Document struct literal in an earlier test may gain `front_matter: None`; nothing else in an earlier test changes."
+decided_by = "agent:supervisor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: 'Use recommended. ... Accept the recommend and most correct implementations going forward instead of escalating to me.' Kennedy, 2026-09-24: 'I want the antigravity to have full permission and escalate to you in which you decide. Only escalate to me (human) when absolutely necessary.'"
+date = "2026-09-25"
+
+[[decisions]]
+id = "front-matter-differential"
+question = "Where does the M12 revision differential for CHG-013 live, and what does it compare?"
+answer = "In crates/app-cli/tests/front_matter_unchanged.rs, because it reads files (pure-fixture-inputs keeps I/O out of core-crate tests); app-cli gains an in-workspace dev-dependency on document, since site does not re-export parse (no external dependency is added; app-cli may depend on any member). Inputs are frozen: the spec, every registered corpus page under xtask/tests/corpus, and 3,000 seeded generated pages (980 with front matter, 2,442 without). It compares digests of each document's pre-existing observation surface with those captured at the contract commit: equal without front matter, different with it (the negative control)."
+decided_by = "agent:supervisor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: 'Use recommended. ... Accept the recommend and most correct implementations going forward instead of escalating to me.' Kennedy, 2026-09-24: 'I want the antigravity to have full permission and escalate to you in which you decide. Only escalate to me (human) when absolutely necessary.'"
+date = "2026-09-25"
+
+[[decisions]]
+id = "front-matter-open-questions"
+question = "How are the seven questions the front-matter oracle registration left open decided?"
+answer = "In front-matter-contract.md section 2.1, before implementation, each by the simplest reading consistent with section 2: split flow lists on every comma; strip matching quotes from every tag value; no space before the colon; an empty list item is an empty tag and is dropped; a trailing carriage return is trailing whitespace; an unclosed flow list is an invalid line; only lowercase title and tags are recognised."
+decided_by = "agent:supervisor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: 'Use recommended. ... Accept the recommend and most correct implementations going forward instead of escalating to me.' Kennedy, 2026-09-24: 'I want the antigravity to have full permission and escalate to you in which you decide. Only escalate to me (human) when absolutely necessary.'"
 date = "2026-09-25"

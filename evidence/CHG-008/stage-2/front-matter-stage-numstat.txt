@@ -1,0 +1,10 @@
+# git diff --numstat 779de1a 5062df039e882110e5ded32965908284c21ea974 -- crates (front matter stage A, CHG-013)
+3	0	crates/app-cli/Cargo.toml
+3424	0	crates/app-cli/tests/data/front_matter_unchanged/golden.json
+257	0	crates/app-cli/tests/front_matter_unchanged.rs
+378	0	crates/document/src/front_matter.rs
+5	0	crates/document/src/lib.rs
+34	8	crates/document/src/parse.rs
+280	0	crates/document/tests/front_matter.rs
+80	0	crates/document/tests/front_matter_review.rs
+1	0	crates/document/tests/transclusion.rs

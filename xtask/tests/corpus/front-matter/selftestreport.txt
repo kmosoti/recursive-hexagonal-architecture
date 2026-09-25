@@ -1,0 +1,48 @@
+PASS a page opening and closing with --- has front matter
+PASS a leading blank line disqualifies recognition
+PASS a byte-order mark disqualifies recognition
+PASS a first line --- with no closing line is not front matter
+PASS a --- block that does not start at line 1 is not front matter
+PASS +++ is never recognized
+PASS ... closes a front-matter block
+PASS trailing spaces on the opening line are allowed
+PASS trailing tabs on the closing line are allowed
+PASS a double-quoted title has its quotes removed
+PASS a single-quoted title has its quotes removed
+PASS an empty title after quote removal is absent
+PASS the first title occurrence wins even when empty
+PASS the first non-empty title occurrence wins over a later one
+PASS a mismatched quote is kept literal
+PASS the title key is matched case-sensitively; Title is unrecognized
+PASS a flow list is split on commas, trimmed, and quote-stripped
+PASS empty flow-list elements are dropped
+PASS an ASCII-case duplicate tag is dropped, first spelling kept
+PASS a block list collects indented list items under an empty-valued tags key
+PASS a scalar tags value is a single tag
+PASS a scalar value with a comma but no brackets is one literal tag, not split
+PASS the first tags occurrence wins; a later flow/block occurrence is ignored
+PASS a list item under a non-tags empty-valued key is valid but not collected
+PASS a list item interrupted by another key-value line stops attaching to the earlier key
+PASS a nested map is invalid
+PASS unindented list items are invalid: the required leading space is missing
+PASS a properly indented list item without any preceding empty-valued key is invalid
+PASS a tab-indented list item does not count as indented by a space
+PASS a key starting with a digit is not a valid key-value line
+PASS two invalid lines are both reported, in order
+PASS front matter with invalid lines still applies its valid keys
+PASS an invalid line does not change the most recent key-value line
+PASS front matter lines produce no body content; body starts after the closer
+PASS a heading's reported line is its absolute source line, after blank lines too
+PASS a front-matter title overrides a body heading for Document::title
+PASS without a front-matter title, the title falls back to the first level-1 heading
+PASS a level-2-only heading does not supply the title
+PASS with no front-matter title and no heading, the title falls back to the basename
+PASS without front matter at all, title derivation is unaffected (first heading)
+PASS without front matter and without a heading, title is the basename, unaffected
+PASS case_count=62
+PASS case ids are unique
+PASS case_count=62
+PASS front_matter_recognized_count=55
+PASS front_matter_not_recognized_count=7
+PASS total_invalid_front_matter_lines=12
+PASS all selftests executed without assertion failure

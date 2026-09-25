@@ -191,3 +191,42 @@ A separate Claude verifier reviewed the combined head. It found L0 all passed, 4
 - **P1, confirmed: the task record failed `rha lint`.** A field this session added in 352b0f1 (`resume_prompt_sha256`) is not in the schema, and no later stage gate linted the task record, so this record's claim that task records still receive the lint was false from 352b0f1 on. Repair: the value is folded into the generation's prompt text, and the record lints as accepted. From now on, each stage gate runs `cargo xtask rha lint .rha/tasks/CHG-008-growth.toml`.
 - **P2, confirmed: "teamwork is reserved for verification" was cited without a decision.** Repair: decisions agy-teamwork-verification-only (Kennedy's words, narrowing agy-supervised-implementation) and agy-verification-second-family are recorded, and both citations now name the id.
 - **P3, confirmed: stale resume point and missing spread headline.** The resume point now shows the review and PR row and the current merge rule. change-spread.md opens with the plan's original prediction accuracy (plan revision 3). Shrinking the H4 evidence records stays owed.
+
+### Stage 2, feature 5, stage A: front matter and tags (CHG-013), prepared before corpus and code
+
+This is the first stage delivered under plan revision 3. It is its own PR, `chg/013-tags-front-matter`, whose first commit is PLAN-4's acceptance record. The [contract](../architecture/front-matter-contract.md) recognises front matter only when it starts on the file's first line, parses a restricted YAML subset without a new dependency, removes the block from the body, lets its title replace the derived title, and records tags on the document. Two probes shaped it:
+- **Current parser:** today a front-matter block renders as a rule plus a heading made of the metadata text.
+- **pulldown-cmark's metadata option:** it recognises `---` blocks mid-page, so it is not used.
+
+Decisions front-matter-first-line, front-matter-grammar, front-matter-check-surface, tags-stage-split and front-matter-compat are in the task record. **M13 split:** the tag index page (site assembly and both renderers) is stage B. **Prediction:** document only.
+
+**Lessons applied from the previous stages (M11).** CHG-012's close predates M11, so its lessons are reconstructed here from the CHG-011 and CHG-012 records, each cited and applied or rejected:
+1. *Probe the parser before writing the contract* (CHG-012). Applied: two probes, above.
+2. *Register a revision differential with a negative control before code* (CHG-011's `![` defect; M12). Applied: `crates/app-cli/tests/front_matter_unchanged.rs`. It compares per-page document digests from the pre-feature parser over the spec, the repository docs and a seeded generated corpus. It requires every page with front matter to change, which is the negative control.
+3. *Run clippy and fmt on registered graders at registration* (CHG-011, 0db8b76). Applied at registration.
+4. *Lint the task record at every stage gate* (PR #21 review). Applied in this stage's gate.
+5. *Write full hashes in prose; short ones can trip the typos check* (PLAN-4). Applied.
+6. *Implementation by Boost or a single agent; verification by an agy verification-only team plus a Claude verifier* (decisions agy-teamwork-verification-only, agy-verification-second-family). Applied.
+7. *Graders must not read files in core crates* (pure-fixture-inputs, the lesson lost between CHG-009 and CHG-010). Applied: the core grader embeds its data. The differential lives in app-cli, where I/O is allowed.
+
+**Re-registration of the revision differential (CHG-013; the implementer's escalation).** The differential discovered its frozen inputs by walking `xtask/tests/corpus/**/*.md` at run time. Its goldens were captured before the oracle package was added in the same commit (7cbbfca), so that package's three `.md` files had no golden entry, and every later corpus would have broken it the same way. The supervisor re-registered it: the frozen inputs are now read by name from the golden file's keys (3,422, unchanged), and discovery is used only when capturing. The digests are not recaptured. At the re-registration commit, the key-set assertion passes, and the negative control still fails, as it must before the feature exists.
+
+**Front matter stage A (CHG-013) closed.** An agy Boost run on Gemini implemented it (9a2e44e): a new `front_matter.rs` plus `parse.rs` and `lib.rs`. The one escalation was a real registration defect: the revision differential discovered corpus pages at run time. It was re-registered to read its inputs by name (ba73e8da191d0ae6bde12341648b5ba42417814c). The gate's scope check found that the packet's task record did not own the PLAN-4 acceptance record (843e086).
+
+Verification:
+- **Claude verifier: APPROVE, one P3.** It ran a differential against the pre-feature parser over 23,500 pages without front matter (0 differences) and 60,000 fuzzed pages (no panic). The P3: carriage returns were not treated as trailing whitespace on front-matter lines (contract 2.1 item 5). Regression tests were registered first (d059d0e) and the repair is one line (8fe48d5). The re-review approved and noted that ` -	` is now an empty item, which is pinned (72cdaf3).
+- **Gemini: APPROVE, 0 findings.** A single agent did the review, because `/teamwork-preview` did not form a team: there is no `.agents/teamwork` folder and no subagent call. It did not find the carriage-return P3 ([report](../../evidence/CHG-008/stage-2/front-matter-verification-gemini.md)).
+
+Carried forward:
+- **P3:** three new pedantic warnings (two `too_many_lines`, one `nonminimal_bool`).
+- **P3:** the oracle's `reference.py` folds case with Unicode rules; the contract says ASCII. No registered case is affected.
+
+[Stage gate](../../evidence/CHG-008/stage-2/front-matter-stage-gate.txt): nextest (CI profile) 426 passed; docs current; architecture and scope with 0 findings; task-record and PLAN-4 record lint accepted; fmt, clippy and typos clean; module H4 28/28; `rhawiki check --root docs` reports zero witnesses. Change spread: document only, as predicted.
+
+**For the next stage (M11): stage B, the tag index page.** The next contract commit must cite each item and apply or reject it:
+1. Stage B reads tags from `Document::front_matter`. Tags keep their first spelling and are de-duplicated with ASCII case, so the tag index needs its own rule for a page id or URL per tag (slug, case, non-ASCII). The contract must decide it.
+2. The prediction (site::assembly, adapter-html, adapter-json) is exactly three production crates, M13's limit. A tag index needs a new page kind that no source file backs, and that may also touch `site::build` or `app-cli`. Probe it before the contract and split again if it exceeds three.
+3. The revision differential must read its inputs by name from its golden keys, never discover them (the lesson of ba73e8da191d0ae6bde12341648b5ba42417814c).
+4. `/teamwork-preview` may not form a team. Before counting a verification run as a team, check for `.agents/teamwork` and a subagent call; otherwise record it as a single agent.
+5. The single Gemini reviewer again found less than the Claude verifier (CHG-012, CHG-013). Keep both halves, and give the Gemini brief a checklist of the contract's amended items, such as section 2.1.
+6. Supervisor answers to agy quote hashes only after the command that produces them has run.

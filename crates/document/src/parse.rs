@@ -7,8 +7,10 @@ use pulldown_cmark::{
 };
 
 use crate::{
-    Align, CalloutKind, Diagnostic, Document, Heading, Link, ReferenceEntry, Transclusion,
+    Align, CalloutKind, Diagnostic, Document, FrontMatter, Heading, Link, ReferenceEntry,
+    Transclusion,
     citation::{PendingCitation, parse_citation_label, resolve_citations},
+    front_matter::extract_front_matter,
     section_ref::{PendingRef, ScannedPiece, resolve_section_refs, scan_references},
     slugify,
 };
@@ -720,14 +722,33 @@ fn plain(nodes: &[BuildNode]) -> String {
 /// Parses one source. Total: never fails, never panics on any UTF-8 input.
 #[must_use]
 pub fn parse(source: &Source) -> Document {
-    let text = &source.text;
+    let (front_matter, fm_diagnostics, text_to_parse) = match extract_front_matter(&source.text) {
+        Some(extracted) => {
+            let fm = FrontMatter {
+                title: extracted.title,
+                tags: extracted.tags,
+                end_line: extracted.end_line,
+            };
+            (
+                Some(fm),
+                extracted.diagnostics,
+                std::borrow::Cow::Owned(extracted.blanked_text),
+            )
+        }
+        None => (
+            None,
+            Vec::new(),
+            std::borrow::Cow::Borrowed(source.text.as_str()),
+        ),
+    };
+    let text = &*text_to_parse;
     let mut starts = vec![0];
     starts.extend(text.match_indices('\n').map(|(i, _)| i + 1));
     let mut b = Builder {
         stack: vec![(Frame::Other, Vec::new())],
         headings: Vec::new(),
         links: Vec::new(),
-        diagnostics: Vec::new(),
+        diagnostics: fm_diagnostics,
         seen: BTreeMap::new(),
         used: std::collections::BTreeSet::new(),
         next_transclusion: 0,
@@ -783,11 +804,15 @@ pub fn parse(source: &Source) -> Document {
     );
     b.diagnostics.extend(citation_diagnostics);
     b.diagnostics.extend(section_diagnostics);
-    let title = b
-        .headings
-        .iter()
-        .find(|h| h.level == 1)
-        .map_or_else(|| source.id.basename().to_owned(), |h| h.text.clone());
+    let title = front_matter
+        .as_ref()
+        .and_then(|fm| fm.title.clone())
+        .unwrap_or_else(|| {
+            b.headings
+                .iter()
+                .find(|h| h.level == 1)
+                .map_or_else(|| source.id.basename().to_owned(), |h| h.text.clone())
+        });
     Document {
         id: PageId::new(source.id.as_str()),
         source_digest: source.digest,
@@ -799,5 +824,6 @@ pub fn parse(source: &Source) -> Document {
         section_refs,
         reference_entries: b.reference_entries,
         citations,
+        front_matter,
     }
 }
