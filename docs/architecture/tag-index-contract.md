@@ -38,6 +38,14 @@ When the site has no tags, nothing is appended. A tag index page renders exactly
 - A slug that equals one of the page's own heading slugs, or a slug already given to an earlier tag, gets the suffix `-2`, `-3` and so on: the first unused one, checked against both sets.
 - Non-ASCII spellings are handled by `slugify`, as for headings.
 
+### 3.1 Amendment: the registration's open questions (decided before implementation)
+
+The oracle registration left four questions open and kept them out of its corpus (decision tag-index-open-questions):
+1. **The tie-break is unreachable.** Tag identity is ASCII-case-insensitive, so two distinct tags never share an ASCII-lowercased spelling, and the ordering needs no tie-break. The clause is kept, but it never applies.
+2. **"The page's own heading slugs"** means the final slugs of the page's headings: `Heading::slug` after the document's own de-duplication, which are the ids the renderers emit.
+3. **Other ids on the page cannot collide.** Reference-entry anchors begin with `ref-` and transcluded headings with `tx-`. A tag anchor begins with `tag`, and after `tag` comes either nothing, `-` and a slug, or `-` and a number. So a tag anchor can collide only with a heading slug, which rule 2 covers.
+4. **`index:` followed by indented list items** follows stage A's rule: list items under an empty-valued key other than `tags` are ignored. `index` is then absent.
+
 ## 4. What does not change (M12)
 
 - **Other pages:** every page that is not a tag index produces exactly the page model it produced before this stage. So does every page of a site where no page is a tag index.

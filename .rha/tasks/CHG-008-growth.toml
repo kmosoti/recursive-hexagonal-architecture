@@ -863,3 +863,11 @@ answer = "No; the check JSON schema stays fixed for Kennedy's held-out fixtures.
 decided_by = "agent:supervisor under human:kennedy's delegation"
 delegation = "Kennedy, 2026-09-22: 'Use recommended. ... Accept the recommend and most correct implementations going forward instead of escalating to me.' Kennedy, 2026-09-25: 'Proceed' (stage B)."
 date = "2026-09-25"
+
+[[decisions]]
+id = "tag-index-open-questions"
+question = "How are the four questions the tag-index oracle registration left open decided?"
+answer = "In tag-index-contract.md section 3.1, before implementation: the tie-break clause is unreachable; the page's own heading slugs are the final de-duplicated Heading::slug values; ref- and tx- ids cannot collide with tag anchors; an index key with block-list items is absent under stage A's rule."
+decided_by = "agent:supervisor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: 'Use recommended. ... Accept the recommend and most correct implementations going forward instead of escalating to me.' Kennedy, 2026-09-25: 'Proceed' (stage B)."
+date = "2026-09-25"
