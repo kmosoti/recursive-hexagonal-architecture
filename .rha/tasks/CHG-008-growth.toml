@@ -12,8 +12,8 @@ branch = "chg/008-growth"
 base_revision = "96019efceb8dc094ef4c323b8836a2e9c873a599"
 intent = "Deliver P-D, CHG-008 through CHG-014: adapter-json and H3, five individually measured W9 features, mutation diagnosis, green lanes and an open stacked PR; fix confirmed defects under RHA and never merge."
 non_goals = ["Spec edits", "Held-out material", "Merge/tag", "History rewriting", "Undisclosed changes to registered corpus grading"]
-scope_globs = [".rha/tasks/CHG-008-growth.toml", ".rha/acceptances/CHG-007.toml", ".rha/assumptions.toml", ".rha/decisions.toml", ".rha/policy.toml", "crates/**", "Cargo.toml", "Cargo.lock", ".cargo/**", ".github/**", "rha-crates.toml", "docs/**", "evidence/**", "xtask/**", "CONTRIBUTING.md", "rha-baseline.json"]
-protected_scope = [".rha/acceptances/CHG-007.toml", ".rha/assumptions.toml", ".rha/decisions.toml", ".rha/policy.toml", "Cargo.toml", "crates/*/Cargo.toml", "crates/*/rha-modules.toml", ".cargo/**", ".github/**", "rha-crates.toml", "xtask/**", "CONTRIBUTING.md", "crates/*/AGENTS.md", "rha-baseline.json"]
+scope_globs = [".rha/tasks/CHG-008-growth.toml", ".rha/acceptances/CHG-007.toml", ".rha/acceptances/PLAN-4.toml", ".rha/assumptions.toml", ".rha/decisions.toml", ".rha/policy.toml", "crates/**", "Cargo.toml", "Cargo.lock", ".cargo/**", ".github/**", "rha-crates.toml", "docs/**", "evidence/**", "xtask/**", "CONTRIBUTING.md", "rha-baseline.json"]
+protected_scope = [".rha/acceptances/CHG-007.toml", ".rha/acceptances/PLAN-4.toml", ".rha/assumptions.toml", ".rha/decisions.toml", ".rha/policy.toml", "Cargo.toml", "crates/*/Cargo.toml", "crates/*/rha-modules.toml", ".cargo/**", ".github/**", "rha-crates.toml", "xtask/**", "CONTRIBUTING.md", "crates/*/AGENTS.md", "rha-baseline.json"]
 
 [[actors]]
 id = "human:kennedy"
