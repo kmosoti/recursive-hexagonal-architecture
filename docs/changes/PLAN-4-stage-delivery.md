@@ -28,3 +28,7 @@
 - **P2, confirmed: M6 cited a decision absent from main and an agy rule with no recorded source.** Repair: M6 now names decisions agy-verification-second-family and agy-teamwork-verification-only (Kennedy's words), which PR #21 records. PR #21 therefore merges before this PR, and this branch merges main before its own merge.
 - **P2, confirmed: revision 2 text still said one PR per packet** (provenance, kickoff prompt, M2 base text, M5, §2.3). Repair: each passage now states the revision 3 rule, and the provenance says revision 3 wins where old text remains.
 - **P3, confirmed: M11 to M13 came before M10.** Repair: reordered. The change-spread headline that line 440 promises is added in PR #21 (5e1dd51).
+
+**Re-review of 34981ab: REQUEST_CHANGES; determinations.** The earlier findings were confirmed repaired. New findings:
+- **P2, confirmed: kickoff step 5 still set one L0 record, one review pair and one PR per packet.** Repair: step 5 now works per stage PR.
+- **P3, confirmed: M6 opened with "when the packet is ready", and the risk table said "one L0 record per packet".** Repair: both now say per stage PR.
