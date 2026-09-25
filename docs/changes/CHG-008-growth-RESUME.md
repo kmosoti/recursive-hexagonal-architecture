@@ -17,7 +17,8 @@ Written 2026-09-23 by the supervising session, after the previous Executor's run
 | Stage 2, feature 2: §-references | Done: gate passed (f18661e) | `docs/architecture/section-reference-contract.md`; `evidence/CHG-008/stage-2/section-refs-stage-*` |
 | Stage 2, feature 3: `[Rn]` citations | Done: gate passed at 0339267 after three review rounds | `docs/architecture/citation-contract.md`; `evidence/CHG-008/stage-2/citations-stage-*` |
 | Stage 2, feature 4: callouts | Done: gate passed at c469d10; Boost implemented, a Gemini verification team and a Claude verifier approved | `docs/architecture/callout-contract.md`; `evidence/CHG-008/stage-2/callouts-*` |
-| Stage 2, feature 5 (tags and front matter) | Not started | plan W9 |
+| Stage 2, feature 5, stage A: front matter and tags on the document | Done: gate passed at 5062df0; PR from `chg/013-tags-front-matter` | `docs/architecture/front-matter-contract.md`; `evidence/CHG-008/stage-2/front-matter-*` |
+| Stage 2, feature 5, stage B: tag index page | Not started (M13 split) | the "For the next stage" list in the change record |
 | Stage 3: mutation analysis (DP-2.2) | Not started | plan W10 |
 | Review and PR | Catch-up PR #21 open (plan revision 3, M2); feature 5 and stage 3 follow as their own PRs | PR #21 |
 

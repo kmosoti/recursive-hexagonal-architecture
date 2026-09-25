@@ -210,3 +210,23 @@ Decisions front-matter-first-line, front-matter-grammar, front-matter-check-surf
 7. *Graders must not read files in core crates* (pure-fixture-inputs, the lesson lost between CHG-009 and CHG-010). Applied: the core grader embeds its data. The differential lives in app-cli, where I/O is allowed.
 
 **Re-registration of the revision differential (CHG-013; the implementer's escalation).** The differential discovered its frozen inputs by walking `xtask/tests/corpus/**/*.md` at run time. Its goldens were captured before the oracle package was added in the same commit (7cbbfca), so that package's three `.md` files had no golden entry, and every later corpus would have broken it the same way. The supervisor re-registered it: the frozen inputs are now read by name from the golden file's keys (3,422, unchanged), and discovery is used only when capturing. The digests are not recaptured. At the re-registration commit, the key-set assertion passes, and the negative control still fails, as it must before the feature exists.
+
+**Front matter stage A (CHG-013) closed.** An agy Boost run on Gemini implemented it (9a2e44e): a new `front_matter.rs` plus `parse.rs` and `lib.rs`. The one escalation was a real registration defect: the revision differential discovered corpus pages at run time. It was re-registered to read its inputs by name (ba73e8d). The gate's scope check found that the packet's task record did not own the PLAN-4 acceptance record (843e086).
+
+Verification:
+- **Claude verifier: APPROVE, one P3.** It ran a differential against the pre-feature parser over 23,500 pages without front matter (0 differences) and 60,000 fuzzed pages (no panic). The P3: carriage returns were not treated as trailing whitespace on front-matter lines (contract 2.1 item 5). Regression tests were registered first (d059d0e) and the repair is one line (8fe48d5). The re-review approved and noted that ` -	` is now an empty item, which is pinned (72cdaf3).
+- **Gemini: APPROVE, 0 findings.** A single agent did the review, because `/teamwork-preview` did not form a team: there is no `.agents/teamwork` folder and no subagent call. It did not find the carriage-return P3 ([report](../../evidence/CHG-008/stage-2/front-matter-verification-gemini.md)).
+
+Carried forward:
+- **P3:** three new pedantic warnings (two `too_many_lines`, one `nonminimal_bool`).
+- **P3:** the oracle's `reference.py` folds case with Unicode rules; the contract says ASCII. No registered case is affected.
+
+[Stage gate](../../evidence/CHG-008/stage-2/front-matter-stage-gate.txt): nextest (CI profile) 426 passed; docs current; architecture and scope with 0 findings; task-record and PLAN-4 record lint accepted; fmt, clippy and typos clean; module H4 28/28; `rhawiki check --root docs` reports zero witnesses. Change spread: document only, as predicted.
+
+**For the next stage (M11): stage B, the tag index page.** The next contract commit must cite each item and apply or reject it:
+1. Stage B reads tags from `Document::front_matter`. Tags keep their first spelling and are de-duplicated with ASCII case, so the tag index needs its own rule for a page id or URL per tag (slug, case, non-ASCII). The contract must decide it.
+2. The prediction (site::assembly, adapter-html, adapter-json) is exactly three production crates, M13's limit. A tag index needs a new page kind that no source file backs, and that may also touch `site::build` or `app-cli`. Probe it before the contract and split again if it exceeds three.
+3. The revision differential must read its inputs by name from its golden keys, never discover them (the lesson of ba73e8d).
+4. `/teamwork-preview` may not form a team. Before counting a verification run as a team, check for `.agents/teamwork` and a subagent call; otherwise record it as a single agent.
+5. The single Gemini reviewer again found less than the Claude verifier (CHG-012, CHG-013). Keep both halves, and give the Gemini brief a checklist of the contract's amended items, such as section 2.1.
+6. Supervisor answers to agy quote hashes only after the command that produces them has run.
