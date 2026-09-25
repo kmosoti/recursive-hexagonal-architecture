@@ -238,6 +238,25 @@ fn plain_text(nodes: &[Node]) -> String {
     out
 }
 
+/// A citation link (CHG-011, citation contract section 2): visible text
+/// `[R<digits>]` with at most one lowercase letter, linking to
+/// `#ref-<label lowercase>`. Section references never have this shape (their
+/// text begins with `§`), so excluding exactly these keeps every other
+/// intra-page link under this grader's count.
+fn is_citation_link(href: &str, text: &str) -> bool {
+    let Some(label) = text.strip_prefix('[').and_then(|t| t.strip_suffix(']')) else {
+        return false;
+    };
+    let Some(rest) = label.strip_prefix('R') else {
+        return false;
+    };
+    let digits = rest.trim_end_matches(|c: char| c.is_ascii_lowercase());
+    !digits.is_empty()
+        && digits.bytes().all(|b| b.is_ascii_digit())
+        && rest.len() - digits.len() <= 1
+        && href == format!("#ref-{}", label.to_lowercase())
+}
+
 /// Every `Node::Link` in the body, as `(href, visible text)`, at any depth.
 fn collect_links(nodes: &[Node], out: &mut Vec<(String, String)>) {
     for node in nodes {
@@ -328,7 +347,7 @@ fn all_registered_section_ref_cases_grade_exact_refs_diagnostics_and_link_invari
         collect_links(&document.body, &mut actual_links);
         let mut actual_hash_links = actual_links
             .into_iter()
-            .filter(|(href, _)| href.starts_with('#'))
+            .filter(|(href, text)| href.starts_with('#') && !is_citation_link(href, text))
             .collect::<Vec<_>>();
         actual_hash_links.sort();
 
