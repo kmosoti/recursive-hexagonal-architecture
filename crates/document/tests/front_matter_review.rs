@@ -56,3 +56,25 @@ fn a_line_of_only_spaces_and_carriage_returns_is_blank() {
     assert!(d.front_matter.is_some());
     assert!(invalid_lines(&d).is_empty(), "{:?}", d.diagnostics);
 }
+
+#[test]
+fn a_dash_followed_only_by_a_tab_is_an_empty_list_item() {
+    // Section 2.1 items 4 and 5: trailing whitespace is ignored, so ` -\t` is ` -`, an empty tag
+    // that is dropped without a diagnostic (a behaviour the repair changed; pinned here).
+    for text in ["---\ntags:\n -\t\n---\n", "---\ntags:\n -\t\r\n---\n"] {
+        let d = doc(text);
+        assert!(
+            invalid_lines(&d).is_empty(),
+            "{text:?}: {:?}",
+            d.diagnostics
+        );
+        assert!(
+            d.front_matter
+                .clone()
+                .expect("front matter")
+                .tags
+                .is_empty(),
+            "{text:?}"
+        );
+    }
+}
