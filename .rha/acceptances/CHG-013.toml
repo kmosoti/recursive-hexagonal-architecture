@@ -1,0 +1,76 @@
+# Acceptance record for CHG-013 stage A (front matter and tags); first commit of stage B's PR (plan revision 3, M2). Creation pre-approved by [acceptance].
+schema_version = 1
+id = "CHG-013"
+change = "docs/changes/CHG-008-growth.md"
+task = ".rha/tasks/CHG-008-growth.toml"
+covers = ["CHG-013"]
+
+[acceptor]
+principal = "human:kennedy"
+role = "acceptor"
+date = "2026-09-25"
+authority_profile = "ECC-Solo"
+basis = "Kennedy, 2026-09-25: 'Continue' after the P-D merge, and decision apply-stage-division-study; merge rule DP-5.4 amendment_2. The supervising session merged pull request 22 at the reviewed head."
+event = "merge of pull request 22"
+
+[subject]
+revision = "fcc7f8bf9ba21b84daea422da95a281fbc7643f2"
+tree = "a094f9a513bd97296fd205a2d72634d4e2c316ac"
+parents = ["a5a6a09c52c56af31ec0f6410277abc9a7a8a957", "9ceb7304d0fd98dc4a85bf101ab4bf341710d161"]
+pull_request = "https://github.com/kmosoti/recursive-hexagonal-architecture/pull/22"
+integrator_edits = "none"
+
+[[evidence]]
+path = "evidence/ci/36184227113.json"
+sha256 = "f06ab7934144df0128f0ae6c71e2a9f007c5816ff3a4eb44303020a5725c36ca"
+class = "ci"
+subject_revision = "fcc7f8bf9ba21b84daea422da95a281fbc7643f2"
+subject_tree = "a094f9a513bd97296fd205a2d72634d4e2c316ac"
+note = "Run 36184227113 on main at the merge (push): all eight L0 checks passed, 426 tests."
+
+[[evidence]]
+path = "https://github.com/kmosoti/recursive-hexagonal-architecture/pull/22#issuecomment-5838873824"
+class = "review"
+note = "Claude verifier APPROVE (one P3, repaired with regression tests first; re-review APPROVE); Gemini single-agent verification APPROVE, 0 findings."
+
+[outcomes]
+passed = ["L0.fmt", "L0.clippy", "L0.nextest", "L0.doctest", "L0.architecture", "L0.deny", "L0.machete", "L0.typos"]
+not_run = []
+failed = []
+not_applicable = []
+inconclusive = []
+
+[disposition]
+decision = "accepted"
+kind = "bootstrap_acceptance"
+merge_allowed = false
+eligibility_at_acceptance = "blocked"
+basis = "All L0 checks passed; Authentic false under [acceptance.bootstrap] (DP-4.1). No claim of conformance."
+exception = "none"
+
+[[disposition.predicates]]
+name = "Authentic"
+holds = false
+reason = "No trusted producers in policy (DP-4.1); this ci record is unauthenticated."
+
+[[disposition.predicates]]
+name = "Applicable"
+holds = true
+reason = "CHG-013 did not edit .rha/policy.toml: git diff a5a6a09c52c56af31ec0f6410277abc9a7a8a957 fcc7f8bf9ba21b84daea422da95a281fbc7643f2 -- .rha/policy.toml is empty."
+
+[[disposition.predicates]]
+name = "Complete"
+holds = true
+reason = "Every required L0 id is present exactly once."
+
+[[disposition.predicates]]
+name = "Passed"
+holds = true
+reason = "All eight L0 checks passed; nextest selected 426 tests."
+
+[carried_forward]
+open = [
+  "Stage B (the tag index) follows as its own PR; the six-item 'For the next stage' list in the change record binds its contract commit.",
+  "P3: three pedantic warnings added in document; the oracle's reference.py folds Unicode case where the contract says ASCII.",
+  "No GPT-6 review; the Codex limit resets 2026-09-29.",
+]
