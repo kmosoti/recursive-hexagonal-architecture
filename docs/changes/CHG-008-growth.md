@@ -230,3 +230,19 @@ Carried forward:
 4. `/teamwork-preview` may not form a team. Before counting a verification run as a team, check for `.agents/teamwork` and a subagent call; otherwise record it as a single agent.
 5. The single Gemini reviewer again found less than the Claude verifier (CHG-012, CHG-013). Keep both halves, and give the Gemini brief a checklist of the contract's amended items, such as section 2.1.
 6. Supervisor answers to agy quote hashes only after the command that produces them has run.
+
+### Stage 2, feature 5, stage B: tag index (CHG-013), prepared before corpus and code
+
+This stage is its own PR, `chg/013b-tag-index`, whose first commit is stage A's acceptance record. The [contract](../architecture/tag-index-contract.md) has two parts:
+- a source page opts in as the tag index with front matter `index: tags`;
+- site assembly appends one level-2 heading per tag, a list of wikilinks to the tagged pages, and TOC entries.
+
+A probe of `site::build` shaped the design. `Inv_K` accepts writes only for input pages or assets, so a generated page that no source file backs would need a new command kind, a new renderer method, both adapters and the contract suites. The chosen design needs none of that. Decisions tag-index-opt-in, tag-index-anchors, tag-index-scope and tag-index-check-surface are in the task record. **Prediction:** document plus site::assembly, which is the plan's original prediction for this feature.
+
+**The handed-forward list from stage A (M11), item by item:**
+1. *Per-tag anchor rule* (slug, case, non-ASCII). Applied: `tag-` plus `slugify`, with deterministic de-duplication (decision tag-index-anchors). Tag identity follows stage A's ASCII-case rule.
+2. *Stay within three production crates; probe first.* Applied: the probe ruled out a generated page, and the design touches two crates.
+3. *The revision differential reads its inputs by name.* Applied: the stage B differential keys its golden file by site and output path, and reads only those names.
+4. *Check that teamwork formed a team before counting it as one.* Applied at verification: the run is counted as a team only if `.agents/teamwork` exists and a subagent was invoked.
+5. *Give the Gemini brief a checklist of the contract's amended items.* Applied at verification.
+6. *Quote hashes only after the command that produces them.* Applied throughout.

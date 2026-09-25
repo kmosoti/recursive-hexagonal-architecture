@@ -831,3 +831,35 @@ answer = "In front-matter-contract.md section 2.1, before implementation, each b
 decided_by = "agent:supervisor under human:kennedy's delegation"
 delegation = "Kennedy, 2026-09-22: 'Use recommended. ... Accept the recommend and most correct implementations going forward instead of escalating to me.' Kennedy, 2026-09-24: 'I want the antigravity to have full permission and escalate to you in which you decide. Only escalate to me (human) when absolutely necessary.'"
 date = "2026-09-25"
+
+[[decisions]]
+id = "tag-index-opt-in"
+question = "How does a page become the tag index?"
+answer = "A source page opts in with front matter `index: tags` (FrontMatter gains `index`). A generated page no source file backs was rejected: Inv_K accepts writes only for input pages or assets, so it needs a new command kind, a renderer method, both adapters and the contract suites (more than three production crates, M13)."
+decided_by = "agent:supervisor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: 'Use recommended. ... Accept the recommend and most correct implementations going forward instead of escalating to me.' Kennedy, 2026-09-25: 'Proceed' (stage B)."
+date = "2026-09-25"
+
+[[decisions]]
+id = "tag-index-anchors"
+question = "What anchor does each tag heading get?"
+answer = "`tag-` plus document::slugify(display spelling), or `tag` when empty; collisions with the page's own heading slugs or earlier tags take -2, -3 and so on, in tag order. Tag identity and display spelling follow stage A's ASCII-case rule."
+decided_by = "agent:supervisor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: 'Use recommended. ... Accept the recommend and most correct implementations going forward instead of escalating to me.' Kennedy, 2026-09-25: 'Proceed' (stage B)."
+date = "2026-09-25"
+
+[[decisions]]
+id = "tag-index-scope"
+question = "Which crates may stage B change?"
+answer = "document (the `index` key) and site::assembly (the generated section: headings, lists, wikilinks to LinkTarget::Page, TOC entries). Renderers, Inv_K, the JSON contract and rhawiki check are unchanged; the generated links are renderer-neutral wikilinks, so each renderer computes its own href."
+decided_by = "agent:supervisor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: 'Use recommended. ... Accept the recommend and most correct implementations going forward instead of escalating to me.' Kennedy, 2026-09-25: 'Proceed' (stage B)."
+date = "2026-09-25"
+
+[[decisions]]
+id = "tag-index-check-surface"
+question = "Does the tag index add a rhawiki check witness?"
+answer = "No; the check JSON schema stays fixed for Kennedy's held-out fixtures."
+decided_by = "agent:supervisor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: 'Use recommended. ... Accept the recommend and most correct implementations going forward instead of escalating to me.' Kennedy, 2026-09-25: 'Proceed' (stage B)."
+date = "2026-09-25"
