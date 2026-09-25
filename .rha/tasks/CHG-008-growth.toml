@@ -703,3 +703,27 @@ answer = "Re-registered by the supervisor, not by the implementer: 0db8b76 inser
 decided_by = "agent:supervisor under human:kennedy's delegation"
 delegation = "Kennedy, 2026-09-24: 'I want the antigravity to have full permission and escalate to you in which you decide. Only escalate to me (human) when absolutely necessary.'"
 date = "2026-09-25"
+
+[[decisions]]
+id = "callouts-gfm-only"
+question = "Which callout syntax does CHG-012 support?"
+answer = "GitHub-flavoured alerts only: the five kinds with the marker alone on the first line, as pulldown-cmark 0.13.4 already recognises with ENABLE_GFM (probed 2026-09-25). Custom titles, other kinds and fold markers are Obsidian extensions and stay ordinary block quotes. Alternative rejected: Obsidian-style callouts, which need parser post-processing and a new node shape (document, site, adapter-html, adapter-json and the JSON contract) for syntax the parser's declared dialect does not have and no page in docs/ uses."
+decided_by = "agent:supervisor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: 'Use recommended. ... Accept the recommend and most correct implementations going forward instead of escalating to me.' Kennedy, 2026-09-24: 'I want the antigravity to have full permission and escalate to you in which you decide. Only escalate to me (human) when absolutely necessary.'"
+date = "2026-09-25"
+
+[[decisions]]
+id = "callouts-html-title"
+question = "How is a callout rendered?"
+answer = "As GFM renders it: a title paragraph <p class=\"callout-title\">Label</p> as the first child of <blockquote class=\"callout kind\">, and stylesheet rules for .callout, .callout-title and each kind. JSON output is unchanged (its contract already excludes a generated label), so the prediction is adapter-html only; the plan's document part is already done (Phase 1 parses the kind)."
+decided_by = "agent:supervisor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: 'Use recommended. ... Accept the recommend and most correct implementations going forward instead of escalating to me.' Kennedy, 2026-09-24: 'I want the antigravity to have full permission and escalate to you in which you decide. Only escalate to me (human) when absolutely necessary.'"
+date = "2026-09-25"
+
+[[decisions]]
+id = "callouts-check-surface"
+question = "Are callouts rhawiki check witnesses?"
+answer = "No. Nothing about a callout can be broken, and the check JSON schema stays fixed for Kennedy's held-out fixtures."
+decided_by = "agent:supervisor under human:kennedy's delegation"
+delegation = "Kennedy, 2026-09-22: 'Use recommended. ... Accept the recommend and most correct implementations going forward instead of escalating to me.' Kennedy, 2026-09-24: 'I want the antigravity to have full permission and escalate to you in which you decide. Only escalate to me (human) when absolutely necessary.'"
+date = "2026-09-25"
