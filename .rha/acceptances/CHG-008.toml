@@ -3,6 +3,7 @@ schema_version = 1
 id = "CHG-008"
 change = "docs/changes/CHG-008-growth.md"
 task = ".rha/tasks/CHG-008-growth.toml"
+covers = ["CHG-008", "CHG-009", "CHG-010", "CHG-011", "CHG-012"]
 
 [acceptor]
 principal = "human:kennedy"
@@ -21,6 +22,7 @@ integrator_edits = "none"
 
 [[evidence]]
 path = "evidence/ci/36150611033.json"
+sha256 = "7b817bbc82a46c78ac9674ab79e757cc726c712a2e9111f70590a902fabfe6cc"
 class = "ci"
 subject_revision = "abd1f847821e2b211563b2928f51f0638578242e"
 subject_tree = "3b3474ae36ad9a7362fcb836b1a96cf1afc8994c"
@@ -73,6 +75,7 @@ open = [
   "P3: DuplicateReferenceEntry diagnostics follow parse-time diagnostics instead of source order.",
   "P3: crates/document/src/node.rs:59 still says callout rendering is plain.",
   "Follow-ups: deep nesting overflows the parser's stack; pulldown-cmark 0.13.4 panics on some wikilink inputs; the lint does not check the acceptance kind rule.",
+  "Follow-up: rha lint accepts acceptance records with an all-zero tree, a wrong digest or flipped predicates (shown by the PLAN-4 re-review); acceptance values are verified by recomputation, not by the lint.",
   "Module H4 evidence records repeat the committed random expectations; shrinking them is owed.",
   "No GPT-6 review of P-D; the Codex limit resets 2026-09-29.",
 ]

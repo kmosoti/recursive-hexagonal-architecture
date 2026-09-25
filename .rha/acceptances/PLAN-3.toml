@@ -21,6 +21,7 @@ integrator_edits = "none"
 
 [[evidence]]
 path = "evidence/ci/36008186429.json"
+sha256 = "4258fce44ef203ca5cf186dc214fb57fae1bd2d8bd122783a4bac487b673ab09"
 class = "ci"
 subject_revision = "ac1e460deeb327287e7e817c6bebd4bf465dc528"
 subject_tree = "05cd82427ed442f0a0b6b21d0574ae87bd88bb60"
