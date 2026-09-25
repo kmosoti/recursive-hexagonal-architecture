@@ -13,8 +13,10 @@ Written 2026-09-23 by the supervising session, after the previous Executor's run
 | --- | --- | --- |
 | Stage 0: assurance prerequisites (renderer and sink contract gaps, the unchanged-page count, graph uniqueness precondition) | Done | CHG-008 change record, "Stage 0"; `evidence/CHG-008/stage-0/` |
 | Stage 1: `adapter-json` and H3 | Done: 79 registered cases pass; the isolated core diff is empty; the H3 detection probe caught all three faulty renderers | BDR-0006; `docs/architecture/json-renderer-contract.md`; `docs/observations/h3-json.md`; `evidence/CHG-008/stage-1/` |
-| Stage 2, feature 1: transclusion `![[Page#Section]]` | Implemented, gate not yet run: the 507 registered cases pass (four packages under `xtask/tests/corpus/transclusion/`), and all 12 sites render through both CLI renderers | BDR-0007; decisions `transclusion-*`; `evidence/CHG-008/stage-2/` |
-| Stage 2, features 2 to 5 (§-references, `[Rn]` citations, callouts, tags and front matter) | Not started | plan W9 |
+| Stage 2, feature 1: transclusion `![[Page#Section]]` | Done: gate passed (22cb415) | BDR-0007; decisions `transclusion-*`; `evidence/CHG-008/stage-2/transclusion-stage-*` |
+| Stage 2, feature 2: §-references | Done: gate passed (f18661e) | `docs/architecture/section-reference-contract.md`; `evidence/CHG-008/stage-2/section-refs-stage-*` |
+| Stage 2, feature 3: `[Rn]` citations | Done: gate passed at 0339267 after three review rounds | `docs/architecture/citation-contract.md`; `evidence/CHG-008/stage-2/citations-stage-*` |
+| Stage 2, features 4 and 5 (callouts, tags and front matter) | Not started | plan W9 |
 | Stage 3: mutation analysis (DP-2.2) | Not started | plan W10 |
 | Review and PR | Not started | |
 
