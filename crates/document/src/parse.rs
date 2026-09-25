@@ -384,7 +384,7 @@ impl Builder {
     }
 
     fn end(&mut self, _end: TagEnd) {
-        let Some((frame, mut children)) = self.stack.pop() else {
+        let Some((frame, children)) = self.stack.pop() else {
             return;
         };
         let node = match frame {
@@ -439,7 +439,6 @@ impl Builder {
                 if let Some(transclusion) = self.transclusion(&children) {
                     Some(BuildNode::Transclusion(transclusion))
                 } else {
-                    self.check_reference_entry(&mut children);
                     Some(BuildNode::Paragraph(children))
                 }
             }
@@ -471,7 +470,6 @@ impl Builder {
                 let item = if let Some(transclusion) = self.transclusion(&children) {
                     vec![BuildNode::Transclusion(transclusion)]
                 } else {
-                    self.check_reference_entry(&mut children);
                     children
                 };
                 if let Some((Frame::List { items, .. }, _)) = self.stack.last_mut() {
@@ -571,9 +569,15 @@ impl Builder {
             return;
         }
 
-        if text == "[" {
-            let line = line_of(starts, offset);
-            self.push_node(BuildNode::OpenBracket { offset, line });
+        if let Some(prefix) = text.strip_suffix('[') {
+            if !prefix.is_empty() {
+                self.push_node(BuildNode::Text(prefix.to_owned()));
+            }
+            let line = line_of(starts, offset + prefix.len());
+            self.push_node(BuildNode::OpenBracket {
+                offset: offset + prefix.len(),
+                line,
+            });
             return;
         }
 
@@ -625,6 +629,37 @@ impl Builder {
                     self.push_node(BuildNode::SectionRef(ref_index));
                 }
             }
+        }
+    }
+}
+
+/// Walk `nodes` in document order and register reference entries.
+///
+/// This runs after the full tree is built so that entries appear in source
+/// order regardless of nesting depth. The contract says "the first entry with
+/// a given label is that label's entry" and "`reference_entries` in document
+/// order"; walking the finished tree guarantees both.
+fn register_entries(nodes: &mut [BuildNode], b: &mut Builder) {
+    for node in nodes.iter_mut() {
+        match node {
+            BuildNode::Paragraph(children) => {
+                b.check_reference_entry(children);
+                // Do not recurse into paragraph children: they are inline nodes
+                // and cannot contain further paragraphs or list items.
+            }
+            BuildNode::List { items, .. } => {
+                for item in items.iter_mut() {
+                    // Check entry for this item first (the item's own leading
+                    // citation), then recurse into the item's children for
+                    // nested blocks. This guarantees outer-before-inner order.
+                    b.check_reference_entry(item);
+                    register_entries(item, b);
+                }
+            }
+            BuildNode::BlockQuote { children, .. } => {
+                register_entries(children, b);
+            }
+            _ => {}
         }
     }
 }
@@ -703,7 +738,8 @@ pub fn parse(source: &Source) -> Document {
     while b.stack.len() > 1 {
         b.end(TagEnd::Paragraph);
     }
-    let body = b.stack.pop().map(|(_, c)| c).unwrap_or_default();
+    let mut body = b.stack.pop().map(|(_, c)| c).unwrap_or_default();
+    register_entries(&mut body, &mut b);
     let (citations, citation_diagnostics, resolved_citations) =
         resolve_citations(&b.reference_entries, &b.pending_citations);
     let (section_refs, section_diagnostics, body) = resolve_section_refs(

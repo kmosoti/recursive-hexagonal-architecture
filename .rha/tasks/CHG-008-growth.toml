@@ -632,6 +632,17 @@ resume_prompt_sha256 = "5c6c7908538ad9b105a5fe57c554c3cfe1f4d1ba23f71cd1b756b4d9
 sample = "one teamwork run, base 3e9e561, 2026-09-24T22:43Z to 2026-09-25T01:12Z; milestones M1-M3 passed the team's own gate (2 reviewers, 2 challengers, forensic auditor each); M4's acceptance commands all exited 0 in the team's tree, but its victory gate was cut off by the Gemini five-hour quota, so the supervisor integrated. Two escalations (a protected Cargo.toml lint edit, denied; a section_refs grader question, answered by re-registration). Output patch sha256 27d7d40ef08f0320a8ca45ed7f66ca70560b76d27c67c7af3e878b4b57a1fa01"
 oracles = "citations.rs (69 cases), citations_render.rs and citations_unchanged.rs (44 golden trees), registered before the run; the earlier registered suites; fmt, clippy, architecture and docs --check; all rerun by the supervising session on the integrated tree"
 
+[[provenance.generations]]
+artifact = "crates/document/src/parse.rs: repair of the 352b0f1 review findings (P2 entry order in tight list items with nested blocks; P2 citation directly after `!`)"
+generation = "sampled"
+model = "claude-opus-4-6-thinking"
+reasoning_effort = "unknown (the model takes no --effort in agy)"
+harness = "Antigravity CLI 1.2.10, /boost pasted into agy-jail with --model claude-opus-4-6-thinking; Boost's DeepCoder subagent hit the Gemini quota (subagents keep their own model), so the root killed it and repaired as a single agent (Solo Routine)"
+prompt = "Repair two defects an independent review found in the citation parser: entry registration order in tight list items with nested blocks, and citations after `!`. The regression tests, registered graders, corpus, contracts and spec are fixed; change only crates/document/src."
+prompt_sha256 = "a5238311ef44162e73e00963aeb6f68f2c1159eb73381dcd1eb8d529764e5e70"
+sample = "one run, base b554bba; no escalations; output patch sha256 ab32f0972c43cd087e8c5b2450cbdbb35af24b1414a8016c968e492e96ee93c6"
+oracles = "citations_review.rs (6 tests from the supervising session, written before the repair), the registered graders and golden trees, the workspace suite, fmt, clippy, architecture and docs --check, rerun by the supervising session"
+
 [[decisions]]
 id = "citations-anchor-node"
 question = "How does a citation link to its reference entry (CHG-011)?"
