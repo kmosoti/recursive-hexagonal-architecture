@@ -6,12 +6,14 @@ pub struct FrontMatter {
     pub title: Option<String>,
     pub tags: Vec<String>,
     pub end_line: usize,
+    pub index: Option<String>,
 }
 
 pub(crate) struct ExtractedFrontMatter {
     pub title: Option<String>,
     pub tags: Vec<String>,
     pub end_line: usize,
+    pub index: Option<String>,
     pub diagnostics: Vec<Diagnostic>,
     pub blanked_text: String,
 }
@@ -136,6 +138,8 @@ pub(crate) fn extract_front_matter(text: &str) -> Option<ExtractedFrontMatter> {
 
     let mut title_captured = false;
     let mut title_val = None;
+    let mut index_captured = false;
+    let mut index_val = None;
     let mut tags_captured = false;
     let mut tags_collector_active = false;
     let mut raw_tag_items: Vec<String> = Vec::new();
@@ -178,6 +182,17 @@ pub(crate) fn extract_front_matter(text: &str) -> Option<ExtractedFrontMatter> {
                     let stripped = strip_matching_quotes(value);
                     if !stripped.is_empty() {
                         title_val = Some(stripped.to_owned());
+                    }
+                }
+                continue;
+            }
+
+            if key == "index" {
+                if !index_captured {
+                    index_captured = true;
+                    let stripped = strip_matching_quotes(value);
+                    if !stripped.is_empty() {
+                        index_val = Some(stripped.to_owned());
                     }
                 }
                 continue;
@@ -248,6 +263,7 @@ pub(crate) fn extract_front_matter(text: &str) -> Option<ExtractedFrontMatter> {
         title: title_val,
         tags,
         end_line,
+        index: index_val,
         diagnostics,
         blanked_text,
     })
@@ -374,5 +390,59 @@ mod tests {
             extracted.diagnostics,
             vec![Diagnostic::InvalidFrontMatter { line: 2 }]
         );
+    }
+
+    #[test]
+    fn index_key_recognized_and_quoted() {
+        let text = "---\nindex: tags\n---\n";
+        let extracted = extract_front_matter(text).expect("recognized");
+        assert_eq!(extracted.index.as_deref(), Some("tags"));
+
+        let text_double = "---\nindex: \"tags\"\n---\n";
+        let extracted_double = extract_front_matter(text_double).expect("recognized");
+        assert_eq!(extracted_double.index.as_deref(), Some("tags"));
+
+        let text_single = "---\nindex: 'tags'\n---\n";
+        let extracted_single = extract_front_matter(text_single).expect("recognized");
+        assert_eq!(extracted_single.index.as_deref(), Some("tags"));
+    }
+
+    #[test]
+    fn index_empty_value_is_absent() {
+        let text = "---\nindex:\n---\n";
+        let extracted = extract_front_matter(text).expect("recognized");
+        assert_eq!(extracted.index, None);
+
+        let text_quotes = "---\nindex: \"\"\n---\n";
+        let extracted_quotes = extract_front_matter(text_quotes).expect("recognized");
+        assert_eq!(extracted_quotes.index, None);
+    }
+
+    #[test]
+    fn index_first_occurrence_wins_among_valid_lines() {
+        let text1 = "---\nindex: other\nindex: tags\n---\n";
+        let extracted1 = extract_front_matter(text1).expect("recognized");
+        assert_eq!(extracted1.index.as_deref(), Some("other"));
+
+        let text2 = "---\nindex: tags\nindex: other\n---\n";
+        let extracted2 = extract_front_matter(text2).expect("recognized");
+        assert_eq!(extracted2.index.as_deref(), Some("tags"));
+
+        let text3 = "---\nindex:\nindex: tags\n---\n";
+        let extracted3 = extract_front_matter(text3).expect("recognized");
+        assert_eq!(extracted3.index, None);
+
+        let text4 = "---\nindex : invalid\nindex: tags\n---\n";
+        let extracted4 = extract_front_matter(text4).expect("recognized");
+        assert_eq!(extracted4.index.as_deref(), Some("tags"));
+        assert_eq!(extracted4.diagnostics.len(), 1);
+    }
+
+    #[test]
+    fn index_with_list_items_follows_stage_a() {
+        let text = "---\nindex:\n - item\n---\n";
+        let extracted = extract_front_matter(text).expect("recognized");
+        assert_eq!(extracted.index, None);
+        assert!(extracted.diagnostics.is_empty());
     }
 }

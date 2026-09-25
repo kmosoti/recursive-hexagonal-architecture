@@ -728,6 +728,7 @@ pub fn parse(source: &Source) -> Document {
                 title: extracted.title,
                 tags: extracted.tags,
                 end_line: extracted.end_line,
+                index: extracted.index,
             };
             (
                 Some(fm),

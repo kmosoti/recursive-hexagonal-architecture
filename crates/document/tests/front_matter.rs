@@ -164,6 +164,7 @@ fn expected_front_matter(case: &Value, id: &str) -> Option<FrontMatter> {
         title,
         tags,
         end_line,
+        index: None,
     })
 }
 

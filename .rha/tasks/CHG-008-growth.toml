@@ -696,6 +696,17 @@ prompt_sha256 = "a690edba55beabe13c90293d392e6aab916f54a758ad602c294bd92a8ad4a48
 sample = "one Boost run, base 07c2ed2, 2026-09-25T18:56Z to 19:20Z; output sha256 ca91a7d45f608e2dd47a3ac65fa05b4a3e890b8fe086a58a2021169b765e206b"
 oracles = "front_matter.rs (62 cases, a separate Sonnet oracle-author session), the M12 revision differential front_matter_unchanged.rs (3,422 inputs, re-registered in ba73e8d), the workspace suite, fmt, clippy, architecture, docs --check and the task-record lint, rerun by the supervising session"
 
+[[provenance.generations]]
+artifact = "CHG-013 stage B: crates/document/src (front_matter.rs, parse.rs: the index key), crates/site/src/assembly/mod.rs (the generated tag section) and the index: None literal in crates/document/tests/front_matter.rs"
+generation = "sampled"
+model = "gemini-3.8-flash-high"
+reasoning_effort = "high (model tier)"
+harness = "Antigravity CLI 1.2.10, /boost pasted into agy-jail: root, DeepCoder and an improvement worker on Gemini; no escalation; the supervisor stopped the run after the DeepCoder's report, while the root repeated the workspace tests, and ran all gates itself"
+prompt = "Implement the tag index per docs/architecture/tag-index-contract.md sections 1, 2, 3 and 3.1; change only crates/document/src, crates/site/src/assembly and one allowed test literal."
+prompt_sha256 = "1fb446c2bf1360aa1061f85d4b6db44b5f84384d703eefceee3c7c6961fb6884"
+sample = "one Boost run, base 12732fd, 2026-09-25T20:47Z to 21:15Z; output diff sha256 e9faf3bf0a217f6471c27d24bfc5a780b65b0acc0b73bc062827af840331cbb2"
+oracles = "tag_index.rs (27 site cases, a separate Sonnet oracle-author session), the site-level revision differential tag_index_unchanged.rs (2,398 outputs), the stage A graders, the workspace suite, fmt, clippy, architecture, docs --check, scope and the task-record lint, rerun by the supervising session"
+
 [[decisions]]
 id = "citations-anchor-node"
 question = "How does a citation link to its reference entry (CHG-011)?"

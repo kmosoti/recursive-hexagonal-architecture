@@ -3,7 +3,7 @@
 
 use std::collections::{BTreeMap, BTreeSet};
 
-use document::{Align, CalloutKind, Document, Node as DocumentNode, section_nodes};
+use document::{Align, CalloutKind, Document, Node as DocumentNode, section_nodes, slugify};
 use graph::{SiteGraph, TransclusionCycle, TransclusionOccurrence, TransclusionRegion};
 use library::PageId;
 
@@ -124,7 +124,7 @@ impl Assemble for DefaultAssembler {
         titles: &dyn Fn(&PageId) -> Option<String>,
         ctx: &AssembleContext,
     ) -> PageModel {
-        let toc = doc
+        let mut toc: Vec<TocEntry> = doc
             .headings
             .iter()
             .map(|h| TocEntry {
@@ -171,7 +171,13 @@ impl Assemble for DefaultAssembler {
             links,
             used_slugs,
         };
-        let body = state.convert_nodes(&doc.body, doc, &root_region, false, &BTreeMap::new(), &[]);
+        let mut body =
+            state.convert_nodes(&doc.body, doc, &root_region, false, &BTreeMap::new(), &[]);
+
+        if doc.front_matter.as_ref().and_then(|fm| fm.index.as_deref()) == Some("tags") {
+            append_tag_index_sections(doc, documents, &mut state, &mut body, &mut toc);
+        }
+
         PageModel {
             id: doc.id.clone(),
             title: doc.title.clone(),
@@ -182,6 +188,110 @@ impl Assemble for DefaultAssembler {
             body,
             built_at: ctx.built_at.clone(),
         }
+    }
+}
+
+struct SiteTag {
+    display: String,
+    pages: Vec<(PageId, String)>,
+}
+
+fn collect_site_tags(documents: &[Document]) -> Vec<SiteTag> {
+    let mut sorted_docs: Vec<&Document> = documents.iter().collect();
+    sorted_docs.sort_by_key(|d| &d.id);
+
+    let mut tags_by_key: BTreeMap<String, SiteTag> = BTreeMap::new();
+
+    for d in sorted_docs {
+        if let Some(fm) = &d.front_matter {
+            let mut seen_in_page = BTreeSet::new();
+            for tag in &fm.tags {
+                let key = tag.to_ascii_lowercase();
+                if seen_in_page.insert(key.clone()) {
+                    tags_by_key
+                        .entry(key)
+                        .and_modify(|site_tag| {
+                            site_tag.pages.push((d.id.clone(), d.title.clone()));
+                        })
+                        .or_insert_with(|| SiteTag {
+                            display: tag.clone(),
+                            pages: vec![(d.id.clone(), d.title.clone())],
+                        });
+                }
+            }
+        }
+    }
+
+    let mut site_tags: Vec<SiteTag> = tags_by_key.into_values().collect();
+    site_tags.sort_by(|a, b| {
+        a.display
+            .to_ascii_lowercase()
+            .cmp(&b.display.to_ascii_lowercase())
+            .then_with(|| a.display.cmp(&b.display))
+            .then_with(|| a.display.as_bytes().cmp(b.display.as_bytes()))
+    });
+    site_tags
+}
+
+fn append_tag_index_sections(
+    doc: &Document,
+    documents: &[Document],
+    state: &mut AssemblyState<'_>,
+    body: &mut Vec<PageNode>,
+    toc: &mut Vec<TocEntry>,
+) {
+    let site_tags = collect_site_tags(documents);
+    if site_tags.is_empty() {
+        return;
+    }
+
+    let page_heading_slugs: BTreeSet<&str> = doc.headings.iter().map(|h| h.slug.as_str()).collect();
+    let mut tag_slugs: BTreeSet<String> = BTreeSet::new();
+
+    for tag in site_tags {
+        let slugified = slugify(&tag.display);
+        let base_slug = if slugified.is_empty() {
+            "tag".to_owned()
+        } else {
+            format!("tag-{slugified}")
+        };
+
+        let mut slug = base_slug.clone();
+        let mut suffix = 2;
+        while page_heading_slugs.contains(slug.as_str()) || tag_slugs.contains(&slug) {
+            slug = format!("{base_slug}-{suffix}");
+            suffix += 1;
+        }
+        tag_slugs.insert(slug.clone());
+
+        let heading_node = PageNode::Heading {
+            level: 2,
+            slug: slug.clone(),
+            children: vec![PageNode::Text(tag.display.clone())],
+        };
+
+        let mut items = Vec::with_capacity(tag.pages.len());
+        for (page_id, page_title) in tag.pages {
+            let link_index = state.links.len();
+            state.links.push(LinkTarget::Page {
+                id: page_id,
+                anchor: None,
+            });
+            items.push(vec![PageNode::WikiLink {
+                index: link_index,
+                children: vec![PageNode::Text(page_title)],
+            }]);
+        }
+        let list_node = PageNode::List { start: None, items };
+
+        toc.push(TocEntry {
+            level: 2,
+            text: tag.display,
+            anchor: slug,
+        });
+
+        body.push(heading_node);
+        body.push(list_node);
     }
 }
 
@@ -710,3 +820,189 @@ fn relative_path(target: &[String], base: &[String], trailing_slash: bool) -> St
 
 #[cfg(test)]
 mod transclusion_tests;
+
+#[cfg(test)]
+mod tag_index_tests {
+    use super::*;
+    use document::{FrontMatter, Heading};
+    use library::Digest;
+
+    fn make_test_doc(
+        id: &str,
+        title: &str,
+        tags: Vec<&str>,
+        headings: Vec<(&str, &str)>,
+        index: Option<&str>,
+    ) -> Document {
+        Document {
+            id: PageId::new(id),
+            source_digest: Digest::of(id.as_bytes()),
+            title: title.to_owned(),
+            headings: headings
+                .into_iter()
+                .map(|(text, slug)| Heading {
+                    level: 2,
+                    text: text.to_owned(),
+                    slug: slug.to_owned(),
+                    base_slug: slug.to_owned(),
+                    line: 1,
+                })
+                .collect(),
+            links: Vec::new(),
+            body: Vec::new(),
+            diagnostics: Vec::new(),
+            section_refs: Vec::new(),
+            reference_entries: Vec::new(),
+            citations: Vec::new(),
+            front_matter: Some(FrontMatter {
+                title: Some(title.to_owned()),
+                tags: tags.into_iter().map(String::from).collect(),
+                end_line: 5,
+                index: index.map(String::from),
+            }),
+        }
+    }
+
+    #[test]
+    fn collect_site_tags_ordering_and_case() {
+        let doc1 = make_test_doc("p1", "Page One", vec!["Alpha", "BETA"], vec![], None);
+        let doc2 = make_test_doc(
+            "p2",
+            "Page Two",
+            vec!["alpha", "beta", "gamma"],
+            vec![],
+            None,
+        );
+        let doc0 = make_test_doc("p0", "Page Zero", vec!["ALPHA", "Delta"], vec![], None);
+
+        // Intentionally provide unordered
+        let docs = vec![doc1, doc2, doc0];
+        let site_tags = collect_site_tags(&docs);
+
+        assert_eq!(site_tags.len(), 4);
+
+        // Tag order: ALPHA, BETA, Delta, gamma
+        assert_eq!(site_tags[0].display, "ALPHA"); // from p0
+        assert_eq!(
+            site_tags[0].pages,
+            vec![
+                (PageId::new("p0"), "Page Zero".to_owned()),
+                (PageId::new("p1"), "Page One".to_owned()),
+                (PageId::new("p2"), "Page Two".to_owned()),
+            ]
+        );
+
+        assert_eq!(site_tags[1].display, "BETA"); // from p1
+        assert_eq!(
+            site_tags[1].pages,
+            vec![
+                (PageId::new("p1"), "Page One".to_owned()),
+                (PageId::new("p2"), "Page Two".to_owned()),
+            ]
+        );
+
+        assert_eq!(site_tags[2].display, "Delta"); // from p0
+        assert_eq!(
+            site_tags[2].pages,
+            vec![(PageId::new("p0"), "Page Zero".to_owned())]
+        );
+
+        assert_eq!(site_tags[3].display, "gamma"); // from p2
+        assert_eq!(
+            site_tags[3].pages,
+            vec![(PageId::new("p2"), "Page Two".to_owned())]
+        );
+    }
+
+    #[test]
+    fn append_tag_index_sections_slug_collisions() {
+        let index_doc = make_test_doc(
+            "index",
+            "Tag Index",
+            vec![],
+            vec![
+                ("Tag Foo", "tag-foo"),
+                ("Tag Foo 2", "tag-foo-2"),
+                ("Tag", "tag"),
+            ],
+            Some("tags"),
+        );
+        let doc_a = make_test_doc("a", "Doc A", vec!["foo", "foo!", "😀"], vec![], None);
+
+        let docs = vec![index_doc.clone(), doc_a];
+        let graph = graph::resolve(&docs);
+        let mut state = AssemblyState {
+            host: &index_doc.id,
+            documents: &docs,
+            graph: &graph,
+            links: Vec::new(),
+            used_slugs: BTreeSet::new(),
+        };
+        let mut body = Vec::new();
+        let mut toc = Vec::new();
+
+        append_tag_index_sections(&index_doc, &docs, &mut state, &mut body, &mut toc);
+
+        // 3 tags: "foo", "foo!", "😀"
+        // foo: slugified is "foo", base "tag-foo", collides with tag-foo and tag-foo-2 -> tag-foo-3
+        // foo!: slugified is "foo", base "tag-foo", collides with tag-foo, tag-foo-2, tag-foo-3 -> tag-foo-4
+        // 😀: slugified is "", base "tag", collides with tag -> tag-2
+        assert_eq!(toc.len(), 3);
+        assert_eq!(toc[0].text, "foo");
+        assert_eq!(toc[0].anchor, "tag-foo-3");
+        assert_eq!(toc[1].text, "foo!");
+        assert_eq!(toc[1].anchor, "tag-foo-4");
+        assert_eq!(toc[2].text, "😀");
+        assert_eq!(toc[2].anchor, "tag-2");
+
+        assert_eq!(body.len(), 6);
+        assert_eq!(
+            body[0],
+            PageNode::Heading {
+                level: 2,
+                slug: "tag-foo-3".to_owned(),
+                children: vec![PageNode::Text("foo".to_owned())],
+            }
+        );
+        assert_eq!(
+            body[2],
+            PageNode::Heading {
+                level: 2,
+                slug: "tag-foo-4".to_owned(),
+                children: vec![PageNode::Text("foo!".to_owned())],
+            }
+        );
+        assert_eq!(
+            body[4],
+            PageNode::Heading {
+                level: 2,
+                slug: "tag-2".to_owned(),
+                children: vec![PageNode::Text("😀".to_owned())],
+            }
+        );
+    }
+
+    #[test]
+    fn empty_site_tags_appends_nothing() {
+        let index_doc = make_test_doc("index", "Tag Index", vec![], vec![], Some("tags"));
+        let other_doc = make_test_doc("other", "Other", vec![], vec![], None);
+
+        let docs = vec![index_doc.clone(), other_doc];
+        let graph = graph::resolve(&docs);
+        let mut state = AssemblyState {
+            host: &index_doc.id,
+            documents: &docs,
+            graph: &graph,
+            links: Vec::new(),
+            used_slugs: BTreeSet::new(),
+        };
+        let mut body = Vec::new();
+        let mut toc = Vec::new();
+
+        append_tag_index_sections(&index_doc, &docs, &mut state, &mut body, &mut toc);
+
+        assert!(body.is_empty());
+        assert!(toc.is_empty());
+        assert!(state.links.is_empty());
+    }
+}
