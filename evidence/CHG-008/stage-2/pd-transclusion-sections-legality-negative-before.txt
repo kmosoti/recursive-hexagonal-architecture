@@ -1,0 +1,1 @@
+DEFECT CONFIRMED: illegal blockquote under paragraph containing Transclusion accepted

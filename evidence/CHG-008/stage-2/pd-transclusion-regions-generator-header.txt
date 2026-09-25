@@ -1,0 +1,11 @@
+OpenAI Codex v0.156.1
+--------
+workdir: /home/kmosoti/projects/rha-m2
+model: gpt-5.6-luna
+provider: openai
+approval: never
+sandbox: workspace-write [workdir, /tmp, $TMPDIR] (network access enabled)
+reasoning effort: high
+reasoning summaries: none
+session id: 01a0cd55-8362-7fe2-aa48-9f27402e8a2c
+--------

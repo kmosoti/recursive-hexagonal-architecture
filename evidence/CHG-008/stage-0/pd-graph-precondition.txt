@@ -1,0 +1,3 @@
+Duplicate ids rejected by Corpus; graph slice with duplicates is outside that domain. Before witnesses: [MissingAnchor { from: PageId("index"), target: "same", heading: "alpha", line: 1 }]; reversed: []
+
+exit: 0

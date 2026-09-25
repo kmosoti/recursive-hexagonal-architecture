@@ -1,0 +1,37 @@
+COMMAND python3 -B target/m2/audit-semantic-package.py /home/kmosoti/projects/rha-m2/target/m2/verify-transclusion-sections section
+{"cases": 80, "cases_sha256": "d43d842b1f7b5eed0833eba2ad4131673299590f240d1f909d2b57760e05b0bf", "content_sha256": "c727fe249b0e5fbfb3a3341a57972a7fbe9320cfe8b09b81ce78d493aacb3de9", "kind_counts": {"section": 80}, "package": "/home/kmosoti/projects/rha-m2/target/m2/verify-transclusion-sections", "payload_count": 7}
+EXIT 0
+COMMAND python3 -B /home/kmosoti/projects/rha-m2/target/m2/verify-transclusion-sections/reference.py
+selftest: PASS
+cases: 80 (hand=16, seeded=64)
+kinds: section=80
+selection_checks: 80
+descriptor_checks: 80
+mutation_checks: 80
+legality_checks: 80
+negative_legality_controls: direct-invalid, paragraph-quote, paragraph-heading, unknown-block, paragraph-unknown
+reproduction: full package bytes match deterministic frozen-input output
+EXIT 0
+COMMAND python3 -B /home/kmosoti/projects/rha-m2/target/m2/verify-transclusion-sections/reference.py --reproduce-to reproduced
+selftest: PASS
+cases: 80 (hand=16, seeded=64)
+kinds: section=80
+selection_checks: 80
+descriptor_checks: 80
+mutation_checks: 80
+legality_checks: 80
+negative_legality_controls: direct-invalid, paragraph-quote, paragraph-heading, unknown-block, paragraph-unknown
+reproduction: full package bytes match deterministic frozen-input output
+reproduced_to: reproduced
+EXIT 0
+BYTE_IDENTICAL_FILES 9
+COMMAND python3 -B target/m2/audit-semantic-package.py /home/kmosoti/projects/rha-m2/target/m2/verify-transclusion-sections/reproduced section
+{"cases": 80, "cases_sha256": "d43d842b1f7b5eed0833eba2ad4131673299590f240d1f909d2b57760e05b0bf", "content_sha256": "c727fe249b0e5fbfb3a3341a57972a7fbe9320cfe8b09b81ce78d493aacb3de9", "kind_counts": {"section": 80}, "package": "/home/kmosoti/projects/rha-m2/target/m2/verify-transclusion-sections/reproduced", "payload_count": 7}
+EXIT 0
+CORRUPTED_COPY_EXIT 1
+Traceback (most recent call last):
+  File "/home/kmosoti/projects/rha-m2/target/m2/audit-semantic-package.py", line 10, in <module>
+    file=p/name;assert file.is_file() and not file.is_symlink();assert h(file.read_bytes())==digest,name
+                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: CASES.json
+VALID_COPY_ACCEPTED_AND_CASE_CORRUPTION_REJECTED

@@ -1,0 +1,9 @@
+COMMAND python3 -B target/m2/audit-semantic-package.py /home/kmosoti/projects/rha-m2/target/m2/verify-transclusion-regions region_graph
+{"cases": 262, "cases_sha256": "1812d1c3dc11a2c12116105590436768630886d8b00747c377efbe498f375b22", "content_sha256": "0a5f534edf4e6171961b5db2761f81237fa99e1f470b671247654ef5fed01812", "kind_counts": {"region_graph": 262}, "package": "/home/kmosoti/projects/rha-m2/target/m2/verify-transclusion-regions", "payload_count": 7}
+EXIT 0
+COMMAND python3 -B /home/kmosoti/projects/rha-m2/target/m2/verify-transclusion-regions/reference.py
+self-tests passed: 262 cases
+EXIT 0
+COMMAND python3 -B /home/kmosoti/projects/rha-m2/target/m2/verify-transclusion-regions/reference.py --reproduce-to reproduced
+ERROR: --reproduce-to must name a fresh direct child of the script package
+EXIT 1

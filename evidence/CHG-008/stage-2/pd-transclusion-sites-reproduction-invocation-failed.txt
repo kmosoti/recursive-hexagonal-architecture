@@ -1,0 +1,14 @@
+COMMAND python3 -B target/m2/audit-semantic-package.py /home/kmosoti/projects/rha-m2/target/m2/verify-transclusion-sites site
+{"cases": 12, "cases_sha256": "672232cf85a3712c3b7c621b40214df6c7ea23dfcbfe1ed5ba113d6dafd34118", "content_sha256": "af373c174af3f6ac7964474122c47f7004bdcf87354ac73d2cedbfa28e9139cb", "kind_counts": {"site": 12}, "package": "/home/kmosoti/projects/rha-m2/target/m2/verify-transclusion-sites", "payload_count": 7}
+EXIT 0
+COMMAND python3 -B /home/kmosoti/projects/rha-m2/target/m2/verify-transclusion-sites/reference.py
+PASS
+- deterministic generator produced 12 site rows (TX01..TX12)
+- CASES.json byte comparison matched generator output
+- every source path is covered by expected_documents
+- every expected_pages object has the seven declared page fields
+- no target implementation, renderer, or live oracle was invoked
+EXIT 0
+COMMAND python3 -B /home/kmosoti/projects/rha-m2/target/m2/verify-transclusion-sites/reference.py --reproduce-to /home/kmosoti/projects/rha-m2/target/m2/verify-transclusion-sites/reproduced
+refusing reproduction: destination must be one fresh direct child
+EXIT 2

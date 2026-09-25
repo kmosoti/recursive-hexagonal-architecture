@@ -1,0 +1,48 @@
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.09s
+     Running `target/debug/xtask architecture`
+crates: 11 (adapter-fs (adapter, prefix), library (core, metadata), site (core, metadata), document (core, metadata), graph (core, metadata), adapter-html (adapter, prefix), adapter-json (adapter, prefix), adapter-sys (adapter, prefix), app-cli (app, prefix), xtask (tool, list), rha-verifier (tool, metadata))
+edges examined: 34 normal, 8 dev, 0 build
+module_edges: {"crate":"site","extraction":"heuristic","package":"site","source":"site","target":"site::build::Command::Write","test_only":false}
+module_edges: {"crate":"site","extraction":"syntax","package":"site","source":"site","target":"site::assembly::AssembleContext","test_only":false}
+module_edges: {"crate":"site","extraction":"syntax","package":"site","source":"site","target":"site::assembly::DefaultAssembler","test_only":false}
+module_edges: {"crate":"site","extraction":"syntax","package":"site","source":"site","target":"site::build::BuildInputs","test_only":false}
+module_edges: {"crate":"site","extraction":"syntax","package":"site","source":"site","target":"site::build::Command::Delete","test_only":false}
+module_edges: {"crate":"site","extraction":"syntax","package":"site","source":"site","target":"site::build::Command::Write","test_only":false}
+module_edges: {"crate":"site","extraction":"syntax","package":"site","source":"site","target":"site::build::Observation","test_only":false}
+module_edges: {"crate":"site","extraction":"syntax","package":"site","source":"site","target":"site::build::PageRenderer","test_only":false}
+module_edges: {"crate":"site","extraction":"syntax","package":"site","source":"site","target":"site::build::Rendered","test_only":false}
+module_edges: {"crate":"site","extraction":"syntax","package":"site","source":"site","target":"site::build::SiteState::default","test_only":false}
+module_edges: {"crate":"site","extraction":"syntax","package":"site","source":"site","target":"site::build::step","test_only":false}
+module_edges: {"crate":"site","extraction":"syntax","package":"site","source":"site","target":"site::port::Clock","test_only":false}
+module_edges: {"crate":"site","extraction":"syntax","package":"site","source":"site","target":"site::port::OutputSink","test_only":false}
+module_edges: {"crate":"site","extraction":"syntax","package":"site","source":"site","target":"site::port::SinkError","test_only":false}
+module_edges: {"crate":"site","extraction":"syntax","package":"site","source":"site::build","target":"site::assembly::Assemble","test_only":false}
+module_edges: {"crate":"site","extraction":"syntax","package":"site","source":"site::build","target":"site::assembly::AssembleContext","test_only":false}
+module_edges: {"crate":"site","extraction":"syntax","package":"site","source":"site::build","target":"site::assembly::PageModel","test_only":false}
+module_edges: {"crate":"site","extraction":"syntax","package":"site","source":"site::contract","target":"site::OutputSink","test_only":false}
+module_edges: {"crate":"site","extraction":"syntax","package":"site","source":"site::contract","target":"site::PageRenderer","test_only":false}
+module_edges: {"crate":"site","extraction":"syntax","package":"site","source":"site::contract","target":"site::assembly::PageModel","test_only":false}
+module_edges: {"crate":"site","extraction":"syntax","package":"site","source":"site::contract","target":"site::assembly::TocEntry","test_only":false}
+module_edges: {"crate":"site","extraction":"syntax","package":"site","source":"site::testing","target":"site::Clock","test_only":false}
+module_edges: {"crate":"site","extraction":"syntax","package":"site","source":"site::testing","target":"site::OutputSink","test_only":false}
+module_edges: {"crate":"site","extraction":"syntax","package":"site","source":"site::testing","target":"site::PageRenderer","test_only":false}
+module_edges: {"crate":"site","extraction":"syntax","package":"site","source":"site::testing","target":"site::Rendered","test_only":false}
+module_edges: {"crate":"site","extraction":"syntax","package":"site","source":"site::testing","target":"site::SinkError","test_only":false}
+module_edges: {"crate":"site","extraction":"syntax","package":"site","source":"site::testing","target":"site::assembly::PageModel","test_only":false}
+module_checks[adapter-fs]: not_run (required=false): not_declared_composite: no module rules obligation
+module_checks[library]: not_run (required=false): not_declared_composite: no module rules obligation
+module_checks[site]: passed (required=true)
+module_checks[document]: not_run (required=false): not_declared_composite: no module rules obligation
+module_checks[graph]: not_run (required=false): not_declared_composite: no module rules obligation
+module_checks[adapter-html]: not_run (required=false): not_declared_composite: no module rules obligation
+module_checks[adapter-json]: not_run (required=false): not_declared_composite: no module rules obligation
+module_checks[adapter-sys]: not_run (required=false): not_declared_composite: no module rules obligation
+module_checks[app-cli]: not_run (required=false): not_declared_composite: no module rules obligation
+module_checks[xtask]: not_run (required=false): not_declared_composite: no module rules obligation
+module_checks[rha-verifier]: not_run (required=false): not_declared_composite: no module rules obligation
+limitation: "transitive.core_disallowed_dependency: not evaluated. The graph is read with `cargo metadata --no-deps`, which shows direct declared edges only (spec §4.1, Law 5 row). No version yet honours [transitive] enabled = true."
+limitation: {"code":"source_approximation","crate":"site","detail":"module extraction is source-based; heuristic paths and unexpanded macros or include! remain limitations","package":"site"}
+limitation: {"code":"macro_expansion","crate":"site","detail":"matches","package":"site","source":"site"}
+limitation: {"code":"macro_expansion","crate":"site","detail":"format","package":"site","source":"site::build"}
+limitation: {"code":"macro_expansion","crate":"site","detail":"format","package":"site","source":"site::testing"}
+summary: 0 error(s), 0 warning(s), passed

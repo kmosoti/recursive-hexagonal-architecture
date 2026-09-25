@@ -1,0 +1,1 @@
+{"cases": 262, "cases_sha256": "1812d1c3dc11a2c12116105590436768630886d8b00747c377efbe498f375b22", "content_sha256": "0a5f534edf4e6171961b5db2761f81237fa99e1f470b671247654ef5fed01812", "kind_counts": {"region_graph": 262}, "package": "target/m2/transclusion-regions", "payload_count": 7}

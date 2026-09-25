@@ -1,0 +1,52 @@
+PASS heading_number('1. Problem') == '1'
+PASS heading_number('1.1 Target') == '1.1'
+PASS heading_number('11.7.6 Acceptance') == '11.7.6'
+PASS heading_number('2 Overview') == '2'
+PASS heading_number('3.4') == '3.4'
+PASS heading_number('Appendix A. Math') == 'A'
+PASS heading_number('Appendix B.2 Definitions') == 'B.2'
+PASS heading_number('Appendix C Overview') == 'C'
+PASS heading_number('Appendix D') == 'D'
+PASS heading_number('Appendix Also') is None
+PASS heading_number('01. First') == '01'
+PASS heading_number('1.10 Ten') == '1.10'
+PASS heading_number('Introduction') is None
+PASS 'see §7.' yields number 7 with the period excluded
+PASS two spaces after § is not a reference
+PASS '§Also' is not a reference
+PASS '§§3–7' yields two references: §§3 and 7
+PASS '§3–§5' yields two references: §3 and §5
+PASS '§§8.3, 8.4' yields only the first reference
+PASS '§6 and §12.1' yields two independent references
+PASS inline code is excluded
+PASS fenced code block is excluded
+PASS link text and destination are excluded
+PASS wikilink is excluded
+PASS transclusion is excluded
+PASS image alt is excluded
+PASS heading text itself is excluded
+PASS block quote content at any depth is recognized
+PASS resolved reference has target_heading_line 1
+PASS resolved reference has no diagnostic
+PASS unresolved reference on numbered page has target None
+PASS unresolved reference on numbered page yields a diagnostic
+PASS unresolved reference on unnumbered page has no diagnostic
+PASS duplicate heading number: first occurrence wins
+PASS range end rejects a double-sign continuation, producing two independent references
+PASS range end letter lookahead rejects a following letter
+PASS a heading inside a block quote has a section number
+PASS a heading inside a list item has a section number
+PASS text between two inline HTML tags is recognized
+PASS a comma after a range is not continued: only the range's own two refs
+PASS a tab after § is not the allowed space, so there is no reference
+PASS a line break after a bare § ends it: no reference, on either line
+PASS a range never crosses a line break: only the first reference survives
+PASS case_count=84
+PASS case ids are unique
+PASS the real spec records no UnresolvedSectionRef diagnostic
+PASS the real spec yields 366 recognized references (informational)
+PASS case_count=84
+PASS synthetic_case_count=83
+PASS spec_case_reference_count=366
+PASS spec_case_diagnostic_count=0
+PASS all selftests executed without assertion failure

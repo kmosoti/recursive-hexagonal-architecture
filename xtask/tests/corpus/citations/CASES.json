@@ -1,0 +1,4345 @@
+[
+  {
+    "id": "entry-simple-digits",
+    "markdown": "# References\n\n[R1] Author, A. (2020). Title. Publisher.\n",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3
+      }
+    ],
+    "citations": [],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "entry-letter-suffix",
+    "markdown": "# References\n\n[R12a] Author, B. (2021). Title. Publisher.\n",
+    "reference_entries": [
+      {
+        "label": "R12a",
+        "anchor": "ref-r12a",
+        "line": 3
+      }
+    ],
+    "citations": [],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "entry-at-end-of-paragraph",
+    "markdown": "# References\n\n[R1]\n",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3
+      }
+    ],
+    "citations": [],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "entry-in-list-item",
+    "markdown": "# References\n\n- [R1] Author, A. (2020). Title.\n- [R2] Author, B. (2021). Title.\n",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3
+      },
+      {
+        "label": "R2",
+        "anchor": "ref-r2",
+        "line": 4
+      }
+    ],
+    "citations": [],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "entry-in-block-quote",
+    "markdown": "# References\n\n> [R1] Author, A. (2020). Title.\n",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3
+      }
+    ],
+    "citations": [],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "not-entry-label-not-first",
+    "markdown": "# References\n\nSee [R1] Author, A. (2020). Title. for details.\n",
+    "reference_entries": [],
+    "citations": [
+      {
+        "label": "R1",
+        "target": null,
+        "line": 3
+      }
+    ],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "not-entry-followed-by-non-space",
+    "markdown": "# References\n\n[R1]Author, A. (2020). Title.\n",
+    "reference_entries": [],
+    "citations": [
+      {
+        "label": "R1",
+        "target": null,
+        "line": 3
+      }
+    ],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "not-entry-lowercase-r",
+    "markdown": "# References\n\n[r1] Author, A. (2020). Title.\n",
+    "reference_entries": [],
+    "citations": [],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "not-entry-no-digits",
+    "markdown": "# References\n\n[R] Author, A. (2020). Title.\n",
+    "reference_entries": [],
+    "citations": [],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "not-entry-uppercase-letter-suffix",
+    "markdown": "# References\n\n[R1A] Author, A. (2020). Title.\n",
+    "reference_entries": [],
+    "citations": [],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "not-entry-two-lowercase-letters",
+    "markdown": "# References\n\n[R1ab] Author, A. (2020). Title.\n",
+    "reference_entries": [],
+    "citations": [],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "duplicate-entry-diagnostic-and-citation",
+    "markdown": "# References\n\n[R1] Author, A. (2020). First. Publisher.\n\n[R1] Author, C. (2022). Second, impostor. Publisher.\n",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3
+      }
+    ],
+    "citations": [
+      {
+        "label": "R1",
+        "target": "ref-r1",
+        "line": 5
+      }
+    ],
+    "diagnostics": {
+      "duplicate_reference_entry": [
+        {
+          "label": "R1",
+          "first_line": 3,
+          "second_line": 5
+        }
+      ],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "duplicate-entry-triple-both-diagnostics-cite-first",
+    "markdown": "# References\n\n[R1] Author, A. (2020). First. Publisher.\n\n[R1] Author, B. (2021). Second. Publisher.\n\n[R1] Author, C. (2022). Third. Publisher.\n",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3
+      }
+    ],
+    "citations": [
+      {
+        "label": "R1",
+        "target": "ref-r1",
+        "line": 5
+      },
+      {
+        "label": "R1",
+        "target": "ref-r1",
+        "line": 7
+      }
+    ],
+    "diagnostics": {
+      "duplicate_reference_entry": [
+        {
+          "label": "R1",
+          "first_line": 3,
+          "second_line": 5
+        },
+        {
+          "label": "R1",
+          "first_line": 3,
+          "second_line": 7
+        }
+      ],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "duplicate-entry-second-label-resolves-as-citation",
+    "markdown": "# References\n\n[R1] Author, A. (2020). First. Publisher.\n\n[R1] Author, C. (2022). Second, impostor. Publisher.\n\nSee [R1] cited in the body.\n",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3
+      }
+    ],
+    "citations": [
+      {
+        "label": "R1",
+        "target": "ref-r1",
+        "line": 5
+      },
+      {
+        "label": "R1",
+        "target": "ref-r1",
+        "line": 7
+      }
+    ],
+    "diagnostics": {
+      "duplicate_reference_entry": [
+        {
+          "label": "R1",
+          "first_line": 3,
+          "second_line": 5
+        }
+      ],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "duplicate-entry-in-list-items",
+    "markdown": "# References\n\n- [R1] First entry.\n- [R1] Duplicate entry.\n",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3
+      }
+    ],
+    "citations": [
+      {
+        "label": "R1",
+        "target": "ref-r1",
+        "line": 4
+      }
+    ],
+    "diagnostics": {
+      "duplicate_reference_entry": [
+        {
+          "label": "R1",
+          "first_line": 3,
+          "second_line": 4
+        }
+      ],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "citation-in-paragraph",
+    "markdown": "# References\n\n[R1] Author, A. (2020). Title.\n\nSee [R1] for background.\n",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3
+      }
+    ],
+    "citations": [
+      {
+        "label": "R1",
+        "target": "ref-r1",
+        "line": 5
+      }
+    ],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "citation-in-list-item",
+    "markdown": "# References\n\n[R1] Author, A. (2020). Title.\n\n- discussed in [R1] here\n",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3
+      }
+    ],
+    "citations": [
+      {
+        "label": "R1",
+        "target": "ref-r1",
+        "line": 5
+      }
+    ],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "citation-in-table-cell",
+    "markdown": "# References\n\n[R1] Author, A. (2020). Title.\n\n| Claim | Source |\n| --- | --- |\n| x | see [R1] |\n",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3
+      }
+    ],
+    "citations": [
+      {
+        "label": "R1",
+        "target": "ref-r1",
+        "line": 7
+      }
+    ],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "citation-in-block-quote",
+    "markdown": "# References\n\n[R1] Author, A. (2020). Title.\n\n> quoting [R1] here\n",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3
+      }
+    ],
+    "citations": [
+      {
+        "label": "R1",
+        "target": "ref-r1",
+        "line": 5
+      }
+    ],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "citation-in-emphasis",
+    "markdown": "# References\n\n[R1] Author, A. (2020). Title.\n\nThis is *emphasized [R1] text*.\n",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3
+      }
+    ],
+    "citations": [
+      {
+        "label": "R1",
+        "target": "ref-r1",
+        "line": 5
+      }
+    ],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "citation-in-strong",
+    "markdown": "# References\n\n[R1] Author, A. (2020). Title.\n\nThis is **strong [R1] text**.\n",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3
+      }
+    ],
+    "citations": [
+      {
+        "label": "R1",
+        "target": "ref-r1",
+        "line": 5
+      }
+    ],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "excluded-heading-text",
+    "markdown": "# References\n\n[R1] Author, A. (2020). Title.\n\n## Discussion of [R1] here\n",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3
+      }
+    ],
+    "citations": [],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "excluded-inline-code",
+    "markdown": "# References\n\n[R1] Author, A. (2020). Title.\n\nInline code `[R1]` must not cite.\n",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3
+      }
+    ],
+    "citations": [],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "excluded-fenced-code-block",
+    "markdown": "# References\n\n[R1] Author, A. (2020). Title.\n\n```\n[R1] inside a fenced code block\n```\n",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3
+      }
+    ],
+    "citations": [],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "excluded-indented-code-block",
+    "markdown": "# References\n\n[R1] Author, A. (2020). Title.\n\n    [R1] inside an indented code block\n",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3
+      }
+    ],
+    "citations": [],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "excluded-html-block",
+    "markdown": "# References\n\n[R1] Author, A. (2020). Title.\n\n<div data-note=\"[R1]\">raw html block</div>\n",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3
+      }
+    ],
+    "citations": [],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "excluded-inline-html-tag-but-text-between-recognized",
+    "markdown": "# References\n\n[R1] Author, A. (2020). Title.\n\nsee <b>[R1]</b> where markup is excluded but the text between is not.\n",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3
+      }
+    ],
+    "citations": [
+      {
+        "label": "R1",
+        "target": "ref-r1",
+        "line": 5
+      }
+    ],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "excluded-link-text",
+    "markdown": "# References\n\n[R1] Author, A. (2020). Title.\n\nBody mentions [R1](https://example.com) as a real link, not a citation.\n",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3
+      }
+    ],
+    "citations": [],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "excluded-link-destination",
+    "markdown": "# References\n\n[R1] Author, A. (2020). Title.\n\nSee [details](https://example.com/R1-[R1]) for more.\n",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3
+      }
+    ],
+    "citations": [],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "excluded-wikilink",
+    "markdown": "# References\n\n[R1] Author, A. (2020). Title.\n\nSee [[R1]] for more, a wikilink target named R1.\n",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3
+      }
+    ],
+    "citations": [],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "excluded-transclusion",
+    "markdown": "# References\n\n[R1] Author, A. (2020). Title.\n\nSee ![[R1]] for more, a transclusion of a page named R1.\n",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3
+      }
+    ],
+    "citations": [],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "excluded-image-alt",
+    "markdown": "# References\n\n[R1] Author, A. (2020). Title.\n\nSee ![R1](img.png) for more.\n",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3
+      }
+    ],
+    "citations": [],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "link-reference-definition-shortcut-is-a-link-not-a-citation",
+    "markdown": "# Notes\n\n[R1]: http://example.com/r1\n\nSee [R1] for the linked destination, not a citation.\n",
+    "reference_entries": [],
+    "citations": [],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "link-reference-definition-does-not-affect-other-labels",
+    "markdown": "# References\n\n[R2] Author, A. (2020). Title.\n\n[R1]: http://example.com/r1\n\nSee [R1] (a link) and [R2] (a citation) together.\n",
+    "reference_entries": [
+      {
+        "label": "R2",
+        "anchor": "ref-r2",
+        "line": 3
+      }
+    ],
+    "citations": [
+      {
+        "label": "R2",
+        "target": "ref-r2",
+        "line": 7
+      }
+    ],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "range-two-citations-with-dash-text-between",
+    "markdown": "# References\n\n[R1] First.\n\n[R72] Seventy-second.\n\nsee [R1]-[R72] for the range.\n",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3
+      },
+      {
+        "label": "R72",
+        "anchor": "ref-r72",
+        "line": 5
+      }
+    ],
+    "citations": [
+      {
+        "label": "R1",
+        "target": "ref-r1",
+        "line": 7
+      },
+      {
+        "label": "R72",
+        "target": "ref-r72",
+        "line": 7
+      }
+    ],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "range-with-spaces-still-two-citations",
+    "markdown": "# References\n\n[R1] First.\n\n[R72] Seventy-second.\n\nsee [R1] - [R72] for the range.\n",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3
+      },
+      {
+        "label": "R72",
+        "anchor": "ref-r72",
+        "line": 5
+      }
+    ],
+    "citations": [
+      {
+        "label": "R1",
+        "target": "ref-r1",
+        "line": 7
+      },
+      {
+        "label": "R72",
+        "target": "ref-r72",
+        "line": 7
+      }
+    ],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "comma-list-is-not-a-citation-form",
+    "markdown": "# References\n\n[R1] First.\n\n[R2] Second.\n\nsee [R1, R2] which is not a citation.\n",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3
+      },
+      {
+        "label": "R2",
+        "anchor": "ref-r2",
+        "line": 5
+      }
+    ],
+    "citations": [],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "adjacent-punctuation-comma",
+    "markdown": "# References\n\n[R1] First.\n\nsee [R1], comma right after.\n",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3
+      }
+    ],
+    "citations": [
+      {
+        "label": "R1",
+        "target": "ref-r1",
+        "line": 5
+      }
+    ],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "adjacent-punctuation-period",
+    "markdown": "# References\n\n[R1] First.\n\nsee [R1]. period right after.\n",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3
+      }
+    ],
+    "citations": [
+      {
+        "label": "R1",
+        "target": "ref-r1",
+        "line": 5
+      }
+    ],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "adjacent-punctuation-parentheses",
+    "markdown": "# References\n\n[R1] First.\n\nsee the result (per [R1]) in parentheses.\n",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3
+      }
+    ],
+    "citations": [
+      {
+        "label": "R1",
+        "target": "ref-r1",
+        "line": 5
+      }
+    ],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "adjacent-word-glued-both-sides",
+    "markdown": "# References\n\n[R1] First.\n\nword[R1]glued on both sides.\n",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3
+      }
+    ],
+    "citations": [
+      {
+        "label": "R1",
+        "target": "ref-r1",
+        "line": 5
+      }
+    ],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "unresolved-citation-on-page-with-entries",
+    "markdown": "# References\n\n[R1] First.\n\nsee [R2] which has no entry.\n",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3
+      }
+    ],
+    "citations": [
+      {
+        "label": "R2",
+        "target": null,
+        "line": 5
+      }
+    ],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": [
+        {
+          "label": "R2",
+          "line": 5
+        }
+      ]
+    }
+  },
+  {
+    "id": "unresolved-citation-on-page-without-entries",
+    "markdown": "# Notes\n\nsee [R1] on a page with no reference entries at all.\n",
+    "reference_entries": [],
+    "citations": [
+      {
+        "label": "R1",
+        "target": null,
+        "line": 3
+      }
+    ],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "unresolved-and-resolved-together",
+    "markdown": "# References\n\n[R1] First.\n\nsee [R1] resolved and [R2] unresolved together.\n",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3
+      }
+    ],
+    "citations": [
+      {
+        "label": "R1",
+        "target": "ref-r1",
+        "line": 5
+      },
+      {
+        "label": "R2",
+        "target": null,
+        "line": 5
+      }
+    ],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": [
+        {
+          "label": "R2",
+          "line": 5
+        }
+      ]
+    }
+  },
+  {
+    "id": "citation-inside-entrys-own-text",
+    "markdown": "# References\n\n[R1] First. Compare with [R2].\n\n[R2] Second.\n",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3
+      },
+      {
+        "label": "R2",
+        "anchor": "ref-r2",
+        "line": 5
+      }
+    ],
+    "citations": [
+      {
+        "label": "R2",
+        "target": "ref-r2",
+        "line": 3
+      }
+    ],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "citation-inside-entrys-own-text-self-reference",
+    "markdown": "# References\n\n[R1] Self-referential entry, see also [R1] later in its own text.\n",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3
+      }
+    ],
+    "citations": [
+      {
+        "label": "R1",
+        "target": "ref-r1",
+        "line": 3
+      }
+    ],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "multiple-entries-and-citations-mixed-order",
+    "markdown": "# References\n\n[R1] First reference.\n\n[R2] Second reference.\n\nBody text cites [R2] before [R1] here.\n",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3
+      },
+      {
+        "label": "R2",
+        "anchor": "ref-r2",
+        "line": 5
+      }
+    ],
+    "citations": [
+      {
+        "label": "R2",
+        "target": "ref-r2",
+        "line": 7
+      },
+      {
+        "label": "R1",
+        "target": "ref-r1",
+        "line": 7
+      }
+    ],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "entry-and-citation-same-paragraph-not-possible-separate-paragraphs",
+    "markdown": "# References\n\n[R1] First reference, cites nothing.\n\nA separate paragraph cites [R1] normally.\n",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3
+      }
+    ],
+    "citations": [
+      {
+        "label": "R1",
+        "target": "ref-r1",
+        "line": 5
+      }
+    ],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "no-entries-no-citations-plain-page",
+    "markdown": "# Notes\n\nA plain page with no bracket labels at all.\n",
+    "reference_entries": [],
+    "citations": [],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "bracket-not-matching-label-grammar-plain-text",
+    "markdown": "# Notes\n\nA page mentioning [Ref1] and [R] and [r2], none of which are labels.\n",
+    "reference_entries": [],
+    "citations": [],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "entry-with-multi-digit-label",
+    "markdown": "# References\n\n[R123] Author. (2020). Title.\n",
+    "reference_entries": [
+      {
+        "label": "R123",
+        "anchor": "ref-r123",
+        "line": 3
+      }
+    ],
+    "citations": [],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "entry-anchor-lowercases-only-the-letter-suffix",
+    "markdown": "# References\n\n[R57a] Author. (2019). Title.\n",
+    "reference_entries": [
+      {
+        "label": "R57a",
+        "anchor": "ref-r57a",
+        "line": 3
+      }
+    ],
+    "citations": [],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "citation-and-entry-on-different-pages-independent",
+    "markdown": "# References\n\n[R1] First.\n\ncites [R1] here.\n",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3
+      }
+    ],
+    "citations": [
+      {
+        "label": "R1",
+        "target": "ref-r1",
+        "line": 5
+      }
+    ],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "table-cell-entry-attempt-is-not-an-entry",
+    "markdown": "# References\n\n[R1] Author, A. (2020). Title.\n\n| Label | Note |\n| --- | --- |\n| [R1] | is a citation, not a second entry |\n",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3
+      }
+    ],
+    "citations": [
+      {
+        "label": "R1",
+        "target": "ref-r1",
+        "line": 7
+      }
+    ],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "list-item-with-trailing-citation",
+    "markdown": "# References\n\n[R1] First entry.\n\n- item text ending with a citation [R1]\n",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3
+      }
+    ],
+    "citations": [
+      {
+        "label": "R1",
+        "target": "ref-r1",
+        "line": 5
+      }
+    ],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "block-quote-entry-then-citation-same-quote",
+    "markdown": "# References\n\n> [R1] Quoted entry.\n\n> cites [R1] in a later quoted paragraph.\n",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3
+      }
+    ],
+    "citations": [
+      {
+        "label": "R1",
+        "target": "ref-r1",
+        "line": 5
+      }
+    ],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "html-block-does-not-consume-following-paragraph",
+    "markdown": "# References\n\n[R1] Author, A. (2020). Title.\n\n<div>excluded [R1] in html block</div>\n\na real citation of [R1] in a normal paragraph.\n",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3
+      }
+    ],
+    "citations": [
+      {
+        "label": "R1",
+        "target": "ref-r1",
+        "line": 7
+      }
+    ],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "fenced-code-tilde-fence-excluded",
+    "markdown": "# References\n\n[R1] Author, A. (2020). Title.\n\n~~~\n[R1] inside a tilde-fenced code block\n~~~\n\nsee [R1] for real.\n",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3
+      }
+    ],
+    "citations": [
+      {
+        "label": "R1",
+        "target": "ref-r1",
+        "line": 9
+      }
+    ],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "entry-paragraph-with-trailing-sentence",
+    "markdown": "# References\n\n[R99] Author, Z. (2023). A Longer Title With Words. Publisher, City.\n",
+    "reference_entries": [
+      {
+        "label": "R99",
+        "anchor": "ref-r99",
+        "line": 3
+      }
+    ],
+    "citations": [],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "multiple-labels-two-digit-and-three-digit-distinct",
+    "markdown": "# References\n\n[R1] One.\n\n[R12] Twelve.\n\ncites [R1] and [R12] distinctly.\n",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3
+      },
+      {
+        "label": "R12",
+        "anchor": "ref-r12",
+        "line": 5
+      }
+    ],
+    "citations": [
+      {
+        "label": "R1",
+        "target": "ref-r1",
+        "line": 7
+      },
+      {
+        "label": "R12",
+        "target": "ref-r12",
+        "line": 7
+      }
+    ],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "range-three-citations-chained",
+    "markdown": "# References\n\n[R1] First.\n\n[R2] Second.\n\n[R3] Third.\n\nsee [R1]-[R2]-[R3] chained.\n",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3
+      },
+      {
+        "label": "R2",
+        "anchor": "ref-r2",
+        "line": 5
+      },
+      {
+        "label": "R3",
+        "anchor": "ref-r3",
+        "line": 7
+      }
+    ],
+    "citations": [
+      {
+        "label": "R1",
+        "target": "ref-r1",
+        "line": 9
+      },
+      {
+        "label": "R2",
+        "target": "ref-r2",
+        "line": 9
+      },
+      {
+        "label": "R3",
+        "target": "ref-r3",
+        "line": 9
+      }
+    ],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "citation-in-entry-continuation-line-same-paragraph",
+    "markdown": "# References\n\n[R1] First.\ncites [R1] on the continuation line of the same paragraph.\n",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3
+      }
+    ],
+    "citations": [
+      {
+        "label": "R1",
+        "target": "ref-r1",
+        "line": 4
+      }
+    ],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "duplicate-entry-across-list-and-paragraph",
+    "markdown": "# References\n\n[R1] First, as a paragraph.\n\n- [R1] Duplicate, as a list item.\n",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3
+      }
+    ],
+    "citations": [
+      {
+        "label": "R1",
+        "target": "ref-r1",
+        "line": 5
+      }
+    ],
+    "diagnostics": {
+      "duplicate_reference_entry": [
+        {
+          "label": "R1",
+          "first_line": 3,
+          "second_line": 5
+        }
+      ],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "unresolved-citation-in-list-item",
+    "markdown": "# References\n\n[R1] First.\n\n- an unresolved [R9] mention\n",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3
+      }
+    ],
+    "citations": [
+      {
+        "label": "R9",
+        "target": null,
+        "line": 5
+      }
+    ],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": [
+        {
+          "label": "R9",
+          "line": 5
+        }
+      ]
+    }
+  },
+  {
+    "id": "unresolved-citation-in-table-cell",
+    "markdown": "# References\n\n[R1] First.\n\n| A | B |\n| --- | --- |\n| x | see [R9] |\n",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3
+      }
+    ],
+    "citations": [
+      {
+        "label": "R9",
+        "target": null,
+        "line": 7
+      }
+    ],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": [
+        {
+          "label": "R9",
+          "line": 7
+        }
+      ]
+    }
+  },
+  {
+    "id": "unresolved-citation-in-block-quote",
+    "markdown": "# References\n\n[R1] First.\n\n> mentions [R9] which is unresolved\n",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3
+      }
+    ],
+    "citations": [
+      {
+        "label": "R9",
+        "target": null,
+        "line": 5
+      }
+    ],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": [
+        {
+          "label": "R9",
+          "line": 5
+        }
+      ]
+    }
+  },
+  {
+    "id": "citation-with-letter-suffix-resolves",
+    "markdown": "# References\n\n[R12a] Entry with letter suffix.\n\ncites [R12a] here.\n",
+    "reference_entries": [
+      {
+        "label": "R12a",
+        "anchor": "ref-r12a",
+        "line": 3
+      }
+    ],
+    "citations": [
+      {
+        "label": "R12a",
+        "target": "ref-r12a",
+        "line": 5
+      }
+    ],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  },
+  {
+    "id": "citation-digits-only-does-not-match-letter-suffix-entry",
+    "markdown": "# References\n\n[R12a] Entry with letter suffix.\n\ncites [R12] which has no entry (different label).\n",
+    "reference_entries": [
+      {
+        "label": "R12a",
+        "anchor": "ref-r12a",
+        "line": 3
+      }
+    ],
+    "citations": [
+      {
+        "label": "R12",
+        "target": null,
+        "line": 5
+      }
+    ],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": [
+        {
+          "label": "R12",
+          "line": 5
+        }
+      ]
+    }
+  },
+  {
+    "id": "real-spec-rha-spec-v0-10",
+    "path": "docs/spec/rha-spec-v0.10.md",
+    "sha256": "bd96216829035ade64c43befa5e672c58078f6afa4b04145c6183227e4e1071a",
+    "reference_entries": [
+      {
+        "label": "R1",
+        "anchor": "ref-r1",
+        "line": 3118
+      },
+      {
+        "label": "R2",
+        "anchor": "ref-r2",
+        "line": 3120
+      },
+      {
+        "label": "R3",
+        "anchor": "ref-r3",
+        "line": 3122
+      },
+      {
+        "label": "R4",
+        "anchor": "ref-r4",
+        "line": 3124
+      },
+      {
+        "label": "R5",
+        "anchor": "ref-r5",
+        "line": 3126
+      },
+      {
+        "label": "R6",
+        "anchor": "ref-r6",
+        "line": 3128
+      },
+      {
+        "label": "R7",
+        "anchor": "ref-r7",
+        "line": 3130
+      },
+      {
+        "label": "R8",
+        "anchor": "ref-r8",
+        "line": 3132
+      },
+      {
+        "label": "R9",
+        "anchor": "ref-r9",
+        "line": 3134
+      },
+      {
+        "label": "R10",
+        "anchor": "ref-r10",
+        "line": 3136
+      },
+      {
+        "label": "R11",
+        "anchor": "ref-r11",
+        "line": 3138
+      },
+      {
+        "label": "R12",
+        "anchor": "ref-r12",
+        "line": 3140
+      },
+      {
+        "label": "R13",
+        "anchor": "ref-r13",
+        "line": 3142
+      },
+      {
+        "label": "R14",
+        "anchor": "ref-r14",
+        "line": 3144
+      },
+      {
+        "label": "R15",
+        "anchor": "ref-r15",
+        "line": 3146
+      },
+      {
+        "label": "R16",
+        "anchor": "ref-r16",
+        "line": 3148
+      },
+      {
+        "label": "R17",
+        "anchor": "ref-r17",
+        "line": 3150
+      },
+      {
+        "label": "R18",
+        "anchor": "ref-r18",
+        "line": 3152
+      },
+      {
+        "label": "R19",
+        "anchor": "ref-r19",
+        "line": 3154
+      },
+      {
+        "label": "R20",
+        "anchor": "ref-r20",
+        "line": 3156
+      },
+      {
+        "label": "R21",
+        "anchor": "ref-r21",
+        "line": 3158
+      },
+      {
+        "label": "R22",
+        "anchor": "ref-r22",
+        "line": 3160
+      },
+      {
+        "label": "R23",
+        "anchor": "ref-r23",
+        "line": 3162
+      },
+      {
+        "label": "R24",
+        "anchor": "ref-r24",
+        "line": 3164
+      },
+      {
+        "label": "R25",
+        "anchor": "ref-r25",
+        "line": 3166
+      },
+      {
+        "label": "R26",
+        "anchor": "ref-r26",
+        "line": 3168
+      },
+      {
+        "label": "R27",
+        "anchor": "ref-r27",
+        "line": 3170
+      },
+      {
+        "label": "R28",
+        "anchor": "ref-r28",
+        "line": 3172
+      },
+      {
+        "label": "R29",
+        "anchor": "ref-r29",
+        "line": 3174
+      },
+      {
+        "label": "R30",
+        "anchor": "ref-r30",
+        "line": 3176
+      },
+      {
+        "label": "R31",
+        "anchor": "ref-r31",
+        "line": 3178
+      },
+      {
+        "label": "R32",
+        "anchor": "ref-r32",
+        "line": 3180
+      },
+      {
+        "label": "R33",
+        "anchor": "ref-r33",
+        "line": 3182
+      },
+      {
+        "label": "R34",
+        "anchor": "ref-r34",
+        "line": 3184
+      },
+      {
+        "label": "R35",
+        "anchor": "ref-r35",
+        "line": 3186
+      },
+      {
+        "label": "R36",
+        "anchor": "ref-r36",
+        "line": 3188
+      },
+      {
+        "label": "R37",
+        "anchor": "ref-r37",
+        "line": 3190
+      },
+      {
+        "label": "R38",
+        "anchor": "ref-r38",
+        "line": 3192
+      },
+      {
+        "label": "R39",
+        "anchor": "ref-r39",
+        "line": 3194
+      },
+      {
+        "label": "R40",
+        "anchor": "ref-r40",
+        "line": 3196
+      },
+      {
+        "label": "R41",
+        "anchor": "ref-r41",
+        "line": 3198
+      },
+      {
+        "label": "R42",
+        "anchor": "ref-r42",
+        "line": 3200
+      },
+      {
+        "label": "R43",
+        "anchor": "ref-r43",
+        "line": 3202
+      },
+      {
+        "label": "R44",
+        "anchor": "ref-r44",
+        "line": 3204
+      },
+      {
+        "label": "R45",
+        "anchor": "ref-r45",
+        "line": 3206
+      },
+      {
+        "label": "R46",
+        "anchor": "ref-r46",
+        "line": 3208
+      },
+      {
+        "label": "R47",
+        "anchor": "ref-r47",
+        "line": 3210
+      },
+      {
+        "label": "R48",
+        "anchor": "ref-r48",
+        "line": 3212
+      },
+      {
+        "label": "R49",
+        "anchor": "ref-r49",
+        "line": 3214
+      },
+      {
+        "label": "R50",
+        "anchor": "ref-r50",
+        "line": 3216
+      },
+      {
+        "label": "R51",
+        "anchor": "ref-r51",
+        "line": 3218
+      },
+      {
+        "label": "R52",
+        "anchor": "ref-r52",
+        "line": 3220
+      },
+      {
+        "label": "R53",
+        "anchor": "ref-r53",
+        "line": 3222
+      },
+      {
+        "label": "R54",
+        "anchor": "ref-r54",
+        "line": 3224
+      },
+      {
+        "label": "R55",
+        "anchor": "ref-r55",
+        "line": 3226
+      },
+      {
+        "label": "R56",
+        "anchor": "ref-r56",
+        "line": 3228
+      },
+      {
+        "label": "R57",
+        "anchor": "ref-r57",
+        "line": 3230
+      },
+      {
+        "label": "R58",
+        "anchor": "ref-r58",
+        "line": 3232
+      },
+      {
+        "label": "R59",
+        "anchor": "ref-r59",
+        "line": 3234
+      },
+      {
+        "label": "R60",
+        "anchor": "ref-r60",
+        "line": 3236
+      },
+      {
+        "label": "R61",
+        "anchor": "ref-r61",
+        "line": 3238
+      },
+      {
+        "label": "R62",
+        "anchor": "ref-r62",
+        "line": 3240
+      },
+      {
+        "label": "R63",
+        "anchor": "ref-r63",
+        "line": 3242
+      },
+      {
+        "label": "R64",
+        "anchor": "ref-r64",
+        "line": 3244
+      },
+      {
+        "label": "R65",
+        "anchor": "ref-r65",
+        "line": 3246
+      },
+      {
+        "label": "R66",
+        "anchor": "ref-r66",
+        "line": 3248
+      },
+      {
+        "label": "R67",
+        "anchor": "ref-r67",
+        "line": 3250
+      },
+      {
+        "label": "R68",
+        "anchor": "ref-r68",
+        "line": 3252
+      },
+      {
+        "label": "R69",
+        "anchor": "ref-r69",
+        "line": 3254
+      },
+      {
+        "label": "R70",
+        "anchor": "ref-r70",
+        "line": 3256
+      },
+      {
+        "label": "R71",
+        "anchor": "ref-r71",
+        "line": 3258
+      },
+      {
+        "label": "R72",
+        "anchor": "ref-r72",
+        "line": 3260
+      },
+      {
+        "label": "R73",
+        "anchor": "ref-r73",
+        "line": 3262
+      },
+      {
+        "label": "R74",
+        "anchor": "ref-r74",
+        "line": 3266
+      },
+      {
+        "label": "R75",
+        "anchor": "ref-r75",
+        "line": 3268
+      },
+      {
+        "label": "R76",
+        "anchor": "ref-r76",
+        "line": 3270
+      },
+      {
+        "label": "R77",
+        "anchor": "ref-r77",
+        "line": 3272
+      },
+      {
+        "label": "R78",
+        "anchor": "ref-r78",
+        "line": 3274
+      },
+      {
+        "label": "R79",
+        "anchor": "ref-r79",
+        "line": 3276
+      },
+      {
+        "label": "R80",
+        "anchor": "ref-r80",
+        "line": 3278
+      },
+      {
+        "label": "R81",
+        "anchor": "ref-r81",
+        "line": 3280
+      },
+      {
+        "label": "R82",
+        "anchor": "ref-r82",
+        "line": 3282
+      },
+      {
+        "label": "R83",
+        "anchor": "ref-r83",
+        "line": 3284
+      },
+      {
+        "label": "R84",
+        "anchor": "ref-r84",
+        "line": 3286
+      },
+      {
+        "label": "R85",
+        "anchor": "ref-r85",
+        "line": 3288
+      },
+      {
+        "label": "R86",
+        "anchor": "ref-r86",
+        "line": 3290
+      },
+      {
+        "label": "R87",
+        "anchor": "ref-r87",
+        "line": 3292
+      },
+      {
+        "label": "R88",
+        "anchor": "ref-r88",
+        "line": 3294
+      },
+      {
+        "label": "R89",
+        "anchor": "ref-r89",
+        "line": 3296
+      },
+      {
+        "label": "R90",
+        "anchor": "ref-r90",
+        "line": 3298
+      },
+      {
+        "label": "R91",
+        "anchor": "ref-r91",
+        "line": 3300
+      },
+      {
+        "label": "R92",
+        "anchor": "ref-r92",
+        "line": 3302
+      },
+      {
+        "label": "R93",
+        "anchor": "ref-r93",
+        "line": 3304
+      },
+      {
+        "label": "R94",
+        "anchor": "ref-r94",
+        "line": 3306
+      },
+      {
+        "label": "R95",
+        "anchor": "ref-r95",
+        "line": 3308
+      },
+      {
+        "label": "R96",
+        "anchor": "ref-r96",
+        "line": 3310
+      },
+      {
+        "label": "R97",
+        "anchor": "ref-r97",
+        "line": 3312
+      },
+      {
+        "label": "R98",
+        "anchor": "ref-r98",
+        "line": 3314
+      },
+      {
+        "label": "R99",
+        "anchor": "ref-r99",
+        "line": 3316
+      },
+      {
+        "label": "R100",
+        "anchor": "ref-r100",
+        "line": 3318
+      },
+      {
+        "label": "R101",
+        "anchor": "ref-r101",
+        "line": 3320
+      },
+      {
+        "label": "R102",
+        "anchor": "ref-r102",
+        "line": 3322
+      },
+      {
+        "label": "R103",
+        "anchor": "ref-r103",
+        "line": 3324
+      },
+      {
+        "label": "R104",
+        "anchor": "ref-r104",
+        "line": 3326
+      },
+      {
+        "label": "R105",
+        "anchor": "ref-r105",
+        "line": 3328
+      },
+      {
+        "label": "R106",
+        "anchor": "ref-r106",
+        "line": 3330
+      },
+      {
+        "label": "R107",
+        "anchor": "ref-r107",
+        "line": 3332
+      },
+      {
+        "label": "R108",
+        "anchor": "ref-r108",
+        "line": 3334
+      },
+      {
+        "label": "R109",
+        "anchor": "ref-r109",
+        "line": 3336
+      },
+      {
+        "label": "R110",
+        "anchor": "ref-r110",
+        "line": 3338
+      },
+      {
+        "label": "R111",
+        "anchor": "ref-r111",
+        "line": 3340
+      },
+      {
+        "label": "R112",
+        "anchor": "ref-r112",
+        "line": 3342
+      },
+      {
+        "label": "R113",
+        "anchor": "ref-r113",
+        "line": 3344
+      },
+      {
+        "label": "R114",
+        "anchor": "ref-r114",
+        "line": 3346
+      },
+      {
+        "label": "R115",
+        "anchor": "ref-r115",
+        "line": 3348
+      },
+      {
+        "label": "R116",
+        "anchor": "ref-r116",
+        "line": 3350
+      },
+      {
+        "label": "R117",
+        "anchor": "ref-r117",
+        "line": 3352
+      },
+      {
+        "label": "R118",
+        "anchor": "ref-r118",
+        "line": 3354
+      },
+      {
+        "label": "R119",
+        "anchor": "ref-r119",
+        "line": 3356
+      },
+      {
+        "label": "R120",
+        "anchor": "ref-r120",
+        "line": 3358
+      },
+      {
+        "label": "R121",
+        "anchor": "ref-r121",
+        "line": 3360
+      },
+      {
+        "label": "R122",
+        "anchor": "ref-r122",
+        "line": 3362
+      },
+      {
+        "label": "R123",
+        "anchor": "ref-r123",
+        "line": 3364
+      },
+      {
+        "label": "R124",
+        "anchor": "ref-r124",
+        "line": 3366
+      },
+      {
+        "label": "R125",
+        "anchor": "ref-r125",
+        "line": 3368
+      },
+      {
+        "label": "R126",
+        "anchor": "ref-r126",
+        "line": 3370
+      },
+      {
+        "label": "R127",
+        "anchor": "ref-r127",
+        "line": 3372
+      },
+      {
+        "label": "R128",
+        "anchor": "ref-r128",
+        "line": 3374
+      },
+      {
+        "label": "R129",
+        "anchor": "ref-r129",
+        "line": 3376
+      },
+      {
+        "label": "R130",
+        "anchor": "ref-r130",
+        "line": 3378
+      },
+      {
+        "label": "R131",
+        "anchor": "ref-r131",
+        "line": 3380
+      },
+      {
+        "label": "R132",
+        "anchor": "ref-r132",
+        "line": 3382
+      },
+      {
+        "label": "R133",
+        "anchor": "ref-r133",
+        "line": 3384
+      },
+      {
+        "label": "R134",
+        "anchor": "ref-r134",
+        "line": 3386
+      },
+      {
+        "label": "R135",
+        "anchor": "ref-r135",
+        "line": 3388
+      },
+      {
+        "label": "R136",
+        "anchor": "ref-r136",
+        "line": 3390
+      },
+      {
+        "label": "R137",
+        "anchor": "ref-r137",
+        "line": 3392
+      },
+      {
+        "label": "R138",
+        "anchor": "ref-r138",
+        "line": 3394
+      },
+      {
+        "label": "R139",
+        "anchor": "ref-r139",
+        "line": 3396
+      },
+      {
+        "label": "R140",
+        "anchor": "ref-r140",
+        "line": 3398
+      },
+      {
+        "label": "R141",
+        "anchor": "ref-r141",
+        "line": 3400
+      },
+      {
+        "label": "R142",
+        "anchor": "ref-r142",
+        "line": 3402
+      },
+      {
+        "label": "R143",
+        "anchor": "ref-r143",
+        "line": 3404
+      },
+      {
+        "label": "R144",
+        "anchor": "ref-r144",
+        "line": 3406
+      },
+      {
+        "label": "R145",
+        "anchor": "ref-r145",
+        "line": 3408
+      },
+      {
+        "label": "R146",
+        "anchor": "ref-r146",
+        "line": 3410
+      },
+      {
+        "label": "R147",
+        "anchor": "ref-r147",
+        "line": 3412
+      },
+      {
+        "label": "R148",
+        "anchor": "ref-r148",
+        "line": 3414
+      },
+      {
+        "label": "R149",
+        "anchor": "ref-r149",
+        "line": 3416
+      },
+      {
+        "label": "R150",
+        "anchor": "ref-r150",
+        "line": 3418
+      },
+      {
+        "label": "R151",
+        "anchor": "ref-r151",
+        "line": 3420
+      },
+      {
+        "label": "R152",
+        "anchor": "ref-r152",
+        "line": 3422
+      },
+      {
+        "label": "R153",
+        "anchor": "ref-r153",
+        "line": 3424
+      },
+      {
+        "label": "R154",
+        "anchor": "ref-r154",
+        "line": 3426
+      },
+      {
+        "label": "R155",
+        "anchor": "ref-r155",
+        "line": 3432
+      },
+      {
+        "label": "R156",
+        "anchor": "ref-r156",
+        "line": 3434
+      },
+      {
+        "label": "R157",
+        "anchor": "ref-r157",
+        "line": 3436
+      },
+      {
+        "label": "R158",
+        "anchor": "ref-r158",
+        "line": 3438
+      },
+      {
+        "label": "R159",
+        "anchor": "ref-r159",
+        "line": 3440
+      },
+      {
+        "label": "R160",
+        "anchor": "ref-r160",
+        "line": 3442
+      },
+      {
+        "label": "R161",
+        "anchor": "ref-r161",
+        "line": 3444
+      },
+      {
+        "label": "R162",
+        "anchor": "ref-r162",
+        "line": 3446
+      },
+      {
+        "label": "R163",
+        "anchor": "ref-r163",
+        "line": 3448
+      },
+      {
+        "label": "R164",
+        "anchor": "ref-r164",
+        "line": 3450
+      },
+      {
+        "label": "R165",
+        "anchor": "ref-r165",
+        "line": 3452
+      },
+      {
+        "label": "R166",
+        "anchor": "ref-r166",
+        "line": 3454
+      },
+      {
+        "label": "R167",
+        "anchor": "ref-r167",
+        "line": 3456
+      },
+      {
+        "label": "R168",
+        "anchor": "ref-r168",
+        "line": 3458
+      }
+    ],
+    "citations": [
+      {
+        "label": "R16",
+        "target": "ref-r16",
+        "line": 59
+      },
+      {
+        "label": "R22",
+        "target": "ref-r22",
+        "line": 59
+      },
+      {
+        "label": "R39",
+        "target": "ref-r39",
+        "line": 59
+      },
+      {
+        "label": "R48",
+        "target": "ref-r48",
+        "line": 59
+      },
+      {
+        "label": "R51",
+        "target": "ref-r51",
+        "line": 59
+      },
+      {
+        "label": "R56",
+        "target": "ref-r56",
+        "line": 59
+      },
+      {
+        "label": "R57",
+        "target": "ref-r57",
+        "line": 59
+      },
+      {
+        "label": "R60",
+        "target": "ref-r60",
+        "line": 59
+      },
+      {
+        "label": "R128",
+        "target": "ref-r128",
+        "line": 59
+      },
+      {
+        "label": "R143",
+        "target": "ref-r143",
+        "line": 59
+      },
+      {
+        "label": "R1",
+        "target": "ref-r1",
+        "line": 60
+      },
+      {
+        "label": "R72",
+        "target": "ref-r72",
+        "line": 60
+      },
+      {
+        "label": "R74",
+        "target": "ref-r74",
+        "line": 61
+      },
+      {
+        "label": "R146",
+        "target": "ref-r146",
+        "line": 61
+      },
+      {
+        "label": "R147",
+        "target": "ref-r147",
+        "line": 62
+      },
+      {
+        "label": "R154",
+        "target": "ref-r154",
+        "line": 62
+      },
+      {
+        "label": "R155",
+        "target": "ref-r155",
+        "line": 63
+      },
+      {
+        "label": "R168",
+        "target": "ref-r168",
+        "line": 63
+      },
+      {
+        "label": "R86",
+        "target": "ref-r86",
+        "line": 105
+      },
+      {
+        "label": "R141",
+        "target": "ref-r141",
+        "line": 105
+      },
+      {
+        "label": "R131",
+        "target": "ref-r131",
+        "line": 124
+      },
+      {
+        "label": "R139",
+        "target": "ref-r139",
+        "line": 124
+      },
+      {
+        "label": "R140",
+        "target": "ref-r140",
+        "line": 139
+      },
+      {
+        "label": "R143",
+        "target": "ref-r143",
+        "line": 166
+      },
+      {
+        "label": "R134",
+        "target": "ref-r134",
+        "line": 208
+      },
+      {
+        "label": "R1",
+        "target": "ref-r1",
+        "line": 214
+      },
+      {
+        "label": "R90",
+        "target": "ref-r90",
+        "line": 215
+      },
+      {
+        "label": "R2",
+        "target": "ref-r2",
+        "line": 216
+      },
+      {
+        "label": "R84",
+        "target": "ref-r84",
+        "line": 217
+      },
+      {
+        "label": "R83",
+        "target": "ref-r83",
+        "line": 217
+      },
+      {
+        "label": "R85",
+        "target": "ref-r85",
+        "line": 217
+      },
+      {
+        "label": "R86",
+        "target": "ref-r86",
+        "line": 217
+      },
+      {
+        "label": "R141",
+        "target": "ref-r141",
+        "line": 217
+      },
+      {
+        "label": "R114",
+        "target": "ref-r114",
+        "line": 218
+      },
+      {
+        "label": "R76",
+        "target": "ref-r76",
+        "line": 224
+      },
+      {
+        "label": "R75",
+        "target": "ref-r75",
+        "line": 224
+      },
+      {
+        "label": "R74",
+        "target": "ref-r74",
+        "line": 224
+      },
+      {
+        "label": "R77",
+        "target": "ref-r77",
+        "line": 224
+      },
+      {
+        "label": "R76",
+        "target": "ref-r76",
+        "line": 228
+      },
+      {
+        "label": "R75",
+        "target": "ref-r75",
+        "line": 229
+      },
+      {
+        "label": "R74",
+        "target": "ref-r74",
+        "line": 230
+      },
+      {
+        "label": "R77",
+        "target": "ref-r77",
+        "line": 231
+      },
+      {
+        "label": "R78",
+        "target": "ref-r78",
+        "line": 231
+      },
+      {
+        "label": "R78",
+        "target": "ref-r78",
+        "line": 233
+      },
+      {
+        "label": "R79",
+        "target": "ref-r79",
+        "line": 239
+      },
+      {
+        "label": "R80",
+        "target": "ref-r80",
+        "line": 240
+      },
+      {
+        "label": "R87",
+        "target": "ref-r87",
+        "line": 240
+      },
+      {
+        "label": "R81",
+        "target": "ref-r81",
+        "line": 241
+      },
+      {
+        "label": "R135",
+        "target": "ref-r135",
+        "line": 241
+      },
+      {
+        "label": "R82",
+        "target": "ref-r82",
+        "line": 242
+      },
+      {
+        "label": "R45",
+        "target": "ref-r45",
+        "line": 252
+      },
+      {
+        "label": "R88",
+        "target": "ref-r88",
+        "line": 253
+      },
+      {
+        "label": "R89",
+        "target": "ref-r89",
+        "line": 254
+      },
+      {
+        "label": "R46",
+        "target": "ref-r46",
+        "line": 254
+      },
+      {
+        "label": "R91",
+        "target": "ref-r91",
+        "line": 254
+      },
+      {
+        "label": "R92",
+        "target": "ref-r92",
+        "line": 254
+      },
+      {
+        "label": "R93",
+        "target": "ref-r93",
+        "line": 255
+      },
+      {
+        "label": "R94",
+        "target": "ref-r94",
+        "line": 255
+      },
+      {
+        "label": "R47",
+        "target": "ref-r47",
+        "line": 255
+      },
+      {
+        "label": "R48",
+        "target": "ref-r48",
+        "line": 255
+      },
+      {
+        "label": "R48",
+        "target": "ref-r48",
+        "line": 255
+      },
+      {
+        "label": "R95",
+        "target": "ref-r95",
+        "line": 256
+      },
+      {
+        "label": "R96",
+        "target": "ref-r96",
+        "line": 256
+      },
+      {
+        "label": "R49",
+        "target": "ref-r49",
+        "line": 256
+      },
+      {
+        "label": "R97",
+        "target": "ref-r97",
+        "line": 256
+      },
+      {
+        "label": "R98",
+        "target": "ref-r98",
+        "line": 256
+      },
+      {
+        "label": "R50",
+        "target": "ref-r50",
+        "line": 257
+      },
+      {
+        "label": "R51",
+        "target": "ref-r51",
+        "line": 257
+      },
+      {
+        "label": "R99",
+        "target": "ref-r99",
+        "line": 257
+      },
+      {
+        "label": "R99",
+        "target": "ref-r99",
+        "line": 257
+      },
+      {
+        "label": "R52",
+        "target": "ref-r52",
+        "line": 258
+      },
+      {
+        "label": "R49",
+        "target": "ref-r49",
+        "line": 262
+      },
+      {
+        "label": "R97",
+        "target": "ref-r97",
+        "line": 262
+      },
+      {
+        "label": "R98",
+        "target": "ref-r98",
+        "line": 262
+      },
+      {
+        "label": "R96",
+        "target": "ref-r96",
+        "line": 262
+      },
+      {
+        "label": "R54",
+        "target": "ref-r54",
+        "line": 263
+      },
+      {
+        "label": "R119",
+        "target": "ref-r119",
+        "line": 263
+      },
+      {
+        "label": "R53",
+        "target": "ref-r53",
+        "line": 264
+      },
+      {
+        "label": "R138",
+        "target": "ref-r138",
+        "line": 272
+      },
+      {
+        "label": "R9",
+        "target": "ref-r9",
+        "line": 273
+      },
+      {
+        "label": "R110",
+        "target": "ref-r110",
+        "line": 273
+      },
+      {
+        "label": "R110",
+        "target": "ref-r110",
+        "line": 273
+      },
+      {
+        "label": "R10",
+        "target": "ref-r10",
+        "line": 274
+      },
+      {
+        "label": "R20",
+        "target": "ref-r20",
+        "line": 275
+      },
+      {
+        "label": "R21",
+        "target": "ref-r21",
+        "line": 275
+      },
+      {
+        "label": "R100",
+        "target": "ref-r100",
+        "line": 275
+      },
+      {
+        "label": "R101",
+        "target": "ref-r101",
+        "line": 275
+      },
+      {
+        "label": "R102",
+        "target": "ref-r102",
+        "line": 275
+      },
+      {
+        "label": "R11",
+        "target": "ref-r11",
+        "line": 275
+      },
+      {
+        "label": "R100",
+        "target": "ref-r100",
+        "line": 275
+      },
+      {
+        "label": "R101",
+        "target": "ref-r101",
+        "line": 275
+      },
+      {
+        "label": "R103",
+        "target": "ref-r103",
+        "line": 276
+      },
+      {
+        "label": "R104",
+        "target": "ref-r104",
+        "line": 277
+      },
+      {
+        "label": "R19",
+        "target": "ref-r19",
+        "line": 277
+      },
+      {
+        "label": "R105",
+        "target": "ref-r105",
+        "line": 277
+      },
+      {
+        "label": "R106",
+        "target": "ref-r106",
+        "line": 278
+      },
+      {
+        "label": "R107",
+        "target": "ref-r107",
+        "line": 279
+      },
+      {
+        "label": "R108",
+        "target": "ref-r108",
+        "line": 279
+      },
+      {
+        "label": "R9",
+        "target": "ref-r9",
+        "line": 279
+      },
+      {
+        "label": "R112",
+        "target": "ref-r112",
+        "line": 280
+      },
+      {
+        "label": "R111",
+        "target": "ref-r111",
+        "line": 280
+      },
+      {
+        "label": "R113",
+        "target": "ref-r113",
+        "line": 281
+      },
+      {
+        "label": "R114",
+        "target": "ref-r114",
+        "line": 281
+      },
+      {
+        "label": "R115",
+        "target": "ref-r115",
+        "line": 289
+      },
+      {
+        "label": "R136",
+        "target": "ref-r136",
+        "line": 290
+      },
+      {
+        "label": "R27",
+        "target": "ref-r27",
+        "line": 291
+      },
+      {
+        "label": "R116",
+        "target": "ref-r116",
+        "line": 292
+      },
+      {
+        "label": "R117",
+        "target": "ref-r117",
+        "line": 292
+      },
+      {
+        "label": "R118",
+        "target": "ref-r118",
+        "line": 292
+      },
+      {
+        "label": "R116",
+        "target": "ref-r116",
+        "line": 292
+      },
+      {
+        "label": "R117",
+        "target": "ref-r117",
+        "line": 292
+      },
+      {
+        "label": "R118",
+        "target": "ref-r118",
+        "line": 292
+      },
+      {
+        "label": "R69",
+        "target": "ref-r69",
+        "line": 300
+      },
+      {
+        "label": "R120",
+        "target": "ref-r120",
+        "line": 300
+      },
+      {
+        "label": "R121",
+        "target": "ref-r121",
+        "line": 301
+      },
+      {
+        "label": "R58",
+        "target": "ref-r58",
+        "line": 302
+      },
+      {
+        "label": "R13",
+        "target": "ref-r13",
+        "line": 303
+      },
+      {
+        "label": "R122",
+        "target": "ref-r122",
+        "line": 304
+      },
+      {
+        "label": "R123",
+        "target": "ref-r123",
+        "line": 305
+      },
+      {
+        "label": "R124",
+        "target": "ref-r124",
+        "line": 305
+      },
+      {
+        "label": "R125",
+        "target": "ref-r125",
+        "line": 305
+      },
+      {
+        "label": "R126",
+        "target": "ref-r126",
+        "line": 305
+      },
+      {
+        "label": "R12",
+        "target": "ref-r12",
+        "line": 306
+      },
+      {
+        "label": "R56",
+        "target": "ref-r56",
+        "line": 314
+      },
+      {
+        "label": "R57",
+        "target": "ref-r57",
+        "line": 315
+      },
+      {
+        "label": "R71",
+        "target": "ref-r71",
+        "line": 316
+      },
+      {
+        "label": "R128",
+        "target": "ref-r128",
+        "line": 317
+      },
+      {
+        "label": "R65",
+        "target": "ref-r65",
+        "line": 318
+      },
+      {
+        "label": "R127",
+        "target": "ref-r127",
+        "line": 319
+      },
+      {
+        "label": "R60",
+        "target": "ref-r60",
+        "line": 320
+      },
+      {
+        "label": "R61",
+        "target": "ref-r61",
+        "line": 321
+      },
+      {
+        "label": "R66",
+        "target": "ref-r66",
+        "line": 321
+      },
+      {
+        "label": "R67",
+        "target": "ref-r67",
+        "line": 321
+      },
+      {
+        "label": "R59",
+        "target": "ref-r59",
+        "line": 322
+      },
+      {
+        "label": "R68",
+        "target": "ref-r68",
+        "line": 322
+      },
+      {
+        "label": "R62",
+        "target": "ref-r62",
+        "line": 323
+      },
+      {
+        "label": "R63",
+        "target": "ref-r63",
+        "line": 324
+      },
+      {
+        "label": "R64",
+        "target": "ref-r64",
+        "line": 325
+      },
+      {
+        "label": "R137",
+        "target": "ref-r137",
+        "line": 325
+      },
+      {
+        "label": "R129",
+        "target": "ref-r129",
+        "line": 325
+      },
+      {
+        "label": "R70",
+        "target": "ref-r70",
+        "line": 326
+      },
+      {
+        "label": "R72",
+        "target": "ref-r72",
+        "line": 326
+      },
+      {
+        "label": "R57",
+        "target": "ref-r57",
+        "line": 328
+      },
+      {
+        "label": "R71",
+        "target": "ref-r71",
+        "line": 328
+      },
+      {
+        "label": "R148",
+        "target": "ref-r148",
+        "line": 341
+      },
+      {
+        "label": "R149",
+        "target": "ref-r149",
+        "line": 342
+      },
+      {
+        "label": "R150",
+        "target": "ref-r150",
+        "line": 343
+      },
+      {
+        "label": "R151",
+        "target": "ref-r151",
+        "line": 344
+      },
+      {
+        "label": "R152",
+        "target": "ref-r152",
+        "line": 345
+      },
+      {
+        "label": "R153",
+        "target": "ref-r153",
+        "line": 346
+      },
+      {
+        "label": "R154",
+        "target": "ref-r154",
+        "line": 347
+      },
+      {
+        "label": "R155",
+        "target": "ref-r155",
+        "line": 384
+      },
+      {
+        "label": "R156",
+        "target": "ref-r156",
+        "line": 385
+      },
+      {
+        "label": "R157",
+        "target": "ref-r157",
+        "line": 386
+      },
+      {
+        "label": "R158",
+        "target": "ref-r158",
+        "line": 387
+      },
+      {
+        "label": "R159",
+        "target": "ref-r159",
+        "line": 388
+      },
+      {
+        "label": "R150",
+        "target": "ref-r150",
+        "line": 389
+      },
+      {
+        "label": "R149",
+        "target": "ref-r149",
+        "line": 389
+      },
+      {
+        "label": "R154",
+        "target": "ref-r154",
+        "line": 389
+      },
+      {
+        "label": "R160",
+        "target": "ref-r160",
+        "line": 390
+      },
+      {
+        "label": "R161",
+        "target": "ref-r161",
+        "line": 391
+      },
+      {
+        "label": "R165",
+        "target": "ref-r165",
+        "line": 392
+      },
+      {
+        "label": "R166",
+        "target": "ref-r166",
+        "line": 392
+      },
+      {
+        "label": "R164",
+        "target": "ref-r164",
+        "line": 393
+      },
+      {
+        "label": "R162",
+        "target": "ref-r162",
+        "line": 394
+      },
+      {
+        "label": "R168",
+        "target": "ref-r168",
+        "line": 394
+      },
+      {
+        "label": "R163",
+        "target": "ref-r163",
+        "line": 394
+      },
+      {
+        "label": "R167",
+        "target": "ref-r167",
+        "line": 395
+      },
+      {
+        "label": "R111",
+        "target": "ref-r111",
+        "line": 467
+      },
+      {
+        "label": "R138",
+        "target": "ref-r138",
+        "line": 599
+      },
+      {
+        "label": "R130",
+        "target": "ref-r130",
+        "line": 605
+      },
+      {
+        "label": "R143",
+        "target": "ref-r143",
+        "line": 617
+      },
+      {
+        "label": "R22",
+        "target": "ref-r22",
+        "line": 686
+      },
+      {
+        "label": "R23",
+        "target": "ref-r23",
+        "line": 686
+      },
+      {
+        "label": "R23",
+        "target": "ref-r23",
+        "line": 726
+      },
+      {
+        "label": "R30",
+        "target": "ref-r30",
+        "line": 753
+      },
+      {
+        "label": "R34",
+        "target": "ref-r34",
+        "line": 753
+      },
+      {
+        "label": "R33",
+        "target": "ref-r33",
+        "line": 797
+      },
+      {
+        "label": "R136",
+        "target": "ref-r136",
+        "line": 801
+      },
+      {
+        "label": "R115",
+        "target": "ref-r115",
+        "line": 826
+      },
+      {
+        "label": "R24",
+        "target": "ref-r24",
+        "line": 830
+      },
+      {
+        "label": "R25",
+        "target": "ref-r25",
+        "line": 858
+      },
+      {
+        "label": "R146",
+        "target": "ref-r146",
+        "line": 858
+      },
+      {
+        "label": "R147",
+        "target": "ref-r147",
+        "line": 889
+      },
+      {
+        "label": "R145",
+        "target": "ref-r145",
+        "line": 891
+      },
+      {
+        "label": "R32",
+        "target": "ref-r32",
+        "line": 916
+      },
+      {
+        "label": "R26",
+        "target": "ref-r26",
+        "line": 936
+      },
+      {
+        "label": "R27",
+        "target": "ref-r27",
+        "line": 936
+      },
+      {
+        "label": "R28",
+        "target": "ref-r28",
+        "line": 949
+      },
+      {
+        "label": "R34",
+        "target": "ref-r34",
+        "line": 949
+      },
+      {
+        "label": "R35",
+        "target": "ref-r35",
+        "line": 953
+      },
+      {
+        "label": "R36",
+        "target": "ref-r36",
+        "line": 959
+      },
+      {
+        "label": "R143",
+        "target": "ref-r143",
+        "line": 977
+      },
+      {
+        "label": "R29",
+        "target": "ref-r29",
+        "line": 1012
+      },
+      {
+        "label": "R31",
+        "target": "ref-r31",
+        "line": 1018
+      },
+      {
+        "label": "R30",
+        "target": "ref-r30",
+        "line": 1018
+      },
+      {
+        "label": "R37",
+        "target": "ref-r37",
+        "line": 1018
+      },
+      {
+        "label": "R144",
+        "target": "ref-r144",
+        "line": 1018
+      },
+      {
+        "label": "R33",
+        "target": "ref-r33",
+        "line": 1045
+      },
+      {
+        "label": "R38",
+        "target": "ref-r38",
+        "line": 1045
+      },
+      {
+        "label": "R39",
+        "target": "ref-r39",
+        "line": 1056
+      },
+      {
+        "label": "R40",
+        "target": "ref-r40",
+        "line": 1070
+      },
+      {
+        "label": "R41",
+        "target": "ref-r41",
+        "line": 1070
+      },
+      {
+        "label": "R103",
+        "target": "ref-r103",
+        "line": 1076
+      },
+      {
+        "label": "R144",
+        "target": "ref-r144",
+        "line": 1085
+      },
+      {
+        "label": "R44",
+        "target": "ref-r44",
+        "line": 1089
+      },
+      {
+        "label": "R42",
+        "target": "ref-r42",
+        "line": 1115
+      },
+      {
+        "label": "R45",
+        "target": "ref-r45",
+        "line": 1129
+      },
+      {
+        "label": "R47",
+        "target": "ref-r47",
+        "line": 1162
+      },
+      {
+        "label": "R48",
+        "target": "ref-r48",
+        "line": 1162
+      },
+      {
+        "label": "R57",
+        "target": "ref-r57",
+        "line": 1174
+      },
+      {
+        "label": "R46",
+        "target": "ref-r46",
+        "line": 1178
+      },
+      {
+        "label": "R91",
+        "target": "ref-r91",
+        "line": 1178
+      },
+      {
+        "label": "R92",
+        "target": "ref-r92",
+        "line": 1178
+      },
+      {
+        "label": "R1",
+        "target": "ref-r1",
+        "line": 1204
+      },
+      {
+        "label": "R50",
+        "target": "ref-r50",
+        "line": 1208
+      },
+      {
+        "label": "R99",
+        "target": "ref-r99",
+        "line": 1208
+      },
+      {
+        "label": "R97",
+        "target": "ref-r97",
+        "line": 1214
+      },
+      {
+        "label": "R98",
+        "target": "ref-r98",
+        "line": 1214
+      },
+      {
+        "label": "R96",
+        "target": "ref-r96",
+        "line": 1214
+      },
+      {
+        "label": "R138",
+        "target": "ref-r138",
+        "line": 1309
+      },
+      {
+        "label": "R65",
+        "target": "ref-r65",
+        "line": 1340
+      },
+      {
+        "label": "R128",
+        "target": "ref-r128",
+        "line": 1340
+      },
+      {
+        "label": "R128",
+        "target": "ref-r128",
+        "line": 1343
+      },
+      {
+        "label": "R65",
+        "target": "ref-r65",
+        "line": 1343
+      },
+      {
+        "label": "R63",
+        "target": "ref-r63",
+        "line": 1349
+      },
+      {
+        "label": "R112",
+        "target": "ref-r112",
+        "line": 1349
+      },
+      {
+        "label": "R165",
+        "target": "ref-r165",
+        "line": 1374
+      },
+      {
+        "label": "R166",
+        "target": "ref-r166",
+        "line": 1374
+      },
+      {
+        "label": "R167",
+        "target": "ref-r167",
+        "line": 1393
+      },
+      {
+        "label": "R9",
+        "target": "ref-r9",
+        "line": 1425
+      },
+      {
+        "label": "R110",
+        "target": "ref-r110",
+        "line": 1425
+      },
+      {
+        "label": "R107",
+        "target": "ref-r107",
+        "line": 1442
+      },
+      {
+        "label": "R9",
+        "target": "ref-r9",
+        "line": 1442
+      },
+      {
+        "label": "R108",
+        "target": "ref-r108",
+        "line": 1442
+      },
+      {
+        "label": "R10",
+        "target": "ref-r10",
+        "line": 1462
+      },
+      {
+        "label": "R11",
+        "target": "ref-r11",
+        "line": 1480
+      },
+      {
+        "label": "R100",
+        "target": "ref-r100",
+        "line": 1480
+      },
+      {
+        "label": "R101",
+        "target": "ref-r101",
+        "line": 1480
+      },
+      {
+        "label": "R102",
+        "target": "ref-r102",
+        "line": 1480
+      },
+      {
+        "label": "R142",
+        "target": "ref-r142",
+        "line": 1482
+      },
+      {
+        "label": "R20",
+        "target": "ref-r20",
+        "line": 1484
+      },
+      {
+        "label": "R21",
+        "target": "ref-r21",
+        "line": 1484
+      },
+      {
+        "label": "R19",
+        "target": "ref-r19",
+        "line": 1488
+      },
+      {
+        "label": "R105",
+        "target": "ref-r105",
+        "line": 1488
+      },
+      {
+        "label": "R104",
+        "target": "ref-r104",
+        "line": 1488
+      },
+      {
+        "label": "R111",
+        "target": "ref-r111",
+        "line": 1505
+      },
+      {
+        "label": "R79",
+        "target": "ref-r79",
+        "line": 1525
+      },
+      {
+        "label": "R80",
+        "target": "ref-r80",
+        "line": 1525
+      },
+      {
+        "label": "R82",
+        "target": "ref-r82",
+        "line": 1525
+      },
+      {
+        "label": "R81",
+        "target": "ref-r81",
+        "line": 1525
+      },
+      {
+        "label": "R106",
+        "target": "ref-r106",
+        "line": 1549
+      },
+      {
+        "label": "R122",
+        "target": "ref-r122",
+        "line": 1549
+      },
+      {
+        "label": "R56",
+        "target": "ref-r56",
+        "line": 1570
+      },
+      {
+        "label": "R56",
+        "target": "ref-r56",
+        "line": 1575
+      },
+      {
+        "label": "R113",
+        "target": "ref-r113",
+        "line": 1581
+      },
+      {
+        "label": "R114",
+        "target": "ref-r114",
+        "line": 1581
+      },
+      {
+        "label": "R121",
+        "target": "ref-r121",
+        "line": 1624
+      },
+      {
+        "label": "R122",
+        "target": "ref-r122",
+        "line": 1636
+      },
+      {
+        "label": "R13",
+        "target": "ref-r13",
+        "line": 1636
+      },
+      {
+        "label": "R12",
+        "target": "ref-r12",
+        "line": 1640
+      },
+      {
+        "label": "R121",
+        "target": "ref-r121",
+        "line": 1670
+      },
+      {
+        "label": "R69",
+        "target": "ref-r69",
+        "line": 1671
+      },
+      {
+        "label": "R120",
+        "target": "ref-r120",
+        "line": 1671
+      },
+      {
+        "label": "R58",
+        "target": "ref-r58",
+        "line": 1674
+      },
+      {
+        "label": "R123",
+        "target": "ref-r123",
+        "line": 1686
+      },
+      {
+        "label": "R124",
+        "target": "ref-r124",
+        "line": 1686
+      },
+      {
+        "label": "R125",
+        "target": "ref-r125",
+        "line": 1692
+      },
+      {
+        "label": "R126",
+        "target": "ref-r126",
+        "line": 1692
+      },
+      {
+        "label": "R62",
+        "target": "ref-r62",
+        "line": 1731
+      },
+      {
+        "label": "R129",
+        "target": "ref-r129",
+        "line": 1739
+      },
+      {
+        "label": "R64",
+        "target": "ref-r64",
+        "line": 1739
+      },
+      {
+        "label": "R56",
+        "target": "ref-r56",
+        "line": 1745
+      },
+      {
+        "label": "R60",
+        "target": "ref-r60",
+        "line": 1746
+      },
+      {
+        "label": "R43",
+        "target": "ref-r43",
+        "line": 1748
+      },
+      {
+        "label": "R61",
+        "target": "ref-r61",
+        "line": 1751
+      },
+      {
+        "label": "R137",
+        "target": "ref-r137",
+        "line": 1751
+      },
+      {
+        "label": "R127",
+        "target": "ref-r127",
+        "line": 1753
+      },
+      {
+        "label": "R56",
+        "target": "ref-r56",
+        "line": 1753
+      },
+      {
+        "label": "R59",
+        "target": "ref-r59",
+        "line": 1780
+      },
+      {
+        "label": "R128",
+        "target": "ref-r128",
+        "line": 1806
+      },
+      {
+        "label": "R127",
+        "target": "ref-r127",
+        "line": 1808
+      },
+      {
+        "label": "R60",
+        "target": "ref-r60",
+        "line": 1812
+      },
+      {
+        "label": "R64",
+        "target": "ref-r64",
+        "line": 1812
+      },
+      {
+        "label": "R61",
+        "target": "ref-r61",
+        "line": 1816
+      },
+      {
+        "label": "R137",
+        "target": "ref-r137",
+        "line": 1818
+      },
+      {
+        "label": "R62",
+        "target": "ref-r62",
+        "line": 1818
+      },
+      {
+        "label": "R64",
+        "target": "ref-r64",
+        "line": 1818
+      },
+      {
+        "label": "R68",
+        "target": "ref-r68",
+        "line": 1818
+      },
+      {
+        "label": "R164",
+        "target": "ref-r164",
+        "line": 1826
+      },
+      {
+        "label": "R155",
+        "target": "ref-r155",
+        "line": 1882
+      },
+      {
+        "label": "R156",
+        "target": "ref-r156",
+        "line": 1882
+      },
+      {
+        "label": "R64",
+        "target": "ref-r64",
+        "line": 1914
+      },
+      {
+        "label": "R61",
+        "target": "ref-r61",
+        "line": 1914
+      },
+      {
+        "label": "R66",
+        "target": "ref-r66",
+        "line": 1925
+      },
+      {
+        "label": "R67",
+        "target": "ref-r67",
+        "line": 1925
+      },
+      {
+        "label": "R57",
+        "target": "ref-r57",
+        "line": 1929
+      },
+      {
+        "label": "R71",
+        "target": "ref-r71",
+        "line": 1929
+      },
+      {
+        "label": "R57",
+        "target": "ref-r57",
+        "line": 1931
+      },
+      {
+        "label": "R70",
+        "target": "ref-r70",
+        "line": 1966
+      },
+      {
+        "label": "R72",
+        "target": "ref-r72",
+        "line": 1966
+      },
+      {
+        "label": "R59",
+        "target": "ref-r59",
+        "line": 2035
+      },
+      {
+        "label": "R68",
+        "target": "ref-r68",
+        "line": 2035
+      },
+      {
+        "label": "R63",
+        "target": "ref-r63",
+        "line": 2150
+      },
+      {
+        "label": "R57",
+        "target": "ref-r57",
+        "line": 2156
+      },
+      {
+        "label": "R71",
+        "target": "ref-r71",
+        "line": 2156
+      },
+      {
+        "label": "R149",
+        "target": "ref-r149",
+        "line": 2212
+      },
+      {
+        "label": "R150",
+        "target": "ref-r150",
+        "line": 2212
+      },
+      {
+        "label": "R163",
+        "target": "ref-r163",
+        "line": 2284
+      },
+      {
+        "label": "R162",
+        "target": "ref-r162",
+        "line": 2286
+      },
+      {
+        "label": "R149",
+        "target": "ref-r149",
+        "line": 2341
+      },
+      {
+        "label": "R150",
+        "target": "ref-r150",
+        "line": 2341
+      },
+      {
+        "label": "R164",
+        "target": "ref-r164",
+        "line": 2355
+      },
+      {
+        "label": "R155",
+        "target": "ref-r155",
+        "line": 2384
+      },
+      {
+        "label": "R156",
+        "target": "ref-r156",
+        "line": 2384
+      },
+      {
+        "label": "R43",
+        "target": "ref-r43",
+        "line": 2461
+      },
+      {
+        "label": "R61",
+        "target": "ref-r61",
+        "line": 2461
+      },
+      {
+        "label": "R68",
+        "target": "ref-r68",
+        "line": 2461
+      },
+      {
+        "label": "R85",
+        "target": "ref-r85",
+        "line": 2494
+      },
+      {
+        "label": "R142",
+        "target": "ref-r142",
+        "line": 2501
+      },
+      {
+        "label": "R56",
+        "target": "ref-r56",
+        "line": 2510
+      },
+      {
+        "label": "R65",
+        "target": "ref-r65",
+        "line": 2515
+      },
+      {
+        "label": "R128",
+        "target": "ref-r128",
+        "line": 2515
+      },
+      {
+        "label": "R127",
+        "target": "ref-r127",
+        "line": 2516
+      },
+      {
+        "label": "R132",
+        "target": "ref-r132",
+        "line": 2890
+      },
+      {
+        "label": "R133",
+        "target": "ref-r133",
+        "line": 2890
+      },
+      {
+        "label": "R3",
+        "target": "ref-r3",
+        "line": 2952
+      },
+      {
+        "label": "R1",
+        "target": "ref-r1",
+        "line": 2952
+      },
+      {
+        "label": "R74",
+        "target": "ref-r74",
+        "line": 2952
+      },
+      {
+        "label": "R76",
+        "target": "ref-r76",
+        "line": 2952
+      },
+      {
+        "label": "R4",
+        "target": "ref-r4",
+        "line": 2953
+      },
+      {
+        "label": "R79",
+        "target": "ref-r79",
+        "line": 2953
+      },
+      {
+        "label": "R80",
+        "target": "ref-r80",
+        "line": 2953
+      },
+      {
+        "label": "R81",
+        "target": "ref-r81",
+        "line": 2953
+      },
+      {
+        "label": "R135",
+        "target": "ref-r135",
+        "line": 2953
+      },
+      {
+        "label": "R82",
+        "target": "ref-r82",
+        "line": 2953
+      },
+      {
+        "label": "R5",
+        "target": "ref-r5",
+        "line": 2954
+      },
+      {
+        "label": "R45",
+        "target": "ref-r45",
+        "line": 2954
+      },
+      {
+        "label": "R87",
+        "target": "ref-r87",
+        "line": 2954
+      },
+      {
+        "label": "R88",
+        "target": "ref-r88",
+        "line": 2954
+      },
+      {
+        "label": "R8",
+        "target": "ref-r8",
+        "line": 2955
+      },
+      {
+        "label": "R1",
+        "target": "ref-r1",
+        "line": 2955
+      },
+      {
+        "label": "R55",
+        "target": "ref-r55",
+        "line": 2956
+      },
+      {
+        "label": "R53",
+        "target": "ref-r53",
+        "line": 2957
+      },
+      {
+        "label": "R6",
+        "target": "ref-r6",
+        "line": 2963
+      },
+      {
+        "label": "R100",
+        "target": "ref-r100",
+        "line": 2963
+      },
+      {
+        "label": "R101",
+        "target": "ref-r101",
+        "line": 2963
+      },
+      {
+        "label": "R102",
+        "target": "ref-r102",
+        "line": 2963
+      },
+      {
+        "label": "R9",
+        "target": "ref-r9",
+        "line": 2963
+      },
+      {
+        "label": "R110",
+        "target": "ref-r110",
+        "line": 2963
+      },
+      {
+        "label": "R7",
+        "target": "ref-r7",
+        "line": 2964
+      },
+      {
+        "label": "R106",
+        "target": "ref-r106",
+        "line": 2964
+      },
+      {
+        "label": "R122",
+        "target": "ref-r122",
+        "line": 2964
+      },
+      {
+        "label": "R107",
+        "target": "ref-r107",
+        "line": 2964
+      },
+      {
+        "label": "R109",
+        "target": "ref-r109",
+        "line": 2965
+      },
+      {
+        "label": "R14",
+        "target": "ref-r14",
+        "line": 2965
+      },
+      {
+        "label": "R79",
+        "target": "ref-r79",
+        "line": 2965
+      },
+      {
+        "label": "R80",
+        "target": "ref-r80",
+        "line": 2965
+      },
+      {
+        "label": "R15",
+        "target": "ref-r15",
+        "line": 2966
+      },
+      {
+        "label": "R138",
+        "target": "ref-r138",
+        "line": 2966
+      },
+      {
+        "label": "R16",
+        "target": "ref-r16",
+        "line": 2967
+      },
+      {
+        "label": "R107",
+        "target": "ref-r107",
+        "line": 2967
+      },
+      {
+        "label": "R108",
+        "target": "ref-r108",
+        "line": 2967
+      },
+      {
+        "label": "R9",
+        "target": "ref-r9",
+        "line": 2967
+      },
+      {
+        "label": "R17",
+        "target": "ref-r17",
+        "line": 2968
+      },
+      {
+        "label": "R18",
+        "target": "ref-r18",
+        "line": 2968
+      },
+      {
+        "label": "R104",
+        "target": "ref-r104",
+        "line": 2968
+      },
+      {
+        "label": "R19",
+        "target": "ref-r19",
+        "line": 2968
+      },
+      {
+        "label": "R105",
+        "target": "ref-r105",
+        "line": 2968
+      },
+      {
+        "label": "R7",
+        "target": "ref-r7",
+        "line": 2976
+      },
+      {
+        "label": "R14",
+        "target": "ref-r14",
+        "line": 2977
+      },
+      {
+        "label": "R107",
+        "target": "ref-r107",
+        "line": 2980
+      },
+      {
+        "label": "R7",
+        "target": "ref-r7",
+        "line": 2980
+      },
+      {
+        "label": "R14",
+        "target": "ref-r14",
+        "line": 2980
+      },
+      {
+        "label": "R96",
+        "target": "ref-r96",
+        "line": 3005
+      },
+      {
+        "label": "R119",
+        "target": "ref-r119",
+        "line": 3005
+      },
+      {
+        "label": "R4",
+        "target": "ref-r4",
+        "line": 3008
+      },
+      {
+        "label": "R14",
+        "target": "ref-r14",
+        "line": 3008
+      },
+      {
+        "label": "R51",
+        "target": "ref-r51",
+        "line": 3012
+      },
+      {
+        "label": "R57",
+        "target": "ref-r57",
+        "line": 3012
+      },
+      {
+        "label": "R73",
+        "target": "ref-r73",
+        "line": 3012
+      },
+      {
+        "label": "R22",
+        "target": "ref-r22",
+        "line": 3012
+      },
+      {
+        "label": "R43",
+        "target": "ref-r43",
+        "line": 3012
+      },
+      {
+        "label": "R44",
+        "target": "ref-r44",
+        "line": 3012
+      },
+      {
+        "label": "R51",
+        "target": "ref-r51",
+        "line": 3012
+      },
+      {
+        "label": "R73",
+        "target": "ref-r73",
+        "line": 3012
+      },
+      {
+        "label": "R57",
+        "target": "ref-r57",
+        "line": 3012
+      },
+      {
+        "label": "R22",
+        "target": "ref-r22",
+        "line": 3012
+      },
+      {
+        "label": "R43",
+        "target": "ref-r43",
+        "line": 3012
+      },
+      {
+        "label": "R44",
+        "target": "ref-r44",
+        "line": 3012
+      },
+      {
+        "label": "R56",
+        "target": "ref-r56",
+        "line": 3012
+      },
+      {
+        "label": "R74",
+        "target": "ref-r74",
+        "line": 3031
+      },
+      {
+        "label": "R146",
+        "target": "ref-r146",
+        "line": 3031
+      },
+      {
+        "label": "R1",
+        "target": "ref-r1",
+        "line": 3114
+      },
+      {
+        "label": "R72",
+        "target": "ref-r72",
+        "line": 3114
+      },
+      {
+        "label": "R22",
+        "target": "ref-r22",
+        "line": 3114
+      },
+      {
+        "label": "R51",
+        "target": "ref-r51",
+        "line": 3114
+      },
+      {
+        "label": "R56",
+        "target": "ref-r56",
+        "line": 3114
+      },
+      {
+        "label": "R57",
+        "target": "ref-r57",
+        "line": 3114
+      },
+      {
+        "label": "R73",
+        "target": "ref-r73",
+        "line": 3114
+      },
+      {
+        "label": "R74",
+        "target": "ref-r74",
+        "line": 3114
+      },
+      {
+        "label": "R146",
+        "target": "ref-r146",
+        "line": 3114
+      },
+      {
+        "label": "R57",
+        "target": "ref-r57",
+        "line": 3262
+      },
+      {
+        "label": "R57",
+        "target": "ref-r57",
+        "line": 3262
+      },
+      {
+        "label": "R167",
+        "target": "ref-r167",
+        "line": 3430
+      },
+      {
+        "label": "R57",
+        "target": "ref-r57",
+        "line": 3430
+      },
+      {
+        "label": "R59",
+        "target": "ref-r59",
+        "line": 3430
+      },
+      {
+        "label": "R68",
+        "target": "ref-r68",
+        "line": 3430
+      },
+      {
+        "label": "R149",
+        "target": "ref-r149",
+        "line": 3430
+      },
+      {
+        "label": "R150",
+        "target": "ref-r150",
+        "line": 3430
+      },
+      {
+        "label": "R154",
+        "target": "ref-r154",
+        "line": 3430
+      }
+    ],
+    "diagnostics": {
+      "duplicate_reference_entry": [],
+      "unresolved_citation": []
+    }
+  }
+]

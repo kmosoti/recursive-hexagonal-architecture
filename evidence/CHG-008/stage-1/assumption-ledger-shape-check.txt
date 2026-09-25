@@ -1,0 +1,2 @@
+TOML parse passed; all support paths exist. Renderer row names all three tested implementations. This is not JSON Schema/rha-lint validation of the assumption-ledger family.
+Compared against preceding commit: only renderer support/statement and the clock display explanation changed; every other assumption row is identical.

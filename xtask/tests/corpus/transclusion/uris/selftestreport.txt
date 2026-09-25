@@ -1,0 +1,9 @@
+PASS cases=153
+PASS legacy_rows_preserved=148
+PASS authored_controls=25
+PASS added_controls=5
+PASS seeded_cases=128 seed=90092028
+PASS differential expected-values=reference for every row
+PASS control coverage=empty/query/fragment/scheme/path/image/unicode/percent/dot-segments/NFC/self-import
+PASS full-package metadata=derived from frozen snapshots
+PASS read-only mode=no files written

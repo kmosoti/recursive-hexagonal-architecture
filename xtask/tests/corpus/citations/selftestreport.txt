@@ -1,0 +1,41 @@
+PASS simple entry recognized with correct anchor
+PASS letter-suffix entry lowercases only the letter
+PASS entry at end of paragraph (label alone)
+PASS label not first is not an entry
+PASS label followed by non-space is not an entry
+PASS lowercase r is not a label
+PASS no digits is not a label
+PASS uppercase letter suffix is not a label
+PASS two-letter suffix is not a label
+PASS duplicate entry: only the first is a ReferenceEntry
+PASS duplicate entry: diagnostic cites first_line and second_line
+PASS duplicate entry: the second label counts as a citation, resolved to the first entry
+PASS triple duplicate: both later paragraphs cite first_line=1
+PASS citation in inline code is excluded
+PASS citation in fenced code block is excluded
+PASS citation in link text and destination is excluded
+PASS citation in wikilink is excluded
+PASS citation in transclusion is excluded
+PASS citation in image alt is excluded
+PASS citation in heading text is excluded
+PASS text between two inline HTML tags is recognized
+PASS a link reference definition turns a bare [R1] into a link, not a citation
+PASS a link reference definition for one label does not affect another
+PASS a range is two independent citations with '-' as ordinary text between them
+PASS a comma list is not a citation form: no bracket matches the label grammar
+PASS unresolved citation on a page with entries is diagnosed
+PASS unresolved citation on a page without entries is not diagnosed
+PASS a citation inside an entry's own text is recognized
+PASS an entry citing its own label later in its own text is a citation
+PASS a table cell entry attempt is not an entry, only a citation
+PASS case_count=69
+PASS case ids are unique
+PASS the real spec records no DuplicateReferenceEntry diagnostic
+PASS the real spec records no UnresolvedCitation diagnostic
+PASS case_count=69
+PASS synthetic_case_count=68
+PASS spec_case_reference_entry_count=168
+PASS spec_case_citation_count=411
+PASS spec_case_duplicate_reference_entry_count=0
+PASS spec_case_unresolved_citation_count=0
+PASS all selftests executed without assertion failure

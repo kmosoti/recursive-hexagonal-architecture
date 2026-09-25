@@ -1,0 +1,26 @@
+schema_version = 1
+package = "transclusion-sections"
+eventual_path = "xtask/tests/corpus/transclusion/sections"
+seed = 90092027
+model = "gpt-5.6-luna"
+effort = "high"
+case_count = 80
+kind_count = 1
+payload_count = 7
+content_sha256 = "c727fe249b0e5fbfb3a3341a57972a7fbe9320cfe8b09b81ce78d493aacb3de9"
+
+[case_counts]
+section = 80
+
+[source_snapshots]
+contract_path = "xtask/tests/corpus/transclusion/sections/source-snapshots/contract.md"
+contract_sha256 = "603120d9ebab92619d67f8caec7172c07793d3e0f80e67912b4d05a402c489e0"
+bdr_path = "xtask/tests/corpus/transclusion/sections/source-snapshots/bdr.md"
+bdr_sha256 = "907b00767da407ccad7ce7f9fbbbac0e2c1746227f2b7981e6681321476f4e28"
+prompt_path = "xtask/tests/corpus/transclusion/sections/source-snapshots/prompt.md"
+prompt_sha256 = "f119f7892c3c9c9a18a4c148ace5ddf1e7ffd1718fee0264fa251c2c1948e015"
+
+[original_paths]
+contract = "docs/architecture/transclusion-contract.md"
+bdr = "docs/adr/BDR-0007-site-owns-page-tree.md"
+prompt = "xtask/tests/corpus/write-prompts/CHG-008/pd-transclusion-sections-generator-prompt.md"

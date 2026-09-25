@@ -37,7 +37,7 @@ fn the_renderer_meets_the_site_contract_and_escapes_page_text() {
     let none = |_: &library::PageId| None;
     let pages: Vec<_> = docs
         .iter()
-        .map(|d| DefaultAssembler.assemble(d, &graph, &none, &AssembleContext::default()))
+        .map(|d| DefaultAssembler.assemble(d, &docs, &graph, &none, &AssembleContext::default()))
         .collect();
     assert!(site::contract::page_renderer(&HtmlRenderer, &pages).is_empty());
     let a = String::from_utf8(site::PageRenderer::render(&HtmlRenderer, &pages[0]).bytes)
@@ -95,7 +95,7 @@ fn hrefs_are_encoded_and_md_links_point_at_the_produced_page() {
     let html = String::from_utf8(
         site::PageRenderer::render(
             &HtmlRenderer,
-            &DefaultAssembler.assemble(start, &graph, &none, &AssembleContext::default()),
+            &DefaultAssembler.assemble(start, &docs, &graph, &none, &AssembleContext::default()),
         )
         .bytes,
     )

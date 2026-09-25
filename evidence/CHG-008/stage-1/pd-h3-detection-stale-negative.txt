@@ -1,0 +1,26 @@
+nondeterministic renderer: [NonDeterministic { page: "a" }, NonDeterministic { page: "b" }]
+panicking renderer: [Panicked { page: "a" }, Panicked { page: "b" }]
+TOC-dropping renderer: [TocNotObserved { page: "a" }, TocNotObserved { page: "b" }]
+StubRenderer: []
+HtmlRenderer: []
+JsonRenderer: [TocNotObserved { page: "a" }, TocNotObserved { page: "b" }]
+
+Seeded panic stderr (caught by contract):
+
+thread 'main' (2875959) panicked at target/m2/pd-h3-detection-probe.rs:98:9:
+render panic
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+thread 'main' (2875959) panicked at target/m2/pd-h3-detection-probe.rs:98:9:
+render panic
+
+thread 'main' (2875959) panicked at target/m2/pd-h3-detection-probe.rs:98:9:
+render panic
+
+thread 'main' (2875959) panicked at target/m2/pd-h3-detection-probe.rs:98:9:
+render panic
+
+thread 'main' (2875959) panicked at target/m2/pd-h3-detection-probe.rs:355:39:
+assertion failed: violations.is_empty()
+
+exit: 101

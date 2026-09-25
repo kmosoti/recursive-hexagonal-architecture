@@ -1,0 +1,23 @@
+# git diff --numstat 863090b 79e89b33e3cc1da122439cc106fb54f6859b1bfc -- crates (transclusion stage, CHG-009)
+2	2	crates/adapter-html/tests/escaping.rs
+1	1	crates/adapter-json/tests/common/mod.rs
+22	1	crates/app-cli/src/main.rs
+407	0	crates/app-cli/tests/transclusion.rs
+1	0	crates/document/Cargo.toml
+3	1	crates/document/src/lib.rs
+11	0	crates/document/src/node.rs
+185	42	crates/document/src/parse.rs
+110	0	crates/document/src/section.rs
+605	0	crates/document/tests/transclusion.rs
+1	0	crates/graph/Cargo.toml
+239	39	crates/graph/src/lib.rs
+116	0	crates/graph/src/transclusion.rs
+225	0	crates/graph/src/transclusion_tests.rs
+10	0	crates/graph/tests/oracle_resolve.rs
+1	0	crates/site/Cargo.toml
+591	5	crates/site/src/assembly/mod.rs
+370	0	crates/site/src/assembly/transclusion_tests.rs
+7	1	crates/site/src/build/mod.rs
+53	2	crates/site/src/lib.rs
+1	0	crates/site/tests/assurance_controls.rs
+3	3	crates/site/tests/build_properties.rs

@@ -1,0 +1,27 @@
+# git diff --numstat e2a2f95 0339267140802add3b2fe93836d8dd4219a8eadd -- crates (citation stage, CHG-011)
+3	0	crates/adapter-html/src/lib.rs
+121	0	crates/adapter-html/tests/anchor.rs
+5	1	crates/adapter-json/src/lib.rs
+128	0	crates/adapter-json/tests/anchor.rs
+6	0	crates/adapter-json/tests/common/mod.rs
+315	0	crates/app-cli/tests/citations_render.rs
+427	0	crates/app-cli/tests/citations_supplementary.rs
+88	0	crates/document/src/citation.rs
+12	0	crates/document/src/lib.rs
+4	0	crates/document/src/node.rs
+200	5	crates/document/src/parse.rs
+2	1	crates/document/src/section.rs
+137	13	crates/document/src/section_ref.rs
+371	0	crates/document/tests/citation_edge_cases.rs
+720	0	crates/document/tests/citation_properties.rs
+500	0	crates/document/tests/citations.rs
+169	0	crates/document/tests/citations_review.rs
+84	0	crates/document/tests/citations_review_2.rs
+73	0	crates/document/tests/citations_review_3.rs
+35	0	crates/document/tests/citations_unchanged.rs
+222	0	crates/document/tests/data/pre_citation_trees.json
+21	1	crates/document/tests/section_refs.rs
+13	4	crates/document/tests/transclusion.rs
+12	0	crates/site/src/assembly/mod.rs
+1	1	crates/site/src/assembly/transclusion_tests.rs
+299	0	crates/site/tests/citation_assembly.rs

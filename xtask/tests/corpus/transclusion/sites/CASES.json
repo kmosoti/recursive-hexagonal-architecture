@@ -1,0 +1,1406 @@
+[
+  {
+    "id": "TX01",
+    "kind": "site",
+    "sources": [
+      {
+        "path": "tx01/host",
+        "text": "# Host\nbefore\n\n![[tx01/target]]\n\nafter\n\n  ![[tx01/target#part]]  \n"
+      },
+      {
+        "path": "tx01/target",
+        "text": "# Target\nintro\n## Part\npart\n"
+      }
+    ],
+    "expected_documents": {
+      "tx01/host": {
+        "transclusions": [
+          {
+            "id": 0,
+            "target": "tx01/target",
+            "anchor": null,
+            "display": "tx01/target",
+            "line": 4
+          },
+          {
+            "id": 1,
+            "target": "tx01/target",
+            "anchor": "part",
+            "display": "tx01/target#part",
+            "line": 8
+          }
+        ],
+        "navigation_links": [],
+        "images": [],
+        "heading_slugs": [
+          "host"
+        ]
+      },
+      "tx01/target": {
+        "transclusions": [],
+        "navigation_links": [],
+        "images": [],
+        "heading_slugs": [
+          "target",
+          "part"
+        ]
+      }
+    },
+    "expected_check": {
+      "schema_version": 1,
+      "pages": 2,
+      "witnesses": [],
+      "counts": {}
+    },
+    "expected_exit": 0,
+    "expected_pages": {
+      "tx01/host": {
+        "toc_anchors": [
+          "host"
+        ],
+        "heading_ids": [
+          "host",
+          "tx-0-target",
+          "tx-0-part",
+          "tx-1-part"
+        ],
+        "wiki_targets": [],
+        "ordinary_hrefs": [],
+        "image_sources": [],
+        "text_includes": [
+          "before",
+          "intro",
+          "part",
+          "after"
+        ],
+        "text_excludes": []
+      }
+    }
+  },
+  {
+    "id": "TX02",
+    "kind": "site",
+    "sources": [
+      {
+        "path": "tx02/host",
+        "text": "# Exclusions\ninline ![[tx02/page]] after\n![[tx02/page|alias]]\n\\![[tx02/page]]\n! [[tx02/page]]\n`![[tx02/page]]`\n```md\n![[tx02/page]]\n```\n![[tx02/page]]\n![[tx02/other]]\n\n    ![[tx02/page]]\n"
+      },
+      {
+        "path": "tx02/page",
+        "text": "# Page\n"
+      },
+      {
+        "path": "tx02/other",
+        "text": "# Other\n"
+      }
+    ],
+    "expected_documents": {
+      "tx02/host": {
+        "transclusions": [],
+        "navigation_links": [
+          {
+            "target": "tx02/page",
+            "anchor": null,
+            "alias": null,
+            "line": 4
+          },
+          {
+            "target": "tx02/page",
+            "anchor": null,
+            "alias": null,
+            "line": 5
+          }
+        ],
+        "images": [
+          {
+            "src": "tx02/page",
+            "alt": "tx02/page"
+          },
+          {
+            "src": "tx02/page",
+            "alt": "alias"
+          },
+          {
+            "src": "tx02/page",
+            "alt": "tx02/page"
+          },
+          {
+            "src": "tx02/other",
+            "alt": "tx02/other"
+          }
+        ],
+        "heading_slugs": [
+          "exclusions"
+        ]
+      },
+      "tx02/page": {
+        "transclusions": [],
+        "navigation_links": [],
+        "images": [],
+        "heading_slugs": [
+          "page"
+        ]
+      },
+      "tx02/other": {
+        "transclusions": [],
+        "navigation_links": [],
+        "images": [],
+        "heading_slugs": [
+          "other"
+        ]
+      }
+    },
+    "expected_check": {
+      "schema_version": 1,
+      "pages": 3,
+      "witnesses": [],
+      "counts": {}
+    },
+    "expected_exit": 0,
+    "expected_pages": {
+      "tx02/host": {
+        "toc_anchors": [
+          "exclusions"
+        ],
+        "heading_ids": [
+          "exclusions"
+        ],
+        "wiki_targets": [
+          {
+            "page": "tx02/page",
+            "anchor": null
+          },
+          {
+            "page": "tx02/page",
+            "anchor": null
+          }
+        ],
+        "ordinary_hrefs": [],
+        "image_sources": [
+          "tx02/page",
+          "tx02/page",
+          "tx02/page",
+          "tx02/other"
+        ],
+        "text_includes": [
+          "alias",
+          "![[tx02/page]]"
+        ],
+        "text_excludes": [
+          "[transclusion unavailable:",
+          "[transclusion cycle:"
+        ]
+      }
+    }
+  },
+  {
+    "id": "TX03",
+    "kind": "site",
+    "sources": [
+      {
+        "path": "tx03/host",
+        "text": "# Contexts\n- ![[tx03/tight]]\n- adjacent ![[tx03/adjacent]]\n\n- ![[tx03/loose]]\n\n> ![[tx03/quote]]\n>\n> - ![[tx03/nested]]\n"
+      },
+      {
+        "path": "tx03/tight",
+        "text": "# Tight\ntight body\n"
+      },
+      {
+        "path": "tx03/loose",
+        "text": "# Loose\nloose body\n"
+      },
+      {
+        "path": "tx03/quote",
+        "text": "# Quote\nquote body\n"
+      },
+      {
+        "path": "tx03/nested",
+        "text": "# Nested\nnested body\n"
+      },
+      {
+        "path": "tx03/adjacent",
+        "text": "# Adjacent\nadjacent body\n"
+      }
+    ],
+    "expected_documents": {
+      "tx03/host": {
+        "transclusions": [
+          {
+            "id": 0,
+            "target": "tx03/tight",
+            "anchor": null,
+            "display": "tx03/tight",
+            "line": 2
+          },
+          {
+            "id": 1,
+            "target": "tx03/loose",
+            "anchor": null,
+            "display": "tx03/loose",
+            "line": 5
+          },
+          {
+            "id": 2,
+            "target": "tx03/quote",
+            "anchor": null,
+            "display": "tx03/quote",
+            "line": 7
+          },
+          {
+            "id": 3,
+            "target": "tx03/nested",
+            "anchor": null,
+            "display": "tx03/nested",
+            "line": 9
+          }
+        ],
+        "navigation_links": [],
+        "images": [
+          {
+            "src": "tx03/adjacent",
+            "alt": "tx03/adjacent"
+          }
+        ],
+        "heading_slugs": [
+          "contexts"
+        ]
+      },
+      "tx03/tight": {
+        "transclusions": [],
+        "navigation_links": [],
+        "images": [],
+        "heading_slugs": [
+          "tight"
+        ]
+      },
+      "tx03/loose": {
+        "transclusions": [],
+        "navigation_links": [],
+        "images": [],
+        "heading_slugs": [
+          "loose"
+        ]
+      },
+      "tx03/quote": {
+        "transclusions": [],
+        "navigation_links": [],
+        "images": [],
+        "heading_slugs": [
+          "quote"
+        ]
+      },
+      "tx03/nested": {
+        "transclusions": [],
+        "navigation_links": [],
+        "images": [],
+        "heading_slugs": [
+          "nested"
+        ]
+      },
+      "tx03/adjacent": {
+        "transclusions": [],
+        "navigation_links": [],
+        "images": [],
+        "heading_slugs": [
+          "adjacent"
+        ]
+      }
+    },
+    "expected_check": {
+      "schema_version": 1,
+      "pages": 6,
+      "witnesses": [],
+      "counts": {}
+    },
+    "expected_exit": 0,
+    "expected_pages": {
+      "tx03/host": {
+        "toc_anchors": [
+          "contexts"
+        ],
+        "heading_ids": [
+          "contexts",
+          "tx-0-tight",
+          "tx-1-loose",
+          "tx-2-quote",
+          "tx-3-nested"
+        ],
+        "wiki_targets": [],
+        "ordinary_hrefs": [],
+        "image_sources": [
+          "tx03/adjacent"
+        ],
+        "text_includes": [
+          "tight body",
+          "loose body",
+          "quote body",
+          "nested body"
+        ],
+        "text_excludes": [
+          "adjacent body"
+        ]
+      }
+    }
+  },
+  {
+    "id": "TX04",
+    "kind": "site",
+    "sources": [
+      {
+        "path": "tx04/host",
+        "text": "# Host\n![[tx04/sections#keep]]\n"
+      },
+      {
+        "path": "tx04/sections",
+        "text": "# Root\nroot\n## Keep\nkeep\n### Child\nchild\n## Peer\npeer\n# Higher\nhigher\n"
+      }
+    ],
+    "expected_documents": {
+      "tx04/host": {
+        "transclusions": [
+          {
+            "id": 0,
+            "target": "tx04/sections",
+            "anchor": "keep",
+            "display": "tx04/sections#keep",
+            "line": 2
+          }
+        ],
+        "navigation_links": [],
+        "images": [],
+        "heading_slugs": [
+          "host"
+        ]
+      },
+      "tx04/sections": {
+        "transclusions": [],
+        "navigation_links": [],
+        "images": [],
+        "heading_slugs": [
+          "root",
+          "keep",
+          "child",
+          "peer",
+          "higher"
+        ]
+      }
+    },
+    "expected_check": {
+      "schema_version": 1,
+      "pages": 2,
+      "witnesses": [],
+      "counts": {}
+    },
+    "expected_exit": 0,
+    "expected_pages": {
+      "tx04/host": {
+        "toc_anchors": [
+          "host"
+        ],
+        "heading_ids": [
+          "host",
+          "tx-0-keep",
+          "tx-0-child"
+        ],
+        "wiki_targets": [],
+        "ordinary_hrefs": [],
+        "image_sources": [],
+        "text_includes": [
+          "keep",
+          "child"
+        ],
+        "text_excludes": [
+          "peer",
+          "higher",
+          "root"
+        ]
+      }
+    }
+  },
+  {
+    "id": "TX05",
+    "kind": "site",
+    "sources": [
+      {
+        "path": "tx05/host",
+        "text": "# Host\n![[tx05/source#target]]\n"
+      },
+      {
+        "path": "tx05/source",
+        "text": "# Source\n1. first\n2. > ## Target\n   > target body\n   >\n   > ### Child\n   > child body\n   >\n   > ## Peer\n   > peer\n3. third\n"
+      }
+    ],
+    "expected_documents": {
+      "tx05/host": {
+        "transclusions": [
+          {
+            "id": 0,
+            "target": "tx05/source",
+            "anchor": "target",
+            "display": "tx05/source#target",
+            "line": 2
+          }
+        ],
+        "navigation_links": [],
+        "images": [],
+        "heading_slugs": [
+          "host"
+        ]
+      },
+      "tx05/source": {
+        "transclusions": [],
+        "navigation_links": [],
+        "images": [],
+        "heading_slugs": [
+          "source",
+          "target",
+          "child",
+          "peer"
+        ]
+      }
+    },
+    "expected_check": {
+      "schema_version": 1,
+      "pages": 2,
+      "witnesses": [],
+      "counts": {}
+    },
+    "expected_exit": 0,
+    "expected_pages": {
+      "tx05/host": {
+        "toc_anchors": [
+          "host"
+        ],
+        "heading_ids": [
+          "host",
+          "tx-0-target",
+          "tx-0-child"
+        ],
+        "wiki_targets": [],
+        "ordinary_hrefs": [],
+        "image_sources": [],
+        "text_includes": [
+          "target body",
+          "child body"
+        ],
+        "text_excludes": [
+          "first",
+          "peer",
+          "third"
+        ]
+      }
+    },
+    "selector_queries": [
+      {
+        "source": "tx05/source",
+        "anchor": "target",
+        "selected_heading_slugs": [
+          "target",
+          "child"
+        ],
+        "excluded_heading_slugs": [
+          "source",
+          "peer"
+        ],
+        "wrapper": "ordered-list-item-2-block-quote",
+        "ordered_start": 2
+      }
+    ]
+  },
+  {
+    "id": "TX06",
+    "kind": "site",
+    "sources": [
+      {
+        "path": "tx06/a",
+        "text": "# A\n![[tx06/b#keep]]\n"
+      },
+      {
+        "path": "tx06/b",
+        "text": "# B\n## Keep\nbefore\n\n![[tx06/c]]\n\nafter\n## Other\nother\n"
+      },
+      {
+        "path": "tx06/c",
+        "text": "# C\nc body\n"
+      }
+    ],
+    "expected_documents": {
+      "tx06/a": {
+        "transclusions": [
+          {
+            "id": 0,
+            "target": "tx06/b",
+            "anchor": "keep",
+            "display": "tx06/b#keep",
+            "line": 2
+          }
+        ],
+        "navigation_links": [],
+        "images": [],
+        "heading_slugs": [
+          "a"
+        ]
+      },
+      "tx06/b": {
+        "transclusions": [
+          {
+            "id": 0,
+            "target": "tx06/c",
+            "anchor": null,
+            "display": "tx06/c",
+            "line": 5
+          }
+        ],
+        "navigation_links": [],
+        "images": [],
+        "heading_slugs": [
+          "b",
+          "keep",
+          "other"
+        ]
+      },
+      "tx06/c": {
+        "transclusions": [],
+        "navigation_links": [],
+        "images": [],
+        "heading_slugs": [
+          "c"
+        ]
+      }
+    },
+    "expected_check": {
+      "schema_version": 1,
+      "pages": 3,
+      "witnesses": [],
+      "counts": {}
+    },
+    "expected_exit": 0,
+    "expected_pages": {
+      "tx06/a": {
+        "toc_anchors": [
+          "a"
+        ],
+        "heading_ids": [
+          "a",
+          "tx-0-keep",
+          "tx-0-0-c"
+        ],
+        "wiki_targets": [],
+        "ordinary_hrefs": [],
+        "image_sources": [],
+        "text_includes": [
+          "before",
+          "c body",
+          "after"
+        ],
+        "text_excludes": [
+          "other"
+        ]
+      }
+    }
+  },
+  {
+    "id": "TX07",
+    "kind": "site",
+    "sources": [
+      {
+        "path": "tx07/host",
+        "text": "# Controls\n![[tx07/exact]]\n\n![[unique]]\n\n![[tx07/missing]]\n\n![[common]]\n\n![[tx07/exact#nope]]\n"
+      },
+      {
+        "path": "tx07/exact",
+        "text": "# Exact\nexact body\n"
+      },
+      {
+        "path": "tx07/path/unique",
+        "text": "# Unique\nunique body\n"
+      },
+      {
+        "path": "tx07/a/common",
+        "text": "# Common A\ncommon a\n"
+      },
+      {
+        "path": "tx07/b/common",
+        "text": "# Common B\ncommon b\n"
+      }
+    ],
+    "expected_documents": {
+      "tx07/host": {
+        "transclusions": [
+          {
+            "id": 0,
+            "target": "tx07/exact",
+            "anchor": null,
+            "display": "tx07/exact",
+            "line": 2
+          },
+          {
+            "id": 1,
+            "target": "unique",
+            "anchor": null,
+            "display": "unique",
+            "line": 4
+          },
+          {
+            "id": 2,
+            "target": "tx07/missing",
+            "anchor": null,
+            "display": "tx07/missing",
+            "line": 6
+          },
+          {
+            "id": 3,
+            "target": "common",
+            "anchor": null,
+            "display": "common",
+            "line": 8
+          },
+          {
+            "id": 4,
+            "target": "tx07/exact",
+            "anchor": "nope",
+            "display": "tx07/exact#nope",
+            "line": 10
+          }
+        ],
+        "navigation_links": [],
+        "images": [],
+        "heading_slugs": [
+          "controls"
+        ]
+      },
+      "tx07/exact": {
+        "transclusions": [],
+        "navigation_links": [],
+        "images": [],
+        "heading_slugs": [
+          "exact"
+        ]
+      },
+      "tx07/path/unique": {
+        "transclusions": [],
+        "navigation_links": [],
+        "images": [],
+        "heading_slugs": [
+          "unique"
+        ]
+      },
+      "tx07/a/common": {
+        "transclusions": [],
+        "navigation_links": [],
+        "images": [],
+        "heading_slugs": [
+          "common-a"
+        ]
+      },
+      "tx07/b/common": {
+        "transclusions": [],
+        "navigation_links": [],
+        "images": [],
+        "heading_slugs": [
+          "common-b"
+        ]
+      }
+    },
+    "expected_check": {
+      "schema_version": 1,
+      "pages": 5,
+      "witnesses": [
+        {
+          "kind": "broken_transclusion",
+          "from": "tx07/host",
+          "target": "tx07/missing"
+        },
+        {
+          "kind": "ambiguous_transclusion",
+          "from": "tx07/host",
+          "target": "common",
+          "candidates": [
+            "tx07/a/common",
+            "tx07/b/common"
+          ]
+        },
+        {
+          "kind": "missing_transclusion_anchor",
+          "from": "tx07/host",
+          "target": "tx07/exact",
+          "heading": "nope"
+        }
+      ],
+      "counts": {
+        "broken_transclusion": 1,
+        "ambiguous_transclusion": 1,
+        "missing_transclusion_anchor": 1
+      }
+    },
+    "expected_exit": 1,
+    "expected_pages": {
+      "tx07/host": {
+        "toc_anchors": [
+          "controls"
+        ],
+        "heading_ids": [
+          "controls",
+          "tx-0-exact",
+          "tx-1-unique"
+        ],
+        "wiki_targets": [],
+        "ordinary_hrefs": [],
+        "image_sources": [],
+        "text_includes": [
+          "exact body",
+          "unique body",
+          "[transclusion unavailable: tx07/missing]",
+          "[transclusion unavailable: common]",
+          "[transclusion unavailable: tx07/exact#nope]"
+        ],
+        "text_excludes": []
+      }
+    }
+  },
+  {
+    "id": "TX08",
+    "kind": "site",
+    "sources": [
+      {
+        "path": "tx08/a",
+        "text": "# A\n## One\n![[tx08/a#one]]\n## Two\n![[tx08/b#two]]\n"
+      },
+      {
+        "path": "tx08/b",
+        "text": "# B\n## Two\n![[tx08/a#two]]\n"
+      }
+    ],
+    "expected_documents": {
+      "tx08/a": {
+        "transclusions": [
+          {
+            "id": 0,
+            "target": "tx08/a",
+            "anchor": "one",
+            "display": "tx08/a#one",
+            "line": 3
+          },
+          {
+            "id": 1,
+            "target": "tx08/b",
+            "anchor": "two",
+            "display": "tx08/b#two",
+            "line": 5
+          }
+        ],
+        "navigation_links": [],
+        "images": [],
+        "heading_slugs": [
+          "a",
+          "one",
+          "two"
+        ]
+      },
+      "tx08/b": {
+        "transclusions": [
+          {
+            "id": 0,
+            "target": "tx08/a",
+            "anchor": "two",
+            "display": "tx08/a#two",
+            "line": 3
+          }
+        ],
+        "navigation_links": [],
+        "images": [],
+        "heading_slugs": [
+          "b",
+          "two"
+        ]
+      }
+    },
+    "expected_check": {
+      "schema_version": 1,
+      "pages": 2,
+      "witnesses": [
+        {
+          "kind": "transclusion_cycle",
+          "path": [
+            "tx08/a#one",
+            "tx08/a#one"
+          ]
+        },
+        {
+          "kind": "transclusion_cycle",
+          "path": [
+            "tx08/a#two",
+            "tx08/b#two",
+            "tx08/a#two"
+          ]
+        }
+      ],
+      "counts": {
+        "transclusion_cycle": 2
+      }
+    },
+    "expected_exit": 1,
+    "expected_pages": {
+      "tx08/b": {
+        "toc_anchors": [
+          "b",
+          "two"
+        ],
+        "heading_ids": [
+          "b",
+          "two",
+          "tx-0-two"
+        ],
+        "wiki_targets": [],
+        "ordinary_hrefs": [],
+        "image_sources": [],
+        "text_includes": [
+          "[transclusion cycle: tx08/a#two -> tx08/b#two -> tx08/a#two]"
+        ],
+        "text_excludes": []
+      }
+    }
+  },
+  {
+    "id": "TX09",
+    "kind": "site",
+    "sources": [
+      {
+        "path": "tx09/a",
+        "text": "# A\n![[tx09/b#keep]]\n"
+      },
+      {
+        "path": "tx09/b",
+        "text": "# B\n## Keep\nkeep\n## Other\n![[tx09/a]]\n"
+      },
+      {
+        "path": "tx09/c",
+        "text": "# C\n![[tx09/c]]\n"
+      }
+    ],
+    "expected_documents": {
+      "tx09/a": {
+        "transclusions": [
+          {
+            "id": 0,
+            "target": "tx09/b",
+            "anchor": "keep",
+            "display": "tx09/b#keep",
+            "line": 2
+          }
+        ],
+        "navigation_links": [],
+        "images": [],
+        "heading_slugs": [
+          "a"
+        ]
+      },
+      "tx09/b": {
+        "transclusions": [
+          {
+            "id": 0,
+            "target": "tx09/a",
+            "anchor": null,
+            "display": "tx09/a",
+            "line": 5
+          }
+        ],
+        "navigation_links": [],
+        "images": [],
+        "heading_slugs": [
+          "b",
+          "keep",
+          "other"
+        ]
+      },
+      "tx09/c": {
+        "transclusions": [
+          {
+            "id": 0,
+            "target": "tx09/c",
+            "anchor": null,
+            "display": "tx09/c",
+            "line": 2
+          }
+        ],
+        "navigation_links": [],
+        "images": [],
+        "heading_slugs": [
+          "c"
+        ]
+      }
+    },
+    "expected_check": {
+      "schema_version": 1,
+      "pages": 3,
+      "witnesses": [
+        {
+          "kind": "transclusion_cycle",
+          "path": [
+            "tx09/c",
+            "tx09/c"
+          ]
+        }
+      ],
+      "counts": {
+        "transclusion_cycle": 1
+      }
+    },
+    "expected_exit": 1,
+    "expected_pages": {
+      "tx09/a": {
+        "toc_anchors": [
+          "a"
+        ],
+        "heading_ids": [
+          "a",
+          "tx-0-keep"
+        ],
+        "wiki_targets": [],
+        "ordinary_hrefs": [],
+        "image_sources": [],
+        "text_includes": [
+          "keep"
+        ],
+        "text_excludes": [
+          "other",
+          "[transclusion cycle:"
+        ]
+      },
+      "tx09/c": {
+        "toc_anchors": [
+          "c"
+        ],
+        "heading_ids": [
+          "c"
+        ],
+        "wiki_targets": [],
+        "ordinary_hrefs": [],
+        "image_sources": [],
+        "text_includes": [
+          "[transclusion cycle: tx09/c -> tx09/c]"
+        ],
+        "text_excludes": []
+      }
+    }
+  },
+  {
+    "id": "TX10",
+    "kind": "site",
+    "sources": [
+      {
+        "path": "tx10/a",
+        "text": "# A\n![[tx10/b#one]]\n\n![[tx10/c#one]]\n"
+      },
+      {
+        "path": "tx10/b",
+        "text": "# B\n## One\n![[tx10/c#one]]\n"
+      },
+      {
+        "path": "tx10/c",
+        "text": "# C\n## One\n![[tx10/a]]\n\n![[tx10/b#one]]\n"
+      }
+    ],
+    "expected_documents": {
+      "tx10/a": {
+        "transclusions": [
+          {
+            "id": 0,
+            "target": "tx10/b",
+            "anchor": "one",
+            "display": "tx10/b#one",
+            "line": 2
+          },
+          {
+            "id": 1,
+            "target": "tx10/c",
+            "anchor": "one",
+            "display": "tx10/c#one",
+            "line": 4
+          }
+        ],
+        "navigation_links": [],
+        "images": [],
+        "heading_slugs": [
+          "a"
+        ]
+      },
+      "tx10/b": {
+        "transclusions": [
+          {
+            "id": 0,
+            "target": "tx10/c",
+            "anchor": "one",
+            "display": "tx10/c#one",
+            "line": 3
+          }
+        ],
+        "navigation_links": [],
+        "images": [],
+        "heading_slugs": [
+          "b",
+          "one"
+        ]
+      },
+      "tx10/c": {
+        "transclusions": [
+          {
+            "id": 0,
+            "target": "tx10/a",
+            "anchor": null,
+            "display": "tx10/a",
+            "line": 3
+          },
+          {
+            "id": 1,
+            "target": "tx10/b",
+            "anchor": "one",
+            "display": "tx10/b#one",
+            "line": 5
+          }
+        ],
+        "navigation_links": [],
+        "images": [],
+        "heading_slugs": [
+          "c",
+          "one"
+        ]
+      }
+    },
+    "expected_check": {
+      "schema_version": 1,
+      "pages": 3,
+      "witnesses": [
+        {
+          "kind": "transclusion_cycle",
+          "path": [
+            "tx10/a",
+            "tx10/b#one",
+            "tx10/c#one",
+            "tx10/a"
+          ]
+        },
+        {
+          "kind": "transclusion_cycle",
+          "path": [
+            "tx10/b#one",
+            "tx10/c#one",
+            "tx10/b#one"
+          ]
+        }
+      ],
+      "counts": {
+        "transclusion_cycle": 2
+      }
+    },
+    "expected_exit": 1,
+    "expected_pages": {
+      "tx10/a": {
+        "toc_anchors": [
+          "a"
+        ],
+        "heading_ids": [
+          "a",
+          "tx-0-one",
+          "tx-0-0-one",
+          "tx-1-one"
+        ],
+        "wiki_targets": [],
+        "ordinary_hrefs": [],
+        "image_sources": [],
+        "text_includes": [
+          "[transclusion cycle: tx10/a -> tx10/b#one -> tx10/c#one -> tx10/a]",
+          "[transclusion cycle: tx10/b#one -> tx10/c#one -> tx10/b#one]"
+        ],
+        "text_excludes": []
+      }
+    }
+  },
+  {
+    "id": "TX11",
+    "kind": "site",
+    "sources": [
+      {
+        "path": "tx11/host",
+        "text": "# Host\n## tx-0-part\n\n![[tx11/source#part]]\n\n![[tx11/source#part]]\n"
+      },
+      {
+        "path": "tx11/source",
+        "text": "# Source\n## Part\nsource body\n[keep](#part)\n[miss](#unknown)\n[[tx11/other]]\n![pic](pic.png)\n"
+      },
+      {
+        "path": "tx11/other",
+        "text": "# Other\nother body\n"
+      }
+    ],
+    "expected_documents": {
+      "tx11/host": {
+        "transclusions": [
+          {
+            "id": 0,
+            "target": "tx11/source",
+            "anchor": "part",
+            "display": "tx11/source#part",
+            "line": 4
+          },
+          {
+            "id": 1,
+            "target": "tx11/source",
+            "anchor": "part",
+            "display": "tx11/source#part",
+            "line": 6
+          }
+        ],
+        "navigation_links": [],
+        "images": [],
+        "heading_slugs": [
+          "host",
+          "tx-0-part"
+        ]
+      },
+      "tx11/source": {
+        "transclusions": [],
+        "navigation_links": [
+          {
+            "target": "tx11/other",
+            "anchor": null,
+            "alias": null,
+            "line": 6
+          }
+        ],
+        "images": [
+          {
+            "src": "pic.png",
+            "alt": "pic"
+          }
+        ],
+        "heading_slugs": [
+          "source",
+          "part"
+        ]
+      },
+      "tx11/other": {
+        "transclusions": [],
+        "navigation_links": [],
+        "images": [],
+        "heading_slugs": [
+          "other"
+        ]
+      }
+    },
+    "expected_check": {
+      "schema_version": 1,
+      "pages": 3,
+      "witnesses": [],
+      "counts": {}
+    },
+    "expected_exit": 0,
+    "expected_pages": {
+      "tx11/host": {
+        "toc_anchors": [
+          "host",
+          "tx-0-part"
+        ],
+        "heading_ids": [
+          "host",
+          "tx-0-part",
+          "tx-0-part-2",
+          "tx-1-part"
+        ],
+        "wiki_targets": [
+          {
+            "page": "tx11/other",
+            "anchor": null
+          },
+          {
+            "page": "tx11/other",
+            "anchor": null
+          }
+        ],
+        "ordinary_hrefs": [
+          "#tx-0-part-2",
+          "source.md#unknown",
+          "#tx-1-part",
+          "source.md#unknown"
+        ],
+        "image_sources": [
+          "pic.png",
+          "pic.png"
+        ],
+        "text_includes": [
+          "source body",
+          "keep",
+          "miss"
+        ],
+        "text_excludes": [
+          "Source",
+          "Other"
+        ]
+      }
+    }
+  },
+  {
+    "id": "TX12",
+    "kind": "site",
+    "sources": [
+      {
+        "path": "tx12/é:dir/host",
+        "text": "# Host\n![[tx12/é:dir/origin#paths]]\n"
+      },
+      {
+        "path": "tx12/outer",
+        "text": "# Outer\n![[tx12/é:dir/origin#paths]]\n"
+      },
+      {
+        "path": "tx12/é:dir/origin",
+        "text": "# Origin\n## Paths\n[rel](../guide.md?x=1#frag)\n[query](?q=1)\n[scheme](./a:b.md)\n[web](https://example.com/a.md?x=1#f)\n[absolute](/abs/path)\n[proto](//cdn.example/x)\n[empty]()\n![relimg](../img.png)\n![schemeimg](./a:b.png)\n"
+      }
+    ],
+    "expected_documents": {
+      "tx12/é:dir/host": {
+        "transclusions": [
+          {
+            "id": 0,
+            "target": "tx12/é:dir/origin",
+            "anchor": "paths",
+            "display": "tx12/é:dir/origin#paths",
+            "line": 2
+          }
+        ],
+        "navigation_links": [],
+        "images": [],
+        "heading_slugs": [
+          "host"
+        ]
+      },
+      "tx12/outer": {
+        "transclusions": [
+          {
+            "id": 0,
+            "target": "tx12/é:dir/origin",
+            "anchor": "paths",
+            "display": "tx12/é:dir/origin#paths",
+            "line": 2
+          }
+        ],
+        "navigation_links": [],
+        "images": [],
+        "heading_slugs": [
+          "outer"
+        ]
+      },
+      "tx12/é:dir/origin": {
+        "transclusions": [],
+        "navigation_links": [],
+        "images": [
+          {
+            "src": "../img.png",
+            "alt": "relimg"
+          },
+          {
+            "src": "./a:b.png",
+            "alt": "schemeimg"
+          }
+        ],
+        "heading_slugs": [
+          "origin",
+          "paths"
+        ]
+      }
+    },
+    "expected_check": {
+      "schema_version": 1,
+      "pages": 3,
+      "witnesses": [],
+      "counts": {}
+    },
+    "expected_exit": 0,
+    "expected_pages": {
+      "tx12/é:dir/host": {
+        "toc_anchors": [
+          "host"
+        ],
+        "heading_ids": [
+          "host",
+          "tx-0-paths"
+        ],
+        "wiki_targets": [],
+        "ordinary_hrefs": [
+          "../guide.md?x=1#frag",
+          "origin.md?q=1",
+          "./a:b.md",
+          "https://example.com/a.md?x=1#f",
+          "/abs/path",
+          "//cdn.example/x",
+          "origin.md"
+        ],
+        "image_sources": [
+          "../img.png",
+          "./a:b.png"
+        ],
+        "text_includes": [
+          "rel",
+          "query",
+          "scheme",
+          "web",
+          "absolute",
+          "proto",
+          "empty",
+          "relimg",
+          "schemeimg"
+        ],
+        "text_excludes": [
+          "[transclusion unavailable:"
+        ]
+      },
+      "tx12/outer": {
+        "toc_anchors": [
+          "outer"
+        ],
+        "heading_ids": [
+          "outer",
+          "tx-0-paths"
+        ],
+        "wiki_targets": [],
+        "ordinary_hrefs": [
+          "guide.md?x=1#frag",
+          "%C3%A9%3Adir/origin.md?q=1",
+          "%C3%A9%3Adir/a:b.md",
+          "https://example.com/a.md?x=1#f",
+          "/abs/path",
+          "//cdn.example/x",
+          "%C3%A9%3Adir/origin.md"
+        ],
+        "image_sources": [
+          "img.png",
+          "%C3%A9%3Adir/a:b.png"
+        ],
+        "text_includes": [
+          "rel",
+          "query",
+          "scheme",
+          "web",
+          "absolute",
+          "proto",
+          "empty",
+          "relimg",
+          "schemeimg"
+        ],
+        "text_excludes": [
+          "[transclusion unavailable:"
+        ]
+      }
+    },
+    "expected_html_contains": {
+      "../guide.md?x=1#frag": "../guide.html?x=1#frag",
+      "origin.md?q=1": "origin.html?q=1",
+      "./a:b.md": "./a:b.html",
+      "https://example.com/a.md?x=1#f": "https://example.com/a.md?x=1#f",
+      "origin.md": "origin.html",
+      "guide.md?x=1#frag": "guide.html?x=1#frag",
+      "%C3%A9%3Adir/origin.md?q=1": "%C3%A9%3Adir/origin.html?q=1",
+      "%C3%A9%3Adir/a:b.md": "%C3%A9%3Adir/a:b.html",
+      "%C3%A9%3Adir/origin.md": "%C3%A9%3Adir/origin.html"
+    }
+  }
+]

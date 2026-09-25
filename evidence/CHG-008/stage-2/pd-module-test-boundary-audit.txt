@@ -1,0 +1,11 @@
+{"package": "/home/kmosoti/projects/rha-m2/target/m2/module-test-boundary", "cases": 12, "outcomes": {"refused": 9, "accepted": 3}, "payloads": 7, "files": 9, "content_sha256": "8733ce9ebf7d1d15f7d35ec7f3ae81861199c45ddc7aebffbf8c13a9fe40338f", "cases_sha256": "8925b750f672407d9faabd80ff87efe8923965c3a4dbb555b8a996840d721ec7"}
+{"package": "/home/kmosoti/projects/rha-m2/target/m2/verify-module-test-boundary", "cases": 12, "outcomes": {"refused": 9, "accepted": 3}, "payloads": 7, "files": 9, "content_sha256": "8733ce9ebf7d1d15f7d35ec7f3ae81861199c45ddc7aebffbf8c13a9fe40338f", "cases_sha256": "8925b750f672407d9faabd80ff87efe8923965c3a4dbb555b8a996840d721ec7"}
+COMMAND ['python3', '-B', '/home/kmosoti/projects/rha-m2/target/m2/verify-module-test-boundary/reference.py'] EXIT 0
+module-test-boundary: PASS cases=12 payloads=7 files=9
+COMMAND ['python3', '-B', '/home/kmosoti/projects/rha-m2/target/m2/verify-module-test-boundary/reference.py', '--reproduce', 'reproduced'] EXIT 0
+module-test-boundary: reproduced byte-identical package at /home/kmosoti/projects/rha-m2/target/m2/verify-module-test-boundary/reproduced
+BYTE_IDENTICAL_FILES 9
+{"package": "/home/kmosoti/projects/rha-m2/target/m2/verify-module-test-boundary/reproduced", "cases": 12, "outcomes": {"refused": 9, "accepted": 3}, "payloads": 7, "files": 9, "content_sha256": "8733ce9ebf7d1d15f7d35ec7f3ae81861199c45ddc7aebffbf8c13a9fe40338f", "cases_sha256": "8925b750f672407d9faabd80ff87efe8923965c3a4dbb555b8a996840d721ec7"}
+CORRUPTED_COPY_EXIT 1
+module-test-boundary: FAIL: payload digest mismatch: CASES.json
+VALID_COPY_ACCEPTED_AND_CASE_TAMPERING_REFUSED

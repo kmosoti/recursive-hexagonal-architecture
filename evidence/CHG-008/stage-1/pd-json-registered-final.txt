@@ -1,0 +1,21 @@
+   Compiling adapter-json v0.1.0 (/home/kmosoti/projects/rha-m2/crates/adapter-json)
+   Compiling app-cli v0.1.0 (/home/kmosoti/projects/rha-m2/crates/app-cli)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.12s
+     Running tests/registered.rs (target/debug/deps/registered-3007968e9bda427c)
+
+running 3 tests
+test symlinked_cases_file_is_refused_before_reading ... ok
+test corrupted_cases_copy_is_refused_without_touching_fixture ... ok
+adapter-json registered cases completed: 75
+test registered_json_adapter_cases_are_all_graded ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+
+     Running tests/json_renderer.rs (target/debug/deps/json_renderer-003ba78d1d1b740c)
+
+running 1 test
+CLI registered cases completed: 4
+test registered_cli_cases_are_exactly_graded ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+

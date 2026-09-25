@@ -1,0 +1,4 @@
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.10s
+     Running `target/debug/xtask rha lint evidence/CHG-008/stage-2/registration-counts.json`
+evidence/CHG-008/stage-2/registration-counts.json: rejected (unknown): schema.missing_field
+  schema /: record discriminator is missing

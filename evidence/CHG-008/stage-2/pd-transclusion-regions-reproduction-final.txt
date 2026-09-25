@@ -1,0 +1,20 @@
+COMMAND python3 -B target/m2/audit-semantic-package.py /home/kmosoti/projects/rha-m2/target/m2/verify-transclusion-regions region_graph
+{"cases": 262, "cases_sha256": "1812d1c3dc11a2c12116105590436768630886d8b00747c377efbe498f375b22", "content_sha256": "0a5f534edf4e6171961b5db2761f81237fa99e1f470b671247654ef5fed01812", "kind_counts": {"region_graph": 262}, "package": "/home/kmosoti/projects/rha-m2/target/m2/verify-transclusion-regions", "payload_count": 7}
+EXIT 0
+COMMAND python3 -B /home/kmosoti/projects/rha-m2/target/m2/verify-transclusion-regions/reference.py
+self-tests passed: 262 cases
+EXIT 0
+COMMAND python3 -B /home/kmosoti/projects/rha-m2/target/m2/verify-transclusion-regions/reference.py --reproduce-to reproduced
+reproduced package: /home/kmosoti/projects/rha-m2/target/m2/verify-transclusion-regions/reproduced
+EXIT 0
+BYTE_IDENTICAL_FILES 9
+COMMAND python3 -B target/m2/audit-semantic-package.py /home/kmosoti/projects/rha-m2/target/m2/verify-transclusion-regions/reproduced region_graph
+{"cases": 262, "cases_sha256": "1812d1c3dc11a2c12116105590436768630886d8b00747c377efbe498f375b22", "content_sha256": "0a5f534edf4e6171961b5db2761f81237fa99e1f470b671247654ef5fed01812", "kind_counts": {"region_graph": 262}, "package": "/home/kmosoti/projects/rha-m2/target/m2/verify-transclusion-regions/reproduced", "payload_count": 7}
+EXIT 0
+CORRUPTED_COPY_EXIT 1
+Traceback (most recent call last):
+  File "/home/kmosoti/projects/rha-m2/target/m2/audit-semantic-package.py", line 10, in <module>
+    file=p/name;assert file.is_file() and not file.is_symlink();assert h(file.read_bytes())==digest,name
+                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: CASES.json
+VALID_COPY_ACCEPTED_AND_CASE_CORRUPTION_REJECTED

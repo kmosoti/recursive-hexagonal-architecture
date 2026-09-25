@@ -1,0 +1,31 @@
+schema_version = 1
+package = "section-refs"
+eventual_path = "xtask/tests/corpus/section-refs"
+case_count = 84
+kind_count = 1
+payload_count = 6
+content_sha256 = "2c1bb793786017ef5f8760bbdd553df1d00bb3158568ac59a81b33eefe510617"
+model = "claude-sonnet-5"
+effort = "medium"
+
+[amendment]
+commit = "a3ca8de"
+description = "Settle five open questions in the §-reference contract before registration"
+contract_sha256_before = "69bd30bcd0093df7cf9a14cd40d43c0f428be3da102ac1a10d7566d98837a2e7"
+contract_sha256_after = "e86c980491bf1116dfbd008cfbc460bf8254786189b06bade1655a9c95071749"
+
+[case_counts]
+synthetic = 83
+real_spec = 1
+
+[source_digests]
+contract_sha256 = "e86c980491bf1116dfbd008cfbc460bf8254786189b06bade1655a9c95071749"
+prompt_sha256 = "2849e871b0783ced6f02bdf5cafcf97f293cd3828a0f29af6170cfa8d87f7a55"
+
+[source_paths]
+contract = "xtask/tests/corpus/section-refs/source-snapshots/contract.md"
+prompt = "xtask/tests/corpus/section-refs/source-snapshots/prompt.md"
+
+[original_paths]
+contract = "docs/architecture/section-reference-contract.md"
+prompt = "(oracle-author task prompt for CHG-010, no repository path; captured verbatim as given)"

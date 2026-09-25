@@ -1,0 +1,3282 @@
+[
+  {
+    "id": "heading-numeric-simple",
+    "markdown": "# 1. Problem, Scope, and Design Goals\n\nSee \u00a71 above.\n",
+    "refs": [
+      {
+        "text": "\u00a71",
+        "number": "1",
+        "target_heading_line": 1,
+        "line": 3
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "heading-numeric-multipart",
+    "markdown": "## 1.1 Target class\n\nSee \u00a71.1 above.\n",
+    "refs": [
+      {
+        "text": "\u00a71.1",
+        "number": "1.1",
+        "target_heading_line": 1,
+        "line": 3
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "heading-numeric-multipart-three",
+    "markdown": "### 11.7.6 Acceptance\n\nSee \u00a711.7.6 above.\n",
+    "refs": [
+      {
+        "text": "\u00a711.7.6",
+        "number": "11.7.6",
+        "target_heading_line": 1,
+        "line": 3
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "heading-numeric-no-trailing-dot",
+    "markdown": "## 2 Overview\n\nSee \u00a72 above.\n",
+    "refs": [
+      {
+        "text": "\u00a72",
+        "number": "2",
+        "target_heading_line": 1,
+        "line": 3
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "heading-numeric-end-of-heading-text",
+    "markdown": "## 3.4\n\nSee \u00a73.4 above.\n",
+    "refs": [
+      {
+        "text": "\u00a73.4",
+        "number": "3.4",
+        "target_heading_line": 1,
+        "line": 3
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "heading-appendix-simple",
+    "markdown": "# Appendix A. Mathematical Foundations\n\nSee \u00a7A above.\n",
+    "refs": [
+      {
+        "text": "\u00a7A",
+        "number": "A",
+        "target_heading_line": 1,
+        "line": 3
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "heading-appendix-multipart",
+    "markdown": "## Appendix B.2 Definitions\n\nSee \u00a7B.2 above.\n",
+    "refs": [
+      {
+        "text": "\u00a7B.2",
+        "number": "B.2",
+        "target_heading_line": 1,
+        "line": 3
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "heading-appendix-no-trailing-dot",
+    "markdown": "# Appendix C Overview\n\nSee \u00a7C above.\n",
+    "refs": [
+      {
+        "text": "\u00a7C",
+        "number": "C",
+        "target_heading_line": 1,
+        "line": 3
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "heading-appendix-end-of-heading-text",
+    "markdown": "# Appendix D\n\nSee \u00a7D above.\n",
+    "refs": [
+      {
+        "text": "\u00a7D",
+        "number": "D",
+        "target_heading_line": 1,
+        "line": 3
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "heading-leading-zero-distinct",
+    "markdown": "## 01. First\n## 1. Second\n\nReferences: \u00a701 and \u00a71.\n",
+    "refs": [
+      {
+        "text": "\u00a701",
+        "number": "01",
+        "target_heading_line": 1,
+        "line": 4
+      },
+      {
+        "text": "\u00a71",
+        "number": "1",
+        "target_heading_line": 2,
+        "line": 4
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "heading-decimal-distinct",
+    "markdown": "## 1.10 Ten\n## 1.1 One\n\nReferences: \u00a71.10 and \u00a71.1.\n",
+    "refs": [
+      {
+        "text": "\u00a71.10",
+        "number": "1.10",
+        "target_heading_line": 1,
+        "line": 4
+      },
+      {
+        "text": "\u00a71.1",
+        "number": "1.1",
+        "target_heading_line": 2,
+        "line": 4
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "heading-duplicate-number-first-wins",
+    "markdown": "## 5. First Instance\n\nSome text.\n\n## 5. Second Instance\n\nSee \u00a75 above.\n",
+    "refs": [
+      {
+        "text": "\u00a75",
+        "number": "5",
+        "target_heading_line": 1,
+        "line": 7
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "heading-numeric-and-appendix-together",
+    "markdown": "## 1. Intro\n## Appendix A. Foo\n\nSee \u00a71 and \u00a7A.\n",
+    "refs": [
+      {
+        "text": "\u00a71",
+        "number": "1",
+        "target_heading_line": 1,
+        "line": 4
+      },
+      {
+        "text": "\u00a7A",
+        "number": "A",
+        "target_heading_line": 2,
+        "line": 4
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "context-paragraph",
+    "markdown": "## 4. Heading\n\nA plain paragraph mentions \u00a74 here.\n",
+    "refs": [
+      {
+        "text": "\u00a74",
+        "number": "4",
+        "target_heading_line": 1,
+        "line": 3
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "context-list-item",
+    "markdown": "## 4. Heading\n\n- an item mentioning \u00a74 inline\n",
+    "refs": [
+      {
+        "text": "\u00a74",
+        "number": "4",
+        "target_heading_line": 1,
+        "line": 3
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "context-table-cell",
+    "markdown": "## 4. Heading\n\n| A | B |\n| --- | --- |\n| x | see \u00a74 |\n",
+    "refs": [
+      {
+        "text": "\u00a74",
+        "number": "4",
+        "target_heading_line": 1,
+        "line": 5
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "context-blockquote-shallow",
+    "markdown": "## 4. Heading\n\n> quoting \u00a74 here\n",
+    "refs": [
+      {
+        "text": "\u00a74",
+        "number": "4",
+        "target_heading_line": 1,
+        "line": 3
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "context-blockquote-nested",
+    "markdown": "## 4. Heading\n\n> > > deeply quoting \u00a74 here\n",
+    "refs": [
+      {
+        "text": "\u00a74",
+        "number": "4",
+        "target_heading_line": 1,
+        "line": 3
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "context-not-in-heading",
+    "markdown": "## 4. Heading mentions \u00a74 inline\n\nNo reference expected anywhere.\n",
+    "refs": [],
+    "diagnostics": []
+  },
+  {
+    "id": "context-not-in-inline-code",
+    "markdown": "## 4. Heading\n\nInline code `\u00a74` must not be a reference.\n",
+    "refs": [],
+    "diagnostics": []
+  },
+  {
+    "id": "context-not-in-fenced-code",
+    "markdown": "## 4. Heading\n\n```\n\u00a74 inside a fenced code block\n```\n",
+    "refs": [],
+    "diagnostics": []
+  },
+  {
+    "id": "context-not-in-indented-code",
+    "markdown": "## 4. Heading\n\n    \u00a74 inside an indented code block\n",
+    "refs": [],
+    "diagnostics": []
+  },
+  {
+    "id": "context-not-in-html-block",
+    "markdown": "## 4. Heading\n\n<div data-note=\"\u00a74\">raw html block</div>\n",
+    "refs": [],
+    "diagnostics": []
+  },
+  {
+    "id": "context-not-in-link-text",
+    "markdown": "## 4. Heading\n\nSee [\u00a74 details](https://example.com/x) for more.\n",
+    "refs": [],
+    "diagnostics": []
+  },
+  {
+    "id": "context-not-in-link-destination",
+    "markdown": "## 4. Heading\n\nSee [details](https://example.com/\u00a74) for more.\n",
+    "refs": [],
+    "diagnostics": []
+  },
+  {
+    "id": "context-not-in-wikilink",
+    "markdown": "## 4. Heading\n\nSee [[Page\u00a74|alias]] for more.\n",
+    "refs": [],
+    "diagnostics": []
+  },
+  {
+    "id": "context-not-in-transclusion",
+    "markdown": "## 4. Heading\n\nSee ![[Page#\u00a74]] for more.\n",
+    "refs": [],
+    "diagnostics": []
+  },
+  {
+    "id": "context-not-in-image-alt",
+    "markdown": "## 4. Heading\n\nSee ![\u00a74 alt](img.png) for more.\n",
+    "refs": [],
+    "diagnostics": []
+  },
+  {
+    "id": "sign-single",
+    "markdown": "## 7. Heading\n\nSee \u00a77 above.\n",
+    "refs": [
+      {
+        "text": "\u00a77",
+        "number": "7",
+        "target_heading_line": 1,
+        "line": 3
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "sign-double",
+    "markdown": "## 7. Heading\n\nSee \u00a7\u00a77 above.\n",
+    "refs": [
+      {
+        "text": "\u00a7\u00a77",
+        "number": "7",
+        "target_heading_line": 1,
+        "line": 3
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "sign-one-space",
+    "markdown": "## 4.1 Heading\n\nSee \u00a7 4.1 above.\n",
+    "refs": [
+      {
+        "text": "\u00a7 4.1",
+        "number": "4.1",
+        "target_heading_line": 1,
+        "line": 3
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "sign-two-spaces-not-a-reference",
+    "markdown": "## 4.1 Heading\n\nSee \u00a7  4.1 above (two spaces).\n",
+    "refs": [],
+    "diagnostics": []
+  },
+  {
+    "id": "sign-sentence-final-period",
+    "markdown": "## 7. Heading\n\nsee \u00a77.\n",
+    "refs": [
+      {
+        "text": "\u00a77",
+        "number": "7",
+        "target_heading_line": 1,
+        "line": 3
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "sign-multipart-sentence-final-period",
+    "markdown": "## 7.1 Heading\n\nsee \u00a77.1.\n",
+    "refs": [
+      {
+        "text": "\u00a77.1",
+        "number": "7.1",
+        "target_heading_line": 1,
+        "line": 3
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "sign-letter-simple",
+    "markdown": "# Appendix A. Foo\n\nsee \u00a7A here.\n",
+    "refs": [
+      {
+        "text": "\u00a7A",
+        "number": "A",
+        "target_heading_line": 1,
+        "line": 3
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "sign-letter-multipart",
+    "markdown": "## Appendix A.1 Foo\n\nsee \u00a7A.1 here.\n",
+    "refs": [
+      {
+        "text": "\u00a7A.1",
+        "number": "A.1",
+        "target_heading_line": 1,
+        "line": 3
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "sign-letter-not-followed-by-letter",
+    "markdown": "# Appendix A. Foo\n\nsee \u00a7Also not a reference.\n",
+    "refs": [],
+    "diagnostics": []
+  },
+  {
+    "id": "sign-bare-alone",
+    "markdown": "## 4. Heading\n\nA stray \u00a7 with nothing after.\n",
+    "refs": [],
+    "diagnostics": []
+  },
+  {
+    "id": "sign-followed-by-punctuation",
+    "markdown": "## 4. Heading\n\nA stray \u00a7, with a comma after.\n",
+    "refs": [],
+    "diagnostics": []
+  },
+  {
+    "id": "sign-followed-by-dash-no-leading-number",
+    "markdown": "## 4. Heading\n\nA stray \u00a7-7 with no number first.\n",
+    "refs": [],
+    "diagnostics": []
+  },
+  {
+    "id": "sign-double-not-followed-by-number",
+    "markdown": "## 4. Heading\n\nA stray \u00a7\u00a7 with nothing after.\n",
+    "refs": [],
+    "diagnostics": []
+  },
+  {
+    "id": "sign-lowercase-letter-not-a-number",
+    "markdown": "## 4. Heading\n\nsee \u00a7a which is lowercase.\n",
+    "refs": [],
+    "diagnostics": []
+  },
+  {
+    "id": "sign-letter-followed-by-digit-no-dot",
+    "markdown": "# Appendix A. Foo\n\nsee \u00a7A1 where 1 is plain text.\n",
+    "refs": [
+      {
+        "text": "\u00a7A",
+        "number": "A",
+        "target_heading_line": 1,
+        "line": 3
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "sign-longest-match-distinguishes-multipart",
+    "markdown": "## 7.1 One\n## 7.10 Ten\n\ncompare \u00a77.1 with \u00a77.10 in the same sentence.\n",
+    "refs": [
+      {
+        "text": "\u00a77.1",
+        "number": "7.1",
+        "target_heading_line": 1,
+        "line": 4
+      },
+      {
+        "text": "\u00a77.10",
+        "number": "7.10",
+        "target_heading_line": 2,
+        "line": 4
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "sign-two-consecutive-no-separator",
+    "markdown": "## 3. Three\n## 4. Four\n\nadjacent \u00a73\u00a74 with no separator.\n",
+    "refs": [
+      {
+        "text": "\u00a73",
+        "number": "3",
+        "target_heading_line": 1,
+        "line": 4
+      },
+      {
+        "text": "\u00a74",
+        "number": "4",
+        "target_heading_line": 2,
+        "line": 4
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "sign-double-resolves-single-heading",
+    "markdown": "## 4.1 Heading\n\nsee \u00a7\u00a74.1 above.\n",
+    "refs": [
+      {
+        "text": "\u00a7\u00a74.1",
+        "number": "4.1",
+        "target_heading_line": 1,
+        "line": 3
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "range-double-sign-en-dash",
+    "markdown": "## 3. Three\n## 7. Seven\n\nsee \u00a7\u00a73\u20137 for the range.\n",
+    "refs": [
+      {
+        "text": "\u00a7\u00a73",
+        "number": "3",
+        "target_heading_line": 1,
+        "line": 4
+      },
+      {
+        "text": "7",
+        "number": "7",
+        "target_heading_line": 2,
+        "line": 4
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "range-single-sign-both-ends",
+    "markdown": "## 3. Three\n## 5. Five\n\nsee \u00a73\u2013\u00a75 for the range.\n",
+    "refs": [
+      {
+        "text": "\u00a73",
+        "number": "3",
+        "target_heading_line": 1,
+        "line": 4
+      },
+      {
+        "text": "\u00a75",
+        "number": "5",
+        "target_heading_line": 2,
+        "line": 4
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "range-multipart-en-dash",
+    "markdown": "## 8.3 Eight Three\n## 8.4 Eight Four\n\nsee \u00a7\u00a78.3\u20138.4 for the range.\n",
+    "refs": [
+      {
+        "text": "\u00a7\u00a78.3",
+        "number": "8.3",
+        "target_heading_line": 1,
+        "line": 4
+      },
+      {
+        "text": "8.4",
+        "number": "8.4",
+        "target_heading_line": 2,
+        "line": 4
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "range-ascii-hyphen",
+    "markdown": "## 3. Three\n## 5. Five\n\nsee \u00a73-5 for the range.\n",
+    "refs": [
+      {
+        "text": "\u00a73",
+        "number": "3",
+        "target_heading_line": 1,
+        "line": 4
+      },
+      {
+        "text": "5",
+        "number": "5",
+        "target_heading_line": 2,
+        "line": 4
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "range-spaces-around-dash",
+    "markdown": "## 3. Three\n## 5. Five\n\nsee \u00a73 - 5 for the range.\n",
+    "refs": [
+      {
+        "text": "\u00a73",
+        "number": "3",
+        "target_heading_line": 1,
+        "line": 4
+      },
+      {
+        "text": "5",
+        "number": "5",
+        "target_heading_line": 2,
+        "line": 4
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "range-end-unresolved",
+    "markdown": "## 3. Three\n\nsee \u00a73\u201399 where 99 does not exist.\n",
+    "refs": [
+      {
+        "text": "\u00a73",
+        "number": "3",
+        "target_heading_line": 1,
+        "line": 3
+      },
+      {
+        "text": "99",
+        "number": "99",
+        "target_heading_line": null,
+        "line": 3
+      }
+    ],
+    "diagnostics": [
+      {
+        "number": "99",
+        "line": 3
+      }
+    ]
+  },
+  {
+    "id": "range-comma-list-only-first",
+    "markdown": "## 8.3 Eight Three\n## 8.4 Eight Four\n\nsee \u00a7\u00a78.3, 8.4 (only the first counts).\n",
+    "refs": [
+      {
+        "text": "\u00a7\u00a78.3",
+        "number": "8.3",
+        "target_heading_line": 1,
+        "line": 4
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "range-and-two-separate-references",
+    "markdown": "## 6. Six\n## 12.1 Twelve One\n\nsee \u00a76 and \u00a712.1 together.\n",
+    "refs": [
+      {
+        "text": "\u00a76",
+        "number": "6",
+        "target_heading_line": 1,
+        "line": 4
+      },
+      {
+        "text": "\u00a712.1",
+        "number": "12.1",
+        "target_heading_line": 2,
+        "line": 4
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "range-end-double-sign-rejected",
+    "markdown": "## 3. Three\n## 5. Five\n\nsee \u00a73\u2013\u00a7\u00a75 where the range grammar rejects a double sign end.\n",
+    "refs": [
+      {
+        "text": "\u00a73",
+        "number": "3",
+        "target_heading_line": 1,
+        "line": 4
+      },
+      {
+        "text": "\u00a7\u00a75",
+        "number": "5",
+        "target_heading_line": 2,
+        "line": 4
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "range-end-letter",
+    "markdown": "# Appendix A. Foo\n## Appendix B. Bar\n\nsee \u00a7A\u2013B for the range.\n",
+    "refs": [
+      {
+        "text": "\u00a7A",
+        "number": "A",
+        "target_heading_line": 1,
+        "line": 4
+      },
+      {
+        "text": "B",
+        "number": "B",
+        "target_heading_line": 2,
+        "line": 4
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "range-end-letter-lookahead-rejected",
+    "markdown": "# Appendix A. Foo\n\nsee \u00a7A\u2013Bz where Bz is not a number.\n",
+    "refs": [
+      {
+        "text": "\u00a7A",
+        "number": "A",
+        "target_heading_line": 1,
+        "line": 3
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "resolve-basic-success",
+    "markdown": "## 4.1 Heading\n\nsee \u00a74.1 which resolves.\n",
+    "refs": [
+      {
+        "text": "\u00a74.1",
+        "number": "4.1",
+        "target_heading_line": 1,
+        "line": 3
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "resolve-numbered-page-unresolved-diagnostic",
+    "markdown": "## 4.1 Heading\n\nsee \u00a799 which does not exist.\n",
+    "refs": [
+      {
+        "text": "\u00a799",
+        "number": "99",
+        "target_heading_line": null,
+        "line": 3
+      }
+    ],
+    "diagnostics": [
+      {
+        "number": "99",
+        "line": 3
+      }
+    ]
+  },
+  {
+    "id": "resolve-unnumbered-page-no-diagnostic",
+    "markdown": "## Introduction\n\nsee \u00a74.1 on a page with no numbered headings.\n",
+    "refs": [
+      {
+        "text": "\u00a74.1",
+        "number": "4.1",
+        "target_heading_line": null,
+        "line": 3
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "resolve-no-headings-at-all-no-diagnostic",
+    "markdown": "A page with no headings mentions \u00a74.1 here.\n",
+    "refs": [
+      {
+        "text": "\u00a74.1",
+        "number": "4.1",
+        "target_heading_line": null,
+        "line": 1
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "resolve-headings-present-none-numbered-no-diagnostic",
+    "markdown": "## Introduction\n## Overview\n\nsee \u00a73 where no heading is numbered.\n",
+    "refs": [
+      {
+        "text": "\u00a73",
+        "number": "3",
+        "target_heading_line": null,
+        "line": 4
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "resolve-exact-string-not-prefix",
+    "markdown": "## 1.1 One One\n## 1.10 One Ten\n## 11.1 Eleven One\n\nsee \u00a71.1 which must match only 1.1, not 1.10 or 11.1.\n",
+    "refs": [
+      {
+        "text": "\u00a71.1",
+        "number": "1.1",
+        "target_heading_line": 1,
+        "line": 5
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "multiline-ref-on-second-line",
+    "markdown": "## 4. Heading\n\nThis paragraph spans\nthree lines and mentions \u00a74\non the middle line here.\n",
+    "refs": [
+      {
+        "text": "\u00a74",
+        "number": "4",
+        "target_heading_line": 1,
+        "line": 4
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "multiline-multiple-refs-different-lines",
+    "markdown": "## 3. Three\n## 5. Five\n\nFirst line mentions \u00a73 here,\nand the second line mentions \u00a75 here.\n",
+    "refs": [
+      {
+        "text": "\u00a73",
+        "number": "3",
+        "target_heading_line": 1,
+        "line": 4
+      },
+      {
+        "text": "\u00a75",
+        "number": "5",
+        "target_heading_line": 2,
+        "line": 5
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "context-table-header-and-body-cell",
+    "markdown": "## 3. Three\n## 5. Five\n\n| see \u00a73 | B |\n| --- | --- |\n| x | see \u00a75 |\n",
+    "refs": [
+      {
+        "text": "\u00a73",
+        "number": "3",
+        "target_heading_line": 1,
+        "line": 4
+      },
+      {
+        "text": "\u00a75",
+        "number": "5",
+        "target_heading_line": 2,
+        "line": 6
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "context-blockquote-with-range",
+    "markdown": "## 3. Three\n## 5. Five\n\n> see \u00a73\u20135 inside a quote\n",
+    "refs": [
+      {
+        "text": "\u00a73",
+        "number": "3",
+        "target_heading_line": 1,
+        "line": 4
+      },
+      {
+        "text": "5",
+        "number": "5",
+        "target_heading_line": 2,
+        "line": 4
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "context-list-item-with-appendix-ref",
+    "markdown": "# Appendix A. Foo\n## Appendix A.1 Bar\n\n- mentions \u00a7A.1 in a list item\n",
+    "refs": [
+      {
+        "text": "\u00a7A.1",
+        "number": "A.1",
+        "target_heading_line": 2,
+        "line": 4
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "context-table-separator-row-not-scanned",
+    "markdown": "## 3. Three\n\n| A | B |\n| --- | --- |\n| \u00a73 | y |\n",
+    "refs": [
+      {
+        "text": "\u00a73",
+        "number": "3",
+        "target_heading_line": 1,
+        "line": 5
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "context-duplicate-and-unrelated-ref-same-page",
+    "markdown": "## 5. First Instance\n## 9. Other\n\nSome text.\n\n## 5. Second Instance\n\nsee \u00a75 and \u00a79 together.\n",
+    "refs": [
+      {
+        "text": "\u00a75",
+        "number": "5",
+        "target_heading_line": 1,
+        "line": 8
+      },
+      {
+        "text": "\u00a79",
+        "number": "9",
+        "target_heading_line": 2,
+        "line": 8
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "context-ref-immediately-before-heading",
+    "markdown": "## 3. Three\n\na line mentioning \u00a73 right before a heading\n## 5. Five\n\nsee \u00a75 too.\n",
+    "refs": [
+      {
+        "text": "\u00a73",
+        "number": "3",
+        "target_heading_line": 1,
+        "line": 3
+      },
+      {
+        "text": "\u00a75",
+        "number": "5",
+        "target_heading_line": 4,
+        "line": 6
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "context-html-block-does-not-consume-following-paragraph",
+    "markdown": "## 4. Heading\n\n<div>excluded \u00a74 in html block</div>\n\na real reference to \u00a74 in a normal paragraph.\n",
+    "refs": [
+      {
+        "text": "\u00a74",
+        "number": "4",
+        "target_heading_line": 1,
+        "line": 5
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "context-fenced-code-with-tilde-fence",
+    "markdown": "## 4. Heading\n\n~~~\n\u00a74 inside a tilde-fenced code block\n~~~\n\nsee \u00a74 for real.\n",
+    "refs": [
+      {
+        "text": "\u00a74",
+        "number": "4",
+        "target_heading_line": 1,
+        "line": 7
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "context-indented-code-followed-by-paragraph",
+    "markdown": "## 4. Heading\n\n    \u00a74 indented code, excluded\n\na real reference to \u00a74 afterwards.\n",
+    "refs": [
+      {
+        "text": "\u00a74",
+        "number": "4",
+        "target_heading_line": 1,
+        "line": 5
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "context-not-in-link-text-and-destination-both",
+    "markdown": "## 4. Heading\n\n[\u00a74 in text](https://example.com/\u00a74-in-dest) and a real \u00a74 after.\n",
+    "refs": [
+      {
+        "text": "\u00a74",
+        "number": "4",
+        "target_heading_line": 1,
+        "line": 3
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "heading-inside-block-quote-counts",
+    "markdown": "> ## 1. Nested In A Quote\n>\n> body text inside the quote\n\nsee \u00a71 which targets the heading nested in the block quote.\n",
+    "refs": [
+      {
+        "text": "\u00a71",
+        "number": "1",
+        "target_heading_line": 1,
+        "line": 5
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "heading-inside-list-item-counts",
+    "markdown": "- ## 1. Nested In A List Item\n\nsee \u00a71 which targets the heading nested in the list item.\n",
+    "refs": [
+      {
+        "text": "\u00a71",
+        "number": "1",
+        "target_heading_line": 1,
+        "line": 3
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "heading-inside-nested-block-quote-counts",
+    "markdown": "> > ## 2. Doubly Nested\n> >\n> > body text\n\nsee \u00a72 which targets the doubly nested heading.\n",
+    "refs": [
+      {
+        "text": "\u00a72",
+        "number": "2",
+        "target_heading_line": 1,
+        "line": 5
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "inline-html-tag-text-between-tags-is-recognized",
+    "markdown": "## 7. Heading\n\nsee <b>\u00a77</b> where the tag markup is excluded but the text between is not.\n",
+    "refs": [
+      {
+        "text": "\u00a77",
+        "number": "7",
+        "target_heading_line": 1,
+        "line": 3
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "range-comma-after-range-only-first-two",
+    "markdown": "## 3. Three\n## 7. Seven\n## 9. Nine\n\nsee \u00a7\u00a73\u20137, 9 where only 3 and 7 are references.\n",
+    "refs": [
+      {
+        "text": "\u00a7\u00a73",
+        "number": "3",
+        "target_heading_line": 1,
+        "line": 5
+      },
+      {
+        "text": "7",
+        "number": "7",
+        "target_heading_line": 2,
+        "line": 5
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "sign-tab-not-the-allowed-space",
+    "markdown": "## 4.1 Heading\n\nsee \u00a7\t4.1 where a tab is not the allowed single space.\n",
+    "refs": [],
+    "diagnostics": []
+  },
+  {
+    "id": "sign-followed-by-line-break-not-a-reference",
+    "markdown": "## 4.1 Heading\n\nsee \u00a7 at the end of this line\n4.1 continues on the next line but is not part of any reference.\n",
+    "refs": [],
+    "diagnostics": []
+  },
+  {
+    "id": "range-split-across-line-break-is-not-a-range",
+    "markdown": "## 3. Three\n\nsee \u00a73\u2013\n5 is on the next line, so no range forms across the break.\n",
+    "refs": [
+      {
+        "text": "\u00a73",
+        "number": "3",
+        "target_heading_line": 1,
+        "line": 3
+      }
+    ],
+    "diagnostics": []
+  },
+  {
+    "id": "real-spec-rha-spec-v0-10",
+    "path": "docs/spec/rha-spec-v0.10.md",
+    "sha256": "bd96216829035ade64c43befa5e672c58078f6afa4b04145c6183227e4e1071a",
+    "refs": [
+      {
+        "text": "\u00a71.4",
+        "number": "1.4",
+        "target_heading_line": 151,
+        "line": 12
+      },
+      {
+        "text": "\u00a73.4",
+        "number": "3.4",
+        "target_heading_line": 484,
+        "line": 24
+      },
+      {
+        "text": "\u00a717",
+        "number": "17",
+        "target_heading_line": 2863,
+        "line": 30
+      },
+      {
+        "text": "\u00a73.6",
+        "number": "3.6",
+        "target_heading_line": 506,
+        "line": 32
+      },
+      {
+        "text": "\u00a7\u00a73",
+        "number": "3",
+        "target_heading_line": 418,
+        "line": 38
+      },
+      {
+        "text": "7",
+        "number": "7",
+        "target_heading_line": 1121,
+        "line": 38
+      },
+      {
+        "text": "\u00a73.9",
+        "number": "3.9",
+        "target_heading_line": 548,
+        "line": 38
+      },
+      {
+        "text": "\u00a7\u00a78.3",
+        "number": "8.3",
+        "target_heading_line": 1372,
+        "line": 38
+      },
+      {
+        "text": "8.4",
+        "number": "8.4",
+        "target_heading_line": 1395,
+        "line": 38
+      },
+      {
+        "text": "\u00a711.6",
+        "number": "11.6",
+        "target_heading_line": 1820,
+        "line": 38
+      },
+      {
+        "text": "\u00a711.8",
+        "number": "11.8",
+        "target_heading_line": 2300,
+        "line": 38
+      },
+      {
+        "text": "\u00a711.7.11",
+        "number": "11.7.11",
+        "target_heading_line": 2224,
+        "line": 38
+      },
+      {
+        "text": "\u00a712.4",
+        "number": "12.4",
+        "target_heading_line": 2465,
+        "line": 38
+      },
+      {
+        "text": "\u00a7\u00a717.1",
+        "number": "17.1",
+        "target_heading_line": 2904,
+        "line": 38
+      },
+      {
+        "text": "17.2",
+        "number": "17.2",
+        "target_heading_line": 2915,
+        "line": 38
+      },
+      {
+        "text": "\u00a7\u00a711.3",
+        "number": "11.3",
+        "target_heading_line": 1778,
+        "line": 44
+      },
+      {
+        "text": "\u00a71.4",
+        "number": "1.4",
+        "target_heading_line": 151,
+        "line": 51
+      },
+      {
+        "text": "\u00a79.5",
+        "number": "9.5",
+        "target_heading_line": 1472,
+        "line": 105
+      },
+      {
+        "text": "\u00a713",
+        "number": "13",
+        "target_heading_line": 2487,
+        "line": 111
+      },
+      {
+        "text": "\u00a77.2",
+        "number": "7.2",
+        "target_heading_line": 1143,
+        "line": 113
+      },
+      {
+        "text": "\u00a77.2",
+        "number": "7.2",
+        "target_heading_line": 1143,
+        "line": 119
+      },
+      {
+        "text": "\u00a77.6",
+        "number": "7.6",
+        "target_heading_line": 1206,
+        "line": 119
+      },
+      {
+        "text": "\u00a79.3",
+        "number": "9.3",
+        "target_heading_line": 1436,
+        "line": 120
+      },
+      {
+        "text": "\u00a76.13",
+        "number": "6.13",
+        "target_heading_line": 957,
+        "line": 120
+      },
+      {
+        "text": "\u00a717",
+        "number": "17",
+        "target_heading_line": 2863,
+        "line": 124
+      },
+      {
+        "text": "\u00a76.8",
+        "number": "6.8",
+        "target_heading_line": 872,
+        "line": 130
+      },
+      {
+        "text": "\u00a73.3",
+        "number": "3.3",
+        "target_heading_line": 446,
+        "line": 132
+      },
+      {
+        "text": "\u00a710.9",
+        "number": "10.9",
+        "target_heading_line": 1665,
+        "line": 134
+      },
+      {
+        "text": "\u00a73",
+        "number": "3",
+        "target_heading_line": 418,
+        "line": 143
+      },
+      {
+        "text": "\u00a711.7",
+        "number": "11.7",
+        "target_heading_line": 1886,
+        "line": 143
+      },
+      {
+        "text": "\u00a71.4",
+        "number": "1.4",
+        "target_heading_line": 151,
+        "line": 144
+      },
+      {
+        "text": "\u00a72.1",
+        "number": "2.1",
+        "target_heading_line": 196,
+        "line": 146
+      },
+      {
+        "text": "\u00a717",
+        "number": "17",
+        "target_heading_line": 2863,
+        "line": 147
+      },
+      {
+        "text": "\u00a77.9",
+        "number": "7.9",
+        "target_heading_line": 1232,
+        "line": 149
+      },
+      {
+        "text": "\u00a711.4",
+        "number": "11.4",
+        "target_heading_line": 1794,
+        "line": 149
+      },
+      {
+        "text": "\u00a713",
+        "number": "13",
+        "target_heading_line": 2487,
+        "line": 149
+      },
+      {
+        "text": "\u00a74",
+        "number": "4",
+        "target_heading_line": 573,
+        "line": 163
+      },
+      {
+        "text": "\u00a76.13",
+        "number": "6.13",
+        "target_heading_line": 957,
+        "line": 164
+      },
+      {
+        "text": "\u00a76.16.7",
+        "number": "6.16.7",
+        "target_heading_line": 1091,
+        "line": 165
+      },
+      {
+        "text": "\u00a76.13",
+        "number": "6.13",
+        "target_heading_line": 957,
+        "line": 166
+      },
+      {
+        "text": "\u00a76.8",
+        "number": "6.8",
+        "target_heading_line": 872,
+        "line": 167
+      },
+      {
+        "text": "\u00a712.1",
+        "number": "12.1",
+        "target_heading_line": 2398,
+        "line": 168
+      },
+      {
+        "text": "\u00a710.9",
+        "number": "10.9",
+        "target_heading_line": 1665,
+        "line": 169
+      },
+      {
+        "text": "\u00a79.14",
+        "number": "9.14",
+        "target_heading_line": 1566,
+        "line": 170
+      },
+      {
+        "text": "\u00a711.4",
+        "number": "11.4",
+        "target_heading_line": 1794,
+        "line": 171
+      },
+      {
+        "text": "\u00a711.7",
+        "number": "11.7",
+        "target_heading_line": 1886,
+        "line": 172
+      },
+      {
+        "text": "\u00a7\u00a73.9",
+        "number": "3.9",
+        "target_heading_line": 548,
+        "line": 173
+      },
+      {
+        "text": "\u00a711.6",
+        "number": "11.6",
+        "target_heading_line": 1820,
+        "line": 174
+      },
+      {
+        "text": "\u00a711.7.11",
+        "number": "11.7.11",
+        "target_heading_line": 2224,
+        "line": 175
+      },
+      {
+        "text": "\u00a7\u00a717.1",
+        "number": "17.1",
+        "target_heading_line": 2904,
+        "line": 176
+      },
+      {
+        "text": "17.2",
+        "number": "17.2",
+        "target_heading_line": 2915,
+        "line": 176
+      },
+      {
+        "text": "\u00a73",
+        "number": "3",
+        "target_heading_line": 418,
+        "line": 182
+      },
+      {
+        "text": "\u00a75",
+        "number": "5",
+        "target_heading_line": 625,
+        "line": 182
+      },
+      {
+        "text": "\u00a77",
+        "number": "7",
+        "target_heading_line": 1121,
+        "line": 182
+      },
+      {
+        "text": "\u00a710",
+        "number": "10",
+        "target_heading_line": 1595,
+        "line": 182
+      },
+      {
+        "text": "\u00a715",
+        "number": "15",
+        "target_heading_line": 2696,
+        "line": 182
+      },
+      {
+        "text": "\u00a76",
+        "number": "6",
+        "target_heading_line": 684,
+        "line": 183
+      },
+      {
+        "text": "\u00a712.1",
+        "number": "12.1",
+        "target_heading_line": 2398,
+        "line": 183
+      },
+      {
+        "text": "\u00a712.1",
+        "number": "12.1",
+        "target_heading_line": 2398,
+        "line": 183
+      },
+      {
+        "text": "\u00a7\u00a711.6",
+        "number": "11.6",
+        "target_heading_line": 1820,
+        "line": 184
+      },
+      {
+        "text": "11.8",
+        "number": "11.8",
+        "target_heading_line": 2300,
+        "line": 184
+      },
+      {
+        "text": "\u00a7\u00a73.9",
+        "number": "3.9",
+        "target_heading_line": 548,
+        "line": 184
+      },
+      {
+        "text": "\u00a716",
+        "number": "16",
+        "target_heading_line": 2800,
+        "line": 186
+      },
+      {
+        "text": "\u00a77.5",
+        "number": "7.5",
+        "target_heading_line": 1180,
+        "line": 214
+      },
+      {
+        "text": "\u00a717",
+        "number": "17",
+        "target_heading_line": 2863,
+        "line": 220
+      },
+      {
+        "text": "\u00a73",
+        "number": "3",
+        "target_heading_line": 418,
+        "line": 224
+      },
+      {
+        "text": "\u00a73.3",
+        "number": "3.3",
+        "target_heading_line": 446,
+        "line": 233
+      },
+      {
+        "text": "\u00a76.13",
+        "number": "6.13",
+        "target_heading_line": 957,
+        "line": 233
+      },
+      {
+        "text": "\u00a78",
+        "number": "8",
+        "target_heading_line": 1297,
+        "line": 233
+      },
+      {
+        "text": "\u00a79.10",
+        "number": "9.10",
+        "target_heading_line": 1523,
+        "line": 239
+      },
+      {
+        "text": "\u00a79.10",
+        "number": "9.10",
+        "target_heading_line": 1523,
+        "line": 244
+      },
+      {
+        "text": "\u00a77.7",
+        "number": "7.7",
+        "target_heading_line": 1212,
+        "line": 262
+      },
+      {
+        "text": "\u00a76.1",
+        "number": "6.1",
+        "target_heading_line": 692,
+        "line": 263
+      },
+      {
+        "text": "\u00a71.1",
+        "number": "1.1",
+        "target_heading_line": 101,
+        "line": 264
+      },
+      {
+        "text": "\u00a79.12",
+        "number": "9.12",
+        "target_heading_line": 1547,
+        "line": 278
+      },
+      {
+        "text": "\u00a79.3",
+        "number": "9.3",
+        "target_heading_line": 1436,
+        "line": 279
+      },
+      {
+        "text": "\u00a79.15",
+        "number": "9.15",
+        "target_heading_line": 1579,
+        "line": 281
+      },
+      {
+        "text": "\u00a76.5",
+        "number": "6.5",
+        "target_heading_line": 799,
+        "line": 290
+      },
+      {
+        "text": "\u00a710.5",
+        "number": "10.5",
+        "target_heading_line": 1634,
+        "line": 304
+      },
+      {
+        "text": "\u00a710.9",
+        "number": "10.9",
+        "target_heading_line": 1665,
+        "line": 305
+      },
+      {
+        "text": "\u00a79.14",
+        "number": "9.14",
+        "target_heading_line": 1566,
+        "line": 314
+      },
+      {
+        "text": "\u00a711.7.3",
+        "number": "11.7.3",
+        "target_heading_line": 1927,
+        "line": 315
+      },
+      {
+        "text": "\u00a78.1",
+        "number": "8.1",
+        "target_heading_line": 1333,
+        "line": 317
+      },
+      {
+        "text": "\u00a711.4",
+        "number": "11.4",
+        "target_heading_line": 1794,
+        "line": 319
+      },
+      {
+        "text": "\u00a711.5",
+        "number": "11.5",
+        "target_heading_line": 1810,
+        "line": 320
+      },
+      {
+        "text": "\u00a711.7.6",
+        "number": "11.7.6",
+        "target_heading_line": 2037,
+        "line": 323
+      },
+      {
+        "text": "\u00a78.2",
+        "number": "8.2",
+        "target_heading_line": 1347,
+        "line": 324
+      },
+      {
+        "text": "\u00a711.0",
+        "number": "11.0",
+        "target_heading_line": 1737,
+        "line": 325
+      },
+      {
+        "text": "\u00a711.5",
+        "number": "11.5",
+        "target_heading_line": 1810,
+        "line": 325
+      },
+      {
+        "text": "\u00a711.7",
+        "number": "11.7",
+        "target_heading_line": 1886,
+        "line": 330
+      },
+      {
+        "text": "\u00a72.5",
+        "number": "2.5",
+        "target_heading_line": 246,
+        "line": 337
+      },
+      {
+        "text": "\u00a711.8",
+        "number": "11.8",
+        "target_heading_line": 2300,
+        "line": 373
+      },
+      {
+        "text": "\u00a79.15",
+        "number": "9.15",
+        "target_heading_line": 1579,
+        "line": 388
+      },
+      {
+        "text": "\u00a717",
+        "number": "17",
+        "target_heading_line": 2863,
+        "line": 397
+      },
+      {
+        "text": "\u00a711.4",
+        "number": "11.4",
+        "target_heading_line": 1794,
+        "line": 411
+      },
+      {
+        "text": "\u00a72.3",
+        "number": "2.3",
+        "target_heading_line": 222,
+        "line": 422
+      },
+      {
+        "text": "\u00a73.5",
+        "number": "3.5",
+        "target_heading_line": 492,
+        "line": 432
+      },
+      {
+        "text": "\u00a73.1",
+        "number": "3.1",
+        "target_heading_line": 424,
+        "line": 444
+      },
+      {
+        "text": "\u00a73.5",
+        "number": "3.5",
+        "target_heading_line": 492,
+        "line": 466
+      },
+      {
+        "text": "\u00a79.8",
+        "number": "9.8",
+        "target_heading_line": 1503,
+        "line": 467
+      },
+      {
+        "text": "\u00a78.2",
+        "number": "8.2",
+        "target_heading_line": 1347,
+        "line": 482
+      },
+      {
+        "text": "\u00a76.8",
+        "number": "6.8",
+        "target_heading_line": 872,
+        "line": 490
+      },
+      {
+        "text": "\u00a75",
+        "number": "5",
+        "target_heading_line": 625,
+        "line": 508
+      },
+      {
+        "text": "\u00a76",
+        "number": "6",
+        "target_heading_line": 684,
+        "line": 508
+      },
+      {
+        "text": "\u00a7\u00a73.1",
+        "number": "3.1",
+        "target_heading_line": 424,
+        "line": 557
+      },
+      {
+        "text": "3.3",
+        "number": "3.3",
+        "target_heading_line": 446,
+        "line": 557
+      },
+      {
+        "text": "\u00a78.2",
+        "number": "8.2",
+        "target_heading_line": 1347,
+        "line": 559
+      },
+      {
+        "text": "\u00a711.8",
+        "number": "11.8",
+        "target_heading_line": 2300,
+        "line": 567
+      },
+      {
+        "text": "\u00a78.4",
+        "number": "8.4",
+        "target_heading_line": 1395,
+        "line": 569
+      },
+      {
+        "text": "\u00a73.3",
+        "number": "3.3",
+        "target_heading_line": 446,
+        "line": 577
+      },
+      {
+        "text": "\u00a76.8",
+        "number": "6.8",
+        "target_heading_line": 872,
+        "line": 585
+      },
+      {
+        "text": "\u00a74.1",
+        "number": "4.1",
+        "target_heading_line": 607,
+        "line": 587
+      },
+      {
+        "text": "\u00a79.3",
+        "number": "9.3",
+        "target_heading_line": 1436,
+        "line": 589
+      },
+      {
+        "text": "\u00a71.4",
+        "number": "1.4",
+        "target_heading_line": 151,
+        "line": 591
+      },
+      {
+        "text": "\u00a78.2",
+        "number": "8.2",
+        "target_heading_line": 1347,
+        "line": 593
+      },
+      {
+        "text": "\u00a76.1",
+        "number": "6.1",
+        "target_heading_line": 692,
+        "line": 601
+      },
+      {
+        "text": "\u00a77.9",
+        "number": "7.9",
+        "target_heading_line": 1232,
+        "line": 603
+      },
+      {
+        "text": "\u00a79.5",
+        "number": "9.5",
+        "target_heading_line": 1472,
+        "line": 605
+      },
+      {
+        "text": "\u00a77.5",
+        "number": "7.5",
+        "target_heading_line": 1180,
+        "line": 609
+      },
+      {
+        "text": "\u00a76.13",
+        "number": "6.13",
+        "target_heading_line": 957,
+        "line": 614
+      },
+      {
+        "text": "\u00a76.13",
+        "number": "6.13",
+        "target_heading_line": 957,
+        "line": 614
+      },
+      {
+        "text": "\u00a76.8",
+        "number": "6.8",
+        "target_heading_line": 872,
+        "line": 616
+      },
+      {
+        "text": "\u00a76.8",
+        "number": "6.8",
+        "target_heading_line": 872,
+        "line": 616
+      },
+      {
+        "text": "\u00a79.8",
+        "number": "9.8",
+        "target_heading_line": 1503,
+        "line": 619
+      },
+      {
+        "text": "\u00a76",
+        "number": "6",
+        "target_heading_line": 684,
+        "line": 627
+      },
+      {
+        "text": "\u00a73.6",
+        "number": "3.6",
+        "target_heading_line": 506,
+        "line": 627
+      },
+      {
+        "text": "\u00a71.4",
+        "number": "1.4",
+        "target_heading_line": 151,
+        "line": 680
+      },
+      {
+        "text": "\u00a78",
+        "number": "8",
+        "target_heading_line": 1297,
+        "line": 694
+      },
+      {
+        "text": "\u00a76.8",
+        "number": "6.8",
+        "target_heading_line": 872,
+        "line": 702
+      },
+      {
+        "text": "\u00a74.1",
+        "number": "4.1",
+        "target_heading_line": 607,
+        "line": 718
+      },
+      {
+        "text": "\u00a73.3",
+        "number": "3.3",
+        "target_heading_line": 446,
+        "line": 749
+      },
+      {
+        "text": "\u00a76.13",
+        "number": "6.13",
+        "target_heading_line": 957,
+        "line": 749
+      },
+      {
+        "text": "\u00a76.11",
+        "number": "6.11",
+        "target_heading_line": 934,
+        "line": 797
+      },
+      {
+        "text": "\u00a76.13",
+        "number": "6.13",
+        "target_heading_line": 957,
+        "line": 845
+      },
+      {
+        "text": "\u00a76.13",
+        "number": "6.13",
+        "target_heading_line": 957,
+        "line": 890
+      },
+      {
+        "text": "\u00a711.7.1",
+        "number": "11.7.1",
+        "target_heading_line": 1892,
+        "line": 910
+      },
+      {
+        "text": "\u00a79.3",
+        "number": "9.3",
+        "target_heading_line": 1436,
+        "line": 932
+      },
+      {
+        "text": "\u00a73.3",
+        "number": "3.3",
+        "target_heading_line": 446,
+        "line": 975
+      },
+      {
+        "text": "\u00a712.1",
+        "number": "12.1",
+        "target_heading_line": 2398,
+        "line": 1016
+      },
+      {
+        "text": "\u00a712.1",
+        "number": "12.1",
+        "target_heading_line": 2398,
+        "line": 1018
+      },
+      {
+        "text": "\u00a76.13",
+        "number": "6.13",
+        "target_heading_line": 957,
+        "line": 1034
+      },
+      {
+        "text": "\u00a712.1",
+        "number": "12.1",
+        "target_heading_line": 2398,
+        "line": 1041
+      },
+      {
+        "text": "\u00a76.4",
+        "number": "6.4",
+        "target_heading_line": 751,
+        "line": 1045
+      },
+      {
+        "text": "\u00a71.4",
+        "number": "1.4",
+        "target_heading_line": 151,
+        "line": 1117
+      },
+      {
+        "text": "\u00a77.9",
+        "number": "7.9",
+        "target_heading_line": 1232,
+        "line": 1129
+      },
+      {
+        "text": "\u00a77.3",
+        "number": "7.3",
+        "target_heading_line": 1160,
+        "line": 1136
+      },
+      {
+        "text": "\u00a77.4",
+        "number": "7.4",
+        "target_heading_line": 1176,
+        "line": 1139
+      },
+      {
+        "text": "\u00a71.1",
+        "number": "1.1",
+        "target_heading_line": 101,
+        "line": 1154
+      },
+      {
+        "text": "\u00a72.12",
+        "number": "2.12",
+        "target_heading_line": 401,
+        "line": 1158
+      },
+      {
+        "text": "\u00a711",
+        "number": "11",
+        "target_heading_line": 1727,
+        "line": 1174
+      },
+      {
+        "text": "\u00a711",
+        "number": "11",
+        "target_heading_line": 1727,
+        "line": 1174
+      },
+      {
+        "text": "\u00a74.1",
+        "number": "4.1",
+        "target_heading_line": 607,
+        "line": 1202
+      },
+      {
+        "text": "\u00a76.13",
+        "number": "6.13",
+        "target_heading_line": 957,
+        "line": 1202
+      },
+      {
+        "text": "\u00a710.9",
+        "number": "10.9",
+        "target_heading_line": 1665,
+        "line": 1204
+      },
+      {
+        "text": "\u00a77.9",
+        "number": "7.9",
+        "target_heading_line": 1232,
+        "line": 1208
+      },
+      {
+        "text": "\u00a72.5",
+        "number": "2.5",
+        "target_heading_line": 246,
+        "line": 1214
+      },
+      {
+        "text": "\u00a77.1",
+        "number": "7.1",
+        "target_heading_line": 1127,
+        "line": 1221
+      },
+      {
+        "text": "\u00a77.2",
+        "number": "7.2",
+        "target_heading_line": 1143,
+        "line": 1222
+      },
+      {
+        "text": "\u00a73.1",
+        "number": "3.1",
+        "target_heading_line": 424,
+        "line": 1224
+      },
+      {
+        "text": "\u00a77.5",
+        "number": "7.5",
+        "target_heading_line": 1180,
+        "line": 1226
+      },
+      {
+        "text": "\u00a78.2",
+        "number": "8.2",
+        "target_heading_line": 1347,
+        "line": 1227
+      },
+      {
+        "text": "\u00a77.9",
+        "number": "7.9",
+        "target_heading_line": 1232,
+        "line": 1229
+      },
+      {
+        "text": "\u00a711",
+        "number": "11",
+        "target_heading_line": 1727,
+        "line": 1287
+      },
+      {
+        "text": "\u00a79.14",
+        "number": "9.14",
+        "target_heading_line": 1566,
+        "line": 1340
+      },
+      {
+        "text": "\u00a78",
+        "number": "8",
+        "target_heading_line": 1297,
+        "line": 1378
+      },
+      {
+        "text": "\u00a711.7.6",
+        "number": "11.7.6",
+        "target_heading_line": 2037,
+        "line": 1409
+      },
+      {
+        "text": "\u00a717.2",
+        "number": "17.2",
+        "target_heading_line": 2915,
+        "line": 1413
+      },
+      {
+        "text": "\u00a78.2",
+        "number": "8.2",
+        "target_heading_line": 1347,
+        "line": 1505
+      },
+      {
+        "text": "\u00a74.1",
+        "number": "4.1",
+        "target_heading_line": 607,
+        "line": 1541
+      },
+      {
+        "text": "\u00a79.3",
+        "number": "9.3",
+        "target_heading_line": 1436,
+        "line": 1551
+      },
+      {
+        "text": "\u00a710.9",
+        "number": "10.9",
+        "target_heading_line": 1665,
+        "line": 1609
+      },
+      {
+        "text": "\u00a76.15",
+        "number": "6.15",
+        "target_heading_line": 1014,
+        "line": 1628
+      },
+      {
+        "text": "\u00a710.3",
+        "number": "10.3",
+        "target_heading_line": 1626,
+        "line": 1717
+      },
+      {
+        "text": "\u00a711.4",
+        "number": "11.4",
+        "target_heading_line": 1794,
+        "line": 1719
+      },
+      {
+        "text": "\u00a79.14",
+        "number": "9.14",
+        "target_heading_line": 1566,
+        "line": 1731
+      },
+      {
+        "text": "\u00a79.6",
+        "number": "9.6",
+        "target_heading_line": 1478,
+        "line": 1731
+      },
+      {
+        "text": "\u00a711.4",
+        "number": "11.4",
+        "target_heading_line": 1794,
+        "line": 1731
+      },
+      {
+        "text": "\u00a7\u00a711.0",
+        "number": "11.0",
+        "target_heading_line": 1737,
+        "line": 1733
+      },
+      {
+        "text": "11.5",
+        "number": "11.5",
+        "target_heading_line": 1810,
+        "line": 1733
+      },
+      {
+        "text": "\u00a7\u00a711.6",
+        "number": "11.6",
+        "target_heading_line": 1820,
+        "line": 1733
+      },
+      {
+        "text": "11.8",
+        "number": "11.8",
+        "target_heading_line": 2300,
+        "line": 1733
+      },
+      {
+        "text": "\u00a71.4",
+        "number": "1.4",
+        "target_heading_line": 151,
+        "line": 1733
+      },
+      {
+        "text": "\u00a79.14",
+        "number": "9.14",
+        "target_heading_line": 1566,
+        "line": 1745
+      },
+      {
+        "text": "\u00a79.14",
+        "number": "9.14",
+        "target_heading_line": 1566,
+        "line": 1745
+      },
+      {
+        "text": "\u00a79.6",
+        "number": "9.6",
+        "target_heading_line": 1478,
+        "line": 1745
+      },
+      {
+        "text": "\u00a711.4",
+        "number": "11.4",
+        "target_heading_line": 1794,
+        "line": 1745
+      },
+      {
+        "text": "\u00a711.5",
+        "number": "11.5",
+        "target_heading_line": 1810,
+        "line": 1746
+      },
+      {
+        "text": "\u00a711.7.6",
+        "number": "11.7.6",
+        "target_heading_line": 2037,
+        "line": 1747
+      },
+      {
+        "text": "\u00a711.7.6",
+        "number": "11.7.6",
+        "target_heading_line": 2037,
+        "line": 1747
+      },
+      {
+        "text": "\u00a711.4",
+        "number": "11.4",
+        "target_heading_line": 1794,
+        "line": 1753
+      },
+      {
+        "text": "\u00a711.7.6",
+        "number": "11.7.6",
+        "target_heading_line": 2037,
+        "line": 1755
+      },
+      {
+        "text": "\u00a77",
+        "number": "7",
+        "target_heading_line": 1121,
+        "line": 1759
+      },
+      {
+        "text": "\u00a78.2",
+        "number": "8.2",
+        "target_heading_line": 1347,
+        "line": 1761
+      },
+      {
+        "text": "\u00a711.7.6",
+        "number": "11.7.6",
+        "target_heading_line": 2037,
+        "line": 1765
+      },
+      {
+        "text": "\u00a710.9",
+        "number": "10.9",
+        "target_heading_line": 1665,
+        "line": 1772
+      },
+      {
+        "text": "\u00a711.7.6",
+        "number": "11.7.6",
+        "target_heading_line": 2037,
+        "line": 1801
+      },
+      {
+        "text": "\u00a711.7.6",
+        "number": "11.7.6",
+        "target_heading_line": 2037,
+        "line": 1804
+      },
+      {
+        "text": "\u00a711.8.6",
+        "number": "11.8.6",
+        "target_heading_line": 2378,
+        "line": 1884
+      },
+      {
+        "text": "\u00a711",
+        "number": "11",
+        "target_heading_line": 1727,
+        "line": 1888
+      },
+      {
+        "text": "\u00a711.6",
+        "number": "11.6",
+        "target_heading_line": 1820,
+        "line": 1890
+      },
+      {
+        "text": "\u00a711.8",
+        "number": "11.8",
+        "target_heading_line": 2300,
+        "line": 1890
+      },
+      {
+        "text": "\u00a712.1",
+        "number": "12.1",
+        "target_heading_line": 2398,
+        "line": 1894
+      },
+      {
+        "text": "\u00a711.7.11",
+        "number": "11.7.11",
+        "target_heading_line": 2224,
+        "line": 1906
+      },
+      {
+        "text": "\u00a711.7.6",
+        "number": "11.7.6",
+        "target_heading_line": 2037,
+        "line": 1916
+      },
+      {
+        "text": "\u00a711.5",
+        "number": "11.5",
+        "target_heading_line": 1810,
+        "line": 1931
+      },
+      {
+        "text": "\u00a711.5",
+        "number": "11.5",
+        "target_heading_line": 1810,
+        "line": 1931
+      },
+      {
+        "text": "\u00a711.7.8",
+        "number": "11.7.8",
+        "target_heading_line": 2152,
+        "line": 1931
+      },
+      {
+        "text": "\u00a712.4",
+        "number": "12.4",
+        "target_heading_line": 2465,
+        "line": 1977
+      },
+      {
+        "text": "\u00a711.2",
+        "number": "11.2",
+        "target_heading_line": 1763,
+        "line": 2085
+      },
+      {
+        "text": "\u00a716",
+        "number": "16",
+        "target_heading_line": 2800,
+        "line": 2085
+      },
+      {
+        "text": "\u00a711.7.9",
+        "number": "11.7.9",
+        "target_heading_line": 2160,
+        "line": 2125
+      },
+      {
+        "text": "\u00a78.4",
+        "number": "8.4",
+        "target_heading_line": 1395,
+        "line": 2131
+      },
+      {
+        "text": "\u00a78.2",
+        "number": "8.2",
+        "target_heading_line": 1347,
+        "line": 2150
+      },
+      {
+        "text": "\u00a71.4",
+        "number": "1.4",
+        "target_heading_line": 151,
+        "line": 2162
+      },
+      {
+        "text": "\u00a711.5",
+        "number": "11.5",
+        "target_heading_line": 1810,
+        "line": 2170
+      },
+      {
+        "text": "\u00a710.9.1",
+        "number": "10.9.1",
+        "target_heading_line": 1676,
+        "line": 2171
+      },
+      {
+        "text": "\u00a711.6",
+        "number": "11.6",
+        "target_heading_line": 1820,
+        "line": 2172
+      },
+      {
+        "text": "\u00a711.7.2",
+        "number": "11.7.2",
+        "target_heading_line": 1912,
+        "line": 2175
+      },
+      {
+        "text": "\u00a7\u00a78.4",
+        "number": "8.4",
+        "target_heading_line": 1395,
+        "line": 2177
+      },
+      {
+        "text": "\u00a7\u00a711.8.2",
+        "number": "11.8.2",
+        "target_heading_line": 2329,
+        "line": 2178
+      },
+      {
+        "text": "11.8.3",
+        "number": "11.8.3",
+        "target_heading_line": 2343,
+        "line": 2178
+      },
+      {
+        "text": "\u00a7\u00a711.6",
+        "number": "11.6",
+        "target_heading_line": 1820,
+        "line": 2186
+      },
+      {
+        "text": "\u00a711.0",
+        "number": "11.0",
+        "target_heading_line": 1737,
+        "line": 2191
+      },
+      {
+        "text": "\u00a711.4",
+        "number": "11.4",
+        "target_heading_line": 1794,
+        "line": 2191
+      },
+      {
+        "text": "\u00a710.10",
+        "number": "10.10",
+        "target_heading_line": 1721,
+        "line": 2220
+      },
+      {
+        "text": "\u00a710.9",
+        "number": "10.9",
+        "target_heading_line": 1665,
+        "line": 2220
+      },
+      {
+        "text": "\u00a712.4",
+        "number": "12.4",
+        "target_heading_line": 2465,
+        "line": 2243
+      },
+      {
+        "text": "\u00a7\u00a711.3",
+        "number": "11.3",
+        "target_heading_line": 1778,
+        "line": 2282
+      },
+      {
+        "text": "\u00a73.9",
+        "number": "3.9",
+        "target_heading_line": 548,
+        "line": 2302
+      },
+      {
+        "text": "\u00a711.0",
+        "number": "11.0",
+        "target_heading_line": 1737,
+        "line": 2368
+      },
+      {
+        "text": "\u00a78.4",
+        "number": "8.4",
+        "target_heading_line": 1395,
+        "line": 2372
+      },
+      {
+        "text": "\u00a7\u00a711.4",
+        "number": "11.4",
+        "target_heading_line": 1794,
+        "line": 2374
+      },
+      {
+        "text": "\u00a717.2",
+        "number": "17.2",
+        "target_heading_line": 2915,
+        "line": 2384
+      },
+      {
+        "text": "\u00a76.15",
+        "number": "6.15",
+        "target_heading_line": 1014,
+        "line": 2400
+      },
+      {
+        "text": "\u00a76.16.1",
+        "number": "6.16.1",
+        "target_heading_line": 1039,
+        "line": 2400
+      },
+      {
+        "text": "\u00a712",
+        "number": "12",
+        "target_heading_line": 2394,
+        "line": 2400
+      },
+      {
+        "text": "\u00a712.2",
+        "number": "12.2",
+        "target_heading_line": 2441,
+        "line": 2400
+      },
+      {
+        "text": "\u00a715",
+        "number": "15",
+        "target_heading_line": 2696,
+        "line": 2400
+      },
+      {
+        "text": "\u00a713",
+        "number": "13",
+        "target_heading_line": 2487,
+        "line": 2400
+      },
+      {
+        "text": "\u00a711.2",
+        "number": "11.2",
+        "target_heading_line": 1763,
+        "line": 2405
+      },
+      {
+        "text": "\u00a710.9",
+        "number": "10.9",
+        "target_heading_line": 1665,
+        "line": 2405
+      },
+      {
+        "text": "\u00a712.2",
+        "number": "12.2",
+        "target_heading_line": 2441,
+        "line": 2407
+      },
+      {
+        "text": "\u00a710.9",
+        "number": "10.9",
+        "target_heading_line": 1665,
+        "line": 2432
+      },
+      {
+        "text": "\u00a74.1",
+        "number": "4.1",
+        "target_heading_line": 607,
+        "line": 2443
+      },
+      {
+        "text": "\u00a710.9.1",
+        "number": "10.9.1",
+        "target_heading_line": 1676,
+        "line": 2447
+      },
+      {
+        "text": "\u00a78.2",
+        "number": "8.2",
+        "target_heading_line": 1347,
+        "line": 2448
+      },
+      {
+        "text": "\u00a711",
+        "number": "11",
+        "target_heading_line": 1727,
+        "line": 2455
+      },
+      {
+        "text": "\u00a711.7.9",
+        "number": "11.7.9",
+        "target_heading_line": 2160,
+        "line": 2459
+      },
+      {
+        "text": "\u00a712.1",
+        "number": "12.1",
+        "target_heading_line": 2398,
+        "line": 2467
+      },
+      {
+        "text": "\u00a711.7.6",
+        "number": "11.7.6",
+        "target_heading_line": 2037,
+        "line": 2483
+      },
+      {
+        "text": "\u00a73.4",
+        "number": "3.4",
+        "target_heading_line": 484,
+        "line": 2495
+      },
+      {
+        "text": "\u00a76.8",
+        "number": "6.8",
+        "target_heading_line": 872,
+        "line": 2497
+      },
+      {
+        "text": "\u00a710.9.3",
+        "number": "10.9.3",
+        "target_heading_line": 1694,
+        "line": 2503
+      },
+      {
+        "text": "\u00a71.4",
+        "number": "1.4",
+        "target_heading_line": 151,
+        "line": 2505
+      },
+      {
+        "text": "\u00a71.3",
+        "number": "1.3",
+        "target_heading_line": 137,
+        "line": 2524
+      },
+      {
+        "text": "\u00a71.1",
+        "number": "1.1",
+        "target_heading_line": 101,
+        "line": 2542
+      },
+      {
+        "text": "\u00a77.2",
+        "number": "7.2",
+        "target_heading_line": 1143,
+        "line": 2560
+      },
+      {
+        "text": "\u00a77.9",
+        "number": "7.9",
+        "target_heading_line": 1232,
+        "line": 2560
+      },
+      {
+        "text": "\u00a76.7",
+        "number": "6.7",
+        "target_heading_line": 847,
+        "line": 2562
+      },
+      {
+        "text": "\u00a73.6",
+        "number": "3.6",
+        "target_heading_line": 506,
+        "line": 2588
+      },
+      {
+        "text": "\u00a710.9.3",
+        "number": "10.9.3",
+        "target_heading_line": 1694,
+        "line": 2623
+      },
+      {
+        "text": "\u00a714.1",
+        "number": "14.1",
+        "target_heading_line": 2546,
+        "line": 2658
+      },
+      {
+        "text": "\u00a79.14",
+        "number": "9.14",
+        "target_heading_line": 1566,
+        "line": 2661
+      },
+      {
+        "text": "\u00a710.9",
+        "number": "10.9",
+        "target_heading_line": 1665,
+        "line": 2662
+      },
+      {
+        "text": "\u00a71.4",
+        "number": "1.4",
+        "target_heading_line": 151,
+        "line": 2698
+      },
+      {
+        "text": "\u00a71.1",
+        "number": "1.1",
+        "target_heading_line": 101,
+        "line": 2702
+      },
+      {
+        "text": "\u00a73.1",
+        "number": "3.1",
+        "target_heading_line": 424,
+        "line": 2705
+      },
+      {
+        "text": "\u00a76.8",
+        "number": "6.8",
+        "target_heading_line": 872,
+        "line": 2709
+      },
+      {
+        "text": "\u00a74.1",
+        "number": "4.1",
+        "target_heading_line": 607,
+        "line": 2712
+      },
+      {
+        "text": "\u00a77.9",
+        "number": "7.9",
+        "target_heading_line": 1232,
+        "line": 2718
+      },
+      {
+        "text": "\u00a77.3",
+        "number": "7.3",
+        "target_heading_line": 1160,
+        "line": 2719
+      },
+      {
+        "text": "\u00a79.3",
+        "number": "9.3",
+        "target_heading_line": 1436,
+        "line": 2729
+      },
+      {
+        "text": "\u00a78.2",
+        "number": "8.2",
+        "target_heading_line": 1347,
+        "line": 2733
+      },
+      {
+        "text": "\u00a79.14",
+        "number": "9.14",
+        "target_heading_line": 1566,
+        "line": 2734
+      },
+      {
+        "text": "\u00a710.9.3",
+        "number": "10.9.3",
+        "target_heading_line": 1694,
+        "line": 2742
+      },
+      {
+        "text": "\u00a712.1",
+        "number": "12.1",
+        "target_heading_line": 2398,
+        "line": 2756
+      },
+      {
+        "text": "\u00a711.0",
+        "number": "11.0",
+        "target_heading_line": 1737,
+        "line": 2784
+      },
+      {
+        "text": "\u00a711.4",
+        "number": "11.4",
+        "target_heading_line": 1794,
+        "line": 2786
+      },
+      {
+        "text": "\u00a71.4",
+        "number": "1.4",
+        "target_heading_line": 151,
+        "line": 2787
+      },
+      {
+        "text": "\u00a717",
+        "number": "17",
+        "target_heading_line": 2863,
+        "line": 2802
+      },
+      {
+        "text": "\u00a711.7.6",
+        "number": "11.7.6",
+        "target_heading_line": 2037,
+        "line": 2841
+      },
+      {
+        "text": "\u00a711.4",
+        "number": "11.4",
+        "target_heading_line": 1794,
+        "line": 2847
+      },
+      {
+        "text": "\u00a711.7",
+        "number": "11.7",
+        "target_heading_line": 1886,
+        "line": 2888
+      },
+      {
+        "text": "\u00a71.1",
+        "number": "1.1",
+        "target_heading_line": 101,
+        "line": 2897
+      },
+      {
+        "text": "\u00a710",
+        "number": "10",
+        "target_heading_line": 1595,
+        "line": 2913
+      },
+      {
+        "text": "\u00a72.1",
+        "number": "2.1",
+        "target_heading_line": 196,
+        "line": 2946
+      },
+      {
+        "text": "\u00a79.10",
+        "number": "9.10",
+        "target_heading_line": 1523,
+        "line": 2956
+      },
+      {
+        "text": "\u00a71.1",
+        "number": "1.1",
+        "target_heading_line": 101,
+        "line": 2957
+      },
+      {
+        "text": "\u00a79.10",
+        "number": "9.10",
+        "target_heading_line": 1523,
+        "line": 2965
+      },
+      {
+        "text": "\u00a79.13",
+        "number": "9.13",
+        "target_heading_line": 1553,
+        "line": 2966
+      },
+      {
+        "text": "\u00a79.3",
+        "number": "9.3",
+        "target_heading_line": 1436,
+        "line": 2978
+      },
+      {
+        "text": "\u00a71.4",
+        "number": "1.4",
+        "target_heading_line": 151,
+        "line": 2992
+      },
+      {
+        "text": "\u00a714",
+        "number": "14",
+        "target_heading_line": 2540,
+        "line": 2992
+      },
+      {
+        "text": "\u00a717",
+        "number": "17",
+        "target_heading_line": 2863,
+        "line": 2993
+      },
+      {
+        "text": "\u00a71.3",
+        "number": "1.3",
+        "target_heading_line": 137,
+        "line": 2993
+      },
+      {
+        "text": "\u00a713",
+        "number": "13",
+        "target_heading_line": 2487,
+        "line": 2993
+      },
+      {
+        "text": "\u00a71",
+        "number": "1",
+        "target_heading_line": 95,
+        "line": 2994
+      },
+      {
+        "text": "\u00a71.1",
+        "number": "1.1",
+        "target_heading_line": 101,
+        "line": 2994
+      },
+      {
+        "text": "\u00a714",
+        "number": "14",
+        "target_heading_line": 2540,
+        "line": 2994
+      },
+      {
+        "text": "\u00a77.2",
+        "number": "7.2",
+        "target_heading_line": 1143,
+        "line": 2995
+      },
+      {
+        "text": "\u00a711.2",
+        "number": "11.2",
+        "target_heading_line": 1763,
+        "line": 2995
+      },
+      {
+        "text": "\u00a717",
+        "number": "17",
+        "target_heading_line": 2863,
+        "line": 2995
+      },
+      {
+        "text": "\u00a77",
+        "number": "7",
+        "target_heading_line": 1121,
+        "line": 2996
+      },
+      {
+        "text": "\u00a77.3",
+        "number": "7.3",
+        "target_heading_line": 1160,
+        "line": 2996
+      },
+      {
+        "text": "\u00a710.9.1",
+        "number": "10.9.1",
+        "target_heading_line": 1676,
+        "line": 2997
+      },
+      {
+        "text": "\u00a710.9.3",
+        "number": "10.9.3",
+        "target_heading_line": 1694,
+        "line": 2997
+      },
+      {
+        "text": "\u00a76.15",
+        "number": "6.15",
+        "target_heading_line": 1014,
+        "line": 2997
+      },
+      {
+        "text": "\u00a712.2",
+        "number": "12.2",
+        "target_heading_line": 2441,
+        "line": 2997
+      },
+      {
+        "text": "\u00a711.0",
+        "number": "11.0",
+        "target_heading_line": 1737,
+        "line": 2998
+      },
+      {
+        "text": "\u00a711.4",
+        "number": "11.4",
+        "target_heading_line": 1794,
+        "line": 2998
+      },
+      {
+        "text": "\u00a711.7.6",
+        "number": "11.7.6",
+        "target_heading_line": 2037,
+        "line": 2998
+      },
+      {
+        "text": "\u00a73",
+        "number": "3",
+        "target_heading_line": 418,
+        "line": 2999
+      },
+      {
+        "text": "\u00a714.1",
+        "number": "14.1",
+        "target_heading_line": 2546,
+        "line": 2999
+      },
+      {
+        "text": "\u00a74.1",
+        "number": "4.1",
+        "target_heading_line": 607,
+        "line": 3000
+      },
+      {
+        "text": "\u00a76.6",
+        "number": "6.6",
+        "target_heading_line": 828,
+        "line": 3000
+      },
+      {
+        "text": "\u00a76.8",
+        "number": "6.8",
+        "target_heading_line": 872,
+        "line": 3000
+      },
+      {
+        "text": "\u00a76.13",
+        "number": "6.13",
+        "target_heading_line": 957,
+        "line": 3000
+      },
+      {
+        "text": "\u00a711.7",
+        "number": "11.7",
+        "target_heading_line": 1886,
+        "line": 3001
+      },
+      {
+        "text": "\u00a76.4",
+        "number": "6.4",
+        "target_heading_line": 751,
+        "line": 3001
+      },
+      {
+        "text": "\u00a712.1",
+        "number": "12.1",
+        "target_heading_line": 2398,
+        "line": 3001
+      },
+      {
+        "text": "\u00a76.7",
+        "number": "6.7",
+        "target_heading_line": 847,
+        "line": 3001
+      },
+      {
+        "text": "\u00a714.1",
+        "number": "14.1",
+        "target_heading_line": 2546,
+        "line": 3001
+      },
+      {
+        "text": "\u00a71.4",
+        "number": "1.4",
+        "target_heading_line": 151,
+        "line": 3001
+      },
+      {
+        "text": "\u00a76.1",
+        "number": "6.1",
+        "target_heading_line": 692,
+        "line": 3002
+      },
+      {
+        "text": "\u00a711.7.6",
+        "number": "11.7.6",
+        "target_heading_line": 2037,
+        "line": 3003
+      },
+      {
+        "text": "\u00a711.7.9",
+        "number": "11.7.9",
+        "target_heading_line": 2160,
+        "line": 3003
+      },
+      {
+        "text": "\u00a711",
+        "number": "11",
+        "target_heading_line": 1727,
+        "line": 3004
+      },
+      {
+        "text": "\u00a72.9",
+        "number": "2.9",
+        "target_heading_line": 308,
+        "line": 3004
+      },
+      {
+        "text": "\u00a79.14",
+        "number": "9.14",
+        "target_heading_line": 1566,
+        "line": 3004
+      },
+      {
+        "text": "\u00a72.5",
+        "number": "2.5",
+        "target_heading_line": 246,
+        "line": 3005
+      },
+      {
+        "text": "\u00a77.7",
+        "number": "7.7",
+        "target_heading_line": 1212,
+        "line": 3005
+      },
+      {
+        "text": "\u00a74",
+        "number": "4",
+        "target_heading_line": 573,
+        "line": 3006
+      },
+      {
+        "text": "\u00a79.5",
+        "number": "9.5",
+        "target_heading_line": 1472,
+        "line": 3006
+      },
+      {
+        "text": "\u00a713",
+        "number": "13",
+        "target_heading_line": 2487,
+        "line": 3006
+      },
+      {
+        "text": "\u00a71.4",
+        "number": "1.4",
+        "target_heading_line": 151,
+        "line": 3007
+      },
+      {
+        "text": "\u00a76.16.7",
+        "number": "6.16.7",
+        "target_heading_line": 1091,
+        "line": 3007
+      },
+      {
+        "text": "\u00a711.7.9",
+        "number": "11.7.9",
+        "target_heading_line": 2160,
+        "line": 3007
+      },
+      {
+        "text": "\u00a79.3",
+        "number": "9.3",
+        "target_heading_line": 1436,
+        "line": 3008
+      },
+      {
+        "text": "\u00a79.10",
+        "number": "9.10",
+        "target_heading_line": 1523,
+        "line": 3008
+      },
+      {
+        "text": "\u00a79.12",
+        "number": "9.12",
+        "target_heading_line": 1547,
+        "line": 3008
+      },
+      {
+        "text": "\u00a72.1",
+        "number": "2.1",
+        "target_heading_line": 196,
+        "line": 3009
+      },
+      {
+        "text": "\u00a72.2",
+        "number": "2.2",
+        "target_heading_line": 210,
+        "line": 3009
+      },
+      {
+        "text": "\u00a72.12",
+        "number": "2.12",
+        "target_heading_line": 401,
+        "line": 3009
+      },
+      {
+        "text": "\u00a76.16",
+        "number": "6.16",
+        "target_heading_line": 1020,
+        "line": 3009
+      },
+      {
+        "text": "\u00a72.2",
+        "number": "2.2",
+        "target_heading_line": 210,
+        "line": 3010
+      },
+      {
+        "text": "\u00a72.9",
+        "number": "2.9",
+        "target_heading_line": 308,
+        "line": 3010
+      },
+      {
+        "text": "\u00a711.0",
+        "number": "11.0",
+        "target_heading_line": 1737,
+        "line": 3012
+      },
+      {
+        "text": "\u00a712.3",
+        "number": "12.3",
+        "target_heading_line": 2453,
+        "line": 3012
+      },
+      {
+        "text": "\u00a76.16.6",
+        "number": "6.16.6",
+        "target_heading_line": 1087,
+        "line": 3012
+      },
+      {
+        "text": "\u00a76.1",
+        "number": "6.1",
+        "target_heading_line": 692,
+        "line": 3018
+      },
+      {
+        "text": "\u00a76.15",
+        "number": "6.15",
+        "target_heading_line": 1014,
+        "line": 3020
+      },
+      {
+        "text": "\u00a76.16.1",
+        "number": "6.16.1",
+        "target_heading_line": 1039,
+        "line": 3020
+      },
+      {
+        "text": "\u00a712",
+        "number": "12",
+        "target_heading_line": 2394,
+        "line": 3020
+      },
+      {
+        "text": "\u00a712.2",
+        "number": "12.2",
+        "target_heading_line": 2441,
+        "line": 3020
+      },
+      {
+        "text": "\u00a715",
+        "number": "15",
+        "target_heading_line": 2696,
+        "line": 3020
+      },
+      {
+        "text": "\u00a712.1",
+        "number": "12.1",
+        "target_heading_line": 2398,
+        "line": 3020
+      },
+      {
+        "text": "\u00a79.10",
+        "number": "9.10",
+        "target_heading_line": 1523,
+        "line": 3021
+      },
+      {
+        "text": "\u00a714.6",
+        "number": "14.6",
+        "target_heading_line": 2651,
+        "line": 3023
+      },
+      {
+        "text": "\u00a717",
+        "number": "17",
+        "target_heading_line": 2863,
+        "line": 3024
+      },
+      {
+        "text": "\u00a72.10",
+        "number": "2.10",
+        "target_heading_line": 333,
+        "line": 3046
+      },
+      {
+        "text": "\u00a77.10",
+        "number": "7.10",
+        "target_heading_line": 1268,
+        "line": 3046
+      },
+      {
+        "text": "\u00a711.7.10",
+        "number": "11.7.10",
+        "target_heading_line": 2194,
+        "line": 3046
+      },
+      {
+        "text": "\u00a7\u00a73.9",
+        "number": "3.9",
+        "target_heading_line": 548,
+        "line": 3071
+      },
+      {
+        "text": "\u00a711.6",
+        "number": "11.6",
+        "target_heading_line": 1820,
+        "line": 3072
+      },
+      {
+        "text": "\u00a78.3",
+        "number": "8.3",
+        "target_heading_line": 1372,
+        "line": 3076
+      },
+      {
+        "text": "\u00a717.2",
+        "number": "17.2",
+        "target_heading_line": 2915,
+        "line": 3085
+      }
+    ],
+    "diagnostics": []
+  }
+]
