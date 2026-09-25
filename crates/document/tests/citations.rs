@@ -15,6 +15,7 @@
 //!   - `Diagnostic::DuplicateReferenceEntry { label, first_line, second_line }`
 //!   - `Diagnostic::UnresolvedCitation { label, line }`
 //!   - `Node::Anchor { id: String }`
+//!
 //! None of these exist yet; this file will not compile until they do. A
 //! stub crate exercising this exact shape was compiled from the scratch
 //! folder as part of writing this grader (see the oracle author's report).
