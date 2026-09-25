@@ -151,7 +151,7 @@ pub(crate) fn extract_front_matter(text: &str) -> Option<ExtractedFrontMatter> {
             break;
         }
 
-        let line = raw_line.strip_suffix('\r').unwrap_or(raw_line);
+        let line = raw_line.trim_end_matches([' ', '\t', '\r']);
 
         if is_blank_line(line) {
             continue;
