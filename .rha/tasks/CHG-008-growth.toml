@@ -685,6 +685,17 @@ prompt_sha256 = "d5636edcc9b1397bb6648041cade17b3d4e082c0a090fd05a09a1d6573bc23c
 sample = "one teamwork run, 2026-09-25T05:16Z to 05:49Z; verdict APPROVE, 0 findings; no escalations"
 oracles = "not applicable (a review); its claims were compared with the separate Claude verifier's, which approved with two P3s this team did not report"
 
+[[provenance.generations]]
+artifact = "CHG-013 stage A: crates/document/src (new front_matter.rs, parse.rs, lib.rs) and the front_matter: None literal in crates/document/tests/transclusion.rs"
+generation = "sampled"
+model = "gemini-3.8-flash-high"
+reasoning_effort = "high (model tier)"
+harness = "Antigravity CLI 1.2.10, /boost pasted into agy-jail: root, DeepCoder and workers on Gemini; one escalation (the differential's key mismatch, a registration defect the supervisor repaired in ba73e8d)"
+prompt = "Implement front matter and tags per docs/architecture/front-matter-contract.md sections 1, 2, 2.1 and 3; recognise only from the first line; no pulldown metadata option; change only crates/document/src plus one allowed test literal."
+prompt_sha256 = "a690edba55beabe13c90293d392e6aab916f54a758ad602c294bd92a8ad4a486"
+sample = "one Boost run, base 07c2ed2, 2026-09-25T18:56Z to 19:20Z; output sha256 ca91a7d45f608e2dd47a3ac65fa05b4a3e890b8fe086a58a2021169b765e206b"
+oracles = "front_matter.rs (62 cases, a separate Sonnet oracle-author session), the M12 revision differential front_matter_unchanged.rs (3,422 inputs, re-registered in ba73e8d), the workspace suite, fmt, clippy, architecture, docs --check and the task-record lint, rerun by the supervising session"
+
 [[decisions]]
 id = "citations-anchor-node"
 question = "How does a citation link to its reference entry (CHG-011)?"
